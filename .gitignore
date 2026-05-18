@@ -12,6 +12,8 @@ out/
 *.suo
 *.log
 *.tmp
+.env
+!.env.example
 
 TestResults/
 coverage/
