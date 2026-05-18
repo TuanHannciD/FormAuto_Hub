@@ -1,0 +1,3 @@
+@FormAutoHub.Api_HostAddress = http://localhost:5235
+
+# Add approved API requests here after contract review.
