@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FormAuto Hub - Tổng quan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#004ac6",
+                      "surface-container-low": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "surface-dim": "#d8dadc",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "surface-container": "#eceef0",
+                      "secondary-container": "#dae2fd",
+                      "outline": "#737686",
+                      "surface-tint": "#0053db",
+                      "on-secondary-container": "#5c647a",
+                      "on-primary-container": "#eeefff",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "primary-fixed": "#dbe1ff",
+                      "on-tertiary-container": "#bdffdc",
+                      "on-secondary-fixed": "#131b2e",
+                      "on-surface": "#191c1e",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed": "#85f8c4",
+                      "surface-container-high": "#e6e8ea",
+                      "background": "#f7f9fb",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface-bright": "#f7f9fb",
+                      "outline-variant": "#c3c6d7",
+                      "surface": "#f7f9fb",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "tertiary-container": "#007d57",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "secondary": "#565e74",
+                      "on-surface-variant": "#434655",
+                      "on-error": "#ffffff",
+                      "primary-container": "#2563eb",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-variant": "#e0e3e5",
+                      "secondary-fixed": "#dae2fd",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#006243",
+                      "on-background": "#191c1e",
+                      "on-primary-fixed": "#00174b",
+                      "on-tertiary-fixed": "#002114"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px",
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-xl-mobile": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "headline-xl": [
+                              "Geist"
+                      ],
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "body-sm": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-xl-mobile": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface text-primary dark:text-primary-fixed-dim font-body-md text-body-md h-screen w-64 fixed left-0 top-0 overflow-y-auto border-r border-outline-variant dark:border-outline flex flex-col p-4 gap-2 z-50">
+<div class="flex items-center gap-3 mb-8 px-4">
+<span class="material-symbols-outlined text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">hub</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">FormAuto Hub</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Automation Engine</span>
+</div>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container dark:bg-secondary text-primary dark:text-on-secondary rounded-lg font-medium active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            Tổng quan
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+            Dự án biểu mẫu
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+            Quy tắc trả lời
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+            Xem trước phản hồi
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+            Lịch sử sử dụng
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+            Credit
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_card">add_card</span>
+            Yêu cầu nạp credit
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-lg transition-colors active:scale-[0.98] duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+            Cài đặt
+        </a>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col h-full bg-background overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest/80 backdrop-blur-md dark:bg-inverse-surface/80 text-primary dark:text-primary-fixed-dim font-body-md text-body-md fixed top-0 right-0 left-64 h-16 z-40 border-b border-outline-variant dark:border-outline flex items-center justify-between px-margin-desktop w-full">
+<div class="flex items-center gap-4">
+<div class="text-sm text-on-surface-variant font-label-md">
+                    Trang chủ / <span class="text-primary font-medium">Tổng quan</span>
+</div>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none text-body-sm font-body-sm focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-on-surface-variant" placeholder="Tìm dự án, yêu cầu nạp, nhật ký..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container dark:hover:bg-on-surface-variant rounded-full p-2 transition-all relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-4 ml-2">
+<img alt="Nguyễn Tuấn" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a user named Nguyễn Tuấn, in a clean, brightly lit modern office setting. The style is neutral, corporate SaaS." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTrv9wRDY_gT_g1St2OvgvH_ep3eeO7wyVz31JS9rytiDQbXdoHoG1c6a31xGn1_FdRrSCI6vYBwSbnOUliXLL_uKahlevW1PUXY0va3bN7XOVCZPz0yfj5lDKKY6Y9CeMkTDT_Etzsp_6KYSj4XuOLJvowBlP3gGBYOQUWBSw7xHGVvlsf8nDzm8MlJotnz9RJq142Z5Vtdkth6Cqlg2MNk3wIKa4-pGD2AhN98FdtX4oL8CyaozhccY2YToA4b2_fmMXKQUJRyur"/>
+<span class="font-label-md text-label-md text-on-surface font-medium">Nguyễn Tuấn</span>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto mt-16 p-margin-desktop">
+<div class="max-w-container-max mx-auto space-y-8">
+<!-- Info Strip -->
+<div class="bg-primary-fixed text-on-primary-fixed-variant p-4 rounded-xl flex items-start gap-3 border border-primary-fixed-dim shadow-sm">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+<div>
+<p class="font-label-md text-label-md font-medium">MVP yêu cầu xem trước và xác nhận trước khi gửi phản hồi.</p>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Credit hiện có</span>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-lg text-sm" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">1.250</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-primary" data-icon="trending_up">trending_up</span>
+                            Sử dụng từ gói nạp gần nhất
+                        </span>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Credit đã nạp</span>
+<span class="material-symbols-outlined text-tertiary bg-tertiary-fixed p-1.5 rounded-lg text-sm" data-icon="payments">payments</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">3.000</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">Tổng lũy kế</span>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Credit đã dùng</span>
+<span class="material-symbols-outlined text-error bg-error-container p-1.5 rounded-lg text-sm" data-icon="money_off">money_off</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">1.750</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">Tính từ khi bắt đầu</span>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Yêu cầu nạp đang chờ</span>
+<span class="material-symbols-outlined text-[#d97706] bg-[#fef3c7] p-1.5 rounded-lg text-sm" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">3</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">Cần admin duyệt</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column (Wider) -->
+<div class="col-span-1 lg:col-span-2 space-y-8">
+<!-- Next Steps Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+                                Việc cần làm tiếp theo
+                            </h2>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/50 hover:border-primary-fixed-dim transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold text-sm">1</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Thêm URL Google Form</span>
+</div>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-surface-tint transition-colors">Bắt đầu</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/50 hover:border-primary-fixed-dim transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-dim text-on-surface-variant flex items-center justify-center font-bold text-sm">2</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Cấu hình quy tắc trả lời</span>
+</div>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors">Tiếp tục</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/50 hover:border-primary-fixed-dim transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-dim text-on-surface-variant flex items-center justify-center font-bold text-sm">3</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Xem trước phản hồi trước khi xác nhận gửi</span>
+</div>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors">Xem trước</button>
+</div>
+</div>
+</section>
+<!-- Recent Tables -->
+<div class="space-y-8">
+<!-- Table 1 -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Yêu cầu nạp credit gần đây</h3>
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem tất cả</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<th class="p-4 font-medium">Mã yêu cầu</th>
+<th class="p-4 font-medium">Gói credit</th>
+<th class="p-4 font-medium">Số tiền</th>
+<th class="p-4 font-medium">Trạng thái</th>
+<th class="p-4 font-medium">Ngày tạo</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 font-medium text-primary">#REQ-003</td>
+<td class="p-4">Gói Cơ Bản</td>
+<td class="p-4">500.000đ</td>
+<td class="p-4"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#fef3c7] text-[#92400e]">Chờ duyệt</span></td>
+<td class="p-4 text-on-surface-variant">20/10/2023</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 font-medium text-primary">#REQ-002</td>
+<td class="p-4">Gói Tiêu Chuẩn</td>
+<td class="p-4">1.000.000đ</td>
+<td class="p-4"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-fixed text-primary">Đã duyệt</span></td>
+<td class="p-4 text-on-surface-variant">15/10/2023</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 font-medium text-primary">#REQ-001</td>
+<td class="p-4">Gói Cơ Bản</td>
+<td class="p-4">500.000đ</td>
+<td class="p-4"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-tertiary-fixed text-tertiary">Đã thanh toán</span></td>
+<td class="p-4 text-on-surface-variant">01/10/2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Table 2 -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Nhật ký sử dụng gần đây</h3>
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem tất cả</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<th class="p-4 font-medium">Thời gian</th>
+<th class="p-4 font-medium">Hành động</th>
+<th class="p-4 font-medium">Biểu mẫu</th>
+<th class="p-4 font-medium text-right">Credit dùng</th>
+<th class="p-4 font-medium">Kết quả</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 text-on-surface-variant">10:45 20/10/2023</td>
+<td class="p-4">Sinh dữ liệu mẫu</td>
+<td class="p-4 truncate max-w-[150px]">Khảo sát khách hàng Q3</td>
+<td class="p-4 text-right text-error font-medium">-5</td>
+<td class="p-4"><span class="inline-flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span> Đã xem trước</span></td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 text-on-surface-variant">09:12 20/10/2023</td>
+<td class="p-4">Gửi phản hồi tự động</td>
+<td class="p-4 truncate max-w-[150px]">Đăng ký sự kiện</td>
+<td class="p-4 text-right text-error font-medium">-10</td>
+<td class="p-4"><span class="inline-flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> Đã xác nhận</span></td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 text-on-surface-variant">16:30 19/10/2023</td>
+<td class="p-4">Gửi phản hồi hàng loạt</td>
+<td class="p-4 truncate max-w-[150px]">Form thu thập email</td>
+<td class="p-4 text-right text-on-surface-variant">0</td>
+<td class="p-4"><span class="inline-flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-sm" data-icon="block">block</span> Bị giới hạn</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+<!-- Right Column (Sidebar) -->
+<div class="col-span-1">
+<section class="bg-surface-container border border-outline-variant rounded-xl p-6 sticky top-6">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Quy tắc an toàn MVP</h3>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-tertiary text-lg mt-0.5" data-icon="gpp_good">gpp_good</span>
+<div>
+<p class="font-label-md text-label-md font-medium text-on-surface">Không tự động gửi</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Hệ thống sẽ không gửi phản hồi khi chưa có sự xác nhận của bạn.</p>
+</div>
+</li>
+<li class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-tertiary text-lg mt-0.5" data-icon="speed">speed</span>
+<div>
+<p class="font-label-md text-label-md font-medium text-on-surface">Giới hạn số lượng</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Chỉ cho phép 1-5 phản hồi mỗi lần thực thi để đảm bảo chất lượng.</p>
+</div>
+</li>
+<li class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-tertiary text-lg mt-0.5" data-icon="receipt_long">receipt_long</span>
+<div>
+<p class="font-label-md text-label-md font-medium text-on-surface">Ghi nhận minh bạch</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ghi nhật ký chi tiết mọi hành động sử dụng credit trên hệ thống.</p>
+</div>
+</li>
+<li class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-error text-lg mt-0.5" data-icon="policy">policy</span>
+<div>
+<p class="font-label-md text-label-md font-medium text-on-surface">Tuân thủ chính sách</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Tuyệt đối không hỗ trợ spam, sử dụng proxy ẩn danh hay bypass captcha.</p>
+</div>
+</li>
+</ul>
+<div class="mt-6 pt-6 border-t border-outline-variant/50">
+<a class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-1" href="#">
+                                    Đọc thêm về chính sách MVP
+                                    <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

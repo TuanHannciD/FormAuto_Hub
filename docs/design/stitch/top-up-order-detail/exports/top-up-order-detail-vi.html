@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chi tiết yêu cầu nạp credit - FormAuto Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Geist Font Emulation */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e6e8ea",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#dae2fd",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-container": "#007d57",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-container": "#2563eb",
+                        "primary": "#004ac6",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-primary-container": "#eeefff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "tertiary-fixed": "#85f8c4",
+                        "surface-variant": "#e0e3e5",
+                        "secondary": "#565e74",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-highest": "#e0e3e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary": "#006243",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-tertiary-fixed": "#002114",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "on-surface-variant": "#434655",
+                        "surface-container": "#eceef0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-container": "#5c647a",
+                        "outline": "#737686",
+                        "surface": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "outline-variant": "#c3c6d7",
+                        "on-surface": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#0053db",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-tertiary-container": "#bdffdc",
+                        "on-primary": "#ffffff",
+                        /* Brand Colors added manually to ensure they work with generic tailwind classes just in case */
+                        "amber-50": "#fffbeb",
+                        "amber-500": "#f59e0b",
+                        "amber-700": "#b45309",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "headline-xl-mobile": ["Inter", "sans-serif"],
+                        "headline-xl": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-xl-mobile": ["30px", { "lineHeight": "38px", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-sm min-h-screen flex text-body-sm">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 border-r border-outline-variant bg-surface-container-low flex flex-col p-4 z-20">
+<!-- Header -->
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-on-primary font-headline-sm">F</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-on-surface">FormAuto Hub</div>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+<span class="font-label-md text-label-md">Dự án biểu mẫu</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">rule</span>
+<span class="font-label-md text-label-md">Quy tắc trả lời</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">preview</span>
+<span class="font-label-md text-label-md">Xem trước phản hồi</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-md text-label-md">Lịch sử sử dụng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">toll</span>
+<span class="font-label-md text-label-md">Credit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl bg-primary-container text-on-primary-container font-semibold transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="font-label-md text-label-md">Yêu cầu nạp credit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Cài đặt</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="h-16 border-b border-outline-variant bg-surface-container-lowest flex items-center justify-between px-margin-desktop sticky top-0 z-10">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm">
+<a class="hover:text-primary transition-colors" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Yêu cầu nạp credit</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface">REQ-1042</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Search -->
+<div class="relative hidden md:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-3 py-1.5 bg-surface rounded-lg border border-outline-variant text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Tìm yêu cầu nạp..." type="text"/>
+</div>
+<!-- User -->
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Nguyễn Tuấn</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-label-md">NT</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="flex justify-between items-start mb-8">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Chi tiết yêu cầu nạp credit</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-[#fffbeb] text-[#b45309] border border-[#fcd34d] font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+                            Chờ duyệt
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Theo dõi thông tin yêu cầu, trạng thái duyệt và lịch sử cập nhật.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+                        Sao chép mã yêu cầu
+                    </button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        Quay lại danh sách
+                    </button>
+</div>
+</div>
+<!-- Main Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Summary Row (Spans full width) -->
+<div class="col-span-12 grid grid-cols-4 gap-gutter mb-2">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1">Mã yêu cầu</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">REQ-1042</span>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1">Gói credit</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Gói tiêu chuẩn</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1">Credit yêu cầu</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface">1.000</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2 border-t border-outline-variant pt-2">Credit chỉ được cộng sau khi admin xác nhận.</span>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-center items-start">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1">Trạng thái hiện tại</span>
+<span class="px-3 py-1 rounded-full bg-[#fffbeb] text-[#b45309] font-label-md text-label-md border border-[#fcd34d]">Chờ duyệt</span>
+</div>
+</div>
+<!-- Left Column (8 cols) -->
+<div class="col-span-8 flex flex-col gap-gutter">
+<!-- Detail Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-5 py-4 border-b border-outline-variant bg-surface-bright">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Thông tin yêu cầu</h2>
+</div>
+<div class="p-5">
+<dl class="grid grid-cols-2 gap-x-8 gap-y-4">
+<div>
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Người tạo</dt>
+<dd class="font-body-md text-body-md text-on-surface">Nguyễn Tuấn</dd>
+</div>
+<div>
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Ngày tạo</dt>
+<dd class="font-body-md text-body-md text-on-surface">24/05/2024 10:02</dd>
+</div>
+<div>
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Phương thức ghi nhận</dt>
+<dd class="font-body-md text-body-md text-on-surface">Chuyển khoản thủ công</dd>
+</div>
+<div>
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Số tiền</dt>
+<dd class="font-body-md text-body-md text-on-surface">Theo báo giá nội bộ</dd>
+</div>
+<div class="col-span-2">
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Payment gateway</dt>
+<dd class="font-body-md text-body-md text-on-surface text-outline">Deferred / Chưa bật trong MVP</dd>
+</div>
+<div class="col-span-2 border-t border-outline-variant pt-4 mt-2">
+<dt class="font-label-sm text-label-sm text-on-surface-variant mb-1">Credit sẽ cộng khi duyệt</dt>
+<dd class="font-headline-md text-headline-md text-primary">1.000</dd>
+</div>
+</dl>
+</div>
+</div>
+<!-- Ghi chú & Phản hồi -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-5 py-4 border-b border-outline-variant bg-surface-bright">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Ghi chú &amp; Phản hồi</h2>
+</div>
+<div class="p-5 flex flex-col gap-6">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-2">Ghi chú từ người dùng</h3>
+<div class="p-4 bg-surface rounded-lg border border-outline-variant font-body-md text-body-md text-on-surface">
+                                    "Cần nạp cho chiến dịch khảo sát tuần này"
+                                </div>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-2">Phản hồi từ Admin</h3>
+<div class="p-4 bg-surface rounded-lg border border-outline-variant border-dashed font-body-md text-body-md text-outline italic">
+                                    Chưa có phản hồi từ admin
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (4 cols) -->
+<div class="col-span-4 flex flex-col gap-gutter">
+<!-- Timeline Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-5 py-4 border-b border-outline-variant bg-surface-bright">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Lịch sử trạng thái</h2>
+</div>
+<div class="p-5">
+<div class="relative border-l-2 border-outline-variant ml-3 pb-4">
+<!-- Item 1 -->
+<div class="mb-6 ml-6 relative">
+<div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-primary"></div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-0.5">24/05/2024 10:02</div>
+<div class="font-label-md text-label-md text-on-surface">Đã tạo yêu cầu</div>
+<div class="font-body-sm text-body-sm text-outline">Nguyễn Tuấn</div>
+</div>
+<!-- Item 2 -->
+<div class="mb-6 ml-6 relative">
+<div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-primary"></div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-0.5">24/05/2024 10:03</div>
+<div class="font-label-md text-label-md text-on-surface">Đang chờ admin kiểm tra</div>
+<div class="font-body-sm text-body-sm text-outline">Hệ thống</div>
+</div>
+<!-- Current -->
+<div class="mb-6 ml-6 relative">
+<div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-[#f59e0b] border-2 border-surface-container-lowest ring-2 ring-[#fcd34d]"></div>
+<div class="font-label-sm text-label-sm text-[#b45309] mb-0.5">Hiện tại</div>
+<div class="font-label-md text-label-md text-on-surface font-semibold">Chờ xác nhận nạp credit</div>
+</div>
+<!-- Future -->
+<div class="ml-6 relative opacity-40">
+<div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-outline"></div>
+<div class="font-label-md text-label-md text-on-surface">Đã duyệt, Credit đã cộng</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Info Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">Quy trình xử lý thủ công</h2>
+<ol class="list-decimal list-inside font-body-sm text-body-sm text-on-surface-variant space-y-2 mb-4">
+<li>User gửi yêu cầu</li>
+<li>Admin kiểm tra thông tin và thanh toán thủ công</li>
+<li>Admin phê duyệt/từ chối</li>
+<li>Hệ thống ghi nhận giao dịch</li>
+</ol>
+<div class="bg-secondary-fixed text-on-secondary-fixed p-3 rounded-lg border border-secondary-fixed-dim font-body-sm text-body-sm flex gap-2 items-start">
+<span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">info</span>
+<p>Màn này chỉ hiển thị chi tiết cho người dùng; thao tác admin cần scope riêng.</p>
+</div>
+</div>
+<!-- Related Links -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">Liên kết liên quan</h2>
+<ul class="space-y-3">
+<li class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID</span>
+<span class="font-body-sm text-body-sm text-on-surface">REQ-1042</span>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Giao dịch credit</span>
+<span class="font-body-sm text-body-sm text-outline">Chưa có</span>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Thông báo</span>
+<span class="font-body-sm text-body-sm text-on-surface">Sẽ gửi khi đổi trạng thái</span>
+</li>
+<li class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ghi chú kiểm toán</span>
+<span class="font-body-sm text-body-sm text-outline text-right max-w-[120px]">Không có cổng thanh toán tự động</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Bottom Reference States -->
+<div class="mt-12 pt-8 border-t border-outline-variant">
+<h3 class="font-label-md text-label-md text-outline mb-4">Reference States (For documentation)</h3>
+<div class="flex gap-4">
+<!-- Not Found -->
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined">search_off</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Không tìm thấy yêu cầu</div>
+<div class="font-body-sm text-body-sm text-outline">Yêu cầu không tồn tại hoặc đã bị xóa.</div>
+</div>
+</div>
+<!-- Error -->
+<div class="flex-1 bg-[#ffdad6] border border-[#ba1a1a] rounded-lg p-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#ffffff] bg-opacity-50 flex items-center justify-center text-[#ba1a1a]">
+<span class="material-symbols-outlined">error</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-[#93000a]">Không tải được chi tiết</div>
+<div class="font-body-sm text-body-sm text-[#93000a] opacity-80">Vui lòng thử lại sau.</div>
+</div>
+</div>
+<!-- Loading -->
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant animate-pulse"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 bg-surface-variant rounded w-1/2 animate-pulse"></div>
+<div class="h-3 bg-surface-variant rounded w-3/4 animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

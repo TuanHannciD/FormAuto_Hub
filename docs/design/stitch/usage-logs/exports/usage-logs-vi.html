@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lịch sử sử dụng - FormAuto Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed": "#002114",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-container": "#007d57",
+                        "inverse-primary": "#b4c5ff",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#bdffdc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "outline-variant": "#c3c6d7",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#006243",
+                        "on-surface": "#191c1e",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-primary": "#ffffff",
+                        "outline": "#737686",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#565e74",
+                        "on-surface-variant": "#434655",
+                        "surface-dim": "#d8dadc",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-low": "#f2f4f6",
+                        "primary": "#004ac6",
+                        "background": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-fixed": "#85f8c4",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-tint": "#0053db",
+                        "secondary-fixed": "#dae2fd",
+                        "on-background": "#191c1e",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary-container": "#2563eb",
+                        "surface-container": "#eceef0",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Geist"],
+                        "headline-xl-mobile": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-sm": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "headline-xl": ["Geist"],
+                        "body-sm": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-xl-mobile": ["30px", { "lineHeight": "38px", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-400-normal.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-500-normal.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-600-normal.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-900-normal.woff2') format('woff2');
+            font-weight: 900;
+            font-style: normal;
+        }
+        body { font-family: 'Geist', sans-serif; background-color: #f7f9fb; color: #191c1e; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-on-surface bg-background">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-screen sticky top-0 left-0 p-4 bg-surface-container-low dark:bg-inverse-surface border-r border-outline-variant w-64 shrink-0">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary font-bold">F</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary leading-tight">FormAuto Hub</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Automation Platform</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Dự án biểu mẫu</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-label-md text-label-md">Quy tắc trả lời</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-md text-label-md">Xem trước phản hồi</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl font-medium" href="#">
+<span class="material-symbols-outlined filled">history</span>
+<span class="font-label-md text-label-md font-bold">Lịch sử sử dụng</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Credit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">add_card</span>
+<span class="font-label-md text-label-md">Yêu cầu nạp credit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-on-secondary-fixed-variant rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Cài đặt</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-4">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-2 px-4 rounded-xl font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">upgrade</span>
+                Nâng cấp gói
+            </button>
+<div class="flex flex-col gap-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Hỗ trợ</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Tài liệu</span>
+</a>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-40 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant shrink-0">
+<div class="flex items-center gap-4 flex-1">
+<div class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+<a class="hover:text-primary transition-colors" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-bold text-on-surface">Lịch sử sử dụng</span>
+</div>
+</div>
+<div class="flex items-center gap-2 max-w-md w-full mx-4">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface rounded-full border border-outline-variant focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-sm text-body-sm" placeholder="Tìm hành động, biểu mẫu, kết quả..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container dark:hover:bg-on-secondary-fixed-variant rounded-full p-2 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container dark:hover:bg-on-secondary-fixed-variant rounded-full p-2 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<img alt="Nguyễn Tuấn Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGscdUpx2A2hsUd0gDOFfegUhp-Xr4Rfr_HXDjKQzvszlSxUFt05ZVwao2USl7BHS4KtOwtGZFHw37AUAgOjHQRyKPl0UIfCDc2Rkb_e5_tBa466AjwmkdtQR0fArSDICkOvqV6ZYCFJRXHBo04H77agbOEs9KoTntwoM8SHcrBINwJWgHdDrNhvQW-YekgBZNe2_eoacia6l5M-_ghOr0WHsOFvzDikJLs376BO-QjJcR2O5c52cyLVws-klLj95RaPZDBP52FRNy"/>
+<span class="font-label-md text-label-md font-medium text-on-surface">Nguyễn Tuấn</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-desktop">
+<div class="max-w-container-max mx-auto flex flex-col gap-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Lịch sử sử dụng</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Theo dõi hành động dùng công cụ, credit đã dùng và kết quả xử lý.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Xuất CSV
+                        </button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Lọc nâng cao
+                        </button>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hành động tháng này</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-on-surface">128</span>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center"><span class="material-symbols-outlined text-[14px]">trending_up</span> Tăng 12%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Credit đã dùng</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-on-surface">1.750</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">/ 3.000</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Lượt xem trước</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-on-surface">96</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">75% tổng số</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Lượt bị giới hạn</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-error">7</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cần rà soát</span>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-col gap-6 w-full">
+<!-- Safety Summary Horizontal Strip -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+<div class="flex flex-col md:flex-row md:items-center gap-4 xl:gap-6">
+<div class="flex items-center gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined text-tertiary">shield_lock</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tóm tắt an toàn</h3>
+</div>
+<div class="hidden md:block h-6 w-px bg-outline-variant"></div>
+<div class="flex flex-wrap items-center gap-4 font-body-sm text-body-sm text-on-surface">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span> Yêu cầu xem trước trước khi xác nhận</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span> Giới hạn 1-5 phản hồi mỗi lần</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span> Credit chỉ trừ khi hành động hợp lệ</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span> Không hỗ trợ spam, proxy, captcha bypass</span>
+</div>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 bg-error-container/20 border border-error-container rounded-lg shrink-0 w-full xl:w-auto">
+<div class="flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-on-error-container font-medium">Log bị giới hạn gần nhất: Vượt giới hạn phản hồi</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">Lý do: Yêu cầu 8 phản hồi, vượt giới hạn MVP (Max 5).</span>
+</div>
+<button class="text-error font-label-sm text-label-sm hover:underline ml-2 whitespace-nowrap flex items-center gap-1">
+                                Xem chi tiết <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Filter Bar Compact -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex flex-wrap items-center gap-3">
+<div class="relative w-full md:w-auto flex-1 min-w-[200px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-3 bg-surface rounded-lg border border-outline-variant focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-sm text-body-sm" placeholder="Tìm mã log, tên biểu mẫu..." type="text"/>
+</div>
+<select class="h-9 bg-surface border border-outline-variant rounded-lg px-3 font-label-sm text-label-sm text-on-surface focus:outline-none">
+<option>30 ngày gần đây</option>
+</select>
+<select class="h-9 bg-surface border border-outline-variant rounded-lg px-3 font-label-sm text-label-sm text-on-surface focus:outline-none hidden md:block">
+<option>Tất cả hành động</option>
+</select>
+<div class="flex items-center gap-2 w-full md:w-auto justify-end">
+<button class="px-3 py-1.5 bg-surface-container text-on-surface rounded-lg font-label-sm text-label-sm hover:bg-surface-variant transition-colors">Đặt lại</button>
+<button class="px-3 py-1.5 bg-primary-container text-on-primary-container rounded-lg font-label-sm text-label-sm hover:bg-primary transition-colors">Áp dụng</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="px-5 py-4 border-b border-outline-variant bg-surface">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Nhật ký sử dụng</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Mỗi dòng là một hành động có thể ảnh hưởng đến credit hoặc trạng thái workflow.</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-lowest">
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium whitespace-nowrap">Thời gian</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium whitespace-nowrap">Mã log</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium min-w-[150px]">Hành động</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium min-w-[150px]">Biểu mẫu</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium text-right">Credit dùng</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium text-right">Số phản hồi</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium">Kết quả</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium">Người thao tác</th>
+<th class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant font-medium text-center">Chi tiết</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-body-sm text-on-surface">
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-3 whitespace-nowrap text-on-surface-variant">24/05/2024 09:42</td>
+<td class="px-4 py-3 font-mono text-xs">LOG-2048</td>
+<td class="px-4 py-3 font-medium">Xem trước phản hồi</td>
+<td class="px-4 py-3">Khảo sát Q2</td>
+<td class="px-4 py-3 text-right">25</td>
+<td class="px-4 py-3 text-right">5</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                                Thành công
+                                            </span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Nguyễn Tuấn</td>
+<td class="px-4 py-3 text-center">
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-3 whitespace-nowrap text-on-surface-variant">24/05/2024 09:51</td>
+<td class="px-4 py-3 font-mono text-xs">LOG-2049</td>
+<td class="px-4 py-3 font-medium">Xác nhận gửi</td>
+<td class="px-4 py-3">Khảo sát Q2</td>
+<td class="px-4 py-3 text-right">25</td>
+<td class="px-4 py-3 text-right">5</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                                Thành công
+                                            </span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Nguyễn Tuấn</td>
+<td class="px-4 py-3 text-center">
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-3 whitespace-nowrap text-on-surface-variant">23/05/2024 16:20</td>
+<td class="px-4 py-3 font-mono text-xs">LOG-2037</td>
+<td class="px-4 py-3 font-medium">Tạo phản hồi nháp</td>
+<td class="px-4 py-3">Feedback nội bộ</td>
+<td class="px-4 py-3 text-right">10</td>
+<td class="px-4 py-3 text-right">2</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                                Đang chờ
+                                            </span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Nguyễn Tuấn</td>
+<td class="px-4 py-3 text-center">
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-3 whitespace-nowrap text-on-surface-variant">22/05/2024 11:08</td>
+<td class="px-4 py-3 font-mono text-xs">LOG-2028</td>
+<td class="px-4 py-3 font-medium text-error">Vượt giới hạn</td>
+<td class="px-4 py-3">Đăng ký sự kiện</td>
+<td class="px-4 py-3 text-right">0</td>
+<td class="px-4 py-3 text-right">8</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                                Vượt giới hạn
+                                            </span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Hệ thống</td>
+<td class="px-4 py-3 text-center">
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-3 whitespace-nowrap text-on-surface-variant">21/05/2024 15:30</td>
+<td class="px-4 py-3 font-mono text-xs">LOG-2015</td>
+<td class="px-4 py-3 font-medium">Cấu hình quy tắc</td>
+<td class="px-4 py-3">Biểu mẫu tuyển dụng</td>
+<td class="px-4 py-3 text-right">0</td>
+<td class="px-4 py-3 text-right text-on-surface-variant">-</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                                Thành công
+                                            </span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Trần Minh</td>
+<td class="px-4 py-3 text-center">
+<button class="text-primary hover:underline font-label-sm text-label-sm">Xem</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant bg-surface flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hiển thị 1-5 / 128 hành động</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant disabled:opacity-50"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-primary-container text-on-primary-container font-label-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container text-on-surface font-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container text-on-surface font-label-sm">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</div><section class="mt-8"><h4 class="font-headline-sm text-headline-sm text-on-surface mb-4">Trạng thái tham chiếu</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-gutter"><div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col items-center justify-center text-center gap-2"><span class="material-symbols-outlined text-outline text-[40px]">history_off</span><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface">Chưa có nhật ký sử dụng</span><span class="font-body-sm text-body-sm text-on-surface-variant">Hiển thị khi tài khoản chưa có hành động nào được ghi nhận.</span></div></div><div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col items-center justify-center text-center gap-2"><span class="material-symbols-outlined text-error text-[40px]">error_outline</span><div class="flex flex-col items-center"><span class="font-label-md text-label-md text-on-surface">Không tải được nhật ký</span><button class="mt-2 px-3 py-1 text-primary hover:bg-primary-container/10 border border-primary rounded-lg font-label-sm text-label-sm transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">refresh</span> Thử lại</button></div></div><div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col gap-4"><div class="flex items-center gap-2"><div class="w-5 h-5 border-2 border-outline-variant border-t-primary rounded-full animate-spin"></div><span class="font-label-md text-label-md text-on-surface-variant">Đang tải nhật ký...</span></div><div class="space-y-3 animate-pulse"><div class="h-3 bg-surface-container-highest rounded w-3/4"></div><div class="h-3 bg-surface-container-highest rounded w-full"></div><div class="h-3 bg-surface-container-highest rounded w-5/6"></div></div></div></div></section>
+</div>
+<!-- Reference States (Miniatures for dev preview) -->
+</div>
+</main>
+</div>
+</body></html>
