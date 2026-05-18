@@ -1,0 +1,17 @@
+bin/
+obj/
+.vs/
+.idea/
+.vscode/
+
+node_modules/
+.next/
+out/
+
+*.user
+*.suo
+*.log
+*.tmp
+
+TestResults/
+coverage/
