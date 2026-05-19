@@ -76,9 +76,9 @@ export default function FormsPage() {
       });
       setAnalysis(result);
       setRuleConfigs(Object.fromEntries(result.questions.map((question) => [question.id, defaultRule(question)])));
-      setMessage("Đã analyze form. Kiểm tra câu hỏi và cấu hình answer rules trước khi generate preview.");
+      setMessage("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không analyze được form.");
+      setMessage(error instanceof Error ? error.message : "Không phân tích được biểu mẫu.");
     } finally {
       setBusy(false);
     }
@@ -114,9 +114,9 @@ export default function FormsPage() {
       });
       setPreviews(result.items);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
-      setMessage(`Đã generate ${result.items.length} preview responses và trừ ${result.creditsUsed} credit.`);
+      setMessage(`Đã tạo ${result.items.length} câu trả lời xem trước và trừ ${result.creditsUsed} credit.`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không generate được preview.");
+      setMessage(error instanceof Error ? error.message : "Không tạo được bản xem trước.");
     } finally {
       setBusy(false);
     }
@@ -124,7 +124,7 @@ export default function FormsPage() {
 
   async function submitConfirmed() {
     if (!analysis || previews.length === 0 || !confirmed) {
-      setMessage("Bạn phải review preview và tick xác nhận trước khi submit.");
+      setMessage("Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.");
       return;
     }
 
@@ -139,9 +139,9 @@ export default function FormsPage() {
         }
       });
       setSubmission(result);
-      setMessage("Submission đã chạy với các preview đã xác nhận.");
+      setMessage("Đã bắt đầu gửi các câu trả lời đã xác nhận.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không submit được preview.");
+      setMessage(error instanceof Error ? error.message : "Không gửi được bản xem trước.");
     } finally {
       setBusy(false);
     }
@@ -159,9 +159,9 @@ export default function FormsPage() {
         method: "POST"
       });
       setSubmission(result);
-      setMessage("Submission job đã pause sau batch hiện tại.");
+      setMessage("Đã tạm dừng sau nhóm gửi hiện tại.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không pause được submission job.");
+      setMessage(error instanceof Error ? error.message : "Không tạm dừng được lượt gửi.");
     } finally {
       setBusy(false);
     }
@@ -179,9 +179,9 @@ export default function FormsPage() {
         method: "POST"
       });
       setSubmission(result);
-      setMessage("Submission job đã cancel.");
+      setMessage("Đã hủy lượt gửi.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không cancel được submission job.");
+      setMessage(error instanceof Error ? error.message : "Không hủy được lượt gửi.");
     } finally {
       setBusy(false);
     }
@@ -192,18 +192,18 @@ export default function FormsPage() {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h2 className="text-2xl font-semibold">Tự động hóa Google Form</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Phân tích form, cấu hình câu trả lời, xem preview và chỉ gửi sau khi xác nhận.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Phân tích biểu mẫu, cài đặt câu trả lời, xem trước và chỉ gửi sau khi xác nhận.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Badge tone="info">Tối đa 100 preview</Badge>
-          <Badge tone="neutral">Batch gửi {SUBMISSION_BATCH_SIZE}</Badge>
+          <Badge tone="info">Tối đa 100 bản xem trước</Badge>
+          <Badge tone="neutral">Mỗi lượt gửi {SUBMISSION_BATCH_SIZE}</Badge>
           <Badge tone="success">Cần xác nhận trước khi gửi</Badge>
         </div>
       </div>
 
       <Alert className="flex items-start gap-3">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
-        <span>Không có auto-submit. Mỗi lần chỉ generate tối đa 100 preview responses, gửi tuần tự theo batch {SUBMISSION_BATCH_SIZE} và phải xác nhận trước khi gửi.</span>
+        <span>Không tự gửi hàng loạt. Mỗi lần chỉ tạo tối đa 100 câu trả lời xem trước, gửi tuần tự theo nhóm {SUBMISSION_BATCH_SIZE} và phải xác nhận trước khi gửi.</span>
       </Alert>
 
       <Card>
@@ -220,11 +220,11 @@ export default function FormsPage() {
             />
             <Input
               maxLength={PROJECT_NAME_MAX_LENGTH}
-              placeholder="Tên project nội bộ"
+              placeholder="Tên nội bộ"
               value={name}
               onChange={(event) => setName(limitText(event.target.value, PROJECT_NAME_MAX_LENGTH))}
             />
-            <Button disabled={busy || !formUrl.trim()} type="submit">Analyze form</Button>
+            <Button disabled={busy || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
           </form>
           {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
         </CardContent>
@@ -233,7 +233,7 @@ export default function FormsPage() {
       {analysis && (
         <Card>
           <CardHeader>
-            <CardTitle>2. Câu hỏi và answer rules</CardTitle>
+            <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-lg border border-border bg-muted/30 p-4">
@@ -244,7 +244,7 @@ export default function FormsPage() {
               </div>
               <div className="mt-3 grid gap-3 text-sm md:grid-cols-3">
                 <div>
-                  <p className="text-xs text-muted-foreground">Project</p>
+                  <p className="text-xs text-muted-foreground">Tên nội bộ</p>
                   <p className="mt-1 font-medium">{analysis.name}</p>
                 </div>
                 <div>
@@ -253,12 +253,12 @@ export default function FormsPage() {
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Luồng xử lý</p>
-                  <p className="mt-1 font-medium">Rules -&gt; Preview -&gt; Confirm</p>
+                  <p className="mt-1 font-medium">Cài đặt -&gt; Xem trước -&gt; Xác nhận</p>
                 </div>
               </div>
             </div>
             {analysis.questions.length === 0 ? (
-              <EmptyState title="Không có câu hỏi được hỗ trợ" detail="Form này chưa có entry phù hợp với MVP question types." />
+              <EmptyState title="Không có câu hỏi được hỗ trợ" detail="Biểu mẫu này chưa có câu hỏi phù hợp với các loại đang hỗ trợ." />
             ) : (
               <div className="space-y-4">
                 {analysis.questions.map((question, index) => (
@@ -272,8 +272,8 @@ export default function FormsPage() {
                 ))}
                 <div className="flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
                   <div>
-                    <p className="text-sm font-medium">Số preview responses</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần generate.</p>
+                    <p className="text-sm font-medium">Số câu trả lời xem trước</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
                     <Input
                       className="mt-2 w-32"
                       inputMode="numeric"
@@ -286,7 +286,7 @@ export default function FormsPage() {
                     />
                   </div>
                   <Button disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
-                    Lưu rules và generate preview
+                    Lưu cách trả lời và tạo bản xem trước
                   </Button>
                 </div>
               </div>
@@ -297,23 +297,23 @@ export default function FormsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>3. Preview và confirmation</CardTitle>
+          <CardTitle>3. Xem trước và xác nhận</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {previews.length === 0 ? (
-            <EmptyState title="Chưa có preview" detail="Generate preview trước khi gửi. Submission sẽ bị chặn nếu thiếu preview hoặc thiếu confirmation." />
+            <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
           ) : (
             <>
               <div className="rounded-lg border border-border bg-muted/30 p-4">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <p className="text-sm font-medium">Preview responses đã tạo</p>
+                    <p className="text-sm font-medium">Câu trả lời xem trước đã tạo</p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Mở từng response để kiểm tra câu trả lời trước khi xác nhận gửi.
+                      Mở từng bản xem trước để kiểm tra câu trả lời trước khi xác nhận gửi.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Badge tone="info">{previews.length} responses</Badge>
+                    <Badge tone="info">{previews.length} bản xem trước</Badge>
                     <Badge tone="neutral">{previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời</Badge>
                   </div>
                 </div>
@@ -340,16 +340,16 @@ export default function FormsPage() {
                     onChange={(event) => setConfirmed(event.target.checked)}
                   />
                   <span>
-                    <span className="block font-medium">Xác nhận sau khi review preview</span>
+                    <span className="block font-medium">Xác nhận sau khi xem lại bản xem trước</span>
                     <span className="mt-1 block text-muted-foreground">
-                      Tôi xác nhận gửi đúng các preview responses này và hiểu hệ thống không hỗ trợ spam, proxy, captcha bypass hoặc unauthorized submission.
+                      Tôi xác nhận gửi đúng các câu trả lời xem trước này và hiểu hệ thống không hỗ trợ spam, proxy, vượt captcha hoặc gửi khi không được phép.
                     </span>
                   </span>
                 </label>
                 <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-muted-foreground">Submission chỉ chạy sau khi checkbox xác nhận được bật.</p>
+                  <p className="text-xs text-muted-foreground">Hệ thống chỉ gửi sau khi ô xác nhận được bật.</p>
                   <Button disabled={busy || !confirmed} onClick={submitConfirmed} type="button">
-                    Submit confirmed previews
+                    Gửi các bản xem trước đã xác nhận
                   </Button>
                 </div>
               </div>
@@ -361,27 +361,27 @@ export default function FormsPage() {
       {submission && (
         <Card>
           <CardHeader>
-            <CardTitle>4. Submission result</CardTitle>
+            <CardTitle>4. Kết quả gửi</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div className="flex flex-wrap items-center gap-3">
               <StatusBadge status={submission.status} />
-              <span>Total: {submission.total}</span>
-              <span>Success: {submission.successCount}</span>
-              <span>Failed: {submission.failedCount}</span>
+              <span>Tổng: {submission.total}</span>
+              <span>Thành công: {submission.successCount}</span>
+              <span>Thất bại: {submission.failedCount}</span>
             </div>
             {(submission.status === "Running" || submission.status === "Pending") && (
               <div className="flex flex-wrap gap-2">
-                <Button disabled={busy} onClick={pauseSubmission} type="button">Pause</Button>
-                <Button disabled={busy} onClick={cancelSubmission} type="button">Cancel</Button>
+                <Button disabled={busy} onClick={pauseSubmission} type="button">Tạm dừng</Button>
+                <Button disabled={busy} onClick={cancelSubmission} type="button">Hủy</Button>
               </div>
             )}
             {submission.status === "Paused" && (
-              <Button disabled={busy} onClick={cancelSubmission} type="button">Cancel paused job</Button>
+              <Button disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
             {submission.logs.map((log) => (
               <div className="rounded-md border border-border p-3" key={log.id}>
-                <StatusBadge status={log.status} /> <span className="ml-2">{log.errorMessage || "Submitted"}</span>
+                <StatusBadge status={log.status} /> <span className="ml-2">{log.errorMessage || "Đã gửi"}</span>
               </div>
             ))}
           </CardContent>
@@ -414,7 +414,7 @@ function PreviewAccordion({
           {index + 1}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block font-semibold">Response #{index + 1}</span>
+          <span className="block font-semibold">Bản xem trước #{index + 1}</span>
           <span className="mt-0.5 block text-xs text-muted-foreground">
             {preview.answers.length} câu trả lời · {formatDate(preview.createdAt)}
           </span>
@@ -575,7 +575,7 @@ function RuleEditor({
             <p className="mt-1 text-xs text-muted-foreground">{question.entryId}</p>
           </div>
         </div>
-        <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập text" : `${question.options.length} lựa chọn`}</Badge>
+        <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
       </div>
 
       {!isTextQuestion && question.options.length > 0 && (
@@ -618,7 +618,7 @@ function RuleEditor({
         {value.mode === "DateRangeSequential" ? (
           <div className="rounded-md border border-border bg-muted/30 p-3">
             <p className="text-sm font-medium">Khoảng ngày tuần tự</p>
-            <p className="mt-1 text-xs text-muted-foreground">Generate preview sẽ đi lần lượt từ ngày bắt đầu đến ngày kết thúc.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt từ ngày bắt đầu đến ngày kết thúc.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="block text-sm font-medium">
                 Từ ngày
@@ -643,7 +643,7 @@ function RuleEditor({
         ) : value.mode === "TimeRangeSequential" ? (
           <div className="rounded-md border border-border bg-muted/30 p-3">
             <p className="text-sm font-medium">Khoảng giờ tuần tự</p>
-            <p className="mt-1 text-xs text-muted-foreground">Generate preview sẽ đi lần lượt theo các slot giờ trong khoảng đã chọn.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt theo các mốc giờ trong khoảng đã chọn.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <label className="block text-sm font-medium">
                 Từ giờ
@@ -701,11 +701,11 @@ function RuleEditor({
                 <p className="mt-1 text-xs text-muted-foreground">
                   {value.mode === "RandomByPercentage"
                     ? "Nhập phần trăm cho từng lựa chọn. Tổng tối đa 100%."
-                    : `Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi generate preview. Tổng tối đa ${MAX_RULE_VALUES}.`}
+                    : `Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi tạo bản xem trước. Tổng tối đa ${MAX_RULE_VALUES}.`}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Badge tone="info">{selectedOptions.length} active</Badge>
+                <Badge tone="info">{selectedOptions.length} đang chọn</Badge>
                 <Badge tone={choiceTotal === choiceLimit ? "success" : "warning"}>
                   {choiceTotal}/{choiceLimit}{value.mode === "RandomByPercentage" ? "%" : ""}
                 </Badge>
@@ -743,9 +743,9 @@ function RuleEditor({
           </div>
         ) : (
           <div className="rounded-md border border-border bg-muted/30 p-3 text-sm">
-            <p className="font-medium">Rule sẽ dùng các lựa chọn đang bật.</p>
+            <p className="font-medium">Cách trả lời sẽ dùng các lựa chọn đang bật.</p>
             <p className="mt-1 text-muted-foreground">
-              Với chế độ hiện tại, hệ thống tự build config từ options thật của form, không cần nhập JSON thủ công.
+              Với chế độ hiện tại, hệ thống tự tạo cấu hình từ lựa chọn thật của biểu mẫu, không cần nhập JSON thủ công.
             </p>
             {isCheckboxQuestion && (
               <CheckboxSelectionFields
@@ -812,7 +812,7 @@ function defaultRule(question: FormQuestion) {
     };
   }
 
-  const values = question.options.length > 0 ? question.options : ["Option A", "Option B"];
+  const values = question.options.length > 0 ? question.options : ["Lựa chọn A", "Lựa chọn B"];
   return {
     mode: "RandomEqually",
     configJson: buildChoiceConfig("RandomEqually", values, question.questionType)
@@ -1070,9 +1070,9 @@ function questionTypeLabel(type: string) {
     case "MultipleChoice":
       return "Trắc nghiệm";
     case "Checkbox":
-      return "Checkbox";
+      return "Ô chọn";
     case "Dropdown":
-      return "Dropdown";
+      return "Danh sách chọn";
     case "LinearScale":
       return "Thang điểm";
     case "Rating":
@@ -1080,7 +1080,7 @@ function questionTypeLabel(type: string) {
     case "MultipleChoiceGrid":
       return "Lưới trắc nghiệm";
     case "CheckboxGrid":
-      return "Lưới checkbox";
+      return "Lưới ô chọn";
     case "Date":
       return "Ngày";
     case "Time":

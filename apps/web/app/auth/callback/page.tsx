@@ -50,7 +50,7 @@ function AuthCallbackContent() {
         if (error.message.includes("409") || error.message.toLowerCase().includes("password")) {
           setMessage("Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.");
         } else if (error.message.includes("401")) {
-          setMessage("Email Google chưa được xác minh hoặc token không hợp lệ.");
+          setMessage("Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.");
         } else {
           setMessage("Không thể liên kết tài khoản Google với tài khoản hiện tại.");
         }
@@ -73,7 +73,7 @@ function AuthCallbackContent() {
           ) : message ? (
             <Alert className="border-amber-200 bg-amber-50 text-amber-800">{message}</Alert>
           ) : (
-            <Alert>Đăng nhập thành công. Đang chuyển vào dashboard...</Alert>
+            <Alert>Đăng nhập thành công. Đang chuyển vào bảng điều khiển...</Alert>
           )}
           <Link
             className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium transition hover:bg-muted"

@@ -44,7 +44,7 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
   }
 
   if (!response.ok) {
-    let message = `Request failed with HTTP ${response.status}.`;
+    let message = `Yêu cầu không thành công. Mã lỗi HTTP ${response.status}.`;
     try {
       const text = await response.text();
       if (text) {

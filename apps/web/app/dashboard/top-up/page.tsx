@@ -13,7 +13,7 @@ export default function TopUpPage() {
   const [orders, setOrders] = useState<TopupOrder[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [packageId, setPackageId] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("Manual");
+  const [paymentMethod, setPaymentMethod] = useState("Thủ công");
   const [paymentNote, setPaymentNote] = useState("");
   const [message, setMessage] = useState("");
 
@@ -44,7 +44,7 @@ export default function TopUpPage() {
         json: { packageId, paymentMethod, paymentNote }
       });
       setPaymentNote("");
-      setMessage("Đã tạo yêu cầu nạp credit. Admin sẽ duyệt thủ công.");
+      setMessage("Đã tạo yêu cầu nạp credit. Quản trị viên sẽ duyệt thủ công.");
       await loadData();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Không tạo được yêu cầu nạp.");
@@ -55,10 +55,10 @@ export default function TopUpPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Yêu cầu nạp credit</h2>
-        <p className="mt-1 text-sm text-muted-foreground">MVP chỉ hỗ trợ yêu cầu nạp và admin duyệt thủ công.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Giai đoạn hiện tại chỉ hỗ trợ yêu cầu nạp và quản trị viên duyệt thủ công.</p>
       </div>
 
-      <Alert>Payment gateway checkout đang Deferred. Không nhập thẻ, QR tự động hoặc thông tin thanh toán production tại đây.</Alert>
+      <Alert>Cổng thanh toán tự động đang để sau. Không nhập thẻ, QR tự động hoặc thông tin thanh toán thật tại đây.</Alert>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_1.3fr]">
         <Card>
@@ -95,7 +95,7 @@ export default function TopUpPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Tóm tắt balance</CardTitle>
+            <CardTitle>Tóm tắt số dư</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 md:grid-cols-3">
             <Metric label="Credit hiện có" value={summary ? String(summary.currentCreditBalance) : "-"} />
@@ -117,7 +117,7 @@ export default function TopUpPage() {
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
-                    <th className="py-2">Credits</th>
+                    <th className="py-2">Credit</th>
                     <th className="py-2">Số tiền</th>
                     <th className="py-2">Phương thức</th>
                     <th className="py-2">Trạng thái</th>

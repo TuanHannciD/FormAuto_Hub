@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary } from "@/lib/api";
+import { displayAction } from "@/lib/labels";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -21,11 +22,11 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Tổng quan vận hành</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi credit, yêu cầu nạp và các thao tác automation gần đây.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Theo dõi credit, yêu cầu nạp và các thao tác biểu mẫu gần đây.</p>
       </div>
 
       <Alert>
-        Form automation luôn yêu cầu preview trước, user confirmation rõ ràng, và giới hạn 1 đến 5 preview responses mỗi lần.
+        Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
       </Alert>
       {message && <Alert className="border-amber-200 bg-amber-50 text-amber-800">{message}</Alert>}
 
@@ -39,24 +40,24 @@ export default function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Next actions</CardTitle>
+            <CardTitle>Việc nên làm tiếp</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/forms">
-              Analyze Google Form URL và cấu hình answer rules
+              Phân tích link Google Form và cài đặt cách trả lời
             </Link>
             <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/top-up">
               Tạo yêu cầu nạp credit thủ công
             </Link>
             <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/usage-logs">
-              Kiểm tra usage logs và hành động bị chặn
+              Kiểm tra lịch sử sử dụng và hành động bị chặn
             </Link>
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Top-up gần đây</CardTitle>
+            <CardTitle>Yêu cầu nạp gần đây</CardTitle>
           </CardHeader>
           <CardContent>
             {!summary || summary.recentTopupOrders.length === 0 ? (
@@ -66,7 +67,7 @@ export default function DashboardPage() {
                 <table className="w-full text-sm">
                   <thead className="text-left text-muted-foreground">
                     <tr>
-                      <th className="py-2">Credits</th>
+                      <th className="py-2">Credit</th>
                       <th className="py-2">Số tiền</th>
                       <th className="py-2">Trạng thái</th>
                       <th className="py-2">Tạo lúc</th>
@@ -91,19 +92,19 @@ export default function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Usage logs gần đây</CardTitle>
+          <CardTitle>Lịch sử sử dụng gần đây</CardTitle>
         </CardHeader>
         <CardContent>
           {!summary || summary.recentUsageLogs.length === 0 ? (
-            <EmptyState title="Chưa có usage log gần đây" detail="Các hành động analyze, preview và submission sẽ xuất hiện tại đây." />
+            <EmptyState title="Chưa có lịch sử sử dụng gần đây" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây." />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
                     <th className="py-2">Thời gian</th>
-                    <th className="py-2">Action</th>
-                    <th className="py-2">Credits</th>
+                    <th className="py-2">Thao tác</th>
+                    <th className="py-2">Credit</th>
                     <th className="py-2">Kết quả</th>
                     <th className="py-2">Mô tả</th>
                   </tr>
@@ -112,7 +113,7 @@ export default function DashboardPage() {
                   {summary.recentUsageLogs.map((log) => (
                     <tr className="border-t border-border" key={log.id}>
                       <td className="py-3">{formatDate(log.createdAt)}</td>
-                      <td className="py-3">{log.action}</td>
+                      <td className="py-3">{displayAction(log.action)}</td>
                       <td className="py-3">{log.creditsUsed}</td>
                       <td className="py-3"><StatusBadge status={log.status} /></td>
                       <td className="py-3">{log.description}</td>

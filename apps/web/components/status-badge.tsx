@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui";
+import { displayStatus } from "@/lib/labels";
 
 export function StatusBadge({ status }: { status: string }) {
   const tone =
@@ -10,5 +11,5 @@ export function StatusBadge({ status }: { status: string }) {
           ? "warning"
           : "neutral";
 
-  return <Badge tone={tone}>{status}</Badge>;
+  return <Badge tone={tone}>{displayStatus(status)}</Badge>;
 }

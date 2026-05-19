@@ -19,7 +19,7 @@ import { Button } from "@/components/ui";
 
 const navItems = [
   { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/dashboard/forms", label: "Form automation", icon: FormInput },
+  { href: "/dashboard/forms", label: "Tự động hóa biểu mẫu", icon: FormInput },
   { href: "/dashboard/top-up", label: "Nạp credit", icon: CreditCard },
   { href: "/dashboard/usage-logs", label: "Lịch sử sử dụng", icon: FileClock },
   { href: "/dashboard/credit-transactions", label: "Giao dịch credit", icon: ReceiptText },
@@ -81,7 +81,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <p className="text-sm font-semibold">FormAuto Hub</p>
-            <p className="text-xs text-muted-foreground">Dashboard vận hành</p>
+            <p className="text-xs text-muted-foreground">Bảng điều khiển vận hành</p>
           </div>
         </div>
         <nav className="space-y-1">
@@ -101,12 +101,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phase 7 dashboard</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bảng điều khiển giai đoạn 7</p>
               <h1 className="text-lg font-semibold">FormAuto Hub</h1>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden text-right text-xs text-muted-foreground sm:block">
-                <p className="font-medium text-foreground">{session?.fullName ?? "FormAuto user"}</p>
+                <p className="font-medium text-foreground">{session?.fullName ?? "Người dùng FormAuto"}</p>
                 <p>{session?.email ?? ""}</p>
               </div>
               <Button type="button" variant="secondary" onClick={logout}>

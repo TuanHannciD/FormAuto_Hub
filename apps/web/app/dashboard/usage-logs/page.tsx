@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog } from "@/lib/api";
+import { displayAction, displayToolName } from "@/lib/labels";
 import { formatDate } from "@/lib/utils";
 
 export default function UsageLogsPage() {
@@ -21,29 +22,29 @@ export default function UsageLogsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Lịch sử sử dụng</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi tool actions, credits used và kết quả workflow.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Theo dõi thao tác hệ thống, credit đã dùng và kết quả xử lý.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <Metric label="Tổng actions" value={String(logs.length)} />
-        <Metric label="Credits used" value={String(creditsUsed)} />
-        <Metric label="Failed actions" value={String(logs.filter((log) => log.status === "Failed").length)} />
+        <Metric label="Tổng thao tác" value={String(logs.length)} />
+        <Metric label="Credit đã dùng" value={String(creditsUsed)} />
+        <Metric label="Thao tác thất bại" value={String(logs.filter((log) => log.status === "Failed").length)} />
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Usage log table</CardTitle>
+          <CardTitle>Bảng lịch sử sử dụng</CardTitle>
         </CardHeader>
         <CardContent>
           {logs.length === 0 ? (
-            <EmptyState title="Chưa có usage logs" detail="Analyze, preview generation và submission actions sẽ được ghi tại đây." />
+            <EmptyState title="Chưa có lịch sử sử dụng" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ được ghi tại đây." />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
                     <th className="py-2">Thời gian</th>
-                    <th className="py-2">Tool</th>
-                    <th className="py-2">Action</th>
-                    <th className="py-2">Credits</th>
+                    <th className="py-2">Công cụ</th>
+                    <th className="py-2">Thao tác</th>
+                    <th className="py-2">Credit</th>
                     <th className="py-2">Kết quả</th>
                     <th className="py-2">Mô tả</th>
                   </tr>
@@ -52,8 +53,8 @@ export default function UsageLogsPage() {
                   {logs.map((log) => (
                     <tr className="border-t border-border" key={log.id}>
                       <td className="py-3">{formatDate(log.createdAt)}</td>
-                      <td className="py-3">{log.toolName}</td>
-                      <td className="py-3">{log.action}</td>
+                      <td className="py-3">{displayToolName(log.toolName)}</td>
+                      <td className="py-3">{displayAction(log.action)}</td>
                       <td className="py-3">{log.creditsUsed}</td>
                       <td className="py-3"><StatusBadge status={log.status} /></td>
                       <td className="py-3">{log.description}</td>

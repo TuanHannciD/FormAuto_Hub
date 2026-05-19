@@ -38,9 +38,9 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Hồ sơ</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Thông tin tài khoản dùng cho dashboard.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Thông tin tài khoản dùng cho bảng điều khiển.</p>
       </div>
-      <Alert>Phiên hiện tại dùng JWT access token và refresh token. Đổi mật khẩu nằm trong mục bảo mật.</Alert>
+      <Alert>Phiên hiện tại dùng mã đăng nhập ngắn hạn và mã làm mới. Đổi mật khẩu nằm trong mục bảo mật.</Alert>
       <Card>
         <CardHeader>
           <CardTitle>Thông tin cá nhân</CardTitle>
@@ -57,7 +57,7 @@ export default function ProfilePage() {
             </label>
             <div className="grid gap-4 text-sm md:grid-cols-2">
               <div>
-                <p className="text-muted-foreground">Role</p>
+                <p className="text-muted-foreground">Vai trò</p>
                 <p className="font-medium">{profile?.role ?? "-"}</p>
               </div>
               <div>

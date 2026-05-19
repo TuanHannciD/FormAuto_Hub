@@ -64,7 +64,7 @@ function LoginContent() {
             </div>
             <div>
               <CardTitle>Đăng nhập</CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">Vào dashboard FormAuto Hub.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Vào bảng điều khiển FormAuto Hub.</p>
             </div>
           </div>
         </CardHeader>

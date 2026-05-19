@@ -29,7 +29,7 @@ export default function TopUpOrderDetailPage() {
         <Card>
           <CardContent>
             <p className="font-medium">Không tìm thấy yêu cầu nạp.</p>
-            <p className="mt-1 text-sm text-muted-foreground">Yêu cầu có thể không tồn tại hoặc không thuộc user hiện tại.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Yêu cầu có thể không tồn tại hoặc không thuộc tài khoản hiện tại.</p>
           </CardContent>
         </Card>
       </div>
@@ -54,10 +54,10 @@ export default function TopUpOrderDetailPage() {
       <div>
         <Link className="text-sm text-primary hover:underline" href="/dashboard/top-up">Quay lại yêu cầu nạp</Link>
         <h2 className="mt-3 text-2xl font-semibold">Chi tiết yêu cầu nạp</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi trạng thái manual approval. Đây không phải payment gateway checkout.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Theo dõi trạng thái duyệt thủ công. Đây không phải màn thanh toán tự động.</p>
       </div>
 
-      <Alert>Payment gateway vẫn Deferred. Yêu cầu này chỉ ghi nhận luồng nạp credit thủ công và chờ admin duyệt.</Alert>
+      <Alert>Cổng thanh toán tự động vẫn để sau. Yêu cầu này chỉ ghi nhận luồng nạp credit thủ công và chờ quản trị viên duyệt.</Alert>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
         <Card>
@@ -65,9 +65,9 @@ export default function TopUpOrderDetailPage() {
             <CardTitle>Thông tin yêu cầu</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
-            <Detail label="Order ID" value={order.id} />
-            <Detail label="Package ID" value={order.packageId} />
-            <Detail label="Credits" value={String(order.credits)} />
+            <Detail label="Mã yêu cầu" value={order.id} />
+            <Detail label="Mã gói credit" value={order.packageId} />
+            <Detail label="Credit" value={String(order.credits)} />
             <Detail label="Số tiền" value={formatCurrency(order.amount)} />
             <div>
               <p className="text-muted-foreground">Trạng thái</p>
@@ -78,14 +78,14 @@ export default function TopUpOrderDetailPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Manual approval timeline</CardTitle>
+            <CardTitle>Tiến trình duyệt thủ công</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
-            <Detail label="Payment method" value={order.paymentMethod} />
-            <Detail label="Payment note" value={order.paymentNote || "-"} />
-            <Detail label="Created at" value={formatDate(order.createdAt)} />
-            <Detail label="Paid at" value={formatDate(order.paidAt)} />
-            <Detail label="Approved at" value={formatDate(order.approvedAt)} />
+            <Detail label="Cách ghi nhận thanh toán" value={order.paymentMethod} />
+            <Detail label="Ghi chú thanh toán" value={order.paymentNote || "-"} />
+            <Detail label="Tạo lúc" value={formatDate(order.createdAt)} />
+            <Detail label="Đã thanh toán lúc" value={formatDate(order.paidAt)} />
+            <Detail label="Được duyệt lúc" value={formatDate(order.approvedAt)} />
           </CardContent>
         </Card>
       </div>
