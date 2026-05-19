@@ -6,7 +6,7 @@
 
 ## Trạng thái hiện tại
 
-- Phase hiện tại: Phase 6 - Production integrations.
+- Phase hiện tại: Phase 7 - Authentication and account access.
 - Phase 1 backend foundation tồn tại trong `src/FormAutoHub.Api`.
 - Initial test project tồn tại trong `tests/FormAutoHub.Tests`.
 - Backend đã chốt: ASP.NET Core Web API .NET 9, SQL Server, EF Core.

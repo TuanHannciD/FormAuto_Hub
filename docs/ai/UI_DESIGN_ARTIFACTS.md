@@ -28,6 +28,10 @@ Design artifacts are not production source code, API contracts, database contrac
 | Credit transactions ledger | `8f55ef6bf6ba4941b6cc616c04c5104c` | `docs/design/stitch/credit-transactions/` | Reference accepted |
 | Profile/account settings | `6ecbf4df5fd945d78d94df8f7d23a153` | `docs/design/stitch/profile-settings/` | Reference accepted |
 | Top-up order detail | `e0811bb411004578ac20dc13f990e7ac` | `docs/design/stitch/top-up-order-detail/` | Reference accepted |
+| Login | `5235dbc4313a48098e4743be671a26a3` | `docs/design/stitch/login/` | Reference accepted after refinement |
+| Register | `29b9ee6f2389428aa1490f91aa9de4bf` | `docs/design/stitch/register/` | Reference accepted after refinement |
+| Auth callback | `e014f45ea68145cb9cfb5ab1821bc175` | `docs/design/stitch/auth-callback/` | Reference accepted after refinement |
+| Profile security | `5e5335a5b7c94b4094d850ec0c03636e` | `docs/design/stitch/profile-security/` | Reference accepted |
 
 ## Artifact Folder Standard
 
@@ -59,7 +63,7 @@ Before implementing a frontend page from a Stitch design:
 Do not implement from UI artifacts unless separately approved:
 
 - payment gateway checkout
-- Google OAuth
+- production Google OAuth implementation
 - official Google Forms API production flow
 - AI answer generation as production-complete
 - AI auto-submit
@@ -79,6 +83,10 @@ Current generated coverage supports:
 - credit transactions ledger
 - profile/account settings
 - top-up order detail
+- login and lockout/auth-error states
+- register
+- auth callback
+- profile security
 
 Remaining useful references:
 

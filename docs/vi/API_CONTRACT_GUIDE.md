@@ -55,6 +55,53 @@ Các API area dưới đây là đề xuất, chưa phải contract cuối. Mỗ
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
 
+### Authentication and account access
+
+Behavior baseline đã duyệt cho Phase 7:
+
+- `POST /api/auth/register` đăng ký bằng email/password và trả JWT sau khi đăng ký thành công
+- `POST /api/auth/login` đăng nhập bằng email/password
+- `POST /api/auth/google` đăng nhập hoặc auto-register bằng Google identity only
+- `POST /api/auth/refresh` rotate refresh token/session hiện tại và trả token mới
+- `POST /api/auth/logout` revoke refresh token/session hiện tại
+- `POST /api/auth/link-google` link Google identity đã verified sau khi user login password
+- `PUT /api/profile/change-password` đổi mật khẩu từ profile
+- password recovery chưa implement và UI có thể hiển thị là đang được cập nhật
+
+Quy tắc token/session đã duyệt:
+
+- access token hết hạn sau 1 giờ
+- refresh token hết hạn sau 7 ngày
+- refresh token/session storage dùng table riêng `RefreshTokens`
+- lockout threshold: 5 failed login attempts
+- lockout duration: 15 minutes
+
+Quy tắc starting credit khi đăng ký đã duyệt:
+
+- user mới nhận 5 starting credits
+- starting credit grant phải ghi một dòng `CreditTransactions`
+- `InitialGrant` là giá trị `CreditTransaction.Type` đã duyệt cho starting credits
+
+Quy tắc Google identity đã duyệt:
+
+- nếu `provider_user_id` hoặc Google `sub` đã tồn tại trong storage, login luôn cho user đã link
+- nếu chưa có provider user id nhưng Google email trùng account password hiện có, chỉ xét link khi `email_verified = true`
+- email trùng đã verified không được silent auto-link; flow ưu tiên là login password trước rồi link Google
+- nếu `email_verified = false`, không auto-link
+- Google auto-register được phép khi không có conflict với account hiện có
+- điều này không duyệt official Google Forms API scopes hoặc Google Forms integration behavior
+
+Cần contract review trước implementation:
+
+- error response details
+
+JWT claims đã duyệt:
+
+- `sub`: user id
+- `email`: user email
+- `role`: user role
+- `jti`: token id
+
 ### Forms
 
 - `POST /api/forms/analyze`
@@ -64,6 +111,19 @@ Các API area dưới đây là đề xuất, chưa phải contract cuối. Mỗ
 
 - `POST /api/projects/{projectId}/answer-rules`
 - `PUT /api/projects/{projectId}/answer-rules/{ruleId}`
+
+Phần mở rộng config answer-rule cho Checkbox đã duyệt:
+
+- chỉ áp dụng cho `FormQuestionTypes.Checkbox`
+- các choice mode hiện có giữ nguyên: `RandomEqually`, `RandomByPercentage`, `RandomByQuantity`
+- `RandomByPercentage` dùng integer percentage weights từ 0 đến 100
+- frontend nên hiển thị input dạng phần trăm và giữ tổng hiển thị không vượt quá 100%
+- `ConfigJson.minSelections`: số option tối thiểu trong mỗi generated answer
+- `ConfigJson.maxSelections`: số option tối đa trong mỗi generated answer
+- nếu thiếu, cả hai mặc định là `1` để tương thích ngược
+- `maxSelections` không được vượt quá số option đã cấu hình hoặc giới hạn generated answer value
+- `MultipleChoice`, `Dropdown`, `LinearScale`, và `Rating` vẫn là câu hỏi single-value
+- `CheckboxGrid` vẫn Deferred để thiết kế rule riêng
 
 ### Generated responses
 
@@ -112,9 +172,9 @@ Assumption: ASP.NET Core `ProblemDetails` là candidate hợp lý, nhưng chưa 
 - Không thêm lifecycle name tùy tiện.
 - Mỗi status cần allowed transitions, owner và terminal-state behavior.
 
-## Status và type values đã duyệt cho Phase 2
+## Status và type values đã duyệt
 
-Được duyệt cho implementation Phase 2:
+Các giá trị đã duyệt:
 
 TopupOrder.Status:
 
@@ -127,6 +187,7 @@ CreditTransaction.Type:
 
 - TopupApproved
 - CreditUsed
+- InitialGrant
 
 UsageLog.Status:
 
@@ -138,11 +199,11 @@ User.Role:
 - User
 - Admin
 
-Không có status, type hoặc role value Phase 2 nào khác được duyệt.
+Không có status, type hoặc role value nào khác được duyệt nếu chưa được document rõ.
 
 ## User context tạm thời
 
-Assumption: Cho đến khi authentication và JWT claims được duyệt, Phase 2 controllers có thể dùng request headers tạm thời cho development và test routing:
+Assumption: JWT authentication của Phase 7 hiện là đường authentication bình thường của app. Temporary request headers chỉ có thể còn lại như fallback cho development/test trong current user context implementation và không được Next.js dashboard API client sử dụng:
 
 - `X-FormAuto-UserId`
 - `X-FormAuto-IsAdmin`

@@ -1,0 +1,123 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { LockKeyhole, Mail } from "lucide-react";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { apiFetch, type AuthTokenResponse } from "@/lib/api";
+import { getStoredSession, saveSession } from "@/lib/auth";
+
+function authErrorMessage(message: string) {
+  if (message.includes("423")) {
+    return "Tài khoản bị khóa tạm thời. Vui lòng thử lại sau 15 phút.";
+  }
+
+  if (message.includes("401")) {
+    return "Email hoặc mật khẩu không đúng.";
+  }
+
+  return message || "Không đăng nhập được. Vui lòng thử lại.";
+}
+
+function LoginContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState(searchParams.get("reason") === "session-expired" ? "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại." : "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (getStoredSession()) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setMessage("");
+    setIsSubmitting(true);
+
+    try {
+      const session = await apiFetch<AuthTokenResponse>("/api/auth/login", {
+        method: "POST",
+        skipAuth: true,
+        json: { email, password }
+      });
+      saveSession(session);
+      router.replace("/dashboard");
+    } catch (error) {
+      setMessage(authErrorMessage(error instanceof Error ? error.message : ""));
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-10">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <LockKeyhole size={20} />
+            </div>
+            <div>
+              <CardTitle>Đăng nhập</CardTitle>
+              <p className="mt-1 text-sm text-muted-foreground">Vào dashboard FormAuto Hub.</p>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={submit}>
+            {message && <Alert className="border-red-200 bg-red-50 text-red-800">{message}</Alert>}
+            <label className="block text-sm font-medium">
+              Email
+              <div className="relative mt-2">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                <Input className="pl-9" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+              </div>
+            </label>
+            <label className="block text-sm font-medium">
+              Mật khẩu
+              <Input className="mt-2" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+            </label>
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
+            </Button>
+          </form>
+          <div className="mt-4 space-y-3">
+            <Button
+              className="w-full"
+              type="button"
+              variant="secondary"
+              onClick={() => router.push("/auth/callback?status=provider-unavailable")}
+            >
+              Đăng nhập với Google
+            </Button>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+              <Link className="text-primary hover:underline" href="/register">
+                Tạo tài khoản
+              </Link>
+              <span className="text-muted-foreground">Quên mật khẩu - Đang cập nhật</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+          Đang mở đăng nhập...
+        </main>
+      }
+    >
+      <LoginContent />
+    </Suspense>
+  );
+}

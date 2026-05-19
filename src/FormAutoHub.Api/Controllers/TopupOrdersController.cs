@@ -1,10 +1,12 @@
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormAutoHub.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/topup-orders")]
 public sealed class TopupOrdersController(ITopupOrderService topupOrderService) : ControllerBase
 {

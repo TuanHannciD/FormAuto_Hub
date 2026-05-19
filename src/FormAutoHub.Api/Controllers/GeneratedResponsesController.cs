@@ -1,10 +1,12 @@
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormAutoHub.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/projects/{projectId:guid}/responses")]
 public sealed class GeneratedResponsesController(IResponseGenerationService responseGenerationService) : ControllerBase
 {

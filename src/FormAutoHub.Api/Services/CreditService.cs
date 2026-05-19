@@ -7,6 +7,12 @@ namespace FormAutoHub.Api.Services;
 
 public interface ICreditService
 {
+    Task<(CreditTransaction Transaction, UserCreditAccount Account)> GrantInitialCreditsAsync(
+        Guid userId,
+        int credits,
+        string description,
+        CancellationToken cancellationToken);
+
     Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddTopupCreditsAsync(
         TopupOrder order,
         string description,
@@ -23,6 +29,55 @@ public interface ICreditService
 
 public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditService
 {
+    public async Task<(CreditTransaction Transaction, UserCreditAccount Account)> GrantInitialCreditsAsync(
+        Guid userId,
+        int credits,
+        string description,
+        CancellationToken cancellationToken)
+    {
+        if (credits <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(credits), "Credits must be greater than zero.");
+        }
+
+        var account = await dbContext.UserCreditAccounts
+            .SingleOrDefaultAsync(item => item.UserId == userId, cancellationToken);
+
+        if (account is null)
+        {
+            account = new UserCreditAccount
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                Balance = 0,
+                TotalDeposited = 0,
+                TotalUsed = 0,
+                UpdatedAt = DateTimeOffset.UtcNow
+            };
+            dbContext.UserCreditAccounts.Add(account);
+        }
+
+        account.Balance += credits;
+        account.TotalDeposited += credits;
+        account.UpdatedAt = DateTimeOffset.UtcNow;
+
+        var transaction = new CreditTransaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            Amount = credits,
+            BalanceAfter = account.Balance,
+            Type = CreditTransactionTypes.InitialGrant,
+            Description = description,
+            ReferenceType = nameof(User),
+            ReferenceId = userId,
+            CreatedAt = DateTimeOffset.UtcNow
+        };
+
+        dbContext.CreditTransactions.Add(transaction);
+        return (transaction, account);
+    }
+
     public async Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddTopupCreditsAsync(
         TopupOrder order,
         string description,

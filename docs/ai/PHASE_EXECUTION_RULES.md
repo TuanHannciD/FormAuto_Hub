@@ -8,7 +8,7 @@ Prevent phase creep and accidental approval of future work.
 
 Default active phase is the current phase in `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: Phase 6 - Production integrations.
+Current active phase: Phase 7 - Authentication and account access.
 
 ## In-Phase Work
 
@@ -44,6 +44,12 @@ The following must remain Deferred until approved:
 - email notifications
 - webhooks
 - deployment platform
+
+Future candidate guidance:
+
+- Google OAuth, official Google Forms API, Google Forms watches/Cloud Pub/Sub notification handling, and background jobs are useful Phase 6 candidates, but remain Deferred until a task explicitly approves the production scope.
+- Approval must cover the integration target, API contracts, database fields, statuses, lifecycle states, token storage model, notification ingestion model, background job framework choice, and validation plan when applicable.
+- If the approved future scope needs UI and existing UI docs are missing or incomplete, ask for UI direction or sync UI docs before implementing UI.
 
 ## Phase 3 Credit Rule
 

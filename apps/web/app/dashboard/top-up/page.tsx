@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Select, Textarea } from "@/components/ui";
+import { DropdownSelect } from "@/components/dropdown-select";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -68,13 +69,15 @@ export default function TopUpPage() {
             <form className="space-y-4" onSubmit={submitOrder}>
               <label className="block text-sm font-medium">
                 Gói credit
-                <Select className="mt-2" value={packageId} onChange={(event) => setPackageId(event.target.value)}>
-                  {packages.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name} - {item.credits} credits - {formatCurrency(item.price)}
-                    </option>
-                  ))}
-                </Select>
+                <DropdownSelect
+                  className="mt-2"
+                  value={packageId}
+                  onChange={setPackageId}
+                  options={packages.map((item) => ({
+                    value: item.id,
+                    label: `${item.name} - ${item.credits} credits - ${formatCurrency(item.price)}`
+                  }))}
+                />
               </label>
               <label className="block text-sm font-medium">
                 Phương thức ghi nhận thủ công

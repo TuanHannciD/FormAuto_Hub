@@ -1,18 +1,20 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
 
-async function getLogs() {
-  try {
-    return (await apiFetch<{ items: UsageLog[] }>("/api/usage-logs")).items;
-  } catch {
-    return [];
-  }
-}
+export default function UsageLogsPage() {
+  const [logs, setLogs] = useState<UsageLog[]>([]);
 
-export default async function UsageLogsPage() {
-  const logs = await getLogs();
+  useEffect(() => {
+    apiFetch<{ items: UsageLog[] }>("/api/usage-logs")
+      .then((data) => setLogs(data.items))
+      .catch(() => setLogs([]));
+  }, []);
+
   const creditsUsed = logs.reduce((total, log) => total + log.creditsUsed, 0);
 
   return (

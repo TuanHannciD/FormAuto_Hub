@@ -8,7 +8,7 @@ Ngăn phase creep và việc vô tình approve future work.
 
 Default active phase là current phase trong `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: Phase 6 - Production integrations.
+Current active phase: Phase 7 - Authentication and account access.
 
 ## Việc trong phase
 
@@ -44,6 +44,12 @@ Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
 - email notifications
 - webhooks
 - deployment platform
+
+Hướng dẫn candidate tương lai:
+
+- Google OAuth, official Google Forms API, Google Forms watches/Cloud Pub/Sub notification handling và background jobs là các candidate hữu ích cho Phase 6, nhưng vẫn giữ `Deferred:` cho đến khi một task duyệt rõ production scope.
+- Approval phải bao gồm integration target, API contracts, database fields, statuses, lifecycle states, token storage model, notification ingestion model, lựa chọn background job framework và validation plan khi áp dụng.
+- Nếu scope tương lai đã duyệt cần UI nhưng UI docs hiện có bị thiếu hoặc chưa đủ, phải hỏi lại hướng UI hoặc sync UI docs trước khi implement UI.
 
 ## Quy tắc credit Phase 3
 

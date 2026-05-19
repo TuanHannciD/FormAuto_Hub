@@ -24,6 +24,7 @@ Các backend/API areas đã implement:
 - endpoint cancel submission job
 - Google Forms public-form integration boundary
 - preview generation cho các MVP answer modes đã duyệt
+- checkbox multi-select generation qua answer-rule config `minSelections` và `maxSelections`
 - chỉ trừ credit sau khi preview generation thành công
 - usage logging cho form analysis, preview generation, và submission actions
 - ghi submission job và submission logs
@@ -43,6 +44,13 @@ Các answer modes đã implement:
 - `RandomByPercentage`
 - `RandomByQuantity`
 - `SampleTextLines`
+
+Các Checkbox config fields đã duyệt:
+
+- `minSelections`
+- `maxSelections`
+
+Các field này chỉ áp dụng cho `FormQuestionTypes.Checkbox`. `CheckboxGrid` vẫn Deferred.
 
 ## Architecture boundaries được giữ
 

@@ -28,6 +28,10 @@ Design artifact không phải production source code, API contract, database con
 | Credit transactions ledger | `8f55ef6bf6ba4941b6cc616c04c5104c` | `docs/design/stitch/credit-transactions/` | Reference đã chấp nhận |
 | Profile/account settings | `6ecbf4df5fd945d78d94df8f7d23a153` | `docs/design/stitch/profile-settings/` | Reference đã chấp nhận |
 | Top-up order detail | `e0811bb411004578ac20dc13f990e7ac` | `docs/design/stitch/top-up-order-detail/` | Reference đã chấp nhận |
+| Login | `5235dbc4313a48098e4743be671a26a3` | `docs/design/stitch/login/` | Reference đã chấp nhận sau khi tinh chỉnh |
+| Register | `29b9ee6f2389428aa1490f91aa9de4bf` | `docs/design/stitch/register/` | Reference đã chấp nhận sau khi tinh chỉnh |
+| Auth callback | `e014f45ea68145cb9cfb5ab1821bc175` | `docs/design/stitch/auth-callback/` | Reference đã chấp nhận sau khi tinh chỉnh |
+| Profile security | `5e5335a5b7c94b4094d850ec0c03636e` | `docs/design/stitch/profile-security/` | Reference đã chấp nhận |
 
 ## Chuẩn thư mục artifact
 
@@ -59,7 +63,7 @@ Trước khi implement frontend page từ Stitch design:
 Không implement từ UI artifact trừ khi được duyệt riêng:
 
 - payment gateway checkout
-- Google OAuth
+- production Google OAuth implementation
 - official Google Forms API production flow
 - AI answer generation ở mức production-complete
 - AI auto-submit
@@ -79,6 +83,10 @@ Các màn đã generate hiện hỗ trợ:
 - credit transactions ledger
 - profile/account settings
 - top-up order detail
+- login và lockout/auth-error states
+- register
+- auth callback
+- profile security
 
 Các reference còn nên thiết kế tiếp:
 

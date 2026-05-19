@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<title>FormAuto Hub - Bảo mật tài khoản</title>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d8dadc",
+                    "secondary-container": "#dae2fd",
+                    "on-secondary-fixed": "#131b2e",
+                    "surface-container-low": "#f2f4f6",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary-fixed": "#85f8c4",
+                    "primary": "#004ac6",
+                    "inverse-on-surface": "#eff1f3",
+                    "inverse-primary": "#b4c5ff",
+                    "on-background": "#191c1e",
+                    "inverse-surface": "#2d3133",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "outline-variant": "#c3c6d7",
+                    "secondary": "#565e74",
+                    "on-tertiary-fixed-variant": "#005137",
+                    "surface-bright": "#f7f9fb",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "background": "#f7f9fb",
+                    "tertiary": "#006243",
+                    "primary-container": "#2563eb",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#68dba9",
+                    "surface-tint": "#0053db",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "on-primary-fixed": "#00174b",
+                    "on-surface-variant": "#434655",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#eeefff",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#bdffdc",
+                    "on-tertiary-fixed": "#002114",
+                    "on-secondary-container": "#5c647a",
+                    "surface-variant": "#e0e3e5",
+                    "outline": "#737686",
+                    "surface": "#f7f9fb",
+                    "secondary-fixed": "#dae2fd",
+                    "tertiary-container": "#007d57",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container": "#eceef0",
+                    "neutral-border": "#E2E8F0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "32px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Geist"],
+                    "label-md": ["Geist"],
+                    "body-lg": ["Geist"],
+                    "headline-sm": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "body-md": ["Geist"],
+                    "body-sm": ["Geist"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        .card-border { border: 1px solid #E2E8F0; }
+        .input-focus:focus { border-color: #2563EB; outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Navigation Shell: SideNavBar -->
+<aside class="h-screen w-64 flex flex-col fixed left-0 top-0 border-r border-outline-variant bg-surface p-4 gap-1 z-20">
+<div class="flex items-center gap-3 px-2 mb-8">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">automation</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">FormAuto Hub</h1>
+<p class="text-[10px] uppercase tracking-wider text-outline">Precision Automation</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-md text-label-md">Dự án biểu mẫu</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">add_card</span>
+<span class="font-label-md text-label-md">Nạp credit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">Lịch sử sử dụng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Giao dịch credit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-bold bg-secondary-container/30 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Cài đặt</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-3 px-2">
+<img alt="Nguyễn Tuấn" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGNKuWkd1zOUCFjhNeyWXEvmM4cM9qtlI4q2Jw4wSiqIZidvRGLLb_XnkqkxZlZqn-jqp6SIZ6jFb6rBIJXnXfRCOWmvxwevLWSByONXBcEqix2OT1oHAau41Eq3UFJEHOpi7fEfgpsxkSaSM7ghxW8-I17pQPPPmjvKV_OHrP1xsXgcPzVjPvEdKxc_licSqRrwxBHF4B5Z0RYnWBj4qOfK1LH4XY5mCeqViF_pQ45GzT2LekFi6xvBw5aX03WPCaagNoOsXa7cwe"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md truncate">Nguyễn Tuấn</p>
+<p class="text-[11px] text-outline truncate">Pro Plan • 1,250 Credits</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Bar -->
+<header class="h-16 w-[calc(100%-16rem)] fixed top-0 right-0 z-10 border-b border-outline-variant bg-surface-container-lowest flex justify-between items-center px-margin-desktop">
+<div class="flex items-center gap-4">
+<nav class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<span>Trang chủ</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Cài đặt</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface">Bảo mật</span>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="pl-10 pr-4 py-1.5 w-64 bg-surface-container-low border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus transition-all" placeholder="Tìm kiếm tính năng..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-1"></div>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant cursor-pointer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjQvoenFKvK8po0hJoYEsKzHw1scPOCZp8G4deKnROsPtLnwGh9Q__q1oQrK3QIqf_WXWfQt24YW8YF_7NM87IX4Qkb89plGX1Wod77mpb4CFqXqJlBu1l2L1VbBQrzr4alOPO4ZcGbHlRRYQ6WTgGd2VBlnH8OrMzI2M_uSSmE-1ghPUCX8oiAJtwpW5u6V87qGZBNpSp91GrBtiQgDi15IvTIAvF8ZiFwKRyJpGFX2Zhtj4jHC2MyKjZaV5NLYc_tBI5HpAxLLK_"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 mt-16 p-margin-desktop min-h-screen max-w-[1280px]">
+<!-- Header Section -->
+<div class="mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Bảo mật tài khoản</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Quản lý mật khẩu, phiên đăng nhập và trạng thái liên kết tài khoản.</p>
+</div>
+<div class="grid grid-cols-1 gap-gutter">
+<!-- Section 1: Đổi mật khẩu (Two-Column Layout for better desktop look) -->
+<section class="bg-surface-container-lowest card-border rounded-xl p-6">
+<div class="flex flex-col md:flex-row gap-8">
+<div class="w-full md:w-1/3">
+<h3 class="font-headline-sm text-headline-sm mb-2">Đổi mật khẩu</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cập nhật mật khẩu định kỳ để giữ tài khoản an toàn.</p>
+</div>
+<div class="w-full md:w-2/3 max-w-md">
+<form class="space-y-4" onsubmit="return false;">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md block">Mật khẩu hiện tại</label>
+<input class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus" placeholder="••••••••" type="password"/>
+<p class="text-error font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                    Mật khẩu hiện tại không đúng
+                                </p>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md block">Mật khẩu mới</label>
+<input class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus" placeholder="••••••••" type="password"/>
+<p class="text-outline font-label-sm text-label-sm">Mật khẩu tối thiểu 8 ký tự.</p>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md block">Xác nhận mật khẩu mới</label>
+<input class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus" placeholder="••••••••" type="password"/>
+<p class="text-error font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                    Xác nhận mật khẩu không khớp
+                                </p>
+</div>
+<div class="pt-2">
+<button class="px-4 py-2 bg-primary-container text-white font-label-md text-label-md rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                                    Cập nhật mật khẩu
+                                </button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- Section 2 & 3: Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Section 2: Phiên hiện tại -->
+<section class="bg-surface-container-lowest card-border rounded-xl p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm">Phiên hiện tại</h3>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2.5 py-0.5 rounded-full font-label-sm text-label-sm border border-tertiary/20">Phiên hiện tại</span>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container-low mb-4">
+<div class="w-10 h-10 bg-white rounded border border-outline-variant flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant">desktop_windows</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Chrome trên macOS</p>
+<div class="flex items-center gap-3 mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        Hà Nội, Việt Nam
+                                    </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        Hoạt động: ngay bây giờ
+                                    </span>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full lg:w-fit px-4 py-2 bg-white border border-outline-variant text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low active:bg-surface-container-high transition-colors">
+                        Đăng xuất phiên này
+                    </button>
+</section>
+<!-- Section 3: Liên kết Google -->
+<section class="bg-surface-container-lowest card-border rounded-xl p-6">
+<h3 class="font-headline-sm text-headline-sm mb-6">Liên kết Google</h3>
+<div class="space-y-3">
+<!-- Linked Row -->
+<div class="flex items-center justify-between p-4 rounded-lg border border-primary/20 bg-primary/5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Đã liên kết Google</p>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Unlinked Row (Reference) -->
+<div class="flex items-center justify-between p-4 rounded-lg border border-outline-variant opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center grayscale">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Chưa liên kết Google</p>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline">Liên kết</button>
+</div>
+</div>
+<p class="mt-6 text-[11px] text-outline italic">Trạng thái hiển thị chỉ là UI reference; không phê duyệt production Google OAuth.</p>
+</section>
+</div>
+<!-- Section 4: Khôi phục mật khẩu -->
+<section class="bg-surface-container-lowest card-border rounded-xl p-6">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-low rounded border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">restore_page</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-0.5">
+<h3 class="font-label-md text-label-md font-bold">Khôi phục mật khẩu</h3>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-label-sm text-[11px] uppercase tracking-tighter">Đang cập nhật</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tính năng khôi phục đang được phát triển.</p>
+</div>
+</div>
+<button class="px-4 py-2 bg-surface-container-high text-outline font-label-md text-label-md rounded-lg cursor-not-allowed border border-outline-variant" disabled="">
+                        Thiết lập ngay
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Interactive script for sidebar highlights -->
+<script>
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Prevent real navigation for this demo
+                e.preventDefault();
+                document.querySelectorAll('nav a').forEach(l => {
+                    l.classList.remove('text-primary', 'font-bold', 'bg-secondary-container/30');
+                    l.classList.add('text-on-surface-variant', 'font-medium');
+                });
+                this.classList.add('text-primary', 'font-bold', 'bg-secondary-container/30');
+                this.classList.remove('text-on-surface-variant', 'font-medium');
+            });
+        });
+    </script>
+</body></html>

@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, FileText, ShieldCheck, SlidersHorizontal } from "lucide-react";
-import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Select, Textarea } from "@/components/ui";
+import { DropdownSelect } from "@/components/dropdown-select";
+import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import {
   apiFetch,
@@ -29,10 +30,12 @@ const PREVIEW_COUNT_MIN = 1;
 const PREVIEW_COUNT_MAX = 100;
 const SUBMISSION_BATCH_SIZE = 10;
 const MAX_RULE_VALUES = 10;
+const PERCENTAGE_TOTAL = 100;
 const MAX_SAMPLE_LINES = 100;
 const MAX_SAMPLE_LENGTH = 500;
 const TIME_STEP_MIN = 5;
 const TIME_STEP_MAX = 120;
+const CHECKBOX_SELECTION_MIN = 1;
 
 export default function FormsPage() {
   const [formUrl, setFormUrl] = useState("");
@@ -457,12 +460,14 @@ function RuleEditor({
   onChange: (value: { mode: string; configJson: string }) => void;
 }) {
   const isTextQuestion = isFreeTextRuleQuestion(question.questionType);
+  const isCheckboxQuestion = question.questionType === "Checkbox";
   const isDateQuestion = question.questionType === "Date";
   const isTimeQuestion = question.questionType === "Time";
   const samples = readSamples(value.configJson);
   const dateRange = readDateRange(value.configJson);
   const timeRange = readTimeRange(value.configJson);
   const selectedOptions = readChoiceValues(question, value.configJson);
+  const checkboxSelection = readCheckboxSelection(value.configJson);
   const choiceNumbers = readChoiceNumbers(value.mode, value.configJson, selectedOptions.length > 0 ? selectedOptions : question.options);
   const visibleModes = modeOptions.filter((mode) => {
     if (isDateQuestion) {
@@ -479,7 +484,7 @@ function RuleEditor({
   function updateMode(mode: string) {
     onChange({
       mode,
-      configJson: defaultConfigForMode(mode, question, selectedOptions.length > 0 ? selectedOptions : question.options, samples)
+      configJson: defaultConfigForMode(mode, question, selectedOptions.length > 0 ? selectedOptions : question.options, samples, checkboxSelection)
     });
   }
 
@@ -502,23 +507,38 @@ function RuleEditor({
       : [...selectedOptions, option];
     onChange({
       mode: value.mode === "SampleTextLines" ? "RandomEqually" : value.mode,
-      configJson: buildChoiceConfig(value.mode === "SampleTextLines" ? "RandomEqually" : value.mode, next.length > 0 ? next : [option])
+      configJson: buildChoiceConfig(
+        value.mode === "SampleTextLines" ? "RandomEqually" : value.mode,
+        next.length > 0 ? next : [option],
+        question.questionType,
+        clampCheckboxSelection(checkboxSelection, next.length > 0 ? next.length : 1)
+      )
     });
   }
 
   function updateChoiceNumber(option: string, rawValue: string) {
-    const requestedValue = clampInteger(rawValue, 0, MAX_RULE_VALUES);
+    const maxTotal = value.mode === "RandomByPercentage" ? PERCENTAGE_TOTAL : MAX_RULE_VALUES;
+    const requestedValue = clampInteger(rawValue, 0, maxTotal);
     const otherTotal = Object.entries(choiceNumbers)
       .filter(([key]) => key !== option)
-      .reduce((sum, [, amount]) => sum + clampInteger(amount, 0, MAX_RULE_VALUES), 0);
-    const numericValue = Math.min(requestedValue, Math.max(0, MAX_RULE_VALUES - otherTotal));
+      .reduce((sum, [, amount]) => sum + clampInteger(amount, 0, maxTotal), 0);
+    const numericValue = Math.min(requestedValue, Math.max(0, maxTotal - otherTotal));
     const next = { ...choiceNumbers, [option]: numericValue };
     const activeOptions = Object.keys(next).filter((key) => next[key] > 0);
     onChange({
       mode: value.mode,
       configJson: value.mode === "RandomByPercentage"
-        ? JSON.stringify({ weights: Object.fromEntries(activeOptions.map((key) => [key, next[key]])) }, null, 2)
-        : JSON.stringify({ quantities: Object.fromEntries(activeOptions.map((key) => [key, next[key]])) }, null, 2)
+        ? buildChoiceNumberConfig("weights", activeOptions, next, question.questionType, checkboxSelection)
+        : buildChoiceNumberConfig("quantities", activeOptions, next, question.questionType, checkboxSelection)
+    });
+  }
+
+  function updateCheckboxSelection(next: { minSelections?: number; maxSelections?: number }) {
+    const optionCount = Math.max(1, selectedOptions.length || question.options.length);
+    const range = clampCheckboxSelection({ ...checkboxSelection, ...next }, optionCount);
+    onChange({
+      mode: value.mode,
+      configJson: mergeCheckboxSelection(value.configJson, value.mode, selectedOptions.length > 0 ? selectedOptions : question.options, range)
     });
   }
 
@@ -536,7 +556,8 @@ function RuleEditor({
     });
   }
 
-  const choiceTotal = Object.values(choiceNumbers).reduce((sum, amount) => sum + clampInteger(amount, 0, MAX_RULE_VALUES), 0);
+  const choiceLimit = value.mode === "RandomByPercentage" ? PERCENTAGE_TOTAL : MAX_RULE_VALUES;
+  const choiceTotal = Object.values(choiceNumbers).reduce((sum, amount) => sum + clampInteger(amount, 0, choiceLimit), 0);
 
   return (
     <div className="rounded-lg border border-border bg-white p-4">
@@ -587,11 +608,11 @@ function RuleEditor({
             <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
             Chế độ trả lời
           </span>
-          <Select value={value.mode} onChange={(event) => updateMode(event.target.value)}>
-          {visibleModes.map((mode) => (
-            <option key={mode.value} value={mode.value}>{mode.label}</option>
-          ))}
-          </Select>
+          <DropdownSelect
+            value={value.mode}
+            onChange={updateMode}
+            options={visibleModes.map((mode) => ({ value: mode.value, label: mode.label }))}
+          />
         </label>
 
         {value.mode === "DateRangeSequential" ? (
@@ -678,31 +699,47 @@ function RuleEditor({
                   {value.mode === "RandomByPercentage" ? "Tỷ lệ theo lựa chọn" : "Số lượng theo lựa chọn"}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi generate preview. Tổng tối đa {MAX_RULE_VALUES}.
+                  {value.mode === "RandomByPercentage"
+                    ? "Nhập phần trăm cho từng lựa chọn. Tổng tối đa 100%."
+                    : `Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi generate preview. Tổng tối đa ${MAX_RULE_VALUES}.`}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Badge tone="info">{selectedOptions.length} active</Badge>
-                <Badge tone={choiceTotal > MAX_RULE_VALUES ? "warning" : "neutral"}>{choiceTotal}/{MAX_RULE_VALUES}</Badge>
+                <Badge tone={choiceTotal === choiceLimit ? "success" : "warning"}>
+                  {choiceTotal}/{choiceLimit}{value.mode === "RandomByPercentage" ? "%" : ""}
+                </Badge>
               </div>
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {(question.options.length > 0 ? question.options : selectedOptions).map((option) => (
-                <label className="grid grid-cols-[1fr_96px] items-center gap-3 rounded-md border border-border bg-white px-3 py-2 text-sm" key={option}>
+                <label className="grid grid-cols-[1fr_120px] items-center gap-3 rounded-md border border-border bg-white px-3 py-2 text-sm" key={option}>
                   <span className="min-w-0 truncate font-medium">{option}</span>
-                  <Input
-                    className="h-9 min-h-9 text-right"
-                    inputMode="numeric"
-                    max={MAX_RULE_VALUES}
-                    min={0}
-                    step={1}
-                    type="number"
-                    value={choiceNumbers[option] ?? 0}
-                    onChange={(event) => updateChoiceNumber(option, event.target.value)}
-                  />
+                  <div className="relative">
+                    <Input
+                      className={`h-9 min-h-9 text-right ${value.mode === "RandomByPercentage" ? "pr-8" : ""}`}
+                      inputMode="numeric"
+                      max={choiceLimit}
+                      min={0}
+                      step={1}
+                      type="number"
+                      value={choiceNumbers[option] ?? 0}
+                      onChange={(event) => updateChoiceNumber(option, event.target.value)}
+                    />
+                    {value.mode === "RandomByPercentage" && (
+                      <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">%</span>
+                    )}
+                  </div>
                 </label>
               ))}
             </div>
+            {isCheckboxQuestion && (
+              <CheckboxSelectionFields
+                maxOptionCount={Math.max(1, selectedOptions.length || question.options.length)}
+                value={checkboxSelection}
+                onChange={updateCheckboxSelection}
+              />
+            )}
           </div>
         ) : (
           <div className="rounded-md border border-border bg-muted/30 p-3 text-sm">
@@ -710,9 +747,59 @@ function RuleEditor({
             <p className="mt-1 text-muted-foreground">
               Với chế độ hiện tại, hệ thống tự build config từ options thật của form, không cần nhập JSON thủ công.
             </p>
+            {isCheckboxQuestion && (
+              <CheckboxSelectionFields
+                maxOptionCount={Math.max(1, selectedOptions.length || question.options.length)}
+                value={checkboxSelection}
+                onChange={updateCheckboxSelection}
+              />
+            )}
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function CheckboxSelectionFields({
+  value,
+  maxOptionCount,
+  onChange
+}: {
+  value: { minSelections: number; maxSelections: number };
+  maxOptionCount: number;
+  onChange: (value: { minSelections?: number; maxSelections?: number }) => void;
+}) {
+  const maxAllowed = Math.min(maxOptionCount, MAX_RULE_VALUES);
+
+  return (
+    <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
+      <label className="block text-sm font-medium">
+        Số lựa chọn tối thiểu
+        <Input
+          className="mt-2"
+          inputMode="numeric"
+          max={maxAllowed}
+          min={CHECKBOX_SELECTION_MIN}
+          step={1}
+          type="number"
+          value={value.minSelections}
+          onChange={(event) => onChange({ minSelections: clampInteger(event.target.value, CHECKBOX_SELECTION_MIN, maxAllowed) })}
+        />
+      </label>
+      <label className="block text-sm font-medium">
+        Số lựa chọn tối đa
+        <Input
+          className="mt-2"
+          inputMode="numeric"
+          max={maxAllowed}
+          min={value.minSelections}
+          step={1}
+          type="number"
+          value={value.maxSelections}
+          onChange={(event) => onChange({ maxSelections: clampInteger(event.target.value, value.minSelections, maxAllowed) })}
+        />
+      </label>
     </div>
   );
 }
@@ -728,11 +815,17 @@ function defaultRule(question: FormQuestion) {
   const values = question.options.length > 0 ? question.options : ["Option A", "Option B"];
   return {
     mode: "RandomEqually",
-    configJson: buildChoiceConfig("RandomEqually", values)
+    configJson: buildChoiceConfig("RandomEqually", values, question.questionType)
   };
 }
 
-function defaultConfigForMode(mode: string, question: FormQuestion, values: string[], currentSamples: string[]) {
+function defaultConfigForMode(
+  mode: string,
+  question: FormQuestion,
+  values: string[],
+  currentSamples: string[],
+  checkboxSelection: { minSelections: number; maxSelections: number }
+) {
   if (mode === "DateRangeSequential") {
     return JSON.stringify({ fromDate: "2026-05-18", toDate: "2026-05-25" }, null, 2);
   }
@@ -745,7 +838,7 @@ function defaultConfigForMode(mode: string, question: FormQuestion, values: stri
     return JSON.stringify({ samples: currentSamples.length > 0 ? currentSamples : defaultSamplesForQuestion(question) }, null, 2);
   }
 
-  return buildChoiceConfig(mode, values);
+  return buildChoiceConfig(mode, values, question.questionType, checkboxSelection);
 }
 
 function defaultSamplesForQuestion(question: FormQuestion) {
@@ -760,18 +853,102 @@ function defaultSamplesForQuestion(question: FormQuestion) {
   return ["Câu trả lời mẫu 1", "Câu trả lời mẫu 2"];
 }
 
-function buildChoiceConfig(mode: string, values: string[]) {
+function buildChoiceConfig(
+  mode: string,
+  values: string[],
+  questionType?: string,
+  checkboxSelection: { minSelections: number; maxSelections: number } = { minSelections: 1, maxSelections: 1 }
+) {
   const normalized = values.map((value) => value.trim()).filter(Boolean);
   const limited = normalized.slice(0, MAX_RULE_VALUES);
+  const selection = questionType === "Checkbox"
+    ? clampCheckboxSelection(checkboxSelection, Math.max(1, limited.length))
+    : null;
   if (mode === "RandomByPercentage") {
-    return JSON.stringify({ weights: Object.fromEntries(limited.map((value) => [value, 1])) }, null, 2);
+    const percentages = buildEqualPercentages(limited);
+    return JSON.stringify(
+      {
+        weights: percentages,
+        ...(selection ?? {})
+      },
+      null,
+      2
+    );
   }
 
   if (mode === "RandomByQuantity") {
-    return JSON.stringify({ quantities: Object.fromEntries(limited.map((value) => [value, 1])) }, null, 2);
+    return JSON.stringify(
+      {
+        quantities: Object.fromEntries(limited.map((value) => [value, 1])),
+        ...(selection ?? {})
+      },
+      null,
+      2
+    );
   }
 
-  return JSON.stringify({ values: normalized }, null, 2);
+  return JSON.stringify({ values: normalized, ...(selection ?? {}) }, null, 2);
+}
+
+function buildEqualPercentages(values: string[]) {
+  if (values.length === 0) {
+    return {};
+  }
+
+  const base = Math.floor(PERCENTAGE_TOTAL / values.length);
+  let remainder = PERCENTAGE_TOTAL - base * values.length;
+  return Object.fromEntries(
+    values.map((value) => {
+      const amount = base + (remainder > 0 ? 1 : 0);
+      remainder -= 1;
+      return [value, amount];
+    })
+  );
+}
+
+function buildChoiceNumberConfig(
+  propertyName: "weights" | "quantities",
+  activeOptions: string[],
+  values: Record<string, number>,
+  questionType: string,
+  checkboxSelection: { minSelections: number; maxSelections: number }
+) {
+  const selection = questionType === "Checkbox"
+    ? clampCheckboxSelection(checkboxSelection, Math.max(1, activeOptions.length))
+    : null;
+
+  return JSON.stringify(
+    {
+      [propertyName]: Object.fromEntries(activeOptions.map((key) => [key, values[key]])),
+      ...(selection ?? {})
+    },
+    null,
+    2
+  );
+}
+
+function mergeCheckboxSelection(
+  configJson: string,
+  mode: string,
+  values: string[],
+  selection: { minSelections: number; maxSelections: number }
+) {
+  try {
+    const parsed = JSON.parse(configJson) as {
+      values?: string[];
+      weights?: Record<string, number>;
+      quantities?: Record<string, number>;
+    };
+    if (mode === "RandomByPercentage" && parsed.weights) {
+      return JSON.stringify({ weights: parsed.weights, ...selection }, null, 2);
+    }
+    if (mode === "RandomByQuantity" && parsed.quantities) {
+      return JSON.stringify({ quantities: parsed.quantities, ...selection }, null, 2);
+    }
+    return JSON.stringify({ values: parsed.values ?? values, ...selection }, null, 2);
+  } catch {
+    return JSON.stringify({ values, ...selection }, null, 2);
+  }
 }
 
 function readSamples(configJson: string) {
@@ -832,6 +1009,7 @@ function readChoiceValues(question: FormQuestion, configJson: string) {
 }
 
 function readChoiceNumbers(mode: string, configJson: string, fallbackOptions: string[]) {
+  const maxValue = mode === "RandomByPercentage" ? PERCENTAGE_TOTAL : MAX_RULE_VALUES;
   try {
     const parsed = JSON.parse(configJson) as {
       weights?: Record<string, number>;
@@ -840,14 +1018,38 @@ function readChoiceNumbers(mode: string, configJson: string, fallbackOptions: st
     const source = mode === "RandomByPercentage" ? parsed.weights : parsed.quantities;
     if (source) {
       return Object.fromEntries(
-        Object.entries(source).map(([key, amount]) => [key, clampInteger(amount, 0, MAX_RULE_VALUES)])
+        Object.entries(source).map(([key, amount]) => [key, clampInteger(amount, 0, maxValue)])
       );
     }
   } catch {
     // Use fallback below.
   }
 
-  return Object.fromEntries(fallbackOptions.map((option) => [option, 1]));
+  return mode === "RandomByPercentage"
+    ? buildEqualPercentages(fallbackOptions)
+    : Object.fromEntries(fallbackOptions.map((option) => [option, 1]));
+}
+
+function readCheckboxSelection(configJson: string) {
+  try {
+    const parsed = JSON.parse(configJson) as { minSelections?: number; maxSelections?: number };
+    return clampCheckboxSelection(
+      {
+        minSelections: parsed.minSelections ?? 1,
+        maxSelections: parsed.maxSelections ?? 1
+      },
+      MAX_RULE_VALUES
+    );
+  } catch {
+    return { minSelections: 1, maxSelections: 1 };
+  }
+}
+
+function clampCheckboxSelection(value: { minSelections: number; maxSelections: number }, optionCount: number) {
+  const maxAllowed = Math.min(Math.max(1, optionCount), MAX_RULE_VALUES);
+  const minSelections = clampInteger(value.minSelections, CHECKBOX_SELECTION_MIN, maxAllowed);
+  const maxSelections = clampInteger(value.maxSelections, minSelections, maxAllowed);
+  return { minSelections, maxSelections };
 }
 
 function clampInteger(value: string | number, min: number, max: number) {

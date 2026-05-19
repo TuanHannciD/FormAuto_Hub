@@ -1,10 +1,12 @@
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormAutoHub.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/projects/{projectId:guid}/answer-rules")]
 public sealed class AnswerRulesController(IAnswerRuleService answerRuleService) : ControllerBase
 {

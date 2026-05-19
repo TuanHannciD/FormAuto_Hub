@@ -103,7 +103,7 @@ public sealed record UpdateProfileResponse(
     DateTimeOffset CreatedAt);
 
 public sealed record ChangePasswordRequest(
-    string CurrentPasswordHash,
-    string NewPasswordHash);
+    string CurrentPassword,
+    string NewPassword);
 
 public sealed record ChangePasswordResponse(bool Changed);

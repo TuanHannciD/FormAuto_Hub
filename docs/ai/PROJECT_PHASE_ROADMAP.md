@@ -6,7 +6,7 @@ Define FormAuto Hub delivery phases and scope gates.
 
 ## Current Phase
 
-Current phase: **Phase 6 - Production integrations**.
+Current phase: **Phase 7 - Authentication and account access**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -160,6 +160,72 @@ Deferred unless explicitly approved:
 - AI mapping/generation
 - webhook integrations
 - production deployment platform
+
+Future candidate notes:
+
+- Google OAuth may be useful later for verified user-owned form access.
+- Official Google Forms API may be useful later for form metadata, question, and response sync.
+- Google Forms watches with Cloud Pub/Sub-style notification handling may be useful later for schema or response change detection.
+- Background jobs may be useful later for watch renewal, sync retries, and integration health checks.
+
+Deferred:
+
+- These future candidates are not approved implementation scope yet.
+- They do not approve API contracts, database fields, statuses, lifecycle states, OAuth token storage, webhook/Pub/Sub ingestion models, or background job framework choices.
+- If a future task requires UI for these integrations, use existing UI docs only when they are sufficient; otherwise ask for UI direction or sync UI docs before implementation.
+
+## Phase 7 - Authentication and account access
+
+Status: Completed.
+
+Approved scope:
+
+- email/password registration
+- email/password login
+- JWT access token with refresh token/session
+- access token expiry of 1 hour
+- refresh token expiry of 7 days
+- registration returns JWT immediately without requiring a second login
+- new registered users receive 5 starting credits
+- starting credit grant must be recorded in `CreditTransactions`
+- `InitialGrant` is approved as the credit transaction type for starting credits
+- logout revokes only the current refresh token/session
+- password change in profile
+- password recovery is not implemented yet; UI may show it as currently being updated
+- Google account login/register for identity only
+- Google login does not approve official Google Forms API, form scopes, watches, webhooks, or background jobs
+
+Approved Google login rules:
+
+- if `provider_user_id` or Google `sub` already exists in storage, login succeeds for that linked user
+- if no provider user id exists but the Google email matches an existing password account, link is considered only when `email_verified = true`
+- matching email with `email_verified = true` must not silently auto-link; the preferred flow is to require the user to log in with password first, then link Google
+- if `email_verified = false`, do not auto-link
+- Google auto-register is allowed when there is no existing matching account conflict
+
+Approved persistence direction:
+
+- use a dedicated `RefreshTokens` table for refresh token/session storage
+- implemented refresh token fields: `Id`, `UserId`, `TokenHash`, `ExpiresAt`, `RevokedAt`, `CreatedAt`
+- implemented Google external login fields: `Id`, `UserId`, `Provider`, `ProviderUserId`, `Email`, `EmailVerified`, `CreatedAt`
+
+Approved lockout baseline:
+
+- lockout threshold: 5 failed login attempts
+- lockout duration: 15 minutes
+
+Completed implementation subset:
+
+- auth endpoints for register, login, Google identity login, refresh, logout, and Google account linking
+- JWT claims: `sub`, `email`, `role`, `jti`
+- `RefreshTokens` table for refresh token/session storage
+- `UserExternalLogins` table for Google identity links
+- app APIs protected with JWT authorization
+- frontend auth routes for login, register, auth callback, and profile security
+- frontend bearer-token API client with refresh-token retry
+- dashboard auth guard and current-session logout
+- profile password change uses password verification instead of temporary hash comparison
+- EF Core migration `Phase7Authentication`
 
 ## Phase Rule
 

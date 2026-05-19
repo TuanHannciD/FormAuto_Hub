@@ -1,19 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
-async function getSummary() {
-  try {
-    return await apiFetch<DashboardSummary>("/api/dashboard/summary");
-  } catch {
-    return null;
-  }
-}
+export default function DashboardPage() {
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [message, setMessage] = useState("");
 
-export default async function DashboardPage() {
-  const summary = await getSummary();
+  useEffect(() => {
+    apiFetch<DashboardSummary>("/api/dashboard/summary")
+      .then(setSummary)
+      .catch((error: Error) => setMessage(error.message));
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -25,6 +27,7 @@ export default async function DashboardPage() {
       <Alert>
         Form automation luôn yêu cầu preview trước, user confirmation rõ ràng, và giới hạn 1 đến 5 preview responses mỗi lần.
       </Alert>
+      {message && <Alert className="border-amber-200 bg-amber-50 text-amber-800">{message}</Alert>}
 
       <div className="grid gap-4 md:grid-cols-4">
         <Metric title="Credit hiện có" value={summary ? String(summary.currentCreditBalance) : "-"} />

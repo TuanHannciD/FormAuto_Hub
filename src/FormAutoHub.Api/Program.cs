@@ -2,7 +2,11 @@ using FormAutoHub.Api.Data;
 using FormAutoHub.Api.Auth;
 using FormAutoHub.Api.Integrations.GoogleForms;
 using FormAutoHub.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +25,24 @@ var allowedCorsOrigins = builder.Configuration
         "http://127.0.0.1:5173"
     ];
 
+var allowedCorsWildcardOrigins = builder.Configuration
+    .GetSection("Cors:AllowedWildcardOrigins")
+    .Get<string[]>()
+    ?? [
+        "https://*.trycloudflare.com"
+    ];
+
 builder.Services.AddControllers();
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.SectionName));
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
         policy
             .WithOrigins(allowedCorsOrigins)
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .WithOrigins(allowedCorsWildcardOrigins)
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -37,8 +52,29 @@ builder.Services.AddDbContext<FormAutoHubDbContext>(options =>
     {
         sqlOptions.EnableRetryOnFailure();
     }));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var authOptions = builder.Configuration.GetSection(AuthOptions.SectionName).Get<AuthOptions>() ?? new AuthOptions();
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = authOptions.Issuer,
+            ValidAudience = authOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.SigningKey)),
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUserContext, HeaderCurrentUserContext>();
+builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IGoogleIdentityVerifier, GoogleIdentityVerifier>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<ITopupOrderService, TopupOrderService>();
@@ -68,6 +104,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

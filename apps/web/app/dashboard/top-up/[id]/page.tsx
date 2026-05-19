@@ -1,22 +1,28 @@
+"use client";
+
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Alert, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type TopupOrder } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
-async function getOrder(id: string) {
-  try {
-    return await apiFetch<TopupOrder>(`/api/topup-orders/${id}`);
-  } catch {
-    return null;
-  }
-}
+export default function TopUpOrderDetailPage() {
+  const params = useParams<{ id: string }>();
+  const [order, setOrder] = useState<TopupOrder | null>(null);
+  const [isMissing, setIsMissing] = useState(false);
 
-export default async function TopUpOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const order = await getOrder(id);
+  useEffect(() => {
+    apiFetch<TopupOrder>(`/api/topup-orders/${params.id}`)
+      .then((data) => {
+        setOrder(data);
+        setIsMissing(false);
+      })
+      .catch(() => setIsMissing(true));
+  }, [params.id]);
 
-  if (!order) {
+  if (isMissing) {
     return (
       <div className="space-y-6">
         <Link className="text-sm text-primary hover:underline" href="/dashboard/top-up">Quay lại yêu cầu nạp</Link>
@@ -24,6 +30,19 @@ export default async function TopUpOrderDetailPage({ params }: { params: Promise
           <CardContent>
             <p className="font-medium">Không tìm thấy yêu cầu nạp.</p>
             <p className="mt-1 text-sm text-muted-foreground">Yêu cầu có thể không tồn tại hoặc không thuộc user hiện tại.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="space-y-6">
+        <Link className="text-sm text-primary hover:underline" href="/dashboard/top-up">Quay lại yêu cầu nạp</Link>
+        <Card>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">Đang tải yêu cầu nạp...</p>
           </CardContent>
         </Card>
       </div>

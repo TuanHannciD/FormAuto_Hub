@@ -24,6 +24,7 @@ Implemented backend/API areas:
 - submission job cancel endpoint
 - Google Forms public-form integration boundary
 - preview generation for approved MVP answer modes
+- checkbox multi-select generation through `minSelections` and `maxSelections` answer-rule config
 - credit deduction only after successful preview generation
 - usage logging for form analysis, preview generation, and submission actions
 - submission job and submission log writes
@@ -43,6 +44,13 @@ Implemented answer modes:
 - `RandomByPercentage`
 - `RandomByQuantity`
 - `SampleTextLines`
+
+Approved Checkbox config fields:
+
+- `minSelections`
+- `maxSelections`
+
+These fields apply only to `FormQuestionTypes.Checkbox`. `CheckboxGrid` remains Deferred.
 
 ## Architecture Boundaries Preserved
 

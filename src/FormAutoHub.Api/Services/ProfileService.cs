@@ -12,7 +12,10 @@ public interface IProfileService
     Task<ChangePasswordResponse?> ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken);
 }
 
-public sealed class ProfileService(FormAutoHubDbContext dbContext, ICurrentUserContext currentUser)
+public sealed class ProfileService(
+    FormAutoHubDbContext dbContext,
+    ICurrentUserContext currentUser,
+    IPasswordHasher passwordHasher)
     : IProfileService
 {
     public async Task<ProfileResponse?> GetAsync(CancellationToken cancellationToken) =>
@@ -45,12 +48,16 @@ public sealed class ProfileService(FormAutoHubDbContext dbContext, ICurrentUserC
             return null;
         }
 
-        if (user.PasswordHash != request.CurrentPasswordHash)
+        if (string.IsNullOrWhiteSpace(user.PasswordHash)
+            || request.NewPassword.Length < 8
+            || !passwordHasher.Verify(request.CurrentPassword, user.PasswordHash))
         {
             return new ChangePasswordResponse(false);
         }
 
-        user.PasswordHash = request.NewPasswordHash;
+        user.PasswordHash = passwordHasher.Hash(request.NewPassword);
+        user.FailedLoginCount = 0;
+        user.LockoutUntil = null;
         await dbContext.SaveChangesAsync(cancellationToken);
         return new ChangePasswordResponse(true);
     }

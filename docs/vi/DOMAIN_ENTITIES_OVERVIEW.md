@@ -15,6 +15,8 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - CreditPackages
 - TopupOrders
 - CreditTransactions
+- RefreshTokens
+- UserExternalLogins
 - UsageLogs
 - FormProjects
 - FormQuestions
@@ -33,6 +35,8 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - PasswordHash
 - FullName
 - Role
+- FailedLoginCount
+- LockoutUntil
 - CreatedAt
 
 ### UserCreditAccounts
@@ -77,6 +81,31 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - Description
 - ReferenceType
 - ReferenceId
+- CreatedAt
+
+### RefreshTokens
+
+Đã chốt cho Phase 7 dưới dạng table riêng cho refresh token/session storage.
+
+- Id
+- UserId
+- TokenHash
+- ExpiresAt
+- RevokedAt
+- CreatedAt
+
+### UserExternalLogins
+
+Đã chốt cho Phase 7 để link Google identity.
+
+Storage này phải hỗ trợ lookup bằng provider user id / Google `sub` trước khi xét email matching.
+
+- Id
+- UserId
+- Provider
+- ProviderUserId
+- Email
+- EmailVerified
 - CreatedAt
 
 ### UsageLogs
@@ -169,7 +198,6 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 Deferred:
 
 - auth fields chi tiết ngoài user basics
-- JWT claim structure
 - exact credit pricing
 - exact credit cost per action
 - refund behavior sau failed submission

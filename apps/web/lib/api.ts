@@ -1,15 +1,26 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
+import { getValidAccessToken, refreshSession } from "@/lib/auth";
 
-const demoUserId = process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "00000000-0000-0000-0000-000000000001";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
 
 type RequestOptions = RequestInit & {
   json?: unknown;
+  skipAuth?: boolean;
 };
 
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  return apiFetchInternal<T>(path, options, false);
+}
+
+async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean): Promise<T> {
   const headers = new Headers(options.headers);
   headers.set("Accept", "application/json");
-  headers.set("X-FormAuto-UserId", demoUserId);
+
+  if (!options.skipAuth) {
+    const accessToken = await getValidAccessToken();
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+  }
 
   let body = options.body;
   if (options.json !== undefined) {
@@ -17,18 +28,33 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
     body = JSON.stringify(options.json);
   }
 
+  const { json, skipAuth, ...fetchOptions } = options;
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
+    ...fetchOptions,
     headers,
     body,
     cache: "no-store"
   });
 
+  if (response.status === 401 && !retried && !options.skipAuth) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      return apiFetchInternal<T>(path, options, true);
+    }
+  }
+
   if (!response.ok) {
     let message = `Request failed with HTTP ${response.status}.`;
     try {
-      const problem = (await response.json()) as { detail?: string; title?: string };
-      message = problem.detail || problem.title || message;
+      const text = await response.text();
+      if (text) {
+        try {
+          const problem = JSON.parse(text) as { detail?: string; title?: string };
+          message = problem.detail || problem.title || text;
+        } catch {
+          message = text;
+        }
+      }
     } catch {
       // Keep fallback message.
     }
@@ -38,6 +64,17 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
 
   return (await response.json()) as T;
 }
+
+export type AuthTokenResponse = {
+  userId: string;
+  email: string;
+  fullName: string;
+  role: string;
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
+};
 
 export type TopupOrder = {
   id: string;

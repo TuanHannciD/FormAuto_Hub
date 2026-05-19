@@ -11,6 +11,8 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<CreditPackage> CreditPackages => Set<CreditPackage>();
     public DbSet<TopupOrder> TopupOrders => Set<TopupOrder>();
     public DbSet<CreditTransaction> CreditTransactions => Set<CreditTransaction>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<UserExternalLogin> UserExternalLogins => Set<UserExternalLogin>();
     public DbSet<UsageLog> UsageLogs => Set<UsageLog>();
     public DbSet<FormProject> FormProjects => Set<FormProject>();
     public DbSet<FormQuestion> FormQuestions => Set<FormQuestion>();
@@ -22,6 +24,23 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(item => item.Email).IsUnique();
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasIndex(item => item.TokenHash).IsUnique();
+            entity.HasIndex(item => new { item.UserId, item.RevokedAt });
+        });
+
+        modelBuilder.Entity<UserExternalLogin>(entity =>
+        {
+            entity.HasIndex(item => new { item.Provider, item.ProviderUserId }).IsUnique();
+            entity.HasIndex(item => item.Email);
+        });
+
         modelBuilder.Entity<UserCreditAccount>(entity =>
         {
             entity.Property(item => item.Balance).HasPrecision(18, 2);

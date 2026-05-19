@@ -55,6 +55,53 @@ The API areas below are proposed, not final contracts. Every endpoint requires c
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
 
+### Authentication and account access
+
+Phase 7 approved behavior baseline:
+
+- `POST /api/auth/register` registers with email/password and returns JWT after successful registration
+- `POST /api/auth/login` logs in with email/password
+- `POST /api/auth/google` logs in or auto-registers with Google identity only
+- `POST /api/auth/refresh` rotates the current refresh token/session and returns new tokens
+- `POST /api/auth/logout` revokes the current refresh token/session only
+- `POST /api/auth/link-google` links a verified Google identity after password login
+- `PUT /api/profile/change-password` changes password from profile
+- password recovery is not implemented yet and may be shown in UI as currently being updated
+
+Approved token/session rules:
+
+- access token expiry: 1 hour
+- refresh token expiry: 7 days
+- refresh token/session storage uses a dedicated `RefreshTokens` table
+- lockout threshold: 5 failed login attempts
+- lockout duration: 15 minutes
+
+Approved registration credit rule:
+
+- new users receive 5 starting credits
+- the starting credit grant must write a `CreditTransactions` row
+- `InitialGrant` is the approved `CreditTransaction.Type` value for starting credits
+
+Approved Google identity rules:
+
+- if `provider_user_id` or Google `sub` already exists in storage, login succeeds for that linked user
+- if no provider user id exists but the Google email matches an existing password account, link is considered only when `email_verified = true`
+- matching verified email must not silently auto-link; the preferred flow is password login first, then Google linking
+- if `email_verified = false`, do not auto-link
+- Google auto-register is allowed when there is no existing matching account conflict
+- this does not approve official Google Forms API scopes or Google Forms integration behavior
+
+Pending contract review before implementation:
+
+- error response details
+
+Approved JWT claims:
+
+- `sub`: user id
+- `email`: user email
+- `role`: user role
+- `jti`: token id
+
 ### Forms
 
 - `POST /api/forms/analyze`
@@ -64,6 +111,19 @@ The API areas below are proposed, not final contracts. Every endpoint requires c
 
 - `POST /api/projects/{projectId}/answer-rules`
 - `PUT /api/projects/{projectId}/answer-rules/{ruleId}`
+
+Approved Checkbox answer-rule config extension:
+
+- applies only to `FormQuestionTypes.Checkbox`
+- existing choice modes stay unchanged: `RandomEqually`, `RandomByPercentage`, `RandomByQuantity`
+- `RandomByPercentage` uses integer percentage weights from 0 to 100
+- frontend should display percentage inputs and keep the visible total at or below 100%
+- `ConfigJson.minSelections`: minimum selected options per generated answer
+- `ConfigJson.maxSelections`: maximum selected options per generated answer
+- if omitted, both default to `1` for backward compatibility
+- `maxSelections` must not exceed the configured option count or generated answer value limit
+- `MultipleChoice`, `Dropdown`, `LinearScale`, and `Rating` remain single-value answer questions
+- `CheckboxGrid` remains Deferred for separate rule design
 
 ### Generated responses
 
@@ -112,9 +172,9 @@ Assumption: ASP.NET Core `ProblemDetails` is a reasonable default candidate, but
 - Do not add lifecycle names casually.
 - Each status needs allowed transitions, owner, and terminal-state behavior.
 
-## Approved Phase 2 Status And Type Values
+## Approved Status And Type Values
 
-Approved for Phase 2 implementation:
+Approved values:
 
 TopupOrder.Status:
 
@@ -127,6 +187,7 @@ CreditTransaction.Type:
 
 - TopupApproved
 - CreditUsed
+- InitialGrant
 
 UsageLog.Status:
 
@@ -138,11 +199,11 @@ User.Role:
 - User
 - Admin
 
-No other Phase 2 status, type, or role values are approved.
+No other status, type, or role values are approved unless explicitly documented.
 
 ## Temporary User Context
 
-Assumption: Until authentication and JWT claims are approved, Phase 2 controllers may use temporary request headers for development and test routing only:
+Assumption: Phase 7 JWT authentication is now the normal app authentication path. Temporary request headers may remain only as development/test fallback behavior in the current user context implementation and are not used by the Next.js dashboard API client:
 
 - `X-FormAuto-UserId`
 - `X-FormAuto-IsAdmin`

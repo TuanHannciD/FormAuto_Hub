@@ -273,6 +273,62 @@ public sealed class Phase3FormAutomationTests
     }
 
     [Fact]
+    public async Task GenerateAsync_UsesMultiSelectValuesForCheckboxQuestion()
+    {
+        var userId = Guid.NewGuid();
+        var projectId = Guid.NewGuid();
+        var questionId = Guid.NewGuid();
+        await using var context = CreateContext();
+        SeedPreviewData(context, userId, projectId, questionId, 5);
+        await context.SaveChangesAsync();
+        SetQuestionRule(
+            context,
+            questionId,
+            FormQuestionTypes.Checkbox,
+            AnswerRuleModes.RandomEqually,
+            JsonSerializer.Serialize(new { values = new[] { "A", "B", "C", "D" }, minSelections = 2, maxSelections = 2 }),
+            ["A", "B", "C", "D"]);
+        await context.SaveChangesAsync();
+
+        var service = new ResponseGenerationService(
+            context,
+            new TestCurrentUserContext(userId),
+            new CreditService(context));
+
+        var result = await service.GenerateAsync(projectId, new GenerateResponsesRequest(4), CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.Equal(
+            new[] { "A,B", "B,C", "C,D", "D,A" },
+            result.Items.Select(item => string.Join(",", item.Answers.Single().Values)));
+    }
+
+    [Fact]
+    public async Task AnswerRuleService_RejectsCheckboxMaxSelectionsAboveOptionCount()
+    {
+        var userId = Guid.NewGuid();
+        var projectId = Guid.NewGuid();
+        var questionId = Guid.NewGuid();
+        await using var context = CreateContext();
+        SeedPreviewData(context, userId, projectId, questionId, 5);
+        await context.SaveChangesAsync();
+        context.FormQuestions.Single(item => item.Id == questionId).QuestionType = FormQuestionTypes.Checkbox;
+        context.FormQuestions.Single(item => item.Id == questionId).OptionsJson = JsonSerializer.Serialize(new[] { "A", "B" });
+        await context.SaveChangesAsync();
+
+        var service = new AnswerRuleService(context, new TestCurrentUserContext(userId));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            service.CreateAsync(
+                projectId,
+                new UpsertAnswerRuleRequest(
+                    questionId,
+                    AnswerRuleModes.RandomEqually,
+                    JsonSerializer.Serialize(new { values = new[] { "A", "B" }, minSelections = 1, maxSelections = 3 })),
+                CancellationToken.None));
+    }
+
+    [Fact]
     public async Task AnswerRuleService_RejectsInvalidDateRange()
     {
         var userId = Guid.NewGuid();
@@ -348,7 +404,7 @@ public sealed class Phase3FormAutomationTests
     }
 
     [Fact]
-    public async Task GenerateAsync_RejectsWeightedRuleAboveSafeValueLimitWithoutDeductingCredits()
+    public async Task GenerateAsync_RejectsPercentageRuleAboveOneHundredWithoutDeductingCredits()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
@@ -360,7 +416,7 @@ public sealed class Phase3FormAutomationTests
             context,
             questionId,
             AnswerRuleModes.RandomByPercentage,
-            JsonSerializer.Serialize(new { weights = new Dictionary<string, int> { ["A"] = 10, ["B"] = 1 } }));
+            JsonSerializer.Serialize(new { weights = new Dictionary<string, int> { ["A"] = 90, ["B"] = 11 } }));
         await context.SaveChangesAsync();
 
         var service = new ResponseGenerationService(

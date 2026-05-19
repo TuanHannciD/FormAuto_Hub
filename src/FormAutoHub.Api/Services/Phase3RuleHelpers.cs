@@ -7,6 +7,8 @@ namespace FormAutoHub.Api.Services;
 
 internal static class Phase3RuleHelpers
 {
+    private const int PercentageTotal = 100;
+
     public static bool IsSupportedMode(string mode) =>
         mode is AnswerRuleModes.RandomEqually
             or AnswerRuleModes.RandomByPercentage
@@ -97,7 +99,8 @@ internal static class Phase3RuleHelpers
             throw new InvalidOperationException("RandomEqually requires values or question options.");
         }
 
-        return new[] { values[responseIndex % values.Count] };
+        EnsureValuesMatchOptions(values, question);
+        return PickChoiceValues(root, question, values, responseIndex);
     }
 
     private static IReadOnlyList<string> PickWeighted(JsonElement root, FormQuestion question, int responseIndex)
@@ -107,7 +110,8 @@ internal static class Phase3RuleHelpers
             throw new InvalidOperationException("RandomByPercentage requires weights.");
         }
 
-        var expanded = new List<string>();
+        var entries = new List<(string Value, int Weight)>();
+        var totalWeight = 0;
         foreach (var property in weights.EnumerateObject())
         {
             if (!property.Value.TryGetInt32(out var weight))
@@ -120,16 +124,26 @@ internal static class Phase3RuleHelpers
                 throw new InvalidOperationException("Weights must not be negative.");
             }
 
-            AddRepeatedValue(expanded, property.Name, weight);
+            if (weight > 0)
+            {
+                entries.Add((property.Name, weight));
+                totalWeight += weight;
+            }
         }
 
-        if (expanded.Count == 0)
+        if (totalWeight == 0)
         {
             throw new InvalidOperationException("RandomByPercentage requires at least one positive weight.");
         }
 
-        EnsureValuesMatchOptions(expanded.Distinct().ToList(), question);
-        return new[] { expanded[responseIndex % expanded.Count] };
+        if (totalWeight > PercentageTotal)
+        {
+            throw new InvalidOperationException("RandomByPercentage total weight must not exceed 100.");
+        }
+
+        var expanded = ExpandWeightedValues(entries, PercentageTotal);
+        EnsureValuesMatchOptions(entries.Select(entry => entry.Value).Distinct().ToList(), question);
+        return PickChoiceValues(root, question, expanded, responseIndex);
     }
 
     private static IReadOnlyList<string> PickByQuantity(JsonElement root, FormQuestion question, int responseIndex)
@@ -161,7 +175,7 @@ internal static class Phase3RuleHelpers
         }
 
         EnsureValuesMatchOptions(expanded.Distinct().ToList(), question);
-        return new[] { expanded[responseIndex % expanded.Count] };
+        return PickChoiceValues(root, question, expanded, responseIndex);
     }
 
     private static IReadOnlyList<string> PickSample(JsonElement root, int responseIndex)
@@ -281,6 +295,98 @@ internal static class Phase3RuleHelpers
         }
 
         values.AddRange(Enumerable.Repeat(value, count));
+    }
+
+    private static IReadOnlyList<string> ExpandWeightedValues(IReadOnlyList<(string Value, int Weight)> entries, int targetTotal)
+    {
+        var expanded = new List<string>(targetTotal);
+        foreach (var entry in entries)
+        {
+            expanded.AddRange(Enumerable.Repeat(entry.Value, entry.Weight));
+        }
+
+        if (expanded.Count == 0)
+        {
+            throw new InvalidOperationException("RandomByPercentage requires at least one positive weight.");
+        }
+
+        return expanded;
+    }
+
+    private static IReadOnlyList<string> PickChoiceValues(
+        JsonElement root,
+        FormQuestion question,
+        IReadOnlyList<string> sourceValues,
+        int responseIndex)
+    {
+        if (question.QuestionType != FormQuestionTypes.Checkbox)
+        {
+            return new[] { sourceValues[responseIndex % sourceValues.Count] };
+        }
+
+        var distinctValues = sourceValues.Distinct(StringComparer.Ordinal).ToList();
+        if (distinctValues.Count == 0)
+        {
+            throw new InvalidOperationException("Checkbox requires at least one configured value.");
+        }
+
+        var minSelections = ReadOptionalSelectionCount(root, "minSelections", 1);
+        var maxSelections = ReadOptionalSelectionCount(root, "maxSelections", 1);
+        if (minSelections < 1)
+        {
+            throw new InvalidOperationException("Checkbox minSelections must be at least 1.");
+        }
+
+        if (maxSelections < minSelections)
+        {
+            throw new InvalidOperationException("Checkbox maxSelections must be greater than or equal to minSelections.");
+        }
+
+        if (maxSelections > distinctValues.Count)
+        {
+            throw new InvalidOperationException("Checkbox maxSelections must not exceed the configured option count.");
+        }
+
+        if (maxSelections > Phase4SafetyLimits.MaxGeneratedAnswerValues)
+        {
+            throw new InvalidOperationException("Checkbox maxSelections exceeds the generated answer value limit.");
+        }
+
+        var selectionCount = minSelections == maxSelections
+            ? minSelections
+            : minSelections + (responseIndex % (maxSelections - minSelections + 1));
+        var selected = new List<string>(selectionCount);
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var cursor = responseIndex % sourceValues.Count;
+        var attempts = 0;
+        while (selected.Count < selectionCount && attempts < sourceValues.Count * 2)
+        {
+            var candidate = sourceValues[cursor % sourceValues.Count];
+            if (seen.Add(candidate))
+            {
+                selected.Add(candidate);
+            }
+
+            cursor += 1;
+            attempts += 1;
+        }
+
+        return selected;
+    }
+
+    private static int ReadOptionalSelectionCount(JsonElement root, string propertyName, int fallback)
+    {
+        if (!root.TryGetProperty(propertyName, out var element))
+        {
+            return fallback;
+        }
+
+        if (!element.TryGetInt32(out var value))
+        {
+            throw new InvalidOperationException("Checkbox selection counts must be integers.");
+        }
+
+        return value;
     }
 
     private static void EnsureValuesMatchOptions(IReadOnlyList<string> values, FormQuestion question)

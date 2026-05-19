@@ -1,18 +1,19 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { Badge } from "@/components/ui";
 import { apiFetch, type CreditTransaction } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
 
-async function getTransactions() {
-  try {
-    return (await apiFetch<{ items: CreditTransaction[] }>("/api/credit-transactions")).items;
-  } catch {
-    return [];
-  }
-}
+export default function CreditTransactionsPage() {
+  const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
 
-export default async function CreditTransactionsPage() {
-  const transactions = await getTransactions();
+  useEffect(() => {
+    apiFetch<{ items: CreditTransaction[] }>("/api/credit-transactions")
+      .then((data) => setTransactions(data.items))
+      .catch(() => setTransactions([]));
+  }, []);
 
   return (
     <div className="space-y-6">

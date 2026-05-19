@@ -24,12 +24,14 @@ public sealed class FoundationTests
                 "FormProject",
                 "FormQuestion",
                 "GeneratedResponse",
+                "RefreshToken",
                 "SubmissionJob",
                 "SubmissionLog",
                 "TopupOrder",
                 "UsageLog",
                 "User",
-                "UserCreditAccount"
+                "UserCreditAccount",
+                "UserExternalLogin"
             ],
             entityNames);
     }

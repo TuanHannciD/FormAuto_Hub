@@ -55,15 +55,17 @@ This repository uses explicit role separation, strict scope control, and paired 
 ## Current Project Baseline
 
 - Project: FormAuto Hub.
-- Current phase: Phase 6 - Production integrations.
+- Current phase: Phase 7 - Authentication and account access.
 - Backend: ASP.NET Core Web API .NET 9.
 - API style: controller-based REST API preferred for MVP.
 - Database: SQL Server.
 - ORM: Entity Framework Core.
 - Persistence discipline: EF Core migrations.
 - Frontend framework: Next.js web dashboard.
+- Authentication: JWT access tokens with refresh token/session storage.
+- Google account login/register: identity-only.
 - Payment gateway integration: Deferred.
-- Google OAuth and official Google Forms API integration: Deferred.
+- Official Google Forms API integration: Deferred.
 - AI answer generation and AI mapping: Deferred.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.

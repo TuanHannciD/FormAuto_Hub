@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+            font-weight: 500;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+            font-weight: 600;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+            font-weight: 700;
+        }
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#85f8c4",
+                      "surface-tint": "#0053db",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#00174b",
+                      "primary": "#004ac6",
+                      "surface-variant": "#e0e3e5",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "on-secondary": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "on-tertiary-container": "#bdffdc",
+                      "surface-bright": "#f7f9fb",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "on-tertiary-fixed": "#002114",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-dim": "#d8dadc",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-surface-variant": "#434655",
+                      "inverse-surface": "#2d3133",
+                      "secondary-container": "#dae2fd",
+                      "surface-container-high": "#e6e8ea",
+                      "primary-fixed": "#dbe1ff",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#dae2fd",
+                      "on-secondary-fixed": "#131b2e",
+                      "on-primary-container": "#eeefff",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "surface": "#f7f9fb",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "primary-container": "#2563eb",
+                      "outline": "#737686",
+                      "tertiary": "#006243",
+                      "on-secondary-container": "#5c647a",
+                      "on-error": "#ffffff",
+                      "background": "#f7f9fb",
+                      "tertiary-container": "#007d57",
+                      "surface-container": "#eceef0",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "secondary": "#565e74",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "on-background": "#191c1e",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist"],
+                      "headline-md": ["Geist"],
+                      "headline-lg-mobile": ["Geist"],
+                      "body-sm": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "body-md": ["Geist"],
+                      "headline-lg": ["Geist"],
+                      "label-sm": ["Geist"],
+                      "headline-xl-mobile": ["Geist"],
+                      "headline-xl": ["Geist"],
+                      "headline-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-xl-mobile": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                      "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<div class="flex justify-between items-center h-16 w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">FormAuto Hub</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Sản phẩm</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Bảng giá</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Tài liệu</a>
+</nav>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-20 px-margin-desktop max-w-container-max mx-auto min-h-screen">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+<!-- Left Column (Trust Panel) -->
+<div class="md:col-span-5 py-8">
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-6 leading-tight">
+                    Quy trình an toàn,<br/>kiểm soát tuyệt đối
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-md">
+                    Phân tích biểu mẫu, cấu hình quy tắc và theo dõi credit thời gian thực. Mọi thao tác đều được kiểm tra kỹ lưỡng trước khi xác nhận để đảm bảo dữ liệu của bạn luôn an toàn.
+                </p>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="bg-secondary-container text-primary p-2 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Bắt buộc xem trước</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Minh bạch hóa kết quả trước khi hệ thống thực thi lệnh.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-secondary-container text-primary p-2 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="filter_alt">filter_alt</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Tối đa 100 bản xem trước, gửi theo lô 10</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Kiểm soát chặt chẽ lưu lượng và độ chính xác của phản hồi.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-secondary-container text-primary p-2 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Theo dõi credit thời gian thực</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cập nhật hạn mức sử dụng ngay lập tức trên dashboard.</p>
+</div>
+</div>
+</div>
+<!-- Abstract Decorative Element -->
+<div class="mt-16 relative h-48 w-full bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden group">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent"></div>
+<div class="absolute top-4 left-4 p-4 bg-white border border-outline-variant rounded shadow-sm flex items-center gap-3 animate-pulse">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<div class="h-2 w-24 bg-surface-variant rounded"></div>
+</div>
+<div class="absolute bottom-4 right-4 p-4 bg-white border border-outline-variant rounded shadow-sm w-32">
+<div class="h-2 w-full bg-surface-variant rounded mb-2"></div>
+<div class="h-2 w-2/3 bg-surface-variant rounded"></div>
+</div>
+</div>
+</div>
+<!-- Right Column (Login Card) -->
+<div class="md:col-start-7 md:col-span-5 lg:col-start-8 lg:col-span-4">
+<div class="bg-white border border-outline-variant rounded-xl p-8 shadow-sm">
+<div class="mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Đăng nhập FormAuto Hub</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Quản lý biểu mẫu, credit và lịch sử thao tác trong một dashboard kiểm soát.</p>
+</div>
+<form class="space-y-5" onsubmit="return false;">
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface" for="email">Email</label>
+<input class="w-full px-4 py-2.5 rounded border border-outline-variant bg-white text-on-surface focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-outline" id="email" placeholder="name@company.com" type="email"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="password">Mật khẩu</label>
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-on-surface transition-colors" href="#">Quên mật khẩu - Đang cập nhật</a>
+</div>
+<input class="w-full px-4 py-2.5 rounded border border-outline-variant bg-white text-on-surface focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-outline" id="password" placeholder="••••••••" type="password"/>
+</div>
+<button class="w-full bg-primary-container text-white font-label-md text-label-md py-3 rounded hover:bg-opacity-90 transition-all active:scale-[0.98]">
+                            Đăng nhập
+                        </button>
+<div class="relative py-2">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant"></div></div>
+<div class="relative flex justify-center text-label-sm uppercase"><span class="bg-white px-2 text-outline">hoặc</span></div>
+</div>
+<button class="w-full bg-white border border-outline-variant text-on-surface font-label-md text-label-md py-2.5 rounded flex items-center justify-center gap-2 hover:bg-surface-container-low transition-all active:scale-[0.98]">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                            Đăng nhập với Google
+                        </button>
+</form>
+<div class="mt-8 text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Chưa có tài khoản? <a class="text-primary font-semibold hover:underline" href="#">Tạo tài khoản</a>
+</p>
+</div>
+</div>
+<!-- Error/Info States -->
+<div class="mt-6 space-y-4">
+<!-- Destructive Alert -->
+<div class="flex items-center gap-3 p-4 bg-error-container text-on-error-container rounded border border-error/20">
+<span class="material-symbols-outlined text-[20px]" data-icon="error">error</span>
+<p class="font-body-sm text-body-sm">Email hoặc mật khẩu không đúng.</p>
+</div>
+<!-- Warning Alert -->
+<div class="flex flex-col gap-2 p-4 bg-surface-container text-on-surface-variant rounded border border-outline-variant">
+<div class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock_clock">lock_clock</span>
+<p class="font-label-md text-label-md">Tài khoản bị khóa tạm thời.</p>
+</div>
+<p class="font-body-sm text-body-sm leading-relaxed">
+                            Vui lòng thử lại sau 15 phút. Nếu bạn vừa nhập sai mật khẩu nhiều lần, hãy chờ hết thời gian khóa rồi thử lại.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center py-8 px-margin-desktop max-w-container-max mx-auto gap-4">
+<div class="font-label-md text-label-md font-semibold text-on-surface">© 2024 FormAuto Hub. All rights reserved.</div>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Security</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Status</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for login button
+        const loginBtn = document.querySelector('button.bg-primary-container');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                loginBtn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="sync">sync</span> Đang xử lý...';
+                loginBtn.disabled = true;
+                setTimeout(() => {
+                    loginBtn.innerHTML = 'Đăng nhập';
+                    loginBtn.disabled = false;
+                }, 1500);
+            });
+        }
+    </script>
+</body></html>

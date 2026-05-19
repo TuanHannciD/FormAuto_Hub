@@ -38,9 +38,9 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Hồ sơ</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Thông tin tài khoản dùng cho dashboard MVP.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Thông tin tài khoản dùng cho dashboard.</p>
       </div>
-      <Alert>Authentication/JWT chính thức vẫn Deferred. Dashboard hiện dùng dev header context theo backend hiện tại.</Alert>
+      <Alert>Phiên hiện tại dùng JWT access token và refresh token. Đổi mật khẩu nằm trong mục bảo mật.</Alert>
       <Card>
         <CardHeader>
           <CardTitle>Thông tin cá nhân</CardTitle>

@@ -8,7 +8,7 @@ This repository contains the documentation baseline and the initial Phase 1 back
 
 ## Current Phase
 
-Current phase: **Phase 6 - Production integrations**.
+Current phase: **Phase 7 - Authentication and account access**.
 
 Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
 
@@ -30,6 +30,8 @@ Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under 
 - ORM: Entity Framework Core with EF Core migrations.
 - Frontend framework: Next.js web dashboard.
 - Frontend UI baseline: shadcn/ui with Tailwind CSS for dashboard/admin components.
+- Authentication: JWT access tokens with refresh token/session storage.
+- Google account login/register: identity-only; official Google Forms API scopes remain Deferred.
 - MVP top-up flow: manual top-up order approval.
 - MVP generated response limit: up to 100 preview responses per action, with controlled submission in sequential batches of 10.
 - Preview before submission is required.
@@ -80,6 +82,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/SOURCE_STRUCTURE_AND_NAMING_RULES.md` | `docs/vi/SOURCE_STRUCTURE_AND_NAMING_RULES.md` | Yes |
 | `docs/ai/FRONTEND_STYLE_GUIDE.md` | `docs/vi/FRONTEND_STYLE_GUIDE.md` | Yes |
 | `docs/ai/UI_DESIGN_ARTIFACTS.md` | `docs/vi/UI_DESIGN_ARTIFACTS.md` | Yes |
+| `docs/ai/AUTH_UI_DESIGN_GUIDE.md` | `docs/vi/AUTH_UI_DESIGN_GUIDE.md` | Yes |
 | `docs/ai/API_CONTRACT_GUIDE.md` | `docs/vi/API_CONTRACT_GUIDE.md` | Yes |
 | `docs/ai/EVENT_AND_WEBHOOK_CONTRACTS.md` | `docs/vi/EVENT_AND_WEBHOOK_CONTRACTS.md` | Yes |
 | `docs/ai/DOMAIN_ENTITIES_OVERVIEW.md` | `docs/vi/DOMAIN_ENTITIES_OVERVIEW.md` | Yes |
@@ -91,6 +94,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/PHASE_3_CLOSEOUT.md` | `docs/vi/PHASE_3_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_4_CLOSEOUT.md` | `docs/vi/PHASE_4_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_5_CLOSEOUT.md` | `docs/vi/PHASE_5_CLOSEOUT.md` | Yes |
+| `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_EXECUTION_RULES.md` | `docs/vi/PHASE_EXECUTION_RULES.md` | Yes |
 | `docs/ai/TECH_STACK_DECISIONS.md` | `docs/vi/TECH_STACK_DECISIONS.md` | Yes |
 | `docs/ai/ENVIRONMENT_SETUP.md` | `docs/vi/ENVIRONMENT_SETUP.md` | Yes |

@@ -15,6 +15,8 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - CreditPackages
 - TopupOrders
 - CreditTransactions
+- RefreshTokens
+- UserExternalLogins
 - UsageLogs
 - FormProjects
 - FormQuestions
@@ -33,6 +35,8 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - PasswordHash
 - FullName
 - Role
+- FailedLoginCount
+- LockoutUntil
 - CreatedAt
 
 ### UserCreditAccounts
@@ -77,6 +81,31 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - Description
 - ReferenceType
 - ReferenceId
+- CreatedAt
+
+### RefreshTokens
+
+Confirmed for Phase 7 as a dedicated refresh token/session storage table.
+
+- Id
+- UserId
+- TokenHash
+- ExpiresAt
+- RevokedAt
+- CreatedAt
+
+### UserExternalLogins
+
+Confirmed for Phase 7 Google identity linking.
+
+This storage must support provider user id / Google `sub` lookup before email matching.
+
+- Id
+- UserId
+- Provider
+- ProviderUserId
+- Email
+- EmailVerified
 - CreatedAt
 
 ### UsageLogs
@@ -169,7 +198,6 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 Deferred:
 
 - exact auth fields beyond MVP user basics
-- JWT claim structure
 - exact credit pricing
 - exact credit cost per action
 - refund behavior after failed submission

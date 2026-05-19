@@ -21,11 +21,13 @@ Use this file as the short entrypoint for AI/operator sessions.
 
 ## Current Baseline
 
-- Current phase: Phase 6 - Production integrations.
+- Current phase: Phase 7 - Authentication and account access.
 - Backend: ASP.NET Core Web API .NET 9.
 - Database: SQL Server.
 - ORM: Entity Framework Core.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.
 - Frontend framework: Next.js web dashboard.
-- Payment gateway, Google OAuth, official Google Forms API, AI generation, and background job framework: Deferred.
+- Authentication uses JWT access tokens with refresh token/session storage.
+- Google account login/register is identity-only.
+- Payment gateway, official Google Forms API, AI generation, and background job framework: Deferred.
