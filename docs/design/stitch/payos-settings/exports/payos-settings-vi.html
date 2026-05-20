@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cấu hình PayOS - FormAuto Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#2563eb",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686",
+                        "secondary-container": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "outline-variant": "#c3c6d7",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#eeefff",
+                        "tertiary-container": "#007d57",
+                        "surface-dim": "#d8dadc",
+                        "on-secondary-fixed": "#131b2e",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container": "#eceef0",
+                        "tertiary": "#006243",
+                        "secondary": "#565e74",
+                        "on-surface-variant": "#434655",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#85f8c4",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#dbe1ff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-container": "#bdffdc",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "inverse-on-surface": "#eff1f3",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1e",
+                        "inverse-primary": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#5c647a",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#002114"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-sm": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "headline-xl": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-sm": ["Geist"],
+                        "label-md": ["Geist"],
+                        "body-lg": ["Geist"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 gap-2 z-50 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="flex items-center gap-3 px-2 py-4 mb-4">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary font-bold">FA</div>
+<div>
+<h1 class="font-headline-md text-on-surface leading-none">FormAuto Hub</h1>
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold mt-1">Admin Dashboard</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span>Top-up &amp; thanh toán</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span>Báo cáo doanh thu</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container transition-all rounded-lg font-label-md font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span>Cấu hình PayOS</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Hệ thống</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-error hover:bg-error-container transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Đăng xuất</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-margin-desktop w-full z-40 bg-surface border-b border-outline-variant sticky top-0">
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-label-md">Admin</span>
+<span class="material-symbols-outlined text-[16px] text-outline-variant" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface font-label-md font-bold">Cấu hình PayOS</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<img alt="Admin avatar" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a business administrator in a modern office setting. The lighting is soft and professional, with a clean, high-key background that matches a B2B SaaS interface aesthetic. The color palette is composed of neutrals and soft blues, conveying trust and efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkBLiWkZ_PqP7IGGPUU8aenrQUiCaYb-N_1tktkpJ71B2OlutFkrb2hppv_Kzj3ocN1_oA3ayU5cleslG7PUxFvyq9tLHVD2weHzMYrhsQyInNYT11PAjuQy0coQQolZXXLOIxK5e7OEJ7EhuICVjoprRtzAa08ahVuMxTR2F0Fgc-pa8o-vURY1wqnPjYRUcP7ppj9aT5GPX5ttPM9bXFfmj9OQgafPlHctAo_nhRszj9a7QXUWayKi0vC0NzVo_YJZUb3tP_9MzS"/>
+<div class="flex flex-col">
+<span class="text-[12px] font-bold leading-none">Quản trị viên</span>
+<span class="text-[10px] text-on-surface-variant leading-none mt-1">Super Admin</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 p-margin-desktop space-y-6 max-w-container-max mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-on-surface">Cấu hình PayOS</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Quản lý trạng thái PayOS cho top-up credit tự động.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-white border border-outline-variant rounded hover:bg-surface-container-low transition-colors text-on-surface font-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+                        Làm mới
+                    </button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded hover:opacity-90 transition-opacity font-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="save">save</span>
+                        Lưu thay đổi
+                    </button>
+</div>
+</div>
+<!-- Warning Banner -->
+<div class="bg-[#FFFBEB] border border-[#FDE68A] rounded-lg p-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-[#D97706]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div class="flex-1">
+<p class="text-[#92400E] font-label-md font-bold">Cần kiểm tra cấu hình</p>
+<p class="text-[#B45309] text-body-sm">Thiếu cấu hình bắt buộc. Hệ thống không tạo payment link cho đến khi cấu hình hợp lệ.</p>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column (Main) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Section: Trạng thái tích hợp -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="sync">sync</span>
+                                Trạng thái tích hợp
+                            </h3>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full animate-pulse"></span>
+                                Đang bật
+                            </span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+<div>
+<p class="font-label-md text-on-surface">Bật PayOS</p>
+<p class="text-body-sm text-on-surface-variant">Cho phép khách hàng thanh toán qua cổng PayOS.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Môi trường</label>
+<select class="w-full bg-surface-container-high border-outline-variant rounded-lg font-body-md text-on-surface-variant cursor-not-allowed" disabled="">
+<option>Sandbox</option>
+<option>Production</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Tiền tệ mặc định</label>
+<input class="w-full bg-surface-container-high border-outline-variant rounded-lg font-body-md text-on-surface-variant" disabled="" type="text" value="VND"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Thông tin cấu hình -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h3 class="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="key">key</span>
+                            Thông tin cấu hình
+                        </h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Client ID</label>
+<div class="relative">
+<input class="w-full bg-surface border-outline-variant rounded-lg font-body-md text-on-surface pr-10" readonly="" type="text" value="payos_client_••••8124"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Checksum key</label>
+<div class="relative">
+<input class="w-full bg-surface border-outline-variant rounded-lg font-body-md text-on-surface pr-10" readonly="" type="password" value="••••••••••••••••"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Webhook URL</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg font-body-sm text-on-surface-variant italic" readonly="" type="text" value="https://api.formautohub.com/api/payments/payos/webhook"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface mb-1.5">Return URL</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg font-body-sm text-on-surface-variant italic" readonly="" type="text" value="https://app.formautohub.com/payment-result"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Kiểm tra cấu hình -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="fact_check">fact_check</span>
+                                Kiểm tra cấu hình
+                            </h3>
+<button class="px-4 py-2 bg-surface-container-high text-outline rounded cursor-not-allowed font-label-md flex items-center gap-2 border border-outline-variant" disabled="">
+<span class="material-symbols-outlined text-[18px]" data-icon="play_circle">play_circle</span>
+                                Kiểm tra cấu hình
+                            </button>
+</div>
+<div class="bg-surface rounded-lg border border-outline-variant p-4">
+<div class="flex items-center justify-between mb-4 pb-4 border-b border-outline-variant">
+<span class="text-body-sm text-on-surface-variant">Trạng thái kiểm tra cuối: <strong class="text-on-surface">Hôm nay, 09:45</strong></span>
+<span class="text-body-sm font-bold text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="cancel">cancel</span>
+                                    Không hợp lệ
+                                </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle">check_circle</span>
+<span class="text-body-sm">Có Client ID</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle">check_circle</span>
+<span class="text-body-sm">Có Checksum key</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="cancel">cancel</span>
+<span class="text-body-sm">Webhook reachable</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle">check_circle</span>
+<span class="text-body-sm">Return URL hợp lệ</span>
+</div>
+</div>
+<p class="mt-4 text-[11px] text-on-surface-variant bg-surface-container-low p-2 rounded italic">
+                                Nút kiểm tra chỉ bật khi backend hỗ trợ endpoint kiểm tra.
+                            </p>
+</div>
+</section>
+<!-- Section: An toàn vận hành -->
+<div class="bg-secondary-container text-on-secondary-container p-4 rounded-xl flex gap-3 border border-outline-variant">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+<div class="text-body-sm leading-relaxed">
+<strong class="block mb-1">Lưu ý an toàn:</strong>
+                            Không lưu secret trong source code. Không cấp credit từ callback chưa xác minh. Mọi giao dịch phải được xác thực bằng chữ ký số Checksum key.
+                        </div>
+</div>
+</div>
+<!-- Right Column (Small) -->
+<div class="space-y-6">
+<!-- Card: Lịch sử thay đổi gần đây -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden sticky top-24">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-label-md font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+                                Lịch sử thay đổi
+                            </h3>
+</div>
+<div class="p-2 custom-scrollbar max-h-[500px] overflow-y-auto">
+<div class="space-y-1">
+<!-- Log Item -->
+<div class="p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-outline-variant uppercase">Vừa xong</span>
+<span class="material-symbols-outlined text-[14px] text-outline opacity-0 group-hover:opacity-100 transition-opacity" data-icon="open_in_new">open_in_new</span>
+</div>
+<p class="text-body-sm font-bold text-on-surface">Cập nhật trạng thái</p>
+<p class="text-[12px] text-on-surface-variant mt-1">Admin đã chuyển trạng thái thành <strong>Bật</strong></p>
+<div class="mt-2 flex items-center gap-1.5">
+<img alt="User" class="w-4 h-4 rounded-full" data-alt="Small thumbnail avatar of a system administrator in a clean digital style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHSmFf7IzO6Os9mCI1tNqDU884x2lAqoyrvO-2guyBVAwQYphaXUJ0NuszWbrNzWeoGXhnbIZkUg3uqtpCODPivsyqz7U1tXuw1QVfi4voCvCYL7wk8rqS-F4dblqh63GHNtG2bMAdGP5D7FV9XSDo6P2_SBpmsUC1qAU80jw_S9HuRt8MWZ-tgsA9sbKkWIuj7uriricAA56hAhgH73s9-wKXDpfi1dtH7qd0_8Ixv5V5maFFdBU3myNl6Edw_DE-HVQL4Du6uYO2"/>
+<span class="text-[11px] text-outline">admin_user_01</span>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-[1px] bg-outline-variant mx-3"></div>
+<!-- Log Item -->
+<div class="p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-outline-variant uppercase">2 giờ trước</span>
+</div>
+<p class="text-body-sm font-bold text-on-surface">Thay đổi Webhook URL</p>
+<p class="text-[12px] text-on-surface-variant mt-1">Cập nhật endpoint nhận thông báo thanh toán</p>
+<div class="mt-2 flex items-center gap-1.5">
+<img alt="User" class="w-4 h-4 rounded-full" data-alt="Small thumbnail avatar of a system administrator in a clean digital style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnEVlH_pw8fva8Fwl7RQwbF_IMh_-x48D9lcxqcamc4pAhSaJA5PurNefCZ8c_ojhdoD7ueQ4TB4HjtFnjUMzC3qnyCsZntSgvM6R0ENh6WJntEwlAgJMP5oHa_lWaPlC9kagk5nEAxgxwD6F-UF4Tzkg1CZ_gn45OeIi5YoUM69wdR6IjWTsJ9B_TTwmLpG7TVpPUwRmZ-EhAd5_6ZzkTYguY56Gycrjz-jH3ZfQdeAUy5FsHlIFXe4ctMg2ZxUfLUFjCAIqLQAPZ"/>
+<span class="text-[11px] text-outline">dev_ops_manager</span>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-[1px] bg-outline-variant mx-3"></div>
+<!-- Log Item -->
+<div class="p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-outline-variant uppercase">Hôm qua</span>
+</div>
+<p class="text-body-sm font-bold text-on-surface">Cấu hình lại Client ID</p>
+<p class="text-[12px] text-on-surface-variant mt-1">Làm mới thông tin nhận diện cửa hàng</p>
+<div class="mt-2 flex items-center gap-1.5">
+<img alt="User" class="w-4 h-4 rounded-full" data-alt="Small thumbnail avatar of a system administrator in a clean digital style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3K747RUa3us_uqO3Yvpm8d4iFY9y5HZ0hi86YxLG93o7JnaBU0-OQoB_ThyyPPAD-guTUIzVoASLGMw3xHJ9-tAV69GO4YTX0L3lfNKf9JSekRupA6cgik4fLu7xfle4wBuFZ1V1OeqsHDObj58EwmoX6j29y1pyc8lB3LpwUGyBymecPvzqcxrKWQEaxNqFCIx8yNr93RHOFfJAGS9bTrla_qCrkMbb5VH1TCD46VqsIs-CHCTt5t5bmRbGgV1VsfPqRz1SDlJ7r"/>
+<span class="text-[11px] text-outline">system_root</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest text-center">
+<button class="text-[11px] font-bold text-primary hover:underline transition-all">Xem toàn bộ lịch sử</button>
+</div>
+</div>
+<!-- Additional Info Card -->
+<div class="border border-outline-variant rounded-xl p-4 bg-white">
+<h4 class="font-label-md font-bold mb-3">Tài liệu tham khảo</h4>
+<ul class="space-y-2">
+<li><a class="text-body-sm text-primary hover:underline flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[16px]" data-icon="description">description</span> PayOS API Documentation</a></li>
+<li><a class="text-body-sm text-primary hover:underline flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[16px]" data-icon="webhook">webhook</span> Hướng dẫn Webhook</a></li>
+<li><a class="text-body-sm text-primary hover:underline flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[16px]" data-icon="security">security</span> Quản lý API Key</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="flex justify-between items-center py-4 px-margin-desktop bg-surface border-t border-outline-variant mt-auto">
+<div class="text-on-surface-variant font-label-sm">
+                © 2024 FormAuto Hub. All rights reserved.
+            </div>
+<div class="flex gap-4">
+<a class="text-on-surface-variant font-label-sm hover:text-primary transition-colors" href="#">Quy định</a>
+<a class="text-on-surface-variant font-label-sm hover:text-primary transition-colors" href="#">Bảo mật</a>
+<a class="text-on-surface-variant font-label-sm hover:text-primary transition-colors" href="#">Trợ giúp</a>
+</div>
+</footer>
+</main>
+<!-- Simple Interactivity for Toggles -->
+<script>
+        // Simple visual feedback for the toggle
+        const toggle = document.querySelector('input[type="checkbox"]');
+        const badge = document.querySelector('.px-3.py-1.bg-tertiary-fixed');
+        const badgeDot = badge?.querySelector('.bg-tertiary');
+        
+        toggle?.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                badge.className = "px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm flex items-center gap-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 bg-tertiary rounded-full animate-pulse"></span> Đang bật`;
+            } else {
+                badge.className = "px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full font-label-sm flex items-center gap-1";
+                badge.innerHTML = `<span class="w-1.5 h-1.5 bg-outline rounded-full"></span> Tạm tắt`;
+            }
+        });
+
+        // Toggle mask for secret keys
+        const passwordFields = document.querySelectorAll('input[type="password"]');
+        passwordFields.forEach(field => {
+            const btn = field.nextElementSibling;
+            btn?.addEventListener('click', () => {
+                const isPassword = field.type === 'password';
+                field.type = isPassword ? 'text' : 'password';
+                btn.querySelector('.material-symbols-outlined').textContent = isPassword ? 'visibility_off' : 'visibility';
+            });
+        });
+    </script>
+</body></html>

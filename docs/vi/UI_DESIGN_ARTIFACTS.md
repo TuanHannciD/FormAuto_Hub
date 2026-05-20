@@ -32,6 +32,13 @@ Design artifact không phải production source code, API contract, database con
 | Register | `29b9ee6f2389428aa1490f91aa9de4bf` | `docs/design/stitch/register/` | Reference đã chấp nhận sau khi tinh chỉnh |
 | Auth callback | `e014f45ea68145cb9cfb5ab1821bc175` | `docs/design/stitch/auth-callback/` | Reference đã chấp nhận sau khi tinh chỉnh |
 | Profile security | `5e5335a5b7c94b4094d850ec0c03636e` | `docs/design/stitch/profile-security/` | Reference đã chấp nhận |
+| Admin shell và guard | `e9fb6043943b42639174301445d4b314` | `docs/design/stitch/admin-shell/` | Reference Phase 8 đã chấp nhận |
+| Admin dashboard | `c77f47bfc1474c4aa36039aa52798a38` | `docs/design/stitch/admin-dashboard/` | Reference Phase 8 đã chấp nhận |
+| Admin top-up/payment management | `648cbe8d68344671967017555f520362` | `docs/design/stitch/admin-topup-payment-management/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
+| Revenue report | `d01a35f848044e2380cc3706141d7a47` | `docs/design/stitch/revenue-report/` | Reference Phase 8 đã chấp nhận |
+| PayOS settings | `060e1cd9ff834848b67697cbe8b25878` | `docs/design/stitch/payos-settings/` | Reference Phase 8 đã chấp nhận |
+| User PayOS top-up flow | `10c6693c87ed4280846741ed7878355e` | `docs/design/stitch/user-topup-payos-flow/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
+| Payment result / return | `6b1140b6e18a4994b1de199d0e251b15` | `docs/design/stitch/payment-result-return/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
 
 ## Chuẩn thư mục artifact
 
@@ -56,13 +63,14 @@ Trước khi implement frontend page từ Stitch design:
 3. Đọc `README.md`, `screen-map.md`, và `notes.md` nếu có trong thư mục screen mục tiêu.
 4. Kiểm tra API/DTO/domain docs hiện tại trước khi bind field UI vào backend data.
 5. Xem sample rows, sample IDs, sample dates, labels, statuses và numbers là placeholder UI data, trừ khi backend contract đã xác nhận.
-6. Giữ đúng scope Phase 2 và safety rules.
+6. Giữ đúng scope phase hiện tại và safety rules.
 
 ## Các mục Deferred cần giữ ngoài UI
 
 Không implement từ UI artifact trừ khi được duyệt riêng:
 
-- payment gateway checkout
+- payment provider ngoài PayOS
+- frontend tự cộng credit
 - production Google OAuth implementation
 - official Google Forms API production flow
 - AI answer generation ở mức production-complete
@@ -87,9 +95,16 @@ Các màn đã generate hiện hỗ trợ:
 - register
 - auth callback
 - profile security
+- admin shell và guard state cho Phase 8
+- admin dashboard Phase 8
+- admin top-up/payment management Phase 8
+- revenue report Phase 8
+- PayOS settings Phase 8
+- user PayOS top-up flow Phase 8
+- payment result / return page Phase 8
 
 Các reference còn nên thiết kế tiếp:
 
-- admin top-up approval/rejection
+- admin top-up approval/rejection chỉ khi scope phê duyệt thủ công được duyệt riêng
 
-Admin top-up approval/rejection vẫn là quyết định scope riêng vì admin UI có thể ảnh hưởng quyền hạn và rủi ro vận hành.
+Manual admin approval/rejection vẫn là quyết định scope riêng vì Phase 8 PayOS top-up chỉ được cộng credit sau khi hệ thống xác minh thanh toán hợp lệ và ghi ledger.

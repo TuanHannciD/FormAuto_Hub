@@ -32,6 +32,13 @@ Design artifacts are not production source code, API contracts, database contrac
 | Register | `29b9ee6f2389428aa1490f91aa9de4bf` | `docs/design/stitch/register/` | Reference accepted after refinement |
 | Auth callback | `e014f45ea68145cb9cfb5ab1821bc175` | `docs/design/stitch/auth-callback/` | Reference accepted after refinement |
 | Profile security | `5e5335a5b7c94b4094d850ec0c03636e` | `docs/design/stitch/profile-security/` | Reference accepted |
+| Admin shell and guard | `e9fb6043943b42639174301445d4b314` | `docs/design/stitch/admin-shell/` | Phase 8 reference accepted |
+| Admin dashboard | `c77f47bfc1474c4aa36039aa52798a38` | `docs/design/stitch/admin-dashboard/` | Phase 8 reference accepted |
+| Admin top-up/payment management | `648cbe8d68344671967017555f520362` | `docs/design/stitch/admin-topup-payment-management/` | Phase 8 reference accepted after copy cleanup |
+| Revenue report | `d01a35f848044e2380cc3706141d7a47` | `docs/design/stitch/revenue-report/` | Phase 8 reference accepted |
+| PayOS settings | `060e1cd9ff834848b67697cbe8b25878` | `docs/design/stitch/payos-settings/` | Phase 8 reference accepted |
+| User PayOS top-up flow | `10c6693c87ed4280846741ed7878355e` | `docs/design/stitch/user-topup-payos-flow/` | Phase 8 reference accepted after copy cleanup |
+| Payment result / return | `6b1140b6e18a4994b1de199d0e251b15` | `docs/design/stitch/payment-result-return/` | Phase 8 reference accepted after copy cleanup |
 
 ## Artifact Folder Standard
 
@@ -56,13 +63,14 @@ Before implementing a frontend page from a Stitch design:
 3. Read the target screen folder `README.md`, `screen-map.md`, and `notes.md` if present.
 4. Check current API/DTO/domain docs before binding UI fields to backend data.
 5. Treat sample rows, sample IDs, sample dates, labels, statuses, and numbers as placeholder UI data unless backend contracts already confirm them.
-6. Preserve Phase 2 scope and safety rules.
+6. Preserve the active phase scope and safety rules.
 
 ## Deferred Items To Keep Out
 
 Do not implement from UI artifacts unless separately approved:
 
-- payment gateway checkout
+- payment providers other than PayOS
+- frontend-only credit updates
 - production Google OAuth implementation
 - official Google Forms API production flow
 - AI answer generation as production-complete
@@ -87,9 +95,16 @@ Current generated coverage supports:
 - register
 - auth callback
 - profile security
+- Phase 8 admin shell and guard state
+- Phase 8 admin dashboard
+- Phase 8 admin top-up/payment management
+- Phase 8 revenue reporting
+- Phase 8 PayOS settings
+- Phase 8 user PayOS top-up flow
+- Phase 8 payment result / return page
 
 Remaining useful references:
 
-- admin top-up approval/rejection
+- admin top-up approval/rejection only if a separate manual approval scope is approved
 
-Admin top-up approval/rejection remains a separate scope decision because admin UI can change operational risk and permissions.
+Manual admin approval/rejection remains a separate scope decision because Phase 8 PayOS top-up must grant credit only after verified payment handling and ledger write.
