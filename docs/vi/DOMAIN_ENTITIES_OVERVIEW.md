@@ -25,6 +25,8 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - SubmissionJobs
 - SubmissionLogs
 - AuditLogs
+- PaymentProviderSettings
+- PaymentRecords
 
 ## Proposed MVP fields
 
@@ -57,6 +59,14 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - IsActive
 - CreatedAt
 
+Follow-up admin package management đã duyệt:
+
+- Admin users được tạo và cập nhật các field hiện có ở trên.
+- `IsActive = false` ẩn package khỏi lựa chọn top-up của normal user.
+- `TopupOrders` đã tạo giữ snapshot `Credits` và `Amount` tại thời điểm tạo.
+- Không hard-delete package trong follow-up đã duyệt.
+- Không thêm màu package, marketing label, discount field hoặc subscription field nếu chưa có approval riêng.
+
 ### TopupOrders
 
 - Id
@@ -71,6 +81,13 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - PaidAt
 - ApprovedAt
 
+Quy tắc Phase 8:
+
+- Với implementation PayOS đầu tiên, giữ `TopupOrders` là order nạp credit user-facing.
+- Giữ lifecycle top-up tối thiểu: `Pending` cho đến khi payment được xác minh, rồi `Approved` sau khi credit ledger write thành công.
+- Không lưu PayOS secrets trong `TopupOrders`.
+- Không dùng dữ liệu frontend return URL làm authority để đánh dấu top-up đã thanh toán.
+
 ### CreditTransactions
 
 - Id
@@ -82,6 +99,70 @@ Các entity đã được chốt ở mức khái niệm. Danh sách field là pr
 - ReferenceType
 - ReferenceId
 - CreatedAt
+
+Quy tắc Phase 8:
+
+- PayOS automatic credit grant phải ghi một dòng `CreditTransactions`.
+- `ReferenceType` nên giữ là `TopupOrder` cho PayOS credit grant, trừ khi ledger review sau này duyệt reference model khác.
+
+### PaymentRecords
+
+Concept đã chốt cho Phase 8 PayOS payment metadata và idempotency.
+
+Các field đề xuất cần database review:
+
+- Id
+- TopupOrderId
+- Provider
+- ProviderOrderCode
+- ProviderPaymentLinkId
+- CheckoutUrl
+- Amount
+- Currency
+- ProviderStatus
+- SignatureVerifiedAt
+- CompletedAt
+- LastWebhookAt
+- RawPayloadJson
+- CreatedAt
+- UpdatedAt
+
+Hướng index và integrity:
+
+- unique index trên `Provider` + `ProviderOrderCode`
+- unique index trên `Provider` + `ProviderPaymentLinkId` khi available
+- foreign key tới `TopupOrders`
+- không dùng `RawPayloadJson` để lưu secrets
+- redact hoặc bỏ sensitive provider data trước khi lưu khi cần
+
+### PaymentProviderSettings
+
+Concept đã chốt cho Phase 8 để lưu cấu hình PayOS trong database.
+
+Các field đề xuất cần database review:
+
+- Id
+- Provider
+- ClientId
+- EncryptedApiKey
+- EncryptedChecksumKey
+- ReturnUrl
+- CancelUrl
+- IsEnabled
+- LastCheckedAt
+- LastCheckStatus
+- LastCheckMessage
+- UpdatedByUserId
+- CreatedAt
+- UpdatedAt
+
+Hướng bảo mật:
+
+- `ApiKey` và `ChecksumKey` phải được mã hóa trước khi lưu.
+- API response và admin UI không bao giờ được trả raw `ApiKey` hoặc raw `ChecksumKey`.
+- Admin UI chỉ được hiển thị secret preview dạng masked.
+- Ứng dụng có thể dùng environment/appsettings cho encryption key material hoặc local fallback, nhưng không dùng làm nguồn cấu hình PayOS chính sau khi Phase 8 settings được implement.
+- Secrets không được commit vào source-controlled configuration.
 
 ### RefreshTokens
 
@@ -201,8 +282,10 @@ Deferred:
 - exact credit pricing
 - exact credit cost per action
 - refund behavior sau failed submission
-- package management UI fields
+- package management fields ngoài follow-up đã duyệt gồm `Name`, `Credits`, `Price`, và `IsActive`
 - payment gateway fields
+- PayOS fields ngoài scope payment record Phase 8
+- PayOS configuration fields ngoài scope provider settings Phase 8
 - Google OAuth fields
 - AI mapping/generation fields
 - webhook fields
@@ -217,7 +300,7 @@ Không thêm field cho:
 - fake-account creation
 - spam campaign management
 - unauthorized submission targets
-- payment gateway behavior khi chưa duyệt
+- payment provider behavior ngoài scope PayOS Phase 8 đã duyệt
 - AI auto-submit behavior
 
 ## Kỷ luật ledger

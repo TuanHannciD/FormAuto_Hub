@@ -12,7 +12,7 @@ Define canonical module ownership for FormAuto Hub.
 | Users | user profile identity and basic user data | credit accounting |
 | UserCreditAccounts | current balance and totals | ledger history as primary record |
 | CreditManagement | credit deduction, credit addition, balance invariants | Google Forms calls |
-| Packages | credit package read model | payment gateway behavior |
+| Packages | credit package read model, approved admin package create/update/active-state follow-up | payment gateway behavior |
 | TopupOrders | user-created top-up orders | admin approval decisions |
 | AdminTopupOrders | admin approve/reject workflow | package management UI unless approved |
 | CreditTransactions | immutable credit ledger entries | mutable balance state as source of truth |

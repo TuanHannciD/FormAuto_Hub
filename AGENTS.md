@@ -55,7 +55,7 @@ This repository uses explicit role separation, strict scope control, and paired 
 ## Current Project Baseline
 
 - Project: FormAuto Hub.
-- Current phase: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
+- Current phase state: Phase 8 closeout completed; next phase not selected.
 - Backend: ASP.NET Core Web API .NET 9.
 - API style: controller-based REST API preferred for MVP.
 - Database: SQL Server.
@@ -114,6 +114,16 @@ The MVP must require preview before submission and limit generated responses to 
 ## Validation Honesty
 
 Never claim validation was completed unless it was actually run.
+
+Build/test success alone is not enough to report a runnable code task as complete when the changed behavior is exercised through an API route, browser route, authentication flow, database migration, payment flow, external callback/webhook, or public/tunnel URL. Applicable runtime smoke must pass, or the closeout must be marked `Blocked` or not complete.
+
+Before reporting completion for runnable code, run the smallest applicable runtime checks:
+
+- restart the affected server or app process after code changes
+- verify changed API endpoints with real HTTP requests and the correct auth role/session
+- verify changed browser routes render and hydrate, including static chunks when using Next.js through a tunnel
+- verify database migrations are applied when runtime code depends on new tables/columns
+- inspect relevant server logs or terminal output after smoke checks
 
 Use these labels:
 

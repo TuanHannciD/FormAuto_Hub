@@ -9,6 +9,7 @@ import {
   FileClock,
   FormInput,
   LayoutDashboard,
+  Shield,
   ReceiptText,
   Settings,
   ShieldCheck,
@@ -95,13 +96,22 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               {item.label}
             </Link>
           ))}
+          {session?.role === "Admin" && (
+            <Link
+              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+              href="/admin"
+            >
+              <Shield size={18} />
+              Khu vực admin
+            </Link>
+          )}
         </nav>
       </aside>
       <main className="lg:pl-72">
         <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bảng điều khiển giai đoạn 7</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bảng điều khiển giai đoạn 8</p>
               <h1 className="text-lg font-semibold">FormAuto Hub</h1>
             </div>
             <div className="flex items-center gap-3">

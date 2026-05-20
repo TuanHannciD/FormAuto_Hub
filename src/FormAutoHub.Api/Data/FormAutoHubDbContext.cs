@@ -21,6 +21,8 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<SubmissionJob> SubmissionJobs => Set<SubmissionJob>();
     public DbSet<SubmissionLog> SubmissionLogs => Set<SubmissionLog>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<PaymentProviderSetting> PaymentProviderSettings => Set<PaymentProviderSetting>();
+    public DbSet<PaymentRecord> PaymentRecords => Set<PaymentRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +62,23 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
         {
             entity.Property(item => item.Amount).HasPrecision(18, 2);
             entity.Property(item => item.BalanceAfter).HasPrecision(18, 2);
+        });
+
+        modelBuilder.Entity<PaymentProviderSetting>(entity =>
+        {
+            entity.HasIndex(item => item.Provider).IsUnique();
+        });
+
+        modelBuilder.Entity<PaymentRecord>(entity =>
+        {
+            entity.Property(item => item.Amount).HasPrecision(18, 2);
+            entity.HasIndex(item => new { item.Provider, item.ProviderOrderCode }).IsUnique();
+            entity.HasIndex(item => new { item.Provider, item.ProviderPaymentLinkId })
+                .IsUnique()
+                .HasFilter("[ProviderPaymentLinkId] <> ''");
+            entity.HasOne(item => item.TopupOrder)
+                .WithMany()
+                .HasForeignKey(item => item.TopupOrderId);
         });
     }
 }

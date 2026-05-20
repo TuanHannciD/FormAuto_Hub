@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, CheckCircle2, CreditCard } from "lucide-react";
 import { DropdownSelect } from "@/components/dropdown-select";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
-import { apiFetch, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
+import { apiFetch, type CreatePayosTopupOrderResponse, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function TopUpPage() {
@@ -16,6 +17,7 @@ export default function TopUpPage() {
   const [paymentMethod, setPaymentMethod] = useState("Thủ công");
   const [paymentNote, setPaymentNote] = useState("");
   const [message, setMessage] = useState("");
+  const [isCreatingPayos, setIsCreatingPayos] = useState(false);
 
   const selectedPackage = useMemo(() => packages.find((item) => item.id === packageId), [packageId, packages]);
 
@@ -51,26 +53,74 @@ export default function TopUpPage() {
     }
   }
 
+  async function createPayosLink() {
+    setMessage("");
+    setIsCreatingPayos(true);
+    try {
+      const result = await apiFetch<CreatePayosTopupOrderResponse>("/api/topup-orders/payos", {
+        method: "POST",
+        json: { packageId }
+      });
+      setMessage("Đã tạo liên kết thanh toán PayOS. Credit chỉ cộng sau khi hệ thống xác minh thanh toán.");
+      await loadData();
+      window.location.href = result.checkoutUrl;
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Không tạo được liên kết PayOS.");
+    } finally {
+      setIsCreatingPayos(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Yêu cầu nạp credit</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Giai đoạn hiện tại chỉ hỗ trợ yêu cầu nạp và quản trị viên duyệt thủ công.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs text-muted-foreground">Tài khoản / Nạp credit</p>
+          <h2 className="mt-2 text-2xl font-semibold">Nạp credit bằng PayOS</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Chọn gói credit, tạo link thanh toán và chờ backend xác minh PayOS.</p>
+        </div>
+        <div className="rounded-md border border-border bg-white px-3 py-2 text-sm">
+          <span className="text-muted-foreground">Số dư: </span>
+          <span className="font-semibold">{summary ? `${summary.currentCreditBalance} credit` : "-"}</span>
+        </div>
       </div>
 
-      <Alert>Cổng thanh toán tự động đang để sau. Không nhập thẻ, QR tự động hoặc thông tin thanh toán thật tại đây.</Alert>
+      <Alert>Credit chỉ được cộng sau khi backend xác minh thanh toán thành công. Giao diện không tự cộng credit.</Alert>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_1.3fr]">
-        <Card>
+      <div className="grid gap-3 md:grid-cols-4">
+        {["Chọn gói", "Chọn PayOS", "Tạo link thanh toán", "Chờ xác minh"].map((step, index) => (
+          <div className="flex items-center gap-3 rounded-md border border-border bg-white p-3 text-sm" key={step}>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{index + 1}</span>
+            <span>{step}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[1.35fr_0.75fr]">
+        <div className="space-y-4">
+          <Card>
           <CardHeader>
-            <CardTitle>Tạo yêu cầu mới</CardTitle>
+            <CardTitle>Chọn gói credit</CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4" onSubmit={submitOrder}>
-              <label className="block text-sm font-medium">
-                Gói credit
+            <div className="space-y-4">
+              <div className="grid gap-3 md:grid-cols-3">
+                {packages.map((item) => (
+                  <button
+                    className={`rounded-lg border p-4 text-left transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border bg-white"}`}
+                    key={item.id}
+                    onClick={() => setPackageId(item.id)}
+                    type="button"
+                  >
+                    <p className="text-sm text-muted-foreground">{item.name}</p>
+                    <p className="mt-3 text-2xl font-semibold">{item.credits} cr</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{formatCurrency(item.price)}</p>
+                    {packageId === item.id && <span className="mt-3 inline-flex rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground">Đang chọn</span>}
+                  </button>
+                ))}
+              </div>
+              {packages.length === 0 && (
                 <DropdownSelect
-                  className="mt-2"
                   value={packageId}
                   onChange={setPackageId}
                   options={packages.map((item) => ({
@@ -78,7 +128,18 @@ export default function TopUpPage() {
                     label: `${item.name} - ${item.credits} credits - ${formatCurrency(item.price)}`
                   }))}
                 />
-              </label>
+              )}
+            </div>
+            {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
+          </CardContent>
+        </Card>
+
+          <Card>
+          <CardHeader>
+            <CardTitle>Yêu cầu thủ công</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4" onSubmit={submitOrder}>
               <label className="block text-sm font-medium">
                 Phương thức ghi nhận thủ công
                 <Input className="mt-2" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
@@ -89,20 +150,38 @@ export default function TopUpPage() {
               </label>
               <Button disabled={!packageId} type="submit">Gửi yêu cầu</Button>
             </form>
-            {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
+          </CardContent>
+        </Card>
+        </div>
+
+        <div className="space-y-4">
+          <Card>
+          <CardHeader>
+            <CardTitle>Chi tiết đơn hàng</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm">
+            <Metric label="Gói sản phẩm" value={selectedPackage?.name ?? "-"} />
+            <Metric label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} cr` : "-"} />
+            <Metric label="Tổng số tiền" value={selectedPackage ? formatCurrency(selectedPackage.price) : "-"} />
+            <Button className="w-full" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
+              <CreditCard size={16} />
+              <span className="ml-2">{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo link thanh toán"}</span>
+              {!isCreatingPayos && <ArrowRight className="ml-2" size={16} />}
+            </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Tóm tắt số dư</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 md:grid-cols-3">
-            <Metric label="Credit hiện có" value={summary ? String(summary.currentCreditBalance) : "-"} />
-            <Metric label="Đang chờ duyệt" value={summary ? String(summary.pendingTopupOrders) : "-"} />
-            <Metric label="Sau khi duyệt" value={selectedPackage && summary ? String(summary.currentCreditBalance + selectedPackage.credits) : "-"} />
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Lưu ý xác minh</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <CheckItem text="Không cộng tiền trực tiếp từ trang return PayOS." />
+              <CheckItem text="Backend xác minh webhook trước khi ghi ledger." />
+              <CheckItem text="Nếu thanh toán chưa cập nhật, vui lòng kiểm tra lại giao dịch." />
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Card>
@@ -152,9 +231,18 @@ export default function TopUpPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-border bg-muted/40 p-4">
+    <div className="rounded-md border border-border p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-2 text-xl font-semibold">{value}</p>
+      <p className="mt-1 font-medium">{value}</p>
+    </div>
+  );
+}
+
+function CheckItem({ text }: { text: string }) {
+  return (
+    <div className="flex items-start gap-2">
+      <CheckCircle2 className="mt-0.5 text-emerald-600" size={15} />
+      <span>{text}</span>
     </div>
   );
 }

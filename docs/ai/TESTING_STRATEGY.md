@@ -37,6 +37,29 @@ Use integration tests for:
 - usage log writes
 - admin top-up approval workflow
 
+### Runtime Smoke Tests
+
+Runnable code changes require runtime smoke when behavior is exposed through a running process.
+
+Use runtime smoke for:
+
+- API route changes
+- browser route or dashboard changes
+- auth/session/role guard changes
+- database-backed behavior after migrations
+- payment link, callback, or webhook behavior
+- public/tunnel URL behavior
+
+Runtime smoke must verify:
+
+- the affected server process was restarted after code changes
+- the target route returns the expected HTTP status and response markers
+- authenticated routes are checked with the correct user role/session
+- browser routes hydrate and load required JavaScript/CSS chunks
+- server logs do not show new exceptions for the smoke path
+
+Build/test without runtime smoke is insufficient for closeout when runtime smoke is applicable.
+
 ### Migration Validation
 
 Database changes must validate:
@@ -44,6 +67,7 @@ Database changes must validate:
 - migration generation
 - migration application on clean database
 - migration application on existing test database when applicable
+- runtime database has the required tables/columns before smoke tests that depend on them
 - rollback or recovery notes when rollback is hard
 
 ### Credit Ledger Tests

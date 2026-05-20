@@ -6,7 +6,6 @@
 <title>Nạp Credit - FormAuto Hub</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
         @font-face {
             font-family: 'Geist';
@@ -23,370 +22,488 @@
             src: url('https://cdn.jsdelivr.net/font/geist/latest/Geist-Bold.woff2') format('woff2');
             font-weight: 600;
         }
-        body { font-family: 'Geist', sans-serif; }
+        body { 
+            font-family: 'Geist', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+        }
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
             display: inline-block;
             line-height: 1;
-            width: 1em;
-            height: 1em;
+            width: 1.25em;
+            height: 1.25em;
+            vertical-align: middle;
         }
     </style>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "surface-container-highest": "#e0e3e5",
-                    "on-primary-fixed-variant": "#003ea8",
-                    "on-primary-container": "#eeefff",
-                    "primary-fixed-dim": "#b4c5ff",
-                    "surface-tint": "#0053db",
-                    "outline-variant": "#c3c6d7",
-                    "surface": "#f7f9fb",
-                    "tertiary-fixed": "#85f8c4",
-                    "tertiary": "#006243",
-                    "on-tertiary-container": "#bdffdc",
-                    "error-container": "#ffdad6",
-                    "surface-dim": "#d8dadc",
-                    "secondary": "#565e74",
-                    "on-surface-variant": "#434655",
-                    "on-secondary-fixed": "#131b2e",
-                    "on-background": "#191c1e",
-                    "tertiary-fixed-dim": "#68dba9",
-                    "outline": "#737686",
-                    "secondary-fixed": "#dae2fd",
-                    "on-error-container": "#93000a",
-                    "on-tertiary-fixed-variant": "#005137",
-                    "tertiary-container": "#007d57",
-                    "on-secondary-fixed-variant": "#3f465c",
-                    "on-primary-fixed": "#00174b",
-                    "on-primary": "#ffffff",
-                    "primary-container": "#2563eb",
-                    "on-secondary-container": "#5c647a",
-                    "primary": "#004ac6",
-                    "on-tertiary-fixed": "#002114",
-                    "inverse-primary": "#b4c5ff",
-                    "surface-container-lowest": "#ffffff",
-                    "on-error": "#ffffff",
-                    "error": "#ba1a1a",
-                    "on-surface": "#191c1e",
-                    "on-secondary": "#ffffff",
-                    "surface-bright": "#f7f9fb",
-                    "inverse-on-surface": "#eff1f3",
-                    "secondary-container": "#dae2fd",
-                    "inverse-surface": "#2d3133",
-                    "primary-fixed": "#dbe1ff",
-                    "secondary-fixed-dim": "#bec6e0",
-                    "surface-container-low": "#f2f4f6",
-                    "surface-container-high": "#e6e8ea",
-                    "on-tertiary": "#ffffff",
-                    "background": "#f7f9fb",
-                    "surface-container": "#eceef0",
-                    "surface-variant": "#e0e3e5"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.125rem",
-                    "lg": "0.25rem",
-                    "xl": "0.5rem",
-                    "full": "0.75rem"
-            },
-            "spacing": {
-                    "unit": "4px",
-                    "container-max": "1280px",
-                    "margin-mobile": "16px",
-                    "margin-desktop": "32px",
-                    "gutter": "24px"
-            },
-            "fontFamily": {
-                    "body-md": ["Geist"],
-                    "body-lg": ["Geist"],
-                    "label-md": ["Geist"],
-                    "label-sm": ["Geist"],
-                    "headline-sm": ["Geist"],
-                    "headline-xl": ["Geist"],
-                    "headline-lg": ["Geist"],
-                    "headline-md": ["Geist"]
-            },
-            "fontSize": {
-                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
-                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-                    "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                    "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
-            }
-          },
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary": "#565e74",
+                "primary-container": "#2563eb",
+                "on-tertiary-container": "#bdffdc",
+                "surface-container-high": "#e6e8ea",
+                "on-primary-fixed": "#00174b",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#434655",
+                "tertiary": "#006243",
+                "inverse-on-surface": "#eff1f3",
+                "tertiary-fixed-dim": "#68dba9",
+                "on-background": "#191c1e",
+                "error-container": "#ffdad6",
+                "inverse-primary": "#b4c5ff",
+                "on-surface": "#191c1e",
+                "surface-variant": "#e0e3e5",
+                "primary-fixed-dim": "#b4c5ff",
+                "on-secondary-container": "#5c647a",
+                "on-tertiary-fixed": "#002114",
+                "surface-tint": "#0053db",
+                "on-secondary-fixed": "#131b2e",
+                "surface-container-low": "#f2f4f6",
+                "secondary-fixed-dim": "#bec6e0",
+                "on-primary-container": "#eeefff",
+                "secondary-container": "#dae2fd",
+                "background": "#f8fafc",
+                "surface-container": "#eceef0",
+                "primary": "#2563eb",
+                "on-tertiary-fixed-variant": "#005137",
+                "on-primary": "#ffffff",
+                "inverse-surface": "#2d3133",
+                "surface-bright": "#f7f9fb",
+                "outline-variant": "#e5e7eb",
+                "tertiary-fixed": "#85f8c4",
+                "secondary-fixed": "#dae2fd",
+                "surface": "#ffffff",
+                "on-primary-fixed-variant": "#003ea8",
+                "on-error": "#ffffff",
+                "outline": "#737686",
+                "tertiary-container": "#007d57",
+                "error": "#ba1a1a",
+                "on-secondary": "#ffffff",
+                "surface-container-highest": "#e0e3e5",
+                "primary-fixed": "#dbe1ff",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed-variant": "#3f465c",
+                "surface-dim": "#d8dadc",
+                "on-error-container": "#93000a"
         },
-      }
-    </script>
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.5rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "margin-desktop": "32px",
+                "container-max": "1280px",
+                "unit": "4px",
+                "margin-mobile": "16px",
+                "gutter": "24px"
+        },
+        "fontFamily": {
+                "headline-sm": [
+                        "Geist"
+                ],
+                "headline-lg": [
+                        "Geist"
+                ],
+                "body-md": [
+                        "Geist"
+                ],
+                "headline-lg-mobile": [
+                        "Geist"
+                ],
+                "headline-xl": [
+                        "Geist"
+                ],
+                "headline-md": [
+                        "Geist"
+                ],
+                "label-md": [
+                        "Geist"
+                ],
+                "label-sm": [
+                        "Geist"
+                ],
+                "body-sm": [
+                        "Geist"
+                ],
+                "body-lg": [
+                        "Geist"
+                ],
+                "headline-xl-mobile": [
+                        "Geist"
+                ]
+        },
+        "fontSize": {
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "30px",
+                        {
+                                "lineHeight": "38px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-xl": [
+                        "36px",
+                        {
+                                "lineHeight": "44px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-xl-mobile": [
+                        "30px",
+                        {
+                                "lineHeight": "38px",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
 </head>
-<body class="bg-surface text-on-surface">
-<!-- Sidebar Navigation -->
-<aside class="fixed left-0 top-0 h-full flex flex-col p-4 h-screen w-64 border-r border-outline-variant bg-surface">
-<div class="mb-8">
-<h1 class="font-headline-sm text-headline-sm font-bold text-primary">FormAuto Hub</h1>
-<p class="text-on-surface-variant text-label-sm">B2B SaaS Automation</p>
+<body class="bg-background text-on-surface">
+<div class="flex h-screen overflow-hidden max-w-[1280px] mx-auto shadow-sm bg-surface">
+<!-- Sidebar -->
+<aside class="w-60 border-r border-outline-variant bg-surface flex flex-col shrink-0">
+<div class="p-5">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-6 h-6 bg-primary rounded-sm flex items-center justify-center">
+<span class="text-on-primary text-[10px] font-bold">FH</span>
 </div>
-<nav class="flex-1 flex flex-col gap-1">
-<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<h1 class="font-headline-sm text-[20px] font-semibold text-primary tracking-tight">FormAuto Hub</h1>
+</div>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-widest font-medium opacity-70">B2B SaaS Automation</p>
+</div>
+<nav class="flex-1 px-3 space-y-0.5">
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100" data-icon="dashboard">dashboard</span>
 <span class="font-label-md">Tổng quan</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100" data-icon="folder_open">folder_open</span>
 <span class="font-label-md">Dự án form</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="rule">rule</span>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100" data-icon="rule">rule</span>
 <span class="font-label-md">Quy tắc trả lời</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100" data-icon="visibility">visibility</span>
 <span class="font-label-md">Xem trước phản hồi</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="history">history</span>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] opacity-70 group-hover:opacity-100" data-icon="history">history</span>
 <span class="font-label-md">Lịch sử</span>
 </a>
-<!-- Active State: Credit -->
-<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-bold" href="#">
-<span class="material-symbols-outlined" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<a class="flex items-center gap-2.5 px-3 py-1.5 bg-primary/10 text-primary rounded font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
 <span class="font-label-md">Credit</span>
 </a>
 </nav>
-<button class="mt-auto flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded-lg font-label-md hover:opacity-90 transition-opacity"><span class="material-symbols-outlined text-md" data-icon="add">add</span> Dự án mới</button>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded text-label-md font-medium hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span> 
+                Dự án mới
+            </button>
+</div>
 </aside>
-<!-- Main Wrapper -->
-<div class="ml-64 min-h-screen flex flex-col">
-<!-- Top App Bar -->
-<header class="flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background">
+<!-- Topbar -->
+<header class="h-12 flex items-center justify-between px-6 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm">
+<span class="opacity-50">Tài khoản</span>
+<span class="material-symbols-outlined text-[14px] opacity-30" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface">Nạp Credit</span>
+</div>
 <div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
-<span class="text-on-surface-variant font-body-md">Tìm kiếm...</span>
+<div class="bg-primary/10 text-primary px-2.5 py-1 rounded text-label-sm font-semibold border border-primary/10">
+                    Số dư: 1.250 credit
+                </div>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span></button>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span></button>
+<img alt="User" class="w-7 h-7 rounded-full border border-outline-variant bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEyZ1CEvyjYddPabTiAILUbfPSH_Hc4M2QDHBFqR5rCo_fAxjqpXtNepu1eBm5xjUqPqEBfGCrQoHf2k6MXRvOp0OupJ03T8wjGBr_NkEWFp3zhDK0QK9NMNTp82eQ8Lx_k1FMGnz3WksiNGmhJ5NauOEin7O3wL1VqUubZlweGg14YKYVKBZNtk0oZYeQHfmgoqmnkl7-iareqw11za2NzH0zrHGNSMlN7KWFuWHy2ciDQipHbD-E8SrxfJK1Cng_q76utAz1C-VH"/>
 </div>
-<div class="flex items-center gap-6">
-<span class="text-primary font-bold text-label-md bg-primary-fixed/30 px-3 py-1 rounded-full">Số dư: 1.250 credit</span>
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="notifications">notifications</span>
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="account_balance_wallet">account_balance_wallet</span>
-</div>
-<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEyZ1CEvyjYddPabTiAILUbfPSH_Hc4M2QDHBFqR5rCo_fAxjqpXtNepu1eBm5xjUqPqEBfGCrQoHf2k6MXRvOp0OupJ03T8wjGBr_NkEWFp3zhDK0QK9NMNTp82eQ8Lx_k1FMGnz3WksiNGmhJ5NauOEin7O3wL1VqUubZlweGg14YKYVKBZNtk0oZYeQHfmgoqmnkl7-iareqw11za2NzH0zrHGNSMlN7KWFuWHy2ciDQipHbD-E8SrxfJK1Cng_q76utAz1C-VH"/>
 </div>
 </header>
 <!-- Main Content -->
-<main class="flex-1 p-margin-desktop max-w-container-max mx-auto w-full">
-<!-- Page Header -->
-<div class="mb-8">
-<h2 class="font-headline-lg text-headline-lg text-on-surface">Nạp credit bằng PayOS</h2>
-<p class="text-on-surface-variant font-body-md mt-1">Chọn gói credit, tạo link thanh toán và hoàn tất thanh toán trên PayOS.</p>
+<main class="flex-1 overflow-y-auto p-6 scroll-smooth">
+<div class="max-w-[1000px] mx-auto">
+<!-- Header -->
+<div class="mb-6">
+<h2 class="text-[28px] font-semibold text-on-surface leading-tight tracking-tight">Nạp credit bằng PayOS</h2>
+<p class="text-on-surface-variant font-body-sm mt-1">Chọn gói credit, tạo link thanh toán và hoàn tất thanh toán trên PayOS.</p>
 </div>
-<!-- Info Alert -->
-<div class="mb-8 p-4 bg-primary-fixed/20 border border-primary/20 rounded-lg flex gap-3 items-start">
-<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
-<p class="text-on-primary-fixed-variant font-body-sm">Credit chỉ được cộng sau khi hệ thống xác minh thanh toán thành công. Giao diện không tự cộng credit.</p>
+<!-- Alert -->
+<div class="mb-8 p-3 bg-primary/10 border border-primary/20 rounded-lg flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5" data-icon="info">info</span>
+<p class="text-primary text-body-sm leading-tight">
+                        Credit chỉ được cộng sau khi hệ thống xác minh thanh toán thành công. Giao diện không tự cộng credit.
+                    </p>
 </div>
 <!-- Stepper -->
-<div class="mb-10">
-<div class="flex items-center w-full">
-<!-- Step 1 -->
-<div class="flex flex-col items-center flex-1 relative">
-<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-md z-10">1</div>
-<span class="mt-2 font-label-sm text-primary">Chọn gói</span>
-<div class="absolute top-4 left-1/2 w-full h-[2px] bg-outline-variant"></div>
+<div class="mb-10 px-4">
+<div class="relative flex items-center justify-between">
+<div class="absolute left-0 top-4 w-full h-[1px] bg-outline-variant -z-10"></div>
+<div class="flex flex-col items-center bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-md border-4 border-background">1</div>
+<span class="mt-2 text-label-sm font-semibold text-primary">Chọn gói</span>
 </div>
-<!-- Step 2 -->
-<div class="flex flex-col items-center flex-1 relative">
-<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md z-10">2</div>
-<span class="mt-2 font-label-sm text-on-surface-variant">Chọn PayOS</span>
-<div class="absolute top-4 left-1/2 w-full h-[2px] bg-outline-variant"></div>
+<div class="flex flex-col items-center bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md border-4 border-background">2</div>
+<span class="mt-2 text-label-sm font-medium text-on-surface-variant">Chọn PayOS</span>
 </div>
-<!-- Step 3 -->
-<div class="flex flex-col items-center flex-1 relative">
-<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md z-10">3</div>
-<span class="mt-2 font-label-sm text-on-surface-variant">Tạo link thanh toán</span>
-<div class="absolute top-4 left-1/2 w-full h-[2px] bg-outline-variant"></div>
+<div class="flex flex-col items-center bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md border-4 border-background">3</div>
+<span class="mt-2 text-label-sm font-medium text-on-surface-variant">Tạo link thanh toán</span>
 </div>
-<!-- Step 4 -->
-<div class="flex flex-col items-center flex-1">
-<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md z-10">4</div>
-<span class="mt-2 font-label-sm text-on-surface-variant">Chờ xác minh</span>
+<div class="flex flex-col items-center bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-label-md border-4 border-background">4</div>
+<span class="mt-2 text-label-sm font-medium text-on-surface-variant">Chờ xác minh</span>
 </div>
 </div>
 </div>
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Left Column -->
-<div class="lg:col-span-8 space-y-gutter">
-<!-- Gói Credit -->
+<!-- Config Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Left: Selection -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Packages -->
 <section>
-<h3 class="font-headline-sm text-headline-sm mb-4">Chọn gói credit</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<h3 class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider mb-4">Chọn gói credit</h3>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 <!-- Card 1 -->
-<div class="p-4 border border-outline-variant rounded-xl bg-surface hover:border-primary transition-all cursor-pointer group">
-<div class="flex justify-between items-start mb-2">
-<span class="font-headline-sm text-headline-sm">Gói 100</span>
-</div>
-<div class="space-y-1">
-<p class="text-on-surface font-bold">100 credit</p>
-<p class="text-on-surface-variant font-body-sm">50.000đ</p>
+<div class="p-4 border border-outline-variant rounded-lg bg-surface shadow-sm hover:border-primary/50 transition-all cursor-pointer group flex flex-col h-full">
+<span class="text-label-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">Gói 100</span>
+<div class="mt-auto pt-4">
+<div class="text-headline-sm font-bold text-on-surface">100 cr</div>
+<div class="text-on-surface-variant text-label-md mt-0.5">50.000đ</div>
 </div>
 </div>
 <!-- Card 2 (Selected) -->
-<div class="p-4 border-2 border-primary rounded-xl bg-primary-fixed/10 relative overflow-hidden">
-<div class="absolute top-0 right-0 bg-primary text-on-primary px-2 py-0.5 text-[10px] font-bold rounded-bl-lg">Phổ biến</div>
-<div class="flex justify-between items-start mb-2">
-<span class="font-headline-sm text-headline-sm text-primary">Gói 500</span>
-</div>
-<div class="space-y-1">
-<p class="text-on-surface font-bold">500 credit</p>
-<p class="text-on-surface-variant font-body-sm">225.000đ</p>
+<div class="p-4 border-2 border-primary rounded-lg bg-surface shadow-sm flex flex-col h-full relative">
+<div class="absolute -top-2 right-2 bg-primary text-on-primary px-1.5 py-0.5 text-[9px] font-bold rounded uppercase">Phổ biến</div>
+<span class="text-label-sm font-bold text-primary">Gói 500</span>
+<div class="mt-auto pt-4">
+<div class="text-[20px] font-bold text-on-surface">500 cr</div>
+<div class="text-on-surface-variant text-label-md mt-0.5">225.000đ</div>
 </div>
 </div>
 <!-- Card 3 -->
-<div class="p-4 border border-outline-variant rounded-xl bg-surface hover:border-primary transition-all cursor-pointer group">
-<div class="flex justify-between items-start mb-2">
-<span class="font-headline-sm text-headline-sm">Gói 1000</span>
-</div>
-<div class="space-y-1">
-<p class="text-on-surface font-bold">1000 credit</p>
-<p class="text-on-surface-variant font-body-sm">400.000đ</p>
+<div class="p-4 border border-outline-variant rounded-lg bg-surface shadow-sm hover:border-primary/50 transition-all cursor-pointer group flex flex-col h-full">
+<span class="text-label-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">Gói 1000</span>
+<div class="mt-auto pt-4">
+<div class="text-[20px] font-bold text-on-surface">1.000 cr</div>
+<div class="text-on-surface-variant text-label-md mt-0.5">400.000đ</div>
 </div>
 </div>
 </div>
 </section>
-<!-- Phương thức thanh toán -->
+<!-- Payment Method -->
 <section>
-<h3 class="font-headline-sm text-headline-sm mb-4">Phương thức thanh toán</h3>
-<div class="p-4 border border-primary rounded-xl bg-surface flex items-center justify-between">
-<div class="flex items-center gap-4">
-<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
-<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+<h3 class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider mb-4">Phương thức thanh toán</h3>
+<div class="p-4 border border-primary/50 rounded-lg bg-surface shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded-full border border-primary flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
 </div>
 <div>
-<p class="font-label-md text-on-surface">PayOS</p>
-<p class="text-on-surface-variant text-body-sm">Thanh toán qua link PayOS</p>
+<p class="font-label-md text-on-surface font-bold">PayOS</p>
+<p class="text-on-surface-variant text-[12px]">Thanh toán nhanh qua link PayOS</p>
 </div>
 </div>
-<img alt="PayOS Logo" class="h-6 object-contain" data-alt="The official minimalist logo of PayOS payment gateway with professional corporate typography and sharp vector lines. The logo is displayed on a clean white background, reflecting a modern fintech aesthetic suitable for high-end SaaS applications. The lighting is even and bright, emphasizing clarity and reliability in financial transactions." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJylBAnPJGd6ielydCg_juKSUT1C9jkFEP-N4v3mkh3DRaSF1TdsO3WXQt7bfueLFHX6_pxb3r7xK-loFJF0NkVdyQf27pwnKAYeHaFww1Ewdh-MCkfxsGezy_sY4vIukJo1HVvtB7kgk0E-s71SBTpzLQKXvyyEXu1Dy9XXvvv49Yj9_kCpcsPKOJFRP6X23gD6zkGfkDy2GE6gwPRJybpdxOoeFB4heVIKwx7Y5DJXJTPwnahzXShHNMElvwUJN5PiTuHNaHKGtN"/>
+<img alt="PayOS" class="h-5 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJylBAnPJGd6ielydCg_juKSUT1C9jkFEP-N4v3mkh3DRaSF1TdsO3WXQt7bfueLFHX6_pxb3r7xK-loFJF0NkVdyQf27pwnKAYeHaFww1Ewdh-MCkfxsGezy_sY4vIukJo1HVvtB7kgk0E-s71SBTpzLQKXvyyEXu1Dy9XXvvv49Yj9_kCpcsPKOJFRP6X23gD6zkGfkDy2GE6gwPRJybpdxOoeFB4heVIKwx7Y5DJXJTPwnahzXShHNMElvwUJN5PiTuHNaHKGtN"/>
 </div>
 </section>
 </div>
-<!-- Right Column -->
-<div class="lg:col-span-4 space-y-6">
-<!-- Chi tiết đơn hàng -->
-<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl">
-<h4 class="font-headline-sm text-headline-sm mb-6 border-b border-outline-variant pb-4">Chi tiết đơn hàng</h4>
-<div class="space-y-4 mb-8">
+<!-- Right: Summary -->
+<div class="lg:col-span-4 space-y-5">
+<div class="bg-surface shadow-sm border border-outline-variant rounded-lg p-5">
+<h4 class="text-label-md font-bold text-on-surface uppercase tracking-wider mb-5 pb-3 border-b border-outline-variant">Chi tiết đơn hàng</h4>
+<div class="space-y-3.5 mb-8 text-body-sm">
 <div class="flex justify-between">
-<span class="text-on-surface-variant font-body-sm">Gói:</span>
-<span class="text-on-surface font-label-md">Gói 500</span>
-</div>
-<div class="flex justify-between">
-<span class="text-on-surface-variant font-body-sm">Credit nhận:</span>
-<span class="text-on-surface font-label-md">500 cr</span>
+<span class="text-on-surface-variant">Gói sản phẩm:</span>
+<span class="font-medium text-on-surface">Gói 500</span>
 </div>
 <div class="flex justify-between">
-<span class="text-on-surface-variant font-body-sm">Số tiền:</span>
-<span class="text-on-surface font-bold text-body-lg">225.000đ</span>
+<span class="text-on-surface-variant">Credit nhận:</span>
+<span class="font-medium text-primary">500 cr</span>
 </div>
-<div class="flex justify-between items-center">
-<span class="text-on-surface-variant font-body-sm">Trạng thái:</span>
-<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[12px] font-bold rounded">CHƯA TẠO LINK</span>
+<div class="flex justify-between pt-2">
+<span class="text-on-surface-variant">Tổng số tiền:</span>
+<span class="text-[20px] font-bold text-on-surface">225.000đ</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="text-on-surface-variant">Trạng thái:</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded uppercase tracking-tighter">Chưa tạo link</span>
 </div>
 </div>
-<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-bold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"><span>Tạo link thanh toán</span><span class="material-symbols-outlined text-md" data-icon="arrow_forward">arrow_forward</span></button>
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-lg font-bold text-label-md hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span>Tạo link thanh toán</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
 </div>
-<!-- Lưu ý xác minh -->
-<div class="p-6 border border-outline-variant rounded-xl space-y-4">
-<h4 class="font-label-md text-on-surface uppercase tracking-wider">Lưu ý xác minh</h4>
-<ul class="space-y-3">
-<li class="flex gap-3 items-start">
-<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
-<p class="text-on-surface-variant font-body-sm">Không đóng trình duyệt quá sớm sau khi thanh toán.</p>
-</li>
-<li class="flex gap-3 items-start">
-<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
-<p class="text-on-surface-variant font-body-sm">Credit sẽ được cập nhật sau khi hệ thống backend xác minh.</p>
-</li>
-<li class="flex gap-3 items-start">
-<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
-<p class="text-on-surface-variant font-body-sm">Nếu trạng thái chưa cập nhật, vui lòng xem lịch sử giao dịch.</p>
-</li>
+<div class="bg-surface shadow-sm border border-outline-variant rounded-lg p-4">
+<h5 class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mb-3">Lưu ý xác minh</h5>
+<ul class="space-y-2.5 text-[12px] leading-snug">
+<li class="flex gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[14px] mt-0.5" data-icon="check_circle">check_circle</span>
+                                    Không đóng trình duyệt quá sớm sau khi thanh toán.
+                                </li>
+<li class="flex gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[14px] mt-0.5" data-icon="check_circle">check_circle</span>
+                                    Credit sẽ được cập nhật sau khi hệ thống backend xác minh.
+                                </li>
+<li class="flex gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[14px] mt-0.5" data-icon="check_circle">check_circle</span>
+                                    Nếu trạng thái chưa cập nhật, vui lòng xem lịch sử giao dịch.
+                                </li>
 </ul>
 </div>
 </div>
 </div>
-<!-- Bottom Section: Recent Table -->
-<section class="mt-12">
-<div class="flex justify-between items-center mb-6">
-<h3 class="font-headline-sm text-headline-sm">Đơn top-up gần đây</h3>
-<button class="text-primary font-label-md hover:underline">Xem tất cả</button>
+<!-- Table Section -->
+<section class="mt-12 mb-8">
+<div class="flex justify-between items-end mb-4">
+<div>
+<h3 class="text-[20px] font-semibold text-on-surface">Đơn top-up gần đây</h3>
+<p class="text-on-surface-variant text-body-sm mt-1">Lịch sử 5 giao dịch nạp credit gần nhất của bạn</p>
 </div>
-<div class="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest">
+<button class="text-primary font-label-md hover:underline decoration-2 underline-offset-4">Xem tất cả</button>
+</div>
+<div class="bg-surface shadow-sm border border-outline-variant rounded-lg overflow-hidden">
 <table class="w-full text-left border-collapse">
 <thead>
-<tr class="bg-surface-container border-b border-outline-variant">
-<th class="px-6 py-4 font-label-md text-on-surface">Mã đơn</th>
-<th class="px-6 py-4 font-label-md text-on-surface">Gói</th>
-<th class="px-6 py-4 font-label-md text-on-surface">Số tiền</th>
-<th class="px-6 py-4 font-label-md text-on-surface">Thanh toán</th>
-<th class="px-6 py-4 font-label-md text-on-surface">Trạng thái Credit</th>
-<th class="px-6 py-4 font-label-md text-on-surface text-right">Thời gian</th>
+<tr class="bg-surface-container-low/50 border-b border-outline-variant">
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Mã đơn</th>
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Gói</th>
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Số tiền</th>
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Thanh toán</th>
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Credit</th>
+<th class="px-5 py-3 font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Thời gian</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-outline-variant">
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="px-6 py-4 font-body-sm font-medium text-primary">TOP-1024</td>
-<td class="px-6 py-4 font-body-sm">Gói 100</td>
-<td class="px-6 py-4 font-body-sm">50.000đ</td>
-<td class="px-6 py-4 font-body-sm">
-<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed">THÀNH CÔNG</span>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-5 py-3 font-medium text-primary text-body-sm">TOP-1024</td>
+<td class="px-5 py-3 text-body-sm text-on-surface">Gói 100</td>
+<td class="px-5 py-3 text-body-sm text-on-surface">50.000đ</td>
+<td class="px-5 py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#10b981]/10 text-[#10b981] uppercase">Thành công</span>
 </td>
-<td class="px-6 py-4 font-body-sm">
-<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed">ĐÃ CỘNG</span>
+<td class="px-5 py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#10b981]/10 text-[#10b981] uppercase">Đã cộng</span>
 </td>
-<td class="px-6 py-4 font-body-sm text-on-surface-variant text-right">14:20 12/05/2024</td>
+<td class="px-5 py-3 text-on-surface-variant text-body-sm text-right">14:20 12/05/2024</td>
 </tr>
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="px-6 py-4 font-body-sm font-medium text-primary">TOP-1023</td>
-<td class="px-6 py-4 font-body-sm">Gói 500</td>
-<td class="px-6 py-4 font-body-sm">225.000đ</td>
-<td class="px-6 py-4 font-body-sm">
-<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-secondary-container text-on-secondary-container">ĐANG CHỜ</span>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-5 py-3 font-medium text-primary text-body-sm">TOP-1023</td>
+<td class="px-5 py-3 text-body-sm text-on-surface">Gói 500</td>
+<td class="px-5 py-3 text-body-sm text-on-surface">225.000đ</td>
+<td class="px-5 py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#f59e0b]/10 text-[#f59e0b] uppercase">Đang chờ</span>
 </td>
-<td class="px-6 py-4 font-body-sm">
-<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-surface-container-highest text-on-surface-variant">CHỜ XÁC MINH</span>
+<td class="px-5 py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-on-surface-variant uppercase">Xác minh...</span>
 </td>
-<td class="px-6 py-4 font-body-sm text-on-surface-variant text-right">09:15 12/05/2024</td>
+<td class="px-5 py-3 text-on-surface-variant text-body-sm text-right">09:15 12/05/2024</td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
+</div>
 </main>
 </div>
-<!-- Micro-interactions Script -->
+</div>
 <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('section:first-of-type .grid > div');
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    cards.forEach(c => {
-                        c.classList.remove('border-primary', 'bg-primary-fixed/10', 'border-2');
-                        c.classList.add('border-outline-variant', 'bg-surface');
-                        const h3 = c.querySelector('span.font-headline-sm');
-                        if(h3) h3.classList.remove('text-primary');
-                    });
-                    card.classList.remove('border-outline-variant', 'bg-surface');
-                    card.classList.add('border-primary', 'bg-primary-fixed/10', 'border-2');
-                    const h3Selected = card.querySelector('span.font-headline-sm');
-                    if(h3Selected) h3Selected.classList.add('text-primary');
+    document.addEventListener('DOMContentLoaded', () => {
+        // Simple card selection logic
+        const packageCards = document.querySelectorAll('section:first-of-type .grid > div');
+        packageCards.forEach(card => {
+            card.addEventListener('click', () => {
+                packageCards.forEach(c => {
+                    c.classList.remove('border-2', 'border-primary');
+                    c.classList.add('border', 'border-outline-variant');
+                    const badge = c.querySelector('.absolute');
+                    if(badge) badge.classList.add('hidden');
+                    const title = c.querySelector('span');
+                    if(title) title.classList.replace('text-primary', 'text-on-surface-variant');
                 });
+                
+                card.classList.remove('border', 'border-outline-variant');
+                card.classList.add('border-2', 'border-primary');
+                const badge = card.querySelector('.absolute');
+                if(badge) badge.classList.remove('hidden');
+                const title = card.querySelector('span');
+                if(title) title.classList.replace('text-on-surface-variant', 'text-primary');
             });
         });
-    </script>
+    });
+</script>
 </body></html>

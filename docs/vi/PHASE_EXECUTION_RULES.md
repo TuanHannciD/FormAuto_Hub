@@ -8,7 +8,15 @@ Ngăn phase creep và việc vô tình approve future work.
 
 Default active phase là current phase trong `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
+Current active phase: chưa chọn phase mới sau closeout Phase 8.
+
+Cho đến khi phase tiếp theo được approve, chỉ được làm follow-up đã document trong phạm vi Phase 8 đã hoàn tất.
+
+Follow-up sau closeout đã duyệt:
+
+- Admin credit package management chỉ được duyệt cho tạo và cập nhật các field `CreditPackages` hiện có: `Name`, `Credits`, `Price`, và `IsActive`.
+- Package đang tắt có thể bị ẩn khỏi lựa chọn top-up của normal user.
+- Hard delete package, discount, subscription pricing, màu package, và merchandising metadata vẫn là `Deferred:`.
 
 ## Việc trong phase
 
@@ -42,7 +50,7 @@ Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
 - exact credit pricing
 - exact credit cost per action
 - admin user management UI
-- package management UI
+- package management behavior ngoài follow-up tạo/cập nhật/active-state gói credit đã duyệt
 - email notifications
 - webhooks
 - deployment platform

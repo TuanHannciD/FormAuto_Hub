@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Current phase: **Phase 8 - Admin, revenue, and PayOS automated credit top-up**.
+Current phase: **Closeout Phase 8 đã hoàn tất; chưa chọn phase tiếp theo**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -229,7 +229,7 @@ Implementation subset đã hoàn tất:
 
 ## Phase 8 - Admin, revenue, and PayOS automated credit top-up
 
-Status: Current.
+Status: Completed.
 
 Scope đã duyệt:
 
@@ -245,6 +245,14 @@ Scope đã duyệt:
 - cập nhật trạng thái top-up order theo kết quả thanh toán đã xác minh
 - admin xem được lịch sử thanh toán và credit transaction
 
+Follow-up sau closeout đã duyệt:
+
+- admin quản lý gói credit trên các field `CreditPackages` hiện có: `Name`, `Credits`, `Price`, và `IsActive`
+- admin được tạo package và cập nhật package hiện có
+- package đang tắt bị ẩn khỏi lựa chọn top-up của normal user
+- không hard-delete package trong follow-up này
+- top-up orders đã tạo giữ snapshot credit và amount
+
 Ranh giới scope:
 
 - PayOS là payment provider duy nhất được duyệt trong phase này.
@@ -259,7 +267,7 @@ Deferred:
 - subscription billing
 - automated refund behavior
 - manual credit adjustment nếu chưa duyệt riêng
-- package management UI nếu chưa duyệt riêng
+- package management behavior ngoài follow-up tạo/cập nhật/bật tắt đã duyệt
 - admin user management UI nếu chưa duyệt riêng
 - official Google Forms API
 - Google Forms watches hoặc background sync
@@ -270,6 +278,10 @@ Kickoff plan:
 
 - Xem `PHASE_8_KICKOFF_PLAN.md`.
 
+Closeout:
+
+- Xem `PHASE_8_CLOSEOUT.md`.
+
 ## Phase Rule
 
-Task ngoài active phase cần approval rõ hoặc phải thu hẹp về safe in-phase subset.
+Chưa chọn phase tiếp theo sau closeout Phase 8. Công việc phase mới cần approval rõ hoặc phải thu hẹp thành follow-up an toàn đã được document.

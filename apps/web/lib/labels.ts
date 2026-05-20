@@ -11,7 +11,16 @@ export function displayStatus(status: string) {
     Running: "Đang chạy",
     Paused: "Đã tạm dừng",
     Cancelled: "Đã hủy",
-    Canceled: "Đã hủy"
+    Canceled: "Đã hủy",
+    Created: "Đã tạo",
+    Paid: "Đã thanh toán",
+    Ready: "Sẵn sàng",
+    MissingConfiguration: "Thiếu cấu hình",
+    NotChecked: "Chưa kiểm tra",
+    PAID: "Đã thanh toán",
+    PENDING: "Đang chờ",
+    CANCELLED: "Đã hủy",
+    CANCELLED_BY_USER: "Người dùng đã hủy"
   };
 
   return labels[status] ?? status;

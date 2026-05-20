@@ -8,7 +8,15 @@ Prevent phase creep and accidental approval of future work.
 
 Default active phase is the current phase in `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
+Current active phase: none selected after Phase 8 closeout.
+
+Until the next phase is approved, only documented follow-up work for the completed Phase 8 scope may proceed.
+
+Approved post-closeout follow-up:
+
+- Admin credit package management is approved only for creating and updating existing `CreditPackages` fields: `Name`, `Credits`, `Price`, and `IsActive`.
+- Inactive packages may be hidden from normal user top-up selection.
+- Package hard delete, discounts, subscription pricing, package colors, and merchandising metadata remain Deferred.
 
 ## In-Phase Work
 
@@ -42,7 +50,7 @@ The following must remain Deferred until approved:
 - exact credit pricing
 - exact credit cost per action
 - admin user management UI
-- package management UI
+- package management behavior beyond the approved credit package create/update/active-state follow-up
 - email notifications
 - webhooks
 - deployment platform

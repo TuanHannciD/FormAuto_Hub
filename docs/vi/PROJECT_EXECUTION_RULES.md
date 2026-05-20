@@ -6,7 +6,7 @@
 
 ## Trạng thái hiện tại
 
-- Phase hiện tại: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
+- Trạng thái phase hiện tại: Closeout Phase 8 đã hoàn tất; chưa chọn phase tiếp theo.
 - Phase 1 backend foundation tồn tại trong `src/FormAutoHub.Api`.
 - Initial test project tồn tại trong `tests/FormAutoHub.Tests`.
 - Backend đã chốt: ASP.NET Core Web API .NET 9, SQL Server, EF Core.

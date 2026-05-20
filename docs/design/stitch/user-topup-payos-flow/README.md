@@ -1,7 +1,7 @@
 # User Top-up PayOS Flow
 
 - Stitch project id: `14663165630678165146`
-- Stitch screen id: `10c6693c87ed4280846741ed7878355e`
+- Stitch screen id: `830150eb380a44ba8c49ddb3f8337f73`
 - Screen title: User PayOS credit top-up flow
 - Language: Vietnamese
 - Design system: `Precision Operational System` (`assets/809a13b0223c4381a9ea7ede2848bb3e`)

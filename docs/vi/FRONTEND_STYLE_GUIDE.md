@@ -17,6 +17,8 @@ File này chỉ kiểm soát style UI. File này không tự phê duyệt việc
 
 FormAuto Hub nên có cảm giác là dashboard vận hành, không phải website marketing.
 
+Copy trên UI mặc định phải dùng tiếng Việt rõ ràng, dễ hiểu. Chỉ dùng tiếng Anh khi bất khả kháng, ví dụ tên sản phẩm, provider, giao thức, code, hoặc định danh kỹ thuật như PayOS, API, webhook, JWT, URL, hoặc tên field.
+
 Nên dùng:
 
 - layout gọn nhưng dễ đọc
@@ -136,6 +138,7 @@ Trước khi tạo frontend files, cần xác nhận:
 - API contracts đã được duyệt hoặc được đánh dấu temporary rõ ràng
 - UI không làm yếu anti-abuse rules
 - UI giữ preview và confirmation requirements khi liên quan
+- UI copy ưu tiên tiếng Việt và tránh label tiếng Anh không cần thiết
 
 ## Quy tắc đồng bộ tài liệu
 

@@ -12,7 +12,7 @@
 | Users | thông tin user và profile cơ bản | credit accounting |
 | UserCreditAccounts | balance hiện tại và tổng cộng | ledger history như nguồn chính |
 | CreditManagement | trừ credit, cộng credit, invariant balance | Google Forms calls |
-| Packages | credit package read model | payment gateway behavior |
+| Packages | credit package read model, follow-up admin tạo/cập nhật/bật tắt package đã duyệt | payment gateway behavior |
 | TopupOrders | top-up order do user tạo | quyết định approve của admin |
 | AdminTopupOrders | admin approve/reject workflow | package management UI khi chưa duyệt |
 | CreditTransactions | ledger bất biến của credit | mutable balance state như source of truth |

@@ -25,6 +25,8 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - SubmissionJobs
 - SubmissionLogs
 - AuditLogs
+- PaymentProviderSettings
+- PaymentRecords
 
 ## Proposed MVP Fields
 
@@ -57,6 +59,14 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - IsActive
 - CreatedAt
 
+Approved admin package management follow-up:
+
+- Admin users may create and update the existing fields above.
+- `IsActive = false` hides the package from normal user top-up selection.
+- Existing `TopupOrders` keep snapshot `Credits` and `Amount` values from creation time.
+- Do not hard-delete packages in the approved follow-up.
+- Do not add package colors, marketing labels, discount fields, or subscription fields without separate approval.
+
 ### TopupOrders
 
 - Id
@@ -71,6 +81,13 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - PaidAt
 - ApprovedAt
 
+Phase 8 rule:
+
+- For the first PayOS implementation, keep `TopupOrders` as the user-facing credit top-up order.
+- Keep top-up lifecycle minimal: `Pending` until verified payment, then `Approved` after the credit ledger write succeeds.
+- Do not store PayOS secrets in `TopupOrders`.
+- Do not use frontend return URL data as authority to mark a top-up as paid.
+
 ### CreditTransactions
 
 - Id
@@ -82,6 +99,70 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - ReferenceType
 - ReferenceId
 - CreatedAt
+
+Phase 8 rule:
+
+- PayOS automatic credit grant must write a `CreditTransactions` row.
+- `ReferenceType` should remain `TopupOrder` for PayOS credit grants unless a later ledger review approves a different reference model.
+
+### PaymentRecords
+
+Confirmed concept for Phase 8 PayOS payment metadata and idempotency.
+
+Proposed fields requiring database review:
+
+- Id
+- TopupOrderId
+- Provider
+- ProviderOrderCode
+- ProviderPaymentLinkId
+- CheckoutUrl
+- Amount
+- Currency
+- ProviderStatus
+- SignatureVerifiedAt
+- CompletedAt
+- LastWebhookAt
+- RawPayloadJson
+- CreatedAt
+- UpdatedAt
+
+Index and integrity direction:
+
+- unique index on `Provider` + `ProviderOrderCode`
+- unique index on `Provider` + `ProviderPaymentLinkId` when available
+- foreign key to `TopupOrders`
+- never use `RawPayloadJson` to store secrets
+- redact or omit sensitive provider data before storage when needed
+
+### PaymentProviderSettings
+
+Confirmed concept for Phase 8 PayOS configuration stored in the database.
+
+Proposed fields requiring database review:
+
+- Id
+- Provider
+- ClientId
+- EncryptedApiKey
+- EncryptedChecksumKey
+- ReturnUrl
+- CancelUrl
+- IsEnabled
+- LastCheckedAt
+- LastCheckStatus
+- LastCheckMessage
+- UpdatedByUserId
+- CreatedAt
+- UpdatedAt
+
+Security direction:
+
+- `ApiKey` and `ChecksumKey` must be encrypted before storage.
+- API responses and admin UI must never return raw `ApiKey` or raw `ChecksumKey`.
+- Admin UI may show only masked secret previews.
+- The application may use environment/appsettings only for encryption key material or local fallback, not as the main PayOS configuration source after Phase 8 settings are implemented.
+- Secrets must not be committed to source-controlled configuration.
 
 ### RefreshTokens
 
@@ -201,8 +282,10 @@ Deferred:
 - exact credit pricing
 - exact credit cost per action
 - refund behavior after failed submission
-- package management UI fields
+- package management fields beyond the approved `Name`, `Credits`, `Price`, and `IsActive` follow-up
 - payment gateway fields
+- PayOS fields beyond the Phase 8 payment record scope
+- PayOS configuration fields beyond the Phase 8 provider settings scope
 - Google OAuth fields
 - AI mapping/generation fields
 - webhook fields
@@ -217,7 +300,7 @@ Do not add fields for:
 - fake-account creation
 - spam campaign management
 - unauthorized submission targets
-- payment gateway behavior before approval
+- payment provider behavior outside approved Phase 8 PayOS scope
 - AI auto-submit behavior
 
 ## Ledger Discipline

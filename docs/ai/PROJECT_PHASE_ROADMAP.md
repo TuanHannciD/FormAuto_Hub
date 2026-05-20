@@ -6,7 +6,7 @@ Define FormAuto Hub delivery phases and scope gates.
 
 ## Current Phase
 
-Current phase: **Phase 8 - Admin, revenue, and PayOS automated credit top-up**.
+Current phase: **Phase 8 closeout completed; next phase not selected**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -229,7 +229,7 @@ Completed implementation subset:
 
 ## Phase 8 - Admin, revenue, and PayOS automated credit top-up
 
-Status: Current.
+Status: Completed.
 
 Approved scope:
 
@@ -245,6 +245,14 @@ Approved scope:
 - top-up order status updates tied to verified payment outcome
 - admin visibility into payment and credit transaction history
 
+Approved post-closeout follow-up:
+
+- admin credit package management for existing `CreditPackages` fields: `Name`, `Credits`, `Price`, and `IsActive`
+- admin may create packages and update existing packages
+- inactive packages are hidden from normal user top-up selection
+- no package hard delete in this follow-up
+- existing top-up orders keep their snapshot credit and amount values
+
 Scope boundaries:
 
 - PayOS is the only approved payment provider in this phase.
@@ -259,7 +267,7 @@ Deferred:
 - subscription billing
 - automated refund behavior
 - manual credit adjustment unless separately approved
-- package management UI unless separately approved
+- package management behavior beyond the approved create/update/bulk visibility follow-up
 - admin user management UI unless separately approved
 - official Google Forms API
 - Google Forms watches or background sync
@@ -270,6 +278,10 @@ Kickoff plan:
 
 - See `PHASE_8_KICKOFF_PLAN.md`.
 
+Closeout:
+
+- See `PHASE_8_CLOSEOUT.md`.
+
 ## Phase Rule
 
-Tasks outside the active phase require explicit approval or must be narrowed to the safe in-phase subset.
+No next phase is selected after Phase 8 closeout. New phase work requires explicit approval or must be narrowed to a documented safe follow-up.

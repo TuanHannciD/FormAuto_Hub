@@ -24,6 +24,8 @@ public sealed class FoundationTests
                 "FormProject",
                 "FormQuestion",
                 "GeneratedResponse",
+                "PaymentProviderSetting",
+                "PaymentRecord",
                 "RefreshToken",
                 "SubmissionJob",
                 "SubmissionLog",
@@ -48,6 +50,7 @@ public sealed class FoundationTests
         AssertPrecision(context, "TopupOrder", "Amount");
         AssertPrecision(context, "CreditTransaction", "Amount");
         AssertPrecision(context, "CreditTransaction", "BalanceAfter");
+        AssertPrecision(context, "PaymentRecord", "Amount");
     }
 
     private static FormAutoHubDbContext CreateContext()

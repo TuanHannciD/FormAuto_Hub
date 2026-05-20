@@ -2,104 +2,33 @@
 
 <html class="light" lang="vi"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=1280, initial-scale=1.0" name="viewport"/>
 <title>Kết quả thanh toán - FormAuto Hub</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "inverse-primary": "#b4c5ff",
-                        "error": "#ba1a1a",
-                        "error-container": "#ffdad6",
-                        "on-tertiary": "#ffffff",
-                        "surface-variant": "#e0e3e5",
-                        "primary-fixed": "#dbe1ff",
-                        "primary-fixed-dim": "#b4c5ff",
-                        "outline": "#737686",
-                        "on-secondary-fixed": "#131b2e",
-                        "on-primary-fixed": "#00174b",
-                        "on-primary": "#ffffff",
-                        "outline-variant": "#c3c6d7",
-                        "inverse-surface": "#2d3133",
-                        "tertiary-container": "#007d57",
-                        "surface": "#f7f9fb",
-                        "inverse-on-surface": "#eff1f3",
-                        "on-background": "#191c1e",
-                        "surface-tint": "#0053db",
-                        "surface-container": "#eceef0",
-                        "secondary-fixed": "#dae2fd",
-                        "on-secondary-fixed-variant": "#3f465c",
-                        "background": "#f7f9fb",
-                        "on-surface": "#191c1e",
-                        "on-secondary": "#ffffff",
-                        "tertiary-fixed-dim": "#68dba9",
-                        "secondary-fixed-dim": "#bec6e0",
-                        "surface-container-lowest": "#ffffff",
-                        "on-surface-variant": "#434655",
-                        "surface-container-low": "#f2f4f6",
-                        "on-tertiary-fixed-variant": "#005137",
-                        "on-primary-fixed-variant": "#003ea8",
-                        "tertiary": "#006243",
-                        "on-primary-container": "#eeefff",
-                        "surface-container-highest": "#e0e3e5",
-                        "on-error": "#ffffff",
-                        "primary": "#004ac6",
-                        "secondary": "#565e74",
-                        "primary-container": "#2563eb",
-                        "on-tertiary-container": "#bdffdc",
-                        "surface-bright": "#f7f9fb",
-                        "on-tertiary-fixed": "#002114",
-                        "on-error-container": "#93000a",
-                        "on-secondary-container": "#5c647a",
-                        "secondary-container": "#dae2fd",
-                        "surface-container-high": "#e6e8ea",
-                        "tertiary-fixed": "#85f8c4",
-                        "surface-dim": "#d8dadc"
+                    colors: {
+                        primary: "#2563eb",
+                        "primary-hover": "#1d4ed8",
+                        surface: "#f8fafc",
+                        "surface-card": "#ffffff",
+                        outline: "#e5e7eb",
+                        "text-main": "#0f172a",
+                        "text-muted": "#64748b",
+                        "status-success": "#10b981",
+                        "status-pending": "#f59e0b",
+                        "status-error": "#ef4444",
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
+                    fontFamily: {
+                        sans: ['Geist', 'sans-serif'],
                     },
-                    "spacing": {
-                        "margin-mobile": "16px",
-                        "margin-desktop": "32px",
-                        "container-max": "1280px",
-                        "unit": "4px",
-                        "gutter": "24px"
-                    },
-                    "fontFamily": {
-                        "headline-md": ["Geist"],
-                        "body-lg": ["Geist"],
-                        "headline-lg": ["Geist"],
-                        "label-sm": ["Geist"],
-                        "headline-sm": ["Geist"],
-                        "headline-lg-mobile": ["Geist"],
-                        "headline-xl": ["Geist"],
-                        "body-sm": ["Geist"],
-                        "label-md": ["Geist"],
-                        "body-md": ["Geist"],
-                        "headline-xl-mobile": ["Geist"]
-                    },
-                    "fontSize": {
-                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-                        "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "headline-xl-mobile": ["30px", {"lineHeight": "38px", "fontWeight": "600"}]
+                    boxShadow: {
+                        'card': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                     }
                 },
             },
@@ -109,239 +38,230 @@
         body {
             font-family: 'Geist', sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .active-step {
-            @apply border-primary text-primary;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
         }
     </style>
 </head>
-<body class="bg-surface text-on-surface">
-<!-- TopNavBar -->
-<header class="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center w-full px-margin-desktop h-16 max-w-container-max mx-auto top-0 z-50">
-<div class="flex items-center gap-gutter">
-<span class="font-headline-sm text-headline-sm font-black text-primary">FormAuto Hub</span>
-<nav class="hidden md:flex gap-6 items-center">
-<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Tổng quan</a>
+<body class="bg-surface text-text-main flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-outline bg-surface-card hidden lg:flex flex-col flex-shrink-0">
+<div class="h-16 flex items-center px-6 border-b border-outline">
+<span class="text-[20px] font-bold text-primary tracking-tight">FormAuto Hub</span>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-text-muted hover:bg-surface rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-primary bg-blue-50 rounded-md font-medium text-sm" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span>Nạp Credit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-muted hover:bg-surface rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-sm font-medium">Lịch sử</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-muted hover:bg-surface rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">Biểu mẫu</span>
+</a>
 </nav>
+<div class="p-4 border-t border-outline">
+<a class="flex items-center gap-3 px-3 py-2 text-text-muted hover:bg-surface rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Cài đặt</span>
+</a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Topbar -->
+<header class="h-16 border-b border-outline bg-surface-card flex items-center justify-between px-8 sticky top-0 z-40">
+<div class="flex items-center gap-2 text-sm">
+<a class="text-text-muted hover:text-text-main" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-[16px] text-text-muted">chevron_right</span>
+<span class="font-medium text-text-main">Kết quả thanh toán</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-md border border-outline">
+<span class="text-xs font-semibold text-text-muted uppercase">Số dư:</span>
+<span class="text-sm font-bold text-primary">1.250 Credit</span>
 </div>
 <div class="flex items-center gap-4">
-<div class="bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant">
-<span class="text-label-md font-label-md text-on-surface-variant">Số dư: <span class="text-primary font-bold">1.250 Credit</span></span>
-</div>
-<div class="flex gap-2">
-<button class="material-symbols-outlined p-2 hover:bg-surface-container transition-colors rounded-full text-on-surface-variant">notifications</button>
-<button class="material-symbols-outlined p-2 hover:bg-surface-container transition-colors rounded-full text-on-surface-variant">settings</button>
-<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
-<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a person with a friendly expression, captured with clean studio lighting on a neutral background, embodying a tech-savvy and approachable professional user persona for a SaaS platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-cEUb3kIMurzULFtB_zQzRwgUFGRiwvuXwmnDH-GL24uw3EK_hmrAyUtGqdVByfyscKbbXDyXxyRVPCl0wtUHNsaGds-ZHzXSYRYutg9u2dk7KAA7SkR9B3Y56cYdL_yQGrcnJRVzzMQ13WxXnuYFG2PcDZO-cPa7sow2n-I9aOvrsflhVbOpKtr7nSofTqxNR6lHYOODgj2v_sM0kBY3X0eC8GM7e-MN0TQUmzLAfmbF9sX_xW19GY_4CSODpo3g5eDNmYQqBKpK"/>
+<button class="material-symbols-outlined text-text-muted hover:text-text-main">notifications</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-cEUb3kIMurzULFtB_zQzRwgUFGRiwvuXwmnDH-GL24uw3EK_hmrAyUtGqdVByfyscKbbXDyXxyRVPCl0wtUHNsaGds-ZHzXSYRYutg9u2dk7KAA7SkR9B3Y56cYdL_yQGrcnJRVzzMQ13WxXnuYFG2PcDZO-cPa7sow2n-I9aOvrsflhVbOpKtr7nSofTqxNR6lHYOODgj2v_sM0kBY3X0eC8GM7e-MN0TQUmzLAfmbF9sX_xW19GY_4CSODpo3g5eDNmYQqBKpK"/>
 </div>
 </div>
 </div>
 </header>
-<main class="max-w-container-max mx-auto px-margin-desktop py-10">
+<!-- Main Content -->
+<main class="flex-1 overflow-auto p-8">
+<div class="max-w-[1024px] mx-auto space-y-6">
 <!-- Header -->
-<div class="mb-8">
-<h1 class="font-headline-lg text-headline-lg text-on-surface">Kết quả thanh toán</h1>
-<p class="font-body-md text-body-md text-on-surface-variant mt-2">Hệ thống đang đối chiếu trạng thái PayOS và cập nhật đơn top-up.</p>
+<div class="flex items-center justify-between">
+<h1 class="text-[28px] font-semibold tracking-tight text-text-main">Kết quả thanh toán</h1>
 </div>
-<!-- Info Alert -->
-<div class="bg-secondary-container/30 border border-outline-variant rounded-lg p-4 flex gap-4 items-start mb-10">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">info</span>
-<p class="font-body-sm text-body-sm text-on-secondary-container leading-relaxed">
-                Giao diện không tự cộng credit. Credit chỉ cập nhật sau khi hệ thống xác minh thanh toán hợp lệ từ đơn vị cung cấp dịch vụ thanh toán (PayOS).
-            </p>
+<!-- Alert Section -->
+<div class="bg-blue-50 border border-blue-100 rounded-lg p-4 flex gap-3 shadow-card">
+<span class="material-symbols-outlined text-primary shrink-0 mt-0.5">info</span>
+<p class="text-sm text-blue-800 leading-relaxed">
+                        Giao diện không tự cộng credit. Credit chỉ cập nhật sau khi hệ thống xác minh thanh toán hợp lệ từ đơn vị cung cấp dịch vụ thanh toán (PayOS).
+                    </p>
 </div>
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Left Side: Order Summary & Timeline -->
-<div class="lg:col-span-8 space-y-6">
-<!-- Timeline -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
-<h3 class="font-label-md text-label-md text-on-surface-variant mb-6 uppercase tracking-wider">Tiến trình xử lý</h3>
-<div class="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-<!-- Horizontal Line (Desktop) -->
-<div class="hidden md:block absolute top-4 left-0 w-full h-0.5 bg-outline-variant -z-10"></div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Processing Area -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Progress Stepper -->
+<div class="bg-surface-card border border-outline rounded-lg p-6 shadow-card">
+<h3 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-8">Tiến trình xử lý đơn hàng</h3>
+<div class="relative flex justify-between items-center px-4">
+<!-- Progress Bar Background -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline -translate-y-1/2 z-0"></div>
+<!-- Progress Bar Active -->
+<div class="absolute top-1/2 left-0 w-[75%] h-0.5 bg-primary -translate-y-1/2 z-0"></div>
 <!-- Step 1 -->
-<div class="flex md:flex-col items-center gap-4 text-center">
-<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center border-4 border-surface-container-lowest">
-<span class="material-symbols-outlined text-sm">check</span>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center ring-4 ring-surface-card">
+<span class="material-symbols-outlined text-[14px]">check</span>
 </div>
-<span class="font-label-sm text-label-sm text-on-surface">Tạo đơn</span>
+<span class="text-xs font-medium text-text-main">Khởi tạo</span>
 </div>
 <!-- Step 2 -->
-<div class="flex md:flex-col items-center gap-4 text-center">
-<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center border-4 border-surface-container-lowest">
-<span class="material-symbols-outlined text-sm">check</span>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center ring-4 ring-surface-card">
+<span class="material-symbols-outlined text-[14px]">check</span>
 </div>
-<span class="font-label-sm text-label-sm text-on-surface">Mở PayOS</span>
+<span class="text-xs font-medium text-text-main">PayOS</span>
 </div>
 <!-- Step 3 -->
-<div class="flex md:flex-col items-center gap-4 text-center">
-<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center border-4 border-surface-container-lowest">
-<span class="material-symbols-outlined text-sm">check</span>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center ring-4 ring-surface-card">
+<span class="material-symbols-outlined text-[14px]">check</span>
 </div>
-<span class="font-label-sm text-label-sm text-on-surface">Nhận kết quả</span>
+<span class="text-xs font-medium text-text-main">Kết quả</span>
 </div>
-<!-- Step 4 (Active) -->
-<div class="flex md:flex-col items-center gap-4 text-center">
-<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center border-4 border-surface-container-lowest animate-pulse">
-<span class="material-symbols-outlined text-sm">sync</span>
+<!-- Step 4 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-card border-2 border-primary flex items-center justify-center ring-4 ring-surface-card">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
 </div>
-<span class="font-label-sm text-label-sm text-primary font-bold">Xác minh backend</span>
+<span class="text-xs font-semibold text-primary">Xác minh</span>
 </div>
-<!-- Step 5 (Pending) -->
-<div class="flex md:flex-col items-center gap-4 text-center">
-<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center border-4 border-surface-container-lowest">
-<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+<!-- Step 5 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface border border-outline flex items-center justify-center ring-4 ring-surface-card">
+<div class="w-2 h-2 rounded-full bg-text-muted opacity-50"></div>
 </div>
-<span class="font-label-sm text-label-sm text-on-surface-variant">Ghi ledger</span>
+<span class="text-xs font-medium text-text-muted">Ghi ledger</span>
 </div>
 </div>
 </div>
-<!-- Order Summary Card -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
-<div class="bg-surface-container px-6 py-4 border-b border-outline-variant">
-<h2 class="font-headline-sm text-headline-sm text-on-surface">Chi tiết đơn hàng</h2>
+<!-- Order Summary -->
+<div class="bg-surface-card border border-outline rounded-lg shadow-card overflow-hidden">
+<div class="px-6 py-4 border-b border-outline bg-surface">
+<h2 class="text-sm font-semibold text-text-main">Chi tiết đơn hàng</h2>
 </div>
-<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
+<div class="p-6 grid grid-cols-2 gap-x-12 gap-y-6">
 <div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Mã đơn hàng</p>
-<p class="font-body-md text-body-md font-bold">TOP-1024</p>
-</div>
-<div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Gói nạp</p>
-<p class="font-body-md text-body-md">Gói 500 credit</p>
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Mã đơn hàng</span>
+<p class="text-sm font-semibold text-text-main">TOP-1024</p>
 </div>
 <div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Số tiền thanh toán</p>
-<p class="font-body-md text-body-md font-bold text-primary">225.000đ</p>
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Gói nạp</span>
+<p class="text-sm text-text-main">Gói 500 credit</p>
 </div>
 <div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Phương thức</p>
-<p class="font-body-md text-body-md flex items-center gap-2">
-<span class="w-6 h-4 bg-primary-container rounded-sm flex items-center justify-center text-[8px] text-white font-black">PayOS</span>
-                                PayOS
-                            </p>
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Số tiền thanh toán</span>
+<p class="text-sm font-semibold text-primary">225.000đ</p>
 </div>
 <div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Tham chiếu PayOS</p>
-<p class="font-body-md text-body-md font-mono text-sm">PAYOS_REF_********382</p>
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Cổng thanh toán</span>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded">PayOS</span>
+<span class="text-sm text-text-main">PayOS Direct</span>
+</div>
 </div>
 <div class="space-y-1">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Thời gian giao dịch</p>
-<p class="font-body-md text-body-md">14:20 24/05/2024</p>
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Tham chiếu giao dịch</span>
+<p class="text-sm font-mono text-text-muted">POS_REF_9921_X22</p>
 </div>
-<div class="space-y-1 md:col-span-2">
-<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Trạng thái credit</p>
-<div class="flex items-center gap-2 mt-1">
-<span class="bg-secondary-container text-on-secondary-fixed-variant px-2.5 py-0.5 rounded text-label-md font-label-md">Chờ ghi ledger</span>
-<span class="text-body-sm text-on-surface-variant italic">Đang chờ xác minh backend...</span>
+<div class="space-y-1">
+<span class="text-[11px] font-semibold text-text-muted uppercase tracking-wider">Thời gian giao dịch</span>
+<p class="text-sm text-text-muted">24/05/2024 - 14:20:31</p>
 </div>
 </div>
+<div class="px-6 py-4 bg-surface border-t border-outline flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-text-muted">Trạng thái hiện tại:</span>
+<span class="px-2.5 py-1 bg-yellow-100 text-yellow-800 text-[11px] font-semibold rounded-md uppercase tracking-wide">Đang chờ xác minh</span>
 </div>
-<div class="px-6 py-6 border-t border-outline-variant flex flex-wrap gap-4">
-<button class="bg-primary hover:opacity-90 text-on-primary px-6 h-10 rounded font-label-md text-label-md transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">dashboard</span>
-                            Về dashboard
-                        </button>
-<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 h-10 rounded font-label-md text-label-md transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">history</span>
-                            Xem lịch sử top-up
-                        </button>
-<button class="border border-outline hover:bg-surface-container-low text-on-surface px-6 h-10 rounded font-label-md text-label-md transition-all">
-                            Tạo đơn nạp mới
-                        </button>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary-hover transition-colors shadow-sm">Về Dashboard</button>
+<button class="px-4 py-2 bg-white border border-outline text-text-main text-sm font-medium rounded-md hover:bg-gray-50 transition-colors shadow-sm">Lịch sử giao dịch</button>
 </div>
 </div>
 </div>
-<!-- Right Side: States Reference -->
-<div class="lg:col-span-4">
-<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 space-y-6 h-full">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Các trạng thái xử lý</h3>
-<div class="space-y-6">
-<!-- Success State -->
-<div class="flex gap-4">
-<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim/30 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
 </div>
+<!-- Right Sidebar: States Reference -->
+<div class="lg:col-span-1">
+<div class="bg-surface-card border border-outline rounded-lg shadow-card p-6 space-y-6">
+<h3 class="text-xs font-bold text-text-muted uppercase tracking-wider border-b border-outline pb-3">Các trạng thái hệ thống</h3>
+<div class="space-y-5">
+<!-- Success -->
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-status-success shrink-0" style="font-variation-settings: 'FILL' 1">check_circle</span>
 <div>
-<div class="flex items-center gap-2 mb-1">
-<h4 class="font-label-md text-label-md font-bold">Thanh toán đã xác minh</h4>
-<span class="bg-tertiary-container text-on-tertiary text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Đã xác minh</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Credit sẽ hiển thị trong số dư sau khi ledger được ghi nhận.</p>
+<p class="text-sm font-semibold text-text-main">Thành công</p>
+<p class="text-[13px] text-text-muted mt-0.5 leading-snug">Thanh toán đã được PayOS xác nhận hợp lệ. Credit sẽ được cộng vào tài khoản trong giây lát.</p>
 </div>
 </div>
-<!-- Waiting State -->
-<div class="flex gap-4">
-<div class="w-10 h-10 rounded-full bg-secondary-container/50 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">schedule</span>
-</div>
+<!-- Pending -->
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-status-pending shrink-0" style="font-variation-settings: 'FILL' 1">schedule</span>
 <div>
-<h4 class="font-label-md text-label-md font-bold mb-1">Đang chờ xác minh</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">PayOS có thể cần thêm thời gian để gửi kết quả về hệ thống.</p>
+<p class="text-sm font-semibold text-text-main">Đang chờ</p>
+<p class="text-[13px] text-text-muted mt-0.5 leading-snug">Hệ thống đang chờ phản hồi cuối cùng từ cổng thanh toán. Vui lòng không tải lại trang.</p>
 </div>
 </div>
-<!-- Error State 1 -->
-<div class="flex gap-4">
-<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span>
-</div>
+<!-- Failure -->
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-status-error shrink-0" style="font-variation-settings: 'FILL' 1">cancel</span>
 <div>
-<h4 class="font-label-md text-label-md font-bold mb-1 text-error">Thanh toán thất bại</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Giao dịch không thành công tại cổng PayOS. Bạn có thể thử lại.</p>
+<p class="text-sm font-semibold text-status-error">Thất bại</p>
+<p class="text-[13px] text-text-muted mt-0.5 leading-snug">Giao dịch bị từ chối hoặc bị hủy bởi người dùng/ngân hàng tại cổng PayOS.</p>
 </div>
 </div>
-<!-- Error State 2 -->
-<div class="flex gap-4">
-<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">report</span>
-</div>
+<!-- Unverified -->
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-text-muted shrink-0" style="font-variation-settings: 'FILL' 1">help</span>
 <div>
-<h4 class="font-label-md text-label-md font-bold mb-1">Chưa thể xác minh thanh toán</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Vui lòng kiểm tra lịch sử top-up hoặc liên hệ hỗ trợ nếu tiền đã bị trừ.</p>
+<p class="text-sm font-semibold text-text-main">Không xác minh được</p>
+<p class="text-[13px] text-text-muted mt-0.5 leading-snug">Hệ thống chưa nhận được dữ liệu xác thực. Kiểm tra lịch sử sau 5-10 phút.</p>
 </div>
 </div>
 </div>
-<div class="pt-6 border-t border-outline-variant">
-<a class="text-primary font-label-md text-label-md hover:underline inline-flex items-center gap-1" href="#">
-                            Liên hệ hỗ trợ kỹ thuật
-                            <span class="material-symbols-outlined text-sm">north_east</span>
+<div class="pt-5 border-t border-outline">
+<a class="text-sm font-medium text-primary flex items-center gap-1 hover:underline" href="#">
+                                    Liên hệ hỗ trợ kỹ thuật
+                                    <span class="material-symbols-outlined text-[16px]">north_east</span>
 </a>
+</div>
 </div>
 </div>
 </div>
 </div>
 </main>
 <!-- Footer -->
-<footer class="bg-surface border-t border-outline-variant mt-20">
-<div class="flex flex-col md:flex-row justify-between items-center w-full py-8 px-margin-desktop max-w-container-max mx-auto">
-<div class="mb-4 md:mb-0">
-<span class="font-headline-sm text-headline-sm text-on-surface">FormAuto Hub</span>
-<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">© 2024 FormAuto Hub. All rights reserved.</p>
-</div>
+<footer class="h-12 border-t border-outline bg-surface-card flex items-center justify-between px-8">
+<span class="text-xs text-text-muted font-medium uppercase tracking-wider">© 2024 FORMAUTO HUB - PRECISION OPS</span>
 <div class="flex gap-6">
-<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Hỗ trợ</a>
-<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Bảo mật</a>
-<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Điều khoản</a>
-</div>
+<a class="text-xs font-semibold text-text-muted hover:text-text-main uppercase tracking-wider" href="#">Terms</a>
+<a class="text-xs font-semibold text-text-muted hover:text-text-main uppercase tracking-wider" href="#">Privacy</a>
+<a class="text-xs font-semibold text-text-muted hover:text-text-main uppercase tracking-wider" href="#">Support</a>
 </div>
 </footer>
-<script>
-        // Micro-interaction for refreshing status
-        document.addEventListener('DOMContentLoaded', () => {
-            const steps = document.querySelectorAll('.animate-pulse');
-            // Mock refreshing logic to simulate checking status
-            let checkCount = 0;
-            const statusInterval = setInterval(() => {
-                checkCount++;
-                if (checkCount > 5) {
-                    clearInterval(statusInterval);
-                }
-                console.log('Hệ thống đang kiểm tra trạng thái PayOS lần ' + checkCount);
-            }, 5000);
-        });
-    </script>
+</div>
 </body></html>

@@ -37,6 +37,29 @@ Dùng integration tests cho:
 - usage log writes
 - admin top-up approval workflow
 
+### Runtime smoke tests
+
+Code chạy thật phải có runtime smoke khi hành vi được expose qua process đang chạy.
+
+Dùng runtime smoke cho:
+
+- API route changes
+- browser route hoặc dashboard changes
+- auth/session/role guard changes
+- hành vi phụ thuộc database sau migrations
+- payment link, callback hoặc webhook behavior
+- public/tunnel URL behavior
+
+Runtime smoke phải verify:
+
+- server process bị ảnh hưởng đã restart sau khi đổi code
+- target route trả HTTP status và response marker đúng kỳ vọng
+- authenticated routes được kiểm tra bằng đúng user role/session
+- browser routes hydrate và load đủ JavaScript/CSS chunks cần thiết
+- server logs không có exception mới cho smoke path
+
+Build/test mà thiếu runtime smoke là chưa đủ để closeout khi runtime smoke áp dụng.
+
 ### Migration validation
 
 Database changes phải validate:
@@ -44,6 +67,7 @@ Database changes phải validate:
 - migration generation
 - apply migration trên clean database
 - apply migration trên existing test database khi phù hợp
+- runtime database có table/column cần thiết trước các smoke test phụ thuộc chúng
 - rollback hoặc recovery notes khi rollback khó
 
 ### Credit ledger tests

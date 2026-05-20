@@ -15,7 +15,25 @@ Define the default task flow for FormAuto Hub work.
 7. Check API/database contract impact.
 8. Propose or implement the smallest safe change.
 9. Validate according to change type.
-10. Report what changed, what did not change, what was tested, and what was not tested.
+10. Run the runtime validation gate when runnable behavior changed.
+11. Review logs and runtime output for new errors.
+12. Report what changed, what did not change, what was tested, and what was not tested.
+
+## Runtime Validation Gate
+
+A task that changes runnable code cannot be reported as complete from build/test alone when the changed behavior is exercised through an API route, browser route, authentication flow, database migration, payment flow, external callback/webhook, or public/tunnel URL.
+
+Before closeout, run every applicable check:
+
+- restart the affected backend, frontend, worker, or local server after code changes
+- verify changed API endpoints with real HTTP requests and the correct auth role/session
+- verify changed browser routes render and hydrate, not just return HTML `200`
+- verify Next.js static chunks return `200` when the app is tested through a tunnel or public URL
+- verify EF Core migrations are applied when runtime code depends on new tables or columns
+- verify payment/webhook flows with safe mocked or sandbox requests when the task changes payment behavior
+- read relevant terminal/server logs after the smoke checks
+
+If an applicable runtime check is not run, the task may be described as implemented, but closeout must be marked `Not run`, `Blocked`, or not complete. Do not say the task is done.
 
 ## Escalation Rules
 
@@ -56,4 +74,3 @@ Stop when the task would:
 - silently finalize a proposed contract
 - implement Deferred work
 - change only one language documentation layer
-

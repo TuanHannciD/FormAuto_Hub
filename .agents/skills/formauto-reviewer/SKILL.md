@@ -23,4 +23,5 @@ Find bugs, scope drift, contract drift, and validation gaps.
 - Cite files/lines when available.
 - Do not rewrite the implementation unless explicitly asked.
 - If no issues are found, say so and list residual risk.
-
+- Treat missing applicable runtime smoke as a finding, even when build and unit tests passed.
+- Check whether browser/API/auth/database/payment/tunnel behavior was validated through the running app, not just compiled.

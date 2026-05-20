@@ -89,6 +89,18 @@ export type TopupOrder = {
   approvedAt?: string | null;
 };
 
+export type CreatePayosTopupOrderResponse = {
+  topupOrderId: string;
+  packageId: string;
+  credits: number;
+  amount: number;
+  paymentProvider: string;
+  checkoutUrl: string;
+  paymentLinkId: string;
+  status: string;
+  createdAt: string;
+};
+
 export type UsageLog = {
   id: string;
   toolName: string;
@@ -116,6 +128,66 @@ export type CreditPackage = {
   price: number;
   isActive: boolean;
   createdAt: string;
+};
+
+export type CreditPackageListResponse = {
+  items: CreditPackage[];
+};
+
+export type CreditPackageRequest = {
+  name: string;
+  credits: number;
+  price: number;
+  isActive: boolean;
+};
+
+export type PayosProviderSettings = {
+  provider: string;
+  clientId: string;
+  hasApiKey: boolean;
+  hasChecksumKey: boolean;
+  apiKeyPreview: string;
+  checksumKeyPreview: string;
+  returnUrl: string;
+  cancelUrl: string;
+  isEnabled: boolean;
+  lastCheckedAt?: string | null;
+  lastCheckStatus: string;
+  lastCheckMessage: string;
+  updatedAt?: string | null;
+};
+
+export type CheckPayosProviderSettingsResponse = {
+  status: string;
+  message: string;
+  checkedAt: string;
+};
+
+export type AdminPayment = {
+  id: string;
+  topupOrderId: string;
+  userId: string;
+  provider: string;
+  providerOrderCode: string;
+  providerPaymentLinkId: string;
+  amount: number;
+  credits: number;
+  currency: string;
+  providerStatus: string;
+  topupOrderStatus: string;
+  createdAt: string;
+  completedAt?: string | null;
+  lastWebhookAt?: string | null;
+};
+
+export type AdminRevenueSummary = {
+  totalRevenue: number;
+  creditSold: number;
+  creditUsed: number;
+  successfulTopupOrders: number;
+  pendingTopupOrders: number;
+  failedPayments: number;
+  recentPayments: AdminPayment[];
 };
 
 export type CreditTransaction = {

@@ -1,7 +1,7 @@
 # PayOS Settings
 
 - Stitch project id: `14663165630678165146`
-- Stitch screen id: `060e1cd9ff834848b67697cbe8b25878`
+- Stitch screen id: `db5f29fe3de7425db428edc29931e139`
 - Screen title: PayOS settings
 - Language: Vietnamese
 - Design system: `Precision Operational System` (`assets/809a13b0223c4381a9ea7ede2848bb3e`)

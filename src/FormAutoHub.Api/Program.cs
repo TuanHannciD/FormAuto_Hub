@@ -83,11 +83,17 @@ builder.Services.AddScoped<ICreditService, CreditService>();
 builder.Services.AddScoped<IUsageLogService, UsageLogService>();
 builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IPaymentSecretProtector, PaymentSecretProtector>();
+builder.Services.AddScoped<IPaymentProviderSettingsService, PaymentProviderSettingsService>();
+builder.Services.AddScoped<IPayosSignatureService, PayosSignatureService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IAdminPaymentReportService, AdminPaymentReportService>();
 builder.Services.AddScoped<IFormProjectService, FormProjectService>();
 builder.Services.AddScoped<IAnswerRuleService, AnswerRuleService>();
 builder.Services.AddScoped<IResponseGenerationService, ResponseGenerationService>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>();
+builder.Services.AddHttpClient<IPayosClient, PayosClient>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

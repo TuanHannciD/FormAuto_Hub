@@ -42,6 +42,11 @@ Bắt buộc agent tự review scope, contract safety, architecture, validation 
 
 - Build/test/runtime validation có thật sự chạy không?
 - Validation bỏ qua có được ghi `Not run` hoặc `Blocked` không?
+- Nếu code đổi API/browser/auth/database/payment path chạy thật, runtime smoke có được chạy sau khi restart process bị ảnh hưởng không?
+- Browser validation có xác nhận hydration/chunk loading thay vì chỉ HTML `200` không?
+- API validation có dùng đúng auth role/session không?
+- Server logs hoặc terminal output có được kiểm tra sau smoke path không?
+- Nếu runtime smoke áp dụng nhưng chưa chạy, final answer có tránh claim task đã done không?
 
 ### Docs
 

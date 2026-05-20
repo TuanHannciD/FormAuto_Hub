@@ -32,13 +32,13 @@ Design artifact không phải production source code, API contract, database con
 | Register | `29b9ee6f2389428aa1490f91aa9de4bf` | `docs/design/stitch/register/` | Reference đã chấp nhận sau khi tinh chỉnh |
 | Auth callback | `e014f45ea68145cb9cfb5ab1821bc175` | `docs/design/stitch/auth-callback/` | Reference đã chấp nhận sau khi tinh chỉnh |
 | Profile security | `5e5335a5b7c94b4094d850ec0c03636e` | `docs/design/stitch/profile-security/` | Reference đã chấp nhận |
-| Admin shell và guard | `e9fb6043943b42639174301445d4b314` | `docs/design/stitch/admin-shell/` | Reference Phase 8 đã chấp nhận |
-| Admin dashboard | `c77f47bfc1474c4aa36039aa52798a38` | `docs/design/stitch/admin-dashboard/` | Reference Phase 8 đã chấp nhận |
-| Admin top-up/payment management | `648cbe8d68344671967017555f520362` | `docs/design/stitch/admin-topup-payment-management/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
-| Revenue report | `d01a35f848044e2380cc3706141d7a47` | `docs/design/stitch/revenue-report/` | Reference Phase 8 đã chấp nhận |
-| PayOS settings | `060e1cd9ff834848b67697cbe8b25878` | `docs/design/stitch/payos-settings/` | Reference Phase 8 đã chấp nhận |
-| User PayOS top-up flow | `10c6693c87ed4280846741ed7878355e` | `docs/design/stitch/user-topup-payos-flow/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
-| Payment result / return | `6b1140b6e18a4994b1de199d0e251b15` | `docs/design/stitch/payment-result-return/` | Reference Phase 8 đã chấp nhận sau khi chỉnh copy |
+| Admin shell và guard | `89e61445e68a4641892aa0e69390b13a` | `docs/design/stitch/admin-shell/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style |
+| Admin dashboard | `20fba37f2d074d719e9993dd877ef3db` | `docs/design/stitch/admin-dashboard/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style |
+| Admin top-up/payment management | `fa8dd85bfff8427b87da20bbf81ffc5f` | `docs/design/stitch/admin-topup-payment-management/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style lần cuối |
+| Revenue report | `c6a382d9b211470aa88af8eea3a5beca` | `docs/design/stitch/revenue-report/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style |
+| PayOS settings | `db5f29fe3de7425db428edc29931e139` | `docs/design/stitch/payos-settings/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style |
+| User PayOS top-up flow | `830150eb380a44ba8c49ddb3f8337f73` | `docs/design/stitch/user-topup-payos-flow/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style lần cuối |
+| Payment result / return | `12cc4ac68fae458999031cd0c184563b` | `docs/design/stitch/payment-result-return/` | Reference Phase 8 đã chấp nhận sau khi đồng bộ style lần cuối |
 
 ## Chuẩn thư mục artifact
 

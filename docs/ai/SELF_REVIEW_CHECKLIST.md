@@ -42,6 +42,11 @@ Require agents to review scope, contract safety, architecture, validation, and d
 
 - Was build/test/runtime validation actually run?
 - Are skipped validations marked `Not run` or `Blocked`?
+- If code changed a runnable API/browser/auth/database/payment path, was runtime smoke performed after restarting the affected process?
+- Did browser validation confirm hydration/chunk loading instead of only HTML `200`?
+- Did API validation use the correct auth role/session?
+- Were server logs or terminal output checked after the smoke path?
+- If runtime smoke was applicable but not run, did the final answer avoid claiming the task is done?
 
 ### Docs
 

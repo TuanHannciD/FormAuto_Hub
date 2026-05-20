@@ -16,6 +16,20 @@ public sealed record CreditPackageResponse(
     bool IsActive,
     DateTimeOffset CreatedAt);
 
+public sealed record CreditPackageListResponse(IReadOnlyList<CreditPackageResponse> Items);
+
+public sealed record CreateCreditPackageRequest(
+    string Name,
+    int Credits,
+    decimal Price,
+    bool IsActive);
+
+public sealed record UpdateCreditPackageRequest(
+    string Name,
+    int Credits,
+    decimal Price,
+    bool IsActive);
+
 public sealed record CreateTopupOrderRequest(
     Guid PackageId,
     string PaymentMethod,

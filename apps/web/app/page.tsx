@@ -94,7 +94,7 @@ const faqs = [
   {
     question: "MVP có cổng thanh toán tự động chưa?",
     answer:
-      "Chưa. Payment gateway đang Deferred; MVP dùng yêu cầu nạp credit thủ công và quản trị viên duyệt."
+      "Phase 8 đã hỗ trợ PayOS cho nạp credit tự động. Các cổng thanh toán khác vẫn Deferred."
   },
   {
     question: "Công cụ có vượt captcha hoặc giới hạn của Google không?",

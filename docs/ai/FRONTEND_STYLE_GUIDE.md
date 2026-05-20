@@ -17,6 +17,8 @@ This file controls UI style only. It does not approve new frontend implementatio
 
 FormAuto Hub should feel like an operational dashboard, not a marketing site.
 
+UI copy must use clear Vietnamese by default. Use English only when it is an unavoidable product, provider, protocol, code, or technical identifier such as PayOS, API, webhook, JWT, URL, or field names.
+
 Use:
 
 - compact but readable layouts
@@ -136,6 +138,7 @@ Before creating frontend files, confirm:
 - API contracts are approved or clearly marked as temporary
 - the UI does not weaken anti-abuse rules
 - the UI preserves preview and confirmation requirements where relevant
+- the UI copy is Vietnamese-first and avoids unnecessary English labels
 
 ## Documentation Sync Rule
 

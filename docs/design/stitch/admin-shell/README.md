@@ -1,7 +1,7 @@
 # Admin Shell
 
 - Stitch project id: `14663165630678165146`
-- Stitch screen id: `e9fb6043943b42639174301445d4b314`
+- Stitch screen id: `89e61445e68a4641892aa0e69390b13a`
 - Screen title: Admin shell and permission guard
 - Language: Vietnamese
 - Design system: `Precision Operational System` (`assets/809a13b0223c4381a9ea7ede2848bb3e`)

@@ -37,6 +37,17 @@ A task is done only when all applicable checks are satisfied or honestly reporte
 
 - Relevant unit/integration tests were run, or marked `Not run`.
 
+### Runtime Smoke Check
+
+- Runnable code changes have applicable runtime smoke.
+- API changes were checked through real HTTP requests.
+- Browser changes were checked through real routes, including hydration/chunk loading when relevant.
+- Auth/admin changes were checked with the correct user role/session.
+- Database-backed changes were checked against a database with the required migration applied.
+- Server logs or terminal output were checked after smoke validation.
+
+Build/test success alone is not enough to mark a runnable code task done when runtime smoke applies.
+
 ### Security/Abuse Check
 
 - No captcha bypass, proxy rotation, fake account, spam, or unauthorized submission behavior was added.
@@ -60,8 +71,9 @@ Validation performed:
 
 Validation not performed:
 
+Runtime smoke:
+
 Risks/Deferred items:
 
 Next recommended step:
 ```
-

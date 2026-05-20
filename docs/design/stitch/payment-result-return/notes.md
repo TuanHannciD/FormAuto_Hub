@@ -1,5 +1,6 @@
 # Notes
 
 - Review status: accepted after Vietnamese copy cleanup.
-- The saved screenshot is rendered from local HTML to reflect corrected Vietnamese copy.
+- Style sync: final refinement removed serif typography and aligned the screen with the accepted dashboard-overview visual language.
+- Saved screenshot uses the final Stitch refinement with compact dashboard typography and no serif headings.
 - The four result states are shown together as reference states; production UI may render one state at a time.
