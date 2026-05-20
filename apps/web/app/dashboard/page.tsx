@@ -6,16 +6,16 @@ import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/c
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary } from "@/lib/api";
 import { displayAction } from "@/lib/labels";
+import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     apiFetch<DashboardSummary>("/api/dashboard/summary")
       .then(setSummary)
-      .catch((error: Error) => setMessage(error.message));
+      .catch((error: Error) => showError(error, "Không tải được tổng quan vận hành."));
   }, []);
 
   return (
@@ -28,8 +28,6 @@ export default function DashboardPage() {
       <Alert>
         Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
       </Alert>
-      {message && <Alert className="border-amber-200 bg-amber-50 text-amber-800">{message}</Alert>}
-
       <div className="grid gap-4 md:grid-cols-4">
         <Metric title="Credit hiện có" value={summary ? String(summary.currentCreditBalance) : "-"} />
         <Metric title="Đã nạp" value={summary ? String(summary.totalCreditsDeposited) : "-"} />
@@ -47,7 +45,7 @@ export default function DashboardPage() {
               Phân tích link Google Form và cài đặt cách trả lời
             </Link>
             <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/top-up">
-              Tạo yêu cầu nạp credit thủ công
+              Nạp credit hoặc theo dõi giao dịch PayOS
             </Link>
             <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/usage-logs">
               Kiểm tra lịch sử sử dụng và hành động bị chặn
@@ -61,7 +59,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {!summary || summary.recentTopupOrders.length === 0 ? (
-              <EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Tạo yêu cầu nạp thủ công khi cần thêm credit." />
+              <EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">

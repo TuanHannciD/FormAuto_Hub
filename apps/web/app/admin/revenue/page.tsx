@@ -5,16 +5,16 @@ import type { ComponentType } from "react";
 import { AlertTriangle, BarChart3, CircleDollarSign, Download, RefreshCw, TrendingUp } from "lucide-react";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Select } from "@/components/ui";
 import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatCurrency } from "@/lib/utils";
 
 export default function RevenueReportPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")
       .then(setSummary)
-      .catch((error: Error) => setMessage(error.message));
+      .catch((error: Error) => showError(error, "Không tải được báo cáo doanh thu."));
   }, []);
 
   return (
@@ -34,14 +34,13 @@ export default function RevenueReportPage() {
           </Select>
           <Button type="button" variant="secondary">
             <Download size={16} />
-            <span className="ml-2">Xuất CSV</span>
+            <span className="ml-2">Xuất CSV đang cập nhật</span>
           </Button>
           <Button type="button" variant="secondary">
             <RefreshCw size={16} />
           </Button>
         </div>
       </div>
-      {message && <Alert className="border-red-200 bg-red-50 text-red-700">{message}</Alert>}
       <div className="grid gap-4 md:grid-cols-4">
         <Metric icon={CircleDollarSign} label="Tiền đến đã thanh toán" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={TrendingUp} label="Tổng credit đã cấp" value={summary ? `${summary.creditSold} cr` : "-"} />
@@ -55,13 +54,11 @@ export default function RevenueReportPage() {
             <CardTitle>Doanh thu theo ngày</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-72 items-end gap-3 rounded-md border border-border bg-muted/20 p-5">
-              {[42, 58, 74, 64, 88, 46, 37, 94, 67, 55].map((height, index) => (
-                <div className="flex flex-1 flex-col justify-end gap-2" key={index}>
-                  <div className="rounded-t-md bg-primary/30" style={{ height: `${height * 2}px` }} />
-                  <span className="text-center text-[10px] text-muted-foreground">{index + 1}</span>
-                </div>
-              ))}
+            <div className="flex h-72 items-center justify-center rounded-md border border-dashed border-border bg-muted/20 p-5 text-center">
+              <div>
+                <p className="font-medium">Biểu đồ doanh thu đang cập nhật</p>
+                <p className="mt-2 max-w-sm text-sm text-muted-foreground">Dữ liệu tổng hợp hiện được hiển thị ở các chỉ số phía trên.</p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -72,8 +69,8 @@ export default function RevenueReportPage() {
               <CardTitle>Xu hướng doanh thu</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold text-emerald-700">+12.4%</p>
-              <p className="mt-2 text-sm text-muted-foreground">Dữ liệu xu hướng hiện là chỉ báo UI, chưa phải báo cáo tài chính được duyệt.</p>
+              <p className="text-3xl font-semibold text-muted-foreground">Đang cập nhật</p>
+              <p className="mt-2 text-sm text-muted-foreground">Xu hướng sẽ hiển thị khi có dữ liệu theo kỳ.</p>
             </CardContent>
           </Card>
           <Card>
@@ -87,7 +84,7 @@ export default function RevenueReportPage() {
           </Card>
         </div>
       </div>
-      <Alert>Hoàn tiền, gói thuê bao và nhà cung cấp khác PayOS chưa nằm trong phạm vi Phase 8.</Alert>
+      <Alert>Hoàn tiền, gói thuê bao và nhà cung cấp thanh toán khác PayOS đang cập nhật.</Alert>
     </div>
   );
 }

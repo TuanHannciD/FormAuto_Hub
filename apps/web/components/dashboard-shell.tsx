@@ -110,9 +110,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <main className="lg:pl-72">
         <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bảng điều khiển giai đoạn 8</p>
-              <h1 className="text-lg font-semibold">FormAuto Hub</h1>
+            <div className="text-xs text-muted-foreground">
+              <span>Dashboard</span>
+              <span className="mx-2">/</span>
+              <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden text-right text-xs text-muted-foreground sm:block">

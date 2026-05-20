@@ -13,7 +13,9 @@ import {
   type GenerateResponsesResult,
   type SubmissionJob
 } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 const modeOptions = [
   { value: "SampleTextLines", label: "Dòng mẫu" },
@@ -47,7 +49,6 @@ export default function FormsPage() {
   const [openPreviews, setOpenPreviews] = useState<Record<string, boolean>>({});
   const [confirmed, setConfirmed] = useState(false);
   const [submission, setSubmission] = useState<SubmissionJob | null>(null);
-  const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
   const canGenerate = useMemo(() => {
@@ -64,7 +65,6 @@ export default function FormsPage() {
   async function analyze(event: React.FormEvent) {
     event.preventDefault();
     setBusy(true);
-    setMessage("");
     setPreviews([]);
     setOpenPreviews({});
     setSubmission(null);
@@ -76,9 +76,9 @@ export default function FormsPage() {
       });
       setAnalysis(result);
       setRuleConfigs(Object.fromEntries(result.questions.map((question) => [question.id, defaultRule(question)])));
-      setMessage("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
+      toast.success("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không phân tích được biểu mẫu.");
+      showError(error, "Không phân tích được biểu mẫu.");
     } finally {
       setBusy(false);
     }
@@ -90,7 +90,6 @@ export default function FormsPage() {
     }
 
     setBusy(true);
-    setMessage("");
     setPreviews([]);
     setOpenPreviews({});
     setSubmission(null);
@@ -114,9 +113,9 @@ export default function FormsPage() {
       });
       setPreviews(result.items);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
-      setMessage(`Đã tạo ${result.items.length} câu trả lời xem trước và trừ ${result.creditsUsed} credit.`);
+      toast.success(`Đã tạo ${result.items.length} câu trả lời xem trước và trừ ${result.creditsUsed} credit.`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không tạo được bản xem trước.");
+      showError(error, "Không tạo được bản xem trước.");
     } finally {
       setBusy(false);
     }
@@ -124,12 +123,11 @@ export default function FormsPage() {
 
   async function submitConfirmed() {
     if (!analysis || previews.length === 0 || !confirmed) {
-      setMessage("Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.");
+      toast.error("Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.");
       return;
     }
 
     setBusy(true);
-    setMessage("");
     try {
       const result = await apiFetch<SubmissionJob>(`/api/projects/${analysis.projectId}/submissions/send`, {
         method: "POST",
@@ -139,9 +137,9 @@ export default function FormsPage() {
         }
       });
       setSubmission(result);
-      setMessage("Đã bắt đầu gửi các câu trả lời đã xác nhận.");
+      toast.success("Đã bắt đầu gửi các câu trả lời đã xác nhận.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không gửi được bản xem trước.");
+      showError(error, "Không gửi được bản xem trước.");
     } finally {
       setBusy(false);
     }
@@ -153,15 +151,14 @@ export default function FormsPage() {
     }
 
     setBusy(true);
-    setMessage("");
     try {
       const result = await apiFetch<SubmissionJob>(`/api/projects/${analysis.projectId}/submissions/jobs/${submission.id}/pause`, {
         method: "POST"
       });
       setSubmission(result);
-      setMessage("Đã tạm dừng sau nhóm gửi hiện tại.");
+      toast.success("Đã tạm dừng sau nhóm gửi hiện tại.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không tạm dừng được lượt gửi.");
+      showError(error, "Không tạm dừng được lượt gửi.");
     } finally {
       setBusy(false);
     }
@@ -173,15 +170,14 @@ export default function FormsPage() {
     }
 
     setBusy(true);
-    setMessage("");
     try {
       const result = await apiFetch<SubmissionJob>(`/api/projects/${analysis.projectId}/submissions/jobs/${submission.id}/cancel`, {
         method: "POST"
       });
       setSubmission(result);
-      setMessage("Đã hủy lượt gửi.");
+      toast.success("Đã hủy lượt gửi.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không hủy được lượt gửi.");
+      showError(error, "Không hủy được lượt gửi.");
     } finally {
       setBusy(false);
     }
@@ -226,7 +222,6 @@ export default function FormsPage() {
             />
             <Button disabled={busy || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
           </form>
-          {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
         </CardContent>
       </Card>
 

@@ -3,19 +3,19 @@
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { CheckCircle2, Clock3, Filter, Search, XCircle } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Select } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Select } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminPayment } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     apiFetch<{ items: AdminPayment[] }>("/api/admin/payments")
       .then((data) => setPayments(data.items))
-      .catch((error: Error) => setMessage(error.message));
+      .catch((error: Error) => showError(error, "Không tải được danh sách thanh toán."));
   }, []);
 
   return (
@@ -25,8 +25,6 @@ export default function AdminPaymentsPage() {
         <h2 className="mt-2 text-2xl font-semibold">Quản lý top-up và thanh toán</h2>
         <p className="mt-1 text-sm text-muted-foreground">Theo dõi đơn nạp credit, xác minh PayOS và lịch sử callback.</p>
       </div>
-      {message && <Alert className="border-red-200 bg-red-50 text-red-700">{message}</Alert>}
-
       <div className="grid gap-4 md:grid-cols-4">
         <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
         <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />

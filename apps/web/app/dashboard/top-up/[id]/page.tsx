@@ -2,16 +2,22 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Alert, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import { Alert, Button, Card, CardContent, Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type TopupOrder } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function TopUpOrderDetailPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const [order, setOrder] = useState<TopupOrder | null>(null);
   const [isMissing, setIsMissing] = useState(false);
+
+  function closeDialog() {
+    router.push("/dashboard/top-up");
+  }
 
   useEffect(() => {
     apiFetch<TopupOrder>(`/api/topup-orders/${params.id}`)
@@ -50,46 +56,53 @@ export default function TopUpOrderDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Link className="text-sm text-primary hover:underline" href="/dashboard/top-up">Quay lại yêu cầu nạp</Link>
-        <h2 className="mt-3 text-2xl font-semibold">Chi tiết yêu cầu nạp</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi trạng thái duyệt thủ công. Đây không phải màn thanh toán tự động.</p>
-      </div>
+    <Dialog open className="lg:pl-72" onOpenChange={(open) => !open && closeDialog()}>
+      <DialogContent className="max-w-4xl">
+        <DialogHeader>
+          <DialogTitle>Chi tiết yêu cầu nạp</DialogTitle>
+          <DialogDescription>Theo dõi trạng thái thanh toán, xác minh và cộng credit.</DialogDescription>
+        </DialogHeader>
+        <DialogBody className="space-y-5">
+          <Alert>Credit được cộng sau khi thanh toán được xác minh hoặc yêu cầu được quản trị viên xử lý.</Alert>
+          <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
+            <section className="rounded-lg border border-border">
+              <div className="border-b border-border px-4 py-3">
+                <h3 className="font-semibold">Thông tin yêu cầu</h3>
+              </div>
+              <div className="space-y-4 p-4 text-sm">
+                <Detail label="Mã yêu cầu" value={order.id} />
+                <Detail label="Mã gói credit" value={order.packageId} />
+                <Detail label="Credit" value={String(order.credits)} />
+                <Detail label="Số tiền" value={formatCurrency(order.amount)} />
+                <div>
+                  <p className="text-muted-foreground">Trạng thái</p>
+                  <div className="mt-1"><StatusBadge status={order.status} /></div>
+                </div>
+              </div>
+            </section>
 
-      <Alert>Cổng thanh toán tự động vẫn để sau. Yêu cầu này chỉ ghi nhận luồng nạp credit thủ công và chờ quản trị viên duyệt.</Alert>
-
-      <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Thông tin yêu cầu</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <Detail label="Mã yêu cầu" value={order.id} />
-            <Detail label="Mã gói credit" value={order.packageId} />
-            <Detail label="Credit" value={String(order.credits)} />
-            <Detail label="Số tiền" value={formatCurrency(order.amount)} />
-            <div>
-              <p className="text-muted-foreground">Trạng thái</p>
-              <div className="mt-1"><StatusBadge status={order.status} /></div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Tiến trình duyệt thủ công</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <Detail label="Cách ghi nhận thanh toán" value={order.paymentMethod} />
-            <Detail label="Ghi chú thanh toán" value={order.paymentNote || "-"} />
-            <Detail label="Tạo lúc" value={formatDate(order.createdAt)} />
-            <Detail label="Đã thanh toán lúc" value={formatDate(order.paidAt)} />
-            <Detail label="Được duyệt lúc" value={formatDate(order.approvedAt)} />
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+            <section className="rounded-lg border border-border">
+              <div className="border-b border-border px-4 py-3">
+                <h3 className="font-semibold">Tiến trình xử lý</h3>
+              </div>
+              <div className="space-y-4 p-4 text-sm">
+                <Detail label="Cách ghi nhận thanh toán" value={order.paymentMethod} />
+                <Detail label="Ghi chú thanh toán" value={order.paymentNote || "-"} />
+                <Detail label="Tạo lúc" value={formatDate(order.createdAt)} />
+                <Detail label="Đã thanh toán lúc" value={formatDate(order.paidAt)} />
+                <Detail label="Được duyệt lúc" value={formatDate(order.approvedAt)} />
+              </div>
+            </section>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Link className="inline-flex min-h-10 items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium hover:bg-muted" href="/dashboard/top-up">
+            Quay lại yêu cầu nạp
+          </Link>
+          <Button type="button" onClick={closeDialog}>Đóng</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

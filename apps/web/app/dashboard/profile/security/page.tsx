@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch } from "@/lib/api";
 import { logoutCurrentSession } from "@/lib/auth";
+import { readableError } from "@/lib/toast";
+import { toast } from "sonner";
 
 type ChangePasswordResponse = {
   changed: boolean;
@@ -15,7 +17,7 @@ function changePasswordError(message: string) {
     return "Mật khẩu hiện tại không đúng hoặc mật khẩu mới chưa hợp lệ.";
   }
 
-  return message || "Không đổi được mật khẩu.";
+  return readableError(message, "Không đổi được mật khẩu.");
 }
 
 export default function ProfileSecurityPage() {
@@ -23,20 +25,18 @@ export default function ProfileSecurityPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function changePassword(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
 
     if (newPassword.length < 8) {
-      setMessage("Mật khẩu tối thiểu 8 ký tự.");
+      toast.error("Mật khẩu tối thiểu 8 ký tự.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setMessage("Xác nhận mật khẩu không khớp.");
+      toast.error("Xác nhận mật khẩu không khớp.");
       return;
     }
 
@@ -51,10 +51,10 @@ export default function ProfileSecurityPage() {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        setMessage("Đã đổi mật khẩu.");
+        toast.success("Đã đổi mật khẩu.");
       }
     } catch (error) {
-      setMessage(changePasswordError(error instanceof Error ? error.message : ""));
+      toast.error(changePasswordError(error instanceof Error ? error.message : ""));
     } finally {
       setIsSubmitting(false);
     }
@@ -71,9 +71,6 @@ export default function ProfileSecurityPage() {
         <h2 className="text-2xl font-semibold">Bảo mật tài khoản</h2>
         <p className="mt-1 text-sm text-muted-foreground">Quản lý mật khẩu, phiên hiện tại và liên kết đăng nhập.</p>
       </div>
-
-      {message && <Alert>{message}</Alert>}
-
       <div className="grid gap-4 lg:grid-cols-[1fr_0.85fr]">
         <Card>
           <CardHeader>
@@ -124,10 +121,10 @@ export default function ProfileSecurityPage() {
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-muted-foreground">Liên kết</span>
-                <Badge tone="neutral">Chưa xác minh trong UI</Badge>
+                <Badge tone="warning">Đang cập nhật</Badge>
               </div>
-              <Button type="button" variant="secondary" onClick={() => router.push("/auth/callback?status=provider-unavailable")}>
-                Liên kết Google
+              <Button type="button" variant="secondary" disabled>
+                Liên kết Google đang cập nhật
               </Button>
             </CardContent>
           </Card>

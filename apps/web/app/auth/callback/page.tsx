@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { saveSession } from "@/lib/auth";
+import { toast } from "sonner";
 
 function getCallbackMessage(status: string | null, error: string | null) {
   if (status === "provider-unavailable") {
@@ -28,8 +29,15 @@ function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const idToken = searchParams.get("id_token");
-  const [message, setMessage] = useState(getCallbackMessage(searchParams.get("status"), searchParams.get("error")));
-  const [isLoading, setIsLoading] = useState(Boolean(idToken) && !message);
+  const callbackMessage = getCallbackMessage(searchParams.get("status"), searchParams.get("error"));
+  const [message, setMessage] = useState(callbackMessage);
+  const [isLoading, setIsLoading] = useState(Boolean(idToken) && !callbackMessage);
+
+  useEffect(() => {
+    if (callbackMessage) {
+      toast.error(callbackMessage);
+    }
+  }, [callbackMessage]);
 
   useEffect(() => {
     if (!idToken || message) {
@@ -48,11 +56,17 @@ function AuthCallbackContent() {
       })
       .catch((error: Error) => {
         if (error.message.includes("409") || error.message.toLowerCase().includes("password")) {
-          setMessage("Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.");
+          const text = "Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.";
+          setMessage(text);
+          toast.error(text);
         } else if (error.message.includes("401")) {
-          setMessage("Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.");
+          const text = "Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.";
+          setMessage(text);
+          toast.error(text);
         } else {
-          setMessage("Không thể liên kết tài khoản Google với tài khoản hiện tại.");
+          const text = "Không thể liên kết tài khoản Google với tài khoản hiện tại.";
+          setMessage(text);
+          toast.error(text);
         }
       })
       .finally(() => setIsLoading(false));
@@ -71,9 +85,9 @@ function AuthCallbackContent() {
               Đang xác thực tài khoản Google...
             </div>
           ) : message ? (
-            <Alert className="border-amber-200 bg-amber-50 text-amber-800">{message}</Alert>
+            <p className="text-sm text-muted-foreground">Không hoàn tất xác thực. Vui lòng thử lại hoặc quay lại đăng nhập.</p>
           ) : (
-            <Alert>Đăng nhập thành công. Đang chuyển vào bảng điều khiển...</Alert>
+            <p className="text-sm text-muted-foreground">Đăng nhập thành công. Đang chuyển vào bảng điều khiển...</p>
           )}
           <Link
             className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium transition hover:bg-muted"

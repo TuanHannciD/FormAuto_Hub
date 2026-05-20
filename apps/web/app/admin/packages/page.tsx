@@ -3,9 +3,28 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { Boxes, CheckCircle2, Pencil, Plus, Search, XCircle } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Select } from "@/components/ui";
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  EmptyState,
+  Input,
+  Select
+} from "@/components/ui";
 import { apiFetch, type CreditPackage, type CreditPackageListResponse, type CreditPackageRequest } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 const emptyForm: CreditPackageRequest = {
   name: "",
@@ -18,10 +37,10 @@ export default function AdminPackagesPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<CreditPackageRequest>(emptyForm);
-  const [message, setMessage] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   async function loadData() {
     const data = await apiFetch<CreditPackageListResponse>("/api/admin/packages");
@@ -29,7 +48,7 @@ export default function AdminPackagesPage() {
   }
 
   useEffect(() => {
-    loadData().catch((error: Error) => setMessage(error.message));
+    loadData().catch((error: Error) => showError(error, "Không tải được danh sách gói credit."));
   }, []);
 
   const filteredPackages = useMemo(
@@ -53,18 +72,29 @@ export default function AdminPackagesPage() {
       price: item.price,
       isActive: item.isActive
     });
-    setMessage("");
+    setIsFormOpen(true);
   }
 
-  function resetForm() {
+  function openCreateDialog() {
     setEditingId(null);
     setForm(emptyForm);
-    setMessage("");
+    setIsFormOpen(true);
+  }
+
+  function closeFormDialog() {
+    setIsFormOpen(false);
+    setEditingId(null);
+    setForm(emptyForm);
+    setIsSaving(false);
   }
 
   async function savePackage(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
+    if (!form.name.trim()) {
+      toast.error("Tên gói credit là bắt buộc.");
+      return;
+    }
+
     setIsSaving(true);
     try {
       if (editingId) {
@@ -72,19 +102,19 @@ export default function AdminPackagesPage() {
           method: "PUT",
           json: form
         });
-        setMessage("Đã cập nhật gói credit.");
+        toast.success("Đã cập nhật gói credit.");
       } else {
         await apiFetch<CreditPackage>("/api/admin/packages", {
           method: "POST",
           json: form
         });
-        setMessage("Đã tạo gói credit.");
+        toast.success("Đã tạo gói credit.");
       }
 
-      resetForm();
+      closeFormDialog();
       await loadData();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không lưu được gói credit.");
+      showError(error, "Không lưu được gói credit.");
     } finally {
       setIsSaving(false);
     }
@@ -96,15 +126,13 @@ export default function AdminPackagesPage() {
         <div>
           <p className="text-xs text-muted-foreground">Admin / Gói credit</p>
           <h2 className="mt-2 text-2xl font-semibold">Quản lý gói credit</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Tạo, sửa và bật tắt gói credit dùng cho nạp thủ công và PayOS.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Tạo, sửa và bật tắt gói credit dùng cho nạp credit và PayOS.</p>
         </div>
-        <Button type="button" onClick={resetForm}>
+        <Button type="button" onClick={openCreateDialog}>
           <Plus size={16} />
           <span className="ml-2">Tạo gói mới</span>
         </Button>
       </div>
-
-      {message && <Alert>{message}</Alert>}
 
       <div className="grid gap-4 md:grid-cols-4">
         <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
@@ -113,7 +141,7 @@ export default function AdminPackagesPage() {
         <Stat icon={Boxes} label="Gói PayOS hợp lệ" value={String(packages.filter((item) => item.isActive && item.price > 0 && item.price === Math.trunc(item.price)).length)} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1.4fr_0.75fr]">
+      <div className="grid gap-4">
         <Card>
           <CardHeader className="space-y-4">
             <CardTitle>Danh sách gói credit</CardTitle>
@@ -171,13 +199,16 @@ export default function AdminPackagesPage() {
             )}
           </CardContent>
         </Card>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{editingId ? "Sửa gói credit" : "Tạo gói credit"}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4" onSubmit={savePackage}>
+      <Dialog open={isFormOpen} className="lg:pl-64" onOpenChange={(open) => !open && closeFormDialog()}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>{editingId ? "Sửa gói credit" : "Tạo gói credit"}</DialogTitle>
+            <DialogDescription>Thông tin gói sẽ được dùng cho nạp credit và PayOS.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={savePackage}>
+            <DialogBody className="space-y-4">
               <label className="block text-sm font-medium">
                 Tên gói
                 <Input className="mt-2" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} />
@@ -195,16 +226,16 @@ export default function AdminPackagesPage() {
                 <input checked={form.isActive} onChange={(event) => setForm((current) => ({ ...current, isActive: event.target.checked }))} type="checkbox" />
               </label>
               <Alert className="border-amber-200 bg-amber-50 text-amber-900">
-                Giá dùng cho PayOS phải là số VND nguyên và lớn hơn 0. Top-up order đã tạo sẽ giữ snapshot credit và số tiền cũ.
+                Giá sử dụng cho PayOS phải là số nguyên VNĐ và lớn hơn 0. Đơn hàng nạp tiền đã được tạo sẽ giữ tín dụng chụp nhanh và số tiền cũ.
               </Alert>
-              <div className="flex flex-wrap gap-2">
-                <Button disabled={isSaving} type="submit">{isSaving ? "Đang lưu..." : "Lưu gói"}</Button>
-                {editingId && <Button type="button" variant="secondary" onClick={resetForm}>Hủy sửa</Button>}
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+            </DialogBody>
+            <DialogFooter>
+              <Button type="button" variant="secondary" onClick={closeFormDialog}>Hủy</Button>
+              <Button disabled={isSaving} type="submit">{isSaving ? "Đang lưu..." : "Lưu gói"}</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

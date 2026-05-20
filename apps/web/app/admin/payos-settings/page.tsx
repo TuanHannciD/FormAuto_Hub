@@ -5,7 +5,9 @@ import type { ComponentType, FormEvent } from "react";
 import { AlertCircle, BookOpen, CheckCircle2, Clipboard, Clock3, KeyRound, RefreshCw, Save, ShieldCheck } from "lucide-react";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, Select } from "@/components/ui";
 import { apiFetch, type CheckPayosProviderSettingsResponse, type PayosProviderSettings } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function PayosSettingsPage() {
   const [settings, setSettings] = useState<PayosProviderSettings | null>(null);
@@ -15,7 +17,6 @@ export default function PayosSettingsPage() {
   const [returnUrl, setReturnUrl] = useState("");
   const [cancelUrl, setCancelUrl] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
-  const [message, setMessage] = useState("");
   const [publicOrigin, setPublicOrigin] = useState("");
 
   const webhookUrl = publicOrigin ? `${publicOrigin}/api/payments/payos/webhook` : "/api/payments/payos/webhook";
@@ -31,12 +32,11 @@ export default function PayosSettingsPage() {
 
   useEffect(() => {
     setPublicOrigin(window.location.origin);
-    loadData().catch((error: Error) => setMessage(error.message));
+    loadData().catch((error: Error) => showError(error, "Không tải được cấu hình PayOS."));
   }, []);
 
   async function save(event: FormEvent) {
     event.preventDefault();
-    setMessage("");
     try {
       const data = await apiFetch<PayosProviderSettings>("/api/admin/payment-providers/payos", {
         method: "PUT",
@@ -45,26 +45,25 @@ export default function PayosSettingsPage() {
       setSettings(data);
       setApiKey("");
       setChecksumKey("");
-      setMessage("Đã lưu cấu hình PayOS. Secret chỉ hiển thị dạng ẩn.");
+      toast.success("Đã lưu cấu hình PayOS. Secret chỉ hiển thị dạng ẩn.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không lưu được cấu hình PayOS.");
+      showError(error, "Không lưu được cấu hình PayOS.");
     }
   }
 
   async function check() {
-    setMessage("");
     try {
       const result = await apiFetch<CheckPayosProviderSettingsResponse>("/api/admin/payment-providers/payos/check", { method: "POST" });
-      setMessage(result.message);
+      toast.info(result.message);
       await loadData();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không kiểm tra được cấu hình PayOS.");
+      showError(error, "Không kiểm tra được cấu hình PayOS.");
     }
   }
 
   async function copyWebhookUrl() {
     await navigator.clipboard.writeText(webhookUrl);
-    setMessage("Đã sao chép webhook URL để cấu hình trong PayOS dashboard.");
+    toast.success("Đã sao chép webhook URL để cấu hình trong PayOS dashboard.");
   }
 
   return (
@@ -75,7 +74,7 @@ export default function PayosSettingsPage() {
           <h2 className="mt-2 text-2xl font-semibold">Cấu hình PayOS</h2>
           <p className="mt-1 text-sm text-muted-foreground">Quản lý trạng thái bật PayOS cho top-up credit tự động.</p>
         </div>
-        <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => setMessage(error.message))}>
+        <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => showError(error, "Không tải được cấu hình PayOS."))}>
           <RefreshCw size={16} />
           <span className="ml-2">Làm mới</span>
         </Button>
@@ -86,8 +85,6 @@ export default function PayosSettingsPage() {
       <Alert className="border-sky-200 bg-sky-50 text-sky-950">
         PayOS cần 3 đường dẫn: Return URL và Cancel URL trỏ về trang frontend bên dưới; Webhook URL cấu hình trong PayOS dashboard và có thể dùng chính domain frontend nhờ proxy `/api/payments/payos/webhook`.
       </Alert>
-      {message && <Alert>{message}</Alert>}
-
       <div className="grid gap-4 xl:grid-cols-[1.35fr_0.75fr]">
         <div className="space-y-4">
           <Card>
@@ -204,7 +201,7 @@ export default function PayosSettingsPage() {
             <CardContent className="space-y-3 text-sm">
               <p className="text-muted-foreground">Cập nhật gần nhất</p>
               <p className="font-medium">{settings?.updatedAt ? formatDate(settings.updatedAt) : "Chưa có dữ liệu"}</p>
-              <p className="text-xs text-muted-foreground">Audit chi tiết chưa nằm trong scope Phase 8 hiện tại.</p>
+              <p className="text-xs text-muted-foreground">Nhật ký audit chi tiết đang cập nhật.</p>
             </CardContent>
           </Card>
           <Card>

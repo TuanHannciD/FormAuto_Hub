@@ -40,7 +40,7 @@ export function LandingDashboardTabs() {
               title="Yêu cầu nạp gần đây"
               columns={["Credit", "Số tiền", "Trạng thái", "Tạo lúc"]}
               emptyTitle="Chưa có yêu cầu nạp gần đây"
-              emptyDetail="Tạo yêu cầu nạp thủ công khi cần thêm credit."
+              emptyDetail="Nạp thêm credit khi cần tiếp tục sử dụng."
             />
           )}
           {activeTab === "usage" && (
@@ -90,7 +90,7 @@ function OverviewPanel() {
           </div>
           <div className="space-y-3 p-4 text-sm">
             <div className="rounded-md border border-slate-200 p-3">Phân tích link Google Form và cài đặt cách trả lời</div>
-            <div className="rounded-md border border-slate-200 p-3">Tạo yêu cầu nạp credit thủ công</div>
+            <div className="rounded-md border border-slate-200 p-3">Nạp credit hoặc theo dõi giao dịch PayOS</div>
             <div className="rounded-md border border-slate-200 p-3">Kiểm tra lịch sử sử dụng và hành động bị chặn</div>
           </div>
         </div>
@@ -98,7 +98,7 @@ function OverviewPanel() {
           <div className="border-b border-slate-100 px-4 py-3">
             <h4 className="text-sm font-semibold text-slate-900">Yêu cầu nạp gần đây</h4>
           </div>
-          <EmptyBlock title="Chưa có yêu cầu nạp gần đây" detail="Tạo yêu cầu nạp thủ công khi cần thêm credit." />
+          <EmptyBlock title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
         </div>
       </div>
       <div className="rounded-lg border border-slate-200 bg-white shadow-sm">

@@ -113,7 +113,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <div className="text-xs text-muted-foreground">
               <span>Admin</span>
               <span className="mx-2">/</span>
-              <span className="font-medium text-primary">Phase 8</span>
+              <span className="font-medium text-primary">Quản trị hệ thống</span>
             </div>
             <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
               <div className="relative hidden w-full max-w-sm md:block">

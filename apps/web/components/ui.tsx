@@ -1,5 +1,65 @@
 import { cn } from "@/lib/utils";
 
+export function Dialog({
+  open,
+  onOpenChange,
+  children,
+  className
+}: {
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div className={cn("fixed inset-0 z-50 !mt-0 flex items-center justify-center px-4 py-6", className)}>
+      <button
+        aria-label="Đóng"
+        className="absolute inset-0 bg-slate-950/45"
+        onClick={() => onOpenChange?.(false)}
+        type="button"
+      />
+      {children}
+    </div>
+  );
+}
+
+export function DialogContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg border border-border bg-white shadow-xl",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("border-b border-border px-5 py-4", className)} {...props} />;
+}
+
+export function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+  return <h2 className={cn("text-lg font-semibold", className)} {...props} />;
+}
+
+export function DialogDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+  return <p className={cn("mt-1 text-sm text-muted-foreground", className)} {...props} />;
+}
+
+export function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("p-5", className)} {...props} />;
+}
+
+export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("flex flex-wrap justify-end gap-2 border-t border-border px-5 py-4", className)} {...props} />;
+}
+
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return <section className={cn("rounded-lg border border-border bg-white shadow-soft", className)} {...props} />;
 }

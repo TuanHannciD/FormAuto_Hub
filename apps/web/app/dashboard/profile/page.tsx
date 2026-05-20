@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch, type Profile } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [fullName, setFullName] = useState("");
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     apiFetch<Profile>("/api/profile")
@@ -16,21 +17,20 @@ export default function ProfilePage() {
         setProfile(data);
         setFullName(data.fullName);
       })
-      .catch((error: Error) => setMessage(error.message));
+      .catch((error: Error) => showError(error, "Không tải được hồ sơ."));
   }, []);
 
   async function save(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
     try {
       const updated = await apiFetch<Profile>("/api/profile", {
         method: "PUT",
         json: { fullName }
       });
       setProfile(updated);
-      setMessage("Đã lưu hồ sơ.");
+      toast.success("Đã lưu hồ sơ.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không lưu được hồ sơ.");
+      showError(error, "Không lưu được hồ sơ.");
     }
   }
 
@@ -67,7 +67,6 @@ export default function ProfilePage() {
             </div>
             <Button type="submit">Lưu hồ sơ</Button>
           </form>
-          {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
         </CardContent>
       </Card>
     </div>

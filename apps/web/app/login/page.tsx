@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { LockKeyhole, Mail } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { getStoredSession, saveSession } from "@/lib/auth";
+import { readableError } from "@/lib/toast";
+import { toast } from "sonner";
 
 function authErrorMessage(message: string) {
   if (message.includes("423")) {
@@ -17,7 +19,7 @@ function authErrorMessage(message: string) {
     return "Email hoặc mật khẩu không đúng.";
   }
 
-  return message || "Không đăng nhập được. Vui lòng thử lại.";
+  return readableError(message, "Không đăng nhập được. Vui lòng thử lại.");
 }
 
 function LoginContent() {
@@ -25,18 +27,20 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(searchParams.get("reason") === "session-expired" ? "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại." : "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    if (searchParams.get("reason") === "session-expired") {
+      toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+    }
+
     if (getStoredSession()) {
       router.replace("/dashboard");
     }
-  }, [router]);
+  }, [router, searchParams]);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
     setIsSubmitting(true);
 
     try {
@@ -48,7 +52,7 @@ function LoginContent() {
       saveSession(session);
       router.replace("/dashboard");
     } catch (error) {
-      setMessage(authErrorMessage(error instanceof Error ? error.message : ""));
+      toast.error(authErrorMessage(error instanceof Error ? error.message : ""));
     } finally {
       setIsSubmitting(false);
     }
@@ -70,7 +74,6 @@ function LoginContent() {
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={submit}>
-            {message && <Alert className="border-red-200 bg-red-50 text-red-800">{message}</Alert>}
             <label className="block text-sm font-medium">
               Email
               <div className="relative mt-2">

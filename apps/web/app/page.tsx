@@ -57,8 +57,8 @@ const featureCards = [
     icon: History
   },
   {
-    title: "Duyệt nạp credit",
-    body: "Rà soát yêu cầu nạp credit thủ công trong luồng MVP.",
+    title: "Đối soát nạp credit",
+    body: "Theo dõi yêu cầu nạp, thanh toán PayOS và trạng thái cộng credit.",
     icon: ShieldCheck
   }
 ];
@@ -66,7 +66,7 @@ const featureCards = [
 const creditCards = [
   {
     title: "Nạp credit",
-    body: "Tạo yêu cầu nạp credit thủ công để quản trị viên rà soát.",
+    body: "Chọn gói credit và thanh toán qua PayOS hoặc gửi yêu cầu đối soát khi cần.",
     icon: CreditCard
   },
   {
@@ -85,16 +85,16 @@ const faqs = [
   {
     question: "FormAuto Hub có tự động gửi phản hồi không?",
     answer:
-      "Không. MVP yêu cầu xem trước và người dùng xác nhận trước khi gửi."
+      "Không. Hệ thống yêu cầu xem trước và người dùng xác nhận trước khi gửi."
   },
   {
     question: "Có thể tạo bao nhiêu phản hồi mỗi lần?",
-    answer: "MVP giới hạn từ 1 đến 100 câu trả lời xem trước trong mỗi thao tác."
+    answer: "Mỗi thao tác hỗ trợ từ 1 đến 100 câu trả lời xem trước."
   },
   {
-    question: "MVP có cổng thanh toán tự động chưa?",
+    question: "Có thể nạp credit tự động không?",
     answer:
-      "Phase 8 đã hỗ trợ PayOS cho nạp credit tự động. Các cổng thanh toán khác vẫn Deferred."
+      "Có. FormAuto Hub hỗ trợ nạp credit tự động qua PayOS. Các phương thức thanh toán khác đang cập nhật."
   },
   {
     question: "Công cụ có vượt captcha hoặc giới hạn của Google không?",
@@ -384,7 +384,7 @@ export default function LandingPage() {
       <section id="credit" className="border-y border-slate-200 bg-slate-50 py-12 md:py-20">
         <div className="mx-auto max-w-[1120px] px-4 md:px-8">
           <h2 className="mx-auto mb-12 max-w-3xl text-center text-3xl font-bold tracking-tight text-slate-900">
-              Mô hình dùng credit, không phụ thuộc cổng thanh toán trong MVP
+              Mô hình credit rõ ràng cho từng thao tác
           </h2>
           <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             {creditCards.map((item) => (
@@ -400,7 +400,7 @@ export default function LandingPage() {
             ))}
           </div>
           <p className="text-center text-sm italic text-slate-500">
-            Tích hợp cổng thanh toán được để lại cho giai đoạn sau.
+            Thanh toán PayOS được xác minh trước khi credit được cộng vào tài khoản.
           </p>
         </div>
       </section>
@@ -455,7 +455,7 @@ export default function LandingPage() {
 function DashboardPreview() {
   const nextActions = [
     "Phân tích link Google Form và cài đặt cách trả lời",
-    "Tạo yêu cầu nạp credit thủ công",
+    "Nạp credit hoặc theo dõi giao dịch PayOS",
     "Kiểm tra lịch sử sử dụng và hành động bị chặn"
   ];
 
@@ -517,7 +517,7 @@ function DashboardPreview() {
               </div>
               <EmptyPreview
                 title="Chưa có yêu cầu nạp gần đây"
-                detail="Tạo yêu cầu nạp thủ công khi cần thêm credit."
+                detail="Nạp thêm credit khi cần tiếp tục sử dụng."
               />
             </div>
           </div>

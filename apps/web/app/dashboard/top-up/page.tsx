@@ -7,7 +7,9 @@ import { DropdownSelect } from "@/components/dropdown-select";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type CreatePayosTopupOrderResponse, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function TopUpPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
@@ -16,7 +18,6 @@ export default function TopUpPage() {
   const [packageId, setPackageId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Thủ công");
   const [paymentNote, setPaymentNote] = useState("");
-  const [message, setMessage] = useState("");
   const [isCreatingPayos, setIsCreatingPayos] = useState(false);
 
   const selectedPackage = useMemo(() => packages.find((item) => item.id === packageId), [packageId, packages]);
@@ -34,38 +35,36 @@ export default function TopUpPage() {
   }
 
   useEffect(() => {
-    loadData().catch((error: Error) => setMessage(error.message));
+    loadData().catch((error: Error) => showError(error, "Không tải được dữ liệu nạp credit."));
   }, []);
 
   async function submitOrder(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
     try {
       await apiFetch<TopupOrder>("/api/topup-orders", {
         method: "POST",
         json: { packageId, paymentMethod, paymentNote }
       });
       setPaymentNote("");
-      setMessage("Đã tạo yêu cầu nạp credit. Quản trị viên sẽ duyệt thủ công.");
+      toast.success("Đã tạo yêu cầu nạp credit. Quản trị viên sẽ đối soát và xử lý.");
       await loadData();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không tạo được yêu cầu nạp.");
+      showError(error, "Không tạo được yêu cầu nạp.");
     }
   }
 
   async function createPayosLink() {
-    setMessage("");
     setIsCreatingPayos(true);
     try {
       const result = await apiFetch<CreatePayosTopupOrderResponse>("/api/topup-orders/payos", {
         method: "POST",
         json: { packageId }
       });
-      setMessage("Đã tạo liên kết thanh toán PayOS. Credit chỉ cộng sau khi hệ thống xác minh thanh toán.");
+      toast.success("Đã tạo liên kết thanh toán PayOS. Credit chỉ cộng sau khi hệ thống xác minh thanh toán.");
       await loadData();
       window.location.href = result.checkoutUrl;
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Không tạo được liên kết PayOS.");
+      showError(error, "Không tạo được liên kết PayOS.");
     } finally {
       setIsCreatingPayos(false);
     }
@@ -130,18 +129,17 @@ export default function TopUpPage() {
                 />
               )}
             </div>
-            {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
           </CardContent>
         </Card>
 
           <Card>
           <CardHeader>
-            <CardTitle>Yêu cầu thủ công</CardTitle>
+            <CardTitle>Yêu cầu đối soát</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={submitOrder}>
               <label className="block text-sm font-medium">
-                Phương thức ghi nhận thủ công
+                Phương thức ghi nhận
                 <Input className="mt-2" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
               </label>
               <label className="block text-sm font-medium">
@@ -190,7 +188,7 @@ export default function TopUpPage() {
         </CardHeader>
         <CardContent>
           {orders.length === 0 ? (
-            <EmptyState title="Chưa có yêu cầu nạp" detail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái duyệt." />
+            <EmptyState title="Chưa có yêu cầu nạp" detail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán." />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

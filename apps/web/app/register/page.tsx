@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserPlus } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { getStoredSession, saveSession } from "@/lib/auth";
+import { readableError } from "@/lib/toast";
+import { toast } from "sonner";
 
 function registerErrorMessage(message: string) {
   if (message.includes("409") || message.toLowerCase().includes("already")) {
@@ -17,7 +19,7 @@ function registerErrorMessage(message: string) {
     return "Thông tin đăng ký không hợp lệ.";
   }
 
-  return message || "Không tạo được tài khoản.";
+  return readableError(message, "Không tạo được tài khoản.");
 }
 
 export default function RegisterPage() {
@@ -25,7 +27,6 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -36,10 +37,9 @@ export default function RegisterPage() {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    setMessage("");
 
     if (password.length < 8) {
-      setMessage("Mật khẩu tối thiểu 8 ký tự.");
+      toast.error("Mật khẩu tối thiểu 8 ký tự.");
       return;
     }
 
@@ -53,7 +53,7 @@ export default function RegisterPage() {
       saveSession(session);
       router.replace("/dashboard");
     } catch (error) {
-      setMessage(registerErrorMessage(error instanceof Error ? error.message : ""));
+      toast.error(registerErrorMessage(error instanceof Error ? error.message : ""));
     } finally {
       setIsSubmitting(false);
     }
@@ -75,7 +75,6 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={submit}>
-            {message && <Alert className="border-red-200 bg-red-50 text-red-800">{message}</Alert>}
             <label className="block text-sm font-medium">
               Họ tên
               <Input className="mt-2" value={fullName} onChange={(event) => setFullName(event.target.value)} required />

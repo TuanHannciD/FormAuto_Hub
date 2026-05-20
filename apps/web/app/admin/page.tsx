@@ -4,19 +4,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
+import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")
       .then(setSummary)
-      .catch((error: Error) => setMessage(error.message));
+      .catch((error: Error) => showError(error, "Không tải được tổng quan quản trị."));
   }, []);
 
   return (
@@ -32,7 +32,6 @@ export default function AdminDashboardPage() {
           <span className="ml-2">Làm mới</span>
         </Button>
       </div>
-      {message && <Alert className="border-red-200 bg-red-50 text-red-700">{message}</Alert>}
       <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
         <Metric icon={CircleDollarSign} label="Tổng doanh thu" tone="blue" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={CreditCard} label="Credit đã bán" tone="emerald" value={summary ? `${summary.creditSold} cr` : "-"} />
@@ -95,7 +94,7 @@ export default function AdminDashboardPage() {
               <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
               <div className="rounded-md border border-amber-200 bg-white p-3">
                 <p className="text-xs font-medium uppercase text-amber-700">Cần theo dõi</p>
-                <p className="mt-1">Live PayOS sandbox và public webhook vẫn là bước smoke trước production.</p>
+                <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
               </div>
             </CardContent>
           </Card>
