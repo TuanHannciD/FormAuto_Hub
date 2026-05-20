@@ -55,7 +55,7 @@ This repository uses explicit role separation, strict scope control, and paired 
 ## Current Project Baseline
 
 - Project: FormAuto Hub.
-- Current phase: Phase 7 - Authentication and account access.
+- Current phase: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
 - Backend: ASP.NET Core Web API .NET 9.
 - API style: controller-based REST API preferred for MVP.
 - Database: SQL Server.
@@ -64,7 +64,7 @@ This repository uses explicit role separation, strict scope control, and paired 
 - Frontend framework: Next.js web dashboard.
 - Authentication: JWT access tokens with refresh token/session storage.
 - Google account login/register: identity-only.
-- Payment gateway integration: Deferred.
+- Payment gateway integration: PayOS automated credit top-up is approved for Phase 8; other payment providers remain Deferred.
 - Official Google Forms API integration: Deferred.
 - AI answer generation and AI mapping: Deferred.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.

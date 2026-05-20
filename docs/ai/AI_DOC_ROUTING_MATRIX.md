@@ -12,8 +12,9 @@ Always read `README.md` and `AGENTS.md` first.
 |---|---|---|
 | Any task | `AGENTS.md` | this file |
 | New requirement | `PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | `PROJECT_EXECUTION_RULES.md`, `TASK_EXECUTION_FLOW.md` |
-| Phase/scope question | `PROJECT_PHASE_ROADMAP.md` | `PHASE_EXECUTION_RULES.md`, `PHASE_0_CLOSEOUT.md`, `PHASE_1_CLOSEOUT.md`, `PHASE_2_CLOSEOUT.md`, `PHASE_7_CLOSEOUT.md` |
+| Phase/scope question | `PROJECT_PHASE_ROADMAP.md` | `PHASE_EXECUTION_RULES.md`, `PHASE_0_CLOSEOUT.md`, `PHASE_1_CLOSEOUT.md`, `PHASE_2_CLOSEOUT.md`, `PHASE_7_CLOSEOUT.md`, `PHASE_8_KICKOFF_PLAN.md` |
 | Phase 3 kickoff | `PHASE_3_KICKOFF_PLAN.md` | `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
+| Phase 8 kickoff | `PHASE_8_KICKOFF_PLAN.md` | `PROJECT_PHASE_ROADMAP.md`, `PHASE_EXECUTION_RULES.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
 | Backend implementation | `TECH_STACK_DECISIONS.md` | `ARCHITECTURE_BOUNDARIES.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
 | Frontend implementation | `TECH_STACK_DECISIONS.md` | `FRONTEND_STYLE_GUIDE.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
 | Frontend UI from generated design | `FRONTEND_STYLE_GUIDE.md` | `UI_DESIGN_ARTIFACTS.md`, target `docs/design/stitch/<page>/` folder |
@@ -25,7 +26,7 @@ Always read `README.md` and `AGENTS.md` first.
 | Form automation work | `MODULE_MAP.md` | `ARCHITECTURE_BOUNDARIES.md`, `API_CONTRACT_GUIDE.md`, `TESTING_STRATEGY.md` |
 | Google Forms integration | `ARCHITECTURE_BOUNDARIES.md` | `EVENT_AND_WEBHOOK_CONTRACTS.md`, `TECH_STACK_DECISIONS.md` |
 | AI feature request | `PHASE_EXECUTION_RULES.md` | `TECH_STACK_DECISIONS.md`, `ARCHITECTURE_BOUNDARIES.md` |
-| Payment request | `PHASE_EXECUTION_RULES.md` | `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
+| Payment request | `PHASE_EXECUTION_RULES.md` | `PHASE_8_KICKOFF_PLAN.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
 | Testing/validation | `TESTING_STRATEGY.md` | `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md` |
 | Documentation edit | `PROJECT_EXECUTION_RULES.md` | matching `docs/ai` and `docs/vi` files |
 | Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, task-specific docs |

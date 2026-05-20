@@ -6,7 +6,7 @@ Define FormAuto Hub delivery phases and scope gates.
 
 ## Current Phase
 
-Current phase: **Phase 7 - Authentication and account access**.
+Current phase: **Phase 8 - Admin, revenue, and PayOS automated credit top-up**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -149,7 +149,7 @@ Frontend framework: Next.js web dashboard.
 
 ## Phase 6 - Production integrations
 
-Status: Current.
+Status: Deferred candidate group.
 
 Deferred unless explicitly approved:
 
@@ -226,6 +226,49 @@ Completed implementation subset:
 - dashboard auth guard and current-session logout
 - profile password change uses password verification instead of temporary hash comparison
 - EF Core migration `Phase7Authentication`
+
+## Phase 8 - Admin, revenue, and PayOS automated credit top-up
+
+Status: Current.
+
+Approved scope:
+
+- dedicated admin area for operational and financial management
+- admin reporting for revenue, top-up orders, credit sales, credit usage, and payment status
+- PayOS as the first approved payment provider for automated credit top-up
+- PayOS payment link creation for top-up orders
+- PayOS callback/webhook handling for payment confirmation
+- PayOS signature or authenticity verification before applying credit
+- automatic credit grant only after a valid paid PayOS event is confirmed
+- idempotent credit grant so repeated callbacks/webhooks do not add duplicate credit
+- `CreditTransactions` ledger entry for every automatic credit grant
+- top-up order status updates tied to verified payment outcome
+- admin visibility into payment and credit transaction history
+
+Scope boundaries:
+
+- PayOS is the only approved payment provider in this phase.
+- Admin reporting must use existing persisted data unless a future approved task adds new fields or aggregates.
+- Credit changes must continue to go through the dedicated credit workflow and transaction ledger discipline.
+- Payment secrets must not be stored in source-controlled configuration.
+- Payment callbacks/webhooks must not grant credit before verification.
+
+Deferred:
+
+- VNPay, MoMo, Stripe, or other payment providers
+- subscription billing
+- automated refund behavior
+- manual credit adjustment unless separately approved
+- package management UI unless separately approved
+- admin user management UI unless separately approved
+- official Google Forms API
+- Google Forms watches or background sync
+- AI mapping/generation
+- production background job framework unless a PayOS task explicitly proves it is needed
+
+Kickoff plan:
+
+- See `PHASE_8_KICKOFF_PLAN.md`.
 
 ## Phase Rule
 

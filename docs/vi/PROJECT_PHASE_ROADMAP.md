@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Current phase: **Phase 7 - Authentication and account access**.
+Current phase: **Phase 8 - Admin, revenue, and PayOS automated credit top-up**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -149,7 +149,7 @@ Frontend framework: Next.js web dashboard.
 
 ## Phase 6 - Production integrations
 
-Status: Current.
+Status: Deferred candidate group.
 
 Deferred trừ khi được duyệt rõ:
 
@@ -226,6 +226,49 @@ Implementation subset đã hoàn tất:
 - dashboard auth guard và logout current session
 - đổi mật khẩu trong profile dùng password verification thay vì so sánh hash tạm thời
 - EF Core migration `Phase7Authentication`
+
+## Phase 8 - Admin, revenue, and PayOS automated credit top-up
+
+Status: Current.
+
+Scope đã duyệt:
+
+- khu vực admin riêng cho quản lý vận hành và tài chính
+- báo cáo admin cho doanh thu, top-up orders, credit đã bán, credit đã dùng và trạng thái thanh toán
+- PayOS là payment provider đầu tiên được duyệt cho nạp credit tự động
+- tạo payment link PayOS cho top-up orders
+- xử lý PayOS callback/webhook để xác nhận thanh toán
+- xác minh chữ ký hoặc tính hợp lệ của PayOS trước khi cộng credit
+- chỉ tự động cộng credit sau khi xác nhận được sự kiện PayOS đã thanh toán hợp lệ
+- cộng credit idempotent để callback/webhook lặp lại không cộng trùng credit
+- ghi `CreditTransactions` cho mọi lần cộng credit tự động
+- cập nhật trạng thái top-up order theo kết quả thanh toán đã xác minh
+- admin xem được lịch sử thanh toán và credit transaction
+
+Ranh giới scope:
+
+- PayOS là payment provider duy nhất được duyệt trong phase này.
+- Báo cáo admin phải dùng dữ liệu đã lưu hiện có, trừ khi task sau này duyệt thêm field hoặc aggregate mới.
+- Credit changes vẫn phải đi qua dedicated credit workflow và tuân thủ transaction ledger.
+- Payment secrets không được lưu trong source-controlled configuration.
+- Payment callback/webhook không được cộng credit trước khi xác minh.
+
+Deferred:
+
+- VNPay, MoMo, Stripe hoặc payment provider khác
+- subscription billing
+- automated refund behavior
+- manual credit adjustment nếu chưa duyệt riêng
+- package management UI nếu chưa duyệt riêng
+- admin user management UI nếu chưa duyệt riêng
+- official Google Forms API
+- Google Forms watches hoặc background sync
+- AI mapping/generation
+- production background job framework trừ khi task PayOS chứng minh là cần
+
+Kickoff plan:
+
+- Xem `PHASE_8_KICKOFF_PLAN.md`.
 
 ## Phase Rule
 

@@ -6,7 +6,7 @@ Define non-negotiable execution discipline for FormAuto Hub.
 
 ## Current State
 
-- Current phase: Phase 7 - Authentication and account access.
+- Current phase: Phase 8 - Admin, revenue, and PayOS automated credit top-up.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.
 - Backend stack is confirmed: ASP.NET Core Web API .NET 9, SQL Server, EF Core.

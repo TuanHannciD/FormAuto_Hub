@@ -8,7 +8,7 @@ This repository contains the documentation baseline and the initial Phase 1 back
 
 ## Current Phase
 
-Current phase: **Phase 7 - Authentication and account access**.
+Current phase: **Phase 8 - Admin, revenue, and PayOS automated credit top-up**.
 
 Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
 
@@ -33,6 +33,7 @@ Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under 
 - Authentication: JWT access tokens with refresh token/session storage.
 - Google account login/register: identity-only; official Google Forms API scopes remain Deferred.
 - MVP top-up flow: manual top-up order approval.
+- Phase 8 payment provider: PayOS first, for automated credit top-up.
 - MVP generated response limit: up to 100 preview responses per action, with controlled submission in sequential batches of 10.
 - Preview before submission is required.
 - Credit changes must be written to `CreditTransactions`.
@@ -95,6 +96,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/PHASE_4_CLOSEOUT.md` | `docs/vi/PHASE_4_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_5_CLOSEOUT.md` | `docs/vi/PHASE_5_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
+| `docs/ai/PHASE_8_KICKOFF_PLAN.md` | `docs/vi/PHASE_8_KICKOFF_PLAN.md` | Yes |
 | `docs/ai/PHASE_EXECUTION_RULES.md` | `docs/vi/PHASE_EXECUTION_RULES.md` | Yes |
 | `docs/ai/TECH_STACK_DECISIONS.md` | `docs/vi/TECH_STACK_DECISIONS.md` | Yes |
 | `docs/ai/ENVIRONMENT_SETUP.md` | `docs/vi/ENVIRONMENT_SETUP.md` | Yes |
