@@ -254,7 +254,7 @@ export default function LandingPage() {
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                 <ListChecks size={16} />
-                1-5 phản hồi mỗi thao tác
+                1-10 phản hồi mỗi thao tác
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                 <Wallet size={16} />
@@ -365,7 +365,7 @@ export default function LandingPage() {
               {[
                 "Xem trước trước khi gửi",
                 "Cần người dùng xác nhận",
-                "1-5 phản hồi mỗi thao tác",
+                "1-10 phản hồi mỗi thao tác",
                 "Ghi nhật ký sử dụng cho thao tác công cụ",
                 "Ghi giao dịch credit cho thay đổi số dư"
               ].map((item) => (
