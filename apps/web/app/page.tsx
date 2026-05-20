@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { LandingDashboardTabs } from "@/components/landing-dashboard-tabs";
 import {
   BarChart3,
   CheckCircle2,
@@ -89,7 +89,7 @@ const faqs = [
   },
   {
     question: "Có thể tạo bao nhiêu phản hồi mỗi lần?",
-    answer: "MVP giới hạn từ 1 đến 5 phản hồi được tạo trong mỗi thao tác."
+    answer: "MVP giới hạn từ 1 đến 100 câu trả lời xem trước trong mỗi thao tác."
   },
   {
     question: "MVP có cổng thanh toán tự động chưa?",
@@ -254,7 +254,7 @@ export default function LandingPage() {
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                 <ListChecks size={16} />
-                1-10 phản hồi mỗi thao tác
+                1-100 câu trả lời xem trước
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                 <Wallet size={16} />
@@ -329,25 +329,7 @@ export default function LandingPage() {
               Dành cho người vận hành và quản trị viên cần nhìn rõ dữ liệu trước khi hành động.
             </p>
           </div>
-          <div className="mx-auto w-full max-w-5xl rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded border border-slate-100 bg-white">
-              <div className="absolute inset-0 flex flex-col gap-4 p-4">
-                <div className="flex gap-4 border-b border-slate-100 pb-2">
-                  <span className="border-b-2 border-blue-600 pb-2 text-xs font-bold text-blue-600">Tổng quan</span>
-                  <span className="text-xs text-slate-500">Đơn nạp</span>
-                  <span className="text-xs text-slate-500">Sử dụng</span>
-                  <span className="text-xs text-slate-500">Credit</span>
-                </div>
-                <Image
-                  src="/images/landing/login-screen.png"
-                  alt="Ảnh chụp web thật của FormAuto Hub được dùng thay ảnh placeholder trong landing"
-                  width={1440}
-                  height={1000}
-                  className="h-auto w-full rounded object-cover"
-                />
-              </div>
-            </div>
-          </div>
+          <LandingDashboardTabs />
         </div>
       </section>
 
@@ -365,7 +347,7 @@ export default function LandingPage() {
               {[
                 "Xem trước trước khi gửi",
                 "Cần người dùng xác nhận",
-                "1-10 phản hồi mỗi thao tác",
+                "1-100 câu trả lời xem trước mỗi thao tác",
                 "Ghi nhật ký sử dụng cho thao tác công cụ",
                 "Ghi giao dịch credit cho thay đổi số dư"
               ].map((item) => (
@@ -471,11 +453,10 @@ export default function LandingPage() {
 }
 
 function DashboardPreview() {
-  const logs = [
-    ["Phân tích biểu mẫu", "Thành công", "2 credit"],
-    ["Xem trước phản hồi", "Thành công", "5 credit"],
-    ["Yêu cầu nạp credit", "Đang chờ", "500 credit"],
-    ["Rà soát gửi phản hồi", "Thất bại", "0 credit"]
+  const nextActions = [
+    "Phân tích link Google Form và cài đặt cách trả lời",
+    "Tạo yêu cầu nạp credit thủ công",
+    "Kiểm tra lịch sử sử dụng và hành động bị chặn"
   ];
 
   return (
@@ -502,56 +483,52 @@ function DashboardPreview() {
           </div>
         </aside>
         <div className="min-w-0 flex-1 space-y-6 overflow-y-auto bg-slate-50/30 p-5">
-          <h2 className="text-sm font-bold text-slate-900">Bảng điều khiển</h2>
+          <div>
+            <h2 className="text-base font-bold text-slate-900">Tổng quan vận hành</h2>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Theo dõi credit, yêu cầu nạp và các thao tác biểu mẫu gần đây.
+            </p>
+          </div>
+          <div className="rounded border border-cyan-100 bg-cyan-50 px-3 py-2 text-[11px] leading-5 text-cyan-900">
+            Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
+          </div>
           <div className="grid grid-cols-2 gap-4">
-            <Metric label="Credit hiện có" value="1,250" />
-            <Metric label="Yêu cầu đang chờ" value="3" />
-            <Metric label="Lượt dùng tháng này" value="48" />
-            <Metric label="Tỷ lệ thành công" value="96%" />
+            <Metric label="Credit hiện có" value="-" />
+            <Metric label="Đã nạp" value="-" />
+            <Metric label="Đã dùng" value="-" />
+            <Metric label="Yêu cầu chờ duyệt" value="-" />
+          </div>
+          <div className="grid gap-4 lg:grid-cols-[0.95fr_1.35fr]">
+            <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
+              <div className="border-b border-slate-100 px-4 py-3">
+                <h3 className="text-sm font-semibold text-slate-900">Việc nên làm tiếp</h3>
+              </div>
+              <div className="space-y-2 p-4">
+                {nextActions.map((action) => (
+                  <div key={action} className="rounded border border-slate-200 bg-white px-3 py-2 text-[11px] leading-5 text-slate-700">
+                    {action}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
+              <div className="border-b border-slate-100 px-4 py-3">
+                <h3 className="text-sm font-semibold text-slate-900">Yêu cầu nạp gần đây</h3>
+              </div>
+              <EmptyPreview
+                title="Chưa có yêu cầu nạp gần đây"
+                detail="Tạo yêu cầu nạp thủ công khi cần thêm credit."
+              />
+            </div>
           </div>
           <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
-            <div className="border-b border-slate-50 px-4 py-3">
-              <h3 className="text-xs font-semibold text-slate-900">Nhật ký gần đây</h3>
+            <div className="border-b border-slate-100 px-4 py-3">
+              <h3 className="text-sm font-semibold text-slate-900">Lịch sử sử dụng gần đây</h3>
             </div>
-            <div className="divide-y divide-slate-50">
-              {logs.map(([action, status, credit]) => (
-                <div key={action} className="grid grid-cols-[1fr_76px_70px] gap-2 px-4 py-2.5 text-[11px]">
-                  <span className="min-w-0 text-slate-700">{action}</span>
-                  <span
-                    className={
-                      status === "Đang chờ"
-                        ? "rounded bg-amber-50 px-1.5 py-0.5 text-center text-[10px] font-medium text-amber-700"
-                        : status === "Thất bại"
-                          ? "rounded bg-red-50 px-1.5 py-0.5 text-center text-[10px] font-medium text-red-700"
-                          : "rounded bg-emerald-50 px-1.5 py-0.5 text-center text-[10px] font-medium text-emerald-700"
-                    }
-                  >
-                    {status}
-                  </span>
-                  <span className="text-slate-500">{credit}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-3 rounded-lg border border-blue-100 bg-blue-50/50 p-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-semibold text-blue-900">Bản xem trước phản hồi</h3>
-              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">
-                Batch #104
-              </span>
-            </div>
-            <div className="space-y-1.5">
-              {["Nguyễn Văn A | 24 | Kỹ thuật", "Trần Thị B | 30 | Marketing", "Lê Văn C | 28 | Thiết kế"].map(
-                (item) => (
-                  <div key={item} className="rounded border border-blue-100/50 bg-white p-2 text-[10px] text-slate-600">
-                    {item}
-                  </div>
-                )
-              )}
-            </div>
-            <button className="w-full rounded border border-blue-200 bg-white py-2 text-[11px] font-semibold text-blue-600 transition-colors hover:bg-blue-50">
-              Xác nhận sau khi rà soát
-            </button>
+            <EmptyPreview
+              title="Chưa có lịch sử sử dụng gần đây"
+              detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây."
+            />
           </div>
         </div>
       </div>
@@ -562,8 +539,17 @@ function DashboardPreview() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-slate-100 bg-white p-3 shadow-sm">
-      <p className="text-[10px] font-medium uppercase text-slate-500">{label}</p>
-      <p className="text-lg font-bold text-slate-900">{value}</p>
+      <p className="text-xs text-slate-500">{label}</p>
+      <p className="mt-2 text-xl font-semibold text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function EmptyPreview({ title, detail }: { title: string; detail: string }) {
+  return (
+    <div className="m-4 rounded-lg border border-dashed border-slate-200 bg-white px-4 py-6 text-center">
+      <p className="text-sm font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-xs leading-5 text-slate-500">{detail}</p>
     </div>
   );
 }
