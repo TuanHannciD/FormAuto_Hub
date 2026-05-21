@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog } from "@/lib/api";
 import { displayAction, displayToolName } from "@/lib/labels";
@@ -20,10 +20,7 @@ export default function UsageLogsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Lịch sử sử dụng</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi thao tác hệ thống, credit đã dùng và kết quả xử lý.</p>
-      </div>
+      <PageHeader title="Lịch sử sử dụng" description="Theo dõi thao tác hệ thống, credit đã dùng và kết quả xử lý." />
       <div className="grid gap-4 md:grid-cols-3">
         <Metric label="Tổng thao tác" value={String(logs.length)} />
         <Metric label="Credit đã dùng" value={String(creditsUsed)} />
@@ -37,7 +34,20 @@ export default function UsageLogsPage() {
           {logs.length === 0 ? (
             <EmptyState title="Chưa có lịch sử sử dụng" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ được ghi tại đây." />
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            <MobileRecordList>
+              {logs.map((log) => (
+                <MobileRecord key={log.id}>
+                  <KeyValueRow label="Thời gian" value={formatDate(log.createdAt)} />
+                  <KeyValueRow label="Công cụ" value={displayToolName(log.toolName)} />
+                  <KeyValueRow label="Thao tác" value={displayAction(log.action)} />
+                  <KeyValueRow label="Credit" value={log.creditsUsed} />
+                  <KeyValueRow label="Kết quả" value={<StatusBadge status={log.status} />} />
+                  <KeyValueRow label="Mô tả" value={log.description} />
+                </MobileRecord>
+              ))}
+            </MobileRecordList>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
@@ -63,6 +73,7 @@ export default function UsageLogsPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </CardContent>
       </Card>

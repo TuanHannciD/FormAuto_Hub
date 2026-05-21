@@ -95,11 +95,11 @@ export default function TopUpOrderDetailPage() {
             </section>
           </div>
         </DialogBody>
-        <DialogFooter>
-          <Link className="inline-flex min-h-10 items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium hover:bg-muted" href="/dashboard/top-up">
+        <DialogFooter className="flex-col sm:flex-row">
+          <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium hover:bg-muted sm:w-auto" href="/dashboard/top-up">
             Quay lại yêu cầu nạp
           </Link>
-          <Button type="button" onClick={closeDialog}>Đóng</Button>
+          <Button className="w-full sm:w-auto" type="button" onClick={closeDialog}>Đóng</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -19,6 +19,10 @@ import {
   DialogTitle,
   EmptyState,
   Input,
+  KeyValueRow,
+  MobileRecord,
+  MobileRecordList,
+  PageHeader,
   Select
 } from "@/components/ui";
 import { apiFetch, type CreditPackage, type CreditPackageListResponse, type CreditPackageRequest } from "@/lib/api";
@@ -122,17 +126,17 @@ export default function AdminPackagesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">Admin / Gói credit</p>
-          <h2 className="mt-2 text-2xl font-semibold">Quản lý gói credit</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Tạo, sửa và bật tắt gói credit dùng cho nạp credit và PayOS.</p>
-        </div>
+      <PageHeader
+        eyebrow="Admin / Gói credit"
+        title="Quản lý gói credit"
+        description="Tạo, sửa và bật tắt gói credit dùng cho nạp credit và PayOS."
+        actions={
         <Button type="button" onClick={openCreateDialog}>
           <Plus size={16} />
           <span className="ml-2">Tạo gói mới</span>
         </Button>
-      </div>
+        }
+      />
 
       <div className="grid gap-4 md:grid-cols-4">
         <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
@@ -161,7 +165,32 @@ export default function AdminPackagesPage() {
             {filteredPackages.length === 0 ? (
               <EmptyState title="Chưa có gói phù hợp" detail="Tạo gói credit đầu tiên hoặc đổi bộ lọc hiện tại." />
             ) : (
-              <div className="overflow-x-auto">
+              <>
+              <MobileRecordList>
+                {filteredPackages.map((item) => (
+                  <MobileRecord key={item.id}>
+                    <KeyValueRow label="Tên gói" value={item.name} />
+                    <KeyValueRow label="Credit" value={`${item.credits} cr`} />
+                    <KeyValueRow label="Giá" value={formatCurrency(item.price)} />
+                    <KeyValueRow
+                      label="Trạng thái"
+                      value={
+                        <span className={item.isActive ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"}>
+                          {item.isActive ? "Đang bật" : "Đang tắt"}
+                        </span>
+                      }
+                    />
+                    <KeyValueRow label="Ngày tạo" value={formatDate(item.createdAt)} />
+                    <div className="border-t border-border pt-3">
+                      <Button className="w-full" type="button" variant="secondary" onClick={() => editPackage(item)}>
+                        <Pencil size={14} />
+                        <span className="ml-2">Sửa</span>
+                      </Button>
+                    </div>
+                  </MobileRecord>
+                ))}
+              </MobileRecordList>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
                   <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
                     <tr>
@@ -196,6 +225,7 @@ export default function AdminPackagesPage() {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </CardContent>
         </Card>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   ClipboardCheck,
@@ -13,10 +13,13 @@ import {
   ReceiptText,
   Settings,
   ShieldCheck,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from "lucide-react";
 import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
 import { Button } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
@@ -30,8 +33,10 @@ const navItems = [
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [session, setSession] = useState<AuthSession | null>(null);
   const [isChecking, setIsChecking] = useState(true);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     function syncSession() {
@@ -56,6 +61,38 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     await logoutCurrentSession();
     router.replace("/login");
   }
+
+  const navigation = (
+    <nav className="space-y-1">
+      {navItems.map((item) => (
+        <Link
+          className={cn(
+            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
+            pathname === item.href && "bg-primary/10 text-primary"
+          )}
+          href={item.href}
+          key={item.href}
+          onClick={() => setIsMobileNavOpen(false)}
+        >
+          <item.icon size={18} />
+          {item.label}
+        </Link>
+      ))}
+      {session?.role === "Admin" && (
+        <Link
+          className={cn(
+            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
+            pathname.startsWith("/admin") && "bg-primary/10 text-primary"
+          )}
+          href="/admin"
+          onClick={() => setIsMobileNavOpen(false)}
+        >
+          <Shield size={18} />
+          Khu vực admin
+        </Link>
+      )}
+    </nav>
+  );
 
   if (isChecking) {
     return (
@@ -85,49 +122,67 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <p className="text-xs text-muted-foreground">Bảng điều khiển vận hành</p>
           </div>
         </div>
-        <nav className="space-y-1">
-          {navItems.map((item) => (
-            <Link
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-              href={item.href}
-              key={item.href}
-            >
-              <item.icon size={18} />
-              {item.label}
-            </Link>
-          ))}
-          {session?.role === "Admin" && (
-            <Link
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-              href="/admin"
-            >
-              <Shield size={18} />
-              Khu vực admin
-            </Link>
-          )}
-        </nav>
+        {navigation}
       </aside>
-      <main className="lg:pl-72">
-        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-5 py-4 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs text-muted-foreground">
-              <span>Dashboard</span>
-              <span className="mx-2">/</span>
-              <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
+      {isMobileNavOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            aria-label="Đóng menu bằng lớp phủ"
+            className="absolute inset-0 bg-slate-950/40"
+            onClick={() => setIsMobileNavOpen(false)}
+            type="button"
+          />
+          <aside className="relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r border-border bg-white px-4 py-5 shadow-xl">
+            <div className="mb-7 flex items-center justify-between gap-3 px-2">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <ClipboardCheck size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold">FormAuto Hub</p>
+                  <p className="truncate text-xs text-muted-foreground">Bảng điều khiển vận hành</p>
+                </div>
+              </div>
+              <Button aria-label="Đóng menu" className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setIsMobileNavOpen(false)}>
+                <X size={16} />
+              </Button>
             </div>
-            <div className="flex items-center gap-3">
+            {navigation}
+          </aside>
+        </div>
+      )}
+      <main className="lg:pl-72">
+        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-4 py-3 backdrop-blur sm:px-5 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <Button
+                aria-label="Mở menu"
+                className="min-h-9 px-3 lg:hidden"
+                type="button"
+                variant="secondary"
+                onClick={() => setIsMobileNavOpen(true)}
+              >
+                <Menu size={16} />
+              </Button>
+              <div className="min-w-0 truncate text-xs text-muted-foreground">
+                <span>Dashboard</span>
+                <span className="mx-2">/</span>
+                <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <div className="hidden text-right text-xs text-muted-foreground sm:block">
                 <p className="font-medium text-foreground">{session?.fullName ?? "Người dùng FormAuto"}</p>
                 <p>{session?.email ?? ""}</p>
               </div>
-              <Button type="button" variant="secondary" onClick={logout}>
+              <Button className="min-h-9 px-3 sm:min-h-10 sm:px-4" type="button" variant="secondary" onClick={logout}>
                 <LogOut size={16} />
-                <span className="ml-2">Đăng xuất</span>
+                <span className="ml-2 hidden sm:inline">Đăng xuất</span>
               </Button>
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-7xl px-5 py-6">{children}</div>
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-5 sm:py-6">{children}</div>
       </main>
     </div>
   );

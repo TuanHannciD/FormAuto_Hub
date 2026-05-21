@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, FileText, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { DropdownSelect } from "@/components/dropdown-select";
-import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
+import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import {
   apiFetch,
@@ -185,17 +185,17 @@ export default function FormsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold">Tự động hóa Google Form</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Phân tích biểu mẫu, cài đặt câu trả lời, xem trước và chỉ gửi sau khi xác nhận.</p>
-        </div>
+      <PageHeader
+        title="Tự động hóa Google Form"
+        description="Phân tích biểu mẫu, cài đặt câu trả lời, xem trước và chỉ gửi sau khi xác nhận."
+        actions={
         <div className="flex flex-wrap gap-2">
           <Badge tone="info">Tối đa 100 bản xem trước</Badge>
           <Badge tone="neutral">Mỗi lượt gửi {SUBMISSION_BATCH_SIZE}</Badge>
           <Badge tone="success">Cần xác nhận trước khi gửi</Badge>
         </div>
-      </div>
+        }
+      />
 
       <Alert className="flex items-start gap-3">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
@@ -220,7 +220,7 @@ export default function FormsPage() {
               value={name}
               onChange={(event) => setName(limitText(event.target.value, PROJECT_NAME_MAX_LENGTH))}
             />
-            <Button disabled={busy || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
+            <Button className="w-full lg:w-auto" disabled={busy || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
           </form>
         </CardContent>
       </Card>
@@ -265,12 +265,12 @@ export default function FormsPage() {
                     onChange={(value) => setRuleConfigs((current) => ({ ...current, [question.id]: value }))}
                   />
                 ))}
-                <div className="flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
-                  <div>
+                <div className="flex flex-col gap-4 border-t border-border pt-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="w-full sm:w-auto">
                     <p className="text-sm font-medium">Số câu trả lời xem trước</p>
                     <p className="mt-1 text-xs text-muted-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
                     <Input
-                      className="mt-2 w-32"
+                      className="mt-2 w-full sm:w-32"
                       inputMode="numeric"
                       max={PREVIEW_COUNT_MAX}
                       min={PREVIEW_COUNT_MIN}
@@ -280,7 +280,7 @@ export default function FormsPage() {
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
                   </div>
-                  <Button disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
+                  <Button className="w-full sm:w-auto" disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
                     Lưu cách trả lời và tạo bản xem trước
                   </Button>
                 </div>
@@ -343,7 +343,7 @@ export default function FormsPage() {
                 </label>
                 <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs text-muted-foreground">Hệ thống chỉ gửi sau khi ô xác nhận được bật.</p>
-                  <Button disabled={busy || !confirmed} onClick={submitConfirmed} type="button">
+                  <Button className="w-full sm:w-auto" disabled={busy || !confirmed} onClick={submitConfirmed} type="button">
                     Gửi các bản xem trước đã xác nhận
                   </Button>
                 </div>
@@ -366,13 +366,13 @@ export default function FormsPage() {
               <span>Thất bại: {submission.failedCount}</span>
             </div>
             {(submission.status === "Running" || submission.status === "Pending") && (
-              <div className="flex flex-wrap gap-2">
-                <Button disabled={busy} onClick={pauseSubmission} type="button">Tạm dừng</Button>
-                <Button disabled={busy} onClick={cancelSubmission} type="button">Hủy</Button>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <Button className="w-full sm:w-auto" disabled={busy} onClick={pauseSubmission} type="button">Tạm dừng</Button>
+                <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy</Button>
               </div>
             )}
             {submission.status === "Paused" && (
-              <Button disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
+              <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
             {submission.logs.map((log) => (
               <div className="rounded-md border border-border p-3" key={log.id}>
@@ -414,7 +414,7 @@ function PreviewAccordion({
             {preview.answers.length} câu trả lời · {formatDate(preview.createdAt)}
           </span>
         </span>
-        <StatusBadge status={preview.status} />
+        <span className="hidden sm:inline-flex"><StatusBadge status={preview.status} /></span>
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-white text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </span>
@@ -561,13 +561,13 @@ function RuleEditor({
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-cyan-700">
             <FileQuestion className="h-4 w-4" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="font-medium">Câu {index + 1}: {question.label}</p>
+              <p className="min-w-0 break-words font-medium">Câu {index + 1}: {question.label}</p>
               <Badge>{questionTypeLabel(question.questionType)}</Badge>
               {question.required && <Badge tone="warning">Bắt buộc</Badge>}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">{question.entryId}</p>
+            <p className="mt-1 break-all text-xs text-muted-foreground">{question.entryId}</p>
           </div>
         </div>
         <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
@@ -708,8 +708,8 @@ function RuleEditor({
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {(question.options.length > 0 ? question.options : selectedOptions).map((option) => (
-                <label className="grid grid-cols-[1fr_120px] items-center gap-3 rounded-md border border-border bg-white px-3 py-2 text-sm" key={option}>
-                  <span className="min-w-0 truncate font-medium">{option}</span>
+                <label className="grid grid-cols-1 gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm sm:grid-cols-[1fr_120px] sm:items-center sm:gap-3" key={option}>
+                  <span className="min-w-0 break-words font-medium sm:truncate">{option}</span>
                   <div className="relative">
                     <Input
                       className={`h-9 min-h-9 text-right ${value.mode === "RandomByPercentage" ? "pr-8" : ""}`}

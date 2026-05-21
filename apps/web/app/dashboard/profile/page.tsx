@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
 import { apiFetch, type Profile } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
@@ -36,10 +36,7 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Hồ sơ</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Thông tin tài khoản dùng cho bảng điều khiển.</p>
-      </div>
+      <PageHeader title="Hồ sơ" description="Thông tin tài khoản dùng cho bảng điều khiển." />
       <Alert>Phiên hiện tại dùng mã đăng nhập ngắn hạn và mã làm mới. Đổi mật khẩu nằm trong mục bảo mật.</Alert>
       <Card>
         <CardHeader>
@@ -65,7 +62,7 @@ export default function ProfilePage() {
                 <p className="font-medium">{formatDate(profile?.createdAt)}</p>
               </div>
             </div>
-            <Button type="submit">Lưu hồ sơ</Button>
+            <Button className="w-full sm:w-auto" type="submit">Lưu hồ sơ</Button>
           </form>
         </CardContent>
       </Card>

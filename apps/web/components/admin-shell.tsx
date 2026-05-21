@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, Bell, Boxes, CreditCard, HelpCircle, LayoutDashboard, LogOut, Search, Settings, ShieldCheck } from "lucide-react";
+import { BarChart3, Bell, Boxes, CreditCard, HelpCircle, LayoutDashboard, LogOut, Menu, Search, Settings, ShieldCheck, X } from "lucide-react";
 import { Button, Input } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
@@ -21,6 +21,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [session, setSession] = useState<AuthSession | null>(null);
   const [isChecking, setIsChecking] = useState(true);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     const nextSession = getStoredSession();
@@ -35,6 +36,33 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     await logoutCurrentSession();
     router.replace("/login");
   }
+
+  const navigation = (
+    <nav className="space-y-1">
+      {navItems.map((item) => (
+        <Link
+          className={cn(
+            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
+            pathname === item.href && "bg-primary/10 text-primary"
+          )}
+          href={item.href}
+          key={item.href}
+          onClick={() => setIsMobileNavOpen(false)}
+        >
+          <item.icon size={18} />
+          {item.label}
+        </Link>
+      ))}
+      <Link
+        className="flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+        href="/dashboard"
+        onClick={() => setIsMobileNavOpen(false)}
+      >
+        <LayoutDashboard size={18} />
+        Về dashboard người dùng
+      </Link>
+    </nav>
+  );
 
   if (isChecking) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Đang kiểm tra quyền admin...</div>;
@@ -69,28 +97,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <p className="text-xs text-muted-foreground">Administrator</p>
           </div>
         </div>
-        <nav className="space-y-1">
-          {navItems.map((item) => (
-            <Link
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
-                pathname === item.href && "bg-primary/10 text-primary"
-              )}
-              href={item.href}
-              key={item.href}
-            >
-              <item.icon size={18} />
-              {item.label}
-            </Link>
-          ))}
-          <Link
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-            href="/dashboard"
-          >
-            <LayoutDashboard size={18} />
-            Về dashboard người dùng
-          </Link>
-        </nav>
+        {navigation}
         <div className="mt-auto space-y-4 border-t border-border pt-4">
           <Link className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground" href="/dashboard">
             <HelpCircle size={18} />
@@ -107,37 +114,86 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </aside>
-      <main className="lg:pl-64">
-        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-5 py-3 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs text-muted-foreground">
-              <span>Admin</span>
-              <span className="mx-2">/</span>
-              <span className="font-medium text-primary">Quản trị hệ thống</span>
+      {isMobileNavOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            aria-label="Đóng menu bằng lớp phủ"
+            className="absolute inset-0 bg-slate-950/40"
+            onClick={() => setIsMobileNavOpen(false)}
+            type="button"
+          />
+          <aside className="relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r border-border bg-white px-4 py-5 shadow-xl">
+            <div className="mb-7 flex items-center justify-between gap-3 px-2">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <ShieldCheck size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold">FormAuto Hub Admin</p>
+                  <p className="truncate text-xs text-muted-foreground">Administrator</p>
+                </div>
+              </div>
+              <Button aria-label="Đóng menu" className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setIsMobileNavOpen(false)}>
+                <X size={16} />
+              </Button>
             </div>
-            <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
+            {navigation}
+            <div className="mt-auto border-t border-border pt-4">
+              <div className="flex items-center gap-3 px-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {session.fullName.slice(0, 1).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-medium">{session.fullName}</p>
+                  <p className="truncate text-[11px] text-muted-foreground">{session.email}</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
+      <main className="lg:pl-64">
+        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-4 py-3 backdrop-blur sm:px-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <Button
+                aria-label="Mở menu"
+                className="min-h-9 px-3 lg:hidden"
+                type="button"
+                variant="secondary"
+                onClick={() => setIsMobileNavOpen(true)}
+              >
+                <Menu size={16} />
+              </Button>
+              <div className="min-w-0 truncate text-xs text-muted-foreground">
+                <span>Admin</span>
+                <span className="mx-2">/</span>
+                <span className="font-medium text-primary">Quản trị hệ thống</span>
+              </div>
+            </div>
+            <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
               <div className="relative hidden w-full max-w-sm md:block">
                 <Search className="pointer-events-none absolute left-3 top-2.5 text-muted-foreground" size={15} />
                 <Input disabled className="min-h-9 bg-muted/40 pl-9" placeholder="Tìm kiếm hệ thống..." />
               </div>
-              <Button aria-label="Thông báo" className="min-h-9 px-3" type="button" variant="secondary">
+              <Button aria-label="Thông báo" className="hidden min-h-9 px-3 sm:inline-flex" type="button" variant="secondary">
                 <Bell size={16} />
               </Button>
-              <Button aria-label="Trợ giúp" className="min-h-9 px-3" type="button" variant="secondary">
+              <Button aria-label="Trợ giúp" className="hidden min-h-9 px-3 sm:inline-flex" type="button" variant="secondary">
                 <HelpCircle size={16} />
               </Button>
               <div className="hidden text-right text-xs text-muted-foreground sm:block">
                 <p className="font-medium text-foreground">{session.fullName}</p>
                 <p>Admin</p>
               </div>
-              <Button type="button" variant="secondary" onClick={logout}>
+              <Button className="min-h-9 px-3 sm:min-h-10 sm:px-4" type="button" variant="secondary" onClick={logout}>
                 <LogOut size={16} />
-                <span className="ml-2">Đăng xuất</span>
+                <span className="ml-2 hidden sm:inline">Đăng xuất</span>
               </Button>
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-7xl px-5 py-6">{children}</div>
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-5 sm:py-6">{children}</div>
       </main>
     </div>
   );

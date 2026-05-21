@@ -59,7 +59,7 @@ function LoginContent() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-10">
+    <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-6 sm:px-5 sm:py-10">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ function LoginContent() {
             >
               Đăng nhập với Google
             </Button>
-            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+            <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
               <Link className="text-primary hover:underline" href="/register">
                 Tạo tài khoản
               </Link>

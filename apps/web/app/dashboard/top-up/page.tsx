@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, CheckCircle2, CreditCard } from "lucide-react";
 import { DropdownSelect } from "@/components/dropdown-select";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, Textarea } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, MobileRecord, MobileRecordList, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type CreatePayosTopupOrderResponse, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { showError } from "@/lib/toast";
@@ -72,21 +72,21 @@ export default function TopUpPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">Tài khoản / Nạp credit</p>
-          <h2 className="mt-2 text-2xl font-semibold">Nạp credit bằng PayOS</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Chọn gói credit, tạo link thanh toán và chờ backend xác minh PayOS.</p>
-        </div>
+      <PageHeader
+        eyebrow="Tài khoản / Nạp credit"
+        title="Nạp credit bằng PayOS"
+        description="Chọn gói credit, tạo link thanh toán và chờ backend xác minh PayOS."
+        actions={
         <div className="rounded-md border border-border bg-white px-3 py-2 text-sm">
           <span className="text-muted-foreground">Số dư: </span>
           <span className="font-semibold">{summary ? `${summary.currentCreditBalance} credit` : "-"}</span>
         </div>
-      </div>
+        }
+      />
 
       <Alert>Credit chỉ được cộng sau khi backend xác minh thanh toán thành công. Giao diện không tự cộng credit.</Alert>
 
-      <div className="grid gap-3 md:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
         {["Chọn gói", "Chọn PayOS", "Tạo link thanh toán", "Chờ xác minh"].map((step, index) => (
           <div className="flex items-center gap-3 rounded-md border border-border bg-white p-3 text-sm" key={step}>
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{index + 1}</span>
@@ -146,7 +146,7 @@ export default function TopUpPage() {
                 Ghi chú cho admin
                 <Textarea className="mt-2" value={paymentNote} onChange={(event) => setPaymentNote(event.target.value)} />
               </label>
-              <Button disabled={!packageId} type="submit">Gửi yêu cầu</Button>
+              <Button className="w-full sm:w-auto" disabled={!packageId} type="submit">Gửi yêu cầu</Button>
             </form>
           </CardContent>
         </Card>
@@ -190,7 +190,24 @@ export default function TopUpPage() {
           {orders.length === 0 ? (
             <EmptyState title="Chưa có yêu cầu nạp" detail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán." />
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            <MobileRecordList>
+              {orders.map((order) => (
+                <MobileRecord key={order.id}>
+                  <KeyValueRow label="Credit" value={order.credits} />
+                  <KeyValueRow label="Số tiền" value={formatCurrency(order.amount)} />
+                  <KeyValueRow label="Phương thức" value={order.paymentMethod} />
+                  <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
+                  <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
+                  <div className="border-t border-border pt-3">
+                    <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-muted" href={`/dashboard/top-up/${order.id}`}>
+                      Xem chi tiết
+                    </Link>
+                  </div>
+                </MobileRecord>
+              ))}
+            </MobileRecordList>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
@@ -220,6 +237,7 @@ export default function TopUpPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </CardContent>
       </Card>

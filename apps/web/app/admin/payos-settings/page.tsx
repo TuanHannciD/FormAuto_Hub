@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ComponentType, FormEvent } from "react";
 import { AlertCircle, BookOpen, CheckCircle2, Clipboard, Clock3, KeyRound, RefreshCw, Save, ShieldCheck } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, Select } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
 import { apiFetch, type CheckPayosProviderSettingsResponse, type PayosProviderSettings } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
@@ -68,17 +68,17 @@ export default function PayosSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">Admin / Cấu hình PayOS</p>
-          <h2 className="mt-2 text-2xl font-semibold">Cấu hình PayOS</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Quản lý trạng thái bật PayOS cho top-up credit tự động.</p>
-        </div>
+      <PageHeader
+        eyebrow="Admin / Cấu hình PayOS"
+        title="Cấu hình PayOS"
+        description="Quản lý trạng thái bật PayOS cho top-up credit tự động."
+        actions={
         <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => showError(error, "Không tải được cấu hình PayOS."))}>
           <RefreshCw size={16} />
           <span className="ml-2">Làm mới</span>
         </Button>
-      </div>
+        }
+      />
       <Alert className="border-amber-200 bg-amber-50 text-amber-900">
         Không hiển thị API key hoặc checksum key thật trên giao diện. Nếu để trống khóa bí mật khi lưu, hệ thống sẽ giữ khóa hiện có.
       </Alert>
@@ -104,7 +104,7 @@ export default function PayosSettingsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   Bật PayOS
-                  <span className="mt-2 flex min-h-10 items-center justify-between rounded-md border border-border bg-muted/30 px-3">
+                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border bg-muted/30 px-3 py-2 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép khách thanh toán qua cổng PayOS.</span>
                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -141,21 +141,21 @@ export default function PayosSettingsPage() {
                 </label>
               </div>
               <div className="rounded-md border border-sky-200 bg-sky-50 p-4 text-sm text-sky-950">
-                <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <p className="font-semibold">Webhook URL cấu hình trong PayOS dashboard</p>
                     <p className="mt-1 text-sky-800">
                       PayOS gửi POST vào URL này. Next.js sẽ chuyển tiếp payload sang backend API để backend xác minh chữ ký và cộng credit.
                     </p>
                   </div>
-                  <Button type="button" variant="secondary" onClick={copyWebhookUrl}>
+                  <Button className="w-full sm:w-auto" type="button" variant="secondary" onClick={copyWebhookUrl}>
                     <Clipboard size={16} />
                     <span className="ml-2">Sao chép</span>
                   </Button>
                 </div>
                 <Input className="mt-3 bg-white font-mono text-xs" readOnly value={webhookUrl} />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Button type="submit">
                   <Save size={16} />
                   <span className="ml-2">Lưu thay đổi</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
 import { Badge } from "@/components/ui";
 import { apiFetch, type CreditTransaction } from "@/lib/api";
 import { displayCreditTransactionType } from "@/lib/labels";
@@ -18,10 +18,7 @@ export default function CreditTransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Giao dịch credit</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Lịch sử ghi nhận credit được nạp và credit đã sử dụng.</p>
-      </div>
+      <PageHeader title="Giao dịch credit" description="Lịch sử ghi nhận credit được nạp và credit đã sử dụng." />
       <Card>
         <CardHeader>
           <CardTitle>Sổ ghi credit</CardTitle>
@@ -30,7 +27,19 @@ export default function CreditTransactionsPage() {
           {transactions.length === 0 ? (
             <EmptyState title="Chưa có giao dịch credit" detail="Yêu cầu nạp được duyệt và lần tạo bản xem trước thành công sẽ được ghi tại đây." />
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            <MobileRecordList>
+              {transactions.map((transaction) => (
+                <MobileRecord key={transaction.id}>
+                  <KeyValueRow label="Thời gian" value={formatDate(transaction.createdAt)} />
+                  <KeyValueRow label="Loại" value={<Badge tone="info">{displayCreditTransactionType(transaction.type)}</Badge>} />
+                  <KeyValueRow label="Số credit" value={transaction.amount} />
+                  <KeyValueRow label="Số dư sau đó" value={transaction.balanceAfter} />
+                  <KeyValueRow label="Mô tả" value={transaction.description} />
+                </MobileRecord>
+              ))}
+            </MobileRecordList>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
@@ -54,6 +63,7 @@ export default function CreditTransactionsPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </CardContent>
       </Card>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
@@ -21,17 +21,17 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">Admin / Tổng quan</p>
-          <h2 className="mt-2 text-2xl font-semibold">Tổng quan quản trị</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Theo dõi doanh thu, credit và trạng thái thanh toán PayOS.</p>
-        </div>
+      <PageHeader
+        eyebrow="Admin / Tổng quan"
+        title="Tổng quan quản trị"
+        description="Theo dõi doanh thu, credit và trạng thái thanh toán PayOS."
+        actions={
         <Button type="button" variant="secondary">
           <RefreshCw size={16} />
           <span className="ml-2">Làm mới</span>
         </Button>
-      </div>
+        }
+      />
       <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
         <Metric icon={CircleDollarSign} label="Tổng doanh thu" tone="blue" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={CreditCard} label="Credit đã bán" tone="emerald" value={summary ? `${summary.creditSold} cr` : "-"} />
@@ -54,11 +54,25 @@ export default function AdminDashboardPage() {
             {!summary || summary.recentPayments.length === 0 ? (
               <EmptyState title="Chưa có thanh toán" detail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán." />
             ) : (
-              <div className="overflow-x-auto">
+              <>
+              <MobileRecordList>
+                {summary.recentPayments.map((item) => (
+                  <MobileRecord key={item.id}>
+                    <KeyValueRow label="Mã PayOS" value={item.providerOrderCode} />
+                    <KeyValueRow label="Người dùng" value={displayPaymentUser(item)} />
+                    <KeyValueRow label="Số tiền" value={formatCurrency(item.amount)} />
+                    <KeyValueRow label="Credit" value={`${item.credits} cr`} />
+                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={item.providerStatus} />} />
+                    <KeyValueRow label="Tạo lúc" value={formatDate(item.createdAt)} />
+                  </MobileRecord>
+                ))}
+              </MobileRecordList>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
                   <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
                     <tr>
                       <th className="px-3 py-2">Mã PayOS</th>
+                      <th className="px-3 py-2">Người dùng</th>
                       <th className="px-3 py-2">Số tiền</th>
                       <th className="px-3 py-2">Credit</th>
                       <th className="px-3 py-2">Trạng thái</th>
@@ -69,6 +83,11 @@ export default function AdminDashboardPage() {
                     {summary.recentPayments.map((item) => (
                       <tr className="border-t border-border" key={item.id}>
                         <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
+                        <td className="px-3 py-3">
+                          <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+                            {displayPaymentUser(item)}
+                          </span>
+                        </td>
                         <td className="px-3 py-3">{formatCurrency(item.amount)}</td>
                         <td className="px-3 py-3">{item.credits} cr</td>
                         <td className="px-3 py-3"><StatusBadge status={item.providerStatus} /></td>
@@ -78,6 +97,7 @@ export default function AdminDashboardPage() {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -116,6 +136,10 @@ export default function AdminDashboardPage() {
       </div>
     </div>
   );
+}
+
+function displayPaymentUser(item: AdminRevenueSummary["recentPayments"][number]) {
+  return item.userEmail || item.userId.slice(0, 8);
 }
 
 function Metric({

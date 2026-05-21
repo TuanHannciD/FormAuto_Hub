@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary } from "@/lib/api";
 import { displayAction } from "@/lib/labels";
@@ -20,10 +20,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Tổng quan vận hành</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Theo dõi credit, yêu cầu nạp và các thao tác biểu mẫu gần đây.</p>
-      </div>
+      <PageHeader title="Tổng quan vận hành" description="Theo dõi credit, yêu cầu nạp và các thao tác biểu mẫu gần đây." />
 
       <Alert>
         Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
@@ -61,7 +58,18 @@ export default function DashboardPage() {
             {!summary || summary.recentTopupOrders.length === 0 ? (
               <EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
             ) : (
-              <div className="overflow-x-auto">
+              <>
+              <MobileRecordList>
+                {summary.recentTopupOrders.map((order) => (
+                  <MobileRecord key={order.id}>
+                    <KeyValueRow label="Credit" value={order.credits} />
+                    <KeyValueRow label="Số tiền" value={formatCurrency(order.amount)} />
+                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
+                    <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
+                  </MobileRecord>
+                ))}
+              </MobileRecordList>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-sm">
                   <thead className="text-left text-muted-foreground">
                     <tr>
@@ -83,6 +91,7 @@ export default function DashboardPage() {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -93,10 +102,22 @@ export default function DashboardPage() {
           <CardTitle>Lịch sử sử dụng gần đây</CardTitle>
         </CardHeader>
         <CardContent>
-          {!summary || summary.recentUsageLogs.length === 0 ? (
-            <EmptyState title="Chưa có lịch sử sử dụng gần đây" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây." />
-          ) : (
-            <div className="overflow-x-auto">
+            {!summary || summary.recentUsageLogs.length === 0 ? (
+              <EmptyState title="Chưa có lịch sử sử dụng gần đây" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây." />
+            ) : (
+            <>
+            <MobileRecordList>
+              {summary.recentUsageLogs.map((log) => (
+                <MobileRecord key={log.id}>
+                  <KeyValueRow label="Thời gian" value={formatDate(log.createdAt)} />
+                  <KeyValueRow label="Thao tác" value={displayAction(log.action)} />
+                  <KeyValueRow label="Credit" value={log.creditsUsed} />
+                  <KeyValueRow label="Kết quả" value={<StatusBadge status={log.status} />} />
+                  <KeyValueRow label="Mô tả" value={log.description} />
+                </MobileRecord>
+              ))}
+            </MobileRecordList>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead className="text-left text-muted-foreground">
                   <tr>
@@ -120,6 +141,7 @@ export default function DashboardPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </CardContent>
       </Card>

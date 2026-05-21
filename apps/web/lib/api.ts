@@ -167,6 +167,7 @@ export type AdminPayment = {
   id: string;
   topupOrderId: string;
   userId: string;
+  userEmail: string;
   provider: string;
   providerOrderCode: string;
   providerPaymentLinkId: string;

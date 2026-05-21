@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
 import { apiFetch } from "@/lib/api";
 import { logoutCurrentSession } from "@/lib/auth";
 import { readableError } from "@/lib/toast";
@@ -67,10 +67,7 @@ export default function ProfileSecurityPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold">Bảo mật tài khoản</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Quản lý mật khẩu, phiên hiện tại và liên kết đăng nhập.</p>
-      </div>
+      <PageHeader title="Bảo mật tài khoản" description="Quản lý mật khẩu, phiên hiện tại và liên kết đăng nhập." />
       <div className="grid gap-4 lg:grid-cols-[1fr_0.85fr]">
         <Card>
           <CardHeader>
@@ -91,7 +88,7 @@ export default function ProfileSecurityPage() {
                 Xác nhận mật khẩu mới
                 <Input className="mt-2" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
               </label>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button className="w-full sm:w-auto" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Đang đổi mật khẩu..." : "Đổi mật khẩu"}
               </Button>
             </form>
@@ -108,7 +105,7 @@ export default function ProfileSecurityPage() {
                 <span className="text-muted-foreground">Trạng thái</span>
                 <Badge tone="success">Đang đăng nhập</Badge>
               </div>
-              <Button type="button" variant="danger" onClick={logout}>
+              <Button className="w-full" type="button" variant="danger" onClick={logout}>
                 Đăng xuất phiên hiện tại
               </Button>
             </CardContent>
@@ -123,7 +120,7 @@ export default function ProfileSecurityPage() {
                 <span className="text-muted-foreground">Liên kết</span>
                 <Badge tone="warning">Đang cập nhật</Badge>
               </div>
-              <Button type="button" variant="secondary" disabled>
+              <Button className="w-full" type="button" variant="secondary" disabled>
                 Liên kết Google đang cập nhật
               </Button>
             </CardContent>

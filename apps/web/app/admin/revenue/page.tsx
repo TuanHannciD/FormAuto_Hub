@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, BarChart3, CircleDollarSign, Download, RefreshCw, TrendingUp } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Select } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, PageHeader, Select } from "@/components/ui";
 import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatCurrency } from "@/lib/utils";
@@ -19,17 +19,16 @@ export default function RevenueReportPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-muted-foreground">Admin / Báo cáo doanh thu</p>
-          <h2 className="mt-2 text-2xl font-semibold">Báo cáo doanh thu</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Theo dõi doanh thu PayOS, credit đã cấp và giao dịch cần đối soát.</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Select disabled className="w-32" defaultValue="day">
+      <PageHeader
+        eyebrow="Admin / Báo cáo doanh thu"
+        title="Báo cáo doanh thu"
+        description="Theo dõi doanh thu PayOS, credit đã cấp và giao dịch cần đối soát."
+        actions={
+        <>
+          <Select disabled className="w-full sm:w-32" defaultValue="day">
             <option value="day">Ngày</option>
           </Select>
-          <Select disabled className="w-40" defaultValue="payos">
+          <Select disabled className="w-full sm:w-40" defaultValue="payos">
             <option value="payos">PayOS</option>
           </Select>
           <Button type="button" variant="secondary">
@@ -39,8 +38,9 @@ export default function RevenueReportPage() {
           <Button type="button" variant="secondary">
             <RefreshCw size={16} />
           </Button>
-        </div>
-      </div>
+        </>
+        }
+      />
       <div className="grid gap-4 md:grid-cols-4">
         <Metric icon={CircleDollarSign} label="Tiền đến đã thanh toán" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={TrendingUp} label="Tổng credit đã cấp" value={summary ? `${summary.creditSold} cr` : "-"} />

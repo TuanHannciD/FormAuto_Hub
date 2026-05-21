@@ -76,6 +76,56 @@ export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDi
   return <div className={cn("p-5", className)} {...props} />;
 }
 
+export function PageHeader({
+  eyebrow,
+  title,
+  description,
+  actions,
+  className
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  actions?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between", className)}>
+      <div className="min-w-0">
+        {eyebrow && <p className="text-xs text-muted-foreground">{eyebrow}</p>}
+        <h2 className={cn("font-semibold leading-tight tracking-tight", eyebrow ? "mt-2 text-2xl" : "text-2xl")}>{title}</h2>
+        {description && <p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>}
+      </div>
+      {actions && <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">{actions}</div>}
+    </div>
+  );
+}
+
+export function MobileRecordList({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("space-y-3 md:hidden", className)} {...props} />;
+}
+
+export function MobileRecord({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <article className={cn("rounded-lg border border-border bg-white p-4 shadow-soft", className)} {...props} />;
+}
+
+export function KeyValueRow({
+  label,
+  value,
+  className
+}: {
+  label: string;
+  value: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex items-start justify-between gap-4 border-t border-border py-2 first:border-t-0 first:pt-0 last:pb-0", className)}>
+      <span className="shrink-0 text-xs text-muted-foreground">{label}</span>
+      <span className="min-w-0 break-words text-right text-sm font-medium">{value}</span>
+    </div>
+  );
+}
+
 export function Button({
   className,
   variant = "primary",

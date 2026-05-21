@@ -204,13 +204,13 @@ export default function LandingPage() {
               FAQ
             </a>
           </div>
-          <div className="hidden items-center gap-3 sm:flex">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link href="/login" className="text-sm font-medium text-slate-700 hover:text-blue-600">
               Đăng nhập
             </Link>
             <Link
               href="/register"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+              className="hidden rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:inline-flex"
             >
               Bắt đầu miễn phí
             </Link>
@@ -225,7 +225,7 @@ export default function LandingPage() {
             <p className="inline-flex rounded border border-blue-100 bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
               QUY TRÌNH GOOGLE FORMS CÓ KIỂM SOÁT
             </p>
-            <h1 className="mb-6 mt-6 max-w-[22rem] break-words text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:max-w-3xl md:text-5xl">
+            <h1 className="mb-6 mt-6 max-w-[22rem] break-words text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:max-w-3xl sm:text-4xl md:text-5xl">
               Xem trước, xác nhận và theo dõi quy trình phản hồi Google Forms
             </h1>
             <p className="mt-6 max-w-[22rem] text-base leading-8 text-slate-600 sm:max-w-2xl md:text-lg">
@@ -460,7 +460,7 @@ function DashboardPreview() {
   ];
 
   return (
-    <div className="flex h-[520px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl">
+    <div className="flex h-[420px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl sm:h-[520px]">
       <div className="flex h-12 items-center justify-between border-b border-slate-100 bg-slate-50/50 px-4">
         <div className="flex gap-1.5">
           <span className="h-3 w-3 rounded-full bg-slate-200" />
@@ -482,7 +482,7 @@ function DashboardPreview() {
             <p className="rounded px-2 py-1.5">Hồ sơ</p>
           </div>
         </aside>
-        <div className="min-w-0 flex-1 space-y-6 overflow-y-auto bg-slate-50/30 p-5">
+        <div className="min-w-0 flex-1 space-y-5 overflow-y-auto bg-slate-50/30 p-4 sm:space-y-6 sm:p-5">
           <div>
             <h2 className="text-base font-bold text-slate-900">Tổng quan vận hành</h2>
             <p className="mt-1 text-xs leading-5 text-slate-500">

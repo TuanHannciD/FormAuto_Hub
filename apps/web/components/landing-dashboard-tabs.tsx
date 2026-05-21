@@ -33,7 +33,7 @@ export function LandingDashboardTabs() {
             </button>
           ))}
         </div>
-        <div className="min-h-[420px] bg-slate-50/60 p-5 md:p-6">
+        <div className="min-h-[420px] bg-slate-50/60 p-3 sm:p-5 md:p-6">
           {activeTab === "overview" && <OverviewPanel />}
           {activeTab === "topups" && (
             <TablePanel
@@ -130,7 +130,16 @@ function TablePanel({
       <div className="border-b border-slate-100 px-4 py-3">
         <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
       </div>
-      <div className="overflow-x-auto px-4 pt-3">
+      <div className="px-4 pt-3">
+        <div className="grid gap-2 sm:hidden">
+          {columns.slice(0, 4).map((column) => (
+            <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600" key={column}>
+              {column}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="hidden overflow-x-auto px-4 pt-3 sm:block">
         <table className="w-full min-w-[620px] text-left text-sm">
           <thead className="text-slate-500">
             <tr>
