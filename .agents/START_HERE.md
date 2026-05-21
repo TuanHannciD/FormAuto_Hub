@@ -21,7 +21,7 @@ Use this file as the short entrypoint for AI/operator sessions.
 
 ## Current Baseline
 
-- Current phase: Phase 7 - Authentication and account access.
+- Current phase: Phase 9 closeout completed; next phase not selected.
 - Backend: ASP.NET Core Web API .NET 9.
 - Database: SQL Server.
 - ORM: Entity Framework Core.
@@ -30,4 +30,5 @@ Use this file as the short entrypoint for AI/operator sessions.
 - Frontend framework: Next.js web dashboard.
 - Authentication uses JWT access tokens with refresh token/session storage.
 - Google account login/register is identity-only.
-- Payment gateway, official Google Forms API, AI generation, and background job framework: Deferred.
+- PayOS automated credit top-up is approved and completed in Phase 8.
+- Payment providers other than PayOS, official Google Forms API, AI generation, and background job framework: Deferred.

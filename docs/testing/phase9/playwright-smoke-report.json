@@ -1,0 +1,80 @@
+{
+  "ok": [
+    {
+      "viewport": "desktop",
+      "route": "/dashboard"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/dashboard/forms"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/dashboard/top-up"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/dashboard/profile"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/dashboard/usage-logs"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/dashboard/credit-transactions"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin guard"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard/forms"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard/top-up"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard/profile"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard/usage-logs"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/dashboard/credit-transactions"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin guard"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "console": [],
+  "requests": [],
+  "screenshots": [
+    "dashboard-desktop.png",
+    "dashboard_forms-desktop.png",
+    "dashboard_top-up-desktop.png",
+    "dashboard_profile-desktop.png",
+    "dashboard_usage-logs-desktop.png",
+    "dashboard_credit-transactions-desktop.png",
+    "admin-guard-desktop.png",
+    "dashboard-mobile.png",
+    "dashboard_forms-mobile.png",
+    "dashboard_top-up-mobile.png",
+    "dashboard_profile-mobile.png",
+    "dashboard_usage-logs-mobile.png",
+    "dashboard_credit-transactions-mobile.png",
+    "admin-guard-mobile.png"
+  ]
+}

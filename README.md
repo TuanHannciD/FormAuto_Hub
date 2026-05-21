@@ -8,7 +8,7 @@ This repository contains the documentation baseline and the initial Phase 1 back
 
 ## Current Phase
 
-Current phase: **Phase 8 closeout completed; next phase not selected**.
+Current phase: **Phase 9 closeout completed; next phase not selected**.
 
 Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
 
@@ -98,6 +98,8 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_8_KICKOFF_PLAN.md` | `docs/vi/PHASE_8_KICKOFF_PLAN.md` | Yes |
 | `docs/ai/PHASE_8_CLOSEOUT.md` | `docs/vi/PHASE_8_CLOSEOUT.md` | Yes |
+| `docs/ai/PHASE_9_KICKOFF_PLAN.md` | `docs/vi/PHASE_9_KICKOFF_PLAN.md` | Yes |
+| `docs/ai/PHASE_9_CLOSEOUT.md` | `docs/vi/PHASE_9_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_EXECUTION_RULES.md` | `docs/vi/PHASE_EXECUTION_RULES.md` | Yes |
 | `docs/ai/TECH_STACK_DECISIONS.md` | `docs/vi/TECH_STACK_DECISIONS.md` | Yes |
 | `docs/ai/ENVIRONMENT_SETUP.md` | `docs/vi/ENVIRONMENT_SETUP.md` | Yes |

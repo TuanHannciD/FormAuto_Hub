@@ -101,4 +101,4 @@ Closeout này giữ đúng Phase 8:
 
 Phase 8 local implementation và các follow-up PayOS/package đã duyệt đã hoàn tất trong scope đã duyệt.
 
-Phase tiếp theo chưa được chọn. Bất kỳ Phase 9 hoặc production-hardening follow-up nào cũng cần approval riêng.
+Tại thời điểm closeout Phase 8, phase tiếp theo chưa được chọn. Phase 9 sau đó đã được duyệt là phase validation/debug; xem `PHASE_9_KICKOFF_PLAN.md`.

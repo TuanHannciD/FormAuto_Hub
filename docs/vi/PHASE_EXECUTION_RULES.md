@@ -8,31 +8,29 @@ Ngăn phase creep và việc vô tình approve future work.
 
 Default active phase là current phase trong `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: chưa chọn phase mới sau closeout Phase 8.
+Current active phase: chưa chọn phase mới sau closeout Phase 9.
 
-Cho đến khi phase tiếp theo được approve, chỉ được làm follow-up đã document trong phạm vi Phase 8 đã hoàn tất.
+Cho đến khi phase tiếp theo được duyệt, chỉ được làm follow-up đã được approve rõ.
 
-Follow-up sau closeout đã duyệt:
+Trạng thái closeout Phase 9:
 
-- Admin credit package management chỉ được duyệt cho tạo và cập nhật các field `CreditPackages` hiện có: `Name`, `Credits`, `Price`, và `IsActive`.
-- Package đang tắt có thể bị ẩn khỏi lựa chọn top-up của normal user.
-- Hard delete package, discount, subscription pricing, màu package, và merchandising metadata vẫn là `Deferred:`.
+- Scope validation/debug của Phase 9 đã hoàn tất.
+- Phase 9 không duyệt automatic fixes sau closeout.
+- Bất kỳ Phase 10, production-hardening, implementation hoặc fix follow-up nào cũng cần approval rõ.
 
 ## Việc trong phase
 
-Phase 8 chỉ cho phép scope admin, doanh thu và nạp credit tự động qua PayOS đã được duyệt:
+Chưa chọn active phase mới.
 
-- khu vực admin riêng
-- báo cáo doanh thu và credit cho admin
-- tạo payment link PayOS cho top-up orders
-- xử lý PayOS callback/webhook
-- xác minh tính hợp lệ của PayOS trước khi cộng credit
-- tự động cộng credit sau khi PayOS xác nhận thanh toán hợp lệ
-- cộng credit idempotent để tránh cộng trùng
-- lịch sử thanh toán và credit transaction cho admin review
-- documentation sync tập trung cho Phase 8 changes
+Việc an toàn sau closeout Phase 9 chỉ gồm:
 
-Phase 8 không tự động approve toàn bộ payment hoặc production integrations. PayOS là payment provider duy nhất được duyệt trong phase này. Mỗi API contract, database field, status, lifecycle rule, webhook verification rule và validation plan vẫn cần review trước khi implement. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, và AI auto-submit khi thiếu preview/confirmation vẫn bị cấm.
+- đọc docs và reports
+- trả lời câu hỏi trạng thái
+- đề xuất scope phase tiếp theo hoặc follow-up
+- cập nhật tài liệu khi được user approve rõ
+- implementation/fix work chỉ sau khi được approve rõ
+
+PayOS vẫn là payment provider duy nhất được duyệt. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, và AI auto-submit khi thiếu preview/confirmation vẫn bị cấm.
 
 ## Deferred items
 
@@ -56,6 +54,7 @@ Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
 - deployment platform
 - automated refund behavior
 - subscription billing
+- tự động fix bug sau closeout Phase 9 nếu chưa được duyệt riêng
 
 Hướng dẫn candidate tương lai:
 

@@ -6,7 +6,7 @@ Define FormAuto Hub delivery phases and scope gates.
 
 ## Current Phase
 
-Current phase: **Phase 8 closeout completed; next phase not selected**.
+Current phase: **Phase 9 closeout completed; next phase not selected**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -282,6 +282,51 @@ Closeout:
 
 - See `PHASE_8_CLOSEOUT.md`.
 
+## Phase 9 - Full-stack real-user debug and smoke validation
+
+Status: Completed.
+
+Approved scope:
+
+- full-stack debug and smoke validation across API, UI, authentication, credits, form automation, admin, reporting, and PayOS top-up
+- real browser UI smoke using Playwright
+- real HTTP API smoke using authenticated user and admin sessions
+- real database-backed checks against an approved database target
+- live Google Form workflow smoke using the approved Google Form URL
+- deep bug-hunting matrix for edge cases, security guards, data consistency, and UI/runtime defects
+- creation of a real PayOS checkout link for the approved 2,000 VND package
+- stop at the payment link checkpoint until the user completes real payment
+- final post-payment verification and report after user payment confirmation
+
+Scope boundaries:
+
+- Phase 9 is a validation/debug phase, not a feature implementation phase.
+- Defects may be reported and prioritized, but fixes require separate approval unless the user explicitly opens a fix task.
+- Do not replace real-user workflow validation with unrelated fake/mock data.
+- Do not grant credit manually to hide a payment, webhook, or ledger defect.
+- Do not weaken preview-before-submit, confirmation, response limit, batch size, auth, admin, or anti-abuse rules.
+
+Deferred:
+
+- new product features
+- new API contracts
+- new database fields or migrations unless a separate fix task approves them
+- payment providers other than PayOS
+- subscription billing
+- automated refunds
+- official Google Forms API
+- Google Forms watches or background sync
+- AI mapping/generation
+- production background job framework
+
+Kickoff plan:
+
+- See `PHASE_9_KICKOFF_PLAN.md`.
+
+Closeout:
+
+- See `PHASE_9_CLOSEOUT.md`.
+
 ## Phase Rule
 
-No next phase is selected after Phase 8 closeout. New phase work requires explicit approval or must be narrowed to a documented safe follow-up.
+No next phase is selected after Phase 9 closeout. New phase work or implementation/fix follow-up requires explicit approval.

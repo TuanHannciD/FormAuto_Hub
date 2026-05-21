@@ -101,4 +101,4 @@ This closeout stayed inside Phase 8:
 
 Phase 8 local implementation and the approved post-closeout PayOS/package follow-ups are complete for the approved scope.
 
-Next phase is not selected. Any Phase 9 or follow-up production-hardening scope requires separate approval.
+At the time of Phase 8 closeout, the next phase was not selected. Phase 9 was later approved as a validation/debug phase; see `PHASE_9_KICKOFF_PLAN.md`.

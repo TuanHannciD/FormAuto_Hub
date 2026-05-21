@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Current phase: **Closeout Phase 8 đã hoàn tất; chưa chọn phase tiếp theo**.
+Current phase: **Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo**.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -282,6 +282,51 @@ Closeout:
 
 - Xem `PHASE_8_CLOSEOUT.md`.
 
+## Phase 9 - Debug full-stack và smoke validation bằng người dùng thật
+
+Status: Completed.
+
+Scope đã duyệt:
+
+- debug và smoke validation full-stack trên API, UI, authentication, credits, form automation, admin, reporting và PayOS top-up
+- smoke UI bằng browser thật với Playwright
+- smoke API bằng HTTP request thật với session user/admin đã xác thực
+- kiểm tra database-backed behavior trên database target đã duyệt
+- live Google Form workflow smoke bằng Google Form URL đã duyệt
+- ma trận moi lỗi sâu cho edge cases, security guards, data consistency và UI/runtime defects
+- tạo PayOS checkout link thật cho package 2.000 VND đã duyệt
+- dừng tại checkpoint payment link cho đến khi user thanh toán thật
+- verify sau thanh toán và hoàn thiện report sau khi user xác nhận đã thanh toán
+
+Ranh giới scope:
+
+- Phase 9 là phase validation/debug, không phải phase implement tính năng.
+- Defect được report và xếp ưu tiên, nhưng fix cần approval riêng trừ khi user mở task fix rõ ràng.
+- Không thay thế real-user workflow validation bằng fake/mock data không liên quan.
+- Không cộng credit thủ công để che lỗi payment, webhook hoặc ledger.
+- Không làm yếu preview-before-submit, confirmation, response limit, batch size, auth, admin hoặc anti-abuse rules.
+
+Deferred:
+
+- tính năng sản phẩm mới
+- API contract mới
+- database field hoặc migration mới trừ khi có task fix riêng duyệt
+- payment provider khác PayOS
+- subscription billing
+- automated refunds
+- official Google Forms API
+- Google Forms watches hoặc background sync
+- AI mapping/generation
+- production background job framework
+
+Kickoff plan:
+
+- Xem `PHASE_9_KICKOFF_PLAN.md`.
+
+Closeout:
+
+- Xem `PHASE_9_CLOSEOUT.md`.
+
 ## Phase Rule
 
-Chưa chọn phase tiếp theo sau closeout Phase 8. Công việc phase mới cần approval rõ hoặc phải thu hẹp thành follow-up an toàn đã được document.
+Chưa chọn phase tiếp theo sau closeout Phase 9. Công việc phase mới hoặc implementation/fix follow-up cần approval rõ.

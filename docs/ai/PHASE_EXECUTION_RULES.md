@@ -8,31 +8,29 @@ Prevent phase creep and accidental approval of future work.
 
 Default active phase is the current phase in `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: none selected after Phase 8 closeout.
+Current active phase: none selected after Phase 9 closeout.
 
-Until the next phase is approved, only documented follow-up work for the completed Phase 8 scope may proceed.
+Until the next phase is approved, only explicitly approved follow-up work may proceed.
 
-Approved post-closeout follow-up:
+Phase 9 closeout state:
 
-- Admin credit package management is approved only for creating and updating existing `CreditPackages` fields: `Name`, `Credits`, `Price`, and `IsActive`.
-- Inactive packages may be hidden from normal user top-up selection.
-- Package hard delete, discounts, subscription pricing, package colors, and merchandising metadata remain Deferred.
+- Phase 9 validation/debug scope is completed.
+- Phase 9 does not approve automatic fixes after closeout.
+- Any Phase 10, production-hardening, implementation, or fix follow-up requires explicit approval.
 
 ## In-Phase Work
 
-Phase 8 allows only the approved admin, revenue, and PayOS automated credit top-up scope:
+No new active phase is selected.
 
-- dedicated admin area
-- admin revenue and credit reporting
-- PayOS payment link creation for top-up orders
-- PayOS callback/webhook handling
-- PayOS authenticity verification before applying credit
-- automatic credit grant after verified PayOS payment
-- idempotent credit application to prevent duplicate credit grants
-- payment and credit transaction history for admin review
-- focused documentation sync for Phase 8 changes
+Safe work after Phase 9 closeout is limited to:
 
-Phase 8 does not approve every payment or production integration. PayOS is the only approved payment provider for this phase. Each API contract, database field, status, lifecycle rule, webhook verification rule, and validation plan still requires review before implementation. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, and AI auto-submit without preview and confirmation remain forbidden.
+- reading docs and reports
+- answering status questions
+- proposing next-phase or follow-up scope
+- documentation updates explicitly approved by the user
+- implementation/fix work only after explicit approval
+
+PayOS remains the only approved payment provider. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, and AI auto-submit without preview and confirmation remain forbidden.
 
 ## Deferred Items
 
@@ -56,6 +54,7 @@ The following must remain Deferred until approved:
 - deployment platform
 - automated refund behavior
 - subscription billing
+- automatic bug fixes after Phase 9 closeout unless separately approved
 
 Future candidate guidance:
 

@@ -1,0 +1,66 @@
+{
+  "ok": [
+    {
+      "viewport": "desktop",
+      "route": "/admin"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin/payments"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin/revenue"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin/packages"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/admin/payos-settings"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin/payments"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin/revenue"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin/packages"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/admin/payos-settings"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "console": [],
+  "requests": [
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3000/dashboard?_rsc=utQopaZyVbfSG9h2",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "screenshots": [
+    "admin-desktop.png",
+    "admin_payments-desktop.png",
+    "admin_revenue-desktop.png",
+    "admin_packages-desktop.png",
+    "admin_payos-settings-desktop.png",
+    "admin-mobile.png",
+    "admin_payments-mobile.png",
+    "admin_revenue-mobile.png",
+    "admin_packages-mobile.png",
+    "admin_payos-settings-mobile.png"
+  ]
+}
