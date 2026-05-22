@@ -87,7 +87,7 @@ export default function TopUpPage() {
       <Alert>Credit chỉ được cộng sau khi backend xác minh thanh toán thành công. Giao diện không tự cộng credit.</Alert>
 
       <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-        {["Chọn gói", "Chọn PayOS", "Tạo link thanh toán", "Chờ xác minh"].map((step, index) => (
+        {["Chọn gói", "Tạo link PayOS", "Thanh toán", "Chờ xác minh"].map((step, index) => (
           <div className="flex items-center gap-3 rounded-md border border-border bg-white p-3 text-sm" key={step}>
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{index + 1}</span>
             <span>{step}</span>
@@ -95,7 +95,7 @@ export default function TopUpPage() {
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.35fr_0.75fr]">
+      <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-4">
           <Card>
           <CardHeader>
@@ -132,35 +132,39 @@ export default function TopUpPage() {
           </CardContent>
         </Card>
 
-          <Card>
-          <CardHeader>
-            <CardTitle>Yêu cầu đối soát</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4" onSubmit={submitOrder}>
-              <label className="block text-sm font-medium">
-                Phương thức ghi nhận
-                <Input className="mt-2" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
-              </label>
-              <label className="block text-sm font-medium">
-                Ghi chú cho admin
-                <Textarea className="mt-2" value={paymentNote} onChange={(event) => setPaymentNote(event.target.value)} />
-              </label>
-              <Button className="w-full sm:w-auto" disabled={!packageId} type="submit">Gửi yêu cầu</Button>
-            </form>
-          </CardContent>
-        </Card>
+          <details className="rounded-lg border border-border bg-white shadow-soft">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-semibold">
+              <span>Yêu cầu đối soát thủ công</span>
+              <span className="text-xs font-medium text-muted-foreground">Dùng khi PayOS chưa cập nhật</span>
+            </summary>
+            <div className="border-t border-border p-5">
+              <form className="space-y-4" onSubmit={submitOrder}>
+                <label className="block text-sm font-medium">
+                  Phương thức ghi nhận
+                  <Input className="mt-2" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
+                </label>
+                <label className="block text-sm font-medium">
+                  Ghi chú cho admin
+                  <Textarea className="mt-2" value={paymentNote} onChange={(event) => setPaymentNote(event.target.value)} />
+                </label>
+                <Button className="w-full sm:w-auto" disabled={!packageId} type="submit">Gửi yêu cầu đối soát</Button>
+              </form>
+            </div>
+          </details>
         </div>
 
         <div className="space-y-4">
-          <Card>
+          <Card className="lg:sticky lg:top-24">
           <CardHeader>
-            <CardTitle>Chi tiết đơn hàng</CardTitle>
+            <CardTitle>Thanh toán PayOS</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <Metric label="Gói sản phẩm" value={selectedPackage?.name ?? "-"} />
             <Metric label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} cr` : "-"} />
             <Metric label="Tổng số tiền" value={selectedPackage ? formatCurrency(selectedPackage.price) : "-"} />
+            <p className="rounded-md border border-cyan-100 bg-cyan-50 px-3 py-2 text-xs leading-5 text-cyan-900">
+              Đây là luồng chính. Sau khi tạo link, hoàn tất thanh toán trên PayOS và chờ webhook xác minh trước khi credit được cộng.
+            </p>
             <Button className="w-full" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
               <CreditCard size={16} />
               <span className="ml-2">{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo link thanh toán"}</span>

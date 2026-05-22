@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, FileText, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { DropdownSelect } from "@/components/dropdown-select";
 import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader, Textarea } from "@/components/ui";
@@ -8,6 +8,9 @@ import { StatusBadge } from "@/components/status-badge";
 import {
   apiFetch,
   type AnalyzeFormResponse,
+  type CreatePayosTopupOrderResponse,
+  type CreditPackage,
+  type DashboardSummary,
   type FormQuestion,
   type GeneratedResponse,
   type GenerateResponsesResult,
@@ -38,6 +41,18 @@ const MAX_SAMPLE_LENGTH = 500;
 const TIME_STEP_MIN = 5;
 const TIME_STEP_MAX = 120;
 const CHECKBOX_SELECTION_MIN = 1;
+const FORM_PREVIEW_RESUME_KEY = "formauto.formPreviewResume";
+const FORM_PREVIEW_RESUME_CHANNEL = "formauto.formPreviewResume";
+
+type FormPreviewResumeContext = {
+  projectId: string;
+  analysis: AnalyzeFormResponse;
+  ruleConfigs: Record<string, { mode: string; configJson: string }>;
+  requestedCount: number;
+  generatedCount: number;
+  missingCredits: number;
+  createdAt: string;
+};
 
 export default function FormsPage() {
   const [formUrl, setFormUrl] = useState("");
@@ -46,10 +61,21 @@ export default function FormsPage() {
   const [ruleConfigs, setRuleConfigs] = useState<Record<string, { mode: string; configJson: string }>>({});
   const [previewCount, setPreviewCount] = useState(1);
   const [previews, setPreviews] = useState<GeneratedResponse[]>([]);
+  const [previewListOpen, setPreviewListOpen] = useState(false);
   const [openPreviews, setOpenPreviews] = useState<Record<string, boolean>>({});
+  const [generationCreditNotice, setGenerationCreditNotice] = useState<{ requestedCount: number; generatedCount: number; missingCredits: number } | null>(null);
+  const [resumeContext, setResumeContext] = useState<FormPreviewResumeContext | null>(null);
+  const [recommendedPackage, setRecommendedPackage] = useState<CreditPackage | null>(null);
+  const [resumeCreditReady, setResumeCreditReady] = useState(false);
+  const [topupBusy, setTopupBusy] = useState(false);
+  const [openRuleEditors, setOpenRuleEditors] = useState<Record<string, boolean>>({});
   const [confirmed, setConfirmed] = useState(false);
+  const [submissionLocked, setSubmissionLocked] = useState(false);
   const [submission, setSubmission] = useState<SubmissionJob | null>(null);
+  const [submissionLogsOpen, setSubmissionLogsOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const rulesSectionRef = useRef<HTMLElement | null>(null);
+  const previewSectionRef = useRef<HTMLElement | null>(null);
 
   const canGenerate = useMemo(() => {
     if (!analysis || analysis.questions.length === 0) {
@@ -62,13 +88,93 @@ export default function FormsPage() {
     });
   }, [analysis, ruleConfigs]);
 
+  const ruleOpenCount = analysis?.questions.filter((question) => openRuleEditors[question.id] ?? true).length ?? 0;
+  const allRuleEditorsOpen = analysis ? ruleOpenCount === analysis.questions.length : false;
+
+  useEffect(() => {
+    const stored = readResumeContext();
+    if (stored) {
+      restoreResumeContext(stored);
+      refreshResumeCreditState(stored);
+    }
+
+    const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel(FORM_PREVIEW_RESUME_CHANNEL) : null;
+    const handleResumeSignal = () => {
+      const next = readResumeContext();
+      if (next) {
+        restoreResumeContext(next);
+        refreshResumeCreditState(next);
+        window.focus();
+      }
+    };
+
+    channel?.addEventListener("message", handleResumeSignal);
+    window.addEventListener("storage", handleResumeSignal);
+    window.addEventListener("focus", handleResumeSignal);
+    document.addEventListener("visibilitychange", handleResumeSignal);
+
+    return () => {
+      channel?.removeEventListener("message", handleResumeSignal);
+      channel?.close();
+      window.removeEventListener("storage", handleResumeSignal);
+      window.removeEventListener("focus", handleResumeSignal);
+      document.removeEventListener("visibilitychange", handleResumeSignal);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!resumeContext) {
+      setResumeCreditReady(false);
+      return;
+    }
+
+    refreshResumeCreditState(resumeContext);
+  }, [resumeContext]);
+
+  useEffect(() => {
+    if (!generationCreditNotice) {
+      setRecommendedPackage(null);
+      return;
+    }
+
+    let active = true;
+    apiFetch<CreditPackage[]>("/api/packages")
+      .then((packages) => {
+        if (!active) {
+          return;
+        }
+
+        setRecommendedPackage(selectRecommendedPackage(packages, generationCreditNotice.missingCredits));
+      })
+      .catch(() => {
+        if (active) {
+          setRecommendedPackage(null);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [generationCreditNotice]);
+
+  useEffect(() => {
+    if (submission?.status === "Completed" || submission?.status === "Failed" || submission?.status === "Cancelled") {
+      setSubmissionLocked(true);
+    }
+  }, [submission?.status]);
+
   async function analyze(event: React.FormEvent) {
     event.preventDefault();
     setBusy(true);
     setPreviews([]);
+    setPreviewListOpen(false);
     setOpenPreviews({});
+    setGenerationCreditNotice(null);
+    setResumeContext(null);
+    clearResumeContext();
     setSubmission(null);
     setConfirmed(false);
+    setSubmissionLocked(false);
     try {
       const result = await apiFetch<AnalyzeFormResponse>("/api/forms/analyze", {
         method: "POST",
@@ -76,6 +182,7 @@ export default function FormsPage() {
       });
       setAnalysis(result);
       setRuleConfigs(Object.fromEntries(result.questions.map((question) => [question.id, defaultRule(question)])));
+      setOpenRuleEditors(Object.fromEntries(result.questions.map((question) => [question.id, true])));
       toast.success("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
     } catch (error) {
       showError(error, "Không phân tích được biểu mẫu.");
@@ -91,9 +198,12 @@ export default function FormsPage() {
 
     setBusy(true);
     setPreviews([]);
+    setPreviewListOpen(false);
     setOpenPreviews({});
+    setGenerationCreditNotice(null);
     setSubmission(null);
     setConfirmed(false);
+    setSubmissionLocked(false);
     try {
       for (const question of analysis.questions) {
         const config = ruleConfigs[question.id];
@@ -112,12 +222,152 @@ export default function FormsPage() {
         json: { count: previewCount }
       });
       setPreviews(result.items);
+      setPreviewListOpen(false);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
+      setGenerationCreditNotice(result.missingCredits > 0
+        ? {
+            requestedCount: result.requestedCount,
+            generatedCount: result.generatedCount,
+            missingCredits: result.missingCredits
+          }
+        : null);
+      if (result.missingCredits > 0) {
+        const nextContext = {
+          projectId: analysis.projectId,
+          analysis,
+          ruleConfigs,
+          requestedCount: result.requestedCount,
+          generatedCount: result.generatedCount,
+          missingCredits: result.missingCredits,
+          createdAt: new Date().toISOString()
+        };
+        saveResumeContext(nextContext);
+        setResumeContext(nextContext);
+      } else {
+        clearResumeContext();
+        setResumeContext(null);
+      }
+      window.setTimeout(() => {
+        previewSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
       toast.success(`Đã tạo ${result.items.length} câu trả lời xem trước và trừ ${result.creditsUsed} credit.`);
     } catch (error) {
       showError(error, "Không tạo được bản xem trước.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function continueMissingGeneration() {
+    const context = resumeContext;
+    if (!context) {
+      toast.error("Không tìm thấy tiến trình cần tiếp tục.");
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const result = await apiFetch<GenerateResponsesResult>(`/api/projects/${context.projectId}/responses/generate`, {
+        method: "POST",
+        json: { count: context.missingCredits }
+      });
+      setPreviews((current) => [...current, ...result.items]);
+      setPreviewListOpen(false);
+      setOpenPreviews((current) => ({
+        ...current,
+        ...Object.fromEntries(result.items.map((preview, index) => [preview.id, current[preview.id] ?? index === 0]))
+      }));
+      if (result.missingCredits > 0) {
+        const nextContext = {
+          ...context,
+          requestedCount: context.missingCredits,
+          generatedCount: result.generatedCount,
+          missingCredits: result.missingCredits,
+          createdAt: new Date().toISOString()
+        };
+        saveResumeContext(nextContext);
+        setResumeContext(nextContext);
+        setGenerationCreditNotice({
+          requestedCount: nextContext.requestedCount,
+          generatedCount: nextContext.generatedCount,
+          missingCredits: nextContext.missingCredits
+        });
+      } else {
+        clearResumeContext();
+        setResumeContext(null);
+        setGenerationCreditNotice(null);
+      }
+      setSubmissionLocked(false);
+      window.setTimeout(() => {
+        previewSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      toast.success(`Đã tạo tiếp ${result.items.length} bản xem trước và trừ ${result.creditsUsed} credit.`);
+    } catch (error) {
+      showError(error, "Không tạo tiếp được phần còn thiếu.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function createRecommendedTopupLink() {
+    if (!generationCreditNotice || !recommendedPackage || !analysis) {
+      toast.error("Chưa có gói credit phù hợp để nạp thêm.");
+      return;
+    }
+
+    const nextContext: FormPreviewResumeContext = {
+      projectId: analysis.projectId,
+      analysis,
+      ruleConfigs,
+      requestedCount: generationCreditNotice.requestedCount,
+      generatedCount: generationCreditNotice.generatedCount,
+      missingCredits: generationCreditNotice.missingCredits,
+      createdAt: new Date().toISOString()
+    };
+    saveResumeContext(nextContext);
+    setResumeContext(nextContext);
+    setResumeCreditReady(false);
+
+    const checkoutWindow = window.open("about:blank", "_blank");
+    setTopupBusy(true);
+    try {
+      const result = await apiFetch<CreatePayosTopupOrderResponse>("/api/topup-orders/payos", {
+        method: "POST",
+        json: { packageId: recommendedPackage.id }
+      });
+      toast.success("Đã tạo liên kết thanh toán PayOS. Sau khi thanh toán, quay lại để tiếp tục tạo phần còn thiếu.");
+      if (checkoutWindow) {
+        checkoutWindow.location.replace(result.checkoutUrl);
+      } else {
+        window.location.href = result.checkoutUrl;
+      }
+    } catch (error) {
+      checkoutWindow?.close();
+      showError(error, "Không tạo được liên kết PayOS.");
+    } finally {
+      setTopupBusy(false);
+    }
+  }
+
+  function restoreResumeContext(context: FormPreviewResumeContext) {
+    setResumeContext(context);
+    setAnalysis(context.analysis);
+    setRuleConfigs(context.ruleConfigs);
+    setPreviewCount(context.missingCredits);
+    setOpenRuleEditors(Object.fromEntries(context.analysis.questions.map((question) => [question.id, true])));
+    setGenerationCreditNotice({
+      requestedCount: context.requestedCount,
+      generatedCount: context.generatedCount,
+      missingCredits: context.missingCredits
+    });
+  }
+
+  async function refreshResumeCreditState(context: FormPreviewResumeContext) {
+    try {
+      const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
+      setResumeCreditReady(summary.currentCreditBalance >= context.missingCredits);
+    } catch {
+      setResumeCreditReady(false);
     }
   }
 
@@ -137,6 +387,8 @@ export default function FormsPage() {
         }
       });
       setSubmission(result);
+      setSubmissionLocked(result.status === "Completed" || result.status === "Failed");
+      setSubmissionLogsOpen(false);
       toast.success("Đã bắt đầu gửi các câu trả lời đã xác nhận.");
     } catch (error) {
       showError(error, "Không gửi được bản xem trước.");
@@ -183,6 +435,27 @@ export default function FormsPage() {
     }
   }
 
+  function restartFromAnswerRules() {
+    setPreviews([]);
+    setPreviewListOpen(false);
+    setOpenPreviews({});
+    setGenerationCreditNotice(null);
+    setResumeContext(null);
+    clearResumeContext();
+    setResumeCreditReady(false);
+    setConfirmed(false);
+    setSubmission(null);
+    setSubmissionLogsOpen(false);
+    setSubmissionLocked(false);
+    if (analysis) {
+      setOpenRuleEditors(Object.fromEntries(analysis.questions.map((question) => [question.id, true])));
+    }
+    window.setTimeout(() => {
+      rulesSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+    toast.info("Đã làm mới lượt gửi hiện tại. Cách trả lời cũ vẫn được giữ để tạo bản xem trước mới.");
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -201,6 +474,23 @@ export default function FormsPage() {
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
         <span>Không tự gửi hàng loạt. Mỗi lần chỉ tạo tối đa 100 câu trả lời xem trước, gửi tuần tự theo nhóm {SUBMISSION_BATCH_SIZE} và phải xác nhận trước khi gửi.</span>
       </Alert>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        {[
+          { label: "1. Phân tích", active: true },
+          { label: "2. Cài đặt và xem trước", active: Boolean(analysis) },
+          { label: "3. Xác nhận gửi", active: previews.length > 0 }
+        ].map((step) => (
+          <div
+            className={`rounded-md border px-3 py-2 text-sm font-medium ${
+              step.active ? "border-primary bg-primary/5 text-primary" : "border-border bg-white text-muted-foreground"
+            }`}
+            key={step.label}
+          >
+            {step.label}
+          </div>
+        ))}
+      </div>
 
       <Card>
         <CardHeader>
@@ -226,9 +516,33 @@ export default function FormsPage() {
       </Card>
 
       {analysis && (
+        <section ref={rulesSectionRef}>
         <Card>
-          <CardHeader>
-            <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
+          <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Đang mở {ruleOpenCount}/{analysis.questions.length} câu hỏi. Có thể mở từng câu để chỉnh nhanh.
+              </p>
+            </div>
+            <button
+              aria-pressed={allRuleEditorsOpen}
+              className={`inline-flex min-h-10 items-center justify-between gap-3 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition ${
+                allRuleEditorsOpen
+                  ? "border-cyan-300 bg-cyan-500 text-white"
+                  : "border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-50"
+              }`}
+              type="button"
+              onClick={() => {
+                const nextOpen = !allRuleEditorsOpen;
+                setOpenRuleEditors(Object.fromEntries(analysis.questions.map((question) => [question.id, nextOpen])));
+              }}
+            >
+              <span>{allRuleEditorsOpen ? "Đóng tất cả" : "Mở tất cả"}</span>
+              <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-white/35" : "bg-cyan-100"}`}>
+                <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
+              </span>
+            </button>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-lg border border-border bg-muted/30 p-4">
@@ -260,15 +574,20 @@ export default function FormsPage() {
                   <RuleEditor
                     key={question.id}
                     index={index}
+                    expanded={openRuleEditors[question.id] ?? true}
                     question={question}
                     value={ruleConfigs[question.id] ?? defaultRule(question)}
                     onChange={(value) => setRuleConfigs((current) => ({ ...current, [question.id]: value }))}
+                    onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="flex flex-col gap-4 border-t border-border pt-4 sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-cyan-200 bg-cyan-50/95 p-4 shadow-soft ring-1 ring-cyan-100 backdrop-blur sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
-                    <p className="text-sm font-medium">Số câu trả lời xem trước</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
+                    <div className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm">
+                      Tạo bản xem trước
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-slate-950">Số câu trả lời xem trước</p>
+                    <p className="mt-1 text-xs text-slate-600">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
                     <Input
                       className="mt-2 w-full sm:w-32"
                       inputMode="numeric"
@@ -279,26 +598,83 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
+                    <p className="mt-2 text-xs font-medium text-cyan-800">
+                      Mỗi câu trả lời xem trước tương ứng 1 credit. Khi bấm lưu và tạo bản xem trước, hệ thống sẽ trừ credit theo số lượng đã chọn.
+                    </p>
                   </div>
                   <Button className="w-full sm:w-auto" disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
-                    Lưu cách trả lời và tạo bản xem trước
+                    Lưu và tạo bản xem trước
                   </Button>
                 </div>
               </div>
             )}
           </CardContent>
         </Card>
+        </section>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>3. Xem trước và xác nhận</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {previews.length === 0 ? (
-            <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
-          ) : (
-            <>
+      <section ref={previewSectionRef}>
+        <Card>
+          <CardHeader>
+            <CardTitle>3. Xem trước và xác nhận</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {previews.length === 0 ? (
+              <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
+            ) : (
+              <>
+              {generationCreditNotice && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950 shadow-sm ring-1 ring-amber-100">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="font-semibold">Credit chưa đủ để tạo toàn bộ số lượng đã chọn</p>
+                      <p className="mt-1 leading-6 text-amber-900">
+                        Bạn yêu cầu {generationCreditNotice.requestedCount} bản xem trước, hệ thống đã tạo {generationCreditNotice.generatedCount} theo số credit hiện có.
+                        Còn thiếu {generationCreditNotice.missingCredits} credit để tạo đủ số lượng.
+                      </p>
+                      {recommendedPackage ? (
+                        <p className="mt-2 text-xs font-medium text-amber-900">
+                          Gói đề xuất: {recommendedPackage.name} - {recommendedPackage.credits} credit.
+                        </p>
+                      ) : (
+                        <p className="mt-2 text-xs font-medium text-amber-900">
+                          Chưa có gói credit phù hợp với số lượng còn thiếu. Vui lòng kiểm tra trang nạp credit.
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                      {resumeContext && resumeCreditReady && (
+                        <Button className="bg-cyan-600 text-white hover:bg-cyan-700" disabled={busy} type="button" onClick={continueMissingGeneration}>
+                          Tiếp tục tạo phần còn thiếu
+                        </Button>
+                      )}
+                      <Button
+                        className="bg-amber-500 text-amber-950 hover:bg-amber-400"
+                        disabled={!recommendedPackage || topupBusy}
+                        type="button"
+                        onClick={createRecommendedTopupLink}
+                      >
+                        {topupBusy ? "Đang tạo link..." : "Nạp thêm credit"}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {resumeContext && !generationCreditNotice && (
+                <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950 shadow-sm ring-1 ring-cyan-100">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="font-semibold">Có tiến trình tạo preview đang chờ tiếp tục</p>
+                      <p className="mt-1 leading-6 text-cyan-900">
+                        Hãy bấm tiếp tục để tạo phần còn thiếu sau khi credit đã được cập nhật.
+                      </p>
+                    </div>
+                    <Button disabled={busy} type="button" onClick={continueMissingGeneration}>
+                      Tiếp tục tạo phần còn thiếu
+                    </Button>
+                  </div>
+                </div>
+              )}
               <div className="rounded-lg border border-border bg-muted/30 p-4">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
@@ -314,19 +690,40 @@ export default function FormsPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                {previews.map((preview, index) => (
-                  <PreviewAccordion
-                    key={preview.id}
-                    index={index}
-                    open={openPreviews[preview.id] ?? false}
-                    preview={preview}
-                    onToggle={() => setOpenPreviews((current) => ({ ...current, [preview.id]: !(current[preview.id] ?? false) }))}
-                  />
-                ))}
+              <div className="rounded-lg border border-border bg-white">
+                <button
+                  aria-expanded={previewListOpen}
+                  className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                  type="button"
+                  onClick={() => setPreviewListOpen((current) => !current)}
+                >
+                  <span>
+                    <span className="block text-sm font-semibold">Danh sách bản xem trước</span>
+                    <span className="mt-1 block text-xs text-muted-foreground">
+                      {previews.length} bản xem trước, {previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời
+                    </span>
+                  </span>
+                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border bg-white px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                    {previewListOpen ? "Thu gọn" : "Mở danh sách"}
+                    {previewListOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                  </span>
+                </button>
+                {previewListOpen && (
+                  <div className="space-y-2 border-t border-border p-3">
+                    {previews.map((preview, index) => (
+                      <PreviewAccordion
+                        key={preview.id}
+                        index={index}
+                        open={openPreviews[preview.id] ?? false}
+                        preview={preview}
+                        onToggle={() => setOpenPreviews((current) => ({ ...current, [preview.id]: !(current[preview.id] ?? false) }))}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="rounded-lg border border-border bg-white p-4">
+              <div className="sticky bottom-3 z-10 rounded-lg border border-cyan-200 bg-cyan-50/95 p-4 shadow-soft ring-1 ring-cyan-100 backdrop-blur">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
@@ -335,23 +732,28 @@ export default function FormsPage() {
                     onChange={(event) => setConfirmed(event.target.checked)}
                   />
                   <span>
-                    <span className="block font-medium">Xác nhận sau khi xem lại bản xem trước</span>
-                    <span className="mt-1 block text-muted-foreground">
+                    <span className="block font-semibold text-slate-950">Xác nhận sau khi xem lại bản xem trước</span>
+                    <span className="mt-1 block text-cyan-900">
                       Tôi xác nhận gửi đúng các câu trả lời xem trước này và hiểu hệ thống không hỗ trợ spam, proxy, vượt captcha hoặc gửi khi không được phép.
                     </span>
                   </span>
                 </label>
-                <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-muted-foreground">Hệ thống chỉ gửi sau khi ô xác nhận được bật.</p>
-                  <Button className="w-full sm:w-auto" disabled={busy || !confirmed} onClick={submitConfirmed} type="button">
-                    Gửi các bản xem trước đã xác nhận
+                <div className="mt-4 flex flex-col gap-3 border-t border-cyan-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs font-medium text-cyan-800">
+                    {submissionLocked
+                      ? "Lượt gửi này đã hoàn tất. Hãy thực hiện lại bước 2 để tạo bản xem trước mới nếu muốn gửi tiếp."
+                      : "Hệ thống chỉ gửi sau khi ô xác nhận được bật."}
+                  </p>
+                  <Button className="w-full bg-cyan-600 text-white hover:bg-cyan-700 sm:w-auto" disabled={busy || !confirmed || submissionLocked} onClick={submitConfirmed} type="button">
+                    {submissionLocked ? "Đã gửi xong" : "Gửi các bản xem trước đã xác nhận"}
                   </Button>
                 </div>
               </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </section>
 
       {submission && (
         <Card>
@@ -374,11 +776,60 @@ export default function FormsPage() {
             {submission.status === "Paused" && (
               <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
-            {submission.logs.map((log) => (
-              <div className="rounded-md border border-border p-3" key={log.id}>
-                <StatusBadge status={log.status} /> <span className="ml-2">{log.errorMessage || "Đã gửi"}</span>
+            {(submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
+              <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-950">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-semibold">Thực hiện lại một lần nữa</p>
+                    <p className="mt-1 text-xs text-cyan-900">
+                      Làm mới bản xem trước, kết quả gửi và trạng thái xác nhận; giữ nguyên cách trả lời đã cài đặt ở bước 2.
+                    </p>
+                  </div>
+                  <Button className="w-full sm:w-auto" disabled={busy} onClick={restartFromAnswerRules} type="button">
+                    Thực hiện lại
+                  </Button>
+                </div>
               </div>
-            ))}
+            )}
+            <div className="rounded-lg border border-border bg-white">
+              <button
+                aria-expanded={submissionLogsOpen}
+                className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                type="button"
+                onClick={() => setSubmissionLogsOpen((current) => !current)}
+              >
+                <span>
+                  <span className="block text-sm font-semibold">Chi tiết các lượt gửi</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {buildSubmissionBatches(submission.logs).length} pack, thành công {submission.successCount}, lỗi {submission.failedCount}
+                  </span>
+                </span>
+                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border bg-white px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                  {submissionLogsOpen ? "Thu gọn" : "Mở chi tiết"}
+                  {submissionLogsOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                </span>
+              </button>
+              {submissionLogsOpen && (
+                <div className="space-y-3 border-t border-border p-3">
+                  {buildSubmissionBatches(submission.logs).map((batch, batchIndex) => {
+                    const successCount = batch.filter((log) => log.status === "Success").length;
+                    const failedCount = batch.length - successCount;
+                    return (
+                      <div className="rounded-lg border border-border bg-muted/20 p-3" key={`submission-pack-${batchIndex}`}>
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <p className="text-sm font-semibold">Pack {batchIndex + 1}</p>
+                          <div className="flex flex-wrap gap-2 text-xs font-medium">
+                            <Badge tone="neutral">Tổng {batch.length}</Badge>
+                            <Badge tone="success">Thành công {successCount}</Badge>
+                            <Badge tone={failedCount > 0 ? "danger" : "neutral"}>Lỗi {failedCount}</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}
@@ -445,14 +896,18 @@ function PreviewAccordion({
 
 function RuleEditor({
   index,
+  expanded,
   question,
   value,
-  onChange
+  onChange,
+  onToggle
 }: {
   index: number;
+  expanded: boolean;
   question: FormQuestion;
   value: { mode: string; configJson: string };
   onChange: (value: { mode: string; configJson: string }) => void;
+  onToggle: () => void;
 }) {
   const isTextQuestion = isFreeTextRuleQuestion(question.questionType);
   const isCheckboxQuestion = question.questionType === "Checkbox";
@@ -555,8 +1010,8 @@ function RuleEditor({
   const choiceTotal = Object.values(choiceNumbers).reduce((sum, amount) => sum + clampInteger(amount, 0, choiceLimit), 0);
 
   return (
-    <div className="rounded-lg border border-border bg-white p-4">
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+    <div className={`rounded-lg border bg-white p-4 transition ${expanded ? "border-border" : "border-cyan-100 shadow-sm"}`}>
+      <div className="mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-cyan-700">
             <FileQuestion className="h-4 w-4" />
@@ -570,8 +1025,26 @@ function RuleEditor({
             <p className="mt-1 break-all text-xs text-muted-foreground">{question.entryId}</p>
           </div>
         </div>
-        <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
+          <button
+            aria-expanded={expanded}
+            className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition ${
+              expanded
+                ? "border-border bg-white text-muted-foreground hover:bg-muted/50"
+                : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100"
+            }`}
+            type="button"
+            onClick={onToggle}
+          >
+            {expanded ? "Thu gọn" : "Mở câu hỏi"}
+            {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          </button>
+        </div>
       </div>
+
+      {expanded && (
+        <div className="mt-4">
 
       {!isTextQuestion && question.options.length > 0 && (
         <div className="mb-4 rounded-md border border-border bg-muted/30 p-3">
@@ -752,6 +1225,8 @@ function RuleEditor({
           </div>
         )}
       </div>
+      </div>
+      )}
     </div>
   );
 }
@@ -1058,6 +1533,55 @@ function clampInteger(value: string | number, min: number, max: number) {
 
 function limitText(value: string, maxLength: number) {
   return value.length > maxLength ? value.slice(0, maxLength) : value;
+}
+
+function selectRecommendedPackage(packages: CreditPackage[], missingCredits: number) {
+  return packages
+    .filter((item) => item.isActive && item.credits >= missingCredits)
+    .sort((left, right) => left.credits - right.credits || left.price - right.price)[0] ?? null;
+}
+
+function saveResumeContext(context: FormPreviewResumeContext) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(FORM_PREVIEW_RESUME_KEY, JSON.stringify(context));
+}
+
+function readResumeContext() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(FORM_PREVIEW_RESUME_KEY);
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(raw) as FormPreviewResumeContext;
+  } catch {
+    clearResumeContext();
+    return null;
+  }
+}
+
+function clearResumeContext() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(FORM_PREVIEW_RESUME_KEY);
+}
+
+function buildSubmissionBatches(logs: SubmissionJob["logs"]) {
+  const batches: Array<SubmissionJob["logs"]> = [];
+  for (let index = 0; index < logs.length; index += SUBMISSION_BATCH_SIZE) {
+    batches.push(logs.slice(index, index + SUBMISSION_BATCH_SIZE));
+  }
+
+  return batches;
 }
 
 function questionTypeLabel(type: string) {

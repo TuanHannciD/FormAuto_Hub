@@ -62,7 +62,13 @@ export default function AdminPaymentsPage() {
         title="Quản lý top-up và thanh toán"
         description="Theo dõi đơn nạp credit, xác minh PayOS và lịch sử callback."
       />
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 md:hidden">
+        <CompactStat label="Chờ" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
+        <CompactStat label="Đã trả" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
+        <CompactStat label="Lỗi" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
+        <CompactStat label="Đối soát" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
+      </div>
+      <div className="hidden gap-4 md:grid md:grid-cols-4">
         <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
         <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
         <Stat icon={XCircle} label="Lỗi xác minh" tone="red" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
@@ -164,6 +170,15 @@ export default function AdminPaymentsPage() {
 
 function displayPaymentUser(item: AdminPayment) {
   return item.userEmail || item.userId.slice(0, 8);
+}
+
+function CompactStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-border bg-white px-3 py-2">
+      <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
+      <p className="mt-1 text-lg font-semibold">{value}</p>
+    </div>
+  );
 }
 
 function Stat({

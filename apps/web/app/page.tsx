@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingDashboardTabs } from "@/components/landing-dashboard-tabs";
+import { siteUrl } from "@/lib/site";
 import {
   BarChart3,
   CheckCircle2,
@@ -124,6 +125,7 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
+    url: siteUrl,
     siteName,
     locale: "vi_VN",
     type: "website",
@@ -210,16 +212,16 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/register"
-              className="hidden rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:inline-flex"
+              className="inline-flex rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:px-4"
             >
-              Bắt đầu miễn phí
+              Bắt đầu
             </Link>
           </div>
         </nav>
       </header>
 
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto grid max-w-[1120px] grid-cols-1 items-center gap-12 px-4 py-12 md:px-8 md:py-20 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-[1120px] grid-cols-1 items-center gap-8 px-4 py-8 md:px-8 md:py-20 lg:grid-cols-2">
           <div className="min-w-0 space-y-8">
             <div>
             <p className="inline-flex rounded border border-blue-100 bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
@@ -247,7 +249,7 @@ export default function LandingPage() {
                 Xem quy trình
               </a>
             </div>
-            <div className="flex max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:max-w-none">
+            <div className="hidden max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:flex sm:max-w-none">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
                 <Eye size={16} />
                 Bắt buộc xem trước
@@ -267,7 +269,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="relative lg:block">
+          <div className="relative hidden sm:block">
             <DashboardPreview />
           </div>
         </div>
@@ -307,8 +309,8 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featureCards.map((feature) => (
-              <article key={feature.title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow">
+            {featureCards.map((feature, index) => (
+              <article key={feature.title} className={`rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow ${index > 2 ? "hidden md:block" : ""}`}>
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
                   <feature.icon size={20} />
                 </div>
@@ -319,7 +321,7 @@ export default function LandingPage() {
           </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-slate-50 py-12 md:py-20">
+      <section className="hidden border-y border-slate-200 bg-slate-50 py-12 md:block md:py-20">
         <div className="mx-auto max-w-[1120px] px-4 md:px-8">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
@@ -381,7 +383,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="credit" className="border-y border-slate-200 bg-slate-50 py-12 md:py-20">
+      <section id="credit" className="hidden border-y border-slate-200 bg-slate-50 py-12 md:block md:py-20">
         <div className="mx-auto max-w-[1120px] px-4 md:px-8">
           <h2 className="mx-auto mb-12 max-w-3xl text-center text-3xl font-bold tracking-tight text-slate-900">
               Mô hình credit rõ ràng cho từng thao tác
@@ -422,7 +424,7 @@ export default function LandingPage() {
           </div>
       </section>
 
-      <section className="mx-auto mb-20 max-w-[1120px] bg-white px-4 md:px-8">
+      <section className="mx-auto mb-20 hidden max-w-[1120px] bg-white px-4 md:block md:px-8">
         <div className="rounded-lg border border-blue-100 bg-blue-50 px-6 py-16 text-center shadow-sm">
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Bắt đầu với quy trình biểu mẫu có kiểm soát

@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { Alert, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { displayStatus } from "@/lib/labels";
+
+const FORM_PREVIEW_RESUME_KEY = "formauto.formPreviewResume";
+const FORM_PREVIEW_RESUME_EVENT_KEY = "formauto.formPreviewResumeEvent";
+const FORM_PREVIEW_RESUME_CHANNEL = "formauto.formPreviewResume";
 
 export default function PayosReturnPage() {
   return (
@@ -40,6 +44,28 @@ function PaymentResultShell({
   status?: string;
   cancelled?: boolean;
 }) {
+  const router = useRouter();
+  const [hasFormPreviewResume, setHasFormPreviewResume] = useState(false);
+
+  useEffect(() => {
+    setHasFormPreviewResume(Boolean(window.localStorage.getItem(FORM_PREVIEW_RESUME_KEY)));
+  }, []);
+
+  function returnToFormPreviewProgress() {
+    const payload = JSON.stringify({ type: "form-preview-resume", at: Date.now() });
+    window.localStorage.setItem(FORM_PREVIEW_RESUME_EVENT_KEY, payload);
+    if (typeof BroadcastChannel !== "undefined") {
+      const channel = new BroadcastChannel(FORM_PREVIEW_RESUME_CHANNEL);
+      channel.postMessage(payload);
+      channel.close();
+    }
+
+    window.close();
+    window.setTimeout(() => {
+      router.push("/dashboard/forms?resume=form-preview");
+    }, 150);
+  }
+
   return (
     <main className="min-h-dvh bg-background px-4 py-6 sm:px-5 sm:py-10">
       <div className="mx-auto max-w-2xl space-y-5">
@@ -57,6 +83,11 @@ function PaymentResultShell({
               <Detail label="Kết quả hủy" value={cancelled ? "Đã hủy" : "Không"} />
             </div>
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              {hasFormPreviewResume && (
+                <Button type="button" onClick={returnToFormPreviewProgress}>
+                  Quay lại tiếp tục tạo preview
+                </Button>
+              )}
               <Link className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground" href="/dashboard">
                 Về tổng quan
               </Link>

@@ -1,6 +1,10 @@
 import { getValidAccessToken, refreshSession } from "@/lib/auth";
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
+export const API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000");
+
+function normalizeBaseUrl(value: string) {
+  return value.replace(/\/+$/, "");
+}
 
 type RequestOptions = RequestInit & {
   json?: unknown;
@@ -252,6 +256,9 @@ export type GenerateResponsesResult = {
   items: GeneratedResponse[];
   creditsUsed: number;
   balanceAfter: number;
+  requestedCount: number;
+  generatedCount: number;
+  missingCredits: number;
 };
 
 export type SubmissionJob = {

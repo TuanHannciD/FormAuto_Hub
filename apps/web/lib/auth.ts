@@ -1,6 +1,10 @@
 "use client";
 
-export const AUTH_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
+export const AUTH_API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000");
+
+function normalizeBaseUrl(value: string) {
+  return value.replace(/\/+$/, "");
+}
 
 const SESSION_KEY = "formauto.auth.session";
 const EXPIRY_BUFFER_MS = 60_000;
