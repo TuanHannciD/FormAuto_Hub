@@ -1,0 +1,172 @@
+[
+  {
+    "route": "/dashboard",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-dashboard.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Tổng quan vận hành",
+        "Việc nên làm tiếp",
+        "Yêu cầu nạp gần đây",
+        "Lịch sử sử dụng gần đây"
+      ]
+    }
+  },
+  {
+    "route": "/dashboard/forms",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-dashboard_forms.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Tự động hóa Google Form",
+        "1. Phân tích Google Form",
+        "2. Câu hỏi và cách trả lời",
+        "3. Xem trước và xác nhận"
+      ]
+    }
+  },
+  {
+    "route": "/dashboard/forms",
+    "viewportName": "desktop",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\desktop-dashboard_forms.png",
+    "metrics": {
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Tự động hóa Google Form",
+        "1. Phân tích Google Form",
+        "2. Câu hỏi và cách trả lời",
+        "3. Xem trước và xác nhận"
+      ]
+    }
+  },
+  {
+    "route": "/dashboard/top-up",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-dashboard_top_up.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Nạp credit bằng PayOS",
+        "Chọn gói credit",
+        "Yêu cầu đối soát",
+        "Chi tiết đơn hàng"
+      ]
+    }
+  },
+  {
+    "route": "/admin",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-admin.png",
+    "metrics": {
+      "innerWidth": 451,
+      "scrollWidth": 451,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Tổng quan quản trị",
+        "Thanh toán gần đây",
+        "Cảnh báo webhook/payment",
+        "Đối soát nhanh"
+      ]
+    }
+  },
+  {
+    "route": "/admin/payments",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-admin_payments.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Quản lý top-up và thanh toán",
+        "Danh sách thanh toán PayOS"
+      ]
+    }
+  },
+  {
+    "route": "/admin/payments",
+    "viewportName": "desktop",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\desktop-admin_payments.png",
+    "metrics": {
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Quản lý top-up và thanh toán",
+        "Danh sách thanh toán PayOS"
+      ]
+    }
+  },
+  {
+    "route": "/admin/packages",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-admin_packages.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Quản lý gói credit",
+        "Danh sách gói credit"
+      ]
+    }
+  },
+  {
+    "route": "/admin/payos-settings",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-admin_payos_settings.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub",
+      "h1h2": [
+        "Cấu hình PayOS",
+        "Thông tin kết nối",
+        "Kiểm tra cấu hình",
+        "Trạng thái"
+      ]
+    }
+  },
+  {
+    "route": "/",
+    "viewportName": "mobile",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\mobile-home.png",
+    "metrics": {
+      "innerWidth": 393,
+      "scrollWidth": 393,
+      "title": "FormAuto Hub | Xem trước và theo dõi phản hồi Google Forms",
+      "h1h2": [
+        "Xem trước, xác nhận và theo dõi quy trình phản hồi Google Forms",
+        "Tổng quan vận hành",
+        "Quy trình an toàn từ liên kết biểu mẫu đến thao tác xác nhận",
+        "Xây dựng cho vận hành biểu mẫu có kiểm soát"
+      ]
+    }
+  },
+  {
+    "route": "/",
+    "viewportName": "desktop",
+    "file": "C:\\Users\\Tuan\\OneDrive\\Desktop\\FormAuto_Hub\\docs\\testing\\ux-review-20260522\\desktop-home.png",
+    "metrics": {
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "title": "FormAuto Hub | Xem trước và theo dõi phản hồi Google Forms",
+      "h1h2": [
+        "Xem trước, xác nhận và theo dõi quy trình phản hồi Google Forms",
+        "Tổng quan vận hành",
+        "Quy trình an toàn từ liên kết biểu mẫu đến thao tác xác nhận",
+        "Xây dựng cho vận hành biểu mẫu có kiểm soát"
+      ]
+    }
+  }
+]
