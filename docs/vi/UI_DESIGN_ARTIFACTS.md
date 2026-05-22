@@ -20,6 +20,7 @@ Design artifact không phải production source code, API contract, database con
 
 | Khu vực | Stitch screen | Thư mục artifact local | Trạng thái |
 |---|---|---|---|
+| Hệ thống logo | `0a7924f70c20477b947be9d2aec41132` | `docs/design/stitch/logo/` | Reference đã chấp nhận |
 | Landing page | `d3e788788e384090945b7542ab7aecf8` | `docs/design/stitch/landing-page/` | Reference đã chấp nhận |
 | Dashboard overview | `e3b29c6ac6ea41a5979c98d174ac5c21` | `docs/design/stitch/dashboard-overview/` | Reference đã chấp nhận |
 | Top-up request | `a15b597f9b6745199ac4b09a60f4083d` | `docs/design/stitch/top-up-request/` | Reference đã chấp nhận |
@@ -83,6 +84,7 @@ Không implement từ UI artifact trừ khi được duyệt riêng:
 
 Các màn đã generate hiện hỗ trợ:
 
+- reference hệ thống logo thương hiệu
 - public landing reference
 - authenticated dashboard overview
 - manual top-up request

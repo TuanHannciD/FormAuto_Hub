@@ -20,6 +20,7 @@ Design artifacts are not production source code, API contracts, database contrac
 
 | Area | Stitch screen | Local artifact folder | Status |
 |---|---|---|---|
+| Logo system | `0a7924f70c20477b947be9d2aec41132` | `docs/design/stitch/logo/` | Reference accepted |
 | Landing page | `d3e788788e384090945b7542ab7aecf8` | `docs/design/stitch/landing-page/` | Reference accepted |
 | Dashboard overview | `e3b29c6ac6ea41a5979c98d174ac5c21` | `docs/design/stitch/dashboard-overview/` | Reference accepted |
 | Top-up request | `a15b597f9b6745199ac4b09a60f4083d` | `docs/design/stitch/top-up-request/` | Reference accepted |
@@ -83,6 +84,7 @@ Do not implement from UI artifacts unless separately approved:
 
 Current generated coverage supports:
 
+- brand logo system reference
 - public landing reference
 - authenticated dashboard overview
 - manual top-up request
