@@ -131,6 +131,7 @@ Behavior đã duyệt:
 
 - chỉ admin được truy cập
 - cung cấp read model cho doanh thu, thanh toán, top-up order, credit đã cấp và credit đã dùng
+- payment read model cho admin trả `userEmail` để hiển thị và có thể giữ `userId` để truy vết
 - đọc và cập nhật cấu hình PayOS qua admin-only APIs
 - lưu cấu hình PayOS trong database qua `PaymentProviderSettings`
 - không expose PayOS secrets
@@ -283,6 +284,23 @@ Phần mở rộng config answer-rule cho Checkbox đã duyệt:
 
 - `POST /api/projects/{projectId}/responses/generate`
 - `GET /api/projects/{projectId}/responses`
+
+Hành vi tạo preview đã duyệt:
+
+- request `count` vẫn phải từ 1 đến 100
+- mỗi generated preview response tốn 1 credit
+- nếu credit hiện có thấp hơn `count` yêu cầu nhưng lớn hơn 0, chỉ tạo theo số credit hiện có thay vì fail toàn bộ request
+- khi tạo partial, chỉ trừ số credit tương ứng với số preview đã tạo và trả về số credit còn thiếu để UI gợi ý nạp thêm
+- nếu credit hiện có là 0, từ chối tạo preview và không lưu generated response hoặc ghi credit transaction
+
+Các field `GenerateResponsesResponse` đã duyệt:
+
+- `items`: các preview response đã tạo
+- `creditsUsed`: số credit đã trừ cho lần tạo này
+- `balanceAfter`: số dư credit sau khi trừ
+- `requestedCount`: số preview user yêu cầu
+- `generatedCount`: số preview thực tế đã tạo
+- `missingCredits`: số credit còn thiếu để tạo đủ số lượng user yêu cầu
 
 ### Submissions
 

@@ -22,15 +22,11 @@ var allowedCorsOrigins = builder.Configuration
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3001",
-        "http://127.0.0.1:5173"
+        "http://127.0.0.1:5173",
+        "https://*.trycloudflare.com",
+        "https://*.servertun.pp.ua"
     ];
 
-var allowedCorsWildcardOrigins = builder.Configuration
-    .GetSection("Cors:AllowedWildcardOrigins")
-    .Get<string[]>()
-    ?? [
-        "https://*.trycloudflare.com"
-    ];
 
 builder.Services.AddControllers();
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.SectionName));
@@ -41,7 +37,6 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(allowedCorsOrigins)
             .SetIsOriginAllowedToAllowWildcardSubdomains()
-            .WithOrigins(allowedCorsWildcardOrigins)
             .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowAnyHeader()
             .AllowAnyMethod();

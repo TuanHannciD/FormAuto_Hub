@@ -61,6 +61,7 @@ public sealed record AdminPaymentResponse(
     Guid Id,
     Guid TopupOrderId,
     Guid UserId,
+    string UserEmail,
     string Provider,
     string ProviderOrderCode,
     string ProviderPaymentLinkId,

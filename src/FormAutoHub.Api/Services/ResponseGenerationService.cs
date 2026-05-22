@@ -55,8 +55,22 @@ public sealed class ResponseGenerationService(
             throw new InvalidOperationException("Every detected question requires an answer rule before preview generation.");
         }
 
+        var account = await dbContext.UserCreditAccounts
+            .AsNoTracking()
+            .SingleOrDefaultAsync(item => item.UserId == currentUser.UserId, cancellationToken);
+        var availableCredits = Math.Max(0, (int)Math.Floor(account?.Balance ?? 0));
+        var generationCount = Math.Min(request.Count, availableCredits);
+        var missingCredits = request.Count - generationCount;
+
+        if (generationCount == 0)
+        {
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Không đủ credit để tạo bản xem trước.", cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            throw new InvalidOperationException("Không đủ credit để tạo bản xem trước.");
+        }
+
         var generated = new List<GeneratedResponse>();
-        for (var responseIndex = 0; responseIndex < request.Count; responseIndex++)
+        for (var responseIndex = 0; responseIndex < generationCount; responseIndex++)
         {
             var answers = new List<GeneratedAnswerResponse>();
             foreach (var question in questions)
@@ -93,19 +107,22 @@ public sealed class ResponseGenerationService(
 
         if (creditResult is null)
         {
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Insufficient credits for preview generation.", cancellationToken);
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Không đủ credit để tạo bản xem trước.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Insufficient credits for preview generation.");
+            throw new InvalidOperationException("Không đủ credit để tạo bản xem trước.");
         }
 
         dbContext.GeneratedResponses.AddRange(generated);
-        await WriteUsageLogAsync(projectId, generated.Count, UsageLogStatuses.Success, "Preview responses generated.", cancellationToken);
+        await WriteUsageLogAsync(projectId, generated.Count, UsageLogStatuses.Success, "Xem các câu trả lời đã tạo.", cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new GenerateResponsesResponse(
             generated.Select(item => item.ToResponse()).ToList(),
             generated.Count,
-            creditResult.Value.Account.Balance);
+            creditResult.Value.Account.Balance,
+            request.Count,
+            generated.Count,
+            missingCredits);
     }
 
     public async Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(Guid projectId, CancellationToken cancellationToken)
@@ -139,7 +156,7 @@ public sealed class ResponseGenerationService(
             Id = Guid.NewGuid(),
             UserId = currentUser.UserId,
             ToolName = "FormAutomation",
-            Action = "GeneratePreviewResponses",
+            Action = "Xem lại câu trả lời được tạo",
             CreditsUsed = creditsUsed,
             Status = status,
             Description = description,

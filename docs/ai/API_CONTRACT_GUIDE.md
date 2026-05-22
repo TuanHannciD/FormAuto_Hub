@@ -131,6 +131,7 @@ Approved behavior:
 
 - admin-only access
 - exposes revenue, payment, top-up order, credit issued, and credit usage read models
+- admin payment read models expose `userEmail` for display and may retain `userId` for traceability
 - reads and updates PayOS configuration through admin-only APIs
 - stores PayOS configuration in the database through `PaymentProviderSettings`
 - does not expose PayOS secrets
@@ -283,6 +284,23 @@ Approved Checkbox answer-rule config extension:
 
 - `POST /api/projects/{projectId}/responses/generate`
 - `GET /api/projects/{projectId}/responses`
+
+Approved preview generation behavior:
+
+- request `count` must remain from 1 to 100
+- each generated preview response costs 1 credit
+- if available credit is lower than requested `count` but greater than 0, generate only the available-credit count instead of failing the whole request
+- when partial generation happens, deduct only the generated count and return the missing credit count so the UI can prompt top-up
+- if available credit is 0, reject preview generation without storing generated responses or writing a credit transaction
+
+Approved `GenerateResponsesResponse` fields:
+
+- `items`: generated preview responses
+- `creditsUsed`: number of credits deducted for this generation
+- `balanceAfter`: user credit balance after deduction
+- `requestedCount`: requested preview count
+- `generatedCount`: actual generated preview count
+- `missingCredits`: credits still needed to satisfy the requested preview count
 
 ### Submissions
 

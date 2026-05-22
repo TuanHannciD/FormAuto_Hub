@@ -84,7 +84,7 @@ public sealed class FormProjectService(
             }
 
             dbContext.FormQuestions.AddRange(questions);
-            await WriteUsageLogAsync(project.Id, UsageLogStatuses.Success, "Form analysis completed.", cancellationToken);
+            await WriteUsageLogAsync(project.Id, UsageLogStatuses.Success, "Phân tích biểu mẫu đã hoàn tất.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
 
             return new AnalyzeFormResponse(

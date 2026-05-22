@@ -58,7 +58,10 @@ public sealed record GeneratedResponseListResponse(IReadOnlyList<GeneratedRespon
 public sealed record GenerateResponsesResponse(
     IReadOnlyList<GeneratedResponseResponse> Items,
     int CreditsUsed,
-    decimal BalanceAfter);
+    decimal BalanceAfter,
+    int RequestedCount,
+    int GeneratedCount,
+    int MissingCredits);
 
 public sealed record SendSubmissionRequest(
     IReadOnlyList<Guid> ResponseIds,

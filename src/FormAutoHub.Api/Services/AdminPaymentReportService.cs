@@ -49,11 +49,13 @@ public sealed class AdminPaymentReportService(FormAutoHubDbContext dbContext) : 
     private IQueryable<AdminPaymentResponse> QueryPaymentsOrderedByNewest() =>
         from payment in dbContext.PaymentRecords.AsNoTracking()
         join order in dbContext.TopupOrders.AsNoTracking() on payment.TopupOrderId equals order.Id
+        join user in dbContext.Users.AsNoTracking() on order.UserId equals user.Id
         orderby payment.CreatedAt descending
         select new AdminPaymentResponse(
             payment.Id,
             payment.TopupOrderId,
             order.UserId,
+            user.Email,
             payment.Provider,
             payment.ProviderOrderCode,
             payment.ProviderPaymentLinkId,
@@ -69,11 +71,13 @@ public sealed class AdminPaymentReportService(FormAutoHubDbContext dbContext) : 
     private IQueryable<AdminPaymentResponse> QueryPaymentsById(Guid id) =>
         from payment in dbContext.PaymentRecords.AsNoTracking()
         join order in dbContext.TopupOrders.AsNoTracking() on payment.TopupOrderId equals order.Id
+        join user in dbContext.Users.AsNoTracking() on order.UserId equals user.Id
         where payment.Id == id
         select new AdminPaymentResponse(
             payment.Id,
             payment.TopupOrderId,
             order.UserId,
+            user.Email,
             payment.Provider,
             payment.ProviderOrderCode,
             payment.ProviderPaymentLinkId,

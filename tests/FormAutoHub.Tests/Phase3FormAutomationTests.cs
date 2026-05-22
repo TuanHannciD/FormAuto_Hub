@@ -464,13 +464,46 @@ public sealed class Phase3FormAutomationTests
     }
 
     [Fact]
-    public async Task GenerateAsync_DoesNotStoreGeneratedResponsesWhenCreditsAreInsufficient()
+    public async Task GenerateAsync_GeneratesOnlyAvailableCreditCountWhenCreditsAreInsufficient()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
         var questionId = Guid.NewGuid();
         await using var context = CreateContext();
         SeedPreviewData(context, userId, projectId, questionId, 1);
+        await context.SaveChangesAsync();
+
+        var service = new ResponseGenerationService(
+            context,
+            new TestCurrentUserContext(userId),
+            new CreditService(context));
+
+        var result = await service.GenerateAsync(projectId, new GenerateResponsesRequest(2), CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.RequestedCount);
+        Assert.Equal(1, result.GeneratedCount);
+        Assert.Equal(1, result.CreditsUsed);
+        Assert.Equal(1, result.MissingCredits);
+        Assert.Single(context.GeneratedResponses);
+        Assert.Single(context.CreditTransactions);
+
+        var account = await context.UserCreditAccounts.SingleAsync(item => item.UserId == userId);
+        Assert.Equal(0, account.Balance);
+
+        var usageLog = await context.UsageLogs.SingleAsync(item => item.UserId == userId);
+        Assert.Equal(UsageLogStatuses.Success, usageLog.Status);
+        Assert.Equal(1, usageLog.CreditsUsed);
+    }
+
+    [Fact]
+    public async Task GenerateAsync_RejectsWhenNoCreditsAreAvailable()
+    {
+        var userId = Guid.NewGuid();
+        var projectId = Guid.NewGuid();
+        var questionId = Guid.NewGuid();
+        await using var context = CreateContext();
+        SeedPreviewData(context, userId, projectId, questionId, 0);
         await context.SaveChangesAsync();
 
         var service = new ResponseGenerationService(
@@ -485,7 +518,7 @@ public sealed class Phase3FormAutomationTests
         Assert.Empty(context.CreditTransactions);
 
         var account = await context.UserCreditAccounts.SingleAsync(item => item.UserId == userId);
-        Assert.Equal(1, account.Balance);
+        Assert.Equal(0, account.Balance);
 
         var usageLog = await context.UsageLogs.SingleAsync(item => item.UserId == userId);
         Assert.Equal(UsageLogStatuses.Failed, usageLog.Status);
