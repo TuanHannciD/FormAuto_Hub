@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 
 const siteName = "FormAuto Hub";
-const title = "FormAuto Hub | Xem trước và theo dõi phản hồi Google Forms";
+const title = "FormAuto Hub | Dữ liệu mẫu Google Forms cho báo cáo";
 const description =
-  "FormAuto Hub giúp đội nhóm phân tích biểu mẫu, cấu hình quy tắc trả lời, xem trước phản hồi và theo dõi credit trước mọi thao tác được xác nhận.";
+  "Tạo dữ liệu phản hồi mẫu để kiểm tra Google Forms, Google Sheets và biểu đồ báo cáo trước khi thu thập phản hồi thật.";
 
 const workflowSteps = [
   { title: "Thêm URL biểu mẫu", icon: LinkIcon },
@@ -33,18 +33,18 @@ const workflowSteps = [
 
 const featureCards = [
   {
-    title: "Phân tích biểu mẫu",
-    body: "Đọc cấu trúc biểu mẫu và nhận diện các loại câu hỏi được hỗ trợ.",
+    title: "Test form trước khi gửi khảo sát",
+    body: "Kiểm tra câu hỏi bắt buộc, lựa chọn, text field và dữ liệu xuất ra trước khi gửi form thật.",
     icon: BarChart3
   },
   {
-    title: "Quy tắc trả lời",
-    body: "Cấu hình chế độ ngẫu nhiên, phần trăm, số lượng và dòng văn bản mẫu.",
+    title: "Demo dữ liệu cho bài thuyết trình",
+    body: "Tạo dữ liệu mẫu để minh họa bảng tính, biểu đồ hoặc dashboard khi dữ liệu thật chưa sẵn sàng.",
     icon: ClipboardList
   },
   {
-    title: "Xem trước phản hồi",
-    body: "Rà soát câu trả lời đã tạo trước mọi thao tác gửi được xác nhận.",
+    title: "Kiểm thử Google Forms to Sheets",
+    body: "Rà soát dữ liệu đổ về Google Sheets, biểu đồ và báo cáo trước khi nhóm chạy khảo sát thật.",
     icon: Eye
   },
   {
@@ -89,6 +89,11 @@ const faqs = [
       "Không. Hệ thống yêu cầu xem trước và người dùng xác nhận trước khi gửi."
   },
   {
+    question: "Có được dùng dữ liệu mẫu để nộp như dữ liệu khảo sát thật không?",
+    answer:
+      "Không. Dữ liệu mẫu chỉ dùng để kiểm thử, demo hoặc chuẩn bị báo cáo; kết luận học thuật vẫn cần phản hồi thật hợp lệ."
+  },
+  {
     question: "Có thể tạo bao nhiêu phản hồi mỗi lần?",
     answer: "Mỗi thao tác hỗ trợ từ 1 đến 100 câu trả lời xem trước."
   },
@@ -114,10 +119,11 @@ export const metadata: Metadata = {
   keywords: [
     "FormAuto Hub",
     "Google Forms",
-    "quản lý Google Forms",
-    "xem trước phản hồi",
-    "credit dashboard",
-    "form automation có kiểm soát"
+    "google forms báo cáo sinh viên",
+    "tạo dữ liệu mẫu Google Forms",
+    "demo dữ liệu khảo sát",
+    "Google Forms to Sheets báo cáo",
+    "kiểm tra Google Form trước khi gửi"
   ],
   alternates: {
     canonical: "/"
@@ -170,12 +176,19 @@ export default function LandingPage() {
       }
     }))
   };
+  const websiteStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteName,
+    url: siteUrl,
+    inLanguage: "vi-VN"
+  };
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-white text-slate-950">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, websiteStructuredData]) }}
       />
 
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -191,7 +204,7 @@ export default function LandingPage() {
           </Link>
           <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
             <a href="#tinh-nang" className="hover:text-blue-600">
-              Tính năng
+              Báo cáo
             </a>
             <a href="#quy-trinh" className="hover:text-blue-600">
               Quy trình
@@ -225,14 +238,14 @@ export default function LandingPage() {
           <div className="min-w-0 space-y-8">
             <div>
             <p className="inline-flex rounded border border-blue-100 bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
-              QUY TRÌNH GOOGLE FORMS CÓ KIỂM SOÁT
+              GOOGLE FORMS CHO BÁO CÁO VÀ DEMO DỮ LIỆU
             </p>
             <h1 className="mb-6 mt-6 max-w-[22rem] break-words text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:max-w-3xl sm:text-4xl md:text-5xl">
-              Xem trước, xác nhận và theo dõi quy trình phản hồi Google Forms
+              Tạo dữ liệu phản hồi mẫu cho Google Forms của bạn
             </h1>
             <p className="mt-6 max-w-[22rem] text-base leading-8 text-slate-600 sm:max-w-2xl md:text-lg">
-              FormAuto Hub giúp đội nhóm phân tích biểu mẫu, cấu hình quy tắc trả lời, xem trước
-              các lô phản hồi nhỏ và theo dõi credit trước mọi thao tác được xác nhận.
+              Kiểm thử form, demo dashboard và rà soát dữ liệu trước khi gửi khảo sát thật. Không
+              dùng để làm giả kết quả báo cáo, spam form hoặc né giới hạn của Google.
             </p>
             </div>
             <div className="flex max-w-[22rem] flex-col flex-wrap gap-4 sm:max-w-none sm:flex-row">
@@ -240,23 +253,23 @@ export default function LandingPage() {
                 href="/register"
                 className="rounded bg-blue-600 px-6 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
               >
-                Bắt đầu miễn phí
+                Bắt đầu với 5 credit
               </Link>
-              <a
-                href="#quy-trinh"
+              <Link
+                href="/google-forms/student-report"
                 className="rounded border border-slate-200 bg-white px-6 py-2.5 text-center text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
               >
-                Xem quy trình
-              </a>
+                Xem cho báo cáo sinh viên
+              </Link>
             </div>
             <div className="hidden max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:flex sm:max-w-none">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
                 <Eye size={16} />
-                Bắt buộc xem trước
+                Dữ liệu mẫu để kiểm thử
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                 <ListChecks size={16} />
-                1-100 câu trả lời xem trước
+                Preview 1-100 phản hồi
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                 <Wallet size={16} />
@@ -264,7 +277,7 @@ export default function LandingPage() {
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                 <ShieldCheck size={16} />
-                Không hỗ trợ spam hoặc né giới hạn
+                Không làm giả khảo sát
               </span>
             </div>
           </div>
@@ -279,10 +292,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-[1120px] px-4 text-center md:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Quy trình an toàn từ liên kết biểu mẫu đến thao tác xác nhận
+              Từ Google Form đến dữ liệu mẫu có thể kiểm tra
             </h2>
             <p className="mx-auto mb-12 max-w-2xl text-lg text-slate-600">
-              Mỗi thao tác đều đi qua bước rà soát, giới hạn và theo dõi trước khi gửi.
+              Mỗi thao tác đều đi qua bước phân tích, preview, giới hạn và xác nhận rõ ràng.
             </p>
           </div>
           <div className="relative grid gap-4 md:grid-cols-5">
@@ -302,10 +315,10 @@ export default function LandingPage() {
       <section id="tinh-nang" className="mx-auto max-w-[1120px] bg-white px-4 py-12 md:px-8 md:py-20">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Xây dựng cho vận hành biểu mẫu có kiểm soát
+              Dành cho sinh viên, nhóm học tập và người làm khảo sát nhỏ
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-slate-600">
-              Tất cả những gì cần để quản lý biểu mẫu, bản xem trước, credit và lịch sử hoạt động trong một dashboard.
+              Cùng một app, nhiều tình huống: test form, demo dữ liệu, kiểm tra sheet và chuẩn bị báo cáo.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -325,10 +338,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-[1120px] px-4 md:px-8">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Theo dõi credit, lượt dùng và bản xem trước trong một bảng điều khiển vận hành
+              Theo dõi credit, lượt dùng và bản xem trước trong một dashboard
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-slate-600">
-              Dành cho người vận hành và quản trị viên cần nhìn rõ dữ liệu trước khi hành động.
+              Dành cho nhóm cần nhìn rõ dữ liệu mẫu, credit và lịch sử thao tác trước khi chạy khảo sát thật.
             </p>
           </div>
           <LandingDashboardTabs />
@@ -343,7 +356,8 @@ export default function LandingPage() {
             </h2>
             <p className="mb-8 text-base leading-relaxed text-slate-600">
               FormAuto Hub giữ quy trình phản hồi trong phạm vi kiểm soát bằng bước xem trước, xác
-              nhận, giới hạn thao tác và lịch sử kiểm tra trước mọi hành động gửi.
+              nhận, giới hạn thao tác và lịch sử kiểm tra. Dữ liệu mẫu không thay thế phản hồi thật
+              trong báo cáo học thuật.
             </p>
             <ul className="space-y-4">
               {[
@@ -351,7 +365,7 @@ export default function LandingPage() {
                 "Cần người dùng xác nhận",
                 "1-100 câu trả lời xem trước mỗi thao tác",
                 "Ghi nhật ký sử dụng cho thao tác công cụ",
-                "Ghi giao dịch credit cho thay đổi số dư"
+                "Không dùng dữ liệu mẫu như kết quả khảo sát thật"
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 text-blue-600" size={20} />
@@ -371,7 +385,7 @@ export default function LandingPage() {
                 "Không vượt captcha",
                 "Không xoay proxy",
                 "Không tạo tài khoản giả",
-                "Không gửi biểu mẫu trái phép"
+                "Không làm giả dữ liệu khảo sát"
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -430,21 +444,21 @@ export default function LandingPage() {
             Bắt đầu với quy trình biểu mẫu có kiểm soát
           </h2>
           <p className="mx-auto mb-10 max-w-2xl text-lg text-blue-900/70">
-            Xem trước phản hồi, xác nhận thao tác và theo dõi credit rõ ràng ngay từ đầu.
+            Tạo dữ liệu mẫu để kiểm thử, demo và chuẩn bị báo cáo mà vẫn giữ preview, giới hạn và log rõ ràng.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/register"
               className="rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
             >
-              Bắt đầu miễn phí
+              Bắt đầu với 5 credit
             </Link>
-            <a
-              href="#quy-trinh"
+            <Link
+              href="/anti-abuse"
               className="rounded border border-blue-200 bg-white px-8 py-3 text-sm font-medium text-blue-900 shadow-sm transition-colors hover:bg-blue-50"
             >
-              Xem quy trình
-            </a>
+              Xem chính sách chống lạm dụng
+            </Link>
           </div>
         </div>
       </section>
@@ -558,10 +572,37 @@ function EmptyPreview({ title, detail }: { title: string; detail: string }) {
 
 function Footer() {
   const groups = [
-    { title: "Sản phẩm", links: ["Tính năng", "Quy trình", "An toàn", "Credit"] },
-    { title: "Tài nguyên", links: ["Tài liệu", "FAQ", "Hỗ trợ"] },
-    { title: "Tài khoản", links: ["Đăng nhập", "Tạo tài khoản"] },
-    { title: "Pháp lý", links: ["Điều khoản", "Quyền riêng tư"] }
+    {
+      title: "Sản phẩm",
+      links: [
+        { label: "Báo cáo sinh viên", href: "/google-forms/student-report" },
+        { label: "Demo khảo sát", href: "/google-forms/survey-demo" },
+        { label: "Forms to Sheets", href: "/google-forms/sheets-report" },
+        { label: "Dữ liệu mẫu", href: "/google-forms/sample-data" }
+      ]
+    },
+    {
+      title: "Tài nguyên",
+      links: [
+        { label: "Chống lạm dụng", href: "/anti-abuse" },
+        { label: "FAQ", href: "#faq" },
+        { label: "Quy trình", href: "#quy-trinh" }
+      ]
+    },
+    {
+      title: "Tài khoản",
+      links: [
+        { label: "Đăng nhập", href: "/login" },
+        { label: "Tạo tài khoản", href: "/register" }
+      ]
+    },
+    {
+      title: "Pháp lý",
+      links: [
+        { label: "Điều khoản", href: "#" },
+        { label: "Quyền riêng tư", href: "#" }
+      ]
+    }
   ];
 
   return (
@@ -572,10 +613,10 @@ function Footer() {
             <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-900">{group.title}</h4>
             <ul className="space-y-3">
               {group.links.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-slate-600 transition-colors hover:text-blue-600">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link href={link.href} className="text-sm text-slate-600 transition-colors hover:text-blue-600">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
