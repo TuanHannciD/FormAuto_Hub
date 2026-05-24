@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
                   </thead>
                   <tbody>
                     {summary.recentPayments.map((item) => (
-                      <tr className="border-t border-border" key={item.id}>
+                      <tr className="border-t border-border/70" key={item.id}>
                         <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
                         <td className="px-3 py-3">
                           <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
@@ -112,7 +112,7 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-amber-900">
               <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
-              <div className="rounded-md border border-amber-200 bg-white p-3">
+              <div className="rounded-md border border-amber-200 bg-white/75 p-3 backdrop-blur">
                 <p className="text-xs font-medium uppercase text-amber-700">Cần theo dõi</p>
                 <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
               </div>
@@ -178,7 +178,7 @@ function Metric({
 
 function Detail({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "danger" }) {
   return (
-    <div className={tone === "danger" ? "rounded-md border border-red-200 bg-red-50 p-3" : "rounded-md border border-border p-3"}>
+    <div className={tone === "danger" ? "rounded-md border border-red-200 bg-red-50/85 p-3" : "rounded-md border border-border/70 bg-white/55 p-3"}>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>

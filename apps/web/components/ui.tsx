@@ -32,7 +32,7 @@ export function DialogContent({ className, ...props }: React.HTMLAttributes<HTML
   return (
     <div
       className={cn(
-        "relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg border border-border bg-white shadow-xl",
+        "glass-panel relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg shadow-xl",
         className
       )}
       {...props}
@@ -41,7 +41,7 @@ export function DialogContent({ className, ...props }: React.HTMLAttributes<HTML
 }
 
 export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("border-b border-border px-5 py-4", className)} {...props} />;
+  return <div className={cn("border-b border-border/70 px-5 py-4", className)} {...props} />;
 }
 
 export function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
@@ -57,15 +57,15 @@ export function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDiv
 }
 
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-wrap justify-end gap-2 border-t border-border px-5 py-4", className)} {...props} />;
+  return <div className={cn("flex flex-wrap justify-end gap-2 border-t border-border/70 px-5 py-4", className)} {...props} />;
 }
 
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <section className={cn("rounded-lg border border-border bg-white shadow-soft", className)} {...props} />;
+  return <section className={cn("glass-panel rounded-lg", className)} {...props} />;
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("border-b border-border px-5 py-4", className)} {...props} />;
+  return <div className={cn("border-b border-border/70 px-5 py-4", className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
@@ -92,8 +92,9 @@ export function PageHeader({
   return (
     <div className={cn("flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between", className)}>
       <div className="min-w-0">
-        {eyebrow && <p className="text-xs text-muted-foreground">{eyebrow}</p>}
-        <h2 className={cn("font-semibold leading-tight tracking-tight", eyebrow ? "mt-2 text-2xl" : "text-2xl")}>{title}</h2>
+        {eyebrow && <p className="text-xs font-medium text-primary">{eyebrow}</p>}
+        <h2 className={cn("font-semibold leading-tight", eyebrow ? "mt-2 text-2xl" : "text-2xl")}>{title}</h2>
+        <div className="aura-divider mt-3 h-px w-28 rounded-full" />
         {description && <p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">{actions}</div>}
@@ -106,7 +107,7 @@ export function MobileRecordList({ className, ...props }: React.HTMLAttributes<H
 }
 
 export function MobileRecord({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <article className={cn("rounded-lg border border-border bg-white p-4 shadow-soft", className)} {...props} />;
+  return <article className={cn("glass-panel rounded-lg p-4", className)} {...props} />;
 }
 
 export function KeyValueRow({
@@ -134,9 +135,9 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50",
-        variant === "primary" && "bg-primary text-primary-foreground hover:opacity-90",
-        variant === "secondary" && "border border-border bg-white text-foreground hover:bg-muted",
+        "inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:opacity-50",
+        variant === "primary" && "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90",
+        variant === "secondary" && "border border-border/80 bg-white/82 text-foreground shadow-sm backdrop-blur hover:bg-white",
         variant === "danger" && "bg-destructive text-destructive-foreground hover:opacity-90",
         className
       )}
@@ -148,7 +149,7 @@ export function Button({
 export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={cn("min-h-10 w-full rounded-md border border-border bg-white px-3 py-2 text-sm outline-none focus:border-primary", className)}
+      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -157,7 +158,7 @@ export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInp
 export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
-      className={cn("min-h-24 w-full rounded-md border border-border bg-white px-3 py-2 text-sm outline-none focus:border-primary", className)}
+      className={cn("min-h-24 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -166,7 +167,7 @@ export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<H
 export function Select({ className, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
-      className={cn("min-h-10 w-full rounded-md border border-border bg-white px-3 py-2 text-sm outline-none focus:border-primary", className)}
+      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -194,12 +195,12 @@ export function Badge({
 }
 
 export function Alert({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900", className)} {...props} />;
+  return <div className={cn("rounded-lg border border-cyan-200/80 bg-cyan-50/80 p-4 text-sm text-cyan-950 shadow-sm backdrop-blur", className)} {...props} />;
 }
 
 export function EmptyState({ title, detail }: { title: string; detail: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-border bg-muted/40 p-6 text-center">
+    <div className="rounded-lg border border-dashed border-border/80 bg-white/55 p-6 text-center backdrop-blur">
       <p className="font-medium">{title}</p>
       <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
     </div>

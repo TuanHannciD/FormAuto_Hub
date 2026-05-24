@@ -62,27 +62,31 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     router.replace("/login");
   }
 
+  function isActiveHref(href: string) {
+    return href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+  }
+
   const navigation = (
     <nav className="space-y-1">
       {navItems.map((item) => (
         <Link
           className={cn(
-            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
-            pathname === item.href && "bg-primary/10 text-primary"
+            "group flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground",
+            isActiveHref(item.href) && "bg-white text-primary shadow-sm ring-1 ring-primary/15"
           )}
           href={item.href}
           key={item.href}
           onClick={() => setIsMobileNavOpen(false)}
         >
-          <item.icon size={18} />
+          <item.icon className={cn("transition", isActiveHref(item.href) && "text-primary")} size={18} />
           {item.label}
         </Link>
       ))}
       {session?.role === "Admin" && (
         <Link
           className={cn(
-            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
-            pathname.startsWith("/admin") && "bg-primary/10 text-primary"
+            "group flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground",
+            pathname.startsWith("/admin") && "bg-white text-primary shadow-sm ring-1 ring-primary/15"
           )}
           href="/admin"
           onClick={() => setIsMobileNavOpen(false)}
@@ -96,7 +100,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   if (isChecking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+      <div className="app-aura-bg flex min-h-screen items-center justify-center text-sm text-muted-foreground">
         Đang kiểm tra phiên đăng nhập...
       </div>
     );
@@ -104,17 +108,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+      <div className="app-aura-bg flex min-h-screen items-center justify-center text-sm text-muted-foreground">
         Đang chuyển về đăng nhập...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-border bg-white px-4 py-5 lg:block">
+    <div className="app-aura-bg min-h-screen">
+      <aside className="glass-sidebar fixed inset-y-0 left-0 hidden w-72 border-r px-4 py-5 lg:block">
         <div className="mb-7 flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
             <ClipboardCheck size={20} />
           </div>
           <div>
@@ -132,10 +136,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             onClick={() => setIsMobileNavOpen(false)}
             type="button"
           />
-          <aside className="relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r border-border bg-white px-4 py-5 shadow-xl">
+          <aside className="glass-sidebar relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r px-4 py-5 shadow-xl">
             <div className="mb-7 flex items-center justify-between gap-3 px-2">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
                   <ClipboardCheck size={20} />
                 </div>
                 <div className="min-w-0">
@@ -152,7 +156,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <main className="lg:pl-72">
-        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-4 py-3 backdrop-blur sm:px-5 sm:py-4">
+        <header className="sticky top-0 z-10 border-b border-white/70 bg-white/78 px-4 py-3 shadow-sm backdrop-blur-xl sm:px-5 sm:py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Button

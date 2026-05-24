@@ -77,7 +77,7 @@ export default function TopUpPage() {
         title="Nạp credit bằng PayOS"
         description="Chọn gói credit, tạo link thanh toán và chờ backend xác minh PayOS."
         actions={
-        <div className="rounded-md border border-border bg-white px-3 py-2 text-sm">
+        <div className="rounded-md border border-border/70 bg-white/75 px-3 py-2 text-sm shadow-sm backdrop-blur">
           <span className="text-muted-foreground">Số dư: </span>
           <span className="font-semibold">{summary ? `${summary.currentCreditBalance} credit` : "-"}</span>
         </div>
@@ -88,7 +88,7 @@ export default function TopUpPage() {
 
       <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
         {["Chọn gói", "Tạo link PayOS", "Thanh toán", "Chờ xác minh"].map((step, index) => (
-          <div className="flex items-center gap-3 rounded-md border border-border bg-white p-3 text-sm" key={step}>
+          <div className="glass-panel flex items-center gap-3 rounded-lg p-3 text-sm" key={step}>
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{index + 1}</span>
             <span>{step}</span>
           </div>
@@ -106,7 +106,7 @@ export default function TopUpPage() {
               <div className="grid gap-3 md:grid-cols-3">
                 {packages.map((item) => (
                   <button
-                    className={`rounded-lg border p-4 text-left transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border bg-white"}`}
+                    className={`rounded-lg border p-4 text-left shadow-sm backdrop-blur transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border/70 bg-white/65"}`}
                     key={item.id}
                     onClick={() => setPackageId(item.id)}
                     type="button"
@@ -132,12 +132,12 @@ export default function TopUpPage() {
           </CardContent>
         </Card>
 
-          <details className="rounded-lg border border-border bg-white shadow-soft">
+          <details className="glass-panel rounded-lg">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-semibold">
               <span>Yêu cầu đối soát thủ công</span>
               <span className="text-xs font-medium text-muted-foreground">Dùng khi PayOS chưa cập nhật</span>
             </summary>
-            <div className="border-t border-border p-5">
+            <div className="border-t border-border/70 p-5">
               <form className="space-y-4" onSubmit={submitOrder}>
                 <label className="block text-sm font-medium">
                   Phương thức ghi nhận
@@ -165,7 +165,7 @@ export default function TopUpPage() {
             <p className="rounded-md border border-cyan-100 bg-cyan-50 px-3 py-2 text-xs leading-5 text-cyan-900">
               Đây là luồng chính. Sau khi tạo link, hoàn tất thanh toán trên PayOS và chờ webhook xác minh trước khi credit được cộng.
             </p>
-            <Button className="w-full" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
+              <Button className="w-full shadow-md" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
               <CreditCard size={16} />
               <span className="ml-2">{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo link thanh toán"}</span>
               {!isCreatingPayos && <ArrowRight className="ml-2" size={16} />}
@@ -203,8 +203,8 @@ export default function TopUpPage() {
                   <KeyValueRow label="Phương thức" value={order.paymentMethod} />
                   <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
                   <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
-                  <div className="border-t border-border pt-3">
-                    <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-muted" href={`/dashboard/top-up/${order.id}`}>
+                  <div className="border-t border-border/70 pt-3">
+                    <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-white/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-white" href={`/dashboard/top-up/${order.id}`}>
                       Xem chi tiết
                     </Link>
                   </div>
@@ -225,7 +225,7 @@ export default function TopUpPage() {
                 </thead>
                 <tbody>
                   {orders.map((order) => (
-                    <tr className="border-t border-border" key={order.id}>
+                    <tr className="border-t border-border/70" key={order.id}>
                       <td className="py-3">{order.credits}</td>
                       <td className="py-3">{formatCurrency(order.amount)}</td>
                       <td className="py-3">{order.paymentMethod}</td>
@@ -251,7 +251,7 @@ export default function TopUpPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border p-3">
+    <div className="rounded-md border border-border/70 bg-white/55 p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>

@@ -37,24 +37,28 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     router.replace("/login");
   }
 
+  function isActiveHref(href: string) {
+    return href === "/admin" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+  }
+
   const navigation = (
     <nav className="space-y-1">
       {navItems.map((item) => (
         <Link
           className={cn(
-            "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
-            pathname === item.href && "bg-primary/10 text-primary"
+            "group flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground",
+            isActiveHref(item.href) && "bg-white text-primary shadow-sm ring-1 ring-primary/15"
           )}
           href={item.href}
           key={item.href}
           onClick={() => setIsMobileNavOpen(false)}
         >
-          <item.icon size={18} />
+          <item.icon className={cn("transition", isActiveHref(item.href) && "text-primary")} size={18} />
           {item.label}
         </Link>
       ))}
       <Link
-        className="flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground"
         href="/dashboard"
         onClick={() => setIsMobileNavOpen(false)}
       >
@@ -65,13 +69,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   );
 
   if (isChecking) {
-    return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Đang kiểm tra quyền admin...</div>;
+    return <div className="app-aura-bg flex min-h-screen items-center justify-center text-sm text-muted-foreground">Đang kiểm tra quyền admin...</div>;
   }
 
   if (!session || session.role !== "Admin") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-5">
-        <div className="max-w-md rounded-lg border border-border bg-white p-6 text-center shadow-soft">
+      <main className="app-aura-bg flex min-h-screen items-center justify-center px-5">
+        <div className="glass-panel max-w-md rounded-lg p-6 text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50 text-amber-700">
             <ShieldCheck size={22} />
           </div>
@@ -86,10 +90,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-white px-4 py-5 lg:flex lg:flex-col">
+    <div className="app-aura-bg min-h-screen">
+      <aside className="glass-sidebar fixed inset-y-0 left-0 hidden w-64 border-r px-4 py-5 lg:flex lg:flex-col">
         <div className="mb-7 flex items-center gap-3 px-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
             <ShieldCheck size={20} />
           </div>
           <div>
@@ -98,8 +102,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         {navigation}
-        <div className="mt-auto space-y-4 border-t border-border pt-4">
-          <Link className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground" href="/dashboard">
+        <div className="mt-auto space-y-4 border-t border-border/70 pt-4">
+          <Link className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground" href="/dashboard">
             <HelpCircle size={18} />
             Hỗ trợ kỹ thuật
           </Link>
@@ -122,10 +126,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             onClick={() => setIsMobileNavOpen(false)}
             type="button"
           />
-          <aside className="relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r border-border bg-white px-4 py-5 shadow-xl">
+          <aside className="glass-sidebar relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r px-4 py-5 shadow-xl">
             <div className="mb-7 flex items-center justify-between gap-3 px-2">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
                   <ShieldCheck size={20} />
                 </div>
                 <div className="min-w-0">
@@ -138,7 +142,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               </Button>
             </div>
             {navigation}
-            <div className="mt-auto border-t border-border pt-4">
+            <div className="mt-auto border-t border-border/70 pt-4">
               <div className="flex items-center gap-3 px-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
                   {session.fullName.slice(0, 1).toUpperCase()}
@@ -153,7 +157,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <main className="lg:pl-64">
-        <header className="sticky top-0 z-10 border-b border-border bg-white/95 px-4 py-3 backdrop-blur sm:px-5">
+        <header className="sticky top-0 z-10 border-b border-white/70 bg-white/78 px-4 py-3 shadow-sm backdrop-blur-xl sm:px-5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Button

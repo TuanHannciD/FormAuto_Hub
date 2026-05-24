@@ -181,7 +181,7 @@ export default function AdminPackagesPage() {
                       }
                     />
                     <KeyValueRow label="Ngày tạo" value={formatDate(item.createdAt)} />
-                    <div className="border-t border-border pt-3">
+                    <div className="border-t border-border/70 pt-3">
                       <Button className="w-full" type="button" variant="secondary" onClick={() => editPackage(item)}>
                         <Pencil size={14} />
                         <span className="ml-2">Sửa</span>
@@ -204,7 +204,7 @@ export default function AdminPackagesPage() {
                   </thead>
                   <tbody>
                     {filteredPackages.map((item) => (
-                      <tr className="border-t border-border" key={item.id}>
+                      <tr className="border-t border-border/70" key={item.id}>
                         <td className="px-3 py-3 font-medium">{item.name}</td>
                         <td className="px-3 py-3">{item.credits} cr</td>
                         <td className="px-3 py-3">{formatCurrency(item.price)}</td>
@@ -251,7 +251,7 @@ export default function AdminPackagesPage() {
                 Giá VND
                 <Input className="mt-2" min={1} step={1} type="number" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: Number(event.target.value) }))} />
               </label>
-              <label className="flex items-center justify-between rounded-md border border-border p-3 text-sm font-medium">
+              <label className="flex items-center justify-between rounded-md border border-border/70 bg-white/55 p-3 text-sm font-medium">
                 <span>Bật gói cho người dùng</span>
                 <input checked={form.isActive} onChange={(event) => setForm((current) => ({ ...current, isActive: event.target.checked }))} type="checkbox" />
               </label>
@@ -292,6 +292,7 @@ function Stat({
       <CardContent className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
+          <div className="mt-3 h-1 w-10 rounded-full bg-primary/35" />
           <p className="mt-2 text-2xl font-semibold">{value}</p>
         </div>
         <span className={`rounded-md p-2 ${toneClass}`}>

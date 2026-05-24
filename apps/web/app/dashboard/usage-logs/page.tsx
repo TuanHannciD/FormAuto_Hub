@@ -61,7 +61,7 @@ export default function UsageLogsPage() {
                 </thead>
                 <tbody>
                   {logs.map((log) => (
-                    <tr className="border-t border-border" key={log.id}>
+                    <tr className="border-t border-border/70" key={log.id}>
                       <td className="py-3">{formatDate(log.createdAt)}</td>
                       <td className="py-3">{displayToolName(log.toolName)}</td>
                       <td className="py-3">{displayAction(log.action)}</td>
@@ -85,6 +85,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <Card>
       <CardContent>
+        <div className="mb-4 h-1 w-10 rounded-full bg-primary/35" />
         <p className="text-sm text-muted-foreground">{label}</p>
         <p className="mt-2 text-2xl font-semibold">{value}</p>
       </CardContent>

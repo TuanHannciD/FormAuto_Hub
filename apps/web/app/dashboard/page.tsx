@@ -38,13 +38,13 @@ export default function DashboardPage() {
             <CardTitle>Việc nên làm tiếp</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/forms">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/forms">
               Phân tích link Google Form và cài đặt cách trả lời
             </Link>
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/top-up">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/top-up">
               Nạp credit hoặc theo dõi giao dịch PayOS
             </Link>
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/usage-logs">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/usage-logs">
               Kiểm tra lịch sử sử dụng và hành động bị chặn
             </Link>
           </CardContent>
@@ -81,7 +81,7 @@ export default function DashboardPage() {
                   </thead>
                   <tbody>
                     {summary.recentTopupOrders.map((order) => (
-                      <tr className="border-t border-border" key={order.id}>
+                      <tr className="border-t border-border/70" key={order.id}>
                         <td className="py-3">{order.credits}</td>
                         <td className="py-3">{formatCurrency(order.amount)}</td>
                         <td className="py-3"><StatusBadge status={order.status} /></td>
@@ -130,7 +130,7 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {summary.recentUsageLogs.map((log) => (
-                    <tr className="border-t border-border" key={log.id}>
+                    <tr className="border-t border-border/70" key={log.id}>
                       <td className="py-3">{formatDate(log.createdAt)}</td>
                       <td className="py-3">{displayAction(log.action)}</td>
                       <td className="py-3">{log.creditsUsed}</td>
@@ -153,6 +153,7 @@ function Metric({ title, value }: { title: string; value: string }) {
   return (
     <Card>
       <CardContent>
+        <div className="mb-4 h-1 w-10 rounded-full bg-primary/35" />
         <p className="text-sm text-muted-foreground">{title}</p>
         <p className="mt-2 text-2xl font-semibold">{value}</p>
       </CardContent>

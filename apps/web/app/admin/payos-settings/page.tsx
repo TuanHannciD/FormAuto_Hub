@@ -79,10 +79,10 @@ export default function PayosSettingsPage() {
         </Button>
         }
       />
-      <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+      <Alert className="border-amber-200/80 bg-amber-50/85 text-amber-900">
         Không hiển thị API key hoặc checksum key thật trên giao diện. Nếu để trống khóa bí mật khi lưu, hệ thống sẽ giữ khóa hiện có.
       </Alert>
-      <Alert className="border-sky-200 bg-sky-50 text-sky-950">
+      <Alert className="border-sky-200/80 bg-sky-50/85 text-sky-950">
         PayOS cần 3 đường dẫn: Return URL và Cancel URL trỏ về trang frontend bên dưới; Webhook URL cấu hình trong PayOS dashboard và có thể dùng chính domain frontend nhờ proxy `/api/payments/payos/webhook`.
       </Alert>
       <div className="grid gap-4 xl:grid-cols-[1.35fr_0.75fr]">
@@ -104,7 +104,7 @@ export default function PayosSettingsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   Bật PayOS
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border bg-muted/30 px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border/70 bg-white/55 px-3 py-2 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép khách thanh toán qua cổng PayOS.</span>
                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -140,7 +140,7 @@ export default function PayosSettingsPage() {
                   <Input className="mt-2" value={cancelUrl} onChange={(event) => setCancelUrl(event.target.value)} />
                 </label>
               </div>
-              <div className="rounded-md border border-sky-200 bg-sky-50 p-4 text-sm text-sky-950">
+              <div className="rounded-md border border-sky-200/80 bg-sky-50/85 p-4 text-sm text-sky-950 shadow-sm backdrop-blur">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <p className="font-semibold">Webhook URL cấu hình trong PayOS dashboard</p>
@@ -232,13 +232,13 @@ function Detail({
   tone?: "default" | "success" | "warning";
 }) {
   const toneClass = {
-    default: "border-border",
-    success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    warning: "border-amber-200 bg-amber-50 text-amber-900"
+    default: "border-border/70 bg-white/55",
+    success: "border-emerald-200 bg-emerald-50/85 text-emerald-900",
+    warning: "border-amber-200 bg-amber-50/85 text-amber-900"
   }[tone];
 
   return (
-    <div className={`rounded-md border p-3 ${toneClass}`}>
+    <div className={`rounded-md border p-3 shadow-sm backdrop-blur ${toneClass}`}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
         {Icon && <Icon size={15} />}
@@ -250,7 +250,7 @@ function Detail({
 
 function CheckRow({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between rounded-md border border-border p-3">
+    <div className="flex items-center justify-between rounded-md border border-border/70 bg-white/55 p-3">
       <span>{label}</span>
       {ok ? <CheckCircle2 className="text-emerald-600" size={16} /> : <AlertCircle className="text-red-600" size={16} />}
     </div>
@@ -259,7 +259,7 @@ function CheckRow({ label, ok }: { label: string; ok: boolean }) {
 
 function Reference({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-md border border-border p-3 text-muted-foreground">
+    <div className="flex items-center gap-2 rounded-md border border-border/70 bg-white/55 p-3 text-muted-foreground">
       <BookOpen size={15} />
       <span>{label}</span>
     </div>

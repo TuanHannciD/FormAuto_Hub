@@ -19,6 +19,11 @@ export default function CreditTransactionsPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Giao dịch credit" description="Lịch sử ghi nhận credit được nạp và credit đã sử dụng." />
+      <div className="grid gap-4 md:grid-cols-3">
+        <Metric label="Tổng giao dịch" value={String(transactions.length)} />
+        <Metric label="Credit mới nhất" value={transactions[0] ? String(transactions[0].amount) : "-"} />
+        <Metric label="Số dư mới nhất" value={transactions[0] ? String(transactions[0].balanceAfter) : "-"} />
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Sổ ghi credit</CardTitle>
@@ -52,7 +57,7 @@ export default function CreditTransactionsPage() {
                 </thead>
                 <tbody>
                   {transactions.map((transaction) => (
-                    <tr className="border-t border-border" key={transaction.id}>
+                    <tr className="border-t border-border/70" key={transaction.id}>
                       <td className="py-3">{formatDate(transaction.createdAt)}</td>
                       <td className="py-3"><Badge tone="info">{displayCreditTransactionType(transaction.type)}</Badge></td>
                       <td className="py-3">{transaction.amount}</td>
@@ -68,5 +73,17 @@ export default function CreditTransactionsPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <Card>
+      <CardContent>
+        <div className="mb-4 h-1 w-10 rounded-full bg-primary/35" />
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="mt-2 text-2xl font-semibold">{value}</p>
+      </CardContent>
+    </Card>
   );
 }

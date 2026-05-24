@@ -483,7 +483,7 @@ export default function FormsPage() {
         ].map((step) => (
           <div
             className={`rounded-md border px-3 py-2 text-sm font-medium ${
-              step.active ? "border-primary bg-primary/5 text-primary" : "border-border bg-white text-muted-foreground"
+              step.active ? "border-primary bg-primary/5 text-primary shadow-sm" : "border-border/70 bg-white/65 text-muted-foreground backdrop-blur"
             }`}
             key={step.label}
           >
@@ -545,7 +545,7 @@ export default function FormsPage() {
             </button>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg border border-border bg-muted/30 p-4">
+            <div className="rounded-lg border border-border/70 bg-white/55 p-4 backdrop-blur">
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <Badge tone="info">{analysis.formTitle}</Badge>
                 <StatusBadge status={analysis.status} />
@@ -581,7 +581,7 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-cyan-200 bg-cyan-50/95 p-4 shadow-soft ring-1 ring-cyan-100 backdrop-blur sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-cyan-200/80 bg-cyan-50/88 p-4 shadow-soft ring-1 ring-cyan-100/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
                     <div className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm">
                       Tạo bản xem trước
@@ -661,7 +661,7 @@ export default function FormsPage() {
                 </div>
               )}
               {resumeContext && !generationCreditNotice && (
-                <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950 shadow-sm ring-1 ring-cyan-100">
+                <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/85 p-4 text-sm text-cyan-950 shadow-sm ring-1 ring-cyan-100/70 backdrop-blur">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Có tiến trình tạo preview đang chờ tiếp tục</p>
@@ -675,7 +675,7 @@ export default function FormsPage() {
                   </div>
                 </div>
               )}
-              <div className="rounded-lg border border-border bg-muted/30 p-4">
+              <div className="rounded-lg border border-border/70 bg-white/55 p-4 backdrop-blur">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="text-sm font-medium">Câu trả lời xem trước đã tạo</p>
@@ -690,7 +690,7 @@ export default function FormsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-border bg-white">
+              <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
                 <button
                   aria-expanded={previewListOpen}
                   className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -703,13 +703,13 @@ export default function FormsPage() {
                       {previews.length} bản xem trước, {previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời
                     </span>
                   </span>
-                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border bg-white px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-white/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                     {previewListOpen ? "Thu gọn" : "Mở danh sách"}
                     {previewListOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                   </span>
                 </button>
                 {previewListOpen && (
-                  <div className="space-y-2 border-t border-border p-3">
+                  <div className="space-y-2 border-t border-border/70 p-3">
                     {previews.map((preview, index) => (
                       <PreviewAccordion
                         key={preview.id}
@@ -723,7 +723,7 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div className="sticky bottom-3 z-10 rounded-lg border border-cyan-200 bg-cyan-50/95 p-4 shadow-soft ring-1 ring-cyan-100 backdrop-blur">
+              <div className="sticky bottom-3 z-10 rounded-lg border border-cyan-200/80 bg-cyan-50/88 p-4 shadow-soft ring-1 ring-cyan-100/70 backdrop-blur-xl">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
@@ -777,7 +777,7 @@ export default function FormsPage() {
               <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
             {(submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
-              <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-950">
+              <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/85 p-4 text-cyan-950 shadow-sm backdrop-blur">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-semibold">Thực hiện lại một lần nữa</p>
@@ -791,7 +791,7 @@ export default function FormsPage() {
                 </div>
               </div>
             )}
-            <div className="rounded-lg border border-border bg-white">
+            <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
               <button
                 aria-expanded={submissionLogsOpen}
                 className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -804,18 +804,18 @@ export default function FormsPage() {
                     {buildSubmissionBatches(submission.logs).length} pack, thành công {submission.successCount}, lỗi {submission.failedCount}
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border bg-white px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-white/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                   {submissionLogsOpen ? "Thu gọn" : "Mở chi tiết"}
                   {submissionLogsOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                 </span>
               </button>
               {submissionLogsOpen && (
-                <div className="space-y-3 border-t border-border p-3">
+                <div className="space-y-3 border-t border-border/70 p-3">
                   {buildSubmissionBatches(submission.logs).map((batch, batchIndex) => {
                     const successCount = batch.filter((log) => log.status === "Success").length;
                     const failedCount = batch.length - successCount;
                     return (
-                      <div className="rounded-lg border border-border bg-muted/20 p-3" key={`submission-pack-${batchIndex}`}>
+                      <div className="rounded-lg border border-border/70 bg-white/55 p-3" key={`submission-pack-${batchIndex}`}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <p className="text-sm font-semibold">Pack {batchIndex + 1}</p>
                           <div className="flex flex-wrap gap-2 text-xs font-medium">
@@ -849,7 +849,7 @@ function PreviewAccordion({
   onToggle: () => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-white">
+    <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
       <button
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-muted/40"
@@ -866,15 +866,15 @@ function PreviewAccordion({
           </span>
         </span>
         <span className="hidden sm:inline-flex"><StatusBadge status={preview.status} /></span>
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-white text-muted-foreground">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-white/80 text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </span>
       </button>
 
       {open && (
-        <div className="max-h-[420px] space-y-2 overflow-y-auto border-t border-border bg-muted/30 p-3">
+        <div className="max-h-[420px] space-y-2 overflow-y-auto border-t border-border/70 bg-white/45 p-3">
           {preview.answers.map((answer, answerIndex) => (
-            <div className="rounded-lg border border-border bg-white px-3 py-3" key={`${preview.id}-${answer.questionId}-${answerIndex}`}>
+            <div className="rounded-lg border border-border/70 bg-white/80 px-3 py-3" key={`${preview.id}-${answer.questionId}-${answerIndex}`}>
               <div className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <FileText className="h-3.5 w-3.5" />
                 <span className="truncate">{answer.label || "Không có tiêu đề"}</span>
@@ -1010,7 +1010,7 @@ function RuleEditor({
   const choiceTotal = Object.values(choiceNumbers).reduce((sum, amount) => sum + clampInteger(amount, 0, choiceLimit), 0);
 
   return (
-    <div className={`rounded-lg border bg-white p-4 transition ${expanded ? "border-border" : "border-cyan-100 shadow-sm"}`}>
+    <div className={`rounded-lg border bg-white/72 p-4 shadow-sm backdrop-blur transition ${expanded ? "border-border/70" : "border-cyan-100"}`}>
       <div className="mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-cyan-700">
@@ -1031,8 +1031,8 @@ function RuleEditor({
             aria-expanded={expanded}
             className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition ${
               expanded
-                ? "border-border bg-white text-muted-foreground hover:bg-muted/50"
-                : "border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100"
+                ? "border-border/70 bg-white/80 text-muted-foreground hover:bg-muted/50"
+                : "border-cyan-200 bg-cyan-50/85 text-cyan-800 hover:bg-cyan-100"
             }`}
             type="button"
             onClick={onToggle}
@@ -1047,7 +1047,7 @@ function RuleEditor({
         <div className="mt-4">
 
       {!isTextQuestion && question.options.length > 0 && (
-        <div className="mb-4 rounded-md border border-border bg-muted/30 p-3">
+        <div className="mb-4 rounded-md border border-border/70 bg-white/55 p-3">
           <p className="mb-2 text-xs font-medium text-muted-foreground">Lựa chọn lấy từ form gốc</p>
           <div className="flex flex-wrap gap-2">
             {question.options.map((option) => {
@@ -1055,7 +1055,7 @@ function RuleEditor({
               return (
                 <button
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
-                    active ? "border-cyan-300 bg-cyan-50 text-cyan-800" : "border-border bg-white text-muted-foreground"
+                    active ? "border-cyan-300 bg-cyan-50 text-cyan-800" : "border-border/70 bg-white/75 text-muted-foreground"
                   }`}
                   key={option}
                   onClick={() => toggleOption(option)}
@@ -1084,7 +1084,7 @@ function RuleEditor({
         </label>
 
         {value.mode === "DateRangeSequential" ? (
-          <div className="rounded-md border border-border bg-muted/30 p-3">
+          <div className="rounded-md border border-border/70 bg-white/55 p-3">
             <p className="text-sm font-medium">Khoảng ngày tuần tự</p>
             <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt từ ngày bắt đầu đến ngày kết thúc.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -1109,7 +1109,7 @@ function RuleEditor({
             </div>
           </div>
         ) : value.mode === "TimeRangeSequential" ? (
-          <div className="rounded-md border border-border bg-muted/30 p-3">
+          <div className="rounded-md border border-border/70 bg-white/55 p-3">
             <p className="text-sm font-medium">Khoảng giờ tuần tự</p>
             <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt theo các mốc giờ trong khoảng đã chọn.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -1160,7 +1160,7 @@ function RuleEditor({
             </span>
           </label>
         ) : value.mode === "RandomByPercentage" || value.mode === "RandomByQuantity" ? (
-          <div className="rounded-md border border-border bg-muted/30 p-3">
+          <div className="rounded-md border border-border/70 bg-white/55 p-3">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-sm font-medium">
@@ -1181,7 +1181,7 @@ function RuleEditor({
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {(question.options.length > 0 ? question.options : selectedOptions).map((option) => (
-                <label className="grid grid-cols-1 gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm sm:grid-cols-[1fr_120px] sm:items-center sm:gap-3" key={option}>
+                <label className="grid grid-cols-1 gap-2 rounded-md border border-border/70 bg-white/75 px-3 py-2 text-sm sm:grid-cols-[1fr_120px] sm:items-center sm:gap-3" key={option}>
                   <span className="min-w-0 break-words font-medium sm:truncate">{option}</span>
                   <div className="relative">
                     <Input
@@ -1210,7 +1210,7 @@ function RuleEditor({
             )}
           </div>
         ) : (
-          <div className="rounded-md border border-border bg-muted/30 p-3 text-sm">
+          <div className="rounded-md border border-border/70 bg-white/55 p-3 text-sm">
             <p className="font-medium">Cách trả lời sẽ dùng các lựa chọn đang bật.</p>
             <p className="mt-1 text-muted-foreground">
               Với chế độ hiện tại, hệ thống tự tạo cấu hình từ lựa chọn thật của biểu mẫu, không cần nhập JSON thủ công.
@@ -1243,7 +1243,7 @@ function CheckboxSelectionFields({
   const maxAllowed = Math.min(maxOptionCount, MAX_RULE_VALUES);
 
   return (
-    <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
+    <div className="mt-3 grid gap-3 border-t border-border/70 pt-3 sm:grid-cols-2">
       <label className="block text-sm font-medium">
         Số lựa chọn tối thiểu
         <Input

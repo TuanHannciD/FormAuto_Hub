@@ -143,7 +143,7 @@ export default function AdminPaymentsPage() {
                 </thead>
                 <tbody>
                   {filteredPayments.map((item) => (
-                    <tr className="border-t border-border" key={item.id}>
+                    <tr className="border-t border-border/70" key={item.id}>
                       <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
                       <td className="px-3 py-3">
                         <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
@@ -174,7 +174,7 @@ function displayPaymentUser(item: AdminPayment) {
 
 function CompactStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border bg-white px-3 py-2">
+    <div className="rounded-md border border-border/70 bg-white/65 px-3 py-2 shadow-sm backdrop-blur">
       <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
       <p className="mt-1 text-lg font-semibold">{value}</p>
     </div>
