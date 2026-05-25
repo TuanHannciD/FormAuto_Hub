@@ -85,9 +85,9 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <Card>
       <CardContent>
-        <div className="mb-4 h-1 w-10 rounded-full bg-primary/35" />
+        <div className="metric-accent mb-4 h-1 w-10 rounded-full" />
         <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="mt-2 text-2xl font-semibold">{value}</p>
+        <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
       </CardContent>
     </Card>
   );

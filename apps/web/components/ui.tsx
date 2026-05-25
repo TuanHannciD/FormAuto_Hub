@@ -32,7 +32,7 @@ export function DialogContent({ className, ...props }: React.HTMLAttributes<HTML
   return (
     <div
       className={cn(
-        "glass-panel relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg shadow-xl",
+        "glass-panel relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg",
         className
       )}
       {...props}
@@ -69,7 +69,7 @@ export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDiv
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cn("text-base font-semibold", className)} {...props} />;
+  return <h2 className={cn("text-[15px] font-bold", className)} {...props} />;
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -93,9 +93,9 @@ export function PageHeader({
     <div className={cn("flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between", className)}>
       <div className="min-w-0">
         {eyebrow && <p className="text-xs font-medium text-primary">{eyebrow}</p>}
-        <h2 className={cn("font-semibold leading-tight", eyebrow ? "mt-2 text-2xl" : "text-2xl")}>{title}</h2>
+        <h2 className={cn("font-extrabold leading-tight text-slate-950", eyebrow ? "mt-2 text-[28px]" : "text-[28px]")}>{title}</h2>
         <div className="aura-divider mt-3 h-px w-28 rounded-full" />
-        {description && <p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>}
+        {description && <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">{actions}</div>}
     </div>
@@ -135,9 +135,9 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:opacity-50",
-        variant === "primary" && "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90",
-        variant === "secondary" && "border border-border/80 bg-white/82 text-foreground shadow-sm backdrop-blur hover:bg-white",
+        "inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:opacity-50",
+        variant === "primary" && "bg-primary text-primary-foreground shadow-[0_10px_24px_rgb(8_145_169_/_0.18)] hover:bg-primary/90",
+        variant === "secondary" && "border border-border/80 bg-white/78 text-foreground shadow-sm backdrop-blur hover:bg-white",
         variant === "danger" && "bg-destructive text-destructive-foreground hover:opacity-90",
         className
       )}
@@ -149,7 +149,7 @@ export function Button({
 export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
+      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/82 px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -158,7 +158,7 @@ export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInp
 export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
-      className={cn("min-h-24 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
+      className={cn("min-h-24 w-full rounded-md border border-border/80 bg-white/82 px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -167,7 +167,7 @@ export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<H
 export function Select({ className, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
-      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
+      className={cn("min-h-10 w-full rounded-md border border-border/80 bg-white/82 px-3 py-2 text-sm outline-none transition focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10", className)}
       {...props}
     />
   );
@@ -181,12 +181,12 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex rounded-full px-2.5 py-1 text-xs font-medium",
-        tone === "neutral" && "bg-muted text-muted-foreground",
+        "inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
+        tone === "neutral" && "bg-slate-100/80 text-slate-500",
         tone === "success" && "bg-emerald-50 text-emerald-700",
         tone === "warning" && "bg-amber-50 text-amber-700",
         tone === "danger" && "bg-red-50 text-red-700",
-        tone === "info" && "bg-cyan-50 text-cyan-700",
+        tone === "info" && "bg-cyan-50 text-primary",
         className
       )}
       {...props}

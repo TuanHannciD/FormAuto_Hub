@@ -109,8 +109,8 @@ function Metric({
             <Icon size={15} />
           </span>
         </div>
-        <div className="mt-4 h-1 w-10 rounded-full bg-primary/35" />
-        <p className="mt-3 text-2xl font-semibold">{value}</p>
+        <div className="metric-accent mt-4 h-1 w-10 rounded-full" />
+        <p className="mt-3 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
       </CardContent>
     </Card>
   );

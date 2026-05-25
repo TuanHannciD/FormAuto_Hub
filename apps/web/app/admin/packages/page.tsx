@@ -292,8 +292,8 @@ function Stat({
       <CardContent className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <div className="mt-3 h-1 w-10 rounded-full bg-primary/35" />
-          <p className="mt-2 text-2xl font-semibold">{value}</p>
+          <div className="metric-accent mt-3 h-1 w-10 rounded-full" />
+          <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
         </div>
         <span className={`rounded-md p-2 ${toneClass}`}>
           <Icon size={18} />

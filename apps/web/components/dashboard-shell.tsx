@@ -71,8 +71,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {navItems.map((item) => (
         <Link
           className={cn(
-            "group flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground",
-            isActiveHref(item.href) && "bg-white text-primary shadow-sm ring-1 ring-primary/15"
+            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-cyan-50/80 hover:text-foreground",
+            isActiveHref(item.href) && "bg-cyan-100/80 text-primary shadow-sm ring-1 ring-cyan-200/70"
           )}
           href={item.href}
           key={item.href}
@@ -85,8 +85,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {session?.role === "Admin" && (
         <Link
           className={cn(
-            "group flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-white/70 hover:text-foreground",
-            pathname.startsWith("/admin") && "bg-white text-primary shadow-sm ring-1 ring-primary/15"
+            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-cyan-50/80 hover:text-foreground",
+            pathname.startsWith("/admin") && "bg-cyan-100/80 text-primary shadow-sm ring-1 ring-cyan-200/70"
           )}
           href="/admin"
           onClick={() => setIsMobileNavOpen(false)}
@@ -116,14 +116,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-aura-bg min-h-screen">
-      <aside className="glass-sidebar fixed inset-y-0 left-0 hidden w-72 border-r px-4 py-5 lg:block">
-        <div className="mb-7 flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
+      <aside className="glass-sidebar fixed inset-y-0 left-0 hidden w-56 border-r px-3 py-4 lg:block">
+        <div className="mb-6 flex items-center gap-2.5 px-1.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
             <ClipboardCheck size={20} />
           </div>
           <div>
-            <p className="text-sm font-semibold">FormAuto Hub</p>
-            <p className="text-xs text-muted-foreground">Bảng điều khiển vận hành</p>
+            <p className="text-[13px] font-extrabold leading-4">FormAuto Hub</p>
+            <p className="text-[11px] text-muted-foreground">Dashboard</p>
           </div>
         </div>
         {navigation}
@@ -136,15 +136,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             onClick={() => setIsMobileNavOpen(false)}
             type="button"
           />
-          <aside className="glass-sidebar relative flex h-full w-[min(20rem,calc(100vw-3rem))] flex-col border-r px-4 py-5 shadow-xl">
+          <aside className="glass-sidebar relative flex h-full w-[min(18rem,calc(100vw-3rem))] flex-col border-r px-4 py-5 shadow-xl">
             <div className="mb-7 flex items-center justify-between gap-3 px-2">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
                   <ClipboardCheck size={20} />
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">FormAuto Hub</p>
-                  <p className="truncate text-xs text-muted-foreground">Bảng điều khiển vận hành</p>
+                  <p className="truncate text-sm font-extrabold">FormAuto Hub</p>
+                  <p className="truncate text-xs text-muted-foreground">Dashboard</p>
                 </div>
               </div>
               <Button aria-label="Đóng menu" className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setIsMobileNavOpen(false)}>
@@ -155,8 +155,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </aside>
         </div>
       )}
-      <main className="lg:pl-72">
-        <header className="sticky top-0 z-10 border-b border-white/70 bg-white/78 px-4 py-3 shadow-sm backdrop-blur-xl sm:px-5 sm:py-4">
+      <main className="lg:pl-56">
+        <header className="sticky top-0 z-10 border-b border-white/70 bg-white/62 px-4 py-3 backdrop-blur-xl sm:px-5 sm:py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Button
@@ -168,7 +168,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               >
                 <Menu size={16} />
               </Button>
-              <div className="min-w-0 truncate text-xs text-muted-foreground">
+              <div className="min-w-0 truncate text-[12px] text-muted-foreground">
                 <span>Dashboard</span>
                 <span className="mx-2">/</span>
                 <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
@@ -186,7 +186,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-5 sm:py-6">{children}</div>
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 sm:py-8 xl:px-8">{children}</div>
       </main>
     </div>
   );

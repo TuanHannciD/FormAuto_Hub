@@ -170,7 +170,7 @@ function Metric({
             <Icon size={15} />
           </span>
         </div>
-        <p className="text-2xl font-semibold">{value}</p>
+        <p className="text-[24px] font-extrabold leading-tight text-slate-950">{value}</p>
       </CardContent>
     </Card>
   );
