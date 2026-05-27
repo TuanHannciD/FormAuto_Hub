@@ -95,6 +95,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/PHASE_3_CLOSEOUT.md` | `docs/vi/PHASE_3_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_4_CLOSEOUT.md` | `docs/vi/PHASE_4_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_5_CLOSEOUT.md` | `docs/vi/PHASE_5_CLOSEOUT.md` | Yes |
+| `docs/ai/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | `docs/vi/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | Yes |
 | `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_8_KICKOFF_PLAN.md` | `docs/vi/PHASE_8_KICKOFF_PLAN.md` | Yes |
 | `docs/ai/PHASE_8_CLOSEOUT.md` | `docs/vi/PHASE_8_CLOSEOUT.md` | Yes |
