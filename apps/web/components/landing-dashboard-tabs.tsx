@@ -15,7 +15,7 @@ export function LandingDashboardTabs() {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
   return (
-    <div className="mx-auto w-full max-w-5xl rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
+    <div className="motion-card mx-auto w-full max-w-5xl rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
       <div className="rounded border border-slate-100 bg-white">
         <div className="flex gap-4 overflow-x-auto border-b border-slate-100 px-4 pt-4">
           {tabs.map((tab) => (
@@ -25,8 +25,8 @@ export function LandingDashboardTabs() {
               onClick={() => setActiveTab(tab.id)}
               className={
                 activeTab === tab.id
-                  ? "whitespace-nowrap border-b-2 border-blue-600 pb-3 text-xs font-bold text-blue-600"
-                  : "whitespace-nowrap pb-3 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600"
+                  ? "whitespace-nowrap border-b-2 border-blue-600 pb-3 text-xs font-bold text-blue-600 transition-colors"
+                  : "whitespace-nowrap border-b-2 border-transparent pb-3 text-xs font-medium text-slate-500 transition-colors hover:border-blue-200 hover:text-blue-600"
               }
             >
               {tab.label}
@@ -84,24 +84,24 @@ function OverviewPanel() {
         <Metric title="Yêu cầu chờ duyệt" value="-" />
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
+        <div className="motion-card rounded-lg border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-100 px-4 py-3">
             <h4 className="text-sm font-semibold text-slate-900">Việc nên làm tiếp</h4>
           </div>
           <div className="space-y-3 p-4 text-sm">
-            <div className="rounded-md border border-slate-200 p-3">Phân tích link Google Form và cài đặt cách trả lời</div>
-            <div className="rounded-md border border-slate-200 p-3">Nạp credit hoặc theo dõi giao dịch PayOS</div>
-            <div className="rounded-md border border-slate-200 p-3">Kiểm tra lịch sử sử dụng và hành động bị chặn</div>
+            <div className="motion-button rounded-md border border-slate-200 p-3">Phân tích link Google Form và cài đặt cách trả lời</div>
+            <div className="motion-button rounded-md border border-slate-200 p-3">Nạp credit hoặc theo dõi giao dịch PayOS</div>
+            <div className="motion-button rounded-md border border-slate-200 p-3">Kiểm tra lịch sử sử dụng và hành động bị chặn</div>
           </div>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white shadow-sm lg:col-span-2">
+        <div className="motion-card rounded-lg border border-slate-200 bg-white shadow-sm lg:col-span-2">
           <div className="border-b border-slate-100 px-4 py-3">
             <h4 className="text-sm font-semibold text-slate-900">Yêu cầu nạp gần đây</h4>
           </div>
           <EmptyBlock title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
         </div>
       </div>
-      <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="motion-card rounded-lg border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-4 py-3">
           <h4 className="text-sm font-semibold text-slate-900">Lịch sử sử dụng gần đây</h4>
         </div>
@@ -126,14 +126,14 @@ function TablePanel({
   emptyDetail: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div className="motion-card rounded-lg border border-slate-200 bg-white shadow-sm">
       <div className="border-b border-slate-100 px-4 py-3">
         <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
       </div>
       <div className="px-4 pt-3">
         <div className="grid gap-2 sm:hidden">
           {columns.slice(0, 4).map((column) => (
-            <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600" key={column}>
+            <div className="motion-button rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600" key={column}>
               {column}
             </div>
           ))}
@@ -159,7 +159,7 @@ function TablePanel({
 
 function Metric({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="motion-card rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <p className="text-sm text-slate-500">{title}</p>
       <p className="mt-2 text-2xl font-semibold text-slate-900">{value}</p>
     </div>
@@ -168,7 +168,7 @@ function Metric({ title, value }: { title: string; value: string }) {
 
 function EmptyBlock({ title, detail }: { title: string; detail: string }) {
   return (
-    <div className="m-4 rounded-lg border border-dashed border-slate-200 bg-white px-4 py-8 text-center">
+    <div className="m-4 rounded-lg border border-dashed border-slate-200 bg-white px-4 py-8 text-center transition-colors hover:border-blue-200">
       <p className="font-semibold text-slate-900">{title}</p>
       <p className="mt-2 text-sm text-slate-500">{detail}</p>
     </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingDashboardTabs } from "@/components/landing-dashboard-tabs";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { siteUrl } from "@/lib/site";
 import {
   BarChart3,
@@ -185,47 +186,47 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-white text-slate-950">
+    <main className="app-aura-bg min-h-screen overflow-x-hidden text-slate-950">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, websiteStructuredData]) }}
       />
 
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/82 backdrop-blur">
         <nav
           aria-label="Điều hướng chính"
           className="mx-auto flex max-w-[1120px] items-center justify-between px-4 py-4 md:px-8"
         >
-          <Link href="/" className="flex items-center gap-3" aria-label="FormAuto Hub home">
+          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-85" aria-label="FormAuto Hub home">
             <span className="grid h-8 w-8 place-items-center rounded bg-blue-600 text-white">
               <BarChart3 size={18} />
             </span>
             <span className="text-lg font-semibold tracking-tight text-slate-950">FormAuto Hub</span>
           </Link>
           <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <a href="#tinh-nang" className="hover:text-blue-600">
+            <a href="#tinh-nang" className="motion-link hover:text-blue-600">
               Báo cáo
             </a>
-            <a href="#quy-trinh" className="hover:text-blue-600">
+            <a href="#quy-trinh" className="motion-link hover:text-blue-600">
               Quy trình
             </a>
-            <a href="#an-toan" className="hover:text-blue-600">
+            <a href="#an-toan" className="motion-link hover:text-blue-600">
               An toàn
             </a>
-            <a href="#credit" className="hover:text-blue-600">
+            <a href="#credit" className="motion-link hover:text-blue-600">
               Credit
             </a>
-            <a href="#faq" className="hover:text-blue-600">
+            <a href="#faq" className="motion-link hover:text-blue-600">
               FAQ
             </a>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/login" className="text-sm font-medium text-slate-700 hover:text-blue-600">
+            <Link href="/login" className="motion-link text-sm font-medium text-slate-700 hover:text-blue-600">
               Đăng nhập
             </Link>
             <Link
               href="/register"
-              className="inline-flex rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:px-4"
+              className="motion-button inline-flex rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:px-4"
             >
               Bắt đầu
             </Link>
@@ -233,10 +234,10 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      <section className="border-b border-slate-200 bg-white">
+      <section className="border-b border-slate-200 bg-transparent">
         <div className="mx-auto grid max-w-[1120px] grid-cols-1 items-center gap-8 px-4 py-8 md:px-8 md:py-20 lg:grid-cols-2">
           <div className="min-w-0 space-y-8">
-            <div>
+            <ScrollReveal>
             <p className="inline-flex rounded border border-blue-100 bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
               GOOGLE FORMS CHO BÁO CÁO VÀ DEMO DỮ LIỆU
             </p>
@@ -247,22 +248,22 @@ export default function LandingPage() {
               Kiểm thử form, demo dashboard và rà soát dữ liệu trước khi gửi khảo sát thật. Không
               dùng để làm giả kết quả báo cáo, spam form hoặc né giới hạn của Google.
             </p>
-            </div>
-            <div className="flex max-w-[22rem] flex-col flex-wrap gap-4 sm:max-w-none sm:flex-row">
+            </ScrollReveal>
+            <ScrollReveal delay={90} className="flex max-w-[22rem] flex-col flex-wrap gap-4 sm:max-w-none sm:flex-row">
               <Link
                 href="/register"
-                className="rounded bg-blue-600 px-6 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+                className="motion-button rounded bg-blue-600 px-6 py-2.5 text-center text-sm font-medium text-white shadow-sm hover:bg-blue-700"
               >
                 Bắt đầu với 5 credit
               </Link>
               <Link
                 href="/google-forms/student-report"
-                className="rounded border border-slate-200 bg-white px-6 py-2.5 text-center text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+                className="motion-button rounded border border-slate-200 bg-white px-6 py-2.5 text-center text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
               >
                 Xem cho báo cáo sinh viên
               </Link>
-            </div>
-            <div className="hidden max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:flex sm:max-w-none">
+            </ScrollReveal>
+            <ScrollReveal delay={160} className="hidden max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:flex sm:max-w-none">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
                 <Eye size={16} />
                 Dữ liệu mẫu để kiểm thử
@@ -279,17 +280,17 @@ export default function LandingPage() {
                 <ShieldCheck size={16} />
                 Không làm giả khảo sát
               </span>
-            </div>
+            </ScrollReveal>
           </div>
 
-          <div className="relative hidden sm:block">
+          <ScrollReveal className="relative hidden sm:block" delay={140} variant="scale">
             <DashboardPreview />
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section id="quy-trinh" className="border-y border-slate-200 bg-slate-50 py-12 md:py-20">
-        <div className="mx-auto max-w-[1120px] px-4 text-center md:px-8">
+      <section id="quy-trinh" className="border-y border-slate-200 bg-white/45 py-12 md:py-20">
+        <ScrollReveal className="mx-auto max-w-[1120px] px-4 text-center md:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
               Từ Google Form đến dữ liệu mẫu có thể kiểm tra
@@ -300,42 +301,42 @@ export default function LandingPage() {
           </div>
           <div className="relative grid gap-4 md:grid-cols-5">
             <div className="absolute left-[10%] right-[10%] top-12 z-0 hidden h-px bg-slate-200 md:block" />
-            {workflowSteps.map((step) => (
-              <article key={step.title} className="relative z-10 rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm">
+            {workflowSteps.map((step, index) => (
+              <ScrollReveal key={step.title} delay={index * 70} as="article" className="motion-card relative z-10 rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm">
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-blue-600 shadow-sm">
                   <step.icon size={20} />
                 </div>
                 <h3 className="mb-1 text-sm font-semibold text-slate-900">{step.title}</h3>
-              </article>
+              </ScrollReveal>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="tinh-nang" className="mx-auto max-w-[1120px] bg-white px-4 py-12 md:px-8 md:py-20">
-          <div className="mb-12 text-center">
+      <section id="tinh-nang" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
+          <ScrollReveal className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
               Dành cho sinh viên, nhóm học tập và người làm khảo sát nhỏ
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-slate-600">
               Cùng một app, nhiều tình huống: test form, demo dữ liệu, kiểm tra sheet và chuẩn bị báo cáo.
             </p>
-          </div>
+          </ScrollReveal>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featureCards.map((feature, index) => (
-              <article key={feature.title} className={`rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow ${index > 2 ? "hidden md:block" : ""}`}>
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
+              <ScrollReveal key={feature.title} delay={(index % 3) * 80} as="article" className={`motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm ${index > 2 ? "hidden md:block" : ""}`}>
+                <div className="motion-icon mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
                   <feature.icon size={20} />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-slate-900">{feature.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-600">{feature.body}</p>
-              </article>
+              </ScrollReveal>
             ))}
           </div>
       </section>
 
-      <section className="hidden border-y border-slate-200 bg-slate-50 py-12 md:block md:py-20">
-        <div className="mx-auto max-w-[1120px] px-4 md:px-8">
+      <section className="hidden border-y border-slate-200 bg-white/45 py-12 md:block md:py-20">
+        <ScrollReveal className="mx-auto max-w-[1120px] px-4 md:px-8">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
               Theo dõi credit, lượt dùng và bản xem trước trong một dashboard
@@ -345,11 +346,11 @@ export default function LandingPage() {
             </p>
           </div>
           <LandingDashboardTabs />
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="an-toan" className="mx-auto max-w-[1120px] bg-white px-4 py-12 md:px-8 md:py-20">
-        <div className="grid grid-cols-1 items-center gap-12 rounded-lg border border-slate-200 bg-white p-8 shadow-sm md:p-12 lg:grid-cols-2">
+      <section id="an-toan" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
+        <ScrollReveal className="grid grid-cols-1 items-center gap-12 rounded-lg border border-slate-200 bg-white p-8 shadow-sm md:p-12 lg:grid-cols-2">
           <div>
             <h2 className="mb-6 text-3xl font-bold tracking-tight text-slate-900">
               Thiết kế xoay quanh giới hạn, rà soát và khả năng truy vết
@@ -394,52 +395,56 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="credit" className="hidden border-y border-slate-200 bg-slate-50 py-12 md:block md:py-20">
-        <div className="mx-auto max-w-[1120px] px-4 md:px-8">
+      <section id="credit" className="hidden border-y border-slate-200 bg-white/45 py-12 md:block md:py-20">
+        <ScrollReveal className="mx-auto max-w-[1120px] px-4 md:px-8">
           <h2 className="mx-auto mb-12 max-w-3xl text-center text-3xl font-bold tracking-tight text-slate-900">
               Mô hình credit rõ ràng cho từng thao tác
           </h2>
           <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {creditCards.map((item) => (
-              <article key={item.title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
+            {creditCards.map((item, index) => (
+              <ScrollReveal key={item.title} delay={index * 80} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="motion-icon mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
                   <item.icon size={20} />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-600">
                   {item.body}
                 </p>
-              </article>
+              </ScrollReveal>
             ))}
           </div>
           <p className="text-center text-sm italic text-slate-500">
             Thanh toán PayOS được xác minh trước khi credit được cộng vào tài khoản.
           </p>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="faq" className="mx-auto max-w-3xl bg-white px-4 py-12 md:px-8 md:py-20">
+      <section id="faq" className="mx-auto max-w-3xl px-4 py-12 md:px-8 md:py-20">
+          <ScrollReveal>
           <h2 className="mb-10 text-center text-3xl font-bold tracking-tight text-slate-900">
             Câu hỏi thường gặp
           </h2>
+          </ScrollReveal>
           <div className="space-y-4">
-            {faqs.map((faq) => (
-              <details key={faq.question} className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            {faqs.map((faq, index) => (
+              <ScrollReveal key={faq.question} delay={index * 45}>
+              <details className="motion-details group rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                 <summary className="flex cursor-pointer list-none items-center justify-between text-base font-semibold text-slate-900">
                   {faq.question}
                   <span className="text-slate-400 transition-transform group-open:rotate-180">⌄</span>
                 </summary>
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">{faq.answer}</p>
               </details>
+              </ScrollReveal>
             ))}
           </div>
       </section>
 
-      <section className="mx-auto mb-20 hidden max-w-[1120px] bg-white px-4 md:block md:px-8">
-        <div className="rounded-lg border border-blue-100 bg-blue-50 px-6 py-16 text-center shadow-sm">
+      <section className="mx-auto mb-20 hidden max-w-[1120px] px-4 md:block md:px-8">
+        <ScrollReveal className="rounded-lg border border-blue-100 bg-blue-50 px-6 py-16 text-center shadow-sm" variant="scale">
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Bắt đầu với quy trình biểu mẫu có kiểm soát
           </h2>
@@ -449,18 +454,18 @@ export default function LandingPage() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/register"
-              className="rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+              className="motion-button rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
             >
               Bắt đầu với 5 credit
             </Link>
             <Link
               href="/anti-abuse"
-              className="rounded border border-blue-200 bg-white px-8 py-3 text-sm font-medium text-blue-900 shadow-sm transition-colors hover:bg-blue-50"
+              className="motion-button rounded border border-blue-200 bg-white px-8 py-3 text-sm font-medium text-blue-900 shadow-sm hover:bg-blue-50"
             >
               Xem chính sách chống lạm dụng
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <Footer />
@@ -476,7 +481,7 @@ function DashboardPreview() {
   ];
 
   return (
-    <div className="flex h-[420px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl sm:h-[520px]">
+    <div className="motion-float flex h-[420px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl sm:h-[520px]">
       <div className="flex h-12 items-center justify-between border-b border-slate-100 bg-slate-50/50 px-4">
         <div className="flex gap-1.5">
           <span className="h-3 w-3 rounded-full bg-slate-200" />
@@ -606,7 +611,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="border-t border-slate-200 bg-white">
+    <footer className="border-t border-slate-200 bg-white/82 backdrop-blur">
       <div className="mx-auto grid max-w-[1120px] grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4 md:px-8">
         {groups.map((group) => (
           <div key={group.title}>

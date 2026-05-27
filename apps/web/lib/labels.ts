@@ -31,6 +31,7 @@ export function displayAction(action: string) {
     AnalyzeForm: "Phân tích biểu mẫu",
     GeneratePreview: "Tạo bản xem trước",
     GenerateResponses: "Tạo bản xem trước",
+    "Xem lại câu trả lời được tạo": "Xem câu trả lời được tạo",
     SubmitResponses: "Gửi câu trả lời",
     Submission: "Gửi câu trả lời",
     TopupApproved: "Duyệt yêu cầu nạp",

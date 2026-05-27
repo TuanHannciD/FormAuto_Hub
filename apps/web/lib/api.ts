@@ -116,6 +116,14 @@ export type UsageLog = {
   createdAt: string;
 };
 
+export type UsageLogPageResponse = {
+  items: UsageLog[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
 export type DashboardSummary = {
   currentCreditBalance: number;
   totalCreditsDeposited: number;

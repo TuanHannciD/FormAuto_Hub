@@ -200,6 +200,31 @@ Cần contract review trước implementation:
 - `GET /api/usage-logs`
 - `GET /api/usage-logs/recent`
 
+Hành vi query đã duyệt cho `GET /api/usage-logs`:
+
+- hỗ trợ `action` để lọc chính xác theo action
+- hỗ trợ `search` trên action, tool name, status và description
+- hỗ trợ `page` và `pageSize`
+- UI usage mặc định nên request `action=Xem lại câu trả lời được tạo`
+- `page` được clamp tối thiểu là 1
+- `pageSize` được clamp từ 1 đến 100
+- kết quả được sort theo `createdAt` giảm dần
+- server chỉ trả các dòng thuộc trang hiện tại theo filter đang áp dụng
+
+Các field response đã duyệt cho `GET /api/usage-logs`:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
+
+Giá trị action filter đã duyệt cho việc xem giao dịch credit từ câu trả lời được tạo:
+
+- `Xem lại câu trả lời được tạo`
+
+Frontend có thể cho phép xem tất cả thao tác, nhưng trang usage-log mặc định phải tập trung vào action xem câu trả lời được tạo vì đó là nhóm usage entry thể hiện giao dịch tiêu credit.
+
 ### Credit transactions
 
 - `GET /api/credit-transactions`

@@ -88,6 +88,19 @@ public sealed record UsageLogResponse(
 
 public sealed record UsageLogListResponse(IReadOnlyList<UsageLogResponse> Items);
 
+public sealed record UsageLogQuery(
+    string? Action,
+    string? Search,
+    int Page,
+    int PageSize);
+
+public sealed record UsageLogPageResponse(
+    IReadOnlyList<UsageLogResponse> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
+
 public sealed record CreditTransactionResponse(
     Guid Id,
     decimal Amount,

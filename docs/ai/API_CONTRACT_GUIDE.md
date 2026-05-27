@@ -200,6 +200,31 @@ Pending contract review before implementation:
 - `GET /api/usage-logs`
 - `GET /api/usage-logs/recent`
 
+Approved `GET /api/usage-logs` query behavior:
+
+- supports `action` as an exact action filter
+- supports `search` across action, tool name, status, and description text
+- supports `page` and `pageSize`
+- default UI usage should request `action=Xem lại câu trả lời được tạo`
+- `page` is clamped to at least 1
+- `pageSize` is clamped from 1 to 100
+- results are sorted by `createdAt` descending
+- server returns only the current page of rows for the active filter
+
+Approved `GET /api/usage-logs` response fields:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
+
+Approved usage-log action filter value for generated-answer credit transaction visibility:
+
+- `Xem lại câu trả lời được tạo`
+
+The frontend may offer an all-actions view, but the default usage-log page must focus on generated-answer review actions because those are the usage entries that represent credit-consuming transactions.
+
 ### Credit transactions
 
 - `GET /api/credit-transactions`
