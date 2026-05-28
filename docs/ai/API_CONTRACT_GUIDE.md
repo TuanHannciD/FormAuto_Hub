@@ -6,7 +6,7 @@ Control API contract design for FormAuto Hub.
 
 ## Current Status
 
-The API areas below are proposed, not final contracts. Every endpoint requires contract review before implementation.
+Some API areas below are proposed, and some phase slices have approved implemented contracts. Each section marks whether the listed behavior is approved, implemented, proposed, or Deferred.
 
 ## REST Naming Rules
 
@@ -157,6 +157,81 @@ Pending contract review before implementation:
 - exact PayOS settings DTO names
 - exact masked secret response shape
 
+### Admin AI provider settings
+
+Approved Phase 6 provider settings backend subset:
+
+- `GET /api/admin/ai-provider-settings`
+- `PUT /api/admin/ai-provider-settings`
+- `POST /api/admin/ai-provider-settings/check`
+
+Approved behavior:
+
+- admin-only access
+- stores AI provider configuration in the database through `AiProviderSettings`
+- encrypts API keys before storage
+- never returns raw API keys to frontend clients
+- returns only masked key previews
+- validates that provider and default model are present before enabling the setting
+- supports a default model for generation
+- configuration check must not generate previews, deduct credit, or create `GeneratedResponses`
+
+Approved request DTO:
+
+`UpdateAiProviderSettingsRequest`
+
+- `provider`
+- `apiKey`
+- `defaultModel`
+- `isEnabled`
+- `baseUrl`
+
+Approved response DTOs:
+
+`AiProviderSettingsResponse`
+
+- `provider`
+- `displayName`
+- `hasApiKey`
+- `apiKeyPreview`
+- `baseUrl`
+- `defaultModel`
+- `allowedModels`
+- `isEnabled`
+- `lastCheckedAt`
+- `lastCheckStatus`
+- `lastCheckMessage`
+- `updatedAt`
+
+`CheckAiProviderSettingsResponse`
+
+- `status`
+- `message`
+- `checkedAt`
+
+Approved provider/model policy:
+
+- Provider and model values are admin-controlled strings stored server-side.
+- Admin update requests may set a custom provider identifier, default model identifier, and optional Base URL.
+- Backend validation requires non-empty provider and default model values before saving.
+- Enabling a setting requires a stored encrypted API key, a non-empty provider, and a non-empty default model.
+- If provided, `baseUrl` must be an absolute `http` or `https` URL.
+- Normal-user generation requests still do not accept provider, model, API key, or base URL authority.
+- `allowedModels` is retained in the response for UI compatibility and may contain the saved default model; it is not a hardcoded provider allow-list.
+- OpenAI-compatible runtime calls use the saved Base URL and call `{baseUrl}/chat/completions`, unless the saved Base URL already ends with `/chat/completions`.
+
+Approved check statuses:
+
+- `NotChecked`
+- `Ready`
+- `MissingConfiguration`
+- `InvalidConfiguration`
+
+Deferred:
+
+- raw error redaction policy
+- live provider model catalog validation calls
+
 ### PayOS webhooks
 
 - `POST /api/payments/payos/webhook`
@@ -228,6 +303,24 @@ The frontend may offer an all-actions view, but the default usage-log page must 
 ### Credit transactions
 
 - `GET /api/credit-transactions`
+
+Approved `GET /api/credit-transactions` query behavior:
+
+- supports `type` as an exact filter using approved `CreditTransaction.Type` values
+- supports `search` across type, description, and reference type text
+- supports `page` and `pageSize`
+- `page` is clamped to at least 1
+- `pageSize` is clamped from 1 to 100
+- results are sorted by `createdAt` descending
+- server returns only the current page of rows for the active filter
+
+Approved `GET /api/credit-transactions` response fields:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
 
 ### Profile
 
@@ -327,6 +420,97 @@ Approved `GenerateResponsesResponse` fields:
 - `generatedCount`: actual generated preview count
 - `missingCredits`: credits still needed to satisfy the requested preview count
 
+### AI prompt profiles
+
+Approved Phase 6 AI prompt persistence backend area:
+
+- `GET /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile/questions/{questionId}`
+- `POST /api/projects/{projectId}/ai-prompt-profile/auto-fill`
+
+Approved/implemented behavior:
+
+- authenticated project owner access
+- Option 2 stores a default profile for the project
+- Option 3 stores global and per-question prompt configuration
+- auto-fill prompt is free and must not deduct credit
+- prompt length limits must be enforced by backend validation
+- prompt guard must reject unsafe prompts before provider calls
+
+Deferred or still requiring review:
+
+- additional frontend/API binding outside the approved scoped slice
+- live provider-backed auto-fill behavior
+- broader prompt-template management
+
+### AI generated responses
+
+Approved Phase 6 AI preview generation backend area:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+- `GET /api/projects/{projectId}/ai-generation-runs`
+- `GET /api/projects/{projectId}/ai-generation-runs/{runId}`
+
+Implemented route:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+
+Implemented request DTO:
+
+`AiGenerateResponsesRequest`
+
+- `mode`
+- `count`
+
+Implemented response DTO:
+
+`AiGenerateResponsesResponse`
+
+- `runId`
+- `status`
+- `requestedCount`
+- `generatedCount`
+- `multiplier`
+- `creditsUsed`
+- `missingCredits`
+- `balanceAfter`
+- `generatedPreviewIds`
+
+Approved/implemented behavior:
+
+- authenticated project owner access for generation
+- AI generation creates `GeneratedResponses` directly
+- generated previews are read-only after creation
+- Option 2 uses credit multiplier `2`
+- Option 3 uses credit multiplier `3`
+- credit is deducted only for successfully stored generated previews
+- failed generation charges zero credit
+- partial generation stores and charges only valid previews
+- AI output must be validated before storage
+- choice-style answers must match stored form options
+- raw provider request/response must be written to AI audit storage
+- raw provider request/response is not returned by the generation response
+- runtime generation uses server-side enabled provider settings; provider/model/API key are not accepted from the normal-user request
+
+Runtime provider adapter boundary:
+
+- the deterministic adapter may be used only when explicitly enabled by local/test configuration
+- the default runtime adapter is fail-safe disabled until a live provider adapter is approved and configured
+- the OpenAI-compatible adapter may be used only when explicitly enabled by runtime configuration and must use server-side admin provider settings
+
+Deferred or still requiring review:
+
+- project-level run read/list endpoints
+- exact run list/detail response shape
+- whether normal users can see non-raw audit summaries
+- raw payload access and retention policy
+- raw admin/debug payload endpoint
+- provider-specific SDK adapters outside the OpenAI-compatible HTTP contract
+- live provider model catalog validation
+- additional frontend/API binding outside the approved scoped slice
+- production browser closeout with real provider credentials
+
 ### Submissions
 
 - `POST /api/projects/{projectId}/submissions/send`
@@ -399,6 +583,18 @@ UsageLog.Status:
 
 - Success
 - Failed
+
+AiGenerationRun.Status:
+
+- Pending
+- Running
+- Succeeded
+- Partial
+- Failed
+
+Phase 6 rule:
+
+- AI run statuses are approved for the Phase 6 requirement package, but allowed transitions and exact persistence fields still require contract and database review before implementation.
 
 User.Role:
 

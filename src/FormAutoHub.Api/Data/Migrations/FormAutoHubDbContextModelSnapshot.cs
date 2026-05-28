@@ -22,6 +22,268 @@ namespace FormAutoHub.Api.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiGenerationRun", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("CreditsUsed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ErrorMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GeneratedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Multiplier")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PromptProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PromptSnapshotJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuestionSnapshotJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RawProviderRequestJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RawProviderResponseJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestedCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("StartedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ValidationSummaryJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PromptProfileId");
+
+                    b.HasIndex("ProjectId", "CreatedAt");
+
+                    b.HasIndex("UserId", "CreatedAt");
+
+                    b.ToTable("AiGenerationRuns");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiGenerationRunItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("GeneratedResponseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RawAnswerJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValidationMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GeneratedResponseId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("RunId");
+
+                    b.ToTable("AiGenerationRunItems");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiPromptProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AudienceJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("GlobalPrompt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId", "Mode")
+                        .IsUnique();
+
+                    b.ToTable("AiPromptProfiles");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiProviderSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AllowedModelsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BaseUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DefaultModel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EncryptedApiKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastCheckMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastCheckStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastCheckedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Provider")
+                        .IsUnique();
+
+                    b.ToTable("AiProviderSettings");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiQuestionPrompt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("UseAi")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("ProfileId", "QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("AiQuestionPrompts");
+                });
+
             modelBuilder.Entity("FormAutoHub.Api.Entities.AnswerRule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -232,6 +494,11 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsReadOnly")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("PayloadJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -242,6 +509,12 @@ namespace FormAutoHub.Api.Data.Migrations
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Rule");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -672,6 +945,79 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("UserExternalLogins");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiGenerationRun", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.FormProject", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.AiPromptProfile", "PromptProfile")
+                        .WithMany()
+                        .HasForeignKey("PromptProfileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Project");
+
+                    b.Navigation("PromptProfile");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiGenerationRunItem", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.GeneratedResponse", "GeneratedResponse")
+                        .WithMany()
+                        .HasForeignKey("GeneratedResponseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FormAutoHub.Api.Entities.FormQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FormAutoHub.Api.Entities.AiGenerationRun", "Run")
+                        .WithMany()
+                        .HasForeignKey("RunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GeneratedResponse");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Run");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiPromptProfile", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.FormProject", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.AiQuestionPrompt", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.AiPromptProfile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.FormQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.PaymentRecord", b =>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { Boxes, CheckCircle2, Pencil, Plus, Search, XCircle } from "lucide-react";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import {
   Alert,
   Button,
@@ -17,11 +18,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  EmptyState,
   Input,
-  KeyValueRow,
-  MobileRecord,
-  MobileRecordList,
   PageHeader,
   Select
 } from "@/components/ui";
@@ -36,6 +33,15 @@ const emptyForm: CreditPackageRequest = {
   price: 50000,
   isActive: true
 };
+
+const packageColumns: Array<BaseTableColumn<CreditPackage>> = [
+  { key: "name", header: "Tên gói", render: (item) => item.name, className: "font-medium" },
+  { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
+  { key: "price", header: "Giá", render: (item) => formatCurrency(item.price) },
+  { key: "isActive", header: "Trạng thái", render: (item) => <PackageStatus isActive={item.isActive} /> },
+  { key: "createdAt", header: "Ngày tạo", render: (item) => formatDate(item.createdAt) },
+  { key: "actions", header: "Hành động", render: () => null, hideOnMobile: true }
+];
 
 export default function AdminPackagesPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
@@ -162,71 +168,33 @@ export default function AdminPackagesPage() {
             </div>
           </CardHeader>
           <CardContent>
-            {filteredPackages.length === 0 ? (
-              <EmptyState title="Chưa có gói phù hợp" detail="Tạo gói credit đầu tiên hoặc đổi bộ lọc hiện tại." />
-            ) : (
-              <>
-              <MobileRecordList>
-                {filteredPackages.map((item) => (
-                  <MobileRecord key={item.id}>
-                    <KeyValueRow label="Tên gói" value={item.name} />
-                    <KeyValueRow label="Credit" value={`${item.credits} cr`} />
-                    <KeyValueRow label="Giá" value={formatCurrency(item.price)} />
-                    <KeyValueRow
-                      label="Trạng thái"
-                      value={
-                        <span className={item.isActive ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"}>
-                          {item.isActive ? "Đang bật" : "Đang tắt"}
-                        </span>
-                      }
-                    />
-                    <KeyValueRow label="Ngày tạo" value={formatDate(item.createdAt)} />
-                    <div className="border-t border-border/70 pt-3">
-                      <Button className="w-full" type="button" variant="secondary" onClick={() => editPackage(item)}>
-                        <Pencil size={14} />
-                        <span className="ml-2">Sửa</span>
-                      </Button>
-                    </div>
-                  </MobileRecord>
-                ))}
-              </MobileRecordList>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
-                    <tr>
-                      <th className="px-3 py-2">Tên gói</th>
-                      <th className="px-3 py-2">Credit</th>
-                      <th className="px-3 py-2">Giá</th>
-                      <th className="px-3 py-2">Trạng thái</th>
-                      <th className="px-3 py-2">Ngày tạo</th>
-                      <th className="px-3 py-2">Hành động</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredPackages.map((item) => (
-                      <tr className="border-t border-border/70" key={item.id}>
-                        <td className="px-3 py-3 font-medium">{item.name}</td>
-                        <td className="px-3 py-3">{item.credits} cr</td>
-                        <td className="px-3 py-3">{formatCurrency(item.price)}</td>
-                        <td className="px-3 py-3">
-                          <span className={item.isActive ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"}>
-                            {item.isActive ? "Đang bật" : "Đang tắt"}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3">{formatDate(item.createdAt)}</td>
-                        <td className="px-3 py-3">
-                          <Button className="min-h-8 px-3" type="button" variant="secondary" onClick={() => editPackage(item)}>
-                            <Pencil size={14} />
-                            <span className="ml-2">Sửa</span>
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </>
-            )}
+            <BaseTable
+              items={filteredPackages}
+              columns={packageColumns.map((column): BaseTableColumn<CreditPackage> =>
+                column.key === "actions"
+                  ? {
+                      ...column,
+                      render: (item) => (
+                        <Button className="min-h-8 px-3" type="button" variant="secondary" onClick={() => editPackage(item)}>
+                          <Pencil size={14} />
+                          <span className="ml-2">Sửa</span>
+                        </Button>
+                      )
+                    }
+                  : column
+              )}
+              getRowKey={(item) => item.id}
+              emptyTitle="Chưa có gói phù hợp"
+              emptyDetail="Tạo gói credit đầu tiên hoặc đổi bộ lọc hiện tại."
+              mobileFooter={(item) => (
+                <div className="border-t border-border/70 pt-3">
+                  <Button className="w-full" type="button" variant="secondary" onClick={() => editPackage(item)}>
+                    <Pencil size={14} />
+                    <span className="ml-2">Sửa</span>
+                  </Button>
+                </div>
+              )}
+            />
           </CardContent>
         </Card>
       </div>
@@ -267,6 +235,14 @@ export default function AdminPackagesPage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function PackageStatus({ isActive }: { isActive: boolean }) {
+  return (
+    <span className={isActive ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"}>
+      {isActive ? "Đang bật" : "Đang tắt"}
+    </span>
   );
 }
 

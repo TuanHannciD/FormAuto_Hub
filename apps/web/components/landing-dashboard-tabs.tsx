@@ -140,17 +140,13 @@ function TablePanel({
         </div>
       </div>
       <div className="hidden overflow-x-auto px-4 pt-3 sm:block">
-        <table className="w-full min-w-[620px] text-left text-sm">
-          <thead className="text-slate-500">
-            <tr>
-              {columns.map((column) => (
-                <th key={column} className="py-2 font-medium">
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        </table>
+        <div className="grid min-w-[620px] grid-flow-col auto-cols-fr text-sm text-slate-500">
+          {columns.map((column) => (
+            <span key={column} className="py-2 font-medium">
+              {column}
+            </span>
+          ))}
+        </div>
       </div>
       <EmptyBlock title={emptyTitle} detail={emptyDetail} />
     </div>

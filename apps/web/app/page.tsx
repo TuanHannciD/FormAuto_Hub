@@ -65,6 +65,34 @@ const featureCards = [
   }
 ];
 
+const seoUseCaseLinks = [
+  {
+    href: "/google-forms/sample-data",
+    title: "Tạo dữ liệu mẫu cho Google Forms",
+    body: "Landing page chính cho nhu cầu kiểm thử biểu mẫu, xem trước phản hồi và demo Google Sheets."
+  },
+  {
+    href: "/google-forms/student-report",
+    title: "Dữ liệu mẫu Google Forms cho báo cáo sinh viên",
+    body: "Dành cho nhóm học tập cần dữ liệu minh họa, biểu đồ và báo cáo nhưng không thay thế phản hồi thật."
+  },
+  {
+    href: "/google-forms/survey-demo",
+    title: "Demo dữ liệu khảo sát Google Forms",
+    body: "Chuẩn bị dữ liệu mẫu để trình bày form, bảng tính, dashboard hoặc prototype khảo sát."
+  },
+  {
+    href: "/google-forms/sheets-report",
+    title: "Kiểm tra dữ liệu Google Forms trong Google Sheets",
+    body: "Rà soát cột, kiểu dữ liệu, chart, dashboard, công thức và pivot table trước khi chạy khảo sát thật."
+  },
+  {
+    href: "/anti-abuse",
+    title: "Chính sách chống lạm dụng Google Forms automation",
+    body: "Làm rõ ranh giới an toàn: không spam, không captcha bypass, không làm giả khảo sát."
+  }
+];
+
 const creditCards = [
   {
     title: "Nạp credit",
@@ -121,6 +149,7 @@ export const metadata: Metadata = {
     "FormAuto Hub",
     "Google Forms",
     "google forms báo cáo sinh viên",
+    "tạo dữ liệu mẫu cho Google Forms",
     "tạo dữ liệu mẫu Google Forms",
     "demo dữ liệu khảo sát",
     "Google Forms to Sheets báo cáo",
@@ -158,10 +187,16 @@ export default function LandingPage() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: siteName,
-    applicationCategory: "BusinessApplication",
+    applicationCategory: "ProductivityApplication",
     operatingSystem: "Web",
+    url: `${siteUrl}/`,
     inLanguage: "vi-VN",
     description,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "VND"
+    },
     featureList: [
       "Phân tích Google Forms",
       "Cấu hình quy tắc trả lời",
@@ -311,6 +346,28 @@ export default function LandingPage() {
             ))}
           </div>
         </ScrollReveal>
+      </section>
+
+      <section className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
+        <ScrollReveal className="mb-10 max-w-3xl">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+            Các trường hợp sử dụng Google Forms phổ biến
+          </h2>
+          <p className="mt-4 text-base leading-7 text-slate-600">
+            Các trang dưới đây là nhóm nội dung chính để Google index từng nhu cầu riêng: tạo dữ
+            liệu mẫu, demo khảo sát, báo cáo sinh viên và kiểm tra dữ liệu trong Google Sheets.
+          </p>
+        </ScrollReveal>
+        <div className="grid gap-4 md:grid-cols-2">
+          {seoUseCaseLinks.map((item, index) => (
+            <ScrollReveal key={item.href} delay={(index % 2) * 70} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <Link href={item.href} className="text-base font-semibold text-blue-700 hover:underline">
+                {item.title}
+              </Link>
+              <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
+            </ScrollReveal>
+          ))}
+        </div>
       </section>
 
       <section id="tinh-nang" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
@@ -580,10 +637,10 @@ function Footer() {
     {
       title: "Sản phẩm",
       links: [
-        { label: "Báo cáo sinh viên", href: "/google-forms/student-report" },
-        { label: "Demo khảo sát", href: "/google-forms/survey-demo" },
-        { label: "Forms to Sheets", href: "/google-forms/sheets-report" },
-        { label: "Dữ liệu mẫu", href: "/google-forms/sample-data" }
+        { label: "Tạo dữ liệu mẫu cho Google Forms", href: "/google-forms/sample-data" },
+        { label: "Dữ liệu mẫu Google Forms cho báo cáo sinh viên", href: "/google-forms/student-report" },
+        { label: "Demo dữ liệu khảo sát Google Forms", href: "/google-forms/survey-demo" },
+        { label: "Kiểm tra dữ liệu Google Forms trong Google Sheets", href: "/google-forms/sheets-report" }
       ]
     },
     {

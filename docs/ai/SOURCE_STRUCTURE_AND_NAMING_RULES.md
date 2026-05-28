@@ -35,6 +35,7 @@ This is a proposed structure, not an immutable contract.
 - DTOs: `<Action>Request`, `<Action>Response`, or `<Entity>Dto`.
 - Entities: singular domain names such as `User`, `TopupOrder`, `UsageLog`.
 - Integration services: provider-scoped names such as `GoogleFormsAnalyzer`.
+- AI provider adapters should be provider-scoped under `Integrations/AI` or an equivalent reviewed AI integration folder when Phase 6 implementation is approved.
 
 ## File Naming Rules
 
@@ -44,6 +45,7 @@ This is a proposed structure, not an immutable contract.
 - Entity files use singular domain names, for example `User.cs`, `TopupOrder.cs`, and `UsageLog.cs`.
 - API contract and DTO files belong under `Contracts/`. Use feature-scoped DTO grouping only when the grouped DTOs are small and tightly related, for example `Phase2Dtos.cs`; otherwise split by workflow using `<Workflow>Dtos.cs`.
 - Domain constant files use plural value-set names, for example `TopupOrderStatuses.cs`, `CreditTransactionTypes.cs`, `UsageLogStatuses.cs`, and `UserRoles.cs`.
+- AI domain constant files should use plural value-set names, for example `AiGenerationRunStatuses.cs`, after contract review approves the values.
 - EF Core context files use the context type name, for example `FormAutoHubDbContext.cs`.
 - EF Core migration files must keep the EF-generated timestamp and migration name format: `<yyyyMMddHHmmss>_<MigrationName>.cs`, `<yyyyMMddHHmmss>_<MigrationName>.Designer.cs`, and `FormAutoHubDbContextModelSnapshot.cs`.
 - Mapping helpers must be feature-scoped and named after the feature, for example `Phase2Mappings.cs`; do not create generic `Mapper.cs`, `Helpers.cs`, or `Utils.cs` files without real reuse.
@@ -57,8 +59,11 @@ This is a proposed structure, not an immutable contract.
 - Business logic belongs in services.
 - EF Core persistence belongs in `Data` and entity configuration.
 - External provider calls belong in `Integrations`.
+- AI provider calls belong in `Integrations/AI` or the reviewed AI integration boundary; they must not be placed in controllers, credit services, or frontend code.
+- AI provider settings, prompt profiles, and AI generation audit entities belong in `Entities/` and EF Core `Data/` only after DB review.
 - Shared code is allowed only after real reuse exists.
 - Frontend folders may be created only when a task explicitly approves frontend implementation, and they must follow the approved Next.js web dashboard direction.
+- Shared frontend UI components belong under `apps/web/components/`. Before adding page-local UI, inspect that folder and reuse available components. If a pattern needs project-wide consistency, update or create a shared component instead of duplicating it per page.
 
 ## Forbidden Moves
 
@@ -66,4 +71,6 @@ This is a proposed structure, not an immutable contract.
 - Do not hide business logic in controllers.
 - Do not hide credit ledger behavior in generic helpers.
 - Do not put Google Forms provider behavior into account or credit modules.
+- Do not put AI provider API keys, provider calls, raw provider payload handling, or prompt/output validation into frontend-only code.
+- Do not put AI credit multiplier logic outside the credit/generation service boundary approved by contract review.
 - Do not create microservice boundaries in MVP.

@@ -11,7 +11,10 @@ namespace FormAutoHub.Api.Services;
 public interface IResponseGenerationService
 {
     Task<GenerateResponsesResponse?> GenerateAsync(Guid projectId, GenerateResponsesRequest request, CancellationToken cancellationToken);
-    Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(Guid projectId, CancellationToken cancellationToken);
+    Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(
+        Guid projectId,
+        IReadOnlyList<Guid> responseIds,
+        CancellationToken cancellationToken);
 }
 
 public sealed class ResponseGenerationService(
@@ -93,6 +96,8 @@ public sealed class ResponseGenerationService(
                 PayloadJson = JsonSerializer.Serialize(answers),
                 PreviewText = previewText,
                 Status = GeneratedResponseStatuses.Previewed,
+                Source = GeneratedResponseSources.Rule,
+                IsReadOnly = false,
                 CreatedAt = DateTimeOffset.UtcNow
             });
         }
@@ -100,7 +105,7 @@ public sealed class ResponseGenerationService(
         var creditResult = await creditService.DeductUsageCreditsAsync(
             currentUser.UserId,
             generated.Count,
-            $"Generated {generated.Count} preview response(s).",
+            $"Đã tạo {generated.Count} phản hồi xem trước.",
             nameof(GeneratedResponse),
             generated.First().Id,
             cancellationToken);
@@ -125,7 +130,10 @@ public sealed class ResponseGenerationService(
             missingCredits);
     }
 
-    public async Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(Guid projectId, CancellationToken cancellationToken)
+    public async Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(
+        Guid projectId,
+        IReadOnlyList<Guid> responseIds,
+        CancellationToken cancellationToken)
     {
         var ownsProject = await dbContext.FormProjects
             .AnyAsync(project => project.Id == projectId && project.UserId == currentUser.UserId, cancellationToken);
@@ -135,9 +143,16 @@ public sealed class ResponseGenerationService(
             return null;
         }
 
-        var responses = await dbContext.GeneratedResponses
+        var query = dbContext.GeneratedResponses
             .AsNoTracking()
-            .Where(response => response.ProjectId == projectId)
+            .Where(response => response.ProjectId == projectId);
+
+        if (responseIds.Count > 0)
+        {
+            query = query.Where(response => responseIds.Contains(response.Id));
+        }
+
+        var responses = await query
             .OrderByDescending(response => response.CreatedAt)
             .ToListAsync(cancellationToken);
 

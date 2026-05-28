@@ -4,11 +4,29 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
-import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
+import { apiFetch, type AdminPayment, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+const recentPaymentColumns: Array<BaseTableColumn<AdminPayment>> = [
+  { key: "providerOrderCode", header: "Mã PayOS", render: (item) => item.providerOrderCode, className: "font-medium" },
+  {
+    key: "user",
+    header: "Người dùng",
+    render: (item) => (
+      <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+        {displayPaymentUser(item)}
+      </span>
+    )
+  },
+  { key: "amount", header: "Số tiền", render: (item) => formatCurrency(item.amount) },
+  { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
+  { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.providerStatus} /> },
+  { key: "createdAt", header: "Tạo lúc", render: (item) => formatDate(item.createdAt) }
+];
 
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
@@ -54,50 +72,14 @@ export default function AdminDashboardPage() {
             {!summary || summary.recentPayments.length === 0 ? (
               <EmptyState title="Chưa có thanh toán" detail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán." />
             ) : (
-              <>
-              <MobileRecordList>
-                {summary.recentPayments.map((item) => (
-                  <MobileRecord key={item.id}>
-                    <KeyValueRow label="Mã PayOS" value={item.providerOrderCode} />
-                    <KeyValueRow label="Người dùng" value={displayPaymentUser(item)} />
-                    <KeyValueRow label="Số tiền" value={formatCurrency(item.amount)} />
-                    <KeyValueRow label="Credit" value={`${item.credits} cr`} />
-                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={item.providerStatus} />} />
-                    <KeyValueRow label="Tạo lúc" value={formatDate(item.createdAt)} />
-                  </MobileRecord>
-                ))}
-              </MobileRecordList>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
-                    <tr>
-                      <th className="px-3 py-2">Mã PayOS</th>
-                      <th className="px-3 py-2">Người dùng</th>
-                      <th className="px-3 py-2">Số tiền</th>
-                      <th className="px-3 py-2">Credit</th>
-                      <th className="px-3 py-2">Trạng thái</th>
-                      <th className="px-3 py-2">Tạo lúc</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summary.recentPayments.map((item) => (
-                      <tr className="border-t border-border/70" key={item.id}>
-                        <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
-                        <td className="px-3 py-3">
-                          <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
-                            {displayPaymentUser(item)}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3">{formatCurrency(item.amount)}</td>
-                        <td className="px-3 py-3">{item.credits} cr</td>
-                        <td className="px-3 py-3"><StatusBadge status={item.providerStatus} /></td>
-                        <td className="px-3 py-3">{formatDate(item.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </>
+              <BaseTable
+                items={summary.recentPayments}
+                columns={recentPaymentColumns}
+                getRowKey={(item) => item.id}
+                emptyTitle="Chưa có thanh toán"
+                emptyDetail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán."
+                minWidthClassName="min-w-[760px]"
+              />
             )}
           </CardContent>
         </Card>
@@ -138,7 +120,7 @@ export default function AdminDashboardPage() {
   );
 }
 
-function displayPaymentUser(item: AdminRevenueSummary["recentPayments"][number]) {
+function displayPaymentUser(item: AdminPayment) {
   return item.userEmail || item.userId.slice(0, 8);
 }
 

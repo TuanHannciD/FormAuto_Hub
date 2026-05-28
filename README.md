@@ -8,7 +8,11 @@ This repository contains the documentation baseline and the initial Phase 1 back
 
 ## Current Phase
 
-Current phase: **Phase 9 closeout completed; next phase not selected**.
+Current global phase: **Phase 9 closeout completed; next phase not selected**.
+
+Active approved follow-up slice: **Phase 6 AI mapping/generation scoped implementation**.
+
+This approved slice does not unlock the full Phase 6 production integration group. The scoped OpenAI-compatible live provider adapter and custom Base URL settings are approved only behind explicit runtime configuration. Broad raw-audit exposure, provider-specific SDK adapters, live model catalog validation, official Google Forms API, Google Forms watches, non-PayOS payment providers, and background-job framework work remain Deferred until separately approved.
 
 Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
 

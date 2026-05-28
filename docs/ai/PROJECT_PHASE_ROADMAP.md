@@ -6,7 +6,11 @@ Define FormAuto Hub delivery phases and scope gates.
 
 ## Current Phase
 
-Current phase: **Phase 9 closeout completed; next phase not selected**.
+Current global phase: **Phase 9 closeout completed; next phase not selected**.
+
+Active approved follow-up slice: **Phase 6 AI mapping/generation scoped implementation**.
+
+This means there is no full new global phase selected after Phase 9, but approved work may continue inside the Phase 6 AI slice only where the Phase 6 AI requirement package, API contracts, database review, provider settings, safety guards, audit rules, and validation scope have already been approved.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -149,7 +153,7 @@ Frontend framework: Next.js web dashboard.
 
 ## Phase 6 - Production integrations
 
-Status: Deferred candidate group.
+Status: Deferred candidate group, with an active approved scoped follow-up for AI mapping/generation.
 
 Deferred unless explicitly approved:
 
@@ -157,7 +161,7 @@ Deferred unless explicitly approved:
 - official Google Forms API
 - payment gateway
 - background job framework
-- AI mapping/generation
+- AI mapping/generation outside the approved scoped follow-up slice
 - webhook integrations
 - production deployment platform
 
@@ -167,10 +171,24 @@ Future candidate notes:
 - Official Google Forms API may be useful later for form metadata, question, and response sync.
 - Google Forms watches with Cloud Pub/Sub-style notification handling may be useful later for schema or response change detection.
 - Background jobs may be useful later for watch renewal, sync retries, and integration health checks.
+- AI mapping/generation has an approved scoped follow-up slice in `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md`; only the approved AI slice may proceed, and broader Phase 6 production integration work remains Deferred.
+
+Current AI scoped follow-up progress:
+
+| Area | Current state |
+|---|---|
+| AI provider settings backend | Implemented for the scoped slice |
+| Admin AI provider config UI | Implemented for the scoped slice |
+| AI prompt profile persistence | Implemented for the scoped slice |
+| AI generate preview API | Implemented for the scoped slice |
+| Normal-user AI mode UI/API binding | Implemented for the scoped slice |
+| Live OpenAI-compatible provider calls | Implemented for the scoped slice behind explicit runtime configuration |
+| Broad AI audit read UI/API and raw payload exposure | Deferred |
+| Custom base URL and live OpenAI-compatible gateway calls | Implemented for the scoped slice |
 
 Deferred:
 
-- These future candidates are not approved implementation scope yet.
+- Future candidates outside the approved AI scoped follow-up are not approved implementation scope yet.
 - They do not approve API contracts, database fields, statuses, lifecycle states, OAuth token storage, webhook/Pub/Sub ingestion models, or background job framework choices.
 - If a future task requires UI for these integrations, use existing UI docs only when they are sufficient; otherwise ask for UI direction or sync UI docs before implementation.
 
@@ -329,4 +347,4 @@ Closeout:
 
 ## Phase Rule
 
-No next phase is selected after Phase 9 closeout. New phase work or implementation/fix follow-up requires explicit approval.
+No full next global phase is selected after Phase 9 closeout. The active approved follow-up slice is Phase 6 AI mapping/generation scoped implementation. New phase work or implementation/fix follow-up outside that approved slice requires explicit approval.

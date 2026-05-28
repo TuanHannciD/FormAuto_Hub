@@ -16,6 +16,7 @@ export function displayStatus(status: string) {
     Paid: "Đã thanh toán",
     Ready: "Sẵn sàng",
     MissingConfiguration: "Thiếu cấu hình",
+    InvalidConfiguration: "Cấu hình không hợp lệ",
     NotChecked: "Chưa kiểm tra",
     PAID: "Đã thanh toán",
     PENDING: "Đang chờ",
@@ -43,6 +44,7 @@ export function displayAction(action: string) {
 
 export function displayCreditTransactionType(type: string) {
   const labels: Record<string, string> = {
+    CreditUsed:"Sử dụng credit",
     Topup: "Nạp credit",
     TopupApproved: "Nạp credit đã duyệt",
     Usage: "Sử dụng credit",

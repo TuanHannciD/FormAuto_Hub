@@ -6,7 +6,8 @@ Define non-negotiable execution discipline for FormAuto Hub.
 
 ## Current State
 
-- Current phase state: Phase 9 closeout completed; next phase not selected.
+- Current global phase state: Phase 9 closeout completed; next phase not selected.
+- Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.
 - Backend stack is confirmed: ASP.NET Core Web API .NET 9, SQL Server, EF Core.
@@ -17,7 +18,7 @@ Define non-negotiable execution discipline for FormAuto Hub.
 - Do not invent business rules, API contracts, fields, statuses, events, lifecycle states, or architecture decisions.
 - Mark missing details as `Assumption:`.
 - Mark unapproved future work as `Deferred:`.
-- Keep changes inside the active phase.
+- Keep changes inside the active global phase or the explicitly approved follow-up slice.
 - Use the smallest correct change.
 - Preserve abuse-prevention language.
 - Preserve validation honesty.

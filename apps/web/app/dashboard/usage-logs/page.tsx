@@ -2,7 +2,10 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, MobileRecord, MobileRecordList, PageHeader, Select } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { DropdownSelect } from "@/components/dropdown-select";
+import { PaginationControls } from "@/components/pagination-controls";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog, type UsageLogPageResponse } from "@/lib/api";
 import { displayAction, displayToolName } from "@/lib/labels";
@@ -17,10 +20,18 @@ const actionOptions = [
   { value: "SubmitResponses", label: "Gửi câu trả lời" }
 ];
 
+const columns: Array<BaseTableColumn<UsageLog>> = [
+  { key: "createdAt", header: "Thời gian", render: (log) => formatDate(log.createdAt) },
+  { key: "toolName", header: "Công cụ", render: (log) => displayToolName(log.toolName) },
+  { key: "action", header: "Thao tác", render: (log) => displayAction(log.action) },
+  { key: "creditsUsed", header: "Credit", render: (log) => log.creditsUsed },
+  { key: "status", header: "Kết quả", render: (log) => <StatusBadge status={log.status} /> },
+  { key: "description", header: "Mô tả", render: (log) => log.description }
+];
+
 export default function UsageLogsPage() {
   const [logs, setLogs] = useState<UsageLog[]>([]);
   const [action, setAction] = useState(generatedAnswersAction);
-  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -46,30 +57,49 @@ export default function UsageLogsPage() {
   }, [action, page, search]);
 
   useEffect(() => {
+    const controller = new AbortController();
+    let isCurrentRequest = true;
+
     setIsLoading(true);
     setError("");
-    apiFetch<UsageLogPageResponse>(queryPath)
+    apiFetch<UsageLogPageResponse>(queryPath, { signal: controller.signal })
       .then((data) => {
+        if (!isCurrentRequest) {
+          return;
+        }
+
         setLogs(data.items);
         setTotalItems(data.totalItems);
         setTotalPages(data.totalPages);
       })
       .catch((fetchError) => {
+        if (!isCurrentRequest || (fetchError instanceof DOMException && fetchError.name === "AbortError")) {
+          return;
+        }
+
         setLogs([]);
         setTotalItems(0);
         setTotalPages(0);
         setError(fetchError instanceof Error ? fetchError.message : "Không tải được lịch sử sử dụng.");
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (isCurrentRequest) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrentRequest = false;
+      controller.abort();
+    };
   }, [queryPath]);
 
   const creditsUsed = logs.reduce((total, log) => total + log.creditsUsed, 0);
   const failedInPage = logs.filter((log) => log.status === "Failed").length;
 
-  function applyFilters(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function updateSearch(nextSearch: string) {
     setPage(1);
-    setSearch(searchInput.trim());
+    setSearch(nextSearch.trim());
   }
 
   function updateAction(nextAction: string) {
@@ -79,7 +109,6 @@ export default function UsageLogsPage() {
 
   function resetFilters() {
     setAction(generatedAnswersAction);
-    setSearchInput("");
     setSearch("");
     setPage(1);
   }
@@ -100,75 +129,35 @@ export default function UsageLogsPage() {
               Dữ liệu được tải theo từng trang và theo filter hiện tại.
             </p>
           </div>
-          <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_16rem_auto_auto]" onSubmit={applyFilters}>
-            <label className="relative block">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-              <Input
-                className="pl-9"
-                placeholder="Tìm theo thao tác, mô tả, trạng thái..."
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-              />
-            </label>
-            <Select value={action} onChange={(event) => updateAction(event.target.value)}>
-              {actionOptions.map((option) => (
-                <option key={option.label} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-            <Button type="submit">Tìm</Button>
-            <Button type="button" variant="secondary" onClick={resetFilters}>Đặt lại</Button>
-          </form>
+          <UsageLogFilters
+            action={action}
+            search={search}
+            isRefreshing={isLoading && logs.length > 0}
+            onActionChange={updateAction}
+            onReset={resetFilters}
+            onSearchChange={updateSearch}
+          />
         </CardHeader>
-        <CardContent>
-          {error ? (
+        <CardContent className="space-y-4">
+          {error && logs.length === 0 ? (
             <EmptyState title="Không tải được lịch sử sử dụng" detail={error} />
-          ) : isLoading ? (
+          ) : isLoading && logs.length === 0 ? (
             <EmptyState title="Đang tải lịch sử sử dụng" detail="Hệ thống chỉ tải dữ liệu cho trang hiện tại." />
-          ) : logs.length === 0 ? (
-            <EmptyState title="Không có kết quả phù hợp" detail="Thử đổi từ khóa tìm kiếm hoặc chọn lại loại thao tác." />
           ) : (
             <>
-            <MobileRecordList>
-              {logs.map((log) => (
-                <MobileRecord key={log.id}>
-                  <KeyValueRow label="Thời gian" value={formatDate(log.createdAt)} />
-                  <KeyValueRow label="Công cụ" value={displayToolName(log.toolName)} />
-                  <KeyValueRow label="Thao tác" value={displayAction(log.action)} />
-                  <KeyValueRow label="Credit" value={log.creditsUsed} />
-                  <KeyValueRow label="Kết quả" value={<StatusBadge status={log.status} />} />
-                  <KeyValueRow label="Mô tả" value={log.description} />
-                </MobileRecord>
-              ))}
-            </MobileRecordList>
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full text-sm">
-                <thead className="text-left text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Thời gian</th>
-                    <th className="py-2">Công cụ</th>
-                    <th className="py-2">Thao tác</th>
-                    <th className="py-2">Credit</th>
-                    <th className="py-2">Kết quả</th>
-                    <th className="py-2">Mô tả</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map((log) => (
-                    <tr className="border-t border-border/70" key={log.id}>
-                      <td className="py-3">{formatDate(log.createdAt)}</td>
-                      <td className="py-3">{displayToolName(log.toolName)}</td>
-                      <td className="py-3">{displayAction(log.action)}</td>
-                      <td className="py-3">{log.creditsUsed}</td>
-                      <td className="py-3"><StatusBadge status={log.status} /></td>
-                      <td className="py-3">{log.description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <Pagination
+            {error && (
+              <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                {error}
+              </div>
+            )}
+            <BaseTable
+              items={logs}
+              columns={columns}
+              getRowKey={(log) => log.id}
+              emptyTitle="Không có kết quả phù hợp"
+              emptyDetail="Thử đổi từ khóa tìm kiếm hoặc chọn lại loại thao tác."
+            />
+            <PaginationControls
               page={page}
               totalPages={totalPages}
               totalItems={totalItems}
@@ -183,6 +172,74 @@ export default function UsageLogsPage() {
   );
 }
 
+function UsageLogFilters({
+  action,
+  search,
+  isRefreshing,
+  onActionChange,
+  onSearchChange,
+  onReset
+}: {
+  action: string;
+  search: string;
+  isRefreshing: boolean;
+  onActionChange: (value: string) => void;
+  onSearchChange: (value: string) => void;
+  onReset: () => void;
+}) {
+  const [searchInput, setSearchInput] = useState(search);
+  const debouncedSearchInput = useDebouncedValue(searchInput.trim(), 420);
+
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
+
+  useEffect(() => {
+    if (debouncedSearchInput !== search) {
+      onSearchChange(debouncedSearchInput);
+    }
+  }, [debouncedSearchInput, onSearchChange, search]);
+
+  function applyFilters(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onSearchChange(searchInput.trim());
+  }
+
+  function resetFilters() {
+    setSearchInput("");
+    onReset();
+  }
+
+  return (
+    <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_16rem_auto_auto]" onSubmit={applyFilters}>
+      <label className="relative block">
+        <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+        <Input
+          className="pl-9"
+          placeholder="Tìm theo thao tác, mô tả, trạng thái..."
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+        />
+      </label>
+      <DropdownSelect value={action} options={actionOptions} onChange={onActionChange} />
+      <Button type="submit">{isRefreshing ? "Đang lọc..." : "Tìm"}</Button>
+      <Button type="button" variant="secondary" onClick={resetFilters}>Đặt lại</Button>
+    </form>
+  );
+}
+
+function useDebouncedValue<T>(value: T, delayMs: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setDebouncedValue(value), delayMs);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [delayMs, value]);
+
+  return debouncedValue;
+}
+
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <Card>
@@ -192,35 +249,5 @@ function Metric({ label, value }: { label: string; value: string }) {
         <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
       </CardContent>
     </Card>
-  );
-}
-
-function Pagination({
-  page,
-  totalPages,
-  totalItems,
-  onPrevious,
-  onNext
-}: {
-  page: number;
-  totalPages: number;
-  totalItems: number;
-  onPrevious: () => void;
-  onNext: () => void;
-}) {
-  return (
-    <div className="mt-4 flex flex-col gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-      <span>
-        Trang {totalPages === 0 ? 0 : page}/{totalPages} · {totalItems} kết quả
-      </span>
-      <div className="flex gap-2">
-        <Button type="button" variant="secondary" disabled={page <= 1} onClick={onPrevious}>
-          Trước
-        </Button>
-        <Button type="button" variant="secondary" disabled={totalPages === 0 || page >= totalPages} onClick={onNext}>
-          Sau
-        </Button>
-      </div>
-    </div>
   );
 }

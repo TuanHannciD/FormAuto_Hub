@@ -1,18 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, FileText, ShieldCheck, SlidersHorizontal } from "lucide-react";
+import { Bot, CheckCircle2, ChevronDown, ChevronUp, FileQuestion, FileText, LockKeyhole, ShieldCheck, SlidersHorizontal, Sparkles, Wand2 } from "lucide-react";
 import { DropdownSelect } from "@/components/dropdown-select";
 import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import {
   apiFetch,
+  type AiGenerateResponsesResult,
+  type AiPromptAutoFillResponse,
+  type AiPromptProfile,
   type AnalyzeFormResponse,
   type CreatePayosTopupOrderResponse,
   type CreditPackage,
   type DashboardSummary,
   type FormQuestion,
   type GeneratedResponse,
+  type GeneratedResponseListResponse,
   type GenerateResponsesResult,
   type SubmissionJob
 } from "@/lib/api";
@@ -43,11 +47,68 @@ const TIME_STEP_MAX = 120;
 const CHECKBOX_SELECTION_MIN = 1;
 const FORM_PREVIEW_RESUME_KEY = "formauto.formPreviewResume";
 const FORM_PREVIEW_RESUME_CHANNEL = "formauto.formPreviewResume";
+const AI_SHORT_FIELD_MAX_LENGTH = 200;
+const AI_GLOBAL_PROMPT_MAX_LENGTH = 2000;
+const AI_QUESTION_PROMPT_MAX_LENGTH = 1000;
+const DEFAULT_AI_GLOBAL_PROMPT = "Tạo câu trả lời tự nhiên, ngắn gọn và phù hợp với câu hỏi trong biểu mẫu.";
+
+type GenerationMode = "rules" | "ai-default" | "ai-custom";
+type AiGenerationMode = Exclude<GenerationMode, "rules">;
+type AiPromptScope = "global" | "per-question";
+
+type AiDirectionFields = {
+  targetAge: string;
+  role: string;
+  context: string;
+  tone: string;
+  answerLength: string;
+  intent: string;
+};
+
+const defaultAiDirection: AiDirectionFields = {
+  targetAge: "",
+  role: "",
+  context: "",
+  tone: "Thân thiện",
+  answerLength: "Ngắn",
+  intent: ""
+};
+
+const generationModeOptions: Array<{
+  value: GenerationMode;
+  title: string;
+  description: string;
+  badge: string;
+}> = [
+  {
+    value: "rules",
+    title: "Option 1",
+    description: "Quy tắc hiện tại",
+    badge: "x1"
+  },
+  {
+    value: "ai-default",
+    title: "Option 2",
+    description: "AI mặc định",
+    badge: "x2"
+  },
+  {
+    value: "ai-custom",
+    title: "Option 3",
+    description: "AI tùy chỉnh",
+    badge: "x3"
+  }
+];
 
 type FormPreviewResumeContext = {
   projectId: string;
   analysis: AnalyzeFormResponse;
   ruleConfigs: Record<string, { mode: string; configJson: string }>;
+  generationMode?: GenerationMode;
+  aiDirection?: AiDirectionFields;
+  aiGlobalPrompt?: string;
+  aiPromptScope?: AiPromptScope;
+  aiQuestionPrompts?: Record<string, string>;
   requestedCount: number;
   generatedCount: number;
   missingCredits: number;
@@ -69,6 +130,13 @@ export default function FormsPage() {
   const [resumeCreditReady, setResumeCreditReady] = useState(false);
   const [topupBusy, setTopupBusy] = useState(false);
   const [openRuleEditors, setOpenRuleEditors] = useState<Record<string, boolean>>({});
+  const [generationMode, setGenerationMode] = useState<GenerationMode>("rules");
+  const [aiPreviewMode, setAiPreviewMode] = useState<AiGenerationMode | null>(null);
+  const [aiQuestionBlocksOpen, setAiQuestionBlocksOpen] = useState<Record<string, boolean>>({});
+  const [aiDirection, setAiDirection] = useState<AiDirectionFields>(defaultAiDirection);
+  const [aiGlobalPrompt, setAiGlobalPrompt] = useState(DEFAULT_AI_GLOBAL_PROMPT);
+  const [aiQuestionPrompts, setAiQuestionPrompts] = useState<Record<string, string>>({});
+  const [aiPromptScope, setAiPromptScope] = useState<AiPromptScope>("global");
   const [confirmed, setConfirmed] = useState(false);
   const [submissionLocked, setSubmissionLocked] = useState(false);
   const [submission, setSubmission] = useState<SubmissionJob | null>(null);
@@ -90,6 +158,8 @@ export default function FormsPage() {
 
   const ruleOpenCount = analysis?.questions.filter((question) => openRuleEditors[question.id] ?? true).length ?? 0;
   const allRuleEditorsOpen = analysis ? ruleOpenCount === analysis.questions.length : false;
+  const aiCreditMultiplier = generationMode === "ai-custom" ? 3 : generationMode === "ai-default" ? 2 : 1;
+  const canGenerateAi = Boolean(analysis && analysis.questions.length > 0 && generationMode !== "rules" && aiGlobalPrompt.trim());
 
   useEffect(() => {
     const stored = readResumeContext();
@@ -163,18 +233,46 @@ export default function FormsPage() {
     }
   }, [submission?.status]);
 
-  async function analyze(event: React.FormEvent) {
-    event.preventDefault();
-    setBusy(true);
+  function clearPreviewWorkflow() {
     setPreviews([]);
     setPreviewListOpen(false);
     setOpenPreviews({});
     setGenerationCreditNotice(null);
     setResumeContext(null);
     clearResumeContext();
-    setSubmission(null);
     setConfirmed(false);
+    setSubmission(null);
+    setSubmissionLogsOpen(false);
     setSubmissionLocked(false);
+    setAiPreviewMode(null);
+  }
+
+  function resetAiPreparation(nextAnalysis: AnalyzeFormResponse) {
+    setGenerationMode("rules");
+    setAiPreviewMode(null);
+    setAiDirection(defaultAiDirection);
+    setAiGlobalPrompt(DEFAULT_AI_GLOBAL_PROMPT);
+    setAiPromptScope("global");
+    setAiQuestionBlocksOpen(Object.fromEntries(nextAnalysis.questions.map((question) => [question.id, false])));
+    setAiQuestionPrompts(Object.fromEntries(nextAnalysis.questions.map((question) => [question.id, ""])));
+  }
+
+  function selectGenerationMode(mode: GenerationMode) {
+    if (mode === generationMode) {
+      return;
+    }
+
+    setGenerationMode(mode);
+    clearPreviewWorkflow();
+    if (mode !== "rules") {
+      void loadAiPromptProfile(mode);
+    }
+  }
+
+  async function analyze(event: React.FormEvent) {
+    event.preventDefault();
+    setBusy(true);
+    clearPreviewWorkflow();
     try {
       const result = await apiFetch<AnalyzeFormResponse>("/api/forms/analyze", {
         method: "POST",
@@ -183,6 +281,7 @@ export default function FormsPage() {
       setAnalysis(result);
       setRuleConfigs(Object.fromEntries(result.questions.map((question) => [question.id, defaultRule(question)])));
       setOpenRuleEditors(Object.fromEntries(result.questions.map((question) => [question.id, true])));
+      resetAiPreparation(result);
       toast.success("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
     } catch (error) {
       showError(error, "Không phân tích được biểu mẫu.");
@@ -197,13 +296,7 @@ export default function FormsPage() {
     }
 
     setBusy(true);
-    setPreviews([]);
-    setPreviewListOpen(false);
-    setOpenPreviews({});
-    setGenerationCreditNotice(null);
-    setSubmission(null);
-    setConfirmed(false);
-    setSubmissionLocked(false);
+    clearPreviewWorkflow();
     try {
       for (const question of analysis.questions) {
         const config = ruleConfigs[question.id];
@@ -222,6 +315,7 @@ export default function FormsPage() {
         json: { count: previewCount }
       });
       setPreviews(result.items);
+      setAiPreviewMode(null);
       setPreviewListOpen(false);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
       setGenerationCreditNotice(result.missingCredits > 0
@@ -236,6 +330,7 @@ export default function FormsPage() {
           projectId: analysis.projectId,
           analysis,
           ruleConfigs,
+          generationMode: "rules" as const,
           requestedCount: result.requestedCount,
           generatedCount: result.generatedCount,
           missingCredits: result.missingCredits,
@@ -267,20 +362,32 @@ export default function FormsPage() {
 
     setBusy(true);
     try {
-      const result = await apiFetch<GenerateResponsesResult>(`/api/projects/${context.projectId}/responses/generate`, {
-        method: "POST",
-        json: { count: context.missingCredits }
-      });
-      setPreviews((current) => [...current, ...result.items]);
+      const contextMode = context.generationMode ?? "rules";
+      const isAiContext = contextMode !== "rules";
+      const multiplier = contextMode === "ai-custom" ? 3 : contextMode === "ai-default" ? 2 : 1;
+      const continueCount = isAiContext
+        ? Math.max(1, Math.ceil(context.missingCredits / multiplier))
+        : context.missingCredits;
+      const result = isAiContext
+        ? await generateAiResponses(context.projectId, contextMode, continueCount)
+        : await apiFetch<GenerateResponsesResult>(`/api/projects/${context.projectId}/responses/generate`, {
+            method: "POST",
+            json: { count: continueCount }
+          });
+      const resultItems = "items" in result
+        ? result.items
+        : await loadGeneratedPreviews(context.projectId, result.generatedPreviewIds);
+      setPreviews((current) => [...current, ...resultItems]);
+      setAiPreviewMode(isAiContext ? contextMode : null);
       setPreviewListOpen(false);
       setOpenPreviews((current) => ({
         ...current,
-        ...Object.fromEntries(result.items.map((preview, index) => [preview.id, current[preview.id] ?? index === 0]))
+        ...Object.fromEntries(resultItems.map((preview, index) => [preview.id, current[preview.id] ?? index === 0]))
       }));
       if (result.missingCredits > 0) {
         const nextContext = {
           ...context,
-          requestedCount: context.missingCredits,
+          requestedCount: continueCount,
           generatedCount: result.generatedCount,
           missingCredits: result.missingCredits,
           createdAt: new Date().toISOString()
@@ -301,7 +408,7 @@ export default function FormsPage() {
       window.setTimeout(() => {
         previewSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
-      toast.success(`Đã tạo tiếp ${result.items.length} bản xem trước và trừ ${result.creditsUsed} credit.`);
+      toast.success(`Đã tạo tiếp ${resultItems.length} bản xem trước và trừ ${result.creditsUsed} credit.`);
     } catch (error) {
       showError(error, "Không tạo tiếp được phần còn thiếu.");
     } finally {
@@ -319,6 +426,11 @@ export default function FormsPage() {
       projectId: analysis.projectId,
       analysis,
       ruleConfigs,
+      generationMode,
+      aiDirection,
+      aiGlobalPrompt,
+      aiPromptScope,
+      aiQuestionPrompts,
       requestedCount: generationCreditNotice.requestedCount,
       generatedCount: generationCreditNotice.generatedCount,
       missingCredits: generationCreditNotice.missingCredits,
@@ -353,8 +465,16 @@ export default function FormsPage() {
     setResumeContext(context);
     setAnalysis(context.analysis);
     setRuleConfigs(context.ruleConfigs);
-    setPreviewCount(context.missingCredits);
+    const contextMode = context.generationMode ?? "rules";
+    const multiplier = contextMode === "ai-custom" ? 3 : contextMode === "ai-default" ? 2 : 1;
+    setGenerationMode(contextMode);
+    setPreviewCount(contextMode === "rules" ? context.missingCredits : Math.max(1, Math.ceil(context.missingCredits / multiplier)));
     setOpenRuleEditors(Object.fromEntries(context.analysis.questions.map((question) => [question.id, true])));
+    setAiDirection(context.aiDirection ?? defaultAiDirection);
+    setAiGlobalPrompt(context.aiGlobalPrompt ?? DEFAULT_AI_GLOBAL_PROMPT);
+    setAiPromptScope(context.aiPromptScope ?? "global");
+    setAiQuestionBlocksOpen(Object.fromEntries(context.analysis.questions.map((question) => [question.id, false])));
+    setAiQuestionPrompts(context.aiQuestionPrompts ?? Object.fromEntries(context.analysis.questions.map((question) => [question.id, ""])));
     setGenerationCreditNotice({
       requestedCount: context.requestedCount,
       generatedCount: context.generatedCount,
@@ -436,17 +556,8 @@ export default function FormsPage() {
   }
 
   function restartFromAnswerRules() {
-    setPreviews([]);
-    setPreviewListOpen(false);
-    setOpenPreviews({});
-    setGenerationCreditNotice(null);
-    setResumeContext(null);
-    clearResumeContext();
+    clearPreviewWorkflow();
     setResumeCreditReady(false);
-    setConfirmed(false);
-    setSubmission(null);
-    setSubmissionLogsOpen(false);
-    setSubmissionLocked(false);
     if (analysis) {
       setOpenRuleEditors(Object.fromEntries(analysis.questions.map((question) => [question.id, true])));
     }
@@ -454,6 +565,171 @@ export default function FormsPage() {
       rulesSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
     toast.info("Đã làm mới lượt gửi hiện tại. Cách trả lời cũ vẫn được giữ để tạo bản xem trước mới.");
+  }
+
+  async function loadAiPromptProfile(mode: AiGenerationMode) {
+    if (!analysis) {
+      return;
+    }
+
+    try {
+      const profile = await apiFetch<AiPromptProfile>(`/api/projects/${analysis.projectId}/ai-prompt-profile?mode=${toBackendAiMode(mode)}`);
+      setAiGlobalPrompt(profile.globalPrompt || DEFAULT_AI_GLOBAL_PROMPT);
+      setAiDirection(readAiDirection(profile.audienceJson));
+      setAiQuestionPrompts({
+        ...Object.fromEntries(analysis.questions.map((question) => [question.id, ""])),
+        ...Object.fromEntries(profile.questions.map((question) => [question.questionId, question.prompt]))
+      });
+      setAiPromptScope(profile.questions.some((question) => question.useAi) ? "per-question" : "global");
+    } catch {
+      setAiDirection(defaultAiDirection);
+      setAiGlobalPrompt(DEFAULT_AI_GLOBAL_PROMPT);
+      setAiPromptScope("global");
+      setAiQuestionPrompts(Object.fromEntries(analysis.questions.map((question) => [question.id, ""])));
+    }
+  }
+
+  async function autoFillAiPrompt() {
+    if (!analysis || generationMode === "rules") {
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const context = buildAiAutoFillContext(generationMode, aiDirection);
+      const response = await apiFetch<AiPromptAutoFillResponse>(`/api/projects/${analysis.projectId}/ai-prompt-profile/auto-fill`, {
+        method: "POST",
+        json: {
+          mode: toBackendAiMode(generationMode),
+          context
+        }
+      });
+      setAiGlobalPrompt(response.globalPrompt || DEFAULT_AI_GLOBAL_PROMPT);
+      setAiDirection(readAiDirection(response.audienceJson));
+      setAiQuestionPrompts({
+        ...Object.fromEntries(analysis.questions.map((question) => [question.id, ""])),
+        ...Object.fromEntries(response.questions.map((question) => [question.questionId, question.prompt]))
+      });
+      if (generationMode === "ai-custom") {
+        setAiPromptScope("per-question");
+      }
+      toast.success("Đã điền gợi ý prompt miễn phí. Prompt sẽ được lưu khi tạo AI preview.");
+    } catch (error) {
+      showError(error, "Không điền được prompt AI.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function saveAiPromptProfile(mode: AiGenerationMode) {
+    if (!analysis) {
+      return;
+    }
+
+    const backendMode = toBackendAiMode(mode);
+    await apiFetch<AiPromptProfile>(`/api/projects/${analysis.projectId}/ai-prompt-profile`, {
+      method: "PUT",
+      json: {
+        mode: backendMode,
+        audienceJson: buildAiAudienceJson(mode, aiDirection),
+        globalPrompt: aiGlobalPrompt
+      }
+    });
+
+    if (mode !== "ai-custom") {
+      return;
+    }
+
+    for (const question of analysis.questions) {
+      await apiFetch(`/api/projects/${analysis.projectId}/ai-prompt-profile/questions/${question.id}`, {
+        method: "PUT",
+        json: {
+          mode: backendMode,
+          prompt: aiQuestionPrompts[question.id] ?? "",
+          useAi: aiPromptScope === "per-question"
+        }
+      });
+    }
+  }
+
+  async function generateAiResponses(projectId: string, mode: AiGenerationMode, count: number) {
+    return apiFetch<AiGenerateResponsesResult>(`/api/projects/${projectId}/ai-responses/generate`, {
+      method: "POST",
+      json: {
+        mode: toBackendAiMode(mode),
+        count
+      }
+    });
+  }
+
+  async function loadGeneratedPreviews(projectId: string, ids: string[]) {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const searchParams = new URLSearchParams();
+    ids.forEach((id) => searchParams.append("ids", id));
+    const response = await apiFetch<GeneratedResponseListResponse>(`/api/projects/${projectId}/responses?${searchParams.toString()}`);
+    const byId = new Map(response.items.map((preview) => [preview.id, preview]));
+    return ids.map((id) => byId.get(id)).filter((preview): preview is GeneratedResponse => Boolean(preview));
+  }
+
+  async function createAiPreviews() {
+    if (!analysis || generationMode === "rules") {
+      return;
+    }
+
+    setBusy(true);
+    clearPreviewWorkflow();
+    try {
+      await saveAiPromptProfile(generationMode);
+      const result = await generateAiResponses(analysis.projectId, generationMode, previewCount);
+      const resultItems = await loadGeneratedPreviews(analysis.projectId, result.generatedPreviewIds);
+      setPreviews(resultItems);
+      setAiPreviewMode(generationMode);
+      setPreviewListOpen(false);
+      setOpenPreviews(Object.fromEntries(resultItems.map((preview, index) => [preview.id, index === 0])));
+      setGenerationCreditNotice(result.missingCredits > 0
+        ? {
+            requestedCount: result.requestedCount,
+            generatedCount: result.generatedCount,
+            missingCredits: result.missingCredits
+          }
+        : null);
+      if (result.missingCredits > 0) {
+        const nextContext: FormPreviewResumeContext = {
+          projectId: analysis.projectId,
+          analysis,
+          ruleConfigs,
+          generationMode,
+          aiDirection,
+          aiGlobalPrompt,
+          aiPromptScope,
+          aiQuestionPrompts,
+          requestedCount: result.requestedCount,
+          generatedCount: result.generatedCount,
+          missingCredits: result.missingCredits,
+          createdAt: new Date().toISOString()
+        };
+        saveResumeContext(nextContext);
+        setResumeContext(nextContext);
+      } else {
+        clearResumeContext();
+        setResumeContext(null);
+      }
+      window.setTimeout(() => {
+        previewSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      if (result.status === "Failed") {
+        toast.error("AI chưa tạo được bản xem trước hợp lệ. Không trừ credit.");
+      } else {
+        toast.success(`Đã tạo ${resultItems.length} AI preview và trừ ${result.creditsUsed} credit.`);
+      }
+    } catch (error) {
+      showError(error, "Không tạo được AI preview.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -522,27 +798,31 @@ export default function FormsPage() {
             <div>
               <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
               <p className="mt-1 text-xs text-muted-foreground">
-                Đang mở {ruleOpenCount}/{analysis.questions.length} câu hỏi. Có thể mở từng câu để chỉnh nhanh.
+                {generationMode === "rules"
+                  ? `Đang mở ${ruleOpenCount}/${analysis.questions.length} câu hỏi. Có thể mở từng câu để chỉnh nhanh.`
+                  : "AI dùng prompt đã lưu, tạo preview read-only và chỉ trừ credit cho preview hợp lệ."}
               </p>
             </div>
-            <button
-              aria-pressed={allRuleEditorsOpen}
-              className={`inline-flex min-h-10 items-center justify-between gap-3 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition ${
-                allRuleEditorsOpen
-                  ? "border-cyan-300 bg-cyan-500 text-white"
-                  : "border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-50"
-              }`}
-              type="button"
-              onClick={() => {
-                const nextOpen = !allRuleEditorsOpen;
-                setOpenRuleEditors(Object.fromEntries(analysis.questions.map((question) => [question.id, nextOpen])));
-              }}
-            >
-              <span>{allRuleEditorsOpen ? "Đóng tất cả" : "Mở tất cả"}</span>
-              <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-white/35" : "bg-cyan-100"}`}>
-                <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
-              </span>
-            </button>
+            {generationMode === "rules" && (
+              <button
+                aria-pressed={allRuleEditorsOpen}
+                className={`inline-flex min-h-10 items-center justify-between gap-3 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition ${
+                  allRuleEditorsOpen
+                    ? "border-cyan-300 bg-cyan-500 text-white"
+                    : "border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-50"
+                }`}
+                type="button"
+                onClick={() => {
+                  const nextOpen = !allRuleEditorsOpen;
+                  setOpenRuleEditors(Object.fromEntries(analysis.questions.map((question) => [question.id, nextOpen])));
+                }}
+              >
+                <span>{allRuleEditorsOpen ? "Đóng tất cả" : "Mở tất cả"}</span>
+                <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-white/35" : "bg-cyan-100"}`}>
+                  <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
+                </span>
+              </button>
+            )}
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-lg border border-border/70 bg-white/55 p-4 backdrop-blur">
@@ -566,8 +846,31 @@ export default function FormsPage() {
                 </div>
               </div>
             </div>
+            <GenerationModeSelector value={generationMode} onChange={selectGenerationMode} />
             {analysis.questions.length === 0 ? (
               <EmptyState title="Không có câu hỏi được hỗ trợ" detail="Biểu mẫu này chưa có câu hỏi phù hợp với các loại đang hỗ trợ." />
+            ) : generationMode !== "rules" ? (
+              <AiModePreparationPanel
+                aiDirection={aiDirection}
+                aiGlobalPrompt={aiGlobalPrompt}
+                aiPromptScope={aiPromptScope}
+                aiQuestionBlocksOpen={aiQuestionBlocksOpen}
+                aiQuestionPrompts={aiQuestionPrompts}
+                busy={busy}
+                canGenerate={canGenerateAi}
+                mode={generationMode}
+                multiplier={aiCreditMultiplier}
+                previewCount={previewCount}
+                questions={analysis.questions}
+                onAutoFill={autoFillAiPrompt}
+                onDirectionChange={(key, value) => setAiDirection((current) => ({ ...current, [key]: limitText(value, AI_SHORT_FIELD_MAX_LENGTH) }))}
+                onGenerate={createAiPreviews}
+                onGlobalPromptChange={(value) => setAiGlobalPrompt(limitText(value, AI_GLOBAL_PROMPT_MAX_LENGTH))}
+                onPreviewCountChange={(value) => setPreviewCount(value)}
+                onPromptScopeChange={setAiPromptScope}
+                onQuestionPromptChange={(questionId, value) => setAiQuestionPrompts((current) => ({ ...current, [questionId]: limitText(value, AI_QUESTION_PROMPT_MAX_LENGTH) }))}
+                onToggleQuestion={(questionId) => setAiQuestionBlocksOpen((current) => ({ ...current, [questionId]: !(current[questionId] ?? false) }))}
+              />
             ) : (
               <div className="space-y-4">
                 {analysis.questions.map((question, index) => (
@@ -684,10 +987,17 @@ export default function FormsPage() {
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
+                    {aiPreviewMode && <Badge tone="info">AI {aiPreviewMode === "ai-custom" ? "Option 3" : "Option 2"}</Badge>}
+                    {aiPreviewMode && <Badge tone="warning">Chỉ đọc</Badge>}
                     <Badge tone="info">{previews.length} bản xem trước</Badge>
                     <Badge tone="neutral">{previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời</Badge>
                   </div>
                 </div>
+                {aiPreviewMode && (
+                  <div className="mt-3 rounded-md border border-cyan-200 bg-cyan-50/80 px-3 py-2 text-xs font-medium text-cyan-900">
+                    Bản xem trước AI đã được lưu read-only. Người dùng chỉ xác nhận gửi sau khi đã mở xem lại nội dung.
+                  </div>
+                )}
               </div>
 
               <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
@@ -714,6 +1024,7 @@ export default function FormsPage() {
                       <PreviewAccordion
                         key={preview.id}
                         index={index}
+                        isAiPreview={Boolean(aiPreviewMode)}
                         open={openPreviews[preview.id] ?? false}
                         preview={preview}
                         onToggle={() => setOpenPreviews((current) => ({ ...current, [preview.id]: !(current[preview.id] ?? false) }))}
@@ -840,11 +1151,13 @@ export default function FormsPage() {
 function PreviewAccordion({
   index,
   preview,
+  isAiPreview,
   open,
   onToggle
 }: {
   index: number;
   preview: GeneratedResponse;
+  isAiPreview?: boolean;
   open: boolean;
   onToggle: () => void;
 }) {
@@ -860,7 +1173,10 @@ function PreviewAccordion({
           {index + 1}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block font-semibold">Bản xem trước #{index + 1}</span>
+          <span className="flex flex-wrap items-center gap-2 font-semibold">
+            Bản xem trước #{index + 1}
+            {isAiPreview && <Badge tone="warning">AI chỉ đọc</Badge>}
+          </span>
           <span className="mt-0.5 block text-xs text-muted-foreground">
             {preview.answers.length} câu trả lời · {formatDate(preview.createdAt)}
           </span>
@@ -888,6 +1204,328 @@ function PreviewAccordion({
               </div>
             </div>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GenerationModeSelector({
+  value,
+  onChange
+}: {
+  value: GenerationMode;
+  onChange: (value: GenerationMode) => void;
+}) {
+  return (
+    <div className="grid gap-2 md:grid-cols-3">
+      {generationModeOptions.map((option) => {
+        const active = value === option.value;
+        const isCustomAi = option.value === "ai-custom";
+        const Icon = option.value === "rules" ? SlidersHorizontal : option.value === "ai-default" ? Bot : Sparkles;
+        return (
+          <button
+            className={`group flex min-h-[92px] flex-col items-start justify-between rounded-lg border p-3 text-left shadow-sm transition ${
+              active
+                ? isCustomAi
+                  ? "border-violet-300 bg-violet-50/85 text-violet-950 ring-1 ring-violet-100"
+                  : "border-cyan-300 bg-cyan-50/85 text-cyan-950 ring-1 ring-cyan-100"
+                : "border-border/70 bg-white/70 text-slate-700 hover:border-cyan-200 hover:bg-cyan-50/45"
+            }`}
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+          >
+            <span className="flex w-full items-center justify-between gap-2">
+              <span className="flex items-center gap-2 text-sm font-semibold">
+                <Icon className="h-4 w-4" />
+                {option.title}
+              </span>
+              <Badge tone={option.value === "rules" ? "neutral" : option.value === "ai-default" ? "info" : "warning"}>{option.badge}</Badge>
+            </span>
+            <span className="mt-3 text-xs font-medium text-muted-foreground group-hover:text-slate-700">
+              {option.description}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function AiModePreparationPanel({
+  mode,
+  questions,
+  aiDirection,
+  aiGlobalPrompt,
+  aiPromptScope,
+  aiQuestionBlocksOpen,
+  aiQuestionPrompts,
+  previewCount,
+  multiplier,
+  busy,
+  canGenerate,
+  onDirectionChange,
+  onGlobalPromptChange,
+  onPromptScopeChange,
+  onQuestionPromptChange,
+  onToggleQuestion,
+  onPreviewCountChange,
+  onAutoFill,
+  onGenerate
+}: {
+  mode: AiGenerationMode;
+  questions: FormQuestion[];
+  aiDirection: AiDirectionFields;
+  aiGlobalPrompt: string;
+  aiPromptScope: AiPromptScope;
+  aiQuestionBlocksOpen: Record<string, boolean>;
+  aiQuestionPrompts: Record<string, string>;
+  previewCount: number;
+  multiplier: number;
+  busy: boolean;
+  canGenerate: boolean;
+  onDirectionChange: (key: keyof AiDirectionFields, value: string) => void;
+  onGlobalPromptChange: (value: string) => void;
+  onPromptScopeChange: (value: AiPromptScope) => void;
+  onQuestionPromptChange: (questionId: string, value: string) => void;
+  onToggleQuestion: (questionId: string) => void;
+  onPreviewCountChange: (value: number) => void;
+  onAutoFill: () => void;
+  onGenerate: () => void;
+}) {
+  const isCustom = mode === "ai-custom";
+
+  return (
+    <div className="space-y-4">
+      <div className={`rounded-lg border p-4 shadow-sm ring-1 ${
+        isCustom
+          ? "border-violet-200 bg-violet-50/75 text-violet-950 ring-violet-100"
+          : "border-cyan-200 bg-cyan-50/80 text-cyan-950 ring-cyan-100"
+      }`}>
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone={isCustom ? "warning" : "info"}>{isCustom ? "Option 3" : "Option 2"}</Badge>
+              <Badge tone="neutral">API thật</Badge>
+              <Badge tone={isCustom ? "warning" : "info"}>x{multiplier} credit</Badge>
+            </div>
+            <p className="mt-2 text-sm font-semibold">{isCustom ? "AI tùy chỉnh theo hướng dẫn" : "AI mặc định với câu hỏi thu gọn"}</p>
+            <p className="mt-1 text-xs leading-5 opacity-80">
+              Backend dùng câu hỏi/options đã lưu, kiểm tra output trước khi lưu preview và không trả raw provider payload về giao diện.
+            </p>
+          </div>
+          <Button className="w-full gap-2 md:w-auto" disabled={busy} type="button" variant="secondary" onClick={onAutoFill}>
+            <Wand2 className="h-4 w-4" />
+            Điền prompt
+          </Button>
+        </div>
+      </div>
+
+      {isCustom && (
+        <div className="rounded-lg border border-violet-200 bg-white/72 p-4 shadow-sm backdrop-blur">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <Sparkles className="h-4 w-4 text-violet-600" />
+            <p className="text-sm font-semibold">Hướng trả lời AI</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <AiDirectionInput label="Độ tuổi mục tiêu" value={aiDirection.targetAge} onChange={(value) => onDirectionChange("targetAge", value)} />
+            <AiDirectionInput label="Vai trò/nghề nghiệp" value={aiDirection.role} onChange={(value) => onDirectionChange("role", value)} />
+            <AiDirectionInput label="Ngữ cảnh" value={aiDirection.context} onChange={(value) => onDirectionChange("context", value)} />
+            <AiDirectionInput label="Giọng văn" value={aiDirection.tone} onChange={(value) => onDirectionChange("tone", value)} />
+            <AiDirectionInput label="Độ dài câu trả lời" value={aiDirection.answerLength} onChange={(value) => onDirectionChange("answerLength", value)} />
+            <AiDirectionInput label="Ý định trả lời" value={aiDirection.intent} onChange={(value) => onDirectionChange("intent", value)} />
+          </div>
+        </div>
+      )}
+
+      <div className="rounded-lg border border-border/70 bg-white/72 p-4 shadow-sm backdrop-blur">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <label className="block flex-1 text-sm font-medium">
+            Prompt chung
+            <Textarea
+              className="mt-2 min-h-28"
+              maxLength={AI_GLOBAL_PROMPT_MAX_LENGTH}
+              value={aiGlobalPrompt}
+              onChange={(event) => onGlobalPromptChange(event.target.value)}
+            />
+            <span className="mt-1 block text-xs font-normal text-muted-foreground">
+              {aiGlobalPrompt.length}/{AI_GLOBAL_PROMPT_MAX_LENGTH} ký tự
+            </span>
+          </label>
+          {isCustom && (
+            <div className="grid shrink-0 grid-cols-2 gap-2 rounded-lg border border-border/70 bg-white/75 p-2 text-sm font-semibold md:w-64">
+              <button
+                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "global" ? "bg-cyan-600 text-white shadow-sm" : "text-muted-foreground hover:bg-cyan-50"}`}
+                type="button"
+                onClick={() => onPromptScopeChange("global")}
+              >
+                Prompt chung
+              </button>
+              <button
+                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "per-question" ? "bg-cyan-600 text-white shadow-sm" : "text-muted-foreground hover:bg-cyan-50"}`}
+                type="button"
+                onClick={() => onPromptScopeChange("per-question")}
+              >
+                Từng câu
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {questions.map((question, index) => (
+          <AiQuestionBlock
+            key={question.id}
+            index={index}
+            mode={mode}
+            open={aiQuestionBlocksOpen[question.id] ?? false}
+            prompt={aiQuestionPrompts[question.id] ?? ""}
+            promptEnabled={isCustom && aiPromptScope === "per-question"}
+            question={question}
+            onPromptChange={(value) => onQuestionPromptChange(question.id, value)}
+            onToggle={() => onToggleQuestion(question.id)}
+          />
+        ))}
+      </div>
+
+      <div className={`sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border p-4 shadow-soft ring-1 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between ${
+        isCustom
+          ? "border-violet-200/80 bg-violet-50/90 ring-violet-100"
+          : "border-cyan-200/80 bg-cyan-50/90 ring-cyan-100/70"
+      }`}>
+        <div className="w-full sm:w-auto">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-800 shadow-sm">
+            <LockKeyhole className="h-3.5 w-3.5" />
+            AI preview chỉ đọc
+          </div>
+          <p className="mt-3 text-sm font-semibold text-slate-950">Số câu trả lời xem trước</p>
+          <p className="mt-1 text-xs text-slate-600">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}; chi phí thật sẽ là {previewCount * multiplier} credit.</p>
+          <Input
+            className="mt-2 w-full sm:w-32"
+            inputMode="numeric"
+            max={PREVIEW_COUNT_MAX}
+            min={PREVIEW_COUNT_MIN}
+            step={1}
+            type="number"
+            value={previewCount}
+            onChange={(event) => onPreviewCountChange(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
+          />
+          <p className="mt-2 text-xs font-medium text-cyan-800">
+            Prompt sẽ được lưu trước, sau đó backend tạo AI preview read-only và trừ credit theo số preview hợp lệ.
+          </p>
+        </div>
+        <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-violet-600 text-white hover:bg-violet-700" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">
+          <Sparkles className="h-4 w-4" />
+          Lưu và tạo AI preview
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function AiDirectionInput({
+  label,
+  value,
+  onChange
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="block text-sm font-medium">
+      {label}
+      <Input
+        className="mt-2"
+        maxLength={AI_SHORT_FIELD_MAX_LENGTH}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function AiQuestionBlock({
+  index,
+  mode,
+  question,
+  open,
+  prompt,
+  promptEnabled,
+  onPromptChange,
+  onToggle
+}: {
+  index: number;
+  mode: AiGenerationMode;
+  question: FormQuestion;
+  open: boolean;
+  prompt: string;
+  promptEnabled: boolean;
+  onPromptChange: (value: string) => void;
+  onToggle: () => void;
+}) {
+  return (
+    <div className={`overflow-hidden rounded-lg border bg-white/72 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md ${
+      mode === "ai-custom" ? "border-violet-100 hover:border-violet-200" : "border-cyan-100 hover:border-cyan-200"
+    }`}>
+      <button
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-4 py-3 text-left"
+        type="button"
+        onClick={onToggle}
+      >
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
+          mode === "ai-custom" ? "bg-violet-50 text-violet-700" : "bg-cyan-50 text-cyan-700"
+        }`}>
+          <Bot className="h-4 w-4" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="break-words text-sm font-semibold">Câu {index + 1}: {question.label}</span>
+            <Badge tone="info">AI</Badge>
+            <Badge>{questionTypeLabel(question.questionType)}</Badge>
+            {question.required && <Badge tone="warning">Bắt buộc</Badge>}
+          </span>
+          <span className="mt-1 block text-xs text-muted-foreground">
+            Khối AI thu gọn; không hiển thị danh sách lựa chọn chi tiết trong Option 2/3.
+          </span>
+        </span>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-white/80 text-muted-foreground">
+          {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </span>
+      </button>
+      {open && (
+        <div className="border-t border-border/70 bg-white/45 p-4">
+          <div className="grid gap-3 text-sm md:grid-cols-3">
+            <div>
+              <p className="text-xs text-muted-foreground">Loại câu hỏi</p>
+              <p className="mt-1 font-medium">{questionTypeLabel(question.questionType)}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Entry ID</p>
+              <p className="mt-1 break-all font-medium">{question.entryId}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Nguồn đáp án</p>
+              <p className="mt-1 font-medium">{isFreeTextAiQuestion(question.questionType) ? "Văn bản tự do" : "Lựa chọn gốc"}</p>
+            </div>
+          </div>
+          {promptEnabled && (
+            <label className="mt-4 block text-sm font-medium">
+              Prompt riêng cho câu này
+              <Textarea
+                className="mt-2 min-h-24"
+                maxLength={AI_QUESTION_PROMPT_MAX_LENGTH}
+                value={prompt}
+                onChange={(event) => onPromptChange(event.target.value)}
+              />
+              <span className="mt-1 block text-xs font-normal text-muted-foreground">
+                {prompt.length}/{AI_QUESTION_PROMPT_MAX_LENGTH} ký tự
+              </span>
+            </label>
+          )}
         </div>
       )}
     </div>
@@ -1274,6 +1912,59 @@ function CheckboxSelectionFields({
   );
 }
 
+function toBackendAiMode(mode: AiGenerationMode) {
+  return mode === "ai-custom" ? "Option3" : "Option2";
+}
+
+function buildAiAudienceJson(mode: AiGenerationMode, direction: AiDirectionFields) {
+  if (mode === "ai-default") {
+    return JSON.stringify({});
+  }
+
+  return JSON.stringify({
+    targetAge: direction.targetAge,
+    role: direction.role,
+    context: direction.context,
+    tone: direction.tone,
+    answerLength: direction.answerLength,
+    intent: direction.intent
+  });
+}
+
+function readAiDirection(audienceJson: string): AiDirectionFields {
+  try {
+    const parsed = JSON.parse(audienceJson) as Partial<AiDirectionFields>;
+    return {
+      targetAge: limitText(String(parsed.targetAge ?? ""), AI_SHORT_FIELD_MAX_LENGTH),
+      role: limitText(String(parsed.role ?? ""), AI_SHORT_FIELD_MAX_LENGTH),
+      context: limitText(String(parsed.context ?? ""), AI_SHORT_FIELD_MAX_LENGTH),
+      tone: limitText(String(parsed.tone ?? defaultAiDirection.tone), AI_SHORT_FIELD_MAX_LENGTH),
+      answerLength: limitText(String(parsed.answerLength ?? defaultAiDirection.answerLength), AI_SHORT_FIELD_MAX_LENGTH),
+      intent: limitText(String(parsed.intent ?? ""), AI_SHORT_FIELD_MAX_LENGTH)
+    };
+  } catch {
+    return defaultAiDirection;
+  }
+}
+
+function buildAiAutoFillContext(mode: AiGenerationMode, direction: AiDirectionFields) {
+  if (mode === "ai-default") {
+    return "";
+  }
+
+  return limitText(
+    [
+      direction.targetAge && `Độ tuổi: ${direction.targetAge}`,
+      direction.role && `Vai trò: ${direction.role}`,
+      direction.context && `Ngữ cảnh: ${direction.context}`,
+      direction.tone && `Giọng văn: ${direction.tone}`,
+      direction.answerLength && `Độ dài: ${direction.answerLength}`,
+      direction.intent && `Ý định: ${direction.intent}`
+    ].filter(Boolean).join("; "),
+    AI_SHORT_FIELD_MAX_LENGTH
+  );
+}
+
 function defaultRule(question: FormQuestion) {
   if (isFreeTextRuleQuestion(question.questionType)) {
     return {
@@ -1615,4 +2306,8 @@ function questionTypeLabel(type: string) {
 
 function isFreeTextRuleQuestion(type: string) {
   return type === "ShortText" || type === "ParagraphText" || type === "Date" || type === "Time";
+}
+
+function isFreeTextAiQuestion(type: string) {
+  return type === "ShortText" || type === "ParagraphText";
 }

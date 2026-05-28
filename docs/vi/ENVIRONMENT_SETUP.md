@@ -25,6 +25,19 @@ Configuration:
 - payment settings chỉ sau khi payment gateway được duyệt
 - AI settings chỉ sau khi AI feature được duyệt
 
+Hướng setup AI provider cho Phase 6:
+
+- AI provider API keys nên được nhập qua admin AI provider settings, không commit vào source-controlled configuration.
+- AI API keys phải được lưu encrypted khi persist.
+- environment/appsettings chỉ có thể cung cấp encryption key material hoặc local fallback sau khi review.
+- provider và model phải có giá trị trước khi enable AI generation.
+- Base URL optional của AI provider phải là absolute URL dùng `http` hoặc `https` khi được cấu hình.
+- request generation từ normal user không được mang provider API key.
+- `AI__ProviderAdapter=Deterministic` là switch chỉ dùng local/test để smoke validation AI generation bằng deterministic output.
+- `AI__ProviderAdapter=OpenAICompatible` bật scoped live OpenAI-compatible chat completions adapter.
+- Nếu chưa cấu hình runtime AI provider adapter được duyệt, backend AI generation phải fail an toàn và không được tạo preview giả như provider thật.
+- Không đặt deterministic adapter switch trong production configuration.
+
 ## Môi trường dự kiến
 
 - Local development
@@ -54,6 +67,9 @@ Deferred:
 - official Google Forms API credentials
 - payment gateway credentials
 - AI provider keys
+- AI provider encryption key material trước khi AI provider settings được duyệt
+- lựa chọn production AI provider adapter
+- live provider/model catalog validation ngoài OpenAI-compatible adapter path đã duyệt
 - queue/background job settings
 - webhook URLs
 - email provider settings

@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
-import { apiFetch, type DashboardSummary } from "@/lib/api";
+import { apiFetch, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { displayAction } from "@/lib/labels";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+const recentTopupColumns: Array<BaseTableColumn<TopupOrder>> = [
+  { key: "credits", header: "Credit", render: (order) => order.credits },
+  { key: "amount", header: "Số tiền", render: (order) => formatCurrency(order.amount) },
+  { key: "status", header: "Trạng thái", render: (order) => <StatusBadge status={order.status} /> },
+  { key: "createdAt", header: "Tạo lúc", render: (order) => formatDate(order.createdAt) }
+];
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -90,40 +98,14 @@ export default function DashboardPage() {
             {!summary || summary.recentTopupOrders.length === 0 ? (
               <EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
             ) : (
-              <>
-              <MobileRecordList>
-                {summary.recentTopupOrders.map((order) => (
-                  <MobileRecord key={order.id}>
-                    <KeyValueRow label="Credit" value={order.credits} />
-                    <KeyValueRow label="Số tiền" value={formatCurrency(order.amount)} />
-                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
-                    <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
-                  </MobileRecord>
-                ))}
-              </MobileRecordList>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-muted-foreground">
-                    <tr>
-                      <th className="py-2">Credit</th>
-                      <th className="py-2">Số tiền</th>
-                      <th className="py-2">Trạng thái</th>
-                      <th className="py-2">Tạo lúc</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summary.recentTopupOrders.map((order) => (
-                      <tr className="border-t border-border/70" key={order.id}>
-                        <td className="py-3">{order.credits}</td>
-                        <td className="py-3">{formatCurrency(order.amount)}</td>
-                        <td className="py-3"><StatusBadge status={order.status} /></td>
-                        <td className="py-3">{formatDate(order.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </>
+              <BaseTable
+                items={summary.recentTopupOrders}
+                columns={recentTopupColumns}
+                getRowKey={(order) => order.id}
+                emptyTitle="Chưa có yêu cầu nạp gần đây"
+                emptyDetail="Nạp thêm credit khi cần tiếp tục sử dụng."
+                minWidthClassName="min-w-[560px]"
+              />
             )}
           </CardContent>
         </Card>

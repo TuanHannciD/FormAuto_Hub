@@ -175,6 +175,27 @@ export type CheckPayosProviderSettingsResponse = {
   checkedAt: string;
 };
 
+export type AiProviderSettings = {
+  provider: string;
+  displayName: string;
+  hasApiKey: boolean;
+  apiKeyPreview: string;
+  baseUrl: string;
+  defaultModel: string;
+  allowedModels: string[];
+  isEnabled: boolean;
+  lastCheckedAt?: string | null;
+  lastCheckStatus: string;
+  lastCheckMessage: string;
+  updatedAt?: string | null;
+};
+
+export type CheckAiProviderSettingsResponse = {
+  status: string;
+  message: string;
+  checkedAt: string;
+};
+
 export type AdminPayment = {
   id: string;
   topupOrderId: string;
@@ -212,6 +233,14 @@ export type CreditTransaction = {
   referenceType: string;
   referenceId?: string | null;
   createdAt: string;
+};
+
+export type CreditTransactionPageResponse = {
+  items: CreditTransaction[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
 };
 
 export type Profile = {
@@ -255,9 +284,15 @@ export type GeneratedResponse = {
   id: string;
   projectId: string;
   status: string;
+  source: string;
+  isReadOnly: boolean;
   previewText: string;
   answers: GeneratedAnswer[];
   createdAt: string;
+};
+
+export type GeneratedResponseListResponse = {
+  items: GeneratedResponse[];
 };
 
 export type GenerateResponsesResult = {
@@ -267,6 +302,51 @@ export type GenerateResponsesResult = {
   requestedCount: number;
   generatedCount: number;
   missingCredits: number;
+};
+
+export type AiQuestionPrompt = {
+  id: string;
+  profileId: string;
+  questionId: string;
+  prompt: string;
+  useAi: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AiPromptProfile = {
+  id: string;
+  projectId: string;
+  userId: string;
+  mode: string;
+  audienceJson: string;
+  globalPrompt: string;
+  questions: AiQuestionPrompt[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AiPromptAutoFillResponse = {
+  mode: string;
+  audienceJson: string;
+  globalPrompt: string;
+  questions: Array<{
+    questionId: string;
+    prompt: string;
+    useAi: boolean;
+  }>;
+};
+
+export type AiGenerateResponsesResult = {
+  runId: string;
+  status: string;
+  requestedCount: number;
+  generatedCount: number;
+  multiplier: number;
+  creditsUsed: number;
+  missingCredits: number;
+  balanceAfter: number;
+  generatedPreviewIds: string[];
 };
 
 export type SubmissionJob = {

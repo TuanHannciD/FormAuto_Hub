@@ -23,6 +23,11 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PaymentProviderSetting> PaymentProviderSettings => Set<PaymentProviderSetting>();
     public DbSet<PaymentRecord> PaymentRecords => Set<PaymentRecord>();
+    public DbSet<AiProviderSetting> AiProviderSettings => Set<AiProviderSetting>();
+    public DbSet<AiPromptProfile> AiPromptProfiles => Set<AiPromptProfile>();
+    public DbSet<AiQuestionPrompt> AiQuestionPrompts => Set<AiQuestionPrompt>();
+    public DbSet<AiGenerationRun> AiGenerationRuns => Set<AiGenerationRun>();
+    public DbSet<AiGenerationRunItem> AiGenerationRunItems => Set<AiGenerationRunItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,6 +74,11 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
             entity.HasIndex(item => item.Provider).IsUnique();
         });
 
+        modelBuilder.Entity<AiProviderSetting>(entity =>
+        {
+            entity.HasIndex(item => item.Provider).IsUnique();
+        });
+
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
             entity.Property(item => item.Amount).HasPrecision(18, 2);
@@ -79,6 +89,60 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
             entity.HasOne(item => item.TopupOrder)
                 .WithMany()
                 .HasForeignKey(item => item.TopupOrderId);
+        });
+
+        modelBuilder.Entity<AiPromptProfile>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProjectId, item.Mode }).IsUnique();
+            entity.HasOne(item => item.Project)
+                .WithMany()
+                .HasForeignKey(item => item.ProjectId);
+        });
+
+        modelBuilder.Entity<AiQuestionPrompt>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProfileId, item.QuestionId }).IsUnique();
+            entity.HasOne(item => item.Profile)
+                .WithMany()
+                .HasForeignKey(item => item.ProfileId);
+            entity.HasOne(item => item.Question)
+                .WithMany()
+                .HasForeignKey(item => item.QuestionId);
+        });
+
+        modelBuilder.Entity<GeneratedResponse>(entity =>
+        {
+            entity.Property(item => item.Source).HasDefaultValue("Rule");
+            entity.Property(item => item.IsReadOnly).HasDefaultValue(false);
+        });
+
+        modelBuilder.Entity<AiGenerationRun>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProjectId, item.CreatedAt });
+            entity.HasIndex(item => new { item.UserId, item.CreatedAt });
+            entity.HasOne(item => item.Project)
+                .WithMany()
+                .HasForeignKey(item => item.ProjectId);
+            entity.HasOne(item => item.PromptProfile)
+                .WithMany()
+                .HasForeignKey(item => item.PromptProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<AiGenerationRunItem>(entity =>
+        {
+            entity.HasIndex(item => item.RunId);
+            entity.HasOne(item => item.Run)
+                .WithMany()
+                .HasForeignKey(item => item.RunId);
+            entity.HasOne(item => item.Question)
+                .WithMany()
+                .HasForeignKey(item => item.QuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(item => item.GeneratedResponse)
+                .WithMany()
+                .HasForeignKey(item => item.GeneratedResponseId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

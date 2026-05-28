@@ -78,6 +78,14 @@ Own external calls to Google Forms, payment providers, AI providers, or future q
 
 Deferred integrations must not be represented as production-complete.
 
+AI integration direction for the Phase 6 requirement package:
+
+- `Integrations.AI` owns provider-specific calls and response parsing.
+- Normal-user frontend requests must not choose provider, model, or API key directly.
+- AI provider settings are admin-owned configuration and must be read server-side.
+- AI output must be validated before any `GeneratedResponses` row is stored.
+- Choice-style answers must not be accepted outside stored form options.
+
 ## Mandatory Boundaries
 
 - Google Forms integration must not be mixed into credit/account services.
@@ -85,4 +93,7 @@ Deferred integrations must not be represented as production-complete.
 - Credit changes must write a transaction ledger entry.
 - Tool usage must write `UsageLogs`.
 - Submission actions must write `SubmissionLogs`.
+- AI generation credit deduction must go through the same dedicated credit workflow and ledger discipline.
+- Raw AI provider request/response audit must not replace `UsageLogs` or `CreditTransactions`.
+- AI-generated previews must still require preview review and explicit user confirmation before submission.
 - If a tool action fails after credit deduction, refund behavior is Deferred and must not be invented.

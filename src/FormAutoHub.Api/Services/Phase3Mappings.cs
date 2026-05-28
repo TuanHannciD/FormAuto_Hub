@@ -1,5 +1,6 @@
 using System.Text.Json;
 using FormAutoHub.Api.Contracts;
+using FormAutoHub.Api.Domain;
 using FormAutoHub.Api.Entities;
 
 namespace FormAutoHub.Api.Services;
@@ -25,6 +26,8 @@ public static class Phase3Mappings
             response.Id,
             response.ProjectId,
             response.Status,
+            string.IsNullOrWhiteSpace(response.Source) ? GeneratedResponseSources.Rule : response.Source,
+            response.IsReadOnly,
             response.PreviewText,
             DeserializeAnswers(response.PayloadJson),
             response.CreatedAt);

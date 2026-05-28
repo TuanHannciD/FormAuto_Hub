@@ -16,11 +16,11 @@ type SeoKeywordPageProps = {
 };
 
 const relatedLinks = [
-  { href: "/google-forms/student-report", label: "Báo cáo sinh viên" },
-  { href: "/google-forms/survey-demo", label: "Demo dữ liệu khảo sát" },
-  { href: "/google-forms/sheets-report", label: "Forms to Sheets" },
-  { href: "/google-forms/sample-data", label: "Dữ liệu mẫu" },
-  { href: "/anti-abuse", label: "Chống lạm dụng" }
+  { href: "/google-forms/sample-data", label: "Tạo dữ liệu mẫu cho Google Forms" },
+  { href: "/google-forms/student-report", label: "Dữ liệu mẫu Google Forms cho báo cáo sinh viên" },
+  { href: "/google-forms/survey-demo", label: "Demo dữ liệu khảo sát Google Forms" },
+  { href: "/google-forms/sheets-report", label: "Kiểm tra dữ liệu Google Forms trong Google Sheets" },
+  { href: "/anti-abuse", label: "Chính sách chống lạm dụng Google Forms automation" }
 ];
 
 const safetyItems = [
@@ -47,6 +47,21 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
         url: siteUrl
       },
       about: config.primaryKeyword
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "FormAuto Hub",
+      applicationCategory: "ProductivityApplication",
+      operatingSystem: "Web",
+      url: siteUrl,
+      description:
+        "FormAuto Hub helps users create sample data for Google Forms to test forms, preview responses, demo Google Sheets dashboards, and prepare reports safely.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "VND"
+      }
     },
     {
       "@context": "https://schema.org",
@@ -159,6 +174,32 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
                 </ScrollReveal>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
+        <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
+          <ScrollReveal>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Hướng dẫn theo use case</h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Các nội dung bên dưới giúp Google và AI search hiểu rõ trang này dành cho ai, giải
+              quyết vấn đề gì và giới hạn sử dụng an toàn ở đâu.
+            </p>
+          </ScrollReveal>
+          <div className="space-y-6">
+            {config.contentSections.map((section, index) => (
+              <ScrollReveal key={section.heading} delay={index * 70} as="article" className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-900">{section.heading}</h2>
+                <div className="mt-4 space-y-4">
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph} className="text-sm leading-7 text-slate-600">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>

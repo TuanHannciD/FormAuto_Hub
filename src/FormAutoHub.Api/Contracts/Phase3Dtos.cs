@@ -49,6 +49,8 @@ public sealed record GeneratedResponseResponse(
     Guid Id,
     Guid ProjectId,
     string Status,
+    string Source,
+    bool IsReadOnly,
     string PreviewText,
     IReadOnlyList<GeneratedAnswerResponse> Answers,
     DateTimeOffset CreatedAt);

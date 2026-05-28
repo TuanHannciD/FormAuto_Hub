@@ -17,6 +17,11 @@ public sealed class FoundationTests
 
         Assert.Equal(
             [
+                "AiGenerationRun",
+                "AiGenerationRunItem",
+                "AiPromptProfile",
+                "AiProviderSetting",
+                "AiQuestionPrompt",
                 "AnswerRule",
                 "AuditLog",
                 "CreditPackage",

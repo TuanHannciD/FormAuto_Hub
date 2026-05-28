@@ -1,5 +1,6 @@
 using FormAutoHub.Api.Data;
 using FormAutoHub.Api.Auth;
+using FormAutoHub.Api.Integrations.AI;
 using FormAutoHub.Api.Integrations.GoogleForms;
 using FormAutoHub.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -80,12 +81,33 @@ builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>(
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IPaymentSecretProtector, PaymentSecretProtector>();
 builder.Services.AddScoped<IPaymentProviderSettingsService, PaymentProviderSettingsService>();
+builder.Services.AddScoped<IAiProviderSecretProtector, AiProviderSecretProtector>();
+builder.Services.AddScoped<IAiProviderSettingsService, AiProviderSettingsService>();
 builder.Services.AddScoped<IPayosSignatureService, PayosSignatureService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminPaymentReportService, AdminPaymentReportService>();
 builder.Services.AddScoped<IFormProjectService, FormProjectService>();
 builder.Services.AddScoped<IAnswerRuleService, AnswerRuleService>();
 builder.Services.AddScoped<IResponseGenerationService, ResponseGenerationService>();
+builder.Services.AddScoped<IAiPromptGuardService, AiPromptGuardService>();
+builder.Services.AddScoped<IAiOutputValidator, AiOutputValidator>();
+builder.Services.AddScoped<IAiPromptProfileService, AiPromptProfileService>();
+
+
+var aiProviderAdapter = builder.Configuration["AI:ProviderAdapter"];
+if (string.Equals(aiProviderAdapter, "Deterministic", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddScoped<IAiProviderAdapter, DeterministicAiProviderAdapter>();
+}
+else if (string.Equals(aiProviderAdapter, "OpenAICompatible", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddHttpClient<IAiProviderAdapter, OpenAiCompatibleProviderAdapter>();
+}
+else
+{
+    builder.Services.AddScoped<IAiProviderAdapter, DisabledAiProviderAdapter>();
+}
+builder.Services.AddScoped<IAiGenerationService, AiGenerationService>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>();
 builder.Services.AddHttpClient<IPayosClient, PayosClient>();

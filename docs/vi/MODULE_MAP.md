@@ -29,7 +29,12 @@
 | AuditLogs | audit admin/security-sensitive | thay thế usage log thông thường |
 | Integrations.GoogleForms | boundary analyze/submit Google Forms | account/credit logic |
 | Integrations.Payment | payment provider boundary đang Deferred | MVP manual approval |
-| Integrations.AI | AI mapping/suggestion boundary đang Deferred | MVP answer generation khi chưa duyệt |
+| Integrations.AI | boundary AI provider Phase 6, provider calls, provider response parsing | credit deduction, submission execution |
+| AiProviderSettings | cấu hình AI provider cho admin | prompt behavior của normal user |
+| AiPromptProfiles | cấu hình AI prompt cấp project | lưu generated preview |
+| AiQuestionPrompts | cấu hình AI prompt theo từng câu hỏi | ownership metadata form đã detect |
+| AiGenerationRuns | raw provider audit và AI generation run state | source of truth của credit ledger |
+| AiGenerationRunItems | evidence validation output AI và mapping tới generated response | workflow sửa generated response |
 
 ## Quy tắc cross-module
 
@@ -40,6 +45,10 @@
 - Form submission phải có preview và user confirmation.
 - Google Forms integration không được nằm trong account/credit modules.
 - Deferred integration module chỉ là planning boundary, không phải production-complete claim.
+- AI provider/model selection phải lấy từ admin settings phía server, không lấy từ input frontend của normal user.
+- AI-generated previews vẫn phải được lưu dạng `GeneratedResponses` và read-only sau khi tạo.
+- Credit deduction cho AI generation phải đi qua `CreditManagement` và ghi `CreditTransactions`.
+- Raw AI provider payloads thuộc AI audit entities và không được expose cho normal users.
 
 ## MVP answer modes
 

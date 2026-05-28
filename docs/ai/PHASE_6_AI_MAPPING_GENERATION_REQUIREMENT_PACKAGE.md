@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define the approved requirement package for the proposed Phase 6 AI mapping/generation slice before API, database, frontend, or provider implementation begins.
+Define the approved requirement package and current implementation boundary for the Phase 6 AI mapping/generation slice.
 
 This document records the user-approved product direction and the contract areas that must still go through focused review.
 
@@ -19,22 +19,72 @@ Approved for planning and contract packaging:
 - anti-abuse prompt and output guards
 - delivery pass sequencing and safe parallel work groups
 
-Not approved by this document alone:
+Approved with conditions for scoped implementation planning:
 
-- final API routes
-- final DTO names and fields
-- final database schema or migrations
-- final provider/model choice
-- production AI provider calls
-- implementation work without a separate implementation approval
+- Phase 6 AI mapping/generation may move from candidate package to implementation planning and scoped implementation.
+- This approval does not unlock the full production AI generation workflow at once.
+- `Worker J - AI Generate API` was unblocked after provider settings, prompt profile, prompt guard, output validator, credit contract, and audit contract were implemented and reviewed.
+- The backend AI preview generation endpoint is implemented for the approved scoped slice.
+- Runtime AI provider execution remains fail-safe by default: the deterministic adapter is allowed only when explicitly enabled through local/test configuration, and the OpenAI-compatible live adapter is allowed only when explicitly enabled through runtime configuration.
+- OpenAI-compatible live provider calls using admin-saved provider/model/Base URL/API key are approved for this scoped slice.
+- The five AI persistence concepts are approved as separate tables, subject to final DB proposal before migration:
+  - `AiProviderSettings`
+  - `AiPromptProfiles`
+  - `AiQuestionPrompts`
+  - `AiGenerationRuns`
+  - `AiGenerationRunItems`
+- AI prompts must not be stored in `AnswerRules.ConfigJson`.
+- `AiPromptProfiles` should be unique by `ProjectId + Mode`.
+- `AiQuestionPrompts` should be unique by `ProfileId + QuestionId`.
+- `AiGenerationRunItems.GeneratedResponseId` may be nullable for invalid or rejected output evidence.
+- `AiGenerationRun` statuses are approved as `Pending`, `Running`, `Succeeded`, `Partial`, and `Failed`.
+- The approved run transition is `Pending -> Running -> Succeeded | Partial | Failed`.
+- Terminal run statuses must not be changed later; retry must create a new run.
+- Provider and model identifiers are admin-controlled string values stored server-side; backend validation requires non-empty values and they must not become arbitrary normal-frontend authority.
+- Custom Base URL support and OpenAI-compatible gateway calls are approved only for the scoped server-side admin settings and adapter path.
+- Option 2 default AI prompt/profile persistence by project is approved.
+- Option 3 global prompt and per-question prompt persistence by project are approved.
+- Prompt auto-fill is free.
+- Initial prompt length limits are approved as guardrails: short context field 200 characters, global prompt 2,000 characters, per-question prompt 1,000 characters, and total prompt payload per run 20,000 characters.
+- Credit multipliers are approved as Option 1 `x1`, Option 2 `x2`, and Option 3 `x3`.
+- Complete AI audit is required from the first implementation.
+- Raw provider request/response access is admin/debug only for now and must not be visible to normal users.
+- Frontend AI mode preparation may start only without unstable real API binding.
+
+Still requiring focused proposal or review before broader production rollout:
+
+- live provider/model catalog validation beyond required local configuration checks
+- provider-specific SDK adapters outside the OpenAI-compatible HTTP contract
+- AI generation run list/detail API for normal-user or admin audit review
+- exact pagination, filtering, and authorization details for AI audit read APIs
+- raw payload retention and redaction policy
+- raw OpenAI-compatible gateway behavior beyond the approved chat completions adapter
+- additional frontend/API binding outside the approved scoped slice
+- production browser closeout after live provider adapter approval
 
 ## Phase Fit
 
-Current project state remains: Phase 9 closeout completed; next phase not selected.
+Current global project phase remains: Phase 9 closeout completed; next phase not selected.
 
-This package is for a proposed Phase 6 production integration candidate. It does not make Phase 6 active by itself.
+Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
 
-Implementation requires explicit approval after contract and database review.
+This package is for a Phase 6 production integration candidate. The approved checklist allowed scoped implementation planning, selected prerequisite implementation work, and the backend AI preview generation endpoint after prerequisite review.
+
+This does not unlock full production AI provider integration, frontend/API scope outside the approved scoped binding, broad raw-audit exposure, or AI auto-submit.
+
+## Current Scoped Slice Progress
+
+| Area | Current state |
+|---|---|
+| AI provider settings backend | Implemented for the scoped slice |
+| Admin AI provider config UI | Implemented for the scoped slice |
+| AI prompt profile persistence | Implemented for the scoped slice |
+| AI generate preview API | Implemented for the scoped slice |
+| Normal-user AI mode UI/API binding | Implemented for the scoped slice |
+| Runtime deterministic AI adapter | Allowed only when explicitly enabled by local/test configuration |
+| Live OpenAI-compatible provider calls | Implemented for the scoped slice behind explicit runtime configuration |
+| Broad AI audit read UI/API and raw payload exposure | Deferred |
+| Custom base URL and live OpenAI-compatible gateway calls | Implemented for the scoped slice |
 
 ## Product Goal
 
@@ -127,7 +177,7 @@ Proposed persistence concept requiring database review:
 Expected behavior:
 
 - admin selects provider first
-- provider and model must match
+- provider and model are admin-entered server-side values and must both be non-empty
 - API key must be encrypted before storage
 - API key must never be returned raw to the frontend
 - UI may show only a masked key preview
@@ -136,17 +186,26 @@ Expected behavior:
 - provider can be enabled only when required configuration is valid
 - generation uses the enabled server-side provider setting, not provider/model values sent from the normal user frontend
 
-Provider/model mismatch example:
+Invalid provider/model configuration example:
 
 ```text
-Provider: Google AI
-API key: Google AI key
-Model: gpt-*
+Provider:
+API key: configured
+Model: gpt-4o-mini
 ```
 
-This must fail validation because the key and model do not belong to the same provider family.
+This must fail validation because provider is missing. A model-family mismatch is not checked in this scoped slice because provider/model values are intentionally admin-configurable strings.
 
-OpenAI-compatible gateways may be supported only as an explicit provider type with a configured base URL and compatible model list.
+OpenAI-compatible gateway names may be entered as flexible provider identifiers in the settings UI. Custom Base URL usage and live calls are approved only through the scoped OpenAI-compatible chat completions adapter.
+
+Approved scoped Base URL and live adapter behavior:
+
+- admin may enter an optional Base URL/API endpoint
+- if entered, Base URL must be an absolute `http` or `https` URL
+- OpenAI-compatible runtime calls use the saved Base URL and call `{baseUrl}/chat/completions`, unless the saved URL already ends with `/chat/completions`
+- runtime calls use server-side encrypted API key material and must not expose raw API keys
+- runtime calls are enabled only when `AI:ProviderAdapter` is explicitly set to `OpenAICompatible`
+- live model catalog validation remains Deferred
 
 ## Credit Rules
 
@@ -319,26 +378,33 @@ Option 3 UI:
 Provider settings UI:
 
 - admin-only AI settings page or section
-- provider selector
+- provider input
+- API endpoint / Base URL input
 - encrypted API key input
 - masked key preview after save
-- default model selection
-- optional base URL for OpenAI-compatible provider type
+- default model input
+- optional Base URL for OpenAI-compatible provider type
 - check configuration action
 - status badge for unchecked, valid, invalid, or disabled state
 
 ## Proposed API Areas
 
-These are proposed areas only and require contract review before implementation:
+Current implemented/approved areas:
 
 - admin AI provider settings read/update/check
 - project AI prompt profile read/update
 - per-question AI prompt read/update
 - AI prompt auto-fill
-- AI preview generation
-- AI generation run read/list for audit
+- AI preview generation: `POST /api/projects/{projectId}/ai-responses/generate`
+- live OpenAI-compatible provider adapter behind explicit runtime configuration
 
-Exact routes, DTOs, error responses, pagination, and authorization rules are not final in this package.
+Still Deferred or requiring separate review:
+
+- AI generation run read/list for audit
+- raw provider payload read API
+- live provider model catalog validation
+- provider-specific SDK adapters outside the OpenAI-compatible HTTP contract
+- final pagination and filtering for audit reads
 
 ## Proposed Module Ownership
 
@@ -379,7 +445,8 @@ Output:
 
 - admin provider settings API
 - encrypted API key storage
-- provider/model validation
+- provider/model required-field validation
+- Base URL validation as an optional absolute `http` or `https` URL
 - masked secret response
 - configuration check
 - admin UI
@@ -390,6 +457,7 @@ Output:
 
 - `Integrations.AI` abstraction
 - provider adapter boundary
+- OpenAI-compatible live adapter behind explicit runtime configuration
 - prompt guard
 - output validator
 - no direct frontend authority over provider/model
@@ -412,6 +480,16 @@ Output:
 - credit multiplier handling
 - partial generation handling
 - complete AI audit run/item writes
+
+Current status:
+
+- implemented for backend `POST /api/projects/{projectId}/ai-responses/generate`
+- stores read-only AI `GeneratedResponses`
+- writes `CreditTransactions`, `UsageLogs`, `AiGenerationRuns`, and `AiGenerationRunItems`
+- charges only successfully stored valid previews
+- uses a deterministic provider adapter only when explicitly enabled for local/test validation
+- uses the OpenAI-compatible live adapter only when explicitly enabled by runtime configuration
+- defaults to a disabled provider adapter when no approved runtime adapter is configured
 
 ### Pass 7 - Frontend UI
 
@@ -490,8 +568,8 @@ These tasks should not run before their dependencies:
 - AI generation API before provider settings and output validator contracts are stable
 - credit multiplier transaction before credit contract review
 - AI audit raw payload storage before access/retention review
-- frontend real API binding before DTO routes are stable
-- browser closeout before backend runtime smoke passes
+- additional frontend/API binding before DTO routes are stable
+- production browser closeout before backend runtime smoke passes and live provider adapter is approved
 
 ## Validation Expectations
 
@@ -532,10 +610,9 @@ Stop before implementation if:
 
 - API routes or DTOs are not reviewed
 - database fields are not reviewed
-- provider/model validation rules are unclear
+- provider/model required-field validation rules are unclear
 - raw provider payload access or retention is unclear
 - credit multiplier behavior is unclear
 - prompt guard scope is weakened
 - output validation would allow choice-style answers outside stored options
 - preview-before-submit or confirmation would be weakened
-

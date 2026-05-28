@@ -27,6 +27,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi">
+      <head>
+        <link rel="alternate" type="text/plain" href={`${siteUrl}/llms.txt`} />
+      </head>
       <body className={beVietnam.className}>
         {children}
         <AppToaster />

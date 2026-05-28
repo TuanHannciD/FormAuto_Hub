@@ -74,6 +74,30 @@ Use shadcn/ui-style components for:
 
 Do not create custom UI primitives when an approved shadcn/ui component is sufficient.
 
+## Shared Component Inventory Rule
+
+Before implementing or editing any frontend page, inspect `apps/web/components/` and reuse existing shared components before creating page-local variants.
+
+Do not hand-code a table, dropdown, status badge, shell, toast host, or UI primitive that already exists in the shared component layer.
+
+Current shared component inventory:
+
+- `components/ui.tsx`: shared UI primitives such as `Button`, `Input`, `Textarea`, `Card`, `Dialog`, `Badge`, `Alert`, `EmptyState`, `PageHeader`, `MobileRecordList`, `MobileRecordCard`, `KeyValueRow`, and related app primitives.
+- `components/base-table.tsx`: canonical base for real data, history, admin, and dashboard tables. Page files must use this for table-like data unless there is a documented reason not to.
+- `components/dropdown-select.tsx`: shared dropdown/select control for filters and custom select UI that must match the app style.
+- `components/status-badge.tsx`: shared status badge rendering. Do not create one-off status badge class sets in pages.
+- `components/dashboard-shell.tsx` and `components/admin-shell.tsx`: shared authenticated app shells and navigation.
+- `components/app-toaster.tsx`: shared toast host for app feedback.
+- `components/landing-dashboard-tabs.tsx`, `components/seo-keyword-page.tsx`, and `components/scroll-reveal.tsx`: landing, SEO, and public-page components. Do not use them as dashboard primitives unless the task explicitly fits that surface.
+
+If a reusable primitive is missing and the same pattern is needed by more than one page, create or extend a shared component first, then use it from the page. Keep page-specific components local only when the pattern is truly one-off.
+
+Review check:
+
+- Search `apps/web/components/` before adding UI.
+- Search existing pages for the same pattern before creating new page-local components.
+- For real tables, `rg "<table|<thead|<tbody|<tr|<th|<td" apps/web/app apps/web/components` should normally show table markup only in the shared base table.
+
 ## Visual Style
 
 - Prefer neutral backgrounds with restrained accent color.

@@ -6,7 +6,7 @@ Describe confirmed conceptual entities and proposed MVP fields without freezing 
 
 ## Contract Status
 
-The entities are confirmed conceptually. The listed fields are proposed MVP fields and require database review before implementation.
+The entities are confirmed conceptually. Most listed fields are proposed MVP fields and require database review before implementation. Phase 6 AI provider settings, prompt profiles, question prompts, generation runs, and generation run items have an approved implemented backend subset documented below.
 
 ## Confirmed Conceptual Entities
 
@@ -27,6 +27,11 @@ The entities are confirmed conceptually. The listed fields are proposed MVP fiel
 - AuditLogs
 - PaymentProviderSettings
 - PaymentRecords
+- AiProviderSettings
+- AiPromptProfiles
+- AiQuestionPrompts
+- AiGenerationRuns
+- AiGenerationRunItems
 
 ## Proposed MVP Fields
 
@@ -164,6 +169,81 @@ Security direction:
 - The application may use environment/appsettings only for encryption key material or local fallback, not as the main PayOS configuration source after Phase 8 settings are implemented.
 - Secrets must not be committed to source-controlled configuration.
 
+### AiProviderSettings
+
+Approved concept for Phase 6 AI provider configuration stored in the database.
+
+Approved fields for the provider settings backend subset:
+
+- Id
+- Provider
+- DisplayName
+- EncryptedApiKey
+- BaseUrl
+- DefaultModel
+- AllowedModelsJson
+- IsEnabled
+- LastCheckedAt
+- LastCheckStatus
+- LastCheckMessage
+- UpdatedByUserId
+- CreatedAt
+- UpdatedAt
+
+Security direction:
+
+- AI API keys must be encrypted before storage.
+- API responses and admin UI must never return raw API keys.
+- Admin UI may show only masked key previews.
+- Provider and model are admin-controlled string values and must both be non-empty before enabling a setting.
+- `AllowedModelsJson` may store the saved default model for UI compatibility; it is not a hardcoded provider allow-list in the flexible provider settings slice.
+- Custom Base URL is approved for the scoped OpenAI-compatible adapter path and is stored as `BaseUrl`.
+- Normal-user generation APIs must use enabled server-side provider settings instead of trusting provider or model values from the frontend.
+- Raw provider request/response audit belongs to `AiGenerationRuns`, not this settings entity.
+
+### AiPromptProfiles
+
+Approved implemented subset for Phase 6 project-level AI prompt configuration.
+
+Implemented fields:
+
+- Id
+- ProjectId
+- UserId
+- Mode
+- AudienceJson
+- GlobalPrompt
+- CreatedAt
+- UpdatedAt
+
+Direction:
+
+- Option 2 stores a default AI prompt/profile for the project.
+- Option 3 stores custom global direction for the project.
+- `AnswerRules.ConfigJson` must not be used to store AI prompt profiles.
+- Unique index: `ProjectId + Mode`.
+
+### AiQuestionPrompts
+
+Approved implemented subset for Phase 6 per-question AI prompt configuration.
+
+Implemented fields:
+
+- Id
+- ProfileId
+- QuestionId
+- Prompt
+- UseAi
+- CreatedAt
+- UpdatedAt
+
+Direction:
+
+- Per-question prompts are used only for AI generation guidance.
+- They must not replace `FormQuestions` as the source of detected form metadata.
+- They must not make generated previews editable after creation.
+- Unique index: `ProfileId + QuestionId`.
+
 ### RefreshTokens
 
 Confirmed for Phase 7 as a dedicated refresh token/session storage table.
@@ -239,6 +319,8 @@ This storage must support provider user id / Google `sub` lookup before email ma
 - PayloadJson
 - PreviewText
 - Status
+- Source
+- IsReadOnly
 - CreatedAt
 
 ### SubmissionJobs
@@ -274,6 +356,64 @@ This storage must support provider user id / Google `sub` lookup before email ma
 - MetadataJson
 - CreatedAt
 
+### AiGenerationRuns
+
+Approved implemented subset for Phase 6 AI generation audit and run state.
+
+Implemented fields:
+
+- Id
+- UserId
+- ProjectId
+- PromptProfileId
+- Mode
+- Provider
+- Model
+- PromptSnapshotJson
+- QuestionSnapshotJson
+- RawProviderRequestJson
+- RawProviderResponseJson
+- Multiplier
+- RequestedCount
+- GeneratedCount
+- CreditsUsed
+- ValidationSummaryJson
+- Status
+- ErrorMessage
+- CreatedAt
+- StartedAt
+- CompletedAt
+
+Security and audit direction:
+
+- Raw provider request/response is stored for audit, but must not be exposed to normal users.
+- Admin/debug access to raw payloads requires explicit API review.
+- Retention and redaction policy must be reviewed before production exposure.
+- `AiGenerationRuns` records generation evidence; it is not the credit ledger source of truth.
+- Index direction implemented: lookup by `ProjectId + CreatedAt` and `UserId + CreatedAt`.
+
+### AiGenerationRunItems
+
+Approved implemented subset for Phase 6 per-output AI validation and generated response mapping.
+
+Implemented fields:
+
+- Id
+- RunId
+- GeneratedResponseId
+- QuestionId
+- Status
+- RawAnswerJson
+- ValidationMessage
+- CreatedAt
+
+Direction:
+
+- Links an AI run to stored `GeneratedResponses`.
+- Records per-question or per-output validation evidence.
+- Must not make `GeneratedResponses` editable after creation.
+- `GeneratedResponseId` and `QuestionId` may be nullable for invalid or rejected output evidence.
+
 ## Deferred Fields And Decisions
 
 Deferred:
@@ -287,7 +427,9 @@ Deferred:
 - PayOS fields beyond the Phase 8 payment record scope
 - PayOS configuration fields beyond the Phase 8 provider settings scope
 - Google OAuth fields
-- AI mapping/generation fields
+- final AI mapping/generation behavior beyond the approved scoped Phase 6 backend slice
+- live AI provider/model catalog validation beyond the OpenAI-compatible chat completions adapter
+- final AI raw audit access, retention, and redaction policy
 - webhook fields
 - production deployment fields
 

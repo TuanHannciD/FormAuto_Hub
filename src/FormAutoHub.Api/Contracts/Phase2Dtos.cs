@@ -111,7 +111,18 @@ public sealed record CreditTransactionResponse(
     Guid? ReferenceId,
     DateTimeOffset CreatedAt);
 
-public sealed record CreditTransactionListResponse(IReadOnlyList<CreditTransactionResponse> Items);
+public sealed record CreditTransactionQuery(
+    string? Type,
+    string? Search,
+    int Page,
+    int PageSize);
+
+public sealed record CreditTransactionPageResponse(
+    IReadOnlyList<CreditTransactionResponse> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
 
 public sealed record ProfileResponse(
     Guid Id,

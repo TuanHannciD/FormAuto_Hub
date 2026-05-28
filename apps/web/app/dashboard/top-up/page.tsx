@@ -3,13 +3,32 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, CheckCircle2, CreditCard } from "lucide-react";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { DropdownSelect } from "@/components/dropdown-select";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, MobileRecord, MobileRecordList, PageHeader, Textarea } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type CreatePayosTopupOrderResponse, type CreditPackage, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
+
+const topupOrderColumns: Array<BaseTableColumn<TopupOrder>> = [
+  { key: "credits", header: "Credit", render: (order) => order.credits },
+  { key: "amount", header: "Số tiền", render: (order) => formatCurrency(order.amount) },
+  { key: "paymentMethod", header: "Phương thức", render: (order) => order.paymentMethod },
+  { key: "status", header: "Trạng thái", render: (order) => <StatusBadge status={order.status} /> },
+  { key: "createdAt", header: "Tạo lúc", render: (order) => formatDate(order.createdAt) },
+  {
+    key: "detail",
+    header: "Chi tiết",
+    render: (order) => (
+      <Link className="text-primary hover:underline" href={`/dashboard/top-up/${order.id}`}>
+        Xem
+      </Link>
+    ),
+    hideOnMobile: true
+  }
+];
 
 export default function TopUpPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
@@ -191,58 +210,20 @@ export default function TopUpPage() {
           <CardTitle>Lịch sử yêu cầu nạp</CardTitle>
         </CardHeader>
         <CardContent>
-          {orders.length === 0 ? (
-            <EmptyState title="Chưa có yêu cầu nạp" detail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán." />
-          ) : (
-            <>
-            <MobileRecordList>
-              {orders.map((order) => (
-                <MobileRecord key={order.id}>
-                  <KeyValueRow label="Credit" value={order.credits} />
-                  <KeyValueRow label="Số tiền" value={formatCurrency(order.amount)} />
-                  <KeyValueRow label="Phương thức" value={order.paymentMethod} />
-                  <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
-                  <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
-                  <div className="border-t border-border/70 pt-3">
-                    <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-white/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-white" href={`/dashboard/top-up/${order.id}`}>
-                      Xem chi tiết
-                    </Link>
-                  </div>
-                </MobileRecord>
-              ))}
-            </MobileRecordList>
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full text-sm">
-                <thead className="text-left text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Credit</th>
-                    <th className="py-2">Số tiền</th>
-                    <th className="py-2">Phương thức</th>
-                    <th className="py-2">Trạng thái</th>
-                    <th className="py-2">Tạo lúc</th>
-                    <th className="py-2">Chi tiết</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr className="border-t border-border/70" key={order.id}>
-                      <td className="py-3">{order.credits}</td>
-                      <td className="py-3">{formatCurrency(order.amount)}</td>
-                      <td className="py-3">{order.paymentMethod}</td>
-                      <td className="py-3"><StatusBadge status={order.status} /></td>
-                      <td className="py-3">{formatDate(order.createdAt)}</td>
-                      <td className="py-3">
-                        <Link className="text-primary hover:underline" href={`/dashboard/top-up/${order.id}`}>
-                          Xem
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            </>
-          )}
+          <BaseTable
+            items={orders}
+            columns={topupOrderColumns}
+            getRowKey={(order) => order.id}
+            emptyTitle="Chưa có yêu cầu nạp"
+            emptyDetail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán."
+            mobileFooter={(order) => (
+              <div className="border-t border-border/70 pt-3">
+                <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-white/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-white" href={`/dashboard/top-up/${order.id}`}>
+                  Xem chi tiết
+                </Link>
+              </div>
+            )}
+          />
         </CardContent>
       </Card>
     </div>

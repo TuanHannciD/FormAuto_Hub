@@ -2,7 +2,7 @@
 
 ## Mục đích
 
-Định nghĩa gói requirement đã được duyệt ở mức ý tưởng cho slice Phase 6 AI mapping/generation trước khi thiết kế API, database, frontend hoặc provider implementation.
+Định nghĩa gói requirement đã được duyệt và ranh giới implementation hiện tại cho slice Phase 6 AI mapping/generation.
 
 Tài liệu này ghi lại hướng sản phẩm đã được user duyệt và các vùng contract vẫn phải review riêng.
 
@@ -19,22 +19,72 @@ Tài liệu này ghi lại hướng sản phẩm đã được user duyệt và 
 - prompt guard và output guard chống abuse
 - thứ tự delivery pass và nhóm việc có thể chạy song song an toàn
 
-Tài liệu này chưa tự duyệt:
+Đã duyệt có điều kiện cho scoped implementation planning:
 
-- API routes cuối cùng
-- tên và field DTO cuối cùng
-- database schema hoặc migration cuối cùng
-- provider/model cuối cùng
-- production AI provider calls
-- implementation nếu chưa có approval riêng
+- Phase 6 AI mapping/generation được chuyển từ candidate package sang implementation planning và scoped implementation.
+- Approval này chưa mở toàn bộ production AI generation workflow cùng lúc.
+- `Worker J - AI Generate API` đã được unblock sau khi provider settings, prompt profile, prompt guard, output validator, credit contract, và audit contract được implement và review.
+- Backend AI preview generation endpoint đã được implement cho scoped slice đã duyệt.
+- Runtime AI provider execution mặc định fail-safe: deterministic adapter chỉ được dùng khi bật rõ qua cấu hình local/test, và OpenAI-compatible live adapter chỉ được dùng khi bật rõ qua runtime configuration.
+- OpenAI-compatible live provider calls dùng provider/model/Base URL/API key do admin lưu được duyệt cho scoped slice này.
+- Năm khái niệm persistence AI được duyệt thành table riêng, nhưng vẫn cần DB proposal cuối trước khi tạo migration:
+  - `AiProviderSettings`
+  - `AiPromptProfiles`
+  - `AiQuestionPrompts`
+  - `AiGenerationRuns`
+  - `AiGenerationRunItems`
+- Không được lưu AI prompts trong `AnswerRules.ConfigJson`.
+- `AiPromptProfiles` nên unique theo `ProjectId + Mode`.
+- `AiQuestionPrompts` nên unique theo `ProfileId + QuestionId`.
+- `AiGenerationRunItems.GeneratedResponseId` được nullable cho evidence của output invalid hoặc rejected.
+- Status của `AiGenerationRun` được duyệt gồm `Pending`, `Running`, `Succeeded`, `Partial`, và `Failed`.
+- Transition được duyệt là `Pending -> Running -> Succeeded | Partial | Failed`.
+- Terminal status không được đổi tiếp; retry phải tạo run mới.
+- Provider và model identifiers là chuỗi do admin kiểm soát và lưu server-side; backend validation yêu cầu giá trị không rỗng và không được trở thành quyền quyết định tùy ý từ normal frontend.
+- Custom Base URL support và OpenAI-compatible gateway calls chỉ được duyệt cho scoped server-side admin settings và adapter path.
+- Option 2 default AI prompt/profile persistence theo project được duyệt.
+- Option 3 global prompt và per-question prompt persistence theo project được duyệt.
+- Prompt auto-fill miễn phí.
+- Giới hạn độ dài prompt ban đầu được duyệt làm guardrail: short context field 200 ký tự, global prompt 2,000 ký tự, per-question prompt 1,000 ký tự, và total prompt payload per run 20,000 ký tự.
+- Credit multiplier được duyệt là Option 1 `x1`, Option 2 `x2`, và Option 3 `x3`.
+- AI audit đầy đủ là bắt buộc ngay từ implementation đầu tiên.
+- Raw provider request/response hiện chỉ admin/debug được xem và không được hiển thị cho normal users.
+- Frontend AI mode preparation được bắt đầu chỉ khi không bind vào real API chưa ổn định.
+
+Vẫn cần proposal hoặc review riêng trước broader production rollout:
+
+- live provider/model catalog validation ngoài required local configuration checks
+- provider-specific SDK adapters ngoài OpenAI-compatible HTTP contract
+- API đọc danh sách/chi tiết AI generation run cho normal-user hoặc admin audit
+- pagination, filtering, và authorization details cụ thể cho AI audit read APIs
+- raw payload retention và redaction policy
+- raw OpenAI-compatible gateway behavior ngoài chat completions adapter đã duyệt
+- frontend/API binding bổ sung ngoài scoped slice đã duyệt
+- production browser closeout sau khi live provider adapter được duyệt
 
 ## Phase fit
 
-Trạng thái project hiện tại vẫn là: Phase 9 closeout completed; next phase not selected.
+Current global project phase vẫn là: Phase 9 closeout completed; next phase not selected.
 
-Package này dành cho một candidate production integration thuộc Phase 6. Nó không tự kích hoạt Phase 6.
+Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
 
-Implementation cần approval rõ sau contract review và database review.
+Package này dành cho một candidate production integration thuộc Phase 6. Checklist đã duyệt cho phép scoped implementation planning, một số prerequisite implementation work, và backend AI preview generation endpoint sau prerequisite review.
+
+Điều này chưa mở full production AI provider integration, frontend/API scope ngoài scoped binding đã duyệt, broad raw-audit exposure, hoặc AI auto-submit.
+
+## Tiến độ hiện tại của scoped slice
+
+| Khu vực | Trạng thái hiện tại |
+|---|---|
+| AI provider settings backend | Đã implement cho scoped slice |
+| Admin AI provider config UI | Đã implement cho scoped slice |
+| AI prompt profile persistence | Đã implement cho scoped slice |
+| AI generate preview API | Đã implement cho scoped slice |
+| Normal-user AI mode UI/API binding | Đã implement cho scoped slice |
+| Runtime deterministic AI adapter | Chỉ được dùng khi bật rõ qua cấu hình local/test |
+| Live OpenAI-compatible provider calls | Đã implement cho scoped slice phía sau runtime configuration rõ ràng |
+| Broad AI audit read UI/API và raw payload exposure | Deferred |
+| Custom base URL và live OpenAI-compatible gateway calls | Đã implement cho scoped slice |
 
 ## Mục tiêu sản phẩm
 
@@ -127,7 +177,7 @@ Khái niệm persistence đề xuất, cần database review:
 Expected behavior:
 
 - admin chọn provider trước
-- provider và model phải khớp nhau
+- provider và model là giá trị server-side do admin nhập và đều không được rỗng
 - API key phải được encrypt trước khi lưu
 - API key không bao giờ được trả raw về frontend
 - UI chỉ được hiển thị masked key preview
@@ -136,17 +186,26 @@ Expected behavior:
 - provider chỉ được enable khi required configuration hợp lệ
 - generation dùng enabled server-side provider setting, không tin provider/model từ normal user frontend gửi lên
 
-Ví dụ provider/model mismatch:
+Ví dụ cấu hình provider/model không hợp lệ:
 
 ```text
-Provider: Google AI
-API key: Google AI key
-Model: gpt-*
+Provider:
+API key: đã cấu hình
+Model: gpt-4o-mini
 ```
 
-Trường hợp này phải fail validation vì key và model không thuộc cùng provider family.
+Trường hợp này phải fail validation vì thiếu provider. Mismatch theo provider family không được kiểm tra trong scoped slice này vì provider/model được chủ đích cho admin nhập linh hoạt.
 
-OpenAI-compatible gateways chỉ được support như một provider type rõ ràng với base URL và danh sách model tương thích đã cấu hình.
+Tên OpenAI-compatible gateway có thể được nhập như provider identifier linh hoạt trong UI settings. Việc dùng custom Base URL và live calls chỉ được duyệt qua scoped OpenAI-compatible chat completions adapter.
+
+Behavior Base URL và live adapter đã duyệt trong scoped slice:
+
+- admin có thể nhập Base URL/API endpoint optional
+- nếu nhập, Base URL phải là absolute URL dùng `http` hoặc `https`
+- OpenAI-compatible runtime calls dùng Base URL đã lưu và gọi `{baseUrl}/chat/completions`, trừ khi URL đã lưu đã kết thúc bằng `/chat/completions`
+- runtime calls dùng API key đã mã hóa phía server và không được expose raw API key
+- runtime calls chỉ bật khi `AI:ProviderAdapter` được set rõ là `OpenAICompatible`
+- live model catalog validation vẫn Deferred
 
 ## Credit rules
 
@@ -319,26 +378,33 @@ Option 3 UI:
 Provider settings UI:
 
 - admin-only AI settings page hoặc section
-- provider selector
+- provider input
+- API endpoint / Base URL input
 - encrypted API key input
 - masked key preview sau khi save
-- default model selection
-- optional base URL cho OpenAI-compatible provider type
+- default model input
+- optional Base URL cho OpenAI-compatible provider type
 - check configuration action
 - status badge cho unchecked, valid, invalid, hoặc disabled state
 
 ## Proposed API Areas
 
-Đây chỉ là các area đề xuất và cần contract review trước implementation:
+Các area hiện đã implement/approve:
 
 - admin AI provider settings read/update/check
 - project AI prompt profile read/update
 - per-question AI prompt read/update
 - AI prompt auto-fill
-- AI preview generation
-- AI generation run read/list cho audit
+- AI preview generation: `POST /api/projects/{projectId}/ai-responses/generate`
+- live OpenAI-compatible provider adapter phía sau runtime configuration rõ ràng
 
-Exact routes, DTOs, error responses, pagination, và authorization rules chưa được chốt trong package này.
+Vẫn Deferred hoặc cần review riêng:
+
+- AI generation run read/list cho audit
+- API đọc raw provider payload
+- live provider model catalog validation
+- provider-specific SDK adapters ngoài OpenAI-compatible HTTP contract
+- pagination và filtering cuối cho audit reads
 
 ## Proposed Module Ownership
 
@@ -379,7 +445,8 @@ Output:
 
 - admin provider settings API
 - encrypted API key storage
-- provider/model validation
+- validation provider/model bắt buộc có giá trị
+- validate Base URL optional là absolute URL dùng `http` hoặc `https`
 - masked secret response
 - configuration check
 - admin UI
@@ -390,6 +457,7 @@ Output:
 
 - `Integrations.AI` abstraction
 - provider adapter boundary
+- OpenAI-compatible live adapter phía sau runtime configuration rõ ràng
 - prompt guard
 - output validator
 - không cho frontend tự quyết provider/model
@@ -412,6 +480,16 @@ Output:
 - xử lý credit multiplier
 - xử lý partial generation
 - ghi AI audit run/item đầy đủ
+
+Trạng thái hiện tại:
+
+- đã implement backend `POST /api/projects/{projectId}/ai-responses/generate`
+- lưu AI `GeneratedResponses` dạng read-only
+- ghi `CreditTransactions`, `UsageLogs`, `AiGenerationRuns`, và `AiGenerationRunItems`
+- chỉ tính credit cho preview hợp lệ đã lưu thành công
+- dùng deterministic provider adapter chỉ khi bật rõ cho local/test validation
+- dùng OpenAI-compatible live adapter chỉ khi bật rõ bằng runtime configuration
+- mặc định dùng disabled provider adapter khi chưa có runtime adapter được duyệt
 
 ### Pass 7 - Frontend UI
 
@@ -490,8 +568,8 @@ Các task này không nên chạy trước dependency:
 - AI generation API trước khi provider settings và output validator contracts ổn định
 - credit multiplier transaction trước credit contract review
 - AI audit raw payload storage trước access/retention review
-- frontend real API binding trước khi DTO routes ổn định
-- browser closeout trước khi backend runtime smoke pass
+- frontend/API binding bổ sung trước khi DTO routes ổn định
+- production browser closeout trước khi backend runtime smoke pass và live provider adapter được duyệt
 
 ## Validation Expectations
 
@@ -532,10 +610,9 @@ Dừng trước implementation nếu:
 
 - API routes hoặc DTOs chưa review
 - database fields chưa review
-- provider/model validation rules chưa rõ
+- rule validation provider/model bắt buộc có giá trị chưa rõ
 - raw provider payload access hoặc retention chưa rõ
 - credit multiplier behavior chưa rõ
 - prompt guard scope bị làm yếu
 - output validation cho phép choice-style answers ngoài stored options
 - preview-before-submit hoặc confirmation bị làm yếu
-

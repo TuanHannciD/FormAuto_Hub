@@ -74,6 +74,30 @@ Dùng component theo hướng shadcn/ui cho:
 
 Không tạo UI primitive riêng khi shadcn/ui component đã đủ dùng.
 
+## Quy tắc kiểm tra component dùng chung
+
+Trước khi implement hoặc chỉnh sửa bất kỳ frontend page nào, phải kiểm tra `apps/web/components/` và ưu tiên dùng component dùng chung có sẵn trước khi tạo biến thể riêng trong page.
+
+Không tự hand-code table, dropdown, status badge, shell, toast host, hoặc UI primitive nếu shared component layer đã có sẵn component tương ứng.
+
+Inventory component dùng chung hiện tại:
+
+- `components/ui.tsx`: UI primitives dùng chung như `Button`, `Input`, `Textarea`, `Card`, `Dialog`, `Badge`, `Alert`, `EmptyState`, `PageHeader`, `MobileRecordList`, `MobileRecordCard`, `KeyValueRow`, và các primitive app liên quan.
+- `components/base-table.tsx`: base chuẩn cho bảng dữ liệu thật, lịch sử, admin, và dashboard. Page files phải dùng component này cho dữ liệu dạng bảng trừ khi có lý do ngoại lệ được ghi rõ.
+- `components/dropdown-select.tsx`: dropdown/select dùng chung cho filters và custom select UI cần khớp style của app.
+- `components/status-badge.tsx`: render status badge dùng chung. Không tạo bộ class status badge riêng lẻ trong từng page.
+- `components/dashboard-shell.tsx` và `components/admin-shell.tsx`: shell và navigation dùng chung cho khu vực app đã đăng nhập.
+- `components/app-toaster.tsx`: toast host dùng chung cho feedback trong app.
+- `components/landing-dashboard-tabs.tsx`, `components/seo-keyword-page.tsx`, và `components/scroll-reveal.tsx`: component cho landing, SEO, và public page. Không dùng chúng như dashboard primitive trừ khi task thật sự thuộc surface đó.
+
+Nếu thiếu reusable primitive và pattern đó cần dùng ở nhiều hơn một page, tạo hoặc mở rộng shared component trước rồi mới dùng trong page. Chỉ giữ component local trong page khi pattern thật sự là one-off.
+
+Checklist review:
+
+- Search `apps/web/components/` trước khi thêm UI.
+- Search các page hiện có để tìm pattern tương tự trước khi tạo component local mới.
+- Với bảng dữ liệu thật, `rg "<table|<thead|<tbody|<tr|<th|<td" apps/web/app apps/web/components` thông thường chỉ nên còn table markup trong shared base table.
+
 ## Phong cách thị giác
 
 - Ưu tiên neutral backgrounds với accent color tiết chế.
