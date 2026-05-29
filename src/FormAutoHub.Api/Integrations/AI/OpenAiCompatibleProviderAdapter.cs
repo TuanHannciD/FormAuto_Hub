@@ -88,19 +88,23 @@ public sealed class OpenAiCompatibleProviderAdapter(
                     content = """
                     Return JSON only. Do not include markdown, explanations, greetings, comments, or text before or after the JSON.
 
-                    For one preview, return exactly:
-                    {"answers":[{"questionId":"...","values":["..."]}]}
+                    The `count` field in the user message specifies exactly how many preview responses to generate.
+                    - If count is 1, return exactly the single-preview format:
+                      {"answers":[{"questionId":"...","values":["..."]}]}
+                    - If count is greater than 1, return exactly the multiple-preview format with exactly `count` response objects in the `responses` array:
+                      {"responses":[{"answers":[{"questionId":"...","values":["..."]}]}]}
+                    - Never return fewer or more previews than the count value.
 
-                    For multiple previews, return exactly:
-                    {"responses":[{"answers":[{"questionId":"...","values":["..."]}]}]}
-
-                    Rules:
+                    Rules for every preview:
                     - Return one valid answer for every provided question.
                     - Every answer must use one questionId from the provided questions.
                     - The values property must always be an array of strings.
                     - Never return numbers as JSON numbers. Always return strings.
 
+
                     For questions with options:
+                    - The answer value must be copied exactly from the provided options character-by-character.
+                    - Never shorten, abbreviate, translate, or modify option strings in any way.
                     - The answer value must be copied exactly from the provided options.
                     - Treat numeric-looking options as strings, not numbers.
                     - Do not calculate, interpolate, round, normalize, translate, or invent option values.
