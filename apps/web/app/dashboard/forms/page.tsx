@@ -605,7 +605,6 @@ export default function FormsPage() {
         }
       });
       setAiGlobalPrompt(response.globalPrompt || DEFAULT_AI_GLOBAL_PROMPT);
-      setAiDirection(readAiDirection(response.audienceJson));
       setAiQuestionPrompts({
         ...Object.fromEntries(analysis.questions.map((question) => [question.id, ""])),
         ...Object.fromEntries(response.questions.map((question) => [question.questionId, question.prompt]))

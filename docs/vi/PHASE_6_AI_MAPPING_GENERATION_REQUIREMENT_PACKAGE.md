@@ -1,47 +1,3 @@
-
-## AI Provider Config Reference
-
-Các key config AI sau điều khiển hành vi generation:
-
-| Key | Mặc định | Mô tả |
-|---|---|---|
-| ProviderAdapter | Disabled | Chọn adapter: Disabled, Deterministic, hoặc OpenAICompatible |
-| RequestTimeoutSeconds | 300 | HTTP timeout cho mỗi lần gọi AI provider (giây) |
-| BatchSize | 10 | Số preview mỗi lần gọi AI provider |
-| MaxParallelBatches | 5 | Số batch chạy song song tối đa (SemaphoreSlim limit) |
-
-### Cách batch splitting hoạt động
-
-1. generationLimit preview được chia thành ceil(generationLimit / BatchSize) batch.
-2. Mỗi batch tạo một AiProviderGenerateRequest độc lập và gọi provider adapter.
-3. SemaphoreSlim(MaxParallelBatches) giới hạn số HTTP call đồng thời.
-4. Tất cả OutputJsons được gom bằng Task.WhenAll, sau đó validate chung.
-5. Credit chỉ bị trừ cho preview đã validate thành công và lưu.
-6. Raw audit lưu batch markers: [Batch X/Y] trong RawProviderRequestJson và RawProviderResponseJson.
-
-Ví dụ: 50 preview với BatchSize=10, MaxParallelBatches=5:
-- 5 batch mỗi batch 10 preview
-- 5 batch chạy đồng thời (SemaphoreSlim cho phép 5)
-- Tổng thời gian ≈ max(thời gian các batch) ≈ ~20-40s
-
-## AI Model Compatibility Notes
-
-Các model đã test với strict JSON output validator (form 15 câu, Option 2):
-
-| Model | Provider | Pass Rate | Ghi chú |
-|---|---|---|---|
-| deepseek-v4-flash | DeepSeek direct API | 100% (21/21) | Khuyến nghị — model free tốt nhất |
-| cx/gpt-5.5-review | OpenCode proxy | 100% (30/30) | Dự phòng, chậm hơn |
-| cx/gpt-5.5 | OpenCode proxy | 100% (15/15) | Dự phòng |
-| oc/deepseek-v4-flash-free | OpenCode proxy | 0% | Trả về SSE streaming format — adapter chưa hỗ trợ |
-| gemini-2.5-flash (Google) | Google free tier | 100% nhưng rate-limited | Lỗi 429 ngăn parallel |
-| Groq llama-3.3-70b | Groq free tier | 1.4% | JSON không tuân thủ |
-| Groq llama-3.1-8b | Groq free tier | 0% | JSON không tuân thủ |
-| Groq llama-4-scout-17b | Groq free tier | 0% | Không khả dụng trên free tier |
-| Groq qwen3-32b | Groq free tier | 0% | Không khả dụng trên free tier |
-| Groq gpt-oss-20b | Groq free tier | 0% | Không khả dụng trên free tier |
-
-Ngày test: 2026-05-29. Yêu cầu JSON compliance bao gồm: copy chính xác giá trị option, phải trả lời đủ 15 câu, không bịa giá trị, map đúng questionId.
 # PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE
 
 ## Mục đích
@@ -574,6 +530,50 @@ Tiến độ hiện tại:
 - audit/security review: Chưa chạy
 - docs sync review: Đã cập nhật (2026-05-29)
 
+
+## AI Provider Config Reference
+
+Các key config AI sau điều khiển hành vi generation:
+
+| Key | Mặc định | Mô tả |
+|---|---|---|
+| ProviderAdapter | Disabled | Chọn adapter: Disabled, Deterministic, hoặc OpenAICompatible |
+| RequestTimeoutSeconds | 300 | HTTP timeout cho mỗi lần gọi AI provider (giây) |
+| BatchSize | 10 | Số preview mỗi lần gọi AI provider |
+| MaxParallelBatches | 5 | Số batch chạy song song tối đa (SemaphoreSlim limit) |
+
+### Cách batch splitting hoạt động
+
+1. generationLimit preview được chia thành ceil(generationLimit / BatchSize) batch.
+2. Mỗi batch tạo một AiProviderGenerateRequest độc lập và gọi provider adapter.
+3. SemaphoreSlim(MaxParallelBatches) giới hạn số HTTP call đồng thời.
+4. Tất cả OutputJsons được gom bằng Task.WhenAll, sau đó validate chung.
+5. Credit chỉ bị trừ cho preview đã validate thành công và lưu.
+6. Raw audit lưu batch markers: [Batch X/Y] trong RawProviderRequestJson và RawProviderResponseJson.
+
+Ví dụ: 50 preview với BatchSize=10, MaxParallelBatches=5:
+- 5 batch mỗi batch 10 preview
+- 5 batch chạy đồng thời (SemaphoreSlim cho phép 5)
+- Tổng thời gian ≈ max(thời gian các batch) ≈ ~20-40s
+
+## AI Model Compatibility Notes
+
+Các model đã test với strict JSON output validator (form 15 câu, Option 2):
+
+| Model | Provider | Pass Rate | Ghi chú |
+|---|---|---|---|
+| deepseek-v4-flash | DeepSeek direct API | 100% (21/21) | Khuyến nghị — model free tốt nhất |
+| cx/gpt-5.5-review | OpenCode proxy | 100% (30/30) | Dự phòng, chậm hơn |
+| cx/gpt-5.5 | OpenCode proxy | 100% (15/15) | Dự phòng |
+| oc/deepseek-v4-flash-free | OpenCode proxy | 0% | Trả về SSE streaming format — adapter chưa hỗ trợ |
+| gemini-2.5-flash (Google) | Google free tier | 100% nhưng rate-limited | Lỗi 429 ngăn parallel |
+| Groq llama-3.3-70b | Groq free tier | 1.4% | JSON không tuân thủ |
+| Groq llama-3.1-8b | Groq free tier | 0% | JSON không tuân thủ |
+| Groq llama-4-scout-17b | Groq free tier | 0% | Không khả dụng trên free tier |
+| Groq qwen3-32b | Groq free tier | 0% | Không khả dụng trên free tier |
+| Groq gpt-oss-20b | Groq free tier | 0% | Không khả dụng trên free tier |
+
+Ngày test: 2026-05-29. Yêu cầu JSON compliance bao gồm: copy chính xác giá trị option, phải trả lời đủ 15 câu, không bịa giá trị, map đúng questionId.
 ## Nhóm việc có thể chạy song song an toàn
 
 Sau khi Pass 1 và Pass 2 hoàn tất, các nhóm sau có thể chạy song song:

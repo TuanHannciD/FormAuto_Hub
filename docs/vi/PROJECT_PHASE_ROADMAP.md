@@ -8,9 +8,9 @@
 
 Current global phase: **Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo**.
 
-Active approved follow-up slice: **Phase 6 AI mapping/generation scoped implementation**.
+Phase 6 AI scoped follow-up: **Đã hoàn thành (xem `PHASE_6_CLOSEOUT.md`)**.
 
-Điều này nghĩa là chưa chọn một global phase mới sau Phase 9, nhưng các việc đã được duyệt có thể tiếp tục trong riêng slice Phase 6 AI khi requirement package, API contract, DB review, provider settings, safety guard, audit rule, và phạm vi validation đã được duyệt.
+Không có active follow-up slice. Chưa chọn global phase mới sau Phase 9. Công việc phase mới hoặc implementation/fix follow-up cần approval rõ.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -151,9 +151,9 @@ Bao gồm:
 
 Frontend framework: Next.js web dashboard.
 
-## Phase 6 - Production integrations
+## Phase 6 - AI mapping/generation scoped follow-up
 
-Status: Deferred candidate group, với một active approved scoped follow-up cho AI mapping/generation.
+Status: Completed cho approved scoped AI slice. Broader production integrations vẫn Deferred. Xem `PHASE_6_CLOSEOUT.md`.
 
 Deferred trừ khi được duyệt rõ:
 
@@ -171,7 +171,7 @@ Ghi chú candidate tương lai:
 - Official Google Forms API có thể hữu ích sau này để đồng bộ metadata, câu hỏi và response của form.
 - Google Forms watches với luồng notification kiểu Cloud Pub/Sub có thể hữu ích sau này để phát hiện thay đổi schema hoặc response.
 - Background jobs có thể hữu ích sau này để renew watch, retry sync và kiểm tra sức khỏe integration.
-- AI mapping/generation có scoped follow-up đã duyệt trong `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md`; chỉ slice AI đã duyệt được tiếp tục, còn broader Phase 6 production integration vẫn Deferred.
+- AI mapping/generation scoped follow-up slice đã **hoàn thành**; xem `PHASE_6_CLOSEOUT.md`. Broader Phase 6 production integration vẫn Deferred.
 
 Tiến độ hiện tại của AI scoped follow-up:
 
@@ -347,4 +347,4 @@ Closeout:
 
 ## Phase Rule
 
-Chưa chọn full global phase tiếp theo sau closeout Phase 9. Active approved follow-up slice hiện tại là Phase 6 AI mapping/generation scoped implementation. Công việc phase mới hoặc implementation/fix follow-up ngoài slice đã duyệt này cần approval rõ.
+Chưa chọn full global phase tiếp theo sau closeout Phase 9. Phase 6 AI scoped follow-up slice đã hoàn thành. Công việc phase mới hoặc implementation/fix follow-up ngoài slice đã duyệt cần approval rõ.
