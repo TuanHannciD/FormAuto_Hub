@@ -1,5 +1,47 @@
 # PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE
 
+## TOC
+
+- [Mục đích](#mục-đích) (45)
+- [Trạng thái duyệt hiện tại](#trạng-thái-duyệt-hiện-tại) (51)
+- [Phase fit](#phase-fit) (107)
+- [Tiến độ hiện tại của scoped slice](#tiến-độ-hiện-tại-của-scoped-slice) (117)
+- [Mục tiêu sản phẩm](#mục-tiêu-sản-phẩm) (135)
+- [Các generation mode](#các-generation-mode) (151)
+  - [Option 1 - Mode mặc định rule-based](#option-1-mode-mặc-định-rule-based) (153)
+  - [Option 2 - Full AI mode](#option-2-full-ai-mode) (171)
+  - [Option 3 - Custom AI mode](#option-3-custom-ai-mode) (187)
+- [Lưu prompt](#lưu-prompt) (202)
+- [AI Provider Settings](#ai-provider-settings) (215)
+- [Credit rules](#credit-rules) (256)
+- [AI Audit](#ai-audit) (298)
+- [AI Output Validation Rules](#ai-output-validation-rules) (333)
+- [Prompt Guard Rules](#prompt-guard-rules) (361)
+- [Giới hạn độ dài prompt](#giới-hạn-độ-dài-prompt) (389)
+- [UI Requirements](#ui-requirements) (399)
+- [Proposed API Areas](#proposed-api-areas) (436)
+- [Proposed Module Ownership](#proposed-module-ownership) (455)
+- [Delivery Pass Plan](#delivery-pass-plan) (469)
+  - [Pass 1 - Requirement and contract docs](#pass-1-requirement-and-contract-docs) (471)
+  - [Pass 2 - API and DB contract review](#pass-2-api-and-db-contract-review) (479)
+  - [Pass 3 - AI provider settings](#pass-3-ai-provider-settings) (488)
+  - [Pass 4 - AI backend boundary](#pass-4-ai-backend-boundary) (500)
+  - [Pass 5 - Prompt profile backend](#pass-5-prompt-profile-backend) (511)
+  - [Pass 6 - AI generate API](#pass-6-ai-generate-api) (520)
+  - [Pass 7 - Frontend UI](#pass-7-frontend-ui) (540)
+  - [Pass 8 - Validation and review](#pass-8-validation-and-review) (551)
+- [AI Provider Config Reference](#ai-provider-config-reference) (576)
+  - [Cách batch splitting hoạt động](#cách-batch-splitting-hoạt-động) (587)
+- [AI Model Compatibility Notes](#ai-model-compatibility-notes) (601)
+- [Nhóm việc có thể chạy song song an toàn](#nhóm-việc-có-thể-chạy-song-song-an-toàn) (619)
+  - [Combo A - Provider settings](#combo-a-provider-settings) (623)
+  - [Combo B - AI safety core](#combo-b-ai-safety-core) (634)
+  - [Combo C - Prompt profile](#combo-c-prompt-profile) (646)
+  - [Combo D - Frontend visual mode preparation](#combo-d-frontend-visual-mode-preparation) (658)
+- [Việc phải chạy tuần tự](#việc-phải-chạy-tuần-tự) (666)
+- [Validation Expectations](#validation-expectations) (676)
+- [Stop Conditions](#stop-conditions) (709)
+
 ## Mục đích
 
 Định nghĩa gói requirement đã được duyệt và ranh giới implementation hiện tại cho slice Phase 6 AI mapping/generation.

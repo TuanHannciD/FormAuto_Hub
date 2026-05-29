@@ -1,5 +1,47 @@
 # PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE
 
+## TOC
+
+- [Purpose](#purpose) (45)
+- [Current Approval State](#current-approval-state) (51)
+- [Phase Fit](#phase-fit) (107)
+- [Current Scoped Slice Progress](#current-scoped-slice-progress) (117)
+- [Product Goal](#product-goal) (135)
+- [Generation Modes](#generation-modes) (151)
+  - [Option 1 - Default rule-based mode](#option-1-default-rule-based-mode) (153)
+  - [Option 2 - Full AI mode](#option-2-full-ai-mode) (171)
+  - [Option 3 - Custom AI mode](#option-3-custom-ai-mode) (187)
+- [Prompt Persistence](#prompt-persistence) (202)
+- [AI Provider Settings](#ai-provider-settings) (215)
+- [Credit Rules](#credit-rules) (256)
+- [AI Audit](#ai-audit) (298)
+- [AI Output Validation Rules](#ai-output-validation-rules) (333)
+- [Prompt Guard Rules](#prompt-guard-rules) (361)
+- [Prompt Length Limits](#prompt-length-limits) (389)
+- [UI Requirements](#ui-requirements) (399)
+- [Proposed API Areas](#proposed-api-areas) (436)
+- [Proposed Module Ownership](#proposed-module-ownership) (455)
+- [Delivery Pass Plan](#delivery-pass-plan) (469)
+  - [Pass 1 - Requirement and contract docs](#pass-1-requirement-and-contract-docs) (471)
+  - [Pass 2 - API and DB contract review](#pass-2-api-and-db-contract-review) (479)
+  - [Pass 3 - AI provider settings](#pass-3-ai-provider-settings) (488)
+  - [Pass 4 - AI backend boundary](#pass-4-ai-backend-boundary) (500)
+  - [Pass 5 - Prompt profile backend](#pass-5-prompt-profile-backend) (511)
+  - [Pass 6 - AI generate API](#pass-6-ai-generate-api) (520)
+  - [Pass 7 - Frontend UI](#pass-7-frontend-ui) (540)
+  - [Pass 8 - Validation and review](#pass-8-validation-and-review) (551)
+- [AI Provider Config Reference](#ai-provider-config-reference) (576)
+  - [How batch splitting works](#how-batch-splitting-works) (587)
+- [AI Model Compatibility Notes](#ai-model-compatibility-notes) (601)
+- [Safe Parallel Work Groups](#safe-parallel-work-groups) (619)
+  - [Combo A - Provider settings](#combo-a-provider-settings) (623)
+  - [Combo B - AI safety core](#combo-b-ai-safety-core) (634)
+  - [Combo C - Prompt profile](#combo-c-prompt-profile) (646)
+  - [Combo D - Frontend visual mode preparation](#combo-d-frontend-visual-mode-preparation) (658)
+- [Work That Must Stay Sequential](#work-that-must-stay-sequential) (666)
+- [Validation Expectations](#validation-expectations) (676)
+- [Stop Conditions](#stop-conditions) (709)
+
 ## Purpose
 
 Define the approved requirement package and current implementation boundary for the Phase 6 AI mapping/generation slice.

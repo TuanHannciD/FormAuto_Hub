@@ -1,5 +1,38 @@
 # DOMAIN_ENTITIES_OVERVIEW
 
+## TOC
+
+- [Purpose](#purpose) (36)
+- [Contract Status](#contract-status) (40)
+- [Confirmed Conceptual Entities](#confirmed-conceptual-entities) (44)
+- [Proposed MVP Fields](#proposed-mvp-fields) (69)
+  - [Users](#users) (71)
+  - [UserCreditAccounts](#usercreditaccounts) (82)
+  - [CreditPackages](#creditpackages) (91)
+  - [TopupOrders](#topuporders) (108)
+  - [CreditTransactions](#credittransactions) (129)
+  - [PaymentRecords](#paymentrecords) (146)
+  - [PaymentProviderSettings](#paymentprovidersettings) (176)
+  - [AiProviderSettings](#aiprovidersettings) (205)
+  - [AiPromptProfiles](#aipromptprofiles) (237)
+  - [AiQuestionPrompts](#aiquestionprompts) (259)
+  - [RefreshTokens](#refreshtokens) (280)
+  - [UserExternalLogins](#userexternallogins) (291)
+  - [UsageLogs](#usagelogs) (305)
+  - [FormProjects](#formprojects) (317)
+  - [FormQuestions](#formquestions) (328)
+  - [AnswerRules](#answerrules) (339)
+  - [GeneratedResponses](#generatedresponses) (348)
+  - [SubmissionJobs](#submissionjobs) (359)
+  - [SubmissionLogs](#submissionlogs) (372)
+  - [AuditLogs](#auditlogs) (382)
+  - [AiGenerationRuns](#aigenerationruns) (392)
+  - [AiGenerationRunItems](#aigenerationrunitems) (428)
+- [Deferred Fields And Decisions](#deferred-fields-and-decisions) (450)
+- [Forbidden Invented Fields](#forbidden-invented-fields) (469)
+- [Ledger Discipline](#ledger-discipline) (481)
+- [Form Automation MVP Scope](#form-automation-mvp-scope) (489)
+
 ## Purpose
 
 Describe confirmed conceptual entities and proposed MVP fields without freezing final database contracts.

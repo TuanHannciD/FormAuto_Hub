@@ -48,3 +48,24 @@ Dừng và xin duyệt khi task:
 - làm yếu quy tắc chống abuse
 - cam kết frontend framework
 - tự bịa hành vi Google OAuth, payment gateway, AI, refund hoặc background job
+
+## File vượt 400 dòng
+
+Một số file docs vượt ngưỡng 400 dòng. Trước khi đọc toàn bộ, nên quét headers để xác nhận task có thực sự cần nội dung bên trong (xem chiến lược đọc trong `PROJECT_EXECUTION_RULES.md#tổ-chức-file--chiến-lược-đọc`).
+
+| File | ~Dòng |
+|---|---|
+| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
+| `API_CONTRACT_GUIDE.md` | ~450 |
+
+Số dòng là gần đúng và có thể lệch theo thời gian. Khi mở file không có trong danh sách nhưng có vẻ lớn, áp dụng cùng cách tiếp cận TOC-first.
+
+## Chiến lược đọc
+
+Trước khi đọc bất kỳ file docs nào, áp dụng các quy tắc sau để tránh tốn token không cần thiết (quy tắc đầy đủ trong `PROJECT_EXECUTION_RULES.md#tổ-chức-file--chiến-lược-đọc`):
+
+1. File này là điểm xuất phát — xác định bộ file tối thiểu cho task trước khi đọc bất cứ file nào khác.
+2. Với file > 200 dòng: quét headers/TOC trước, chỉ đọc full các section liên quan.
+3. Không đọc lại file đã đọc trong cùng phiên.
+4. Thứ tự ưu tiên: rules/contracts → overview kiến trúc → chi tiết implementation.
+5. Dùng TOC kèm dòng để nhảy đến section cần thay vì đọc toàn bộ file lớn.

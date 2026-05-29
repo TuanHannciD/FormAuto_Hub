@@ -48,3 +48,24 @@ Stop and ask for approval when:
 - the task weakens abuse-prevention rules
 - the task commits to a frontend framework
 - the task invents Google OAuth, payment gateway, AI, refund, or background job behavior
+
+## Files Over 400 Lines
+
+Some docs files exceed the 400-line threshold. Before reading them in full, scan section headers to confirm the task needs the content (see `PROJECT_EXECUTION_RULES.md#file-organization--reading-strategy` for reading strategy).
+
+| File | Approx. Lines |
+|---|---|
+| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
+| `API_CONTRACT_GUIDE.md` | ~450 |
+
+Line counts are approximate and may drift over time. When opening a file not listed here but appearing large, apply the same TOC-first approach.
+
+## Reading Strategy
+
+Before loading any docs file, apply these rules to avoid unnecessary token usage (full rules in `PROJECT_EXECUTION_RULES.md#file-organization--reading-strategy`):
+
+1. This file is the starting point — identify the minimal file set for the task before reading anything else.
+2. For files > 200 lines: scan headers/TOC first, load full content only for relevant sections.
+3. Do not re-read a file already loaded in the same session.
+4. Priority: rules/contracts → architecture overviews → implementation details.
+5. Use TOC line ranges to jump to sections instead of loading entire large files.

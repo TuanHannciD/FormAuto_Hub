@@ -10,6 +10,28 @@ using Microsoft.Extensions.Configuration;
 
 namespace FormAutoHub.Api.Services;
 
+// === FILE MAP (AiGenerationService.cs – 564 dòng) ===
+// Dòng    Method                      Mục đích
+// 43      AiGenerationService()       Constructor – DI: DbContext, user context, prompt guard, validator, provider adapter, config
+// 53      GenerateAsync()             Entry point – validate input, gọi provider, tạo previews, trừ credit, ghi audit
+// 383     GetCurrentBalanceAsync()    Truy vấn số dư credit của user hiện tại
+// 392     NormalizeMode()             Chuẩn hóa chế độ generate (default → Option2)
+// 394     IsSupportedMode()           Kiểm tra chế độ generate có được hỗ trợ
+// 397     GetMultiplier()             Tính hệ số nhân credit theo chế độ (Option2=2, Option3=3)
+// 400     IsConfiguredProviderSetting() Kiểm tra provider setting đã được admin cấu hình
+// 405     BuildPromptSnapshotJson()   Tạo snapshot JSON của prompt profile để audit
+// 423     BuildQuestionSnapshotJson() Tạo snapshot JSON của question để audit
+// 435     BuildGuardPayload()         Tạo payload gửi qua prompt guard để kiểm tra abuse
+// 446     ReadOptions()               Đọc danh sách option từ answer rule
+// 463     ReadRawAnswerItems()        Parse kết quả AI trả về thành danh sách RawAnswerItem
+// 497     BuildPreviewText()          Tạo text preview cho một answer item
+// 500     StartRun()                  Đánh dấu AiGenerationRun bắt đầu (status Running)
+// 511     CompleteRun()               Đánh dấu run hoàn tất thành công
+// 522     FailRun()                   Đánh dấu run thất bại kèm lý do
+// 530     WriteUsageLogAsync()        Ghi UsageLog sau mỗi lần generate
+// 553     ToResponse()                Map entity sang DTO AiGenerateResponsesResponse
+// 570     GenerateBatchAsync()        Gọi provider, validate output, tạo preview, ghi credit + audit
+// 585     RawAnswerItem               Record nội bộ chứa answer text/value thô từ AI provider
 public interface IAiGenerationService
 {
     Task<AiGenerateResponsesResponse?> GenerateAsync(

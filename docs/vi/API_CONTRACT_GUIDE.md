@@ -1,5 +1,36 @@
 # API_CONTRACT_GUIDE
 
+## TOC
+
+- [Mục đích](#mục-đích) (34)
+- [Trạng thái hiện tại](#trạng-thái-hiện-tại) (38)
+- [Quy tắc REST naming](#quy-tắc-rest-naming) (42)
+- [API area đề xuất](#api-area-đề-xuất) (50)
+  - [Dashboard](#dashboard) (52)
+  - [Packages](#packages) (56)
+  - [Top-up orders](#top-up-orders) (101)
+  - [Admin top-up orders](#admin-top-up-orders) (146)
+  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
+  - [PayOS webhooks](#payos-webhooks) (266)
+  - [Usage logs](#usage-logs) (304)
+  - [Credit transactions](#credit-transactions) (334)
+  - [Profile](#profile) (356)
+  - [Authentication and account access](#authentication-and-account-access) (362)
+  - [Forms](#forms) (409)
+  - [Answer rules](#answer-rules) (414)
+  - [Generated responses](#generated-responses) (432)
+  - [AI prompt profiles](#ai-prompt-profiles) (454)
+  - [AI generated responses](#ai-generated-responses) (478)
+  - [Submissions](#submissions) (545)
+- [Quy tắc DTO](#quy-tắc-dto) (560)
+- [Error response](#error-response) (568)
+- [Pagination và filtering](#pagination-và-filtering) (574)
+- [Kỷ luật status](#kỷ-luật-status) (581)
+- [Status và type values đã duyệt](#status-và-type-values-đã-duyệt) (587)
+- [User context tạm thời](#user-context-tạm-thời) (637)
+- [Versioning và OpenAPI](#versioning-và-openapi) (646)
+- [Quy tắc thay đổi](#quy-tắc-thay-đổi) (651)
+
 ## Mục đích
 
 Kiểm soát thiết kế API contract cho FormAuto Hub.

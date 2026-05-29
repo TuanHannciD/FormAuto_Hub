@@ -10,6 +10,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FormAutoHub.Tests;
 
+// === FILE MAP (Phase3FormAutomationTests.cs – 978 dòng) ===
+// Dòng    Test method                                          Nhóm / Mục đích
+// 44      GoogleFormsClient_AnalyzesSentinelEntryNames          GoogleForms – phân tích tên sentinel entry
+// 71      GoogleFormsClient_AnalyzesPublicLoadDataQuestions     GoogleForms – phân tích câu hỏi từ public load data
+// 112      GoogleFormsClient_AnalyzesQuestionTypesExceptUpload   GoogleForms – loại trừ file upload khỏi phân tích
+// 163     GenerateAsync_DeductsCreditsAndWritesAudit            Generate – trừ credit + ghi usage/credit transaction
+// 198     GenerateAsync_UsesUpTo100SampleTextLines              Generate – giới hạn 100 dòng text mẫu
+// 225     AnswerRuleService_RejectsOver100SampleTextLines       AnswerRule – từ chối >100 dòng text mẫu
+// 248     GenerateAsync_UsesSequentialDateRange                 Generate – sinh date tuần tự trong khoảng
+// 276     GenerateAsync_UsesSequentialTimeRange                 Generate – sinh time tuần tự trong khoảng
+// 304     GenerateAsync_UsesMultiSelectCheckboxValues           Generate – sinh giá trị checkbox multi-select
+// 335     AnswerRuleService_RejectsCheckboxAboveOptionCount     AnswerRule – từ chối maxSelections > option count
+// 360     AnswerRuleService_RejectsInvalidDateRange             AnswerRule – từ chối date range không hợp lệ
+// 384     AnswerRuleService_RejectsInvalidTimeStep              AnswerRule – từ chối time step không hợp lệ
+// 408     GenerateAsync_RejectsCountAbove100NoCreditDeduction   Generate – từ chối count >100, không trừ credit
+// 435     GenerateAsync_RejectsPercentageAbove100NoDeduction    Generate – từ chối percentage >100
+// 465     GenerateAsync_RejectsQuantityAboveSafeValueLimit      Generate – từ chối quantity vượt safe value limit
+// 495     GenerateAsync_GeneratesOnlyAvailableCreditCount       Generate – chỉ generate đúng số credit còn lại
+// 528     GenerateAsync_RejectsWhenNoCreditsAvailable           Generate – từ chối khi hết credit
+// 557     SendAsync_RejectsSubmissionWithoutConfirmation        Send – từ chối submit khi chưa confirm
+// 580     SendAsync_RejectsDuplicateResponseIds                 Send – từ chối response ID trùng
+// 603     SendAsync_RejectsAlreadySubmittedResponse             Send – từ chối response đã submit
+// 626     SendAsync_SubmitsConfirmedPreviewAndWritesLog         Send – submit preview đã confirm + ghi submission log
+// 658     SendAsync_AllowsUpTo100ConfirmedPreviews              Send – cho phép tối đa 100 preview đã confirm
+// 687     SendAsync_RejectsOver100ConfirmedPreviews             Send – từ chối >100 preview đã confirm
+// 709     PauseAsync_MarksRunningJobAsPaused                    Pause – đánh dấu job đang chạy thành paused
+// 741     AnswerRuleService_RejectsOversizedConfigJson          AnswerRule – từ chối config JSON quá lớn
+// 761     AnswerRuleService_CreateAsync_UpsertsExistingRule     AnswerRule – upsert rule cho question đã tồn tại
+// 794     FormProjectService_RejectsOversizedFormUrl            FormProject – từ chối form URL quá dài
 public sealed class Phase3FormAutomationTests
 {
     [Fact]

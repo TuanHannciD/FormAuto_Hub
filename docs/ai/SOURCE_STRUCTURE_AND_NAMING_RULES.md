@@ -74,3 +74,77 @@ This is a proposed structure, not an immutable contract.
 - Do not put AI provider API keys, provider calls, raw provider payload handling, or prompt/output validation into frontend-only code.
 - Do not put AI credit multiplier logic outside the credit/generation service boundary approved by contract review.
 - Do not create microservice boundaries in MVP.
+
+## File Map Rule for Large Code Files
+
+- No hard line limit is enforced for code files. Split only when architecturally justified.
+- When a C# file exceeds **500 lines** and is not split, a **file map** comment block is required at the top of the file, right after namespace/using declarations.
+- The map lists every public/internal method, property group, and region with its starting line number and a one-line purpose description.
+
+### Map Format
+
+```csharp
+// === FILE MAP (CreditService.cs - 620 dong) ===
+// Dong    Method/Region                  Muc dich
+// 25-48   DeductCreditsAsync()           Tru credit + ghi ledger, rollback neu that bai
+// 50-72   AddCreditsAsync()              Nap credit thu cong (admin), ghi ledger
+// 74-110  ProcessTopupCallbackAsync()    Xu ly callback PayOS, doi soat chu ky
+// 112-145 ValidateTopupRequest()         Validate don nap truoc khi gui PayOS
+// 147-200 GetBalanceAndLedgerAsync()     Truy van so du + lich su giao dich
+// 202-280 CalculateUsageCost()           Tinh phi credit theo batch size + loai form
+// 282-350 ReserveCreditsAsync()          Giu credit truoc khi generate, hoan neu huy
+// 352-420 RefundCreditsAsync()           Hoan credit khi generate that bai
+// 422-490 GetUsageReportAsync()          Bao cao su dung credit theo khoang thoi gian
+// 492-560 ReconcileLedgerAsync()         Doi soat ledger dinh ky voi PayOS
+// 562-620 Private helpers + constants    Cac helper noi bo, hang so credit
+```
+
+### Rules
+
+- The map must be kept up to date when methods are added, removed, or moved.
+- For files with regions, group the map entries by region.
+- Private helpers shared across many methods can be grouped as one entry.
+- The map is for human and AI readability; do not generate it at build time.
+## File Map and Extraction Rules for Frontend Files (apps/web/)
+
+- No hard line limit. Split only when architecturally justified (a component becomes independently reusable, conceptually separate, or the file becomes hard to navigate).
+- When a `.tsx`/`.ts` file exceeds **500 lines** and is not split, a **file map** comment block is required at the top of the file, right after imports.
+- The map lists every exported function, component, hook, and major constant/type block with its starting line number and a one-line purpose description.
+
+### TSX File Map Format
+
+```tsx
+// === FILE MAP (FormsPage.tsx - 620 dong) ===
+// Dong    Component/Function                  Muc dich
+// 30-85   FormsPage()                        Trang chinh: phan tich form, cau hinh rule, preview, submit
+// 87-120  PreviewAccordion()                 Accordion hien thi tung ban preview
+// 122-155 GenerationModeSelector()           Chon che do tao: rules / AI default / AI custom
+// 157-210 AiModePreparationPanel()           Panel chuan bi AI direction + prompt
+// 212-250 RuleEditor()                       Editor rule cho tung cau hoi trong form
+// 252-280 Helper functions                   toBackendAiMode, buildAiAudienceJson, readAiDirection, ...
+```
+
+### Extractable Patterns (only when justified)
+
+| Extract to | When |
+|---|---|
+| `_components/<Name>.tsx` | A child component is >=30 lines and conceptually self-contained |
+| `_constants.ts` | 10+ related constants that form a configuration block |
+| `_types.ts` | 5+ interfaces/types used across multiple components in the feature |
+| `_helpers.ts` | 5+ pure utility functions with no React dependencies |
+| `_hooks.ts` | 3+ custom hooks or a hook >=30 lines |
+
+### Colocation Rules
+
+- Extracted files live in the same folder as the page (colocation).
+- Use `_` prefix convention for page-local modules: `_components/`, `_constants.ts`, `_types.ts`, `_helpers.ts`, `_hooks.ts`.
+- Do not create empty extraction files "just in case".
+- Extraction is optional: if the file is readable and the components are tightly coupled, a file map alone is sufficient.
+- Keep the main `page.tsx` as the routing entry; do not move the default export.
+
+### Rules
+
+- The map must be kept up to date when components/functions are added, removed, or moved.
+- Constants and types blocks can be grouped as single entries.
+- Private helper functions shared across components can be grouped as one entry.
+- The map is for human and AI readability; do not generate it at build time.

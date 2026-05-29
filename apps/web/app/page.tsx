@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingDashboardTabs } from "@/components/landing-dashboard-tabs";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -18,6 +18,21 @@ import {
   Wallet,
   Eye
 } from "lucide-react";
+// === FILE MAP (page.tsx – 699 dòng) ===
+// Dòng    Section                         Mục đích
+// 1-20    Imports                         React, Next.js, lucide, components, lib
+// 22-24   SEO constants                   siteName, title, description
+// 27-33   workflowSteps                   Các bước workflow hiển thị trên landing
+// 35-66   featureCards                    6 thẻ tính năng chính
+// 68-94   seoUseCaseLinks                 Internal links cho SEO landing pages
+// 96-112  creditCards                     3 thẻ gói credit
+// 114-143 faqs                            10 câu hỏi thường gặp
+// 145-183 metadata                        Next.js Metadata export (SEO tags)
+// 185     LandingPage()                   Trang landing chính: hero, tabs, features, FAQ, CTA
+// 533     DashboardPreview()              Mockup dashboard minh họa giao diện
+// 617     Metric()                        Component hiển thị số liệu trong mockup
+// 626     EmptyPreview()                  Empty state trong mockup
+// 635     Footer()                        Footer với copyright + links
 
 const siteName = "FormAuto Hub";
 const title = "FormAuto Hub | Dữ liệu mẫu Google Forms cho báo cáo";

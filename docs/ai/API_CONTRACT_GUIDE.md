@@ -1,5 +1,36 @@
 # API_CONTRACT_GUIDE
 
+## TOC
+
+- [Purpose](#purpose) (34)
+- [Current Status](#current-status) (38)
+- [REST Naming Rules](#rest-naming-rules) (42)
+- [Proposed API Areas](#proposed-api-areas) (50)
+  - [Dashboard](#dashboard) (52)
+  - [Packages](#packages) (56)
+  - [Top-up orders](#top-up-orders) (101)
+  - [Admin top-up orders](#admin-top-up-orders) (146)
+  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
+  - [PayOS webhooks](#payos-webhooks) (266)
+  - [Usage logs](#usage-logs) (304)
+  - [Credit transactions](#credit-transactions) (334)
+  - [Profile](#profile) (356)
+  - [Authentication and account access](#authentication-and-account-access) (362)
+  - [Forms](#forms) (409)
+  - [Answer rules](#answer-rules) (414)
+  - [Generated responses](#generated-responses) (432)
+  - [AI prompt profiles](#ai-prompt-profiles) (454)
+  - [AI generated responses](#ai-generated-responses) (478)
+  - [Submissions](#submissions) (545)
+- [DTO Rules](#dto-rules) (560)
+- [Error Response Rules](#error-response-rules) (568)
+- [Pagination And Filtering](#pagination-and-filtering) (574)
+- [Status Discipline](#status-discipline) (581)
+- [Approved Status And Type Values](#approved-status-and-type-values) (587)
+- [Temporary User Context](#temporary-user-context) (637)
+- [Versioning And OpenAPI](#versioning-and-openapi) (646)
+- [Change Rule](#change-rule) (651)
+
 ## Purpose
 
 Control API contract design for FormAuto Hub.

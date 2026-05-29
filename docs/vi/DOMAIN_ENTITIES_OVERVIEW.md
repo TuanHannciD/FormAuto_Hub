@@ -1,5 +1,38 @@
 # DOMAIN_ENTITIES_OVERVIEW
 
+## TOC
+
+- [Mục đích](#mục-đích) (36)
+- [Trạng thái contract](#trạng-thái-contract) (40)
+- [Conceptual entities đã chốt](#conceptual-entities-đã-chốt) (44)
+- [Proposed MVP fields](#proposed-mvp-fields) (69)
+  - [Users](#users) (71)
+  - [UserCreditAccounts](#usercreditaccounts) (82)
+  - [CreditPackages](#creditpackages) (91)
+  - [TopupOrders](#topuporders) (108)
+  - [CreditTransactions](#credittransactions) (129)
+  - [PaymentRecords](#paymentrecords) (146)
+  - [PaymentProviderSettings](#paymentprovidersettings) (176)
+  - [AiProviderSettings](#aiprovidersettings) (205)
+  - [AiPromptProfiles](#aipromptprofiles) (237)
+  - [AiQuestionPrompts](#aiquestionprompts) (259)
+  - [RefreshTokens](#refreshtokens) (280)
+  - [UserExternalLogins](#userexternallogins) (291)
+  - [UsageLogs](#usagelogs) (305)
+  - [FormProjects](#formprojects) (317)
+  - [FormQuestions](#formquestions) (328)
+  - [AnswerRules](#answerrules) (339)
+  - [GeneratedResponses](#generatedresponses) (348)
+  - [SubmissionJobs](#submissionjobs) (359)
+  - [SubmissionLogs](#submissionlogs) (372)
+  - [AuditLogs](#auditlogs) (382)
+  - [AiGenerationRuns](#aigenerationruns) (392)
+  - [AiGenerationRunItems](#aigenerationrunitems) (428)
+- [Deferred fields và decisions](#deferred-fields-và-decisions) (450)
+- [Field không được tự bịa](#field-không-được-tự-bịa) (469)
+- [Kỷ luật ledger](#kỷ-luật-ledger) (481)
+- [Scope Form Automation MVP](#scope-form-automation-mvp) (489)
+
 ## Mục đích
 
 Mô tả conceptual entities đã chốt và proposed MVP fields mà không đóng băng database contract cuối.

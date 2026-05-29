@@ -10,6 +10,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace FormAutoHub.Tests;
+// === FILE MAP (AiGenerationServiceTests.cs – 558 dòng) ===
+// Dòng    Test method                                                   Mục đích
+// 31      GenerateAsync_Option2WritesPreviewsCreditUsageAndAudit         Generate mode Option2 – ghi previews, credit, audit đầy đủ
+// 96      GenerateAsync_Option3UsesMultiplierThree                       Generate mode Option3 – nhân credit x3
+// 125     GenerateAsync_PartialGenerationRespectsLimitedCredits          Generate với credit hạn chế – chỉ sinh đúng số credit còn
+// 160     GenerateAsync_FailedProviderCallChargesZero                    Provider lỗi – không trừ credit
+// 190     GenerateAsync_ProviderTimeoutChargesZero                       Provider timeout – không trừ credit
+// 228     GenerateAsync_AllInvalidOutputChargesZeroAndStoresNoPreviews   Output không hợp lệ – không trừ credit, không lưu preview
+// 260     GenerateAsync_ChoiceAnswerOutsideStoredOptionsIsRejected       Loại bỏ answer nằm ngoài danh sách option đã lưu
+// 288     GenerateAsync_GridOutputFailsSafely                            Grid output không hỗ trợ – fail an toàn
+// 317     GenerateAsync_PromptGuardBlocksBeforeProviderCall               Prompt guard chặn trước khi gọi provider + trừ credit
+// 352     GenerateRequest_DoesNotAcceptProviderModelOrApiKeyAuthority    Request không được tự chọn provider model/api key
+// 367     DisabledAiProviderAdapter_FailsSafeBeforeReturningFakeOutput   Provider adapter bị disable – fail an toàn
+// 568     Protect / Unprotect / Preview                                  Secret protector – mã hóa/giải mã API key
 
 public sealed class AiGenerationServiceTests
 {
