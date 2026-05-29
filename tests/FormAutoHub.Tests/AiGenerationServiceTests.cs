@@ -6,6 +6,7 @@ using FormAutoHub.Api.Domain;
 using FormAutoHub.Api.Entities;
 using FormAutoHub.Api.Integrations.AI;
 using FormAutoHub.Api.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace FormAutoHub.Tests;
@@ -169,6 +170,44 @@ public sealed class AiGenerationServiceTests
         Assert.Empty(context.GeneratedResponses);
         Assert.Empty(context.CreditTransactions);
         Assert.Equal(10, (await context.UserCreditAccounts.SingleAsync()).Balance);
+    }
+
+    [Fact]
+    public async Task GenerateAsync_ProviderTimeoutChargesZero()
+    {
+        var userId = Guid.NewGuid();
+        var projectId = Guid.NewGuid();
+        var textQuestionId = Guid.NewGuid();
+        var choiceQuestionId = Guid.NewGuid();
+        await using var context = CreateContext();
+        SeedProject(context, userId, projectId, textQuestionId, choiceQuestionId, 10);
+        SeedProvider(context);
+        SeedPromptProfile(context, userId, projectId, AiPromptProfileModes.Option2);
+        await context.SaveChangesAsync();
+
+        var adapter = new TestAiProviderAdapter(_ => throw new TaskCanceledException("provider timeout"));
+        var service = CreateService(context, userId, adapter);
+
+        var response = await service.GenerateAsync(
+            projectId,
+            new AiGenerateResponsesRequest(AiPromptProfileModes.Option2, 2),
+            CancellationToken.None);
+
+        Assert.NotNull(response);
+        Assert.Equal(AiGenerationRunStatuses.Failed, response.Status);
+        Assert.Equal(0, response.GeneratedCount);
+        Assert.Equal(0, response.CreditsUsed);
+        Assert.Empty(context.GeneratedResponses);
+        Assert.Empty(context.CreditTransactions);
+        Assert.Equal(10, (await context.UserCreditAccounts.SingleAsync()).Balance);
+
+        var run = await context.AiGenerationRuns.SingleAsync();
+        Assert.Contains("timed out", run.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+
+        var usageLog = await context.UsageLogs.SingleAsync();
+        Assert.Equal(UsageLogStatuses.Failed, usageLog.Status);
+        Assert.Equal(0, usageLog.CreditsUsed);
+        Assert.Contains("timed out", usageLog.Description, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -339,6 +378,7 @@ public sealed class AiGenerationServiceTests
             new AiOutputValidator(),
             adapter,
             new TestSecretProtector(),
+            new ConfigurationBuilder().Build(),
             new CreditService(context));
 
     private static FormAutoHubDbContext CreateContext()

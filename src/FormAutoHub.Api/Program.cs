@@ -101,7 +101,11 @@ if (string.Equals(aiProviderAdapter, "Deterministic", StringComparison.OrdinalIg
 }
 else if (string.Equals(aiProviderAdapter, "OpenAICompatible", StringComparison.OrdinalIgnoreCase))
 {
-    builder.Services.AddHttpClient<IAiProviderAdapter, OpenAiCompatibleProviderAdapter>();
+    var aiTimeoutSeconds = builder.Configuration.GetValue<int>("AI:RequestTimeoutSeconds", 300);
+    builder.Services.AddHttpClient<IAiProviderAdapter, OpenAiCompatibleProviderAdapter>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(aiTimeoutSeconds);
+    });
 }
 else
 {

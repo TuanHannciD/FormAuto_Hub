@@ -85,6 +85,10 @@ This does not unlock full production AI provider integration, frontend/API scope
 | Live OpenAI-compatible provider calls | Implemented for the scoped slice behind explicit runtime configuration |
 | Broad AI audit read UI/API and raw payload exposure | Deferred |
 | Custom base URL and live OpenAI-compatible gateway calls | Implemented for the scoped slice |
+| Parallel batch generation (SemaphoreSlim + Task.WhenAll) | Implemented for the scoped slice |
+| Configurable HTTP timeout for AI provider | Implemented via AI:RequestTimeoutSeconds |
+| Batch size and parallel concurrency config | Implemented via AI:BatchSize and AI:MaxParallelBatches |
+| AI model compatibility testing | Verified — DeepSeek v4-flash 100% pass rate (2026-05-29) |
 
 ## Product Goal
 
@@ -514,6 +518,62 @@ Output:
 - audit/security review
 - docs sync review
 
+
+Current progress:
+
+- backend build: Verified (2026-05-29)
+- backend tests: Verified — 42/42 AI-related tests pass (2026-05-29)
+- EF Core migration validation: Verified
+- authenticated API smoke: Verified — DeepSeek v4-flash 100% pass rate, parallel batch operation confirmed (2026-05-29)
+- frontend lint/build: Not run
+- browser smoke: Not run
+- audit/security review: Not run
+- docs sync review: Updated (2026-05-29)
+
+
+## AI Provider Config Reference
+
+The following AI config keys control generation behavior:
+
+| Key | Default | Description |
+|---|---|---|
+| ProviderAdapter | Disabled | Adapter selection: Disabled, Deterministic, or OpenAICompatible |
+| RequestTimeoutSeconds | 300 | HTTP timeout per provider API call (seconds) |
+| BatchSize | 10 | Number of previews per single AI provider call |
+| MaxParallelBatches | 5 | Maximum concurrent batch calls (SemaphoreSlim limit) |
+
+### How batch splitting works
+
+1. generationLimit previews are split into ceil(generationLimit / BatchSize) batches.
+2. Each batch creates an independent AiProviderGenerateRequest and calls the provider adapter.
+3. SemaphoreSlim(MaxParallelBatches) limits concurrent HTTP calls.
+4. All batch OutputJsons are collected with Task.WhenAll, then validated together.
+5. Credit is deducted only for successfully validated and stored previews.
+6. Raw audit stores batch markers: [Batch X/Y] in RawProviderRequestJson and RawProviderResponseJson.
+
+Example: 50 previews with BatchSize=10, MaxParallelBatches=5:
+- 5 batches of 10 previews each
+- All 5 batches run concurrently (SemaphoreSlim permits 5)
+- Total wall time ≈ max(batch times) ≈ ~20-40s
+
+## AI Model Compatibility Notes
+
+Models tested with the strict JSON output validator (15-question form, Option 2):
+
+| Model | Provider | Pass Rate | Notes |
+|---|---|---|---|
+| deepseek-v4-flash | DeepSeek direct API | 100% (21/21) | Recommended free model |
+| cx/gpt-5.5-review | OpenCode proxy | 100% (30/30) | Backup option, slower |
+| cx/gpt-5.5 | OpenCode proxy | 100% (15/15) | Backup option |
+| oc/deepseek-v4-flash-free | OpenCode proxy | 0% | Returns SSE streaming format — adapter does not support |
+| gemini-2.5-flash (Google) | Google free tier | 100% but rate-limited | 429 errors prevent parallel use |
+| Groq llama-3.3-70b | Groq free tier | 1.4% | JSON non-compliant |
+| Groq llama-3.1-8b | Groq free tier | 0% | JSON non-compliant |
+| Groq llama-4-scout-17b | Groq free tier | 0% | Not available on free tier |
+| Groq qwen3-32b | Groq free tier | 0% | Not available on free tier |
+| Groq gpt-oss-20b | Groq free tier | 0% | Not available on free tier |
+
+Test date: 2026-05-29. JSON compliance requirements include: exact option value matching, all 15 questions must be answered, no invented values, valid questionId mapping.
 ## Safe Parallel Work Groups
 
 After Pass 1 and Pass 2 are complete, these groups can run in parallel:

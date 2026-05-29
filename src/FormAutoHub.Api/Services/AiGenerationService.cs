@@ -6,6 +6,7 @@ using FormAutoHub.Api.Domain;
 using FormAutoHub.Api.Entities;
 using FormAutoHub.Api.Integrations.AI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace FormAutoHub.Api.Services;
 
@@ -24,6 +25,7 @@ public sealed class AiGenerationService(
     IAiOutputValidator outputValidator,
     IAiProviderAdapter providerAdapter,
     IAiProviderSecretProtector secretProtector,
+    IConfiguration configuration,
     ICreditService creditService) : IAiGenerationService
 {
     public async Task<AiGenerateResponsesResponse?> GenerateAsync(
@@ -138,22 +140,40 @@ public sealed class AiGenerationService(
             return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
         }
 
-        var providerRequest = new AiProviderGenerateRequest(
-            project.Id,
-            mode,
-            generationLimit,
-            setting.Provider,
-            setting.DefaultModel,
-            promptSnapshotJson,
-            questionSnapshotJson,
-            setting.BaseUrl,
-            secretProtector.Unprotect(setting.EncryptedApiKey));
-        run.RawProviderRequestJson = JsonSerializer.Serialize(providerRequest);
+        var batchSize = Math.Max(1, configuration.GetValue<int>("AI:BatchSize", 10));
+        var maxParallel = Math.Max(1, configuration.GetValue<int>("AI:MaxParallelBatches", 5));
+        var numBatches = (int)Math.Ceiling((double)generationLimit / batchSize);
+        using var semaphore = new SemaphoreSlim(maxParallel, maxParallel);
 
-        AiProviderGenerateResult providerResult;
+        var batchTasks = new List<Task<AiProviderGenerateResult>>();
+        for (var batchIndex = 0; batchIndex < numBatches; batchIndex++)
+        {
+            var batchCount = Math.Min(batchSize, generationLimit - batchIndex * batchSize);
+            var batchRequest = new AiProviderGenerateRequest(
+                project.Id,
+                mode,
+                batchCount,
+                setting.Provider,
+                setting.DefaultModel,
+                promptSnapshotJson,
+                questionSnapshotJson,
+                setting.BaseUrl,
+                secretProtector.Unprotect(setting.EncryptedApiKey));
+            batchTasks.Add(GenerateBatchAsync(batchRequest, semaphore, cancellationToken));
+        }
+
+        AiProviderGenerateResult[] batchResults;
         try
         {
-            providerResult = await providerAdapter.GenerateAsync(providerRequest, cancellationToken);
+            batchResults = await Task.WhenAll(batchTasks);
+        }
+        catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            FailRun(run, "AI provider generation timed out.");
+            run.ErrorMessage = $"{run.ErrorMessage} {exception.Message}".Trim();
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "AI provider generation timed out.", cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
         }
         catch (Exception exception) when (exception is not OperationCanceledException)
         {
@@ -164,15 +184,27 @@ public sealed class AiGenerationService(
             return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
         }
 
-        run.RawProviderRequestJson = string.IsNullOrWhiteSpace(providerResult.RawProviderRequestJson)
-            ? run.RawProviderRequestJson
-            : providerResult.RawProviderRequestJson;
-        run.RawProviderResponseJson = providerResult.RawProviderResponseJson;
+        var successfulBatches = batchResults
+            .Where(result => result is not null)
+            .ToList();
+        var allOutputJsons = successfulBatches
+            .SelectMany(result => result.OutputJsons)
+            .Take(generationLimit)
+            .ToList();
+
+        run.RawProviderRequestJson = string.Join(
+            "\n---\n",
+            successfulBatches.Select((result, index) =>
+                $"[Batch {index + 1}/{successfulBatches.Count}]\n{result.RawProviderRequestJson}"));
+        run.RawProviderResponseJson = string.Join(
+            "\n---\n",
+            successfulBatches.Select((result, index) =>
+                $"[Batch {index + 1}/{successfulBatches.Count}]\n{result.RawProviderResponseJson}"));
 
         var generatedResponses = new List<GeneratedResponse>();
         var runItems = new List<AiGenerationRunItem>();
         var validationSummaries = new List<object>();
-        foreach (var outputJson in providerResult.OutputJsons.Take(generationLimit))
+        foreach (var outputJson in allOutputJsons.Take(generationLimit))
         {
             var responseId = Guid.NewGuid();
             var validation = outputValidator.Validate(outputJson, questions);
@@ -248,7 +280,7 @@ public sealed class AiGenerationService(
             }));
         }
 
-        if (providerResult.OutputJsons.Count == 0)
+        if (allOutputJsons.Count == 0)
         {
             runItems.Add(new AiGenerationRunItem
             {
@@ -512,5 +544,21 @@ public sealed class AiGenerationService(
             balanceAfter,
             generatedPreviewIds);
 
+
+    private async Task<AiProviderGenerateResult> GenerateBatchAsync(
+        AiProviderGenerateRequest request,
+        SemaphoreSlim semaphore,
+        CancellationToken cancellationToken)
+    {
+        await semaphore.WaitAsync(cancellationToken);
+        try
+        {
+            return await providerAdapter.GenerateAsync(request, cancellationToken);
+        }
+        finally
+        {
+            semaphore.Release();
+        }
+    }
     private sealed record RawAnswerItem(Guid? QuestionId, string RawJson);
 }
