@@ -14,7 +14,8 @@ const navItems = [
   { href: "/admin/packages", label: "Gói credit", icon: Boxes },
   { href: "/admin/revenue", label: "Báo cáo doanh thu", icon: BarChart3 },
   { href: "/admin/payos-settings", label: "Cấu hình PayOS", icon: Settings },
-  { href: "/admin/ai-provider-settings", label: "Cấu hình AI", icon: Bot }
+  { href: "/admin/ai-provider-settings", label: "Cấu hình AI", icon: Bot },
+  { href: "/admin/ai-usage", label: "Thống kê AI", icon: BarChart3 }
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

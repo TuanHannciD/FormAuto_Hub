@@ -36,6 +36,8 @@ Define canonical module ownership for FormAuto Hub.
 | AiGenerationRuns | raw provider audit and AI generation run state | credit ledger source of truth |
 | AiGenerationRunItems | AI output validation evidence and generated response mapping | editable generated response workflow |
 
+| AiAnalytics | AI usage statistics aggregation and reporting; query-only from existing `AiGenerationRuns`, `UsageLogs`, and `Users` tables | credit deduction, submission execution, Google Forms calls |
+
 ## Cross-Module Rules
 
 - Credit deduction must go through `CreditManagement`.

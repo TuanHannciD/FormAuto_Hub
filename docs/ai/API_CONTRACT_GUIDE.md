@@ -542,6 +542,82 @@ Deferred or still requiring review:
 - additional frontend/API binding outside the approved scoped slice
 - production browser closeout with real provider credentials
 
+### AI usage analytics
+
+- `GET /api/dashboard/ai-usage` — user-scoped AI generation statistics
+- `GET /api/admin/ai-usage` — admin-scoped AI generation statistics
+
+Approved user behavior:
+
+- returns total AI generation runs, successful/failed counts, credits used, previews generated
+- returns mode breakdown (FullAi / CustomAi) with run count and credits used
+- returns 10 most recent runs with project name, provider, model, status, duration
+- returns daily usage summary for the last 30 days (date, runs, credits used)
+- returns data scoped to the authenticated user only
+- all data is query-only from existing `AiGenerationRuns` table; no new DB entities
+
+Approved admin behavior:
+
+- returns all user-scoped fields aggregated across all users
+- additionally returns total user count, provider performance stats, and top users by credit consumption
+- top user data includes `UserId` and `Email` retrieved from `Users` table
+- provider performance includes success/fail counts and average duration per `(provider, model)` pair
+
+### GET /api/admin/ai-usage/runs — Admin paged AI runs
+
+**Authentication:** Admin JWT required.
+
+**Query parameters:**
+- `page` (int, default 1) — page number
+- `pageSize` (int, default 20, max 100) — items per page
+- `status` (string, optional) — filter by run status (e.g., Succeeded, Failed, Partial)
+- `mode` (string, optional) — filter by mode (e.g., Option2, Option3)
+- `provider` (string, optional) — filter by provider name
+- `model` (string, optional) — filter by model name
+- `fromDate` (ISO datetime, optional) — filter runs created on or after
+- `toDate` (ISO datetime, optional) — filter runs created on or before
+
+**Response (200):**
+```json
+{
+  "items": [
+    {
+      "id": "guid",
+      "mode": "Option2",
+      "status": "Succeeded",
+      "provider": "Deepseek",
+      "model": "deepseek-v4-flash",
+      "requestedCount": 5,
+      "generatedCount": 5,
+      "creditsUsed": 15,
+      "durationMs": 24073,
+      "createdAt": "2026-05-30T01:59:12.7650167+00:00",
+      "projectName": "test"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 122,
+  "totalPages": 7
+}
+```
+
+**Behavior:**
+- Returns paginated AI generation runs ordered by `CreatedAt` descending
+- Supports up to 6 optional filters that combine with AND logic
+- All data is read-only from existing `AiGenerationRuns` table
+- `durationMs` is computed client-side from `StartedAt`/`CompletedAt` difference
+
+
+
+Deferred:
+
+- per-project AI usage breakdown
+- per-question (AiGenerationRunItem) analytics
+- AI usage export (CSV, JSON download)
+- real-time usage monitoring
+- AI usage alerts or threshold notifications
+
 ### Submissions
 
 - `POST /api/projects/{projectId}/submissions/send`

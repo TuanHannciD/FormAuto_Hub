@@ -36,6 +36,8 @@
 | AiGenerationRuns | raw provider audit và AI generation run state | source of truth của credit ledger |
 | AiGenerationRunItems | evidence validation output AI và mapping tới generated response | workflow sửa generated response |
 
+| AiAnalytics | Tổng hợp và báo cáo thống kê AI; chỉ đọc từ các bảng `AiGenerationRuns`, `UsageLogs`, và `Users` | deduction credit, thực thi submission, gọi Google Forms |
+
 ## Quy tắc cross-module
 
 - Credit deduction phải đi qua `CreditManagement`.

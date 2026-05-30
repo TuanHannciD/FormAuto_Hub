@@ -36,7 +36,8 @@ export function displayAction(action: string) {
     SubmitResponses: "Gửi câu trả lời",
     Submission: "Gửi câu trả lời",
     TopupApproved: "Duyệt yêu cầu nạp",
-    InitialGrant: "Tặng credit ban đầu"
+    InitialGrant: "Tặng credit ban đầu",
+    AiGenerateResponses: "AI tạo ra phản hồi"    
   };
 
   return labels[action] ?? action;

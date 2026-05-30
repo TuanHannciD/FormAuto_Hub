@@ -103,6 +103,56 @@ Credit multipliers:
 - Option 2 (Full AI): **x2** - one AI call generates all answers
 - Option 3 (Custom AI): **x3** - per-question AI calls with custom prompts
 
+
+
+## A1 — AI Usage Analytics Dashboard (Follow-up completed)
+
+After Phase 6 closeout, a scoped follow-up implemented the AI usage analytics dashboard for both admin and user roles.
+
+### API Endpoints
+
+- `GET /api/dashboard/ai-usage` — user-scoped AI generation statistics
+- `GET /api/admin/ai-usage` — admin-scoped summary statistics
+- `GET /api/admin/ai-usage/runs` — admin paged runs with filters (status, mode, provider, model, date range)
+
+### User-facing Dashboard
+
+- `/dashboard/ai-usage` page showing:
+  - Metric cards: total runs, success rate, credits used, previews generated
+  - Mode breakdown cards (Option 2 / Option 3)
+  - Daily usage bar chart (30 days)
+  - Recent runs table (last 10)
+
+### Admin Dashboard
+
+- `/admin/ai-usage` page with two tabs:
+  - **Tong quan** — full summary: metric cards, mode breakdown, provider performance table, top users table, daily usage chart
+  - **Lich su** — paged runs table with filters: status dropdown, mode dropdown, provider text, model text, from/to date, pagination controls
+
+### Provider Performance
+
+- Success/fail counts per (provider, model) pair
+- Average duration in milliseconds for completed runs
+- Data materialized client-side to avoid EF Core LINQ translation issues
+
+### Paged Runs API
+
+- Query parameters: `page` (default 1), `pageSize` (default 20, max 100), `status`, `mode`, `provider`, `model`, `fromDate`, `toDate`
+- Response: `{ items, page, pageSize, totalItems, totalPages }`
+- Admin-only, ordered by `CreatedAt` descending
+
+### Data Model
+
+- All queries read-only from existing `AiGenerationRuns` table
+- User emails fetched from `Users` table for top-users display
+- No new entities, migrations, or DB changes
+
+### Scope Notes
+
+- Query-only from existing tables; no new DB entities
+- Frontend uses existing `BaseTable`, `PaginationControls`, `Badge`, `StatusBadge` components
+- No lazy loading, CSV export, or notifications — these remain Deferred
+
 ## Deferred Items Preserved
 
 The implementation did not add:
@@ -114,7 +164,6 @@ The implementation did not add:
 - Real-time streaming AI responses
 - AI-powered form analysis (form structure detection)
 - Multi-provider fallback or load balancing
-- AI usage analytics dashboard
 - Google Forms API integration
 - Payment gateway changes
 - New user-facing AI features beyond the 3 approved modes

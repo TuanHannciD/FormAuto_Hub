@@ -103,6 +103,56 @@ Credit multipliers:
 - Option 2 (AI mặc định): **x2** - một lần gọi AI sinh tất cả câu trả lời
 - Option 3 (AI tùy chỉnh): **x3** - gọi AI riêng cho từng câu hỏi với prompt tùy chỉnh
 
+
+
+## A1 — AI Usage Analytics Dashboard (Follow-up đã hoàn thành)
+
+Sau Phase 6 closeout, một follow-up scoped implement dashboard thống kê AI cho cả admin và user.
+
+### API Endpoints
+
+- `GET /api/dashboard/ai-usage` — thống kê AI theo user
+- `GET /api/admin/ai-usage` — thống kê tổng quan cho admin
+- `GET /api/admin/ai-usage/runs` — danh sách lượt AI có phân trang và bộ lọc (status, mode, provider, model, ngày)
+
+### Giao diện User
+
+- Trang `/dashboard/ai-usage` hiển thị:
+  - Thẻ metric: tổng lượt AI, tỉ lệ thành công, credit đã dùng, previews đã tạo
+  - Thẻ phân tích theo mode (Option 2 / Option 3)
+  - Biểu đồ cột sử dụng theo ngày (30 ngày)
+  - Bảng 10 lượt AI gần đây
+
+### Giao diện Admin
+
+- Trang `/admin/ai-usage` với hai tab:
+  - **Tổng quan** — đầy đủ số liệu: thẻ metric, phân tích mode, bảng hiệu suất provider, bảng top users, biểu đồ ngày
+  - **Lịch sử** — bảng lượt AI có phân trang với bộ lọc: status dropdown, mode dropdown, provider text, model text, từ ngày/đến ngày, điều khiển phân trang
+
+### Hiệu suất Provider
+
+- Đếm thành công/thất bại theo cặp (provider, model)
+- Thời gian trung bình (milliseconds) cho các run hoàn thành
+- Dữ liệu được materialize client-side để tránh lỗi EF Core LINQ translation
+
+### API Paged Runs
+
+- Tham số query: `page` (mặc định 1), `pageSize` (mặc định 20, tối đa 100), `status`, `mode`, `provider`, `model`, `fromDate`, `toDate`
+- Response: `{ items, page, pageSize, totalItems, totalPages }`
+- Chỉ admin, sắp xếp theo `CreatedAt` giảm dần
+
+### Data Model
+
+- Tất cả query read-only từ bảng `AiGenerationRuns` hiện có
+- Email người dùng lấy từ bảng `Users` cho top-users display
+- Không có entity, migration hay DB change mới
+
+### Scope Notes
+
+- Chỉ query từ bảng hiện có; không entity mới
+- Frontend dùng các component có sẵn: `BaseTable`, `PaginationControls`, `Badge`, `StatusBadge`
+- Không có lazy loading, CSV export hay notifications — các tính năng này vẫn Deferred
+
 ## Deferred items được giữ
 
 Implementation không thêm:
@@ -114,7 +164,6 @@ Implementation không thêm:
 - Real-time streaming AI responses
 - AI-powered form analysis (phát hiện cấu trúc form)
 - Multi-provider fallback hoặc load balancing
-- AI usage analytics dashboard
 - Google Forms API integration
 - Payment gateway changes
 - New user-facing AI features ngoài 3 mode đã duyệt

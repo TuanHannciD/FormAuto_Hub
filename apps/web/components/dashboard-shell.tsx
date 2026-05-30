@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
+  BarChart3,
   ClipboardCheck,
   CreditCard,
   FileClock,
@@ -28,6 +29,7 @@ const navItems = [
   { href: "/dashboard/usage-logs", label: "Lịch sử sử dụng", icon: FileClock },
   { href: "/dashboard/credit-transactions", label: "Giao dịch credit", icon: ReceiptText },
   { href: "/dashboard/profile", label: "Hồ sơ", icon: Settings },
+  { href: "/dashboard/ai-usage", label: "Thống kê AI", icon: BarChart3 },
   { href: "/dashboard/profile/security", label: "Bảo mật", icon: ShieldCheck }
 ];
 

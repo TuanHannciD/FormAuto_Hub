@@ -320,7 +320,7 @@ public sealed class AiGenerationService(
 
         if (generatedResponses.Count == 0)
         {
-            FailRun(run, "AI output did not contain any valid preview responses.");
+            FailRun(run, "Kết quả đầu ra của AI không chứa bất kỳ phản hồi xem trước hợp lệ nào.");
             run.ValidationSummaryJson = JsonSerializer.Serialize(validationSummaries);
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);

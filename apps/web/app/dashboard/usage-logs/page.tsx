@@ -15,9 +15,10 @@ const generatedAnswersAction = "Xem lại câu trả lời được tạo";
 const pageSize = 20;
 const actionOptions = [
   { value: generatedAnswersAction, label: "Chỉ xem câu trả lời được tạo" },
-  { value: "", label: "Tất cả thao tác" },
+  { value: "AiGenerateResponses", label: "Câu trả lời được AI tạo" },
   { value: "AnalyzeForm", label: "Phân tích biểu mẫu" },
-  { value: "SubmitResponses", label: "Gửi câu trả lời" }
+  { value: "SubmitResponses", label: "Gửi câu trả lời" },
+  { value: "", label: "Tất cả thao tác" },
 ];
 
 const columns: Array<BaseTableColumn<UsageLog>> = [

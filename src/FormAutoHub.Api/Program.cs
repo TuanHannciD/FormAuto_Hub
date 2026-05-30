@@ -112,6 +112,7 @@ else
     builder.Services.AddScoped<IAiProviderAdapter, DisabledAiProviderAdapter>();
 }
 builder.Services.AddScoped<IAiGenerationService, AiGenerationService>();
+builder.Services.AddScoped<IAiAnalyticsService, AiAnalyticsService>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>();
 builder.Services.AddHttpClient<IPayosClient, PayosClient>();

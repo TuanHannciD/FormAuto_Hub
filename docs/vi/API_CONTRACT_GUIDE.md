@@ -542,6 +542,66 @@ Deferred hoặc vẫn cần review:
 - frontend/API binding bổ sung ngoài scoped slice đã duyệt
 - production browser closeout với credential provider thật
 
+### AI usage analytics
+
+- `GET /api/dashboard/ai-usage` — Thống kê AI generation theo người dùng
+- `GET /api/admin/ai-usage` — Thống kê AI generation toàn hệ thống
+
+Hành vi đã duyệt (người dùng):
+
+- Trả về tổng số lượt AI generation, số lần thành công/thất bại, credit đã dùng, số previews đã tạo
+- Trả về phân tích theo chế độ (FullAi / CustomAi) với số lần dùng và credit
+- Trả về 10 lượt AI gần nhất kèm tên project, provider, model, trạng thái, thời gian
+- Trả về thống kê theo ngày trong 30 ngày qua (ngày, số lần, credit)
+- Dữ liệu chỉ đọc từ bảng `AiGenerationRuns` hiện có; không cần entity mới
+
+Hành vi đã duyệt (admin):
+
+- Trả về tất cả trường của người dùng nhưng tổng hợp trên toàn hệ thống
+- Thêm: tổng số người dùng, hiệu suất provider, người dùng top đầu
+- Hiệu suất provider bao gồm số lần thành công/thất bại và thời gian trung bình
+
+### GET /api/admin/ai-usage/runs — Admin danh sách lượt AI (phân trang)
+
+**Xác thực:** Admin JWT bắt buộc.
+
+**Tham số query:**
+- `page` (int, mặc định 1) — số trang
+- `pageSize` (int, mặc định 20, tối đa 100) — số bản ghi mỗi trang
+- `status` (string, tùy chọn) — lọc theo trạng thái (VD: Succeeded, Failed, Partial)
+- `mode` (string, tùy chọn) — lọc theo mode (VD: Option2, Option3)
+- `provider` (string, tùy chọn) — lọc theo tên provider
+- `model` (string, tùy chọn) — lọc theo tên model
+- `fromDate` (ISO datetime, tùy chọn) — lọc từ ngày
+- `toDate` (ISO datetime, tùy chọn) — lọc đến ngày
+
+**Response (200):**
+```json
+{
+  "items": [...],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 122,
+  "totalPages": 7
+}
+```
+
+**Behavior:**
+- Trả về danh sách lượt AI có phân trang, sắp xếp theo `CreatedAt` giảm dần
+- Hỗ trợ tối đa 6 bộ lọc kết hợp với logic AND
+- Dữ liệu read-only từ bảng `AiGenerationRuns`
+- `durationMs` được tính client-side từ `StartedAt`/`CompletedAt`
+
+
+
+Deferred:
+
+- Thống kê AI theo project
+- Thống kê cấp câu hỏi (AiGenerationRunItem)
+- Xuất dữ liệu AI (CSV, JSON)
+- Giám sát AI real-time
+- Cảnh báo AI hoặc ngưỡng thông báo
+
 ### Submissions
 
 - `POST /api/projects/{projectId}/submissions/send`
