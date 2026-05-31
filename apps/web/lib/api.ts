@@ -249,6 +249,8 @@ export type Profile = {
   fullName: string;
   role: string;
   createdAt: string;
+  googleLinked?: boolean;
+  googleEmail?: string | null;
 };
 
 export type FormQuestion = {

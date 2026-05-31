@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { UserPlus } from "lucide-react";
+import { GoogleIdentityButton } from "@/components/google-identity-button";
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { getStoredSession, saveSession } from "@/lib/auth";
@@ -11,8 +12,8 @@ import { readableError } from "@/lib/toast";
 import { toast } from "sonner";
 
 function registerErrorMessage(message: string) {
-  if (message.includes("409") || message.toLowerCase().includes("already")) {
-    return "Email đã tồn tại.";
+  if (message.includes("409") || message.toLowerCase().includes("already") || message.toLowerCase().includes("password")) {
+    return "Email đã tồn tại. Hãy đăng nhập bằng mật khẩu rồi liên kết Google trong hồ sơ bảo mật.";
   }
 
   if (message.includes("400")) {
@@ -59,6 +60,26 @@ export default function RegisterPage() {
     }
   }
 
+  const registerWithGoogle = useCallback(
+    async (idToken: string) => {
+      setIsSubmitting(true);
+      try {
+        const session = await apiFetch<AuthTokenResponse>("/api/auth/google", {
+          method: "POST",
+          skipAuth: true,
+          json: { idToken }
+        });
+        saveSession(session);
+        router.replace("/dashboard");
+      } catch (error) {
+        toast.error(registerErrorMessage(error instanceof Error ? error.message : ""));
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [router]
+  );
+
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-6 sm:px-5 sm:py-10">
       <Card className="w-full max-w-md">
@@ -93,14 +114,12 @@ export default function RegisterPage() {
             </Button>
           </form>
           <div className="mt-4 space-y-3">
-            <Button
-              className="w-full"
-              type="button"
-              variant="secondary"
-              onClick={() => router.push("/auth/callback?status=provider-unavailable")}
-            >
-              Tiếp tục với Google
-            </Button>
+            <GoogleIdentityButton
+              disabled={isSubmitting}
+              text="signup_with"
+              onCredential={registerWithGoogle}
+              onUnavailable={() => toast.error("Không tải được Google sign-up.")}
+            />
             <p className="text-sm text-muted-foreground">
               Đã có tài khoản?{" "}
               <Link className="text-primary hover:underline" href="/login">
