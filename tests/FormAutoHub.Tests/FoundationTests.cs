@@ -32,6 +32,8 @@ public sealed class FoundationTests
                 "PaymentProviderSetting",
                 "PaymentRecord",
                 "RefreshToken",
+                "ResearchForm",
+                "ResearchFormQuestion",
                 "SubmissionJob",
                 "SubmissionLog",
                 "TopupOrder",

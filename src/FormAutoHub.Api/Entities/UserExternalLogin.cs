@@ -8,5 +8,10 @@ public sealed class UserExternalLogin
     public string ProviderUserId { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public bool EmailVerified { get; set; }
+    public string? EncryptedAccessToken { get; set; }
+    public string? EncryptedRefreshToken { get; set; }
+    public DateTimeOffset? TokenExpiresAt { get; set; }
+    public string? Scopes { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 }

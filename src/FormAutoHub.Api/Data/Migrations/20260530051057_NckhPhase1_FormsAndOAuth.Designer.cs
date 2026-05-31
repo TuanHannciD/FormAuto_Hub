@@ -4,6 +4,7 @@ using FormAutoHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FormAutoHub.Api.Data.Migrations
 {
     [DbContext(typeof(FormAutoHubDbContext))]
-    partial class FormAutoHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530051057_NckhPhase1_FormsAndOAuth")]
+    partial class NckhPhase1_FormsAndOAuth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

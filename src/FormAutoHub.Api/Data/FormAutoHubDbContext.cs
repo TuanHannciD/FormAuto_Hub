@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using FormAutoHub.Api.Entities;
+using FormAutoHub.Api.Entities.Nckh;
 
 namespace FormAutoHub.Api.Data;
 
@@ -28,6 +29,9 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<AiQuestionPrompt> AiQuestionPrompts => Set<AiQuestionPrompt>();
     public DbSet<AiGenerationRun> AiGenerationRuns => Set<AiGenerationRun>();
     public DbSet<AiGenerationRunItem> AiGenerationRunItems => Set<AiGenerationRunItem>();
+
+    public DbSet<ResearchForm> ResearchForms => Set<ResearchForm>();
+    public DbSet<ResearchFormQuestion> ResearchFormQuestions => Set<ResearchFormQuestion>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -143,6 +147,25 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
                 .WithMany()
                 .HasForeignKey(item => item.GeneratedResponseId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResearchForm>(entity =>
+        {
+            entity.HasIndex(item => new { item.UserId, item.GoogleFormId }).IsUnique();
+            entity.HasIndex(item => new { item.UserId, item.Status });
+            entity.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(item => item.UserId);
+        });
+
+        modelBuilder.Entity<ResearchFormQuestion>(entity =>
+        {
+            entity.HasIndex(item => new { item.FormId, item.GoogleQuestionId });
+            entity.HasIndex(item => new { item.FormId, item.OrderIndex });
+            entity.HasOne(item => item.Form)
+                .WithMany(item => item.Questions)
+                .HasForeignKey(item => item.FormId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
