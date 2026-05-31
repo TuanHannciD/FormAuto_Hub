@@ -31,4 +31,4 @@ Use this file as the short entrypoint for AI/operator sessions.
 - Authentication uses JWT access tokens with refresh token/session storage.
 - Google account login/register is identity-only.
 - PayOS automated credit top-up is approved and completed in Phase 8.
-- Payment providers other than PayOS, official Google Forms API, AI generation, and background job framework: Deferred.
+- Payment providers other than PayOS, official Google Forms API for FormAuto Hub, broader AI rollout outside the completed Phase 6 scoped AI slice, and background job framework: Deferred.
