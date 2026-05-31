@@ -108,7 +108,7 @@ Still requiring focused proposal or review before broader production rollout:
 
 Current global project phase remains: Phase 9 closeout completed; next phase not selected.
 
-Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
+Active approved follow-up slice: none. The Phase 6 AI mapping/generation scoped implementation is completed; this package remains historical scope and contract context.
 
 This package is for a Phase 6 production integration candidate. The approved checklist allowed scoped implementation planning, selected prerequisite implementation work, and the backend AI preview generation endpoint after prerequisite review.
 

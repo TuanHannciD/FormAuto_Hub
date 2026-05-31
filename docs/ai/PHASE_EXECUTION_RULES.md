@@ -10,9 +10,9 @@ Default active phase is the current global phase in `PROJECT_PHASE_ROADMAP.md`.
 
 Current global active phase: none selected after Phase 9 closeout.
 
-Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
+Active approved follow-up slice: none. Phase 6 AI mapping/generation scoped implementation is completed.
 
-Until the next global phase is approved, only explicitly approved follow-up work may proceed. Work inside the Phase 6 AI slice must stay within the approved scoped implementation and must not become full Phase 6 production integration by implication.
+Until the next global phase or follow-up is approved, only explicitly approved follow-up work may proceed. The completed Phase 6 AI slice must not become full Phase 6 production integration by implication.
 
 Phase 9 closeout state:
 
@@ -24,7 +24,7 @@ Phase 9 closeout state:
 
 No new global active phase is selected.
 
-The current approved implementation lane is the Phase 6 AI mapping/generation scoped follow-up slice.
+There is no current approved implementation lane.
 
 Safe work after Phase 9 closeout is limited to:
 
@@ -33,7 +33,7 @@ Safe work after Phase 9 closeout is limited to:
 - proposing next-phase or follow-up scope
 - documentation updates explicitly approved by the user
 - implementation/fix work only after explicit approval
-- Phase 6 AI scoped follow-up tasks only when they match the approved AI requirement package and reviewed API/database/provider/audit/safety boundaries
+- validation or fix follow-up for the completed Phase 6 AI scoped slice only when explicitly approved and kept within reviewed API/database/provider/audit/safety boundaries
 
 PayOS remains the only approved payment provider. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, and AI auto-submit without preview and confirmation remain forbidden.
 

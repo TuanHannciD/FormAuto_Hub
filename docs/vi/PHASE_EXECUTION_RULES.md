@@ -10,9 +10,9 @@ Default active phase là current global phase trong `PROJECT_PHASE_ROADMAP.md`.
 
 Current global active phase: chưa chọn phase mới sau closeout Phase 9.
 
-Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
+Active approved follow-up slice: không có. Phase 6 AI mapping/generation scoped implementation đã hoàn thành.
 
-Cho đến khi global phase tiếp theo được duyệt, chỉ được làm follow-up đã được approve rõ. Việc trong slice Phase 6 AI phải nằm đúng scoped implementation đã duyệt và không được tự biến thành full Phase 6 production integration.
+Cho đến khi global phase hoặc follow-up tiếp theo được duyệt, chỉ được làm follow-up đã được approve rõ. Slice Phase 6 AI đã hoàn thành không được tự biến thành full Phase 6 production integration.
 
 Trạng thái closeout Phase 9:
 
@@ -24,7 +24,7 @@ Trạng thái closeout Phase 9:
 
 Chưa chọn global active phase mới.
 
-Implementation lane hiện được duyệt là Phase 6 AI mapping/generation scoped follow-up slice.
+Hiện không có implementation lane nào đang được approve.
 
 Việc an toàn sau closeout Phase 9 chỉ gồm:
 
@@ -33,7 +33,7 @@ Việc an toàn sau closeout Phase 9 chỉ gồm:
 - đề xuất scope phase tiếp theo hoặc follow-up
 - cập nhật tài liệu khi được user approve rõ
 - implementation/fix work chỉ sau khi được approve rõ
-- task thuộc Phase 6 AI scoped follow-up chỉ khi khớp requirement package đã duyệt và các boundary API/database/provider/audit/safety đã review
+- validation hoặc fix follow-up cho slice Phase 6 AI đã hoàn thành chỉ khi được approve rõ và giữ trong boundary API/database/provider/audit/safety đã review
 
 PayOS vẫn là payment provider duy nhất được duyệt. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, và AI auto-submit khi thiếu preview/confirmation vẫn bị cấm.
 

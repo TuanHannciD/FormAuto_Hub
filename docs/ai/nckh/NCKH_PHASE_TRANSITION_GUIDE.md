@@ -1,0 +1,105 @@
+# NCKH_PHASE_TRANSITION_GUIDE
+
+## Purpose
+
+Define how to move from the closed FormAuto Hub global phase state into a specific NCKH phase without confusing NCKH work with a new FormAuto Hub global phase.
+
+## Current Baseline
+
+- FormAuto Hub global phase: Phase 9 closeout completed; no next global phase selected.
+- NCKH is a separate module track inside the same repository.
+- NCKH Phase 1 has implementation evidence in the repo.
+- NCKH Phase 2 is the next candidate and is not active until explicitly approved.
+
+## Required Startup Order For NCKH Work
+
+1. Read `README.md`.
+2. Read `AGENTS.md`.
+3. Read `docs/ai/AI_DOC_ROUTING_MATRIX.md`.
+4. Read `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`.
+5. Read this file.
+6. Read `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`.
+7. Read phase-specific NCKH docs:
+   - requirements: `NCKH_REQUIREMENT_PACKAGE.md`
+   - module ownership: `NCKH_MODULE_MAP.md`
+   - architecture boundaries: `NCKH_ARCHITECTURE_BOUNDARIES.md`
+   - domain model: `NCKH_DOMAIN_ENTITIES_OVERVIEW.md`
+   - proposed APIs: `NCKH_API_CONTRACT_GUIDE.md`
+
+## Transition Rule
+
+Do not phrase NCKH work as "FormAuto Hub Phase 10" unless the user explicitly chooses a FormAuto Hub global Phase 10.
+
+Use this wording instead:
+
+- "Open NCKH Phase 2"
+- "NCKH Phase 2 follow-up"
+- "NCKH Phase 1 validation/fix follow-up"
+
+## Go/No-Go Checklist
+
+Before implementing a new NCKH phase, confirm:
+
+- The user explicitly approved the target phase or fix follow-up.
+- The target phase is listed as current candidate or proposed in `NCKH_PHASE_ROADMAP.md`.
+- The current implementation evidence in `NCKH_PROGRESS_LEDGER.md` does not conflict with the requested scope.
+- API routes, DTOs, statuses, and lifecycle states have contract review when touched.
+- Entity fields, relationships, delete behavior, indexes, and migrations have DB risk review when touched.
+- Google OAuth/Forms/Sheets scopes are explicitly approved for the phase.
+- Frontend work has approved backend contracts or is limited to documented shell/UI states.
+- `docs/ai/nckh` and `docs/vi/nckh` will be updated together if docs change.
+
+## Safe Work Without Opening A Phase
+
+Allowed without opening a new implementation phase:
+
+- reading docs and source evidence
+- answering phase/status questions
+- proposing NCKH scope
+- doc-only sync approved by the user
+- validation-only checks approved by the user
+
+Not allowed without explicit approval:
+
+- adding NCKH entities or migrations
+- adding NCKH API contracts
+- implementing Phase 2+ services/controllers/frontend flows
+- enabling new Google scopes
+- treating proposed Phase 2+ behavior as completed
+
+## Recommended Next Candidate
+
+The next implementation candidate is **NCKH Phase 2 - Model & Variable Management**.
+
+Before Phase 2 implementation, prepare a narrow kickoff plan covering:
+
+- exact entities and fields to add
+- allowed status/lifecycle values
+- one-model-per-form rule and conflict behavior
+- variable type and scale validation
+- mapping ownership and delete behavior
+- migration and rollback risk
+- API contract surface
+- minimal frontend dependency, if any
+- validation plan
+
+## Closeout Rule
+
+When a NCKH phase is completed, create or update closeout evidence before moving the roadmap:
+
+- implementation summary
+- files changed
+- API/database contracts finalized
+- validation run and results
+- validation not run
+- residual risks
+- Deferred items preserved
+- next candidate phase
+
+If closeout evidence is missing, mark the phase as `Implemented with repo evidence` or `Partially implemented`, not `Completed`.
+
+## Deferred
+
+- Any NCKH Phase 2+ implementation without explicit approval.
+- Any FormAuto Hub global Phase 10 decision by implication.
+- Any production readiness claim without current runtime validation.

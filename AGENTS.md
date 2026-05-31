@@ -56,7 +56,7 @@ This repository uses explicit role separation, strict scope control, and paired 
 
 - Project: FormAuto Hub.
 - Current global phase state: Phase 9 closeout completed; next phase not selected.
-- Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
+- Active approved follow-up slice: none. Phase 6 AI mapping/generation scoped implementation is completed; new follow-up work requires explicit approval.
 - Backend: ASP.NET Core Web API .NET 9.
 - API style: controller-based REST API preferred for MVP.
 - Database: SQL Server.
@@ -67,7 +67,7 @@ This repository uses explicit role separation, strict scope control, and paired 
 - Google account login/register: identity-only.
 - Payment gateway integration: PayOS automated credit top-up is approved for Phase 8; other payment providers remain Deferred.
 - Official Google Forms API integration: Deferred.
-- AI answer generation and AI mapping: approved only within the Phase 6 scoped follow-up slice; scoped OpenAI-compatible live provider calls are allowed only behind explicit runtime configuration, while broader AI rollout remains Deferred.
+- AI answer generation and AI mapping: the Phase 6 scoped follow-up slice is completed; scoped OpenAI-compatible live provider calls are allowed only behind explicit runtime configuration, while broader AI rollout remains Deferred.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.
 

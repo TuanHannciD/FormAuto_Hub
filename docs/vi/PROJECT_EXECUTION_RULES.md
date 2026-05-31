@@ -7,7 +7,7 @@
 ## Trạng thái hiện tại
 
 - Trạng thái global phase hiện tại: Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo.
-- Active approved follow-up slice: Phase 6 AI mapping/generation scoped implementation.
+- Active approved follow-up slice: không có. Phase 6 AI mapping/generation scoped implementation đã hoàn thành.
 - Phase 1 backend foundation tồn tại trong `src/FormAutoHub.Api`.
 - Initial test project tồn tại trong `tests/FormAutoHub.Tests`.
 - Backend đã chốt: ASP.NET Core Web API .NET 9, SQL Server, EF Core.
@@ -18,7 +18,7 @@
 - Không tự bịa business rule, API contract, field, status, event, lifecycle state hoặc quyết định kiến trúc.
 - Chi tiết thiếu phải ghi `Assumption:`.
 - Phần chưa duyệt phải ghi `Deferred:`.
-- Giữ task trong active global phase hoặc follow-up slice đã được approve rõ.
+- Giữ task trong active global phase hoặc follow-up slice được approve rõ.
 - Chỉ thay đổi nhỏ nhất đủ đúng.
 - Không làm yếu quy tắc chống abuse.
 - Không làm mất validation honesty.

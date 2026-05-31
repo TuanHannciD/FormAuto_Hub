@@ -31,6 +31,7 @@ Luôn đọc `README.md` và `AGENTS.md` trước.
 | Testing/validation | `PHASE_9_KICKOFF_PLAN.md` | `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md` |
 | Sửa tài liệu | `PROJECT_EXECUTION_RULES.md` | cặp file tương ứng trong `docs/ai` và `docs/vi` |
 | Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, tài liệu theo task |
+| Task NCKH | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
 
 ## Quy tắc đồng bộ
 
@@ -56,6 +57,8 @@ Một số file docs vượt ngưỡng 400 dòng. Trước khi đọc toàn bộ
 | File | ~Dòng |
 |---|---|
 | `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
+| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~150 |
+| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~200 |
 | `API_CONTRACT_GUIDE.md` | ~450 |
 
 Số dòng là gần đúng và có thể lệch theo thời gian. Khi mở file không có trong danh sách nhưng có vẻ lớn, áp dụng cùng cách tiếp cận TOC-first.

@@ -32,7 +32,10 @@ Always read `README.md` and `AGENTS.md` first.
 | Documentation edit | `PROJECT_EXECUTION_RULES.md` | matching `docs/ai` and `docs/vi` files |
 | Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, task-specific docs |
 
-## Required Sync Pairing
+
+| NCKH task | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
+
+
 
 Every file in `docs/ai/` must have a same-name counterpart in `docs/vi/`.
 
@@ -56,6 +59,8 @@ Some docs files exceed the 400-line threshold. Before reading them in full, scan
 | File | Approx. Lines |
 |---|---|
 | `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
+| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~150 |
+| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~200 |
 | `API_CONTRACT_GUIDE.md` | ~450 |
 
 Line counts are approximate and may drift over time. When opening a file not listed here but appearing large, apply the same TOC-first approach.
