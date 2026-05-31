@@ -18,8 +18,12 @@ public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options) : IGoo
 {
     public async Task<GoogleIdentity?> VerifyAsync(string idToken, CancellationToken cancellationToken)
     {
-        var googleClientId = options.Value.GoogleClientId;
-        if (string.IsNullOrWhiteSpace(googleClientId))
+        var authOptions = options.Value;
+        var googleClientId = string.IsNullOrWhiteSpace(authOptions.GoogleClientId)
+            ? authOptions.GoogleOAuthClientId
+            : authOptions.GoogleClientId;
+
+        if (string.IsNullOrWhiteSpace(googleClientId) || string.IsNullOrWhiteSpace(idToken))
         {
             return null;
         }
@@ -29,7 +33,16 @@ public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options) : IGoo
             Audience = [googleClientId]
         };
 
-        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+        GoogleJsonWebSignature.Payload payload;
+        try
+        {
+            payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+        }
+        catch (InvalidJwtException)
+        {
+            return null;
+        }
+
         return new GoogleIdentity(
             payload.Subject,
             payload.Email,
