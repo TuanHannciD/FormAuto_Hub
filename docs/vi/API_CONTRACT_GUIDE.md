@@ -359,6 +359,11 @@ Các field response đã duyệt cho `GET /api/credit-transactions`:
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
 
+Identity fields đã duyệt trong `GET /api/profile`:
+
+- `googleLinked`: cho biết authenticated user đã link Google identity hay chưa
+- `googleEmail`: email Google đã link khi có; nếu chưa có thì là `null`
+
 ### Authentication and account access
 
 Behavior baseline đã duyệt cho Phase 7:
@@ -369,6 +374,7 @@ Behavior baseline đã duyệt cho Phase 7:
 - `POST /api/auth/refresh` rotate refresh token/session hiện tại và trả token mới
 - `POST /api/auth/logout` revoke refresh token/session hiện tại
 - `POST /api/auth/link-google` link Google identity đã verified sau khi user login password
+- `DELETE /api/auth/link-google` hủy link Google identity của user hiện tại khi tài khoản vẫn còn đường đăng nhập bằng mật khẩu
 - `PUT /api/profile/change-password` đổi mật khẩu từ profile
 - password recovery chưa implement và UI có thể hiển thị là đang được cập nhật
 
@@ -391,6 +397,8 @@ Quy tắc Google identity đã duyệt:
 - nếu `provider_user_id` hoặc Google `sub` đã tồn tại trong storage, login luôn cho user đã link
 - nếu chưa có provider user id nhưng Google email trùng account password hiện có, chỉ xét link khi `email_verified = true`
 - email trùng đã verified không được silent auto-link; flow ưu tiên là login password trước rồi link Google
+- Link Google trong profile/security chỉ cho phép khi tài khoản hiện tại chưa có Google identity linked và email Google đã verified trùng với email của tài khoản hiện tại
+- Hủy link Google trong profile/security chỉ cho phép khi tài khoản hiện tại vẫn có đường đăng nhập bằng mật khẩu, để tránh khóa user Google-only khỏi tài khoản
 - nếu `email_verified = false`, không auto-link
 - Google auto-register được phép khi không có conflict với account hiện có
 - điều này không duyệt official Google Forms API scopes hoặc Google Forms integration behavior
@@ -702,6 +710,7 @@ Assumption: JWT authentication của Phase 7 hiện là đường authentication
 - `X-FormAuto-IsAdmin`
 
 Các headers này không phải authentication contract cuối.
+
 
 ## Versioning và OpenAPI
 

@@ -129,7 +129,9 @@ public sealed record ProfileResponse(
     string Email,
     string FullName,
     string Role,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt,
+    bool GoogleLinked,
+    string? GoogleEmail);
 
 public sealed record UpdateProfileRequest(string FullName);
 

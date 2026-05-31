@@ -28,6 +28,7 @@ public interface IAuthService
     Task<AuthServiceResult<AuthTokenResponse>> RefreshAsync(RefreshTokenRequest request, CancellationToken cancellationToken);
     Task<AuthServiceResult<LogoutResponse>> LogoutAsync(LogoutRequest request, CancellationToken cancellationToken);
     Task<AuthServiceResult<LinkGoogleResponse>> LinkGoogleAsync(LinkGoogleRequest request, CancellationToken cancellationToken);
+    Task<AuthServiceResult<UnlinkGoogleResponse>> UnlinkGoogleAsync(CancellationToken cancellationToken);
 }
 
 public sealed class AuthService(
@@ -123,6 +124,11 @@ public sealed class AuthService(
             return new AuthServiceResult<AuthTokenResponse>(AuthResultStatus.InvalidCredentials);
         }
 
+        if (!identity.EmailVerified)
+        {
+            return new AuthServiceResult<AuthTokenResponse>(AuthResultStatus.InvalidCredentials);
+        }
+
         var existingLogin = await dbContext.UserExternalLogins
             .SingleOrDefaultAsync(
                 item => item.Provider == GoogleProvider && item.ProviderUserId == identity.ProviderUserId,
@@ -140,11 +146,6 @@ public sealed class AuthService(
         var existingUser = await dbContext.Users.SingleOrDefaultAsync(item => item.Email == email, cancellationToken);
         if (existingUser is not null)
         {
-            if (!identity.EmailVerified)
-            {
-                return new AuthServiceResult<AuthTokenResponse>(AuthResultStatus.InvalidCredentials);
-            }
-
             return new AuthServiceResult<AuthTokenResponse>(
                 AuthResultStatus.LinkRequired,
                 Message: "Login with password first, then link Google.");
@@ -231,7 +232,15 @@ public sealed class AuthService(
 
         if (!string.Equals(user.Email, NormalizeEmail(identity.Email), StringComparison.OrdinalIgnoreCase))
         {
-            return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Conflict);
+            return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Conflict, Message: "Google email must match the current account email.");
+        }
+
+        var userAlreadyLinked = await dbContext.UserExternalLogins
+            .AnyAsync(item => item.Provider == GoogleProvider && item.UserId == user.Id, cancellationToken);
+
+        if (userAlreadyLinked)
+        {
+            return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Conflict, Message: "This account already has a linked Google account.");
         }
 
         var existingLogin = await dbContext.UserExternalLogins
@@ -251,6 +260,34 @@ public sealed class AuthService(
         }
 
         return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Success, new LinkGoogleResponse(true));
+    }
+
+    public async Task<AuthServiceResult<UnlinkGoogleResponse>> UnlinkGoogleAsync(CancellationToken cancellationToken)
+    {
+        var user = await dbContext.Users.SingleOrDefaultAsync(item => item.Id == currentUser.UserId, cancellationToken);
+        if (user is null)
+        {
+            return new AuthServiceResult<UnlinkGoogleResponse>(AuthResultStatus.NotFound);
+        }
+
+        if (string.IsNullOrWhiteSpace(user.PasswordHash))
+        {
+            return new AuthServiceResult<UnlinkGoogleResponse>(
+                AuthResultStatus.Conflict,
+                Message: "Set a password before unlinking Google to avoid losing account access.");
+        }
+
+        var existingLogin = await dbContext.UserExternalLogins
+            .SingleOrDefaultAsync(item => item.Provider == GoogleProvider && item.UserId == user.Id, cancellationToken);
+
+        if (existingLogin is null)
+        {
+            return new AuthServiceResult<UnlinkGoogleResponse>(AuthResultStatus.Success, new UnlinkGoogleResponse(false));
+        }
+
+        dbContext.UserExternalLogins.Remove(existingLogin);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return new AuthServiceResult<UnlinkGoogleResponse>(AuthResultStatus.Success, new UnlinkGoogleResponse(true));
     }
 
     private AuthTokenResponse CreateSession(User user)

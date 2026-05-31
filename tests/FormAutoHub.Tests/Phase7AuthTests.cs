@@ -83,6 +83,144 @@ public sealed class Phase7AuthTests
     }
 
     [Fact]
+    public async Task GoogleLoginAsync_AutoRegistersWhenEmailIsUnused()
+    {
+        await using var context = CreateContext();
+        var googleVerifier = new FakeGoogleIdentityVerifier(
+            new GoogleIdentity("google-sub-1", "new@example.test", true, "Google User"));
+        var service = CreateService(context, googleVerifier);
+
+        var result = await service.GoogleLoginAsync(new GoogleLoginRequest("token"), CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.Success, result.Status);
+        Assert.NotNull(result.Value);
+        Assert.Equal("new@example.test", result.Value.Email);
+        Assert.Single(context.UserExternalLogins);
+    }
+
+    [Fact]
+    public async Task GoogleLoginAsync_RejectsUnverifiedEmail()
+    {
+        await using var context = CreateContext();
+        var googleVerifier = new FakeGoogleIdentityVerifier(
+            new GoogleIdentity("google-sub-1", "new@example.test", false, "Google User"));
+        var service = CreateService(context, googleVerifier);
+
+        var result = await service.GoogleLoginAsync(new GoogleLoginRequest("token"), CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.InvalidCredentials, result.Status);
+        Assert.Empty(context.Users);
+        Assert.Empty(context.UserExternalLogins);
+    }
+
+    [Fact]
+    public async Task LinkGoogleAsync_RejectsWhenCurrentUserAlreadyLinked()
+    {
+        await using var context = CreateContext();
+        var googleVerifier = new FakeGoogleIdentityVerifier(
+            new GoogleIdentity("google-sub-2", "user@example.test", true, "Google User"));
+        var service = CreateService(context, googleVerifier);
+        var register = await service.RegisterAsync(new RegisterRequest("user@example.test", "password1", "Test User"), CancellationToken.None);
+
+        context.UserExternalLogins.Add(new UserExternalLogin
+        {
+            Id = Guid.NewGuid(),
+            UserId = register.Value!.UserId,
+            Provider = "Google",
+            ProviderUserId = "google-sub-1",
+            Email = "user@example.test",
+            EmailVerified = true,
+            CreatedAt = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
+
+        var linkService = CreateService(context, googleVerifier, register.Value.UserId);
+
+        var result = await linkService.LinkGoogleAsync(new LinkGoogleRequest("token"), CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.Conflict, result.Status);
+        Assert.Single(context.UserExternalLogins);
+    }
+
+    [Fact]
+    public async Task LinkGoogleAsync_RejectsWhenEmailDoesNotMatchCurrentUser()
+    {
+        await using var context = CreateContext();
+        var googleVerifier = new FakeGoogleIdentityVerifier(
+            new GoogleIdentity("google-sub-1", "other@example.test", true, "Google User"));
+        var service = CreateService(context, googleVerifier);
+        var register = await service.RegisterAsync(new RegisterRequest("user@example.test", "password1", "Test User"), CancellationToken.None);
+        var linkService = CreateService(context, googleVerifier, register.Value!.UserId);
+
+        var result = await linkService.LinkGoogleAsync(new LinkGoogleRequest("token"), CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.Conflict, result.Status);
+        Assert.Empty(context.UserExternalLogins);
+    }
+
+    [Fact]
+    public async Task UnlinkGoogleAsync_RemovesGoogleLoginWhenPasswordExists()
+    {
+        await using var context = CreateContext();
+        var service = CreateService(context);
+        var register = await service.RegisterAsync(new RegisterRequest("user@example.test", "password1", "Test User"), CancellationToken.None);
+
+        context.UserExternalLogins.Add(new UserExternalLogin
+        {
+            Id = Guid.NewGuid(),
+            UserId = register.Value!.UserId,
+            Provider = "Google",
+            ProviderUserId = "google-sub-1",
+            Email = "user@example.test",
+            EmailVerified = true,
+            CreatedAt = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
+
+        var unlinkService = CreateService(context, currentUserId: register.Value.UserId);
+
+        var result = await unlinkService.UnlinkGoogleAsync(CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.Success, result.Status);
+        Assert.True(result.Value!.Unlinked);
+        Assert.Empty(context.UserExternalLogins);
+    }
+
+    [Fact]
+    public async Task UnlinkGoogleAsync_RejectsGoogleOnlyAccount()
+    {
+        await using var context = CreateContext();
+        var userId = Guid.NewGuid();
+        context.Users.Add(new User
+        {
+            Id = userId,
+            Email = "google@example.test",
+            PasswordHash = null,
+            FullName = "Google User",
+            Role = UserRoles.User,
+            CreatedAt = DateTimeOffset.UtcNow
+        });
+        context.UserExternalLogins.Add(new UserExternalLogin
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            Provider = "Google",
+            ProviderUserId = "google-sub-1",
+            Email = "google@example.test",
+            EmailVerified = true,
+            CreatedAt = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
+
+        var unlinkService = CreateService(context, currentUserId: userId);
+
+        var result = await unlinkService.UnlinkGoogleAsync(CancellationToken.None);
+
+        Assert.Equal(AuthResultStatus.Conflict, result.Status);
+        Assert.Single(context.UserExternalLogins);
+    }
+
+    [Fact]
     public async Task RefreshAsync_RotatesCurrentRefreshToken()
     {
         await using var context = CreateContext();

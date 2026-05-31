@@ -359,6 +359,11 @@ Approved `GET /api/credit-transactions` response fields:
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
 
+Approved `GET /api/profile` identity fields:
+
+- `googleLinked`: whether the authenticated user already has a linked Google identity
+- `googleEmail`: linked Google email when available; otherwise `null`
+
 ### Authentication and account access
 
 Phase 7 approved behavior baseline:
@@ -369,6 +374,7 @@ Phase 7 approved behavior baseline:
 - `POST /api/auth/refresh` rotates the current refresh token/session and returns new tokens
 - `POST /api/auth/logout` revokes the current refresh token/session only
 - `POST /api/auth/link-google` links a verified Google identity after password login
+- `DELETE /api/auth/link-google` unlinks the current user's Google identity when the account still has password login available
 - `PUT /api/profile/change-password` changes password from profile
 - password recovery is not implemented yet and may be shown in UI as currently being updated
 
@@ -391,6 +397,8 @@ Approved Google identity rules:
 - if `provider_user_id` or Google `sub` already exists in storage, login succeeds for that linked user
 - if no provider user id exists but the Google email matches an existing password account, link is considered only when `email_verified = true`
 - matching verified email must not silently auto-link; the preferred flow is password login first, then Google linking
+- Google linking from profile/security is allowed only when the current account has no linked Google identity and the verified Google email matches the current account email
+- Google unlinking from profile/security is allowed only when the current account has a password login path, to avoid locking out Google-only users
 - if `email_verified = false`, do not auto-link
 - Google auto-register is allowed when there is no existing matching account conflict
 - this does not approve official Google Forms API scopes or Google Forms integration behavior

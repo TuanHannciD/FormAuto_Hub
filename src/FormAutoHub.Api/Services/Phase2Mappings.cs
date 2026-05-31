@@ -24,8 +24,8 @@ internal static class Phase2Mappings
         new(transaction.Id, transaction.Amount, transaction.BalanceAfter, transaction.Type,
             transaction.Description, transaction.ReferenceType, transaction.ReferenceId, transaction.CreatedAt);
 
-    public static ProfileResponse ToProfileResponse(this User user) =>
-        new(user.Id, user.Email, user.FullName, user.Role, user.CreatedAt);
+    public static ProfileResponse ToProfileResponse(this User user, UserExternalLogin? googleLogin = null) =>
+        new(user.Id, user.Email, user.FullName, user.Role, user.CreatedAt, googleLogin is not null, googleLogin?.Email);
 
     public static UpdateProfileResponse ToUpdateProfileResponse(this User user) =>
         new(user.Id, user.Email, user.FullName, user.Role, user.CreatedAt);
