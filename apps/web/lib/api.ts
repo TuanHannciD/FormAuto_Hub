@@ -367,3 +367,65 @@ export type SubmissionJob = {
     submittedAt?: string | null;
   }>;
 };
+// ── NCKH Survey Module ──────────────────────────────────────────
+
+export type NckhGoogleLinkRequest = {
+  authorizationCode: string;
+  redirectUri: string;
+};
+
+export type NckhGoogleLinkResponse = {
+  linked: boolean;
+  email: string;
+};
+
+export type NckhFormQuestion = {
+  id: string;
+  googleQuestionId: string;
+  questionText: string;
+  questionType: string;
+  isRequired: boolean;
+  orderIndex: number;
+};
+
+export type NckhFormItem = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questionCount: number;
+  importedAt: string;
+};
+
+export type NckhFormListResponse = {
+  items: NckhFormItem[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhFormDetailResponse = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questions: NckhFormQuestion[];
+  importedAt: string;
+};
+
+export type NckhImportFormRequest = {
+  formUrl: string;
+};
+
+export type NckhImportFormResponse = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questionCount: number;
+  importedAt: string;
+};
