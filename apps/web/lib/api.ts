@@ -15,6 +15,32 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   return apiFetchInternal<T>(path, options, false);
 }
 
+export async function apiFetchBlob(path: string): Promise<Blob> {
+  const headers = new Headers();
+  const accessToken = await getValidAccessToken();
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers,
+    cache: "no-store"
+  });
+
+  if (response.status === 401) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      return apiFetchBlob(path);
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(`Không tải được tệp. Mã lỗi HTTP ${response.status}.`);
+  }
+
+  return response.blob();
+}
+
 async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean): Promise<T> {
   const headers = new Headers(options.headers);
   headers.set("Accept", "application/json");
@@ -82,15 +108,44 @@ export type AuthTokenResponse = {
 
 export type TopupOrder = {
   id: string;
+  userId?: string;
+  userEmail?: string;
   packageId: string;
+  packageName?: string;
   credits: number;
   amount: number;
   status: string;
   paymentMethod: string;
   paymentNote: string;
+  evidenceFileId?: string | null;
   createdAt: string;
   paidAt?: string | null;
   approvedAt?: string | null;
+};
+
+export type UploadTopupEvidenceResponse = {
+  fileId: string;
+  fileName: string;
+  contentType: string;
+  length: number;
+  createdAt: string;
+};
+
+export type ManualCreditGrantResponse = {
+  userId: string;
+  userEmail: string;
+  creditTransactionId: string;
+  balanceAfter: number;
+};
+
+export type AdminCreditUserOption = {
+  id: string;
+  email: string;
+  fullName: string;
+};
+
+export type AdminCreditUserOptionListResponse = {
+  items: AdminCreditUserOption[];
 };
 
 export type CreatePayosTopupOrderResponse = {

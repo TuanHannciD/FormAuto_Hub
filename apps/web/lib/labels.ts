@@ -50,10 +50,20 @@ export function displayCreditTransactionType(type: string) {
     TopupApproved: "Nạp credit đã duyệt",
     Usage: "Sử dụng credit",
     InitialGrant: "Credit khởi đầu",
+    ManualGrant: "Cộng credit thủ công",
     Refund: "Hoàn credit"
   };
 
   return labels[type] ?? type;
+}
+
+export function displayPaymentMethod(method: string) {
+  const labels: Record<string, string> = {
+    Manual: "Đối soát thủ công",
+    PayOS: "PayOS"
+  };
+
+  return labels[method] ?? method;
 }
 
 export function displayToolName(toolName: string) {

@@ -19,5 +19,11 @@ export function readableError(error: unknown, fallback = "Yêu cầu không thà
 }
 
 export function showError(error: unknown, fallback = "Yêu cầu không thành công.") {
-  toast.error(readableError(error, fallback));
+  const message = readableError(error, fallback);
+  const raw = error instanceof Error ? error.message : typeof error === "string" ? error : "";
+  if (raw && raw !== message) {
+    console.error(fallback, error);
+  }
+
+  toast.error(message);
 }

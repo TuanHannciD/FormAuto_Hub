@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, Bell, Bot, Boxes, CreditCard, HelpCircle, LayoutDashboard, LogOut, Menu, Search, Settings, ShieldCheck, X } from "lucide-react";
+import { BarChart3, Bell, Bot, Boxes, CreditCard, HandCoins, HelpCircle, LayoutDashboard, LogOut, Menu, Search, Settings, ShieldCheck, X } from "lucide-react";
 import { Button, Input } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
@@ -11,6 +11,7 @@ import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSess
 const navItems = [
   { href: "/admin", label: "Tổng quan admin", icon: LayoutDashboard },
   { href: "/admin/payments", label: "Thanh toán và nạp credit", icon: CreditCard },
+  { href: "/admin/manual-credits", label: "Đối soát thủ công", icon: HandCoins },
   { href: "/admin/packages", label: "Gói credit", icon: Boxes },
   { href: "/admin/revenue", label: "Báo cáo doanh thu", icon: BarChart3 },
   { href: "/admin/payos-settings", label: "Cấu hình PayOS", icon: Settings },
