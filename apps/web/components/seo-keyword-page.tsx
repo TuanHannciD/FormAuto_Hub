@@ -1,11 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import {
+  ArrowUpRight,
   BarChart3,
   CheckCircle2,
   FileSearch,
+  GraduationCap,
   ListChecks,
+  Presentation,
   ShieldCheck,
+  Sparkles,
   Wallet
 } from "lucide-react";
 import type { SeoPageConfig } from "@/lib/seo-pages";
@@ -30,6 +35,39 @@ const safetyItems = [
   "Không vượt captcha, xoay proxy hoặc tạo tài khoản giả",
   "Không bỏ qua bước xem trước và xác nhận"
 ];
+
+const seoAccents = [
+  {
+    card: "border-cyan-100 bg-gradient-to-br from-white via-cyan-50/70 to-white hover:border-cyan-200",
+    icon: "border-cyan-100 bg-cyan-500 text-white shadow-cyan-500/25",
+    chip: "border-cyan-100 bg-cyan-50 text-cyan-700",
+    line: "from-cyan-400 to-sky-500"
+  },
+  {
+    card: "border-emerald-100 bg-gradient-to-br from-white via-emerald-50/70 to-white hover:border-emerald-200",
+    icon: "border-emerald-100 bg-emerald-500 text-white shadow-emerald-500/25",
+    chip: "border-emerald-100 bg-emerald-50 text-emerald-700",
+    line: "from-emerald-400 to-teal-500"
+  },
+  {
+    card: "border-amber-100 bg-gradient-to-br from-white via-amber-50/75 to-white hover:border-amber-200",
+    icon: "border-amber-100 bg-amber-500 text-white shadow-amber-500/25",
+    chip: "border-amber-100 bg-amber-50 text-amber-700",
+    line: "from-amber-400 to-orange-500"
+  },
+  {
+    card: "border-fuchsia-100 bg-gradient-to-br from-white via-fuchsia-50/65 to-white hover:border-fuchsia-200",
+    icon: "border-fuchsia-100 bg-fuchsia-500 text-white shadow-fuchsia-500/25",
+    chip: "border-fuchsia-100 bg-fuchsia-50 text-fuchsia-700",
+    line: "from-fuchsia-400 to-pink-500"
+  }
+];
+
+const useCaseIcons = [GraduationCap, Presentation, BarChart3, FileSearch];
+
+function getSeoAccent(index: number) {
+  return seoAccents[index % seoAccents.length];
+}
 
 export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
   const pageUrl = `${siteUrl}/${config.slug}`;
@@ -113,19 +151,39 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal as="aside" delay={120} variant="scale" className="motion-card rounded-lg border border-slate-200 bg-slate-50 p-6">
+          <ScrollReveal as="aside" delay={120} variant="scale" className="motion-card overflow-hidden rounded-lg border border-cyan-100 bg-gradient-to-br from-white via-cyan-50/80 to-emerald-50/70 p-6 shadow-sm">
+            <div className="relative mb-6 overflow-hidden rounded-lg border border-white/70 bg-white shadow-sm">
+              <Image
+                src="/images/landing/login-screen.png"
+                alt="Giao diện FormAuto Hub"
+                width={1440}
+                height={1000}
+                className="h-36 w-full object-cover object-top"
+                priority={false}
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/55 to-transparent p-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/92 px-3 py-1 text-xs font-semibold text-cyan-700">
+                  <Sparkles size={14} />
+                  Mẫu giao diện
+                </span>
+              </div>
+            </div>
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Từ khóa liên quan</h2>
             <div className="mt-4 flex flex-wrap gap-2">
-              {[config.primaryKeyword, ...config.secondaryKeywords].map((keyword) => (
+              {[config.primaryKeyword, ...config.secondaryKeywords].map((keyword, index) => {
+                const accent = getSeoAccent(index);
+
+                return (
                 <span
                   key={keyword}
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700"
+                  className={`rounded-full border px-3 py-1 text-xs font-medium ${accent.chip}`}
                 >
                   {keyword}
                 </span>
-              ))}
+                );
+              })}
             </div>
-            <div className="mt-6 rounded border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950">
+            <div className="mt-6 rounded border border-emerald-100 bg-white/78 p-4 text-sm leading-6 text-emerald-950 shadow-sm">
               Dữ liệu mẫu chỉ dùng để kiểm thử, demo hoặc chuẩn bị báo cáo. Không dùng để làm giả
               kết quả khảo sát hoặc thay thế phản hồi thật.
             </div>
@@ -142,12 +200,19 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
           </p>
         </ScrollReveal>
         <div className="grid gap-4 md:grid-cols-3">
-          {config.useCases.map((item, index) => (
-            <ScrollReveal key={item} delay={index * 70} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <CheckCircle2 className="mb-4 text-blue-600" size={22} />
+          {config.useCases.map((item, index) => {
+            const accent = getSeoAccent(index);
+            const Icon = useCaseIcons[index] ?? CheckCircle2;
+
+            return (
+            <ScrollReveal key={item} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-5 shadow-sm ${accent.card}`}>
+              <div className={`motion-icon mb-4 flex h-11 w-11 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
+                <Icon size={20} />
+              </div>
               <h3 className="text-sm font-semibold leading-6 text-slate-900">{item}</h3>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -163,10 +228,12 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
           <div className="grid gap-6 md:grid-cols-3">
             {config.features.map((feature, index) => {
               const Icon = [FileSearch, ListChecks, Wallet][index] ?? BarChart3;
+              const accent = getSeoAccent(index);
 
               return (
-                <ScrollReveal key={feature.title} delay={index * 80} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-                  <div className="motion-icon mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
+                <ScrollReveal key={feature.title} delay={index * 80} as="article" className={`motion-card relative overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
+                  <div className={`absolute right-4 top-4 h-16 w-16 rounded-full bg-gradient-to-br ${accent.line} opacity-10`} />
+                  <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
                     <Icon size={20} />
                   </div>
                   <h3 className="text-lg font-semibold text-slate-900">{feature.title}</h3>
@@ -188,8 +255,12 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
             </p>
           </ScrollReveal>
           <div className="space-y-6">
-            {config.contentSections.map((section, index) => (
-              <ScrollReveal key={section.heading} delay={index * 70} as="article" className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+            {config.contentSections.map((section, index) => {
+              const accent = getSeoAccent(index + 1);
+
+              return (
+              <ScrollReveal key={section.heading} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
+                <div className={`mb-5 h-1.5 w-16 rounded-full bg-gradient-to-r ${accent.line}`} />
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">{section.heading}</h2>
                 <div className="mt-4 space-y-4">
                   {section.body.map((paragraph) => (
@@ -199,28 +270,29 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
                   ))}
                 </div>
               </ScrollReveal>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-12 md:px-8 md:py-20 lg:grid-cols-2">
-        <ScrollReveal className="motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <ScrollReveal className="motion-card rounded-lg border border-emerald-100 bg-gradient-to-br from-white via-emerald-50/70 to-white p-6 shadow-sm md:p-8">
           <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-slate-900">
-            <ShieldCheck className="text-blue-600" size={24} />
+            <ShieldCheck className="text-emerald-600" size={24} />
             Giới hạn an toàn
           </h2>
           <ul className="mt-6 space-y-3">
             {safetyItems.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm leading-6 text-slate-700">
-                <CheckCircle2 className="mt-0.5 shrink-0 text-blue-600" size={18} />
+                <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-600" size={18} />
                 {item}
               </li>
             ))}
           </ul>
         </ScrollReveal>
 
-        <ScrollReveal delay={100} className="rounded-lg border border-slate-200 bg-slate-50 p-6 md:p-8">
+        <ScrollReveal delay={100} className="rounded-lg border border-indigo-100 bg-gradient-to-br from-white via-indigo-50/70 to-white p-6 shadow-sm md:p-8">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">Trang liên quan</h2>
           <div className="mt-6 grid gap-3">
             {relatedLinks
@@ -229,9 +301,10 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="motion-button rounded border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm hover:border-blue-200 hover:text-blue-700"
+                  className="motion-button flex items-center justify-between gap-3 rounded border border-white/70 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm hover:border-indigo-200 hover:text-indigo-700"
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  <ArrowUpRight className="shrink-0 text-slate-300" size={16} />
                 </Link>
               ))}
           </div>

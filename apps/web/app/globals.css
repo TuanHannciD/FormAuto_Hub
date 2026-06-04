@@ -37,11 +37,57 @@ a {
 }
 
 .app-aura-bg {
-  background:
-    radial-gradient(circle at 20% 8%, rgb(125 236 249 / 0.35), transparent 23rem),
-    radial-gradient(circle at 86% 12%, rgb(203 213 255 / 0.42), transparent 26rem),
-    radial-gradient(circle at 55% 100%, rgb(204 251 241 / 0.28), transparent 28rem),
-    linear-gradient(135deg, #f7fdff 0%, #effaff 46%, #f8fbff 100%);
+  background-color: #f7fbff;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgb(6 182 212 / 0.16) 0%, transparent 48%),
+    radial-gradient(ellipse at 14% 34%, rgb(20 184 166 / 0.13) 0%, transparent 42%),
+    radial-gradient(ellipse at 88% 46%, rgb(132 85 239 / 0.095) 0%, transparent 44%),
+    radial-gradient(ellipse at 24% 68%, rgb(244 114 182 / 0.07) 0%, transparent 44%),
+    radial-gradient(ellipse at 76% 100%, rgb(245 158 11 / 0.075) 0%, transparent 48%),
+    linear-gradient(135deg, #f8feff 0%, #effbff 42%, #f8fbff 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100vw 100vh, 100vw 100vh, 100vw 100vh, 100vw 100vh, 100vw 100vh, 100% 100%;
+  position: relative;
+}
+
+main.app-aura-bg {
+  isolation: isolate;
+}
+
+main.app-aura-bg::before,
+main.app-aura-bg::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+}
+
+main.app-aura-bg::before {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 47px, rgb(6 104 122 / 0.035) 48px 49px),
+    repeating-linear-gradient(90deg, transparent 0 47px, rgb(6 104 122 / 0.03) 48px 49px),
+    linear-gradient(115deg, transparent 0 16%, rgb(255 255 255 / 0.42) 17%, transparent 23%),
+    linear-gradient(102deg, transparent 0 47%, rgb(255 255 255 / 0.36) 49%, transparent 56%),
+    linear-gradient(78deg, transparent 0 70%, rgb(255 255 255 / 0.34) 72%, transparent 79%);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.85), rgb(0 0 0 / 0.32) 45%, rgb(0 0 0 / 0.72));
+}
+
+main.app-aura-bg::after {
+  background-image:
+    linear-gradient(105deg, transparent 5%, rgb(255 255 255 / 0.54) 14%, rgb(125 211 252 / 0.12) 18%, transparent 31%),
+    linear-gradient(73deg, transparent 38%, rgb(255 255 255 / 0.42) 47%, rgb(196 181 253 / 0.11) 53%, transparent 66%),
+    linear-gradient(113deg, transparent 63%, rgb(255 255 255 / 0.44) 73%, rgb(251 191 36 / 0.08) 78%, transparent 88%),
+    radial-gradient(ellipse at 20% 30%, rgb(6 182 212 / 0.08), transparent 36%),
+    radial-gradient(ellipse at 86% 58%, rgb(244 114 182 / 0.055), transparent 34%);
+  filter: blur(0.2px);
+  opacity: 0.92;
+}
+
+main.app-aura-bg > :not(header) {
+  position: relative;
+  z-index: 1;
 }
 
 .glass-panel {

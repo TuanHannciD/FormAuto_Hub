@@ -8,13 +8,17 @@ import {
   CheckCircle2,
   ClipboardList,
   CreditCard,
+  ArrowUpRight,
   FileSearch,
+  GraduationCap,
   History,
   LinkIcon,
   ListChecks,
+  Presentation,
   ShieldCheck,
   ReceiptText,
   Search,
+  Sparkles,
   Wallet,
   Eye
 } from "lucide-react";
@@ -46,6 +50,40 @@ const workflowSteps = [
   { title: "Xem trước phản hồi", icon: Eye },
   { title: "Xác nhận gửi", icon: CheckCircle2 }
 ];
+
+const landingAccents = [
+  {
+    card: "border-cyan-100 bg-gradient-to-br from-white via-cyan-50/70 to-white hover:border-cyan-200",
+    icon: "border-cyan-100 bg-cyan-500 text-white shadow-cyan-500/25",
+    line: "from-cyan-400 to-sky-500"
+  },
+  {
+    card: "border-emerald-100 bg-gradient-to-br from-white via-emerald-50/70 to-white hover:border-emerald-200",
+    icon: "border-emerald-100 bg-emerald-500 text-white shadow-emerald-500/25",
+    line: "from-emerald-400 to-teal-500"
+  },
+  {
+    card: "border-amber-100 bg-gradient-to-br from-white via-amber-50/75 to-white hover:border-amber-200",
+    icon: "border-amber-100 bg-amber-500 text-white shadow-amber-500/25",
+    line: "from-amber-400 to-orange-500"
+  },
+  {
+    card: "border-fuchsia-100 bg-gradient-to-br from-white via-fuchsia-50/65 to-white hover:border-fuchsia-200",
+    icon: "border-fuchsia-100 bg-fuchsia-500 text-white shadow-fuchsia-500/25",
+    line: "from-fuchsia-400 to-pink-500"
+  },
+  {
+    card: "border-indigo-100 bg-gradient-to-br from-white via-indigo-50/65 to-white hover:border-indigo-200",
+    icon: "border-indigo-100 bg-indigo-500 text-white shadow-indigo-500/25",
+    line: "from-indigo-400 to-violet-500"
+  }
+];
+
+const useCaseIcons = [GraduationCap, Presentation, BarChart3, Search, ShieldCheck];
+
+function getLandingAccent(index: number) {
+  return landingAccents[index % landingAccents.length];
+}
 
 const featureCards = [
   {
@@ -350,15 +388,20 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="relative grid gap-4 md:grid-cols-5">
-            <div className="absolute left-[10%] right-[10%] top-12 z-0 hidden h-px bg-slate-200 md:block" />
-            {workflowSteps.map((step, index) => (
-              <ScrollReveal key={step.title} delay={index * 70} as="article" className="motion-card relative z-10 rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-blue-600 shadow-sm">
+            <div className="absolute left-[10%] right-[10%] top-12 z-0 hidden h-1 rounded-full bg-gradient-to-r from-cyan-200 via-emerald-200 to-amber-200 md:block" />
+            {workflowSteps.map((step, index) => {
+              const accent = getLandingAccent(index);
+
+              return (
+              <ScrollReveal key={step.title} delay={index * 70} as="article" className={`motion-card relative z-10 overflow-hidden rounded-lg border p-5 text-center shadow-sm ${accent.card}`}>
+                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent.line}`} />
+                <div className={`motion-icon mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg ${accent.icon}`}>
                   <step.icon size={20} />
                 </div>
                 <h3 className="mb-1 text-sm font-semibold text-slate-900">{step.title}</h3>
               </ScrollReveal>
-            ))}
+              );
+            })}
           </div>
         </ScrollReveal>
       </section>
@@ -374,14 +417,25 @@ export default function LandingPage() {
           </p>
         </ScrollReveal>
         <div className="grid gap-4 md:grid-cols-2">
-          {seoUseCaseLinks.map((item, index) => (
-            <ScrollReveal key={item.href} delay={(index % 2) * 70} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <Link href={item.href} className="text-base font-semibold text-blue-700 hover:underline">
+          {seoUseCaseLinks.map((item, index) => {
+            const accent = getLandingAccent(index);
+            const Icon = useCaseIcons[index] ?? Sparkles;
+
+            return (
+            <ScrollReveal key={item.href} delay={(index % 2) * 70} as="article" className={`motion-card group rounded-lg border p-5 shadow-sm ${accent.card}`}>
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <span className={`motion-icon flex h-11 w-11 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
+                  <Icon size={20} />
+                </span>
+                <ArrowUpRight className="text-slate-300 transition-colors group-hover:text-slate-500" size={18} />
+              </div>
+              <Link href={item.href} className="text-base font-semibold text-slate-950 hover:text-blue-700">
                 {item.title}
               </Link>
               <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -395,15 +449,20 @@ export default function LandingPage() {
             </p>
           </ScrollReveal>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featureCards.map((feature, index) => (
-              <ScrollReveal key={feature.title} delay={(index % 3) * 80} as="article" className={`motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm ${index > 2 ? "hidden md:block" : ""}`}>
-                <div className="motion-icon mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
+            {featureCards.map((feature, index) => {
+              const accent = getLandingAccent(index);
+
+              return (
+              <ScrollReveal key={feature.title} delay={(index % 3) * 80} as="article" className={`motion-card relative overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card} ${index > 2 ? "hidden md:block" : ""}`}>
+                <div className={`absolute right-4 top-4 h-16 w-16 rounded-full bg-gradient-to-br ${accent.line} opacity-10`} />
+                <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
                   <feature.icon size={20} />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-slate-900">{feature.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-600">{feature.body}</p>
               </ScrollReveal>
-            ))}
+              );
+            })}
           </div>
       </section>
 
@@ -422,8 +481,12 @@ export default function LandingPage() {
       </section>
 
       <section id="an-toan" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
-        <ScrollReveal className="grid grid-cols-1 items-center gap-12 rounded-lg border border-slate-200 bg-white p-8 shadow-sm md:p-12 lg:grid-cols-2">
+        <ScrollReveal className="grid grid-cols-1 items-center gap-12 overflow-hidden rounded-lg border border-emerald-100 bg-gradient-to-br from-white via-emerald-50/60 to-cyan-50/60 p-8 shadow-sm md:p-12 lg:grid-cols-2">
           <div>
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm">
+              <Sparkles size={14} />
+              Quy trình an toàn
+            </span>
             <h2 className="mb-6 text-3xl font-bold tracking-tight text-slate-900">
               Thiết kế xoay quanh giới hạn, rà soát và khả năng truy vết
             </h2>
@@ -441,13 +504,13 @@ export default function LandingPage() {
                 "Không dùng dữ liệu mẫu như kết quả khảo sát thật"
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 text-blue-600" size={20} />
+                  <CheckCircle2 className="mt-0.5 text-emerald-600" size={20} />
                   <span className="text-sm text-slate-700">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-8">
+          <div className="rounded-lg border border-rose-100 bg-white/86 p-8 shadow-lg shadow-rose-100/40">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-red-600">
               <ShieldCheck size={20} />
               Không hỗ trợ
@@ -476,9 +539,13 @@ export default function LandingPage() {
               Mô hình credit rõ ràng cho từng thao tác
           </h2>
           <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {creditCards.map((item, index) => (
-              <ScrollReveal key={item.title} delay={index * 80} as="article" className="motion-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="motion-icon mb-4 flex h-10 w-10 items-center justify-center rounded border border-blue-100 bg-blue-50 text-blue-600">
+            {creditCards.map((item, index) => {
+              const accent = getLandingAccent(index + 2);
+
+              return (
+              <ScrollReveal key={item.title} delay={index * 80} as="article" className={`motion-card overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
+                <div className={`mb-5 h-1.5 w-16 rounded-full bg-gradient-to-r ${accent.line}`} />
+                <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
                   <item.icon size={20} />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
@@ -486,7 +553,8 @@ export default function LandingPage() {
                   {item.body}
                 </p>
               </ScrollReveal>
-            ))}
+              );
+            })}
           </div>
           <p className="text-center text-sm italic text-slate-500">
             Thanh toán PayOS được xác minh trước khi credit được cộng vào tài khoản.
@@ -516,7 +584,10 @@ export default function LandingPage() {
       </section>
 
       <section className="mx-auto mb-20 hidden max-w-[1120px] px-4 md:block md:px-8">
-        <ScrollReveal className="rounded-lg border border-blue-100 bg-blue-50 px-6 py-16 text-center shadow-sm" variant="scale">
+        <ScrollReveal className="overflow-hidden rounded-lg border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 px-6 py-16 text-center shadow-sm" variant="scale">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-cyan-500 text-white shadow-lg shadow-cyan-500/25">
+            <Sparkles size={24} />
+          </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Bắt đầu với quy trình biểu mẫu có kiểm soát
           </h2>

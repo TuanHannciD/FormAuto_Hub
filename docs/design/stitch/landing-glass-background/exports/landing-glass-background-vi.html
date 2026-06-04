@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FormAuto Hub - Background Reference</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "secondary-container": "#8455ef",
+                        "primary-container": "#06b6d4",
+                        "surface-dim": "#d8dadc",
+                        "outline": "#6d797d",
+                        "on-tertiary-fixed": "#00201c",
+                        "inverse-surface": "#2d3133",
+                        "on-surface-variant": "#3d494c",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#6b38d4",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#bcc9cd",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "tertiary-container": "#1abaa8",
+                        "on-primary-fixed-variant": "#004e5c",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#4cd7f6",
+                        "tertiary-fixed": "#71f8e4",
+                        "tertiary": "#006b5f",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#acedff",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary-container": "#00424f",
+                        "surface-tint": "#00687a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary": "#00687a",
+                        "surface-container-low": "#f2f4f6",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#00443c",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed": "#e9ddff",
+                        "on-background": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-primary-fixed": "#001f26",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface": "#f7f9fb",
+                        "primary-fixed-dim": "#4cd7f6",
+                        "on-tertiary-fixed-variant": "#005048"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Sora"],
+                        "caption": ["Sora"],
+                        "body-md": ["Sora"],
+                        "display": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-md": ["Sora"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .app-aura-bg {
+            background-color: #f7f9fb; /* surface base */
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.12) 0%, transparent 50%), /* Cyan top */
+                radial-gradient(ellipse at 20% 40%, rgba(132, 85, 239, 0.08) 0%, transparent 40%), /* Violet middle left */
+                radial-gradient(ellipse at 80% 60%, rgba(233, 221, 255, 0.12) 0%, transparent 40%), /* Pink/Light purple middle right */
+                radial-gradient(ellipse at 50% 100%, rgba(245, 158, 11, 0.06) 0%, transparent 50%); /* Amber bottom */
+            background-attachment: fixed;
+            background-size: 100vw 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: 
+                repeating-linear-gradient(transparent, transparent 49px, rgba(109, 121, 125, 0.03) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(109, 121, 125, 0.03) 50px);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.2));
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.2));
+        }
+
+        .glass-ribbon {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 100px;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 8px 32px rgba(0,0,0,0.01);
+            z-index: 1;
+        }
+
+        .ribbon-1 {
+            width: 120%;
+            height: 120px;
+            top: 15%;
+            left: -10%;
+            transform: rotate(-8deg);
+        }
+
+        .ribbon-2 {
+            width: 80%;
+            height: 90px;
+            top: 45%;
+            right: -10%;
+            transform: rotate(12deg);
+        }
+
+        .ribbon-3 {
+            width: 110%;
+            height: 140px;
+            top: 75%;
+            left: -5%;
+            transform: rotate(-5deg);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 1), 0 20px 40px rgba(0,0,0,0.02);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    </style>
+</head>
+<body class="app-aura-bg text-on-surface font-body-md antialiased min-h-[2400px]">
+<!-- Decorative Elements -->
+<div class="bg-pattern"></div>
+<div class="glass-ribbon ribbon-1 opacity-60"></div>
+<div class="glass-ribbon ribbon-2 opacity-50"></div>
+<div class="glass-ribbon ribbon-3 opacity-40"></div>
+<!-- TopNavBar -->
+<nav class="glass-nav fixed top-0 w-full z-50 border-b border-white/20 shadow-none">
+<div class="flex items-center justify-between px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary">FormAuto Hub</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-primary-fixed font-bold border-b-2 border-primary-fixed pb-1" href="#">Features</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors hover:bg-white/10 transition-all duration-300 px-2 py-1 rounded" href="#">Showcase</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors hover:bg-white/10 transition-all duration-300 px-2 py-1 rounded" href="#">Solutions</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors hover:bg-white/10 transition-all duration-300 px-2 py-1 rounded" href="#">Pricing</a>
+</div>
+<button class="font-label-md text-label-md px-6 py-2 rounded-full bg-gradient-to-r from-primary to-primary/80 text-on-primary hover:opacity-90 scale-95 active:scale-90 transition-transform">Get Started</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="max-w-container-max mx-auto px-margin-desktop pt-32 pb-24 relative z-10 flex flex-col gap-[120px]">
+<!-- Small Hero -->
+<section class="flex flex-col items-center text-center mt-20 relative z-10">
+<h1 class="font-display text-display text-primary mb-4">Nền tảng Tự động hóa Biểu mẫu</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Trải nghiệm giao diện kính mờ hiện đại. Không gian làm việc tối giản, thoáng đãng giúp tập trung vào luồng công việc.</p>
+<div class="mt-8 px-4 py-2 glass-card rounded-full font-caption text-caption text-secondary">
+<span class="material-symbols-outlined align-middle mr-1 text-sm">auto_awesome</span> Nền kính sắc độ nhẹ
+            </div>
+</section>
+<!-- Feature Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter relative z-10">
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined">description</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Biểu mẫu Thông minh</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tự động nhận diện trường dữ liệu. Họa tiết trừu tượng mờ tạo chiều sâu mà không làm nhiễu thông tin.</p>
+</div>
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-tertiary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-12 h-12 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary mb-2">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Tốc độ Tối ưu</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Xử lý hàng ngàn biểu mẫu trong tích tắc với luồng xử lý nền mượt mà.</p>
+</div>
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary mb-2">
+<span class="material-symbols-outlined">security</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Bảo mật Tuyệt đối</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Dữ liệu được mã hóa đa lớp, an toàn trong không gian số trong suốt.</p>
+</div>
+</section>
+<!-- Long Section / Typography Check -->
+<section class="glass-card rounded-2xl p-12 my-20 relative z-10">
+<h2 class="font-display text-display text-primary mb-8 border-b border-white/30 pb-4">Vùng đọc rõ</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="flex flex-col gap-6">
+<h4 class="font-headline-lg text-headline-lg text-on-surface">Kiểm tra Độ tương phản</h4>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Đây là vùng kiểm tra độ đọc chữ trên nền gradient đa sắc tố. Nền trắng mờ (white/40) kết hợp blur(20px) giúp văn bản nổi bật mà vẫn giữ được cảm giác xuyên thấu.</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Các chi tiết bóng đổ (shadows) được thay thế hoàn toàn bằng kỹ thuật xếp chồng sắc độ (tonal stacking) và viền sáng (inner glow).</p>
+</div>
+<div class="flex flex-col gap-6 bg-white/30 p-6 rounded-lg border border-white/50">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-primary-container/30 border border-primary-container/50"></div>
+<span class="font-label-md text-label-md">Primary Container Highlight</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-secondary-container/30 border border-secondary-container/50"></div>
+<span class="font-label-md text-label-md">Secondary Container Highlight</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-tertiary-container/30 border border-tertiary-container/50"></div>
+<span class="font-label-md text-label-md">Tertiary Container Highlight</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="flex flex-col items-center justify-center py-32 text-center mt-auto relative z-10">
+<div class="glass-card p-12 rounded-3xl max-w-3xl w-full flex flex-col items-center gap-8 relative overflow-hidden">
+<!-- Inner glow effect specific to CTA -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none"></div>
+<h2 class="font-display text-display text-primary">Sẵn sàng chuyển đổi?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Bắt đầu trải nghiệm luồng công việc tự động hóa với giao diện đỉnh cao ngay hôm nay.</p>
+<button class="font-label-md text-label-md px-8 py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-[0_8px_16px_rgba(6,182,212,0.2)] hover:shadow-[0_12px_24px_rgba(6,182,212,0.3)] transition-all transform hover:-translate-y-1">
+                    Bắt đầu ngay
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-white/10 bg-surface-container-lowest/40 backdrop-blur-md mt-auto relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md text-primary">FormAuto Hub</div>
+<div class="font-label-md text-label-md text-outline hover:text-on-surface hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100">
+                © 2024 FormAuto Hub. All rights reserved.
+            </div>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="font-label-md text-label-md text-outline hover:text-on-surface hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-outline hover:text-on-surface hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-outline hover:text-on-surface hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>
