@@ -32,6 +32,9 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
 
     public DbSet<ResearchForm> ResearchForms => Set<ResearchForm>();
     public DbSet<ResearchFormQuestion> ResearchFormQuestions => Set<ResearchFormQuestion>();
+    public DbSet<ResearchModel> ResearchModels => Set<ResearchModel>();
+    public DbSet<ResearchVariable> ResearchVariables => Set<ResearchVariable>();
+    public DbSet<ObservedQuestionMapping> ObservedQuestionMappings => Set<ObservedQuestionMapping>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -166,6 +169,47 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
                 .WithMany(item => item.Questions)
                 .HasForeignKey(item => item.FormId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ResearchModel>(entity =>
+        {
+            entity.HasIndex(item => new { item.UserId, item.Status });
+            entity.HasIndex(item => new { item.FormId, item.Status });
+            entity.HasIndex(item => item.FormId)
+                .IsUnique()
+                .HasFilter("[Status] = 'Active'");
+            entity.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(item => item.UserId);
+            entity.HasOne(item => item.Form)
+                .WithMany(item => item.Models)
+                .HasForeignKey(item => item.FormId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResearchVariable>(entity =>
+        {
+            entity.Property(item => item.MinValue).HasPrecision(18, 2);
+            entity.Property(item => item.MaxValue).HasPrecision(18, 2);
+            entity.HasIndex(item => new { item.ModelId, item.Code }).IsUnique();
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.Variables)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ObservedQuestionMapping>(entity =>
+        {
+            entity.HasIndex(item => new { item.VariableId, item.FormQuestionId }).IsUnique();
+            entity.HasIndex(item => new { item.VariableId, item.ObservedCode }).IsUnique();
+            entity.HasOne(item => item.Variable)
+                .WithMany(item => item.ObservedQuestionMappings)
+                .HasForeignKey(item => item.VariableId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(item => item.FormQuestion)
+                .WithMany(item => item.ObservedQuestionMappings)
+                .HasForeignKey(item => item.FormQuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

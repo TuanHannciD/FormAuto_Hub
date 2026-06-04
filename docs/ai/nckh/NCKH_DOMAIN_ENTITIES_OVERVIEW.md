@@ -19,7 +19,7 @@ Users (existing)
   │
   └── 1:N ── ResearchModels
                │
-               ├── 1:1 ── ResearchForms
+               ├── N:1 ── ResearchForms
                │
                ├── 1:N ── ResearchVariables
                │            │
@@ -102,13 +102,18 @@ Mô hình nghiên cứu — đơn vị trung tâm của module.
 - FormId (FK → ResearchForms.Id)
 - Name (string)
 - Description (string, nullable)
-- Status (Draft | Active | Archived)
+- Status (Draft | Active)
 - CreatedAt (DateTime)
 - UpdatedAt (DateTime)
 
-Index: (UserId, Status); UNIQUE(FormId) — 1:1 model-form cho MVP
+Index: (UserId, Status); (FormId, Status)
 
-Lifecycle: Draft → Active → Archived
+Approved Phase 2 direction:
+
+- multiple models per imported form are allowed
+- at most one `Active` model per form is allowed
+- `Draft` is the required minimum status for Phase 2
+- `Archived` remains outside current Phase 2 scope
 
 ### ResearchVariables
 

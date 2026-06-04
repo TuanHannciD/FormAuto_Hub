@@ -25,3 +25,7 @@ Use this file to choose the smallest sufficient skill combination.
 - Database recommendation -> risk review -> controlled doc editor after approval.
 - Bug symptom -> triage -> HTTP behavior tester when a live route check is useful -> worker -> reviewer.
 - Stitch UI screen -> iterative Stitch designer -> save design artifact -> reviewer when implementation risk exists.
+
+## Ready Packs
+
+- NCKH Phase 2 immediate handoff pack: `templates/chat-starters/nckh-phase2/README.md`

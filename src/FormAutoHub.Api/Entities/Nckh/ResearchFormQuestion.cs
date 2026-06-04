@@ -12,4 +12,5 @@ public sealed class ResearchFormQuestion
     public DateTimeOffset CreatedAt { get; set; }
 
     public ResearchForm Form { get; set; } = null!;
+    public ICollection<ObservedQuestionMapping> ObservedQuestionMappings { get; set; } = new List<ObservedQuestionMapping>();
 }

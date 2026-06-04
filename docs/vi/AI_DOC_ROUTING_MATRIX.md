@@ -31,7 +31,7 @@ Luôn đọc `README.md` và `AGENTS.md` trước.
 | Testing/validation | `PHASE_9_KICKOFF_PLAN.md` | `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md` |
 | Sửa tài liệu | `PROJECT_EXECUTION_RULES.md` | cặp file tương ứng trong `docs/ai` và `docs/vi` |
 | Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, tài liệu theo task |
-| Task NCKH | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
+| Task NCKH | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_PHASE_1_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
 
 ## Quy tắc đồng bộ
 

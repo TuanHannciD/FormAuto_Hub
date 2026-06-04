@@ -8,8 +8,9 @@ Define how to move from the closed FormAuto Hub global phase state into a specif
 
 - FormAuto Hub global phase: Phase 9 closeout completed; no next global phase selected.
 - NCKH is a separate module track inside the same repository.
-- NCKH Phase 1 has implementation evidence in the repo.
-- NCKH Phase 2 is the next candidate and is not active until explicitly approved.
+- NCKH Phase 1 is completed for its approved scope.
+- NCKH Phase 2 is completed for its approved backend-only scope.
+- NCKH Phase 3 is the next proposed phase and is not active until explicitly approved.
 
 ## Required Startup Order For NCKH Work
 
@@ -20,6 +21,9 @@ Define how to move from the closed FormAuto Hub global phase state into a specif
 5. Read this file.
 6. Read `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`.
 7. Read phase-specific NCKH docs:
+   - closeout evidence: `NCKH_PHASE_1_CLOSEOUT.md`
+   - Phase 2 closeout evidence: `NCKH_PHASE_2_CLOSEOUT.md`
+   - Phase 2 kickoff plan: `NCKH_PHASE_2_KICKOFF_PLAN.md`
    - requirements: `NCKH_REQUIREMENT_PACKAGE.md`
    - module ownership: `NCKH_MODULE_MAP.md`
    - architecture boundaries: `NCKH_ARCHITECTURE_BOUNDARIES.md`
@@ -32,8 +36,8 @@ Do not phrase NCKH work as "FormAuto Hub Phase 10" unless the user explicitly ch
 
 Use this wording instead:
 
-- "Open NCKH Phase 2"
-- "NCKH Phase 2 follow-up"
+- "Open NCKH Phase 3"
+- "NCKH Phase 2 closeout/fix follow-up"
 - "NCKH Phase 1 validation/fix follow-up"
 
 ## Go/No-Go Checklist
@@ -63,25 +67,27 @@ Not allowed without explicit approval:
 
 - adding NCKH entities or migrations
 - adding NCKH API contracts
-- implementing Phase 2+ services/controllers/frontend flows
+- implementing Phase 3+ services/controllers/frontend flows
 - enabling new Google scopes
-- treating proposed Phase 2+ behavior as completed
+- treating proposed Phase 3+ behavior as completed
 
 ## Recommended Next Candidate
 
-The next implementation candidate is **NCKH Phase 2 - Model & Variable Management**.
+The next implementation candidate is **NCKH Phase 3 - Canvas Relations & Hypothesis**.
 
-Before Phase 2 implementation, prepare a narrow kickoff plan covering:
+Before Phase 3 implementation, prepare a narrow kickoff plan covering:
 
-- exact entities and fields to add
-- allowed status/lifecycle values
-- one-model-per-form rule and conflict behavior
-- variable type and scale validation
-- mapping ownership and delete behavior
+- exact relation and node-position entities and fields to add
+- ownership and model-status constraints
+- relation validation and duplicate/self-relation behavior
+- whether hypothesis text/code generation is deterministic only or needs a separate approval
+- delete behavior when variables or mappings are removed
 - migration and rollback risk
 - API contract surface
-- minimal frontend dependency, if any
+- frontend dependency, if any, including React Flow only after backend contracts are approved
 - validation plan
+
+Use `NCKH_PHASE_2_CLOSEOUT.md` as the dependency baseline before any Phase 3 planning.
 
 ## Closeout Rule
 
@@ -100,6 +106,6 @@ If closeout evidence is missing, mark the phase as `Implemented with repo eviden
 
 ## Deferred
 
-- Any NCKH Phase 2+ implementation without explicit approval.
+- Any NCKH Phase 3+ implementation without explicit approval.
 - Any FormAuto Hub global Phase 10 decision by implication.
 - Any production readiness claim without current runtime validation.

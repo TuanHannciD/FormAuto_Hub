@@ -35,7 +35,7 @@ Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under 
 - Frontend framework: Next.js web dashboard.
 - Frontend UI baseline: shadcn/ui with Tailwind CSS for dashboard/admin components.
 - Authentication: JWT access tokens with refresh token/session storage.
-- Google account login/register: identity-only for FormAuto Hub; official Google Forms API OAuth scopes approved for NCKH Survey Module (Phase 1 complete).
+- Google account login/register: identity-only for the core FormAuto Hub product; NCKH Survey Module has a separate approved Phase 1 track with repo evidence for Google OAuth link and Google Forms read/import.
 - MVP top-up flow: manual top-up order approval.
 - Phase 8 payment provider: PayOS first, for automated credit top-up.
 - MVP generated response limit: up to 100 preview responses per action, with controlled submission in sequential batches of 10.

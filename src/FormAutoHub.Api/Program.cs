@@ -120,6 +120,7 @@ builder.Services.AddScoped<IGoogleTokenProtector, GoogleTokenProtector>();
 builder.Services.AddHttpClient<IGoogleOAuthService, GoogleOAuthService>();
 builder.Services.AddHttpClient<IGoogleFormsApiService, GoogleFormsApiService>();
 builder.Services.AddScoped<IResearchFormService, ResearchFormService>();
+builder.Services.AddScoped<IResearchModelService, ResearchModelService>();
 
 builder.Services.AddOpenApi();
 

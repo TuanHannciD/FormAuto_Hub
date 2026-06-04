@@ -33,7 +33,7 @@ Always read `README.md` and `AGENTS.md` first.
 | Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, task-specific docs |
 
 
-| NCKH task | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
+| NCKH task | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_PHASE_1_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
 
 
 

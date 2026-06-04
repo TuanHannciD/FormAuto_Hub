@@ -6,13 +6,15 @@
 
 ## Phase hiện tại
 
-Trạng thái phase NCKH hiện tại: **Phase 1 đã có implementation evidence trong repo; Phase 2 là candidate tiếp theo và chưa được duyệt để triển khai**.
+Trạng thái phase NCKH hiện tại: **Phase 1 và Phase 2 đã completed cho đúng phạm vi được duyệt; Phase 3 là phase đề xuất tiếp theo và chưa được duyệt để triển khai**.
 
 Mặc định không có phase triển khai NCKH nào đang active. Mọi phase NCKH mới hoặc follow-up fix đều cần approval rõ trước khi implementation.
 
 Nguồn tiến trình cần đọc:
 
 - Đọc `NCKH_PROGRESS_LEDGER.md` trước để biết evidence đã implement và trạng thái validation.
+- Đọc `NCKH_PHASE_1_CLOSEOUT.md` để xem snapshot closeout evidence rõ cho Phase 1.
+- Đọc `NCKH_PHASE_2_CLOSEOUT.md` để xem snapshot closeout evidence rõ cho Phase 2.
 - Đọc `NCKH_PHASE_TRANSITION_GUIDE.md` trước khi mở phase NCKH tiếp theo.
 
 ## Sơ đồ phụ thuộc phase
@@ -21,12 +23,12 @@ Nguồn tiến trình cần đọc:
 Phase 0 (Tài liệu)
   |
   v
-Phase 1 (OAuth + Forms API import - đã có evidence implementation)
+Phase 1 (OAuth + Forms API import - đã completed)
   |
   v
-Phase 2 (Model + Biến + Mapping - candidate tiếp theo, cần approval)
+Phase 2 (Model + Biến + Mapping - đã completed)
   |
-  +--> Phase 3 (Canvas + Quan hệ - đề xuất)
+  +--> Phase 3 (Canvas + Quan hệ - đề xuất, cần approval)
   +--> Phase 4 (Tạo/Cập nhật Form - đề xuất)
   |       |
   |       v
@@ -67,7 +69,7 @@ Tiêu chí hoàn thành:
 
 ## Phase 1 - Backend Foundation + Google OAuth Link + Forms API Import
 
-Trạng thái: Đã có implementation evidence trong repo. Cần chạy lại runtime/live validation trước khi xem là production-ready.
+Trạng thái: Completed cho đúng phạm vi Phase 1 đã duyệt. Xem `NCKH_PHASE_1_CLOSEOUT.md` để biết closeout evidence và validation record hiện tại.
 
 Evidence đã implement:
 
@@ -98,20 +100,24 @@ Ranh giới scope:
 
 Trạng thái validation:
 
-- Có evidence test/smoke trong repo file, nhưng task sync tài liệu này chưa chạy lại runtime validation hiện tại.
+- Closeout evidence hiện tại đã bao gồm repo evidence, validation build/test/web build hiện tại, và manual test do user xác nhận cho đúng phạm vi API/browser của Phase 1.
 
 ## Phase 2 - Quản lý Model & Biến
 
-Trạng thái: Candidate tiếp theo. Cần approval rõ trước khi triển khai.
+Trạng thái: Completed cho đúng scope backend-only Phase 2 đã duyệt. Xem `NCKH_PHASE_2_CLOSEOUT.md` để biết closeout evidence và validation record.
 
-Scope đề xuất:
+Scope đã implement:
 
 - Entity: `ResearchModel`, `ResearchVariable`, `ObservedQuestionMapping`
 - Service cho workflow model, biến, và mapping
 - Controller CRUD cho model, biến, và mapping
-- Ràng buộc: MVP một active model cho mỗi imported form nếu chưa có approval thay đổi
-- Cascade/delete behavior phải được review trước migration
-- Hành vi cảnh báo khi sửa biến sau khi có data vẫn là đề xuất cho đến khi Phase 5 data behavior được duyệt
+- Cho phép nhiều model trên một imported form
+- Ràng buộc: tối đa một model `Active` trên mỗi imported form
+- Activation rõ ràng `Draft -> Active`
+- Delivery backend-only
+- Mapping dùng endpoint riêng, không đi theo payload nested của variable
+- Delete behavior nằm trong owned cascade path của Phase 2: `ResearchModel -> ResearchVariable -> ObservedQuestionMapping`
+- `ObservedQuestionMapping -> ResearchFormQuestion` dùng restrict delete behavior
 
 Ranh giới scope:
 
@@ -120,6 +126,9 @@ Ranh giới scope:
 - Không tạo form.
 - Không thu thập hoặc chuẩn hóa response.
 - Không export.
+- Không implement frontend trong Phase 2.
+- Lifecycle `Archived` nằm ngoài scope của Phase 2.
+- Hành vi cảnh báo khi sửa biến sau khi có data vẫn deferred cho đến khi Phase 5 data behavior được duyệt.
 
 ## Phase 3 - Canvas Quan hệ & Giả thuyết
 
@@ -231,7 +240,7 @@ Nhãn report:
 
 ## Deferred
 
-- Implementation NCKH Phase 2+ cho đến khi được duyệt
+- Implementation NCKH Phase 3+ cho đến khi được duyệt
 - Google Sheets API response pull cho đến Phase 5 approval
 - Google Forms create/update cho đến Phase 4 approval
 - Google Forms watches / Cloud Pub/Sub

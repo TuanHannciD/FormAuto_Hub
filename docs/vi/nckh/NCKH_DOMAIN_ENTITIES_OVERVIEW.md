@@ -19,7 +19,7 @@ Users (hiện có)
   │
   └── 1:N ── ResearchModels (Mô hình nghiên cứu)
                │
-               ├── 1:1 ── ResearchForms
+               ├── N:1 ── ResearchForms
                │
                ├── 1:N ── ResearchVariables (Biến nghiên cứu)
                │            │
@@ -95,10 +95,17 @@ Index: (FormId, GoogleQuestionId); (FormId, OrderIndex)
 - FormId (FK → ResearchForms.Id)
 - Name (string)
 - Description (string, nullable)
-- Status (Draft | Active | Archived)
+- Status (Draft | Active)
 - CreatedAt, UpdatedAt (DateTime)
 
-Index: (UserId, Status); UNIQUE(FormId)
+Index: (UserId, Status); (FormId, Status)
+
+Hướng đã duyệt cho Phase 2:
+
+- cho phép nhiều model trên một imported form
+- tối đa một model `Active` trên mỗi form
+- `Draft` là trạng thái tối thiểu bắt buộc của Phase 2
+- `Archived` nằm ngoài scope hiện tại của Phase 2
 
 ### ResearchVariables
 

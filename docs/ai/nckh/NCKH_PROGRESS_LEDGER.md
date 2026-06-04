@@ -10,7 +10,7 @@ This file is the first NCKH-specific status document to read after `README.md`, 
 
 Global FormAuto Hub state: Phase 9 closeout completed; no next global phase selected.
 
-NCKH state: Phase 1 has implementation evidence in the repo. Phase 2 is the next candidate and is not approved by default.
+NCKH state: Phase 1 and Phase 2 are completed for their approved scopes. Phase 3 is the next proposed phase and is not approved by default.
 
 No NCKH implementation phase is currently active unless a user explicitly approves one.
 
@@ -27,7 +27,12 @@ No NCKH implementation phase is currently active unless a user explicitly approv
 | Phase 1 DTOs | `src/FormAutoHub.Api/Contracts/NckhDtos.cs` | Implemented |
 | Phase 1 frontend | `apps/web/app/dashboard/nckh/page.tsx`, `apps/web/app/dashboard/nckh/callback/page.tsx` | Implemented |
 | Phase 1 tests | `tests/FormAutoHub.Tests/NckhPhase1OAuthAndFormsTests.cs`, `apps/web/tests/nckh.spec.ts` | Test files exist |
-| Phase 2+ backend | Research model, variables, mappings, relations, data, export code | Not found in current evidence pass |
+| Phase 2 entities | `src/FormAutoHub.Api/Entities/Nckh/ResearchModel.cs`, `ResearchVariable.cs`, `ObservedQuestionMapping.cs` | Implemented |
+| Phase 2 migration | `src/FormAutoHub.Api/Data/Migrations/20260602193837_NckhPhase2_PersistenceFoundation.cs` | Implemented and applied in validation |
+| Phase 2 API | `src/FormAutoHub.Api/Controllers/Nckh/ResearchModelsController.cs`, `ResearchVariablesController.cs` | Implemented |
+| Phase 2 services | `src/FormAutoHub.Api/Services/Nckh/ResearchModelService.cs`, `ResearchFormService.cs` | Implemented |
+| Phase 2 tests | `tests/FormAutoHub.Tests/NckhPhase2PersistenceTests.cs`, `NckhPhase2ModelApiTests.cs`, `NckhPhase2VariableMappingApiTests.cs` | Tests pass in latest validation |
+| Phase 3+ backend | Relations, canvas positions, data collection, normalization, export code | Deferred / not implemented |
 
 ## Implemented Phase 1 Behavior
 
@@ -43,11 +48,19 @@ Implemented:
 - duplicate imported form guard per user/form
 - frontend shell for NCKH dashboard and OAuth callback
 
-Not implemented by Phase 1 evidence:
+Implemented by Phase 2 evidence:
 
 - research model CRUD
-- variable CRUD
-- observed question mapping CRUD
+- multiple models per imported form
+- single `Active` model enforcement per imported form
+- explicit `Draft -> Active` activation endpoint
+- variable CRUD under a model
+- observed question mapping CRUD through separate endpoints
+- database uniqueness for variable codes and observed mappings
+- delete model within the owned Phase 2 cascade path
+
+Not implemented by Phase 1/2 evidence:
+
 - model relations
 - node/canvas positions
 - Google Form create/update
@@ -59,29 +72,31 @@ Not implemented by Phase 1 evidence:
 
 ## Validation State
 
-Verified in this doc sync task:
+Verified in the latest docs and validation pass:
 
 - Repo files were scanned for NCKH docs, entities, controller/service/contracts, migration, frontend routes, and tests.
+- dotnet build FormAutoHub.sln -c Release passed for the current NCKH Phase 2 backend slice.
+- dotnet test tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj -c Release passed: 122 passed, 0 failed.
+- EF Core database update applied `20260602193837_NckhPhase2_PersistenceFoundation` in the Development SQL Server database.
+- Authenticated HTTP smoke passed on `http://127.0.0.1:5097` with a real JWT for model, variable, and mapping CRUD plus `Draft -> Active` activation.
+- NCKH Phase 2 smoke data was cleaned and the API process was stopped after validation.
+- User-confirmed manual testing for the NCKH Phase 1 flow was recorded on 2026-06-01 for all 6 scoped checks: POST /api/v1/nckh/auth/google-link, POST /api/v1/nckh/forms/import, GET /api/v1/nckh/forms, GET /api/v1/nckh/forms/{formId}, /dashboard/nckh, and /dashboard/nckh/callback.
 
-Not run in this doc sync task:
+Not run in the latest docs and validation pass:
 
-- `dotnet build`
-- `dotnet test`
-- `npm run build`
-- Playwright smoke
-- live Google OAuth flow
-- live Google Forms API import
-- migration apply against a current database
+- Playwright smoke for NCKH Phase 2 frontend, because Phase 2 is backend-only and no frontend scope was implemented.
+- live Google OAuth flow or live Google Forms API import during the Phase 2 closeout pass; these belong to Phase 1 behavior and were not changed by Phase 2.
+- frontend build during the Phase 2 closeout pass, because no frontend file changed in the current Phase 2 scope.
 
-Do not claim current runtime readiness from this ledger alone. Re-run applicable validation before closeout of any implementation task.
+Phase 1 and Phase 2 now have closeout evidence plus validation evidence for their approved scopes. Keep future claims outside those scopes or beyond the recorded validation evidence explicit.
 
 ## Phase State Table
 
 | NCKH phase | State | Next action |
 |---|---|---|
 | Phase 0 - Docs baseline | Completed baseline | Keep AI/VI synced |
-| Phase 1 - OAuth + Forms API import | Implemented with repo evidence | Re-run validation before production/runtime claims |
-| Phase 2 - Model + Variables + Mapping | Next candidate, not active | Requires approval, contract guard, DB risk review |
+| Phase 1 - OAuth + Forms API import | Completed | Keep Phase 1 boundaries intact |
+| Phase 2 - Model + Variables + Mapping | Completed | See `NCKH_PHASE_2_CLOSEOUT.md`; Phase 3 remains approval-gated |
 | Phase 3 - Canvas Relations | Proposed | Requires approval after/with Phase 2 dependency clarity |
 | Phase 4 - Form Generation | Proposed | Requires approval and Google Forms write-scope review |
 | Phase 5 - Data Collection + Normalization | Proposed | Requires approval and Google Sheets scope review |
@@ -99,6 +114,6 @@ Do not claim current runtime readiness from this ledger alone. Re-run applicable
 
 ## Deferred
 
-- NCKH Phase 2+ implementation until explicitly approved.
-- Any new API contracts, database fields, lifecycle states, or Google scopes outside Phase 1 until reviewed and approved.
+- NCKH Phase 3+ implementation until explicitly approved.
+- Any new API contracts, database fields, lifecycle states, or Google scopes outside Phase 1/2 until reviewed and approved.
 - Production-readiness claims until current validation is run.

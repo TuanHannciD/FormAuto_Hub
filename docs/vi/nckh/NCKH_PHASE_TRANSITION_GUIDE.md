@@ -8,8 +8,9 @@
 
 - Global phase FormAuto Hub: Phase 9 closeout đã hoàn tất; chưa chọn global phase tiếp theo.
 - NCKH là track module riêng trong cùng repository.
-- NCKH Phase 1 đã có implementation evidence trong repo.
-- NCKH Phase 2 là candidate tiếp theo và chưa active cho đến khi được approve rõ.
+- NCKH Phase 1 đã completed cho đúng phạm vi được duyệt.
+- NCKH Phase 2 đã completed cho đúng scope backend-only được duyệt.
+- NCKH Phase 3 là phase đề xuất tiếp theo và chưa active cho đến khi được approve rõ.
 
 ## Thứ tự đọc bắt buộc cho việc NCKH
 
@@ -20,6 +21,9 @@
 5. Đọc file này.
 6. Đọc `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`.
 7. Đọc các docs NCKH theo phase:
+   - closeout evidence: `NCKH_PHASE_1_CLOSEOUT.md`
+   - closeout evidence Phase 2: `NCKH_PHASE_2_CLOSEOUT.md`
+   - kickoff plan cho Phase 2: `NCKH_PHASE_2_KICKOFF_PLAN.md`
    - requirements: `NCKH_REQUIREMENT_PACKAGE.md`
    - module ownership: `NCKH_MODULE_MAP.md`
    - architecture boundaries: `NCKH_ARCHITECTURE_BOUNDARIES.md`
@@ -32,8 +36,8 @@ Không gọi việc NCKH là "FormAuto Hub Phase 10" trừ khi user chọn rõ g
 
 Dùng wording này:
 
-- "Mở NCKH Phase 2"
-- "NCKH Phase 2 follow-up"
+- "Mở NCKH Phase 3"
+- "NCKH Phase 2 closeout/fix follow-up"
 - "NCKH Phase 1 validation/fix follow-up"
 
 ## Checklist Go/No-Go
@@ -63,25 +67,27 @@ Không được phép nếu chưa có approval rõ:
 
 - thêm NCKH entities hoặc migrations
 - thêm NCKH API contracts
-- implement service/controller/frontend flow Phase 2+
+- implement service/controller/frontend flow Phase 3+
 - bật Google scopes mới
-- xem behavior Phase 2+ đang đề xuất là đã completed
+- xem behavior Phase 3+ đang đề xuất là đã completed
 
 ## Candidate tiếp theo được khuyến nghị
 
-Candidate implementation tiếp theo là **NCKH Phase 2 - Model & Variable Management**.
+Candidate implementation tiếp theo là **NCKH Phase 3 - Canvas Relations & Hypothesis**.
 
-Trước khi implement Phase 2, cần chuẩn bị kickoff plan hẹp gồm:
+Trước khi implement Phase 3, cần chuẩn bị kickoff plan hẹp gồm:
 
-- entity và field chính xác cần thêm
-- status/lifecycle values được phép
-- rule một model cho mỗi form và conflict behavior
-- validation cho variable type và scale
-- mapping ownership và delete behavior
+- entity và field chính xác cho relation và node position cần thêm
+- constraint ownership và trạng thái model
+- validation quan hệ, duplicate relation, và self-relation behavior
+- việc sinh hypothesis text/code là deterministic hay cần approval riêng
+- delete behavior khi variable hoặc mapping bị xóa
 - migration và rollback risk
 - API contract surface
-- dependency frontend tối thiểu nếu có
+- dependency frontend nếu có, bao gồm React Flow chỉ sau khi backend contract được duyệt
 - validation plan
+
+Dùng `NCKH_PHASE_2_CLOSEOUT.md` làm baseline dependency trước mọi planning Phase 3.
 
 ## Quy tắc closeout
 
@@ -100,6 +106,6 @@ Nếu thiếu closeout evidence, ghi phase là `Implemented with repo evidence` 
 
 ## Deferred
 
-- Bất kỳ implementation NCKH Phase 2+ nào chưa được approve rõ.
+- Bất kỳ implementation NCKH Phase 3+ nào chưa được approve rõ.
 - Bất kỳ quyết định global FormAuto Hub Phase 10 nào do suy diễn.
 - Bất kỳ claim production readiness nào chưa có runtime validation hiện tại.

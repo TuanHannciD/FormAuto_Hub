@@ -6,13 +6,15 @@ Define delivery phases for the NCKH Survey Platform, a module inside the FormAut
 
 ## Current Phase
 
-Current NCKH phase state: **Phase 1 implemented with repo evidence; Phase 2 is the next candidate and is not approved for implementation yet**.
+Current NCKH phase state: **Phase 1 and Phase 2 completed for their approved scopes; Phase 3 is the next proposed phase and is not approved for implementation yet**.
 
 No NCKH implementation phase is active by default. Every new NCKH phase or fix follow-up requires explicit approval before implementation.
 
 Progress source of truth:
 
 - Read `NCKH_PROGRESS_LEDGER.md` first for implemented evidence and validation state.
+- Read `NCKH_PHASE_1_CLOSEOUT.md` for the explicit Phase 1 closeout evidence snapshot.
+- Read `NCKH_PHASE_2_CLOSEOUT.md` for the explicit Phase 2 closeout evidence snapshot.
 - Read `NCKH_PHASE_TRANSITION_GUIDE.md` before opening the next NCKH phase.
 
 ## Phase Dependency Map
@@ -21,12 +23,12 @@ Progress source of truth:
 Phase 0 (Docs)
   |
   v
-Phase 1 (OAuth + Forms API import - implemented with repo evidence)
+Phase 1 (OAuth + Forms API import - completed)
   |
   v
-Phase 2 (Model + Variables + Mapping - next candidate, needs approval)
+Phase 2 (Model + Variables + Mapping - completed)
   |
-  +--> Phase 3 (Canvas Relations - proposed)
+  +--> Phase 3 (Canvas Relations - proposed, needs approval)
   +--> Phase 4 (Form Generation - proposed)
   |       |
   |       v
@@ -67,7 +69,7 @@ Exit criteria:
 
 ## Phase 1 - Backend Foundation + Google OAuth Link + Forms API Import
 
-Status: Implemented with repo evidence. Runtime/live validation should be re-run before treating it as production-ready.
+Status: Completed for the approved Phase 1 scope. See `NCKH_PHASE_1_CLOSEOUT.md` for the closeout evidence snapshot and current validation record.
 
 Implemented evidence:
 
@@ -98,20 +100,24 @@ Scope boundaries:
 
 Validation state:
 
-- Unit/integration and browser smoke evidence exists in repo files, but current runtime validation has not been re-run in this doc sync task.
+- Current closeout evidence includes repo evidence, current build/test/web build validation, and user-confirmed manual testing for the approved Phase 1 API/browser scope.
 
 ## Phase 2 - Model & Variable Management
 
-Status: Next candidate. Needs explicit approval before implementation.
+Status: Completed for the approved backend-only Phase 2 scope. See `NCKH_PHASE_2_CLOSEOUT.md` for closeout evidence and validation record.
 
-Proposed scope:
+Implemented scope:
 
 - Entities: `ResearchModel`, `ResearchVariable`, `ObservedQuestionMapping`
 - Services for model, variable, and mapping workflows
 - Controllers for model, variable, and mapping CRUD
-- Constraint: one active MVP model per imported form unless explicitly changed
-- Cascade/delete behavior must be reviewed before migration
-- Warning behavior when editing variables after data exists remains proposed until Phase 5 data behavior is approved
+- Multiple models per imported form are allowed
+- Constraint: at most one `Active` model per imported form
+- Explicit `Draft -> Active` activation
+- Backend-only delivery
+- Mapping uses separate endpoint(s), not nested variable payloads
+- Delete behavior stays inside the owned Phase 2 cascade path: `ResearchModel -> ResearchVariable -> ObservedQuestionMapping`
+- `ObservedQuestionMapping -> ResearchFormQuestion` uses restrict delete behavior
 
 Scope boundaries:
 
@@ -120,6 +126,9 @@ Scope boundaries:
 - No form generation.
 - No response collection or normalization.
 - No export.
+- No frontend implementation inside Phase 2.
+- `Archived` lifecycle remains out of Phase 2 scope.
+- Warning behavior when editing variables after data exists remains deferred until Phase 5 data behavior is approved.
 
 ## Phase 3 - Canvas Relations & Hypothesis
 
@@ -231,7 +240,7 @@ Report labels:
 
 ## Deferred
 
-- NCKH Phase 2+ implementation until approved
+- NCKH Phase 3+ implementation until approved
 - Google Sheets API response pull until Phase 5 approval
 - Google Forms create/update until Phase 4 approval
 - Google Forms watches / Cloud Pub/Sub

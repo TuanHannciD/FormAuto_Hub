@@ -2,7 +2,14 @@
 
 ## Purpose
 
-Đề xuất API contracts cho NCKH Survey Module. Tất cả endpoints là proposed, cần review trước implementation.
+API contract guide cho NCKH Survey Module.
+
+Phase 1/2 note:
+
+- The Phase 1 endpoints in section 1 are implemented with repo evidence and should be treated as the current documented contract baseline for NCKH Phase 1.
+- The Phase 2 endpoints in sections 2-4 are implemented with repo evidence and current closeout validation. See `NCKH_PHASE_2_CLOSEOUT.md`.
+- Current runtime readiness is not claimed by this file alone for future changes; re-run validation before new closeout/runtime claims.
+- Endpoints outside sections 1-4 remain proposed until their later NCKH phases are explicitly approved and implemented.
 
 ## Base Path
 
@@ -12,12 +19,12 @@ Tất cả NCKH API endpoints bắt đầu với `/api/v1/nckh`.
 
 Tất cả endpoints yêu cầu JWT Bearer token. Role: Researcher (default user role) hoặc Admin.
 
-## Proposed Endpoints
+## Implemented Phase 1 Endpoints
 
 ### 1. Google OAuth & Forms Import
 
 #### POST /api/v1/nckh/auth/google-link
-Link Google Account với OAuth Forms + Sheets scopes.
+Link Google Account with the approved NCKH Forms read scope.
 
 Request:
 ```json
@@ -107,6 +114,8 @@ Response 200:
 
 ---
 
+## Implemented Phase 2 Endpoints
+
 ### 2. Research Models
 
 #### POST /api/v1/nckh/models
@@ -130,26 +139,25 @@ Response 201:
   "status": "Draft",
   "formTitle": "Khảo sát sinh viên",
   "variableCount": 0,
-  "relationCount": 0,
   "createdAt": "2026-05-30T10:00:00Z"
 }
 ```
 
-Errors: 400 (validation), 409 (form already has a model)
+Errors: 400 (validation), 404 (imported form not found), 409 (another active model already exists during activation)
 
 ---
 
 #### GET /api/v1/nckh/models
 List user models.
 
-Query: status (Draft|Active|Archived, optional)
+Query: status (Draft|Active, optional)
 
 Response 200: paged list
 
 ---
 
 #### GET /api/v1/nckh/models/{modelId}
-Get model detail with variables, relations, summary.
+Get model detail with variables and Phase 2 summary.
 
 Response 200:
 ```json
@@ -157,13 +165,10 @@ Response 200:
   "id": "guid",
   "name": "...",
   "description": "...",
-  "status": "Active",
+  "status": "Draft",
   "formTitle": "Khảo sát sinh viên",
   "variableCount": 3,
-  "relationCount": 2,
-  "responseCount": 45,
-  "variables": [...],
-  "relations": [...]
+  "variables": [...]
 }
 ```
 
@@ -174,8 +179,21 @@ Update model name/description.
 
 ---
 
+#### POST /api/v1/nckh/models/{modelId}/activate
+Activate a `Draft` model.
+
+Rules:
+
+- only `Draft` and `Active` are implemented lifecycle statuses
+- activation succeeds only when no other `Active` model exists for the same imported form
+- creating a `Draft` model is allowed even if another model for the same form already exists
+
+---
+
 #### DELETE /api/v1/nckh/models/{modelId}
-Delete model. Không xóa survey data. Cascade: variables, mappings, relations, node positions.
+Delete model. Phase 2 delete affects only the owned cascade path: `ResearchModel -> ResearchVariable -> ObservedQuestionMapping`.
+
+Future frontend confirmation UX remains out of Phase 2 scope.
 
 ---
 
@@ -193,11 +211,7 @@ Request:
   "scaleType": "Likert",
   "scalePoint": 5,
   "minValue": 1,
-  "maxValue": 5,
-  "mappings": [
-    { "formQuestionId": "guid-q3", "observedCode": "TH1" },
-    { "formQuestionId": "guid-q4", "observedCode": "TH2" }
-  ]
+  "maxValue": 5
 }
 ```
 
@@ -209,28 +223,33 @@ Response 201:
   "code": "TH",
   "variableType": "Independent",
   "scaleType": "Likert",
-  "scalePoint": 5,
-  "mappingCount": 2
+  "scalePoint": 5
 }
 ```
 
-Errors: 400 (duplicate code, invalid mappings), 409 (model archived)
+Errors: 400 (duplicate code, invalid scale payload), 404 (model not found)
 
 ---
 
 #### GET /api/v1/nckh/models/{modelId}/variables
-List variables with their mappings.
+List variables.
 
 ---
 
 #### PUT /api/v1/nckh/variables/{variableId}
-Update variable. Trả về cảnh báo nếu model đã có data.
+Update variable. Data-impact warnings remain deferred until later approved data phases exist.
 
 Request:
 ```json
 {
   "name": "Kỹ năng tự học (updated)",
-  "mappings": [...]
+  "code": "TH",
+  "variableType": "Independent",
+  "scaleType": "Likert",
+  "scalePoint": 7,
+  "minValue": null,
+  "maxValue": null,
+  "sortOrder": 1
 }
 ```
 
@@ -238,19 +257,43 @@ Response 200:
 ```json
 {
   "id": "guid",
-  "hasData": true,
-  "warning": "Model has collected data. Changing variable definition may affect existing normalized data."
+  "name": "Kỹ năng tự học (updated)",
+  "code": "TH"
 }
 ```
 
 ---
 
 #### DELETE /api/v1/nckh/variables/{variableId}
-Cascade delete mappings + node positions.
+Cascade delete mappings. Do not pull in node-position behavior from Phase 3.
 
 ---
 
-### 4. Relations
+### 4. Observed Question Mappings
+
+Mappings are handled through separate endpoint(s), not nested variable payloads.
+
+Implemented Phase 2 route surface:
+
+- `POST /api/v1/nckh/variables/{variableId}/mappings`
+- `GET /api/v1/nckh/variables/{variableId}/mappings`
+- `GET /api/v1/nckh/models/{modelId}/mappings`
+- `PUT /api/v1/nckh/mappings/{mappingId}`
+- `DELETE /api/v1/nckh/mappings/{mappingId}`
+
+Validation:
+
+- mapped question must belong to the same imported form as the variable's model
+- duplicate `(VariableId, FormQuestionId)` is rejected
+- duplicate `(VariableId, ObservedCode)` is rejected
+
+---
+
+## Proposed Future Endpoints
+
+---
+
+### 5. Relations
 
 #### POST /api/v1/nckh/models/{modelId}/relations
 Add relation.
@@ -290,7 +333,7 @@ Delete relation + associated node position.
 
 ---
 
-### 5. Canvas Positions
+### 6. Canvas Positions
 
 #### PUT /api/v1/nckh/models/{modelId}/positions
 Save node positions for canvas.
@@ -313,7 +356,7 @@ Load node positions.
 
 ---
 
-### 6. Form Generation
+### 7. Form Generation
 
 #### POST /api/v1/nckh/models/{modelId}/generate-form
 Generate or update Google Form from model.
@@ -347,7 +390,7 @@ Errors: 400 (no variables with mappings), 401 (Google not linked)
 
 ---
 
-### 7. Data Collection
+### 8. Data Collection
 
 #### POST /api/v1/nckh/models/{modelId}/collect
 Manual pull responses.
@@ -372,7 +415,7 @@ Query: page, pageSize
 
 ---
 
-### 8. Data Normalization
+### 9. Data Normalization
 
 #### POST /api/v1/nckh/models/{modelId}/normalize
 Normalize collected data.
@@ -409,7 +452,7 @@ Response 200:
 
 ---
 
-### 9. Export
+### 10. Export
 
 #### GET /api/v1/nckh/models/{modelId}/export?format=csv
 Download dataset.csv.

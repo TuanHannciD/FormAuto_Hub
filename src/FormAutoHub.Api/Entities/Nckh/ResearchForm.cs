@@ -13,4 +13,5 @@ public sealed class ResearchForm
     public DateTimeOffset UpdatedAt { get; set; }
 
     public ICollection<ResearchFormQuestion> Questions { get; set; } = new List<ResearchFormQuestion>();
+    public ICollection<ResearchModel> Models { get; set; } = new List<ResearchModel>();
 }
