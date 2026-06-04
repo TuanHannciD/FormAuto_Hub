@@ -27,6 +27,7 @@ Ghi lại công nghệ đã duyệt và các phần Deferred.
 - Background job framework.
 - AI answer generation.
 - AI mapping.
+- lựa chọn AI provider và model cuối.
 - Email notification provider.
 - Webhook platform.
 - Production deployment platform.
@@ -52,6 +53,31 @@ Future options có thể gồm:
 - queue-based worker
 
 Chưa option nào được duyệt.
+
+## AI provider direction
+
+AI provider settings được duyệt cho planning Phase 6 như một vùng cấu hình database do admin quản lý.
+
+Hướng đã duyệt cho worker:
+
+- lưu provider API keys qua admin settings và encrypt trước khi persist
+- validate provider và model không rỗng trước khi enable provider setting
+- validate Base URL optional là absolute URL dùng `http` hoặc `https`
+- không để normal-user generation requests phụ thuộc vào provider secrets
+- dùng abstraction `Integrations.AI` cho provider-specific calls
+- runtime mặc định phải fail-safe khi chưa cấu hình live provider adapter đã duyệt
+- deterministic AI adapter chỉ được dùng cho local/test validation khi bật rõ bằng configuration
+- OpenAI-compatible adapter chỉ được dùng khi runtime configuration bật rõ `AI:ProviderAdapter=OpenAICompatible`
+
+Deferred:
+
+- provider cuối
+- model cuối
+- lựa chọn provider SDK hoặc HTTP client library
+- nguồn validate provider/model catalog khi live
+- provider-specific SDK adapter ngoài OpenAI-compatible HTTP adapter đã duyệt
+- raw audit retention infrastructure
+- production background worker cho AI generation
 
 ## Frontend direction
 

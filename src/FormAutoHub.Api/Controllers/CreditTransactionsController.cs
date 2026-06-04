@@ -11,6 +11,13 @@ namespace FormAutoHub.Api.Controllers;
 public sealed class CreditTransactionsController(ICreditTransactionService creditTransactionService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<CreditTransactionListResponse>> GetMine(CancellationToken cancellationToken) =>
-        Ok(await creditTransactionService.GetMineAsync(cancellationToken));
+    public async Task<ActionResult<CreditTransactionPageResponse>> GetMine(
+        [FromQuery] string? type,
+        [FromQuery] string? search,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default) =>
+        Ok(await creditTransactionService.GetMineAsync(
+            new CreditTransactionQuery(type, search, page, pageSize),
+            cancellationToken));
 }

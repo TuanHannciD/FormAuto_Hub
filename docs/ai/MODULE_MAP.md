@@ -29,7 +29,14 @@ Define canonical module ownership for FormAuto Hub.
 | AuditLogs | admin/security-sensitive audit records | normal usage log replacement |
 | Integrations.GoogleForms | Google Forms analysis/submission integration boundary | account/credit business logic |
 | Integrations.Payment | Deferred payment provider boundary | MVP manual approval implementation |
-| Integrations.AI | Deferred AI mapping/suggestion boundary | MVP answer generation unless approved |
+| Integrations.AI | Phase 6 AI provider boundary, provider calls, provider response parsing | credit deduction, submission execution |
+| AiProviderSettings | admin AI provider configuration | normal-user prompt behavior |
+| AiPromptProfiles | project-level AI prompt configuration | generated preview persistence |
+| AiQuestionPrompts | per-question AI prompt configuration | detected form metadata ownership |
+| AiGenerationRuns | raw provider audit and AI generation run state | credit ledger source of truth |
+| AiGenerationRunItems | AI output validation evidence and generated response mapping | editable generated response workflow |
+
+| AiAnalytics | AI usage statistics aggregation and reporting; query-only from existing `AiGenerationRuns`, `UsageLogs`, and `Users` tables | credit deduction, submission execution, Google Forms calls |
 
 ## Cross-Module Rules
 
@@ -40,6 +47,10 @@ Define canonical module ownership for FormAuto Hub.
 - Form submission must require preview and user confirmation.
 - Google Forms integration code must stay out of credit/account modules.
 - Deferred integration modules may exist as planning boundaries, not production-complete claims.
+- AI provider/model selection must come from server-side admin settings, not normal-user frontend input.
+- AI-generated previews must still be stored as `GeneratedResponses` and remain read-only after creation.
+- AI generation credit deduction must go through `CreditManagement` and write `CreditTransactions`.
+- Raw AI provider payloads belong in AI audit entities and must not be exposed to normal users.
 
 ## MVP Answer Modes
 

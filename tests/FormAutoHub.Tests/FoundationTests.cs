@@ -17,6 +17,11 @@ public sealed class FoundationTests
 
         Assert.Equal(
             [
+                "AiGenerationRun",
+                "AiGenerationRunItem",
+                "AiPromptProfile",
+                "AiProviderSetting",
+                "AiQuestionPrompt",
                 "AnswerRule",
                 "AuditLog",
                 "CreditPackage",
@@ -24,9 +29,14 @@ public sealed class FoundationTests
                 "FormProject",
                 "FormQuestion",
                 "GeneratedResponse",
+                "ObservedQuestionMapping",
                 "PaymentProviderSetting",
                 "PaymentRecord",
                 "RefreshToken",
+                "ResearchForm",
+                "ResearchFormQuestion",
+                "ResearchModel",
+                "ResearchVariable",
                 "SubmissionJob",
                 "SubmissionLog",
                 "TopupOrder",

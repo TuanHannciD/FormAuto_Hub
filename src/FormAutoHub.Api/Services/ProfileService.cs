@@ -18,11 +18,25 @@ public sealed class ProfileService(
     IPasswordHasher passwordHasher)
     : IProfileService
 {
+    private const string GoogleProvider = "Google";
+
     public async Task<ProfileResponse?> GetAsync(CancellationToken cancellationToken) =>
         await dbContext.Users
             .AsNoTracking()
             .Where(user => user.Id == currentUser.UserId)
-            .Select(user => user.ToProfileResponse())
+            .GroupJoin(
+                dbContext.UserExternalLogins.AsNoTracking().Where(login => login.Provider == GoogleProvider),
+                user => user.Id,
+                login => login.UserId,
+                (user, googleLogins) => new { User = user, GoogleLogin = googleLogins.FirstOrDefault() })
+            .Select(item => new ProfileResponse(
+                item.User.Id,
+                item.User.Email,
+                item.User.FullName,
+                item.User.Role,
+                item.User.CreatedAt,
+                item.GoogleLogin != null,
+                item.GoogleLogin == null ? null : item.GoogleLogin.Email))
             .SingleOrDefaultAsync(cancellationToken);
 
     public async Task<UpdateProfileResponse?> UpdateAsync(UpdateProfileRequest request, CancellationToken cancellationToken)

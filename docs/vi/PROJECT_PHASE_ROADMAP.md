@@ -6,7 +6,11 @@
 
 ## Current Phase
 
-Current phase: **Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo**.
+Current global phase: **Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo**.
+
+Phase 6 AI scoped follow-up: **Đã hoàn thành (xem `PHASE_6_CLOSEOUT.md`)**.
+
+Không có active follow-up slice. Chưa chọn global phase mới sau Phase 9. Công việc phase mới hoặc implementation/fix follow-up cần approval rõ.
 
 ## Phase 0 - Documentation and scope baseline
 
@@ -147,9 +151,9 @@ Bao gồm:
 
 Frontend framework: Next.js web dashboard.
 
-## Phase 6 - Production integrations
+## Phase 6 - AI mapping/generation scoped follow-up
 
-Status: Deferred candidate group.
+Status: Completed cho approved scoped AI slice. Broader production integrations vẫn Deferred. Xem `PHASE_6_CLOSEOUT.md`.
 
 Deferred trừ khi được duyệt rõ:
 
@@ -157,7 +161,7 @@ Deferred trừ khi được duyệt rõ:
 - official Google Forms API
 - payment gateway
 - background job framework
-- AI mapping/generation
+- AI mapping/generation ngoài scoped follow-up đã duyệt
 - webhook integrations
 - production deployment platform
 
@@ -167,10 +171,24 @@ Ghi chú candidate tương lai:
 - Official Google Forms API có thể hữu ích sau này để đồng bộ metadata, câu hỏi và response của form.
 - Google Forms watches với luồng notification kiểu Cloud Pub/Sub có thể hữu ích sau này để phát hiện thay đổi schema hoặc response.
 - Background jobs có thể hữu ích sau này để renew watch, retry sync và kiểm tra sức khỏe integration.
+- AI mapping/generation scoped follow-up slice đã **hoàn thành**; xem `PHASE_6_CLOSEOUT.md`. Broader Phase 6 production integration vẫn Deferred.
+
+Tiến độ hiện tại của AI scoped follow-up:
+
+| Khu vực | Trạng thái hiện tại |
+|---|---|
+| AI provider settings backend | Đã implement cho scoped slice |
+| Admin AI provider config UI | Đã implement cho scoped slice |
+| AI prompt profile persistence | Đã implement cho scoped slice |
+| AI generate preview API | Đã implement cho scoped slice |
+| Normal-user AI mode UI/API binding | Đã implement cho scoped slice |
+| Live OpenAI-compatible provider calls | Đã implement cho scoped slice phía sau runtime configuration rõ ràng |
+| Broad AI audit read UI/API và raw payload exposure | Deferred |
+| Custom base URL và live OpenAI-compatible gateway calls | Đã implement cho scoped slice |
 
 Deferred:
 
-- Các candidate tương lai này chưa phải scope implementation đã duyệt.
+- Các candidate tương lai ngoài AI scoped follow-up đã duyệt chưa phải scope implementation đã duyệt.
 - Các mục này không duyệt API contracts, database fields, statuses, lifecycle states, OAuth token storage, webhook/PubSub ingestion models hoặc lựa chọn background job framework.
 - Nếu task tương lai cần UI cho các integration này, chỉ dùng UI docs hiện có khi đã đủ; nếu chưa đủ thì phải hỏi lại hướng UI hoặc sync UI docs trước khi implement.
 
@@ -329,4 +347,4 @@ Closeout:
 
 ## Phase Rule
 
-Chưa chọn phase tiếp theo sau closeout Phase 9. Công việc phase mới hoặc implementation/fix follow-up cần approval rõ.
+Chưa chọn full global phase tiếp theo sau closeout Phase 9. Phase 6 AI scoped follow-up slice đã hoàn thành. Công việc phase mới hoặc implementation/fix follow-up ngoài slice đã duyệt cần approval rõ.

@@ -5,7 +5,7 @@ export function StatusBadge({ status }: { status: string }) {
   const tone =
     status === "Success" || status === "Approved" || status === "Completed" || status === "Submitted" || status === "Paid" || status === "Ready"
       ? "success"
-      : status === "Failed" || status === "Rejected" || status === "MissingConfiguration"
+      : status === "Failed" || status === "Rejected" || status === "MissingConfiguration" || status === "InvalidConfiguration"
         ? "danger"
         : status === "Pending" || status === "Previewed" || status === "Created" || status === "NotChecked"
           ? "warning"

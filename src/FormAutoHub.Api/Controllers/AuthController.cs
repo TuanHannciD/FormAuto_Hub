@@ -69,6 +69,14 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
         return ToActionResult(result);
     }
 
+    [HttpDelete("link-google")]
+    [Authorize]
+    public async Task<ActionResult<UnlinkGoogleResponse>> UnlinkGoogle(CancellationToken cancellationToken)
+    {
+        var result = await authService.UnlinkGoogleAsync(cancellationToken);
+        return ToActionResult(result);
+    }
+
     private ActionResult<T> ToActionResult<T>(AuthServiceResult<T> result)
     {
         if (result.Status == AuthResultStatus.Success && result.Value is not null)

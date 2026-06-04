@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: 210 20% 98%;
-  --foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --border: 214 32% 91%;
-  --primary: 187 85% 32%;
+  --background: 196 100% 98%;
+  --foreground: 222 50% 10%;
+  --muted: 199 56% 95%;
+  --muted-foreground: 215 18% 46%;
+  --border: 205 36% 90%;
+  --primary: 189 96% 31%;
   --primary-foreground: 0 0% 100%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
@@ -23,9 +23,193 @@ body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   overflow-x: hidden;
+  font-size: 14px;
+  letter-spacing: 0;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.16);
+}
+
+.app-aura-bg {
+  background:
+    radial-gradient(circle at 20% 8%, rgb(125 236 249 / 0.35), transparent 23rem),
+    radial-gradient(circle at 86% 12%, rgb(203 213 255 / 0.42), transparent 26rem),
+    radial-gradient(circle at 55% 100%, rgb(204 251 241 / 0.28), transparent 28rem),
+    linear-gradient(135deg, #f7fdff 0%, #effaff 46%, #f8fbff 100%);
+}
+
+.glass-panel {
+  border: 1px solid rgb(226 238 246 / 0.92);
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: 0 14px 36px rgb(15 23 42 / 0.055);
+  backdrop-filter: blur(20px);
+}
+
+.glass-sidebar {
+  border-color: rgb(226 238 246 / 0.86);
+  background: rgb(248 253 255 / 0.86);
+  box-shadow: 12px 0 30px rgb(15 23 42 / 0.035);
+  backdrop-filter: blur(24px);
+}
+
+.aura-divider {
+  background: linear-gradient(90deg, rgb(0 169 195 / 0.68), rgb(105 113 255 / 0.28), transparent);
+}
+
+.metric-accent {
+  background: linear-gradient(90deg, rgb(0 169 195 / 0.46), rgb(124 58 237 / 0.22));
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transition:
+    opacity 680ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal-up {
+  transform: translateY(24px);
+}
+
+.scroll-reveal-fade {
+  transform: translateY(0);
+}
+
+.scroll-reveal-scale {
+  transform: translateY(18px) scale(0.985);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.motion-card {
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease,
+    background-color 220ms ease;
+}
+
+.motion-card:hover {
+  border-color: rgb(147 197 253 / 0.88);
+  box-shadow: 0 18px 42px rgb(15 23 42 / 0.105);
+  transform: translateY(-4px);
+}
+
+.motion-card:hover .motion-icon {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.motion-icon {
+  transition: transform 220ms ease;
+}
+
+.motion-button {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 220ms ease,
+    color 180ms ease,
+    transform 220ms ease;
+}
+
+.motion-button:hover {
+  box-shadow: 0 14px 30px rgb(37 99 235 / 0.18);
+  transform: translateY(-2px);
+}
+
+.motion-link {
+  position: relative;
+  transition: color 180ms ease;
+}
+
+.motion-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.25rem;
+  left: 0;
+  height: 2px;
+  content: "";
+  background: currentColor;
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 220ms ease;
+}
+
+.motion-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.motion-details {
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.motion-details:hover {
+  border-color: rgb(147 197 253 / 0.78);
+  box-shadow: 0 14px 34px rgb(15 23 42 / 0.085);
+  transform: translateY(-2px);
+}
+
+.motion-float {
+  animation: motion-float 7s ease-in-out infinite;
+}
+
+@keyframes motion-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .motion-card,
+  .motion-button,
+  .motion-details,
+  .motion-icon,
+  .motion-link,
+  .motion-link::after {
+    transition: none;
+  }
+
+  .motion-card:hover,
+  .motion-button:hover,
+  .motion-details:hover,
+  .motion-card:hover .motion-icon {
+    transform: none;
+  }
+
+  .motion-float {
+    animation: none;
+  }
 }

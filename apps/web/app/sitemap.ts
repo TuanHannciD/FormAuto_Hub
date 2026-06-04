@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: siteUrl,
+      url: `${siteUrl}/`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1
@@ -15,20 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...seoPageSlugs.map((slug) => ({
       url: `${siteUrl}/${slug}`,
       lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.8
-    })),
-    {
-      url: `${siteUrl}/login`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5
-    },
-    {
-      url: `${siteUrl}/register`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5
-    }
+      changeFrequency: slug === "anti-abuse" ? ("monthly" as const) : ("weekly" as const),
+      priority: slug === "google-forms/sample-data" ? 0.9 : slug === "anti-abuse" ? 0.7 : 0.8
+    }))
   ];
 }

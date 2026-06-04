@@ -8,4 +8,6 @@ public sealed class AuthOptions
     public string Audience { get; set; } = "FormAutoHub";
     public string SigningKey { get; set; } = string.Empty;
     public string GoogleClientId { get; set; } = string.Empty;
+    public string GoogleOAuthClientId { get; set; } = string.Empty;
+    public string GoogleOAuthClientSecret { get; set; } = string.Empty;
 }

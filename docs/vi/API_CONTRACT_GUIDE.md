@@ -1,12 +1,43 @@
 # API_CONTRACT_GUIDE
 
+## TOC
+
+- [Mục đích](#mục-đích) (34)
+- [Trạng thái hiện tại](#trạng-thái-hiện-tại) (38)
+- [Quy tắc REST naming](#quy-tắc-rest-naming) (42)
+- [API area đề xuất](#api-area-đề-xuất) (50)
+  - [Dashboard](#dashboard) (52)
+  - [Packages](#packages) (56)
+  - [Top-up orders](#top-up-orders) (101)
+  - [Admin top-up orders](#admin-top-up-orders) (146)
+  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
+  - [PayOS webhooks](#payos-webhooks) (266)
+  - [Usage logs](#usage-logs) (304)
+  - [Credit transactions](#credit-transactions) (334)
+  - [Profile](#profile) (356)
+  - [Authentication and account access](#authentication-and-account-access) (362)
+  - [Forms](#forms) (409)
+  - [Answer rules](#answer-rules) (414)
+  - [Generated responses](#generated-responses) (432)
+  - [AI prompt profiles](#ai-prompt-profiles) (454)
+  - [AI generated responses](#ai-generated-responses) (478)
+  - [Submissions](#submissions) (545)
+- [Quy tắc DTO](#quy-tắc-dto) (560)
+- [Error response](#error-response) (568)
+- [Pagination và filtering](#pagination-và-filtering) (574)
+- [Kỷ luật status](#kỷ-luật-status) (581)
+- [Status và type values đã duyệt](#status-và-type-values-đã-duyệt) (587)
+- [User context tạm thời](#user-context-tạm-thời) (637)
+- [Versioning và OpenAPI](#versioning-và-openapi) (646)
+- [Quy tắc thay đổi](#quy-tắc-thay-đổi) (651)
+
 ## Mục đích
 
 Kiểm soát thiết kế API contract cho FormAuto Hub.
 
 ## Trạng thái hiện tại
 
-Các API area dưới đây là đề xuất, chưa phải contract cuối. Mỗi endpoint cần contract review trước khi implement.
+Một số API area dưới đây vẫn là đề xuất, và một số phase slice đã có contract được duyệt và implement. Mỗi section ghi rõ behavior là đã duyệt, đã implement, đề xuất, hoặc Deferred.
 
 ## Quy tắc REST naming
 
@@ -157,6 +188,81 @@ Cần contract review trước implementation:
 - tên PayOS settings DTO chính xác
 - masked secret response shape chính xác
 
+### Admin AI provider settings
+
+Backend subset provider settings Phase 6 đã duyệt:
+
+- `GET /api/admin/ai-provider-settings`
+- `PUT /api/admin/ai-provider-settings`
+- `POST /api/admin/ai-provider-settings/check`
+
+Behavior đã duyệt:
+
+- chỉ admin được truy cập
+- lưu cấu hình AI provider trong database qua `AiProviderSettings`
+- mã hóa API keys trước khi lưu
+- không bao giờ trả raw API key về frontend clients
+- chỉ trả key preview dạng masked
+- validate provider và default model có giá trị trước khi enable setting
+- hỗ trợ default model cho generation
+- configuration check không được generate preview, trừ credit, hoặc tạo `GeneratedResponses`
+
+Request DTO đã duyệt:
+
+`UpdateAiProviderSettingsRequest`
+
+- `provider`
+- `apiKey`
+- `defaultModel`
+- `isEnabled`
+- `baseUrl`
+
+Response DTOs đã duyệt:
+
+`AiProviderSettingsResponse`
+
+- `provider`
+- `displayName`
+- `hasApiKey`
+- `apiKeyPreview`
+- `baseUrl`
+- `defaultModel`
+- `allowedModels`
+- `isEnabled`
+- `lastCheckedAt`
+- `lastCheckStatus`
+- `lastCheckMessage`
+- `updatedAt`
+
+`CheckAiProviderSettingsResponse`
+
+- `status`
+- `message`
+- `checkedAt`
+
+Chính sách provider/model đã duyệt:
+
+- Provider và model là chuỗi do admin kiểm soát và được lưu server-side.
+- Admin update request được đặt custom provider identifier, default model identifier, và Base URL optional.
+- Backend validation yêu cầu provider và default model không được rỗng trước khi lưu.
+- Enable setting yêu cầu API key đã lưu dạng encrypted, provider không rỗng, và default model không rỗng.
+- Nếu có nhập, `baseUrl` phải là absolute URL dùng `http` hoặc `https`.
+- Normal-user generation request vẫn không được nhận quyền quyết định provider, model, API key, hoặc base URL.
+- `allowedModels` được giữ trong response để tương thích UI và có thể chứa default model đã lưu; đây không còn là hardcoded provider allow-list.
+- OpenAI-compatible runtime calls dùng Base URL đã lưu và gọi `{baseUrl}/chat/completions`, trừ khi Base URL đã kết thúc bằng `/chat/completions`.
+
+Check statuses đã duyệt:
+
+- `NotChecked`
+- `Ready`
+- `MissingConfiguration`
+- `InvalidConfiguration`
+
+Deferred:
+
+- chính sách redact raw error
+- live provider model catalog validation calls
+
 ### PayOS webhooks
 
 - `POST /api/payments/payos/webhook`
@@ -200,15 +306,63 @@ Cần contract review trước implementation:
 - `GET /api/usage-logs`
 - `GET /api/usage-logs/recent`
 
+Hành vi query đã duyệt cho `GET /api/usage-logs`:
+
+- hỗ trợ `action` để lọc chính xác theo action
+- hỗ trợ `search` trên action, tool name, status và description
+- hỗ trợ `page` và `pageSize`
+- UI usage mặc định nên request `action=Xem lại câu trả lời được tạo`
+- `page` được clamp tối thiểu là 1
+- `pageSize` được clamp từ 1 đến 100
+- kết quả được sort theo `createdAt` giảm dần
+- server chỉ trả các dòng thuộc trang hiện tại theo filter đang áp dụng
+
+Các field response đã duyệt cho `GET /api/usage-logs`:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
+
+Giá trị action filter đã duyệt cho việc xem giao dịch credit từ câu trả lời được tạo:
+
+- `Xem lại câu trả lời được tạo`
+
+Frontend có thể cho phép xem tất cả thao tác, nhưng trang usage-log mặc định phải tập trung vào action xem câu trả lời được tạo vì đó là nhóm usage entry thể hiện giao dịch tiêu credit.
+
 ### Credit transactions
 
 - `GET /api/credit-transactions`
+
+Hành vi query đã duyệt cho `GET /api/credit-transactions`:
+
+- hỗ trợ `type` để lọc chính xác theo các giá trị `CreditTransaction.Type` đã duyệt
+- hỗ trợ `search` trên type, description, và reference type
+- hỗ trợ `page` và `pageSize`
+- `page` được clamp tối thiểu là 1
+- `pageSize` được clamp từ 1 đến 100
+- kết quả được sort theo `createdAt` giảm dần
+- server chỉ trả các dòng thuộc trang hiện tại theo filter đang áp dụng
+
+Các field response đã duyệt cho `GET /api/credit-transactions`:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
 
 ### Profile
 
 - `GET /api/profile`
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
+
+Identity fields đã duyệt trong `GET /api/profile`:
+
+- `googleLinked`: cho biết authenticated user đã link Google identity hay chưa
+- `googleEmail`: email Google đã link khi có; nếu chưa có thì là `null`
 
 ### Authentication and account access
 
@@ -220,6 +374,7 @@ Behavior baseline đã duyệt cho Phase 7:
 - `POST /api/auth/refresh` rotate refresh token/session hiện tại và trả token mới
 - `POST /api/auth/logout` revoke refresh token/session hiện tại
 - `POST /api/auth/link-google` link Google identity đã verified sau khi user login password
+- `DELETE /api/auth/link-google` hủy link Google identity của user hiện tại khi tài khoản vẫn còn đường đăng nhập bằng mật khẩu
 - `PUT /api/profile/change-password` đổi mật khẩu từ profile
 - password recovery chưa implement và UI có thể hiển thị là đang được cập nhật
 
@@ -242,6 +397,8 @@ Quy tắc Google identity đã duyệt:
 - nếu `provider_user_id` hoặc Google `sub` đã tồn tại trong storage, login luôn cho user đã link
 - nếu chưa có provider user id nhưng Google email trùng account password hiện có, chỉ xét link khi `email_verified = true`
 - email trùng đã verified không được silent auto-link; flow ưu tiên là login password trước rồi link Google
+- Link Google trong profile/security chỉ cho phép khi tài khoản hiện tại chưa có Google identity linked và email Google đã verified trùng với email của tài khoản hiện tại
+- Hủy link Google trong profile/security chỉ cho phép khi tài khoản hiện tại vẫn có đường đăng nhập bằng mật khẩu, để tránh khóa user Google-only khỏi tài khoản
 - nếu `email_verified = false`, không auto-link
 - Google auto-register được phép khi không có conflict với account hiện có
 - điều này không duyệt official Google Forms API scopes hoặc Google Forms integration behavior
@@ -301,6 +458,157 @@ Các field `GenerateResponsesResponse` đã duyệt:
 - `requestedCount`: số preview user yêu cầu
 - `generatedCount`: số preview thực tế đã tạo
 - `missingCredits`: số credit còn thiếu để tạo đủ số lượng user yêu cầu
+
+### AI prompt profiles
+
+Backend area lưu AI prompt Phase 6 đã duyệt:
+
+- `GET /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile/questions/{questionId}`
+- `POST /api/projects/{projectId}/ai-prompt-profile/auto-fill`
+
+Behavior đã duyệt/implement:
+
+- authenticated project owner được truy cập
+- Option 2 lưu default profile cho project
+- Option 3 lưu global và per-question prompt configuration
+- auto-fill prompt miễn phí và không được trừ credit
+- backend validation phải enforce prompt length limits
+- prompt guard phải reject unsafe prompts trước provider calls
+
+Deferred hoặc vẫn cần review:
+
+- frontend/API binding bổ sung ngoài scoped slice đã duyệt
+- live provider-backed auto-fill behavior
+- quản lý prompt-template rộng hơn
+
+### AI generated responses
+
+Backend area AI preview generation Phase 6 đã duyệt:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+- `GET /api/projects/{projectId}/ai-generation-runs`
+- `GET /api/projects/{projectId}/ai-generation-runs/{runId}`
+
+Route đã implement:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+
+Request DTO đã implement:
+
+`AiGenerateResponsesRequest`
+
+- `mode`
+- `count`
+
+Response DTO đã implement:
+
+`AiGenerateResponsesResponse`
+
+- `runId`
+- `status`
+- `requestedCount`
+- `generatedCount`
+- `multiplier`
+- `creditsUsed`
+- `missingCredits`
+- `balanceAfter`
+- `generatedPreviewIds`
+
+Behavior đã duyệt/implement:
+
+- authenticated project owner được generate
+- AI generation tạo trực tiếp `GeneratedResponses`
+- generated previews là read-only sau khi tạo
+- Option 2 dùng credit multiplier `2`
+- Option 3 dùng credit multiplier `3`
+- credit chỉ bị trừ cho generated previews được lưu thành công
+- generation failed trừ 0 credit
+- partial generation chỉ lưu và tính credit cho preview hợp lệ
+- AI output phải được validate trước khi lưu
+- choice-style answers phải khớp stored form options
+- raw provider request/response phải được ghi vào AI audit storage
+- raw provider request/response không được trả trong generation response
+- runtime generation dùng provider settings đã enabled ở server; normal-user request không nhận provider/model/API key
+
+Boundary cho runtime provider adapter:
+
+- deterministic adapter chỉ được dùng khi bật rõ bằng cấu hình local/test
+- runtime adapter mặc định fail-safe disabled cho đến khi live provider adapter được approve và cấu hình
+- OpenAI-compatible adapter chỉ được dùng khi bật rõ bằng runtime configuration và phải dùng admin provider settings phía server
+
+Deferred hoặc vẫn cần review:
+
+- endpoint đọc danh sách/chi tiết run cấp project
+- run list/detail response shape chính xác
+- normal users có được xem non-raw audit summaries hay không
+- raw payload access và retention policy
+- raw admin/debug payload endpoint
+- provider-specific SDK adapter ngoài OpenAI-compatible HTTP contract
+- live provider model catalog validation
+- frontend/API binding bổ sung ngoài scoped slice đã duyệt
+- production browser closeout với credential provider thật
+
+### AI usage analytics
+
+- `GET /api/dashboard/ai-usage` — Thống kê AI generation theo người dùng
+- `GET /api/admin/ai-usage` — Thống kê AI generation toàn hệ thống
+
+Hành vi đã duyệt (người dùng):
+
+- Trả về tổng số lượt AI generation, số lần thành công/thất bại, credit đã dùng, số previews đã tạo
+- Trả về phân tích theo chế độ (FullAi / CustomAi) với số lần dùng và credit
+- Trả về 10 lượt AI gần nhất kèm tên project, provider, model, trạng thái, thời gian
+- Trả về thống kê theo ngày trong 30 ngày qua (ngày, số lần, credit)
+- Dữ liệu chỉ đọc từ bảng `AiGenerationRuns` hiện có; không cần entity mới
+
+Hành vi đã duyệt (admin):
+
+- Trả về tất cả trường của người dùng nhưng tổng hợp trên toàn hệ thống
+- Thêm: tổng số người dùng, hiệu suất provider, người dùng top đầu
+- Hiệu suất provider bao gồm số lần thành công/thất bại và thời gian trung bình
+
+### GET /api/admin/ai-usage/runs — Admin danh sách lượt AI (phân trang)
+
+**Xác thực:** Admin JWT bắt buộc.
+
+**Tham số query:**
+- `page` (int, mặc định 1) — số trang
+- `pageSize` (int, mặc định 20, tối đa 100) — số bản ghi mỗi trang
+- `status` (string, tùy chọn) — lọc theo trạng thái (VD: Succeeded, Failed, Partial)
+- `mode` (string, tùy chọn) — lọc theo mode (VD: Option2, Option3)
+- `provider` (string, tùy chọn) — lọc theo tên provider
+- `model` (string, tùy chọn) — lọc theo tên model
+- `fromDate` (ISO datetime, tùy chọn) — lọc từ ngày
+- `toDate` (ISO datetime, tùy chọn) — lọc đến ngày
+
+**Response (200):**
+```json
+{
+  "items": [...],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 122,
+  "totalPages": 7
+}
+```
+
+**Behavior:**
+- Trả về danh sách lượt AI có phân trang, sắp xếp theo `CreatedAt` giảm dần
+- Hỗ trợ tối đa 6 bộ lọc kết hợp với logic AND
+- Dữ liệu read-only từ bảng `AiGenerationRuns`
+- `durationMs` được tính client-side từ `StartedAt`/`CompletedAt`
+
+
+
+Deferred:
+
+- Thống kê AI theo project
+- Thống kê cấp câu hỏi (AiGenerationRunItem)
+- Xuất dữ liệu AI (CSV, JSON)
+- Giám sát AI real-time
+- Cảnh báo AI hoặc ngưỡng thông báo
 
 ### Submissions
 
@@ -375,6 +683,18 @@ UsageLog.Status:
 - Success
 - Failed
 
+AiGenerationRun.Status:
+
+- Pending
+- Running
+- Succeeded
+- Partial
+- Failed
+
+Quy tắc Phase 6:
+
+- AI run statuses được duyệt cho Phase 6 requirement package, nhưng allowed transitions và persistence fields chính xác vẫn cần contract và database review trước implementation.
+
 User.Role:
 
 - User
@@ -390,6 +710,7 @@ Assumption: JWT authentication của Phase 7 hiện là đường authentication
 - `X-FormAuto-IsAdmin`
 
 Các headers này không phải authentication contract cuối.
+
 
 ## Versioning và OpenAPI
 

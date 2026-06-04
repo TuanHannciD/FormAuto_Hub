@@ -25,6 +25,11 @@ Dùng unit tests cho:
 - credit deduction calculations
 - top-up approval/rejection logic
 - validation helpers
+- AI prompt guard rules
+- AI output validator rules
+- AI credit multiplier calculations
+- validation field bắt buộc của AI provider settings
+- validation Base URL của AI provider
 
 ### Integration tests
 
@@ -36,6 +41,9 @@ Dùng integration tests cho:
 - credit ledger writes
 - usage log writes
 - admin top-up approval workflow
+- AI provider settings persistence và masked response behavior
+- AI prompt profile persistence
+- AI generation audit persistence
 
 ### Runtime smoke tests
 
@@ -48,6 +56,7 @@ Dùng runtime smoke cho:
 - auth/session/role guard changes
 - hành vi phụ thuộc database sau migrations
 - payment link, callback hoặc webhook behavior
+- AI provider settings check và AI generation routes
 - public/tunnel URL behavior
 
 Runtime smoke phải verify:
@@ -89,6 +98,28 @@ Verify:
 - submission action log usage
 - failed actions log status trung thực
 
+### AI generation tests
+
+Verify:
+
+- admin AI provider settings không bao giờ trả raw API keys
+- provider rỗng hoặc default model rỗng bị reject trước khi enable generation
+- Base URL của AI provider sai format bị reject trước khi lưu
+- OpenAI-compatible adapter không expose raw API key trong raw request audit đã lưu
+- prompt auto-fill không trừ credit
+- unsafe prompts bị reject trước provider calls
+- invalid AI output schema bị reject
+- choice-style answers ngoài stored options bị reject
+- AI generation failed ghi audit state và trừ 0 credit
+- partial AI generation chỉ lưu và tính credit cho preview hợp lệ
+- Option 2 dùng multiplier 2
+- Option 3 dùng multiplier 3
+- AI generation ghi `GeneratedResponses`, `CreditTransactions`, `UsageLogs`, `AiGenerationRuns`, và `AiGenerationRunItems` khi áp dụng
+- AI-generated `GeneratedResponses` vẫn read-only
+- runtime AI adapter mặc định fail an toàn khi chưa có live adapter được duyệt
+- deterministic AI adapter smoke chỉ chạy khi bật rõ bằng cấu hình local/test
+- OpenAI-compatible adapter smoke chỉ chạy khi bật rõ bằng runtime configuration và có credential provider thật
+
 ### Submission validation tests
 
 Verify:
@@ -112,6 +143,7 @@ Verify hệ thống reject hoặc không implement:
 - unauthorized form submission
 - spam-scale batch sizes
 - AI auto-submit
+- prompt instruction cố ép câu trả lời nằm ngoài stored options
 
 ### Documentation sync review
 

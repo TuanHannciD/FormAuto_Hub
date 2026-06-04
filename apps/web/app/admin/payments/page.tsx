@@ -3,12 +3,31 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { CheckCircle2, Clock3, Filter, Search, XCircle } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, MobileRecord, MobileRecordList, PageHeader, Select } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminPayment } from "@/lib/api";
 import { displayStatus } from "@/lib/labels";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+const paymentColumns: Array<BaseTableColumn<AdminPayment>> = [
+  { key: "providerOrderCode", header: "Mã PayOS", render: (item) => item.providerOrderCode, className: "font-medium" },
+  {
+    key: "user",
+    header: "Người dùng",
+    render: (item) => (
+      <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+        {displayPaymentUser(item)}
+      </span>
+    )
+  },
+  { key: "amount", header: "Số tiền", render: (item) => formatCurrency(item.amount) },
+  { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
+  { key: "providerStatus", header: "Thanh toán", render: (item) => <StatusBadge status={item.providerStatus} /> },
+  { key: "topupOrderStatus", header: "Top-up", render: (item) => <StatusBadge status={item.topupOrderStatus} /> },
+  { key: "lastWebhookAt", header: "Webhook gần nhất", render: (item) => item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có" }
+];
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
@@ -108,60 +127,14 @@ export default function AdminPaymentsPage() {
           </form>
         </CardHeader>
         <CardContent>
-          {filteredPayments.length === 0 ? (
-            <EmptyState
-              title={payments.length === 0 ? "Chưa có thanh toán" : "Không có thanh toán phù hợp"}
-              detail={payments.length === 0 ? "Thanh toán PayOS sẽ xuất hiện sau khi user tạo yêu cầu nạp credit." : "Đổi từ khóa, trạng thái hoặc phương thức để xem thêm kết quả."}
-            />
-          ) : (
-            <>
-            <MobileRecordList>
-              {filteredPayments.map((item) => (
-                <MobileRecord key={item.id}>
-                  <KeyValueRow label="Mã PayOS" value={item.providerOrderCode} />
-                  <KeyValueRow label="Người dùng" value={displayPaymentUser(item)} />
-                  <KeyValueRow label="Số tiền" value={formatCurrency(item.amount)} />
-                  <KeyValueRow label="Credit" value={`${item.credits} cr`} />
-                  <KeyValueRow label="Thanh toán" value={<StatusBadge status={item.providerStatus} />} />
-                  <KeyValueRow label="Top-up" value={<StatusBadge status={item.topupOrderStatus} />} />
-                  <KeyValueRow label="Webhook gần nhất" value={item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có"} />
-                </MobileRecord>
-              ))}
-            </MobileRecordList>
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
-                  <tr>
-                    <th className="px-3 py-2">Mã PayOS</th>
-                    <th className="px-3 py-2">Người dùng</th>
-                    <th className="px-3 py-2">Số tiền</th>
-                    <th className="px-3 py-2">Credit</th>
-                    <th className="px-3 py-2">Thanh toán</th>
-                    <th className="px-3 py-2">Top-up</th>
-                    <th className="px-3 py-2">Webhook gần nhất</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPayments.map((item) => (
-                    <tr className="border-t border-border" key={item.id}>
-                      <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
-                      <td className="px-3 py-3">
-                        <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
-                          {displayPaymentUser(item)}
-                        </span>
-                      </td>
-                      <td className="px-3 py-3">{formatCurrency(item.amount)}</td>
-                      <td className="px-3 py-3">{item.credits} cr</td>
-                      <td className="px-3 py-3"><StatusBadge status={item.providerStatus} /></td>
-                      <td className="px-3 py-3"><StatusBadge status={item.topupOrderStatus} /></td>
-                      <td className="px-3 py-3">{item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            </>
-          )}
+          <BaseTable
+            items={filteredPayments}
+            columns={paymentColumns}
+            getRowKey={(item) => item.id}
+            emptyTitle={payments.length === 0 ? "Chưa có thanh toán" : "Không có thanh toán phù hợp"}
+            emptyDetail={payments.length === 0 ? "Thanh toán PayOS sẽ xuất hiện sau khi user tạo yêu cầu nạp credit." : "Đổi từ khóa, trạng thái hoặc phương thức để xem thêm kết quả."}
+            minWidthClassName="min-w-[860px]"
+          />
         </CardContent>
       </Card>
     </div>
@@ -174,7 +147,7 @@ function displayPaymentUser(item: AdminPayment) {
 
 function CompactStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border bg-white px-3 py-2">
+    <div className="rounded-md border border-border/70 bg-white/65 px-3 py-2 shadow-sm backdrop-blur">
       <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
       <p className="mt-1 text-lg font-semibold">{value}</p>
     </div>
@@ -204,7 +177,7 @@ function Stat({
       <CardContent className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <p className="mt-2 text-2xl font-semibold">{value}</p>
+          <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
         </div>
         <span className={`rounded-md p-2 ${toneClass}`}>
           <Icon size={18} />

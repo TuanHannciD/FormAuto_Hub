@@ -1,7 +1,10 @@
 using FormAutoHub.Api.Data;
 using FormAutoHub.Api.Auth;
+using FormAutoHub.Api.Integrations.AI;
 using FormAutoHub.Api.Integrations.GoogleForms;
+using FormAutoHub.Api.Integrations.Google;
 using FormAutoHub.Api.Services;
+using FormAutoHub.Api.Services.Nckh;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -11,7 +14,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+    ?? throw new InvalidOperationException("Connection string ''DefaultConnection'' is not configured.");
 
 var allowedCorsOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
@@ -27,7 +30,6 @@ var allowedCorsOrigins = builder.Configuration
         "https://*.servertun.pp.ua"
     ];
 
-
 builder.Services.AddControllers();
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.SectionName));
 builder.Services.AddCors(options =>
@@ -36,7 +38,6 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins(allowedCorsOrigins)
-            .SetIsOriginAllowedToAllowWildcardSubdomains()
             .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -80,22 +81,51 @@ builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>(
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IPaymentSecretProtector, PaymentSecretProtector>();
 builder.Services.AddScoped<IPaymentProviderSettingsService, PaymentProviderSettingsService>();
+builder.Services.AddScoped<IAiProviderSecretProtector, AiProviderSecretProtector>();
+builder.Services.AddScoped<IAiProviderSettingsService, AiProviderSettingsService>();
 builder.Services.AddScoped<IPayosSignatureService, PayosSignatureService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminPaymentReportService, AdminPaymentReportService>();
 builder.Services.AddScoped<IFormProjectService, FormProjectService>();
 builder.Services.AddScoped<IAnswerRuleService, AnswerRuleService>();
 builder.Services.AddScoped<IResponseGenerationService, ResponseGenerationService>();
+builder.Services.AddScoped<IAiPromptGuardService, AiPromptGuardService>();
+builder.Services.AddScoped<IAiOutputValidator, AiOutputValidator>();
+builder.Services.AddScoped<IAiPromptProfileService, AiPromptProfileService>();
+
+var aiProviderAdapter = builder.Configuration["AI:ProviderAdapter"];
+if (string.Equals(aiProviderAdapter, "Deterministic", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddScoped<IAiProviderAdapter, DeterministicAiProviderAdapter>();
+}
+else if (string.Equals(aiProviderAdapter, "OpenAICompatible", StringComparison.OrdinalIgnoreCase))
+{
+    var aiTimeoutSeconds = builder.Configuration.GetValue<int>("AI:RequestTimeoutSeconds", 300);
+    builder.Services.AddHttpClient<IAiProviderAdapter, OpenAiCompatibleProviderAdapter>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(aiTimeoutSeconds);
+    });
+}
+else
+{
+    builder.Services.AddScoped<IAiProviderAdapter, DisabledAiProviderAdapter>();
+}
+builder.Services.AddScoped<IAiGenerationService, AiGenerationService>();
+builder.Services.AddScoped<IAiAnalyticsService, AiAnalyticsService>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>();
 builder.Services.AddHttpClient<IPayosClient, PayosClient>();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddScoped<IGoogleTokenProtector, GoogleTokenProtector>();
+builder.Services.AddHttpClient<IGoogleOAuthService, GoogleOAuthService>();
+builder.Services.AddHttpClient<IGoogleFormsApiService, GoogleFormsApiService>();
+builder.Services.AddScoped<IResearchFormService, ResearchFormService>();
+builder.Services.AddScoped<IResearchModelService, ResearchModelService>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

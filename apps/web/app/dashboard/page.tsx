@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { Alert, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
-import { apiFetch, type DashboardSummary } from "@/lib/api";
+import { apiFetch, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { displayAction } from "@/lib/labels";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+const recentTopupColumns: Array<BaseTableColumn<TopupOrder>> = [
+  { key: "credits", header: "Credit", render: (order) => order.credits },
+  { key: "amount", header: "Số tiền", render: (order) => formatCurrency(order.amount) },
+  { key: "status", header: "Trạng thái", render: (order) => <StatusBadge status={order.status} /> },
+  { key: "createdAt", header: "Tạo lúc", render: (order) => formatDate(order.createdAt) }
+];
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -25,136 +33,101 @@ export default function DashboardPage() {
       <Alert>
         Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
       </Alert>
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Metric title="Credit hiện có" value={summary ? String(summary.currentCreditBalance) : "-"} />
-        <Metric title="Đã nạp" value={summary ? String(summary.totalCreditsDeposited) : "-"} />
-        <Metric title="Đã dùng" value={summary ? String(summary.totalCreditsUsed) : "-"} />
-        <Metric title="Yêu cầu chờ duyệt" value={summary ? String(summary.pendingTopupOrders) : "-"} />
+        <Metric title="Đã nạp" value={summary ? String(summary.totalCreditsDeposited) : "-"} tone="green" />
+        <Metric title="Đã dùng" value={summary ? String(summary.totalCreditsUsed) : "-"} tone="violet" />
+        <Metric title="Yêu cầu chờ duyệt" value={summary ? String(summary.pendingTopupOrders) : "-"} tone="red" />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(22rem,1fr)]">
         <Card>
           <CardHeader>
             <CardTitle>Việc nên làm tiếp</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/forms">
+          <CardContent className="grid gap-3 text-sm md:grid-cols-2">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/forms">
               Phân tích link Google Form và cài đặt cách trả lời
             </Link>
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/top-up">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/top-up">
               Nạp credit hoặc theo dõi giao dịch PayOS
             </Link>
-            <Link className="block rounded-md border border-border p-3 hover:bg-muted" href="/dashboard/usage-logs">
+            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/usage-logs">
               Kiểm tra lịch sử sử dụng và hành động bị chặn
             </Link>
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
+            <CardTitle>Lịch sử sử dụng gần đây</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {!summary || summary.recentUsageLogs.length === 0 ? (
+              <EmptyState title="Chưa có lịch sử sử dụng" detail="Các thao tác gần đây sẽ xuất hiện tại đây." />
+            ) : (
+              summary.recentUsageLogs.slice(0, 4).map((log) => (
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md border border-border/70 bg-white/55 p-3 2xl:grid-cols-[auto_minmax(0,1fr)_auto]" key={log.id}>
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-primary">
+                    {log.creditsUsed}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold leading-5">{displayAction(log.action)}</p>
+                    <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{formatDate(log.createdAt)}</p>
+                  </div>
+                  <div className="col-start-2 2xl:col-start-auto">
+                    <StatusBadge status={log.status} />
+                  </div>
+                </div>
+              ))
+            )}
+            <Link className="inline-flex text-xs font-semibold text-primary hover:underline" href="/dashboard/usage-logs">
+              Xem toàn bộ lịch sử
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="xl:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between gap-3">
             <CardTitle>Yêu cầu nạp gần đây</CardTitle>
+            <Link className="text-xs font-semibold text-primary hover:underline" href="/dashboard/top-up">
+              Xem tất cả
+            </Link>
           </CardHeader>
           <CardContent>
             {!summary || summary.recentTopupOrders.length === 0 ? (
               <EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." />
             ) : (
-              <>
-              <MobileRecordList>
-                {summary.recentTopupOrders.map((order) => (
-                  <MobileRecord key={order.id}>
-                    <KeyValueRow label="Credit" value={order.credits} />
-                    <KeyValueRow label="Số tiền" value={formatCurrency(order.amount)} />
-                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={order.status} />} />
-                    <KeyValueRow label="Tạo lúc" value={formatDate(order.createdAt)} />
-                  </MobileRecord>
-                ))}
-              </MobileRecordList>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-muted-foreground">
-                    <tr>
-                      <th className="py-2">Credit</th>
-                      <th className="py-2">Số tiền</th>
-                      <th className="py-2">Trạng thái</th>
-                      <th className="py-2">Tạo lúc</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summary.recentTopupOrders.map((order) => (
-                      <tr className="border-t border-border" key={order.id}>
-                        <td className="py-3">{order.credits}</td>
-                        <td className="py-3">{formatCurrency(order.amount)}</td>
-                        <td className="py-3"><StatusBadge status={order.status} /></td>
-                        <td className="py-3">{formatDate(order.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </>
+              <BaseTable
+                items={summary.recentTopupOrders}
+                columns={recentTopupColumns}
+                getRowKey={(order) => order.id}
+                emptyTitle="Chưa có yêu cầu nạp gần đây"
+                emptyDetail="Nạp thêm credit khi cần tiếp tục sử dụng."
+                minWidthClassName="min-w-[560px]"
+              />
             )}
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Lịch sử sử dụng gần đây</CardTitle>
-        </CardHeader>
-        <CardContent>
-            {!summary || summary.recentUsageLogs.length === 0 ? (
-              <EmptyState title="Chưa có lịch sử sử dụng gần đây" detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây." />
-            ) : (
-            <>
-            <MobileRecordList>
-              {summary.recentUsageLogs.map((log) => (
-                <MobileRecord key={log.id}>
-                  <KeyValueRow label="Thời gian" value={formatDate(log.createdAt)} />
-                  <KeyValueRow label="Thao tác" value={displayAction(log.action)} />
-                  <KeyValueRow label="Credit" value={log.creditsUsed} />
-                  <KeyValueRow label="Kết quả" value={<StatusBadge status={log.status} />} />
-                  <KeyValueRow label="Mô tả" value={log.description} />
-                </MobileRecord>
-              ))}
-            </MobileRecordList>
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full text-sm">
-                <thead className="text-left text-muted-foreground">
-                  <tr>
-                    <th className="py-2">Thời gian</th>
-                    <th className="py-2">Thao tác</th>
-                    <th className="py-2">Credit</th>
-                    <th className="py-2">Kết quả</th>
-                    <th className="py-2">Mô tả</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {summary.recentUsageLogs.map((log) => (
-                    <tr className="border-t border-border" key={log.id}>
-                      <td className="py-3">{formatDate(log.createdAt)}</td>
-                      <td className="py-3">{displayAction(log.action)}</td>
-                      <td className="py-3">{log.creditsUsed}</td>
-                      <td className="py-3"><StatusBadge status={log.status} /></td>
-                      <td className="py-3">{log.description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }
 
-function Metric({ title, value }: { title: string; value: string }) {
+function Metric({ title, value, tone = "cyan" }: { title: string; value: string; tone?: "cyan" | "green" | "violet" | "red" }) {
+  const toneClass = {
+    cyan: "metric-accent",
+    green: "bg-emerald-200",
+    violet: "bg-violet-200",
+    red: "bg-red-200"
+  }[tone];
+
   return (
     <Card>
       <CardContent>
+        <div className={`mb-4 h-1 w-10 rounded-full ${toneClass}`} />
         <p className="text-sm text-muted-foreground">{title}</p>
-        <p className="mt-2 text-2xl font-semibold">{value}</p>
+        <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
       </CardContent>
     </Card>
   );

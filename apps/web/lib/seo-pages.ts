@@ -18,6 +18,10 @@ export type SeoPageConfig = {
   primaryKeyword: string;
   secondaryKeywords: string[];
   useCases: string[];
+  contentSections: Array<{
+    heading: string;
+    body: string[];
+  }>;
   features: Array<{
     title: string;
     body: string;
@@ -31,15 +35,16 @@ export type SeoPageConfig = {
 export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
   "google-forms/student-report": {
     slug: "google-forms/student-report",
-    title: "Google Forms cho báo cáo sinh viên | FormAuto Hub",
+    title: "Tạo dữ liệu mẫu Google Forms cho báo cáo sinh viên | FormAuto Hub",
     description:
-      "Tạo dữ liệu phản hồi mẫu để kiểm tra Google Forms, Google Sheets và biểu đồ báo cáo trước khi thu thập phản hồi thật.",
+      "Tạo dữ liệu mẫu Google Forms cho báo cáo sinh viên, kiểm tra Google Sheets, biểu đồ và demo nhóm trước khi thu thập phản hồi thật.",
     eyebrow: "Báo cáo sinh viên",
-    h1: "Kiểm tra Google Forms và dữ liệu mẫu cho bài báo cáo",
+    h1: "Tạo dữ liệu mẫu Google Forms cho báo cáo sinh viên",
     lead:
-      "FormAuto Hub giúp sinh viên và nhóm học tập tạo bản xem trước phản hồi mẫu, kiểm tra form khảo sát và rà soát dữ liệu trước khi gửi khảo sát thật.",
-    primaryKeyword: "google forms báo cáo sinh viên",
+      "FormAuto Hub giúp sinh viên và nhóm học tập tạo dữ liệu mẫu cho Google Forms để kiểm tra form khảo sát, thử bảng dữ liệu, rà soát biểu đồ và chuẩn bị phần demo trước khi gửi khảo sát thật.",
+    primaryKeyword: "dữ liệu mẫu Google Forms cho báo cáo sinh viên",
     secondaryKeywords: [
+      "google forms báo cáo sinh viên",
       "làm khảo sát bằng Google Form",
       "kiểm tra Google Form trước khi gửi",
       "dữ liệu mẫu cho bài báo cáo",
@@ -49,6 +54,22 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       "Kiểm tra form khảo sát trước khi gửi cho lớp hoặc nhóm",
       "Thử dữ liệu mẫu để xem bảng tính và biểu đồ có đúng không",
       "Chuẩn bị demo quy trình cho bài thuyết trình"
+    ],
+    contentSections: [
+      {
+        heading: "Vì sao sinh viên cần dữ liệu mẫu Google Forms?",
+        body: [
+          "Khi làm báo cáo môn học hoặc khảo sát nhóm, biểu mẫu thường được tạo trước khi có đủ người trả lời thật. Nếu chờ đến lúc thu thập xong mới kiểm tra, nhóm dễ phát hiện muộn các lỗi như câu hỏi thiếu lựa chọn, dữ liệu đổ sai cột, biểu đồ không đọc đúng kiểu dữ liệu hoặc dashboard không đủ mẫu để minh họa.",
+          "FormAuto Hub giúp tạo dữ liệu mẫu Google Forms trong giai đoạn chuẩn bị. Dữ liệu này phù hợp để kiểm thử cấu trúc form, kiểm tra Google Sheets và trình bày quy trình thu thập dữ liệu trong slide. Nội dung phải được ghi rõ là dữ liệu mẫu hoặc dữ liệu minh họa, không phải kết quả khảo sát thật."
+        ]
+      },
+      {
+        heading: "Quy trình phù hợp cho bài báo cáo nhóm",
+        body: [
+          "Nhóm có thể tạo Google Form, thêm URL vào FormAuto Hub, cấu hình quy tắc trả lời theo từng câu hỏi và xem trước phản hồi mẫu. Sau khi preview, nhóm kiểm tra lại dữ liệu đầu ra trong Google Sheets, biểu đồ và phần trình bày. Việc gửi hoặc sử dụng dữ liệu luôn cần sự xác nhận rõ ràng của người dùng.",
+          "Cách làm này giúp nhóm thống nhất cấu trúc khảo sát trước ngày thuyết trình, đồng thời giảm rủi ro nhầm dữ liệu mẫu với phản hồi thật. Với báo cáo học thuật, kết luận cuối cùng vẫn cần dựa trên phản hồi hợp lệ từ người tham gia khảo sát."
+        ]
+      }
     ],
     features: [
       {
@@ -85,13 +106,14 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
     slug: "google-forms/survey-demo",
     title: "Demo dữ liệu khảo sát Google Forms | FormAuto Hub",
     description:
-      "Tạo bản xem trước dữ liệu khảo sát mẫu để demo form, bảng tính và dashboard trước khi có phản hồi thật.",
+      "Demo dữ liệu khảo sát Google Forms bằng dữ liệu mẫu để trình bày form, bảng tính, biểu đồ và dashboard trước khi có phản hồi thật.",
     eyebrow: "Demo dữ liệu khảo sát",
-    h1: "Demo dữ liệu khảo sát trước khi chạy khảo sát thật",
+    h1: "Demo dữ liệu khảo sát Google Forms bằng dữ liệu mẫu",
     lead:
-      "Dành cho nhóm sinh viên, câu lạc bộ hoặc lớp học cần trình bày form khảo sát, bảng dữ liệu và biểu đồ khi dữ liệu thật chưa sẵn sàng.",
-    primaryKeyword: "demo dữ liệu khảo sát",
+      "Dành cho nhóm sinh viên, câu lạc bộ, lớp học hoặc team nhỏ cần trình bày form khảo sát, bảng dữ liệu và biểu đồ Google Sheets khi dữ liệu thật chưa sẵn sàng.",
+    primaryKeyword: "demo dữ liệu khảo sát Google Forms",
     secondaryKeywords: [
+      "demo dữ liệu khảo sát",
       "dữ liệu mẫu khảo sát",
       "xem trước phản hồi khảo sát",
       "demo Google Forms",
@@ -101,6 +123,22 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       "Minh họa dữ liệu khảo sát trong buổi thuyết trình",
       "Kiểm tra Google Sheets hoặc dashboard trước khi công bố form",
       "Giúp nhóm thống nhất cấu trúc câu hỏi trước khi thu thập thật"
+    ],
+    contentSections: [
+      {
+        heading: "Demo khảo sát cần dữ liệu đủ giống thực tế",
+        body: [
+          "Một form khảo sát thường chỉ dễ đánh giá khi có dữ liệu mẫu đủ đa dạng. Nếu bảng Google Sheets trống, nhóm khó kiểm tra biểu đồ, tỷ lệ lựa chọn, cột dữ liệu và cách dashboard hiển thị. Dữ liệu demo giúp người xem hiểu form sẽ vận hành thế nào mà không cần chờ phản hồi thật.",
+          "FormAuto Hub tập trung vào demo dữ liệu khảo sát có kiểm soát. Người dùng tạo bản xem trước, rà soát kết quả và chỉ dùng dữ liệu mẫu cho mục đích minh họa, kiểm thử hoặc chuẩn bị thuyết trình."
+        ]
+      },
+      {
+        heading: "Dùng demo đúng cách",
+        body: [
+          "Dữ liệu demo nên được tách khỏi dữ liệu khảo sát thật và được ghi chú rõ trong slide, báo cáo hoặc buổi trình bày. Điều này giúp tránh hiểu nhầm rằng dữ liệu mẫu là kết quả nghiên cứu cuối cùng.",
+          "Trang này nhấn mạnh các trường hợp hợp lệ như prototype khảo sát, trình bày workflow, kiểm tra dashboard hoặc chuẩn bị bản mẫu cho giảng viên và team. FormAuto Hub không hỗ trợ spam form, thao túng khảo sát hoặc gửi phản hồi hàng loạt vào form không có quyền."
+        ]
+      }
     ],
     features: [
       {
@@ -134,15 +172,16 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
   },
   "google-forms/sheets-report": {
     slug: "google-forms/sheets-report",
-    title: "Google Forms to Sheets cho báo cáo | FormAuto Hub",
+    title: "Kiểm tra dữ liệu Google Forms trong Google Sheets | FormAuto Hub",
     description:
-      "Kiểm tra dữ liệu Google Forms đổ về Google Sheets, thử biểu đồ và rà soát báo cáo trước khi khảo sát thật.",
+      "Kiểm tra dữ liệu Google Forms trong Google Sheets bằng dữ liệu mẫu để rà soát cột, kiểu dữ liệu, chart, dashboard và báo cáo.",
     eyebrow: "Forms to Sheets",
-    h1: "Kiểm tra Google Forms to Sheets trước khi làm báo cáo",
+    h1: "Kiểm tra dữ liệu Google Forms trong Google Sheets bằng dữ liệu mẫu",
     lead:
-      "FormAuto Hub giúp bạn tạo preview phản hồi mẫu để xem dữ liệu trong Google Sheets, kiểm tra cột, biểu đồ và báo cáo trước khi công bố form.",
-    primaryKeyword: "google forms to sheets báo cáo",
+      "FormAuto Hub giúp bạn tạo preview phản hồi mẫu để kiểm tra dữ liệu Google Forms trong Google Sheets, rà soát thứ tự cột, kiểu dữ liệu, biểu đồ và báo cáo trước khi công bố form.",
+    primaryKeyword: "kiểm tra dữ liệu Google Forms trong Google Sheets",
     secondaryKeywords: [
+      "google forms to sheets báo cáo",
       "kiểm tra biểu đồ Google Sheets",
       "Google Forms Google Sheets báo cáo",
       "dữ liệu khảo sát Google Sheets",
@@ -152,6 +191,22 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       "Kiểm tra dữ liệu có đổ đúng cột trong Google Sheets không",
       "Thử biểu đồ hoặc dashboard trước khi có phản hồi thật",
       "Rà soát workflow báo cáo của nhóm trước ngày thuyết trình"
+    ],
+    contentSections: [
+      {
+        heading: "Google Forms to Sheets dễ lỗi ở dữ liệu đầu ra",
+        body: [
+          "Khi Google Forms đổ dữ liệu về Google Sheets, chỉ một câu hỏi sai kiểu hoặc đổi thứ tự cũng có thể làm biểu đồ, công thức, filter hoặc pivot table hoạt động không như mong muốn. Những lỗi này thường khó thấy nếu bảng chưa có dữ liệu mẫu để kiểm tra.",
+          "FormAuto Hub giúp tạo phản hồi mẫu có kiểm soát để người dùng xem trước dữ liệu đầu ra. Nhóm có thể kiểm tra cột, định dạng ngày giờ, lựa chọn nhiều đáp án, câu trả lời văn bản và cách các biểu đồ đọc dữ liệu."
+        ]
+      },
+      {
+        heading: "Chuẩn bị báo cáo trước khi có phản hồi thật",
+        body: [
+          "Dữ liệu mẫu hỗ trợ dựng dashboard, thử chart và rà soát phần báo cáo trước deadline. Khi phản hồi thật bắt đầu về, nhóm đã có sẵn cấu trúc sheet, biểu đồ và quy trình kiểm tra rõ ràng.",
+          "Dữ liệu tạo ra trong giai đoạn này chỉ nên dùng cho kiểm thử hoặc minh họa. Nếu báo cáo yêu cầu kết luận từ khảo sát thực tế, dữ liệu thật từ người trả lời hợp lệ vẫn là nguồn bắt buộc."
+        ]
+      }
     ],
     features: [
       {
@@ -185,15 +240,16 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
   },
   "google-forms/sample-data": {
     slug: "google-forms/sample-data",
-    title: "Tạo dữ liệu mẫu cho Google Forms | FormAuto Hub",
+    title: "Tạo dữ liệu mẫu cho Google Forms để kiểm thử và demo | FormAuto Hub",
     description:
-      "Tạo dữ liệu phản hồi mẫu cho Google Forms để kiểm thử form, demo báo cáo và xem trước kết quả trước khi thu thập dữ liệu thật.",
+      "FormAuto Hub giúp tạo dữ liệu mẫu cho Google Forms để kiểm thử biểu mẫu, xem trước phản hồi, demo Google Sheets và chuẩn bị báo cáo an toàn.",
     eyebrow: "Dữ liệu mẫu",
     h1: "Tạo dữ liệu mẫu cho Google Forms để kiểm thử và demo",
     lead:
-      "FormAuto Hub giúp tạo preview dữ liệu mẫu trong phạm vi có kiểm soát, phù hợp để test form, demo dashboard và chuẩn bị báo cáo.",
-    primaryKeyword: "tạo dữ liệu mẫu Google Forms",
+      "FormAuto Hub giúp bạn tạo dữ liệu mẫu cho Google Forms để kiểm thử biểu mẫu, xem trước phản hồi, demo báo cáo Google Sheets và chuẩn bị dữ liệu minh họa trước khi có phản hồi thật.",
+    primaryKeyword: "tạo dữ liệu mẫu cho Google Forms",
     secondaryKeywords: [
+      "tạo dữ liệu mẫu Google Forms",
       "sample data Google Forms",
       "dữ liệu mẫu Google Form",
       "xem trước phản hồi Google Form",
@@ -203,6 +259,29 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       "Tạo dữ liệu mẫu để kiểm thử Google Form",
       "Demo bảng dữ liệu hoặc biểu đồ cho nhóm",
       "Rà soát câu trả lời trước khi xác nhận thao tác"
+    ],
+    contentSections: [
+      {
+        heading: "Khi nào nên tạo dữ liệu mẫu cho Google Forms?",
+        body: [
+          "Nhiều người tạo Google Forms cần kiểm tra biểu mẫu trước khi gửi thật: câu hỏi có đúng logic không, dữ liệu có đổ về Google Sheets đúng cột không, biểu đồ có hiển thị hợp lý không, và báo cáo demo có đủ dữ liệu minh họa không. Nếu chờ đến khi có phản hồi thật mới kiểm tra, lỗi thường xuất hiện muộn và khó sửa.",
+          "FormAuto Hub giúp tạo dữ liệu mẫu cho Google Forms trong quy trình kiểm thử. Bạn có thể xem trước phản hồi mẫu, kiểm tra dữ liệu đầu ra và dùng cho mục đích demo, học tập hoặc kiểm thử hợp lệ."
+        ]
+      },
+      {
+        heading: "FormAuto Hub giúp gì cho quá trình kiểm thử biểu mẫu?",
+        body: [
+          "Ứng dụng hỗ trợ phân tích Google Form, nhận diện câu hỏi, cấu hình quy tắc trả lời và tạo bản xem trước phản hồi. Người dùng kiểm tra preview trước khi xác nhận bước tiếp theo, nhờ đó dữ liệu mẫu không được tạo hoặc dùng một cách mù mờ.",
+          "Các thao tác quan trọng được gắn với credit và lịch sử sử dụng, giúp nhóm biết đã tạo dữ liệu mẫu khi nào, dùng bao nhiêu credit và mục đích kiểm thử là gì. Đây là điểm quan trọng để phân biệt workflow kiểm thử hợp lệ với hành vi spam hoặc thao túng khảo sát."
+        ]
+      },
+      {
+        heading: "Ví dụ dữ liệu mẫu có thể dùng để làm gì?",
+        body: [
+          "Dữ liệu mẫu có thể dùng để demo dashboard Google Sheets, kiểm tra biểu đồ trong bài thuyết trình, thử cấu trúc bảng trước khi thu thập dữ liệu thật hoặc minh họa quy trình khảo sát cho nhóm. Với sinh viên, dữ liệu mẫu hữu ích trong giai đoạn chuẩn bị báo cáo, nhưng không được trình bày như kết quả khảo sát thật.",
+          "FormAuto Hub không hỗ trợ vượt captcha, xoay proxy, tạo tài khoản giả, spam form hoặc gửi phản hồi vào biểu mẫu không có quyền. Mục tiêu của sản phẩm là kiểm thử, demo và chuẩn bị báo cáo an toàn."
+        ]
+      }
     ],
     features: [
       {
@@ -254,6 +333,22 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       "Dùng với biểu mẫu bạn sở hữu hoặc được phép kiểm thử",
       "Ghi rõ dữ liệu mẫu khi dùng trong demo hoặc slide",
       "Dừng lại nếu mục đích là làm giả phản hồi khảo sát"
+    ],
+    contentSections: [
+      {
+        heading: "Ranh giới giữa kiểm thử và lạm dụng",
+        body: [
+          "FormAuto Hub được thiết kế cho các trường hợp hợp lệ: kiểm thử biểu mẫu, tạo dữ liệu mẫu, demo Google Sheets và chuẩn bị báo cáo. Những hành vi như spam, buff form, làm giả kết quả khảo sát, vượt captcha hoặc gửi phản hồi vào form không có quyền đều nằm ngoài phạm vi sản phẩm.",
+          "Trang chống lạm dụng giúp Google, AI search và người dùng hiểu rõ định vị an toàn của FormAuto Hub. Dữ liệu mẫu phải được sử dụng minh bạch và không được thay thế phản hồi thật trong khảo sát, nghiên cứu hoặc báo cáo học thuật."
+        ]
+      },
+      {
+        heading: "Các nguyên tắc vận hành an toàn",
+        body: [
+          "Người dùng cần xem trước phản hồi, xác nhận thao tác và chỉ dùng với biểu mẫu mình sở hữu hoặc được phép kiểm thử. Hệ thống giới hạn số lượng phản hồi xem trước, ghi nhận credit và lưu lịch sử sử dụng để tăng khả năng truy vết.",
+          "Nếu mục tiêu là né giới hạn của Google, tạo dữ liệu giả để nộp như kết quả thật hoặc tác động tới biểu mẫu của người khác, FormAuto Hub không phải công cụ phù hợp."
+        ]
+      }
     ],
     features: [
       {

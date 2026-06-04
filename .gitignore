@@ -13,7 +13,12 @@ out/
 *.log
 *.tmp
 .env
+.env.local
 !.env.example
 
 TestResults/
 coverage/
+playwright-report/
+test-results/
+.codex-tmp/
+src/FormAutoHub.Api/appsettings.Development.json

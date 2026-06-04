@@ -88,6 +88,19 @@ public sealed record UsageLogResponse(
 
 public sealed record UsageLogListResponse(IReadOnlyList<UsageLogResponse> Items);
 
+public sealed record UsageLogQuery(
+    string? Action,
+    string? Search,
+    int Page,
+    int PageSize);
+
+public sealed record UsageLogPageResponse(
+    IReadOnlyList<UsageLogResponse> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
+
 public sealed record CreditTransactionResponse(
     Guid Id,
     decimal Amount,
@@ -98,14 +111,27 @@ public sealed record CreditTransactionResponse(
     Guid? ReferenceId,
     DateTimeOffset CreatedAt);
 
-public sealed record CreditTransactionListResponse(IReadOnlyList<CreditTransactionResponse> Items);
+public sealed record CreditTransactionQuery(
+    string? Type,
+    string? Search,
+    int Page,
+    int PageSize);
+
+public sealed record CreditTransactionPageResponse(
+    IReadOnlyList<CreditTransactionResponse> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
 
 public sealed record ProfileResponse(
     Guid Id,
     string Email,
     string FullName,
     string Role,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt,
+    bool GoogleLinked,
+    string? GoogleEmail);
 
 public sealed record UpdateProfileRequest(string FullName);
 

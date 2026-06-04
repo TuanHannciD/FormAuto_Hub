@@ -6,11 +6,13 @@ Prevent phase creep and accidental approval of future work.
 
 ## Active Phase Rule
 
-Default active phase is the current phase in `PROJECT_PHASE_ROADMAP.md`.
+Default active phase is the current global phase in `PROJECT_PHASE_ROADMAP.md`.
 
-Current active phase: none selected after Phase 9 closeout.
+Current global active phase: none selected after Phase 9 closeout.
 
-Until the next phase is approved, only explicitly approved follow-up work may proceed.
+Active approved follow-up slice: none. Phase 6 AI mapping/generation scoped implementation is completed.
+
+Until the next global phase or follow-up is approved, only explicitly approved follow-up work may proceed. The completed Phase 6 AI slice must not become full Phase 6 production integration by implication.
 
 Phase 9 closeout state:
 
@@ -20,7 +22,9 @@ Phase 9 closeout state:
 
 ## In-Phase Work
 
-No new active phase is selected.
+No new global active phase is selected.
+
+There is no current approved implementation lane.
 
 Safe work after Phase 9 closeout is limited to:
 
@@ -29,6 +33,7 @@ Safe work after Phase 9 closeout is limited to:
 - proposing next-phase or follow-up scope
 - documentation updates explicitly approved by the user
 - implementation/fix work only after explicit approval
+- validation or fix follow-up for the completed Phase 6 AI scoped slice only when explicitly approved and kept within reviewed API/database/provider/audit/safety boundaries
 
 PayOS remains the only approved payment provider. Captcha bypass, proxy rotation, fake-account behavior, unauthorized submission, spam tooling, and AI auto-submit without preview and confirmation remain forbidden.
 
@@ -42,8 +47,8 @@ The following must remain Deferred until approved:
 - official Google Forms API
 - payment providers other than PayOS
 - background job framework
-- AI answer generation
-- AI mapping
+- AI answer generation outside the approved Phase 6 AI scoped follow-up slice
+- AI mapping outside the approved Phase 6 AI scoped follow-up slice
 - refund behavior after failed submission
 - exact credit pricing
 - exact credit cost per action
@@ -59,6 +64,7 @@ The following must remain Deferred until approved:
 Future candidate guidance:
 
 - Google OAuth, official Google Forms API, Google Forms watches/Cloud Pub/Sub notification handling, background jobs, non-PayOS payment providers, refunds, and subscription billing remain Deferred until a task explicitly approves the production scope.
+- AI mapping/generation has an approved Phase 6 scoped follow-up slice. Implementation still requires staying inside the approved API, database, provider, audit, safety, and validation boundaries.
 - Approval must cover the integration target, API contracts, database fields, statuses, lifecycle states, token storage model, notification ingestion model, background job framework choice, and validation plan when applicable.
 - If the approved future scope needs UI and existing UI docs are missing or incomplete, ask for UI direction or sync UI docs before implementing UI.
 

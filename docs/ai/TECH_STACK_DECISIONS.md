@@ -27,6 +27,7 @@ Record approved and Deferred technology choices.
 - Background job framework.
 - AI answer generation.
 - AI mapping.
+- Final AI provider and model choice.
 - Email notification provider.
 - Webhook platform.
 - Production deployment platform.
@@ -52,6 +53,31 @@ Future options may include:
 - queue-based worker
 
 No specific option is approved.
+
+## AI Provider Direction
+
+AI provider settings are approved for Phase 6 planning as an admin-managed database configuration area.
+
+Approved direction for workers:
+
+- store provider API keys through admin settings, encrypted before persistence
+- validate non-empty provider and model values before enabling a provider setting
+- validate optional Base URL as an absolute `http` or `https` URL
+- keep normal-user generation requests independent from provider secrets
+- use an `Integrations.AI` abstraction for provider-specific calls
+- default runtime behavior must be fail-safe when no approved live provider adapter is configured
+- the deterministic AI adapter is allowed only for explicit local/test validation through configuration
+- the OpenAI-compatible adapter is allowed only for explicit runtime configuration through `AI:ProviderAdapter=OpenAICompatible`
+
+Deferred:
+
+- final provider
+- final model
+- provider SDK or HTTP client library choice
+- live provider/model catalog validation source
+- provider-specific SDK adapters outside the approved OpenAI-compatible HTTP adapter
+- raw audit retention infrastructure
+- any production background worker for AI generation
 
 ## Frontend Direction
 

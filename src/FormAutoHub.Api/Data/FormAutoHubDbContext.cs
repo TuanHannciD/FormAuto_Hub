@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using FormAutoHub.Api.Entities;
+using FormAutoHub.Api.Entities.Nckh;
 
 namespace FormAutoHub.Api.Data;
 
@@ -23,6 +24,17 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PaymentProviderSetting> PaymentProviderSettings => Set<PaymentProviderSetting>();
     public DbSet<PaymentRecord> PaymentRecords => Set<PaymentRecord>();
+    public DbSet<AiProviderSetting> AiProviderSettings => Set<AiProviderSetting>();
+    public DbSet<AiPromptProfile> AiPromptProfiles => Set<AiPromptProfile>();
+    public DbSet<AiQuestionPrompt> AiQuestionPrompts => Set<AiQuestionPrompt>();
+    public DbSet<AiGenerationRun> AiGenerationRuns => Set<AiGenerationRun>();
+    public DbSet<AiGenerationRunItem> AiGenerationRunItems => Set<AiGenerationRunItem>();
+
+    public DbSet<ResearchForm> ResearchForms => Set<ResearchForm>();
+    public DbSet<ResearchFormQuestion> ResearchFormQuestions => Set<ResearchFormQuestion>();
+    public DbSet<ResearchModel> ResearchModels => Set<ResearchModel>();
+    public DbSet<ResearchVariable> ResearchVariables => Set<ResearchVariable>();
+    public DbSet<ObservedQuestionMapping> ObservedQuestionMappings => Set<ObservedQuestionMapping>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,6 +81,11 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
             entity.HasIndex(item => item.Provider).IsUnique();
         });
 
+        modelBuilder.Entity<AiProviderSetting>(entity =>
+        {
+            entity.HasIndex(item => item.Provider).IsUnique();
+        });
+
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
             entity.Property(item => item.Amount).HasPrecision(18, 2);
@@ -79,6 +96,120 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
             entity.HasOne(item => item.TopupOrder)
                 .WithMany()
                 .HasForeignKey(item => item.TopupOrderId);
+        });
+
+        modelBuilder.Entity<AiPromptProfile>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProjectId, item.Mode }).IsUnique();
+            entity.HasOne(item => item.Project)
+                .WithMany()
+                .HasForeignKey(item => item.ProjectId);
+        });
+
+        modelBuilder.Entity<AiQuestionPrompt>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProfileId, item.QuestionId }).IsUnique();
+            entity.HasOne(item => item.Profile)
+                .WithMany()
+                .HasForeignKey(item => item.ProfileId);
+            entity.HasOne(item => item.Question)
+                .WithMany()
+                .HasForeignKey(item => item.QuestionId);
+        });
+
+        modelBuilder.Entity<GeneratedResponse>(entity =>
+        {
+            entity.Property(item => item.Source).HasDefaultValue("Rule");
+            entity.Property(item => item.IsReadOnly).HasDefaultValue(false);
+        });
+
+        modelBuilder.Entity<AiGenerationRun>(entity =>
+        {
+            entity.HasIndex(item => new { item.ProjectId, item.CreatedAt });
+            entity.HasIndex(item => new { item.UserId, item.CreatedAt });
+            entity.HasOne(item => item.Project)
+                .WithMany()
+                .HasForeignKey(item => item.ProjectId);
+            entity.HasOne(item => item.PromptProfile)
+                .WithMany()
+                .HasForeignKey(item => item.PromptProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<AiGenerationRunItem>(entity =>
+        {
+            entity.HasIndex(item => item.RunId);
+            entity.HasOne(item => item.Run)
+                .WithMany()
+                .HasForeignKey(item => item.RunId);
+            entity.HasOne(item => item.Question)
+                .WithMany()
+                .HasForeignKey(item => item.QuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(item => item.GeneratedResponse)
+                .WithMany()
+                .HasForeignKey(item => item.GeneratedResponseId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResearchForm>(entity =>
+        {
+            entity.HasIndex(item => new { item.UserId, item.GoogleFormId }).IsUnique();
+            entity.HasIndex(item => new { item.UserId, item.Status });
+            entity.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(item => item.UserId);
+        });
+
+        modelBuilder.Entity<ResearchFormQuestion>(entity =>
+        {
+            entity.HasIndex(item => new { item.FormId, item.GoogleQuestionId });
+            entity.HasIndex(item => new { item.FormId, item.OrderIndex });
+            entity.HasOne(item => item.Form)
+                .WithMany(item => item.Questions)
+                .HasForeignKey(item => item.FormId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ResearchModel>(entity =>
+        {
+            entity.HasIndex(item => new { item.UserId, item.Status });
+            entity.HasIndex(item => new { item.FormId, item.Status });
+            entity.HasIndex(item => item.FormId)
+                .IsUnique()
+                .HasFilter("[Status] = 'Active'");
+            entity.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(item => item.UserId);
+            entity.HasOne(item => item.Form)
+                .WithMany(item => item.Models)
+                .HasForeignKey(item => item.FormId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ResearchVariable>(entity =>
+        {
+            entity.Property(item => item.MinValue).HasPrecision(18, 2);
+            entity.Property(item => item.MaxValue).HasPrecision(18, 2);
+            entity.HasIndex(item => new { item.ModelId, item.Code }).IsUnique();
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.Variables)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ObservedQuestionMapping>(entity =>
+        {
+            entity.HasIndex(item => new { item.VariableId, item.FormQuestionId }).IsUnique();
+            entity.HasIndex(item => new { item.VariableId, item.ObservedCode }).IsUnique();
+            entity.HasOne(item => item.Variable)
+                .WithMany(item => item.ObservedQuestionMappings)
+                .HasForeignKey(item => item.VariableId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(item => item.FormQuestion)
+                .WithMany(item => item.ObservedQuestionMappings)
+                .HasForeignKey(item => item.FormQuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

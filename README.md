@@ -8,7 +8,11 @@ This repository contains the documentation baseline and the initial Phase 1 back
 
 ## Current Phase
 
-Current phase: **Phase 9 closeout completed; next phase not selected**.
+Current global phase: **Phase 9 closeout completed; next phase not selected**.
+
+Phase 6 AI scoped follow-up: **Completed (see docs/ai/PHASE_6_CLOSEOUT.md)**.
+
+No active follow-up slice. No new global phase is selected. New phase work, deferred-item activation, or implementation/fix follow-up requires explicit approval.
 
 Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
 
@@ -31,7 +35,7 @@ Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under 
 - Frontend framework: Next.js web dashboard.
 - Frontend UI baseline: shadcn/ui with Tailwind CSS for dashboard/admin components.
 - Authentication: JWT access tokens with refresh token/session storage.
-- Google account login/register: identity-only; official Google Forms API scopes remain Deferred.
+- Google account login/register: identity-only for the core FormAuto Hub product; NCKH Survey Module has a separate approved Phase 1 track with repo evidence for Google OAuth link and Google Forms read/import.
 - MVP top-up flow: manual top-up order approval.
 - Phase 8 payment provider: PayOS first, for automated credit top-up.
 - MVP generated response limit: up to 100 preview responses per action, with controlled submission in sequential batches of 10.
@@ -95,6 +99,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/PHASE_3_CLOSEOUT.md` | `docs/vi/PHASE_3_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_4_CLOSEOUT.md` | `docs/vi/PHASE_4_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_5_CLOSEOUT.md` | `docs/vi/PHASE_5_CLOSEOUT.md` | Yes |
+| `docs/ai/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | `docs/vi/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | Yes |
 | `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
 | `docs/ai/PHASE_8_KICKOFF_PLAN.md` | `docs/vi/PHASE_8_KICKOFF_PLAN.md` | Yes |
 | `docs/ai/PHASE_8_CLOSEOUT.md` | `docs/vi/PHASE_8_CLOSEOUT.md` | Yes |

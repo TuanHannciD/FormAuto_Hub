@@ -4,11 +4,29 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, KeyValueRow, MobileRecord, MobileRecordList, PageHeader } from "@/components/ui";
+import { BaseTable, type BaseTableColumn } from "@/components/base-table";
+import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
-import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
+import { apiFetch, type AdminPayment, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
+
+const recentPaymentColumns: Array<BaseTableColumn<AdminPayment>> = [
+  { key: "providerOrderCode", header: "Mã PayOS", render: (item) => item.providerOrderCode, className: "font-medium" },
+  {
+    key: "user",
+    header: "Người dùng",
+    render: (item) => (
+      <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+        {displayPaymentUser(item)}
+      </span>
+    )
+  },
+  { key: "amount", header: "Số tiền", render: (item) => formatCurrency(item.amount) },
+  { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
+  { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.providerStatus} /> },
+  { key: "createdAt", header: "Tạo lúc", render: (item) => formatDate(item.createdAt) }
+];
 
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
@@ -54,50 +72,14 @@ export default function AdminDashboardPage() {
             {!summary || summary.recentPayments.length === 0 ? (
               <EmptyState title="Chưa có thanh toán" detail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán." />
             ) : (
-              <>
-              <MobileRecordList>
-                {summary.recentPayments.map((item) => (
-                  <MobileRecord key={item.id}>
-                    <KeyValueRow label="Mã PayOS" value={item.providerOrderCode} />
-                    <KeyValueRow label="Người dùng" value={displayPaymentUser(item)} />
-                    <KeyValueRow label="Số tiền" value={formatCurrency(item.amount)} />
-                    <KeyValueRow label="Credit" value={`${item.credits} cr`} />
-                    <KeyValueRow label="Trạng thái" value={<StatusBadge status={item.providerStatus} />} />
-                    <KeyValueRow label="Tạo lúc" value={formatDate(item.createdAt)} />
-                  </MobileRecord>
-                ))}
-              </MobileRecordList>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
-                    <tr>
-                      <th className="px-3 py-2">Mã PayOS</th>
-                      <th className="px-3 py-2">Người dùng</th>
-                      <th className="px-3 py-2">Số tiền</th>
-                      <th className="px-3 py-2">Credit</th>
-                      <th className="px-3 py-2">Trạng thái</th>
-                      <th className="px-3 py-2">Tạo lúc</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summary.recentPayments.map((item) => (
-                      <tr className="border-t border-border" key={item.id}>
-                        <td className="px-3 py-3 font-medium">{item.providerOrderCode}</td>
-                        <td className="px-3 py-3">
-                          <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
-                            {displayPaymentUser(item)}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3">{formatCurrency(item.amount)}</td>
-                        <td className="px-3 py-3">{item.credits} cr</td>
-                        <td className="px-3 py-3"><StatusBadge status={item.providerStatus} /></td>
-                        <td className="px-3 py-3">{formatDate(item.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </>
+              <BaseTable
+                items={summary.recentPayments}
+                columns={recentPaymentColumns}
+                getRowKey={(item) => item.id}
+                emptyTitle="Chưa có thanh toán"
+                emptyDetail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán."
+                minWidthClassName="min-w-[760px]"
+              />
             )}
           </CardContent>
         </Card>
@@ -112,7 +94,7 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-amber-900">
               <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
-              <div className="rounded-md border border-amber-200 bg-white p-3">
+              <div className="rounded-md border border-amber-200 bg-white/75 p-3 backdrop-blur">
                 <p className="text-xs font-medium uppercase text-amber-700">Cần theo dõi</p>
                 <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
               </div>
@@ -138,7 +120,7 @@ export default function AdminDashboardPage() {
   );
 }
 
-function displayPaymentUser(item: AdminRevenueSummary["recentPayments"][number]) {
+function displayPaymentUser(item: AdminPayment) {
   return item.userEmail || item.userId.slice(0, 8);
 }
 
@@ -170,7 +152,7 @@ function Metric({
             <Icon size={15} />
           </span>
         </div>
-        <p className="text-2xl font-semibold">{value}</p>
+        <p className="text-[24px] font-extrabold leading-tight text-slate-950">{value}</p>
       </CardContent>
     </Card>
   );
@@ -178,7 +160,7 @@ function Metric({
 
 function Detail({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "danger" }) {
   return (
-    <div className={tone === "danger" ? "rounded-md border border-red-200 bg-red-50 p-3" : "rounded-md border border-border p-3"}>
+    <div className={tone === "danger" ? "rounded-md border border-red-200 bg-red-50/85 p-3" : "rounded-md border border-border/70 bg-white/55 p-3"}>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>

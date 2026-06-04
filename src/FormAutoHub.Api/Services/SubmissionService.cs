@@ -181,7 +181,7 @@ public sealed class SubmissionService(
         await WriteUsageLogAsync(
             projectId,
             job.Status == SubmissionJobStatuses.Completed ? UsageLogStatuses.Success : UsageLogStatuses.Failed,
-            "Confirmed preview responses submitted.",
+            "Gửi form thành công",
             cancellationToken);
         AuditLogWriter.Add(dbContext, currentUser.UserId, "SubmitResponses", nameof(SubmissionJob), job.Id, new
         {

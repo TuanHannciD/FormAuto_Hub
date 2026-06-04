@@ -30,9 +30,10 @@ public sealed class GeneratedResponsesController(IResponseGenerationService resp
     [HttpGet]
     public async Task<ActionResult<GeneratedResponseListResponse>> GetProjectResponses(
         Guid projectId,
+        [FromQuery] Guid[] ids,
         CancellationToken cancellationToken)
     {
-        var response = await responseGenerationService.GetProjectResponsesAsync(projectId, cancellationToken);
+        var response = await responseGenerationService.GetProjectResponsesAsync(projectId, ids, cancellationToken);
         return response is null ? NotFound() : Ok(response);
     }
 }

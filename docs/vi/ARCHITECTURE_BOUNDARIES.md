@@ -78,6 +78,14 @@ Sở hữu external calls tới Google Forms, payment providers, AI providers ho
 
 Deferred integrations không được gọi là production-complete.
 
+Hướng AI integration cho Phase 6 requirement package:
+
+- `Integrations.AI` sở hữu provider-specific calls và response parsing.
+- Request từ normal-user frontend không được tự chọn provider, model, hoặc API key trực tiếp.
+- AI provider settings là cấu hình admin-owned và phải được đọc phía server.
+- AI output phải được validate trước khi lưu bất kỳ dòng `GeneratedResponses` nào.
+- Câu trả lời dạng lựa chọn không được accept nếu nằm ngoài stored form options.
+
 ## Boundary bắt buộc
 
 - Google Forms integration không được trộn vào credit/account services.
@@ -85,4 +93,7 @@ Deferred integrations không được gọi là production-complete.
 - Credit changes phải ghi ledger entry.
 - Tool usage phải ghi `UsageLogs`.
 - Submission actions phải ghi `SubmissionLogs`.
+- Credit deduction cho AI generation phải đi qua cùng dedicated credit workflow và ledger discipline.
+- Raw AI provider request/response audit không được thay thế `UsageLogs` hoặc `CreditTransactions`.
+- AI-generated previews vẫn phải được review ở preview và user confirm rõ trước submission.
 - Nếu tool action fail sau credit deduction, refund behavior là Deferred và không được tự bịa.

@@ -1,12 +1,43 @@
 # API_CONTRACT_GUIDE
 
+## TOC
+
+- [Purpose](#purpose) (34)
+- [Current Status](#current-status) (38)
+- [REST Naming Rules](#rest-naming-rules) (42)
+- [Proposed API Areas](#proposed-api-areas) (50)
+  - [Dashboard](#dashboard) (52)
+  - [Packages](#packages) (56)
+  - [Top-up orders](#top-up-orders) (101)
+  - [Admin top-up orders](#admin-top-up-orders) (146)
+  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
+  - [PayOS webhooks](#payos-webhooks) (266)
+  - [Usage logs](#usage-logs) (304)
+  - [Credit transactions](#credit-transactions) (334)
+  - [Profile](#profile) (356)
+  - [Authentication and account access](#authentication-and-account-access) (362)
+  - [Forms](#forms) (409)
+  - [Answer rules](#answer-rules) (414)
+  - [Generated responses](#generated-responses) (432)
+  - [AI prompt profiles](#ai-prompt-profiles) (454)
+  - [AI generated responses](#ai-generated-responses) (478)
+  - [Submissions](#submissions) (545)
+- [DTO Rules](#dto-rules) (560)
+- [Error Response Rules](#error-response-rules) (568)
+- [Pagination And Filtering](#pagination-and-filtering) (574)
+- [Status Discipline](#status-discipline) (581)
+- [Approved Status And Type Values](#approved-status-and-type-values) (587)
+- [Temporary User Context](#temporary-user-context) (637)
+- [Versioning And OpenAPI](#versioning-and-openapi) (646)
+- [Change Rule](#change-rule) (651)
+
 ## Purpose
 
 Control API contract design for FormAuto Hub.
 
 ## Current Status
 
-The API areas below are proposed, not final contracts. Every endpoint requires contract review before implementation.
+Some API areas below are proposed, and some phase slices have approved implemented contracts. Each section marks whether the listed behavior is approved, implemented, proposed, or Deferred.
 
 ## REST Naming Rules
 
@@ -157,6 +188,81 @@ Pending contract review before implementation:
 - exact PayOS settings DTO names
 - exact masked secret response shape
 
+### Admin AI provider settings
+
+Approved Phase 6 provider settings backend subset:
+
+- `GET /api/admin/ai-provider-settings`
+- `PUT /api/admin/ai-provider-settings`
+- `POST /api/admin/ai-provider-settings/check`
+
+Approved behavior:
+
+- admin-only access
+- stores AI provider configuration in the database through `AiProviderSettings`
+- encrypts API keys before storage
+- never returns raw API keys to frontend clients
+- returns only masked key previews
+- validates that provider and default model are present before enabling the setting
+- supports a default model for generation
+- configuration check must not generate previews, deduct credit, or create `GeneratedResponses`
+
+Approved request DTO:
+
+`UpdateAiProviderSettingsRequest`
+
+- `provider`
+- `apiKey`
+- `defaultModel`
+- `isEnabled`
+- `baseUrl`
+
+Approved response DTOs:
+
+`AiProviderSettingsResponse`
+
+- `provider`
+- `displayName`
+- `hasApiKey`
+- `apiKeyPreview`
+- `baseUrl`
+- `defaultModel`
+- `allowedModels`
+- `isEnabled`
+- `lastCheckedAt`
+- `lastCheckStatus`
+- `lastCheckMessage`
+- `updatedAt`
+
+`CheckAiProviderSettingsResponse`
+
+- `status`
+- `message`
+- `checkedAt`
+
+Approved provider/model policy:
+
+- Provider and model values are admin-controlled strings stored server-side.
+- Admin update requests may set a custom provider identifier, default model identifier, and optional Base URL.
+- Backend validation requires non-empty provider and default model values before saving.
+- Enabling a setting requires a stored encrypted API key, a non-empty provider, and a non-empty default model.
+- If provided, `baseUrl` must be an absolute `http` or `https` URL.
+- Normal-user generation requests still do not accept provider, model, API key, or base URL authority.
+- `allowedModels` is retained in the response for UI compatibility and may contain the saved default model; it is not a hardcoded provider allow-list.
+- OpenAI-compatible runtime calls use the saved Base URL and call `{baseUrl}/chat/completions`, unless the saved Base URL already ends with `/chat/completions`.
+
+Approved check statuses:
+
+- `NotChecked`
+- `Ready`
+- `MissingConfiguration`
+- `InvalidConfiguration`
+
+Deferred:
+
+- raw error redaction policy
+- live provider model catalog validation calls
+
 ### PayOS webhooks
 
 - `POST /api/payments/payos/webhook`
@@ -200,15 +306,63 @@ Pending contract review before implementation:
 - `GET /api/usage-logs`
 - `GET /api/usage-logs/recent`
 
+Approved `GET /api/usage-logs` query behavior:
+
+- supports `action` as an exact action filter
+- supports `search` across action, tool name, status, and description text
+- supports `page` and `pageSize`
+- default UI usage should request `action=Xem lại câu trả lời được tạo`
+- `page` is clamped to at least 1
+- `pageSize` is clamped from 1 to 100
+- results are sorted by `createdAt` descending
+- server returns only the current page of rows for the active filter
+
+Approved `GET /api/usage-logs` response fields:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
+
+Approved usage-log action filter value for generated-answer credit transaction visibility:
+
+- `Xem lại câu trả lời được tạo`
+
+The frontend may offer an all-actions view, but the default usage-log page must focus on generated-answer review actions because those are the usage entries that represent credit-consuming transactions.
+
 ### Credit transactions
 
 - `GET /api/credit-transactions`
+
+Approved `GET /api/credit-transactions` query behavior:
+
+- supports `type` as an exact filter using approved `CreditTransaction.Type` values
+- supports `search` across type, description, and reference type text
+- supports `page` and `pageSize`
+- `page` is clamped to at least 1
+- `pageSize` is clamped from 1 to 100
+- results are sorted by `createdAt` descending
+- server returns only the current page of rows for the active filter
+
+Approved `GET /api/credit-transactions` response fields:
+
+- `items`
+- `page`
+- `pageSize`
+- `totalItems`
+- `totalPages`
 
 ### Profile
 
 - `GET /api/profile`
 - `PUT /api/profile`
 - `PUT /api/profile/change-password`
+
+Approved `GET /api/profile` identity fields:
+
+- `googleLinked`: whether the authenticated user already has a linked Google identity
+- `googleEmail`: linked Google email when available; otherwise `null`
 
 ### Authentication and account access
 
@@ -220,6 +374,7 @@ Phase 7 approved behavior baseline:
 - `POST /api/auth/refresh` rotates the current refresh token/session and returns new tokens
 - `POST /api/auth/logout` revokes the current refresh token/session only
 - `POST /api/auth/link-google` links a verified Google identity after password login
+- `DELETE /api/auth/link-google` unlinks the current user's Google identity when the account still has password login available
 - `PUT /api/profile/change-password` changes password from profile
 - password recovery is not implemented yet and may be shown in UI as currently being updated
 
@@ -242,6 +397,8 @@ Approved Google identity rules:
 - if `provider_user_id` or Google `sub` already exists in storage, login succeeds for that linked user
 - if no provider user id exists but the Google email matches an existing password account, link is considered only when `email_verified = true`
 - matching verified email must not silently auto-link; the preferred flow is password login first, then Google linking
+- Google linking from profile/security is allowed only when the current account has no linked Google identity and the verified Google email matches the current account email
+- Google unlinking from profile/security is allowed only when the current account has a password login path, to avoid locking out Google-only users
 - if `email_verified = false`, do not auto-link
 - Google auto-register is allowed when there is no existing matching account conflict
 - this does not approve official Google Forms API scopes or Google Forms integration behavior
@@ -301,6 +458,173 @@ Approved `GenerateResponsesResponse` fields:
 - `requestedCount`: requested preview count
 - `generatedCount`: actual generated preview count
 - `missingCredits`: credits still needed to satisfy the requested preview count
+
+### AI prompt profiles
+
+Approved Phase 6 AI prompt persistence backend area:
+
+- `GET /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile`
+- `PUT /api/projects/{projectId}/ai-prompt-profile/questions/{questionId}`
+- `POST /api/projects/{projectId}/ai-prompt-profile/auto-fill`
+
+Approved/implemented behavior:
+
+- authenticated project owner access
+- Option 2 stores a default profile for the project
+- Option 3 stores global and per-question prompt configuration
+- auto-fill prompt is free and must not deduct credit
+- prompt length limits must be enforced by backend validation
+- prompt guard must reject unsafe prompts before provider calls
+
+Deferred or still requiring review:
+
+- additional frontend/API binding outside the approved scoped slice
+- live provider-backed auto-fill behavior
+- broader prompt-template management
+
+### AI generated responses
+
+Approved Phase 6 AI preview generation backend area:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+- `GET /api/projects/{projectId}/ai-generation-runs`
+- `GET /api/projects/{projectId}/ai-generation-runs/{runId}`
+
+Implemented route:
+
+- `POST /api/projects/{projectId}/ai-responses/generate`
+
+Implemented request DTO:
+
+`AiGenerateResponsesRequest`
+
+- `mode`
+- `count`
+
+Implemented response DTO:
+
+`AiGenerateResponsesResponse`
+
+- `runId`
+- `status`
+- `requestedCount`
+- `generatedCount`
+- `multiplier`
+- `creditsUsed`
+- `missingCredits`
+- `balanceAfter`
+- `generatedPreviewIds`
+
+Approved/implemented behavior:
+
+- authenticated project owner access for generation
+- AI generation creates `GeneratedResponses` directly
+- generated previews are read-only after creation
+- Option 2 uses credit multiplier `2`
+- Option 3 uses credit multiplier `3`
+- credit is deducted only for successfully stored generated previews
+- failed generation charges zero credit
+- partial generation stores and charges only valid previews
+- AI output must be validated before storage
+- choice-style answers must match stored form options
+- raw provider request/response must be written to AI audit storage
+- raw provider request/response is not returned by the generation response
+- runtime generation uses server-side enabled provider settings; provider/model/API key are not accepted from the normal-user request
+
+Runtime provider adapter boundary:
+
+- the deterministic adapter may be used only when explicitly enabled by local/test configuration
+- the default runtime adapter is fail-safe disabled until a live provider adapter is approved and configured
+- the OpenAI-compatible adapter may be used only when explicitly enabled by runtime configuration and must use server-side admin provider settings
+
+Deferred or still requiring review:
+
+- project-level run read/list endpoints
+- exact run list/detail response shape
+- whether normal users can see non-raw audit summaries
+- raw payload access and retention policy
+- raw admin/debug payload endpoint
+- provider-specific SDK adapters outside the OpenAI-compatible HTTP contract
+- live provider model catalog validation
+- additional frontend/API binding outside the approved scoped slice
+- production browser closeout with real provider credentials
+
+### AI usage analytics
+
+- `GET /api/dashboard/ai-usage` — user-scoped AI generation statistics
+- `GET /api/admin/ai-usage` — admin-scoped AI generation statistics
+
+Approved user behavior:
+
+- returns total AI generation runs, successful/failed counts, credits used, previews generated
+- returns mode breakdown (FullAi / CustomAi) with run count and credits used
+- returns 10 most recent runs with project name, provider, model, status, duration
+- returns daily usage summary for the last 30 days (date, runs, credits used)
+- returns data scoped to the authenticated user only
+- all data is query-only from existing `AiGenerationRuns` table; no new DB entities
+
+Approved admin behavior:
+
+- returns all user-scoped fields aggregated across all users
+- additionally returns total user count, provider performance stats, and top users by credit consumption
+- top user data includes `UserId` and `Email` retrieved from `Users` table
+- provider performance includes success/fail counts and average duration per `(provider, model)` pair
+
+### GET /api/admin/ai-usage/runs — Admin paged AI runs
+
+**Authentication:** Admin JWT required.
+
+**Query parameters:**
+- `page` (int, default 1) — page number
+- `pageSize` (int, default 20, max 100) — items per page
+- `status` (string, optional) — filter by run status (e.g., Succeeded, Failed, Partial)
+- `mode` (string, optional) — filter by mode (e.g., Option2, Option3)
+- `provider` (string, optional) — filter by provider name
+- `model` (string, optional) — filter by model name
+- `fromDate` (ISO datetime, optional) — filter runs created on or after
+- `toDate` (ISO datetime, optional) — filter runs created on or before
+
+**Response (200):**
+```json
+{
+  "items": [
+    {
+      "id": "guid",
+      "mode": "Option2",
+      "status": "Succeeded",
+      "provider": "Deepseek",
+      "model": "deepseek-v4-flash",
+      "requestedCount": 5,
+      "generatedCount": 5,
+      "creditsUsed": 15,
+      "durationMs": 24073,
+      "createdAt": "2026-05-30T01:59:12.7650167+00:00",
+      "projectName": "test"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 122,
+  "totalPages": 7
+}
+```
+
+**Behavior:**
+- Returns paginated AI generation runs ordered by `CreatedAt` descending
+- Supports up to 6 optional filters that combine with AND logic
+- All data is read-only from existing `AiGenerationRuns` table
+- `durationMs` is computed client-side from `StartedAt`/`CompletedAt` difference
+
+
+
+Deferred:
+
+- per-project AI usage breakdown
+- per-question (AiGenerationRunItem) analytics
+- AI usage export (CSV, JSON download)
+- real-time usage monitoring
+- AI usage alerts or threshold notifications
 
 ### Submissions
 
@@ -374,6 +698,18 @@ UsageLog.Status:
 
 - Success
 - Failed
+
+AiGenerationRun.Status:
+
+- Pending
+- Running
+- Succeeded
+- Partial
+- Failed
+
+Phase 6 rule:
+
+- AI run statuses are approved for the Phase 6 requirement package, but allowed transitions and exact persistence fields still require contract and database review before implementation.
 
 User.Role:
 

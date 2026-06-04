@@ -34,3 +34,5 @@ public sealed record LogoutRequest(
 public sealed record LogoutResponse(bool Revoked);
 
 public sealed record LinkGoogleResponse(bool Linked);
+
+public sealed record UnlinkGoogleResponse(bool Unlinked);

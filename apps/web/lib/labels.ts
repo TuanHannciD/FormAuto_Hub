@@ -16,6 +16,7 @@ export function displayStatus(status: string) {
     Paid: "Đã thanh toán",
     Ready: "Sẵn sàng",
     MissingConfiguration: "Thiếu cấu hình",
+    InvalidConfiguration: "Cấu hình không hợp lệ",
     NotChecked: "Chưa kiểm tra",
     PAID: "Đã thanh toán",
     PENDING: "Đang chờ",
@@ -31,10 +32,12 @@ export function displayAction(action: string) {
     AnalyzeForm: "Phân tích biểu mẫu",
     GeneratePreview: "Tạo bản xem trước",
     GenerateResponses: "Tạo bản xem trước",
+    "Xem lại câu trả lời được tạo": "Xem câu trả lời được tạo",
     SubmitResponses: "Gửi câu trả lời",
     Submission: "Gửi câu trả lời",
     TopupApproved: "Duyệt yêu cầu nạp",
-    InitialGrant: "Tặng credit ban đầu"
+    InitialGrant: "Tặng credit ban đầu",
+    AiGenerateResponses: "AI tạo ra phản hồi"    
   };
 
   return labels[action] ?? action;
@@ -42,14 +45,25 @@ export function displayAction(action: string) {
 
 export function displayCreditTransactionType(type: string) {
   const labels: Record<string, string> = {
+    CreditUsed:"Sử dụng credit",
     Topup: "Nạp credit",
     TopupApproved: "Nạp credit đã duyệt",
     Usage: "Sử dụng credit",
     InitialGrant: "Credit khởi đầu",
+    ManualGrant: "Cộng credit thủ công",
     Refund: "Hoàn credit"
   };
 
   return labels[type] ?? type;
+}
+
+export function displayPaymentMethod(method: string) {
+  const labels: Record<string, string> = {
+    Manual: "Đối soát thủ công",
+    PayOS: "PayOS"
+  };
+
+  return labels[method] ?? method;
 }
 
 export function displayToolName(toolName: string) {

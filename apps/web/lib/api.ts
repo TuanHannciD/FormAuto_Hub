@@ -15,6 +15,32 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   return apiFetchInternal<T>(path, options, false);
 }
 
+export async function apiFetchBlob(path: string): Promise<Blob> {
+  const headers = new Headers();
+  const accessToken = await getValidAccessToken();
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers,
+    cache: "no-store"
+  });
+
+  if (response.status === 401) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      return apiFetchBlob(path);
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(`Không tải được tệp. Mã lỗi HTTP ${response.status}.`);
+  }
+
+  return response.blob();
+}
+
 async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean): Promise<T> {
   const headers = new Headers(options.headers);
   headers.set("Accept", "application/json");
@@ -82,15 +108,44 @@ export type AuthTokenResponse = {
 
 export type TopupOrder = {
   id: string;
+  userId?: string;
+  userEmail?: string;
   packageId: string;
+  packageName?: string;
   credits: number;
   amount: number;
   status: string;
   paymentMethod: string;
   paymentNote: string;
+  evidenceFileId?: string | null;
   createdAt: string;
   paidAt?: string | null;
   approvedAt?: string | null;
+};
+
+export type UploadTopupEvidenceResponse = {
+  fileId: string;
+  fileName: string;
+  contentType: string;
+  length: number;
+  createdAt: string;
+};
+
+export type ManualCreditGrantResponse = {
+  userId: string;
+  userEmail: string;
+  creditTransactionId: string;
+  balanceAfter: number;
+};
+
+export type AdminCreditUserOption = {
+  id: string;
+  email: string;
+  fullName: string;
+};
+
+export type AdminCreditUserOptionListResponse = {
+  items: AdminCreditUserOption[];
 };
 
 export type CreatePayosTopupOrderResponse = {
@@ -114,6 +169,14 @@ export type UsageLog = {
   description: string;
   projectId?: string | null;
   createdAt: string;
+};
+
+export type UsageLogPageResponse = {
+  items: UsageLog[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
 };
 
 export type DashboardSummary = {
@@ -167,6 +230,27 @@ export type CheckPayosProviderSettingsResponse = {
   checkedAt: string;
 };
 
+export type AiProviderSettings = {
+  provider: string;
+  displayName: string;
+  hasApiKey: boolean;
+  apiKeyPreview: string;
+  baseUrl: string;
+  defaultModel: string;
+  allowedModels: string[];
+  isEnabled: boolean;
+  lastCheckedAt?: string | null;
+  lastCheckStatus: string;
+  lastCheckMessage: string;
+  updatedAt?: string | null;
+};
+
+export type CheckAiProviderSettingsResponse = {
+  status: string;
+  message: string;
+  checkedAt: string;
+};
+
 export type AdminPayment = {
   id: string;
   topupOrderId: string;
@@ -206,12 +290,22 @@ export type CreditTransaction = {
   createdAt: string;
 };
 
+export type CreditTransactionPageResponse = {
+  items: CreditTransaction[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
 export type Profile = {
   id: string;
   email: string;
   fullName: string;
   role: string;
   createdAt: string;
+  googleLinked?: boolean;
+  googleEmail?: string | null;
 };
 
 export type FormQuestion = {
@@ -247,9 +341,15 @@ export type GeneratedResponse = {
   id: string;
   projectId: string;
   status: string;
+  source: string;
+  isReadOnly: boolean;
   previewText: string;
   answers: GeneratedAnswer[];
   createdAt: string;
+};
+
+export type GeneratedResponseListResponse = {
+  items: GeneratedResponse[];
 };
 
 export type GenerateResponsesResult = {
@@ -259,6 +359,51 @@ export type GenerateResponsesResult = {
   requestedCount: number;
   generatedCount: number;
   missingCredits: number;
+};
+
+export type AiQuestionPrompt = {
+  id: string;
+  profileId: string;
+  questionId: string;
+  prompt: string;
+  useAi: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AiPromptProfile = {
+  id: string;
+  projectId: string;
+  userId: string;
+  mode: string;
+  audienceJson: string;
+  globalPrompt: string;
+  questions: AiQuestionPrompt[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AiPromptAutoFillResponse = {
+  mode: string;
+  audienceJson: string;
+  globalPrompt: string;
+  questions: Array<{
+    questionId: string;
+    prompt: string;
+    useAi: boolean;
+  }>;
+};
+
+export type AiGenerateResponsesResult = {
+  runId: string;
+  status: string;
+  requestedCount: number;
+  generatedCount: number;
+  multiplier: number;
+  creditsUsed: number;
+  missingCredits: number;
+  balanceAfter: number;
+  generatedPreviewIds: string[];
 };
 
 export type SubmissionJob = {
@@ -278,4 +423,66 @@ export type SubmissionJob = {
     errorMessage: string;
     submittedAt?: string | null;
   }>;
+};
+// ── NCKH Survey Module ──────────────────────────────────────────
+
+export type NckhGoogleLinkRequest = {
+  authorizationCode: string;
+  redirectUri: string;
+};
+
+export type NckhGoogleLinkResponse = {
+  linked: boolean;
+  email: string;
+};
+
+export type NckhFormQuestion = {
+  id: string;
+  googleQuestionId: string;
+  questionText: string;
+  questionType: string;
+  isRequired: boolean;
+  orderIndex: number;
+};
+
+export type NckhFormItem = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questionCount: number;
+  importedAt: string;
+};
+
+export type NckhFormListResponse = {
+  items: NckhFormItem[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhFormDetailResponse = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questions: NckhFormQuestion[];
+  importedAt: string;
+};
+
+export type NckhImportFormRequest = {
+  formUrl: string;
+};
+
+export type NckhImportFormResponse = {
+  id: string;
+  googleFormId: string;
+  formUrl: string;
+  title: string;
+  status: string;
+  questionCount: number;
+  importedAt: string;
 };
