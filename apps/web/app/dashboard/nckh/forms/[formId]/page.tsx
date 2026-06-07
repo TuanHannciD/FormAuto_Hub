@@ -275,6 +275,12 @@ export default function NckhFormWorkspacePage() {
 
   const hasPendingAction = pendingAction !== null;
 
+  const resetRelationDraft = useCallback((sortOrder = "1") => {
+    setRelationDraft({ fromVariableId: "", toVariableId: "", direction: "Positive", sortOrder });
+    setRelationFromSearch("");
+    setRelationToSearch("");
+  }, []);
+
   const variableTypeOptions = useMemo<DropdownOption[]>(
     () => variableTypes.map((item) => ({ value: item, label: displayVariableType(item) })),
     []
@@ -377,6 +383,7 @@ export default function NckhFormWorkspacePage() {
   }, [loadWorkspace]);
 
   useEffect(() => {
+    resetRelationDraft();
     if (selectedModelId) {
       loadModelData(selectedModelId);
     } else {
@@ -387,7 +394,7 @@ export default function NckhFormWorkspacePage() {
       setResponses(null);
       setDataset(null);
     }
-  }, [loadModelData, selectedModelId]);
+  }, [loadModelData, resetRelationDraft, selectedModelId]);
 
   async function createModel(event: FormEvent) {
     event.preventDefault();
@@ -474,6 +481,9 @@ export default function NckhFormWorkspacePage() {
     try {
       await apiFetch<void>(`/api/v1/nckh/variables/${variable.id}`, { method: "DELETE" });
       toast.success("Đã xóa biến.");
+      if (relationDraft.fromVariableId === variable.id || relationDraft.toVariableId === variable.id) {
+        resetRelationDraft(String(Math.max(1, relations.length)));
+      }
       await loadModelData(selectedModelId);
     } catch (deleteError) {
       toast.error(readableNckhError(deleteError, "Không xóa được biến."));
@@ -539,9 +549,7 @@ export default function NckhFormWorkspacePage() {
         }
       });
       toast.success("Đã thêm quan hệ.");
-      setRelationDraft({ fromVariableId: "", toVariableId: "", direction: "Positive", sortOrder: String(relations.length + 2) });
-      setRelationFromSearch("");
-      setRelationToSearch("");
+      resetRelationDraft(String(relations.length + 2));
       await loadModelData(selectedModelId);
     } catch (relationError) {
       toast.error(readableNckhError(relationError, "Không thêm được quan hệ."));
@@ -619,6 +627,7 @@ export default function NckhFormWorkspacePage() {
     try {
       await apiFetch<void>(`/api/v1/nckh/relations/${relation.id}`, { method: "DELETE" });
       toast.success("Đã xóa quan hệ.");
+      resetRelationDraft(String(Math.max(1, relations.length)));
       await loadModelData(selectedModelId);
     } catch (deleteError) {
       toast.error(readableNckhError(deleteError, "Không xóa được quan hệ."));

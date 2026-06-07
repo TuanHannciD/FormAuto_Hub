@@ -590,6 +590,81 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     }).toBe(true);
   });
 
+  test("clears canvas relation draft after deleting a relation", async ({ page }) => {
+    let relationItems = [MOCK_RELATION];
+    let createRelationPayload: { fromVariableId?: string; toVariableId?: string } | null = null;
+
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/relations**`, async (route) => {
+      const method = route.request().method();
+      if (method === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            items: relationItems,
+            page: 1,
+            pageSize: 100,
+            totalItems: relationItems.length,
+            totalPages: relationItems.length > 0 ? 1 : 0
+          })
+        });
+        return;
+      }
+      if (method === "POST") {
+        createRelationPayload = route.request().postDataJSON();
+        const createdRelation = {
+          ...MOCK_RELATION,
+          id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+          fromVariableId: createRelationPayload?.fromVariableId ?? MOCK_VARIABLE.id,
+          fromVariableName: MOCK_VARIABLE.name,
+          fromVariableCode: MOCK_VARIABLE.code,
+          toVariableId: createRelationPayload?.toVariableId ?? MOCK_VARIABLE_2.id,
+          toVariableName: MOCK_VARIABLE_2.name,
+          toVariableCode: MOCK_VARIABLE_2.code,
+          hypothesisCode: "H1"
+        };
+        relationItems = [createdRelation];
+        await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify(createdRelation) });
+        return;
+      }
+      await route.continue();
+    });
+
+    await page.route(`**/api/v1/nckh/relations/${MOCK_RELATION.id}`, async (route) => {
+      if (route.request().method() !== "DELETE") {
+        await route.continue();
+        return;
+      }
+      relationItems = [];
+      await route.fulfill({ status: 204, body: "" });
+    });
+
+    page.on("dialog", (dialog) => dialog.accept());
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+
+    await page.getByPlaceholder("Tìm biến nguồn").fill("SER");
+    await page.getByRole("option", { name: /SER - Chất lượng dịch vụ/ }).click();
+    await page.getByPlaceholder("Tìm biến đích").fill("SAT");
+    await page.getByRole("option", { name: /SAT - Sự hài lòng/ }).click();
+
+    await page.getByRole("button", { name: "Xóa quan hệ H1" }).first().click();
+    await expect(page.getByText("Chưa có quan hệ", { exact: true }).first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByPlaceholder("Tìm biến nguồn")).toHaveValue("");
+    await expect(page.getByPlaceholder("Tìm biến đích")).toHaveValue("");
+
+    await page.getByPlaceholder("Tìm biến nguồn").fill("SAT");
+    await page.getByRole("option", { name: /SAT - Sự hài lòng/ }).click();
+    await page.getByPlaceholder("Tìm biến đích").fill("SER");
+    await page.getByRole("option", { name: /SER - Chất lượng dịch vụ/ }).click();
+    await page.getByRole("button", { name: "Thêm quan hệ" }).click();
+
+    await expect.poll(() => createRelationPayload).toMatchObject({
+      fromVariableId: MOCK_VARIABLE.id,
+      toVariableId: MOCK_VARIABLE_2.id
+    });
+  });
+
   test("keeps canvas relation and position edits read-only for active models", async ({ page }) => {
     await page.route("**/api/v1/nckh/models?page=1&pageSize=100", async (route) => {
       await route.fulfill({
