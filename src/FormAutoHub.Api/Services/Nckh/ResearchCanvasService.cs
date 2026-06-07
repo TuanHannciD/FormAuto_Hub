@@ -391,8 +391,8 @@ public sealed class ResearchCanvasService(FormAutoHubDbContext dbContext) : IRes
             var relation = ordered[index];
             relation.HypothesisCode = $"H{index + 1}";
             relation.HypothesisText = relation.Direction == PositiveDirection
-                ? $"{relation.FromVariable.Name} có ảnh hưởng tiêu cực đến {relation.ToVariable.Name}"
-                : $"{relation.FromVariable.Name} có ảnh hưởng tiêu cực đến {relation.ToVariable.Name}";
+                ? $"{relation.FromVariable.Name} has a positive influence on {relation.ToVariable.Name}"
+                : $"{relation.FromVariable.Name} has a negative influence on {relation.ToVariable.Name}";
             relation.UpdatedAt = DateTimeOffset.UtcNow;
         }
     }
@@ -515,4 +515,3 @@ public sealed class ResearchCanvasService(FormAutoHubDbContext dbContext) : IRes
         return new ResearchFormServiceResult<T>(ResearchFormServiceStatus.Conflict, Message: message);
     }
 }
-

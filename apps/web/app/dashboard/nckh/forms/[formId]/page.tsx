@@ -326,6 +326,24 @@ export default function NckhFormWorkspacePage() {
     [relationToSearch, variableOptions]
   );
 
+  const relationDraftError = useMemo(() => {
+    if (!relationDraft.fromVariableId || !relationDraft.toVariableId) {
+      return "Chọn đủ biến nguồn và biến đích trước khi thêm quan hệ.";
+    }
+
+    if (relationDraft.fromVariableId === relationDraft.toVariableId) {
+      return "Biến nguồn và biến đích phải khác nhau.";
+    }
+
+    const alreadyExists = relations.some((relation) => (
+      relation.fromVariableId === relationDraft.fromVariableId
+      && relation.toVariableId === relationDraft.toVariableId
+    ));
+    return alreadyExists ? "Quan hệ có hướng này đã tồn tại trong mô hình." : null;
+  }, [relationDraft.fromVariableId, relationDraft.toVariableId, relations]);
+
+  const showRelationDraftError = Boolean(relationDraft.fromVariableId || relationDraft.toVariableId) && relationDraftError;
+
   const loadWorkspace = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -532,7 +550,11 @@ export default function NckhFormWorkspacePage() {
 
   async function createRelation(event: FormEvent) {
     event.preventDefault();
-    if (!selectedModelId || !relationDraft.fromVariableId || !relationDraft.toVariableId) return;
+    if (!selectedModelId) return;
+    if (relationDraftError) {
+      toast.error(relationDraftError);
+      return;
+    }
     if (!canEditCanvas) {
       toast.error("Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.");
       return;
@@ -959,8 +981,13 @@ export default function NckhFormWorkspacePage() {
                   emptyText="Không có biến phù hợp"
                   onSearchChange={setRelationFromSearch}
                   onChange={(value, option) => {
-                    setRelationDraft({ ...relationDraft, fromVariableId: value });
+                    setRelationDraft((current) => (
+                      current.toVariableId === value
+                        ? { ...current, fromVariableId: value, toVariableId: "" }
+                        : { ...current, fromVariableId: value }
+                    ));
                     setRelationFromSearch(option.label);
+                    if (relationDraft.toVariableId === value) setRelationToSearch("");
                   }}
                 />
                 <SearchableDropdownSelect
@@ -972,14 +999,20 @@ export default function NckhFormWorkspacePage() {
                   emptyText="Không có biến phù hợp"
                   onSearchChange={setRelationToSearch}
                   onChange={(value, option) => {
-                    setRelationDraft({ ...relationDraft, toVariableId: value });
+                    setRelationDraft((current) => (
+                      current.fromVariableId === value
+                        ? { ...current, toVariableId: "" }
+                        : { ...current, toVariableId: value }
+                    ));
                     setRelationToSearch(option.label);
+                    if (relationDraft.fromVariableId === value) setRelationToSearch("");
                   }}
                 />
                 <DropdownSelect disabled={!canEditCanvas} value={relationDraft.direction} options={relationDirectionOptions} onChange={(value) => setRelationDraft({ ...relationDraft, direction: value })} />
                 <Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={relationDraft.sortOrder} onChange={(event) => setRelationDraft({ ...relationDraft, sortOrder: event.target.value })} />
-                <Button aria-label="Thêm quan hệ" type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createRelation") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createRelation") ? "Đang thêm..." : "Thêm"}</span></Button>
+                <Button aria-label="Thêm quan hệ" type="submit" disabled={hasPendingAction || !canEditCanvas || Boolean(relationDraftError)}>{isActionPending("createRelation") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createRelation") ? "Đang thêm..." : "Thêm"}</span></Button>
               </form>
+              {showRelationDraftError && <p className="text-sm font-medium text-amber-700">{relationDraftError}</p>}
 
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-white/65 p-3">
                 <div className="min-w-0 text-sm text-muted-foreground">

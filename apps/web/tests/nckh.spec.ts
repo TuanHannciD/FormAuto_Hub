@@ -665,6 +665,30 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     });
   });
 
+  test("blocks duplicate canvas relation before sending API request", async ({ page }) => {
+    let createRelationCalls = 0;
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/relations`, async (route) => {
+      if (route.request().method() === "POST") {
+        createRelationCalls += 1;
+        await route.fulfill({ status: 400, contentType: "application/json", body: JSON.stringify({ title: "Bad Request" }) });
+        return;
+      }
+      await route.continue();
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+
+    await page.getByPlaceholder("Tìm biến nguồn").fill("SER");
+    await page.getByRole("option", { name: /SER - Chất lượng dịch vụ/ }).click();
+    await page.getByPlaceholder("Tìm biến đích").fill("SAT");
+    await page.getByRole("option", { name: /SAT - Sự hài lòng/ }).click();
+
+    await expect(page.getByText("Quan hệ có hướng này đã tồn tại trong mô hình.")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Thêm quan hệ" })).toBeDisabled();
+    expect(createRelationCalls).toBe(0);
+  });
+
   test("keeps canvas relation and position edits read-only for active models", async ({ page }) => {
     await page.route("**/api/v1/nckh/models?page=1&pageSize=100", async (route) => {
       await route.fulfill({
