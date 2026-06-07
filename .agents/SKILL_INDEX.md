@@ -29,3 +29,4 @@ Use this file to choose the smallest sufficient skill combination.
 ## Ready Packs
 
 - NCKH Phase 2 immediate handoff pack: `templates/chat-starters/nckh-phase2/README.md`
+- NCKH Phase 3 immediate handoff pack: `templates/chat-starters/nckh-phase3/README.md`

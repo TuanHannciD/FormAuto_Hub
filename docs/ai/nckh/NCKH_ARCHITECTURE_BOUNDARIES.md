@@ -85,12 +85,14 @@ When adding NCKH entities to `FormAutoHubDbContext.OnModelCreating`, the followi
 | ModelRelations | ModelId → ResearchModels | **Cascade** | Delete model → delete all relations |
 | ResearchVariables | ModelId → ResearchModels | **Cascade** | Delete model → delete all variables |
 | ObservedQuestionMappings | VariableId → ResearchVariables | **Cascade** | Delete variable → delete its mappings |
-| NodePositions | VariableId → ResearchVariables | **Cascade** | Delete variable → delete its position |
+| NodePositions | VariableId → ResearchVariables | **Restrict / NoAction** | SQL Server multiple-cascade-path avoidance; service deletes variable positions before allowed variable delete |
 | NodePositions | RelationId → ModelRelations | **Cascade** | Delete relation → delete its position |
 
 **Dual-FK to same table:** `ModelRelations` has two FKs to `ResearchVariables`. Both navigation properties MUST be explicitly configured with `HasForeignKey()` in `OnModelCreating`. Missing this configuration will cause `dotnet ef migrations add` to fail.
 
-**CHECK constraint:** `NodePositions` requires a CHECK constraint validating that only one of `VariableId`/`RelationId` is set. This must be added via `migrationBuilder.Sql()` — EF Core fluent API does not support CHECK constraints.
+**CHECK constraint:** `NodePositions` requires a CHECK constraint validating that only one of `VariableId`/`RelationId` is set. EF Core table check-constraint configuration is acceptable when it produces the SQL Server constraint in migration output.
+
+**SQL Server cascade-path rule:** Phase 3 uses restrict/no-action on `NodePositions.ModelId` and `NodePositions.VariableId` to avoid SQL Server multiple cascade paths. Cleanup that cannot be represented safely as DB cascade is owned by the NCKH service layer.
 
 ## Namespace Convention
 

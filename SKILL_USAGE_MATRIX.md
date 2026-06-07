@@ -27,3 +27,8 @@ Ma trận chọn nhanh bộ skill FormAuto Hub.
 - Bug task: `formauto-bug-triage` -> `formauto-http-behavior-tester` -> `formauto-implementation-worker` -> `formauto-reviewer`.
 - Documentation task: `formauto-controlled-doc-editor` -> paired `docs/ai` and `docs/vi` update -> `formauto-reviewer`.
 - Stitch UI task: `formauto-stitch-ui-iterative-designer` -> save `docs/design/stitch/<page-slug>` -> `formauto-reviewer` if the design will be implemented.
+
+## Ready handoff packs
+
+- NCKH Phase 2: `templates/chat-starters/nckh-phase2/README.md`.
+- NCKH Phase 3: `templates/chat-starters/nckh-phase3/README.md`; trước khi giao implementation worker, approve `docs/ai/nckh/NCKH_PHASE_3_SINGLE_APPROVAL_PACKET.md` một lần.

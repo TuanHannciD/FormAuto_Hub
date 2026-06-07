@@ -6,7 +6,7 @@ Mô tả mô hình entity cho NCKH Survey Module. Tất cả entity là mới, k
 
 ## Trạng thái hợp đồng
 
-Entity khái niệm đề xuất. Các trường là proposed, cần đánh giá cơ sở dữ liệu trước khi triển khai.
+Entity Phase 1 đến Phase 5 đã được implement cho đúng scope được duyệt. Entity hoặc field tương lai vẫn là proposed cho đến khi được approve, review, implement, và validate riêng.
 
 ## Sơ đồ quan hệ entity
 
@@ -215,28 +215,30 @@ Index: (ModelId)
 
 ### SurveyResponses
 
+Dữ liệu response thô từ response collection path đã duyệt của Phase 5. Freeze Phase 5 hiện ưu tiên Google Forms responses API; Google Sheets collection vẫn là path thay thế chỉ khi được approve rõ sau này.
+
 - Id (GUID, PK)
 - ModelId (FK → ResearchModels.Id)
 - GoogleResponseId (string)
-- RespondentId (string)
+- RespondentId (string, nullable)
 - RawDataJson (nvarchar(max))
-- ResponseTimestamp (DateTime)
-- CreatedAt, UpdatedAt (DateTime)
+- ResponseTimestamp (DateTimeOffset, nullable)
+- CreatedAt, UpdatedAt (DateTimeOffset)
 
-Index: UNIQUE(ModelId, GoogleResponseId); (ModelId, RespondentId)
+Index: UNIQUE(ModelId, GoogleResponseId); (ModelId, RespondentId); (ModelId, ResponseTimestamp)
 
 ### NormalizedDatasets
 
 - Id (GUID, PK)
 - ModelId (FK → ResearchModels.Id)
-- RespondentId (string)
-- NormalizedDataJson (nvarchar(max))
-- ComputedScoresJson (nvarchar(max))
-- NormalizedAt (DateTime)
+- SurveyResponseId (FK → SurveyResponses.Id)
+- RespondentId (string, nullable)
+- NormalizedDataJson (nvarchar(max), gồm observed values và computed mean values)
 - IsStale (bool, mặc định: false) — đánh dấu cần chuẩn hóa lại sau khi sửa biến
-- CreatedAt (DateTime)
+- NormalizedAt (DateTimeOffset)
+- CreatedAt, UpdatedAt (DateTimeOffset)
 
-Index: UNIQUE(ModelId, RespondentId); (ModelId, NormalizedAt)
+Index: UNIQUE(ModelId, SurveyResponseId); (ModelId, RespondentId); (ModelId, IsStale); (ModelId, NormalizedAt)
 
 ### DataCollectionLogs
 
@@ -246,10 +248,11 @@ Index: UNIQUE(ModelId, RespondentId); (ModelId, NormalizedAt)
 - ResponsesCollected (int)
 - ResponsesSkipped (int)
 - ErrorMessage (string, nullable)
-- StartedAt, CompletedAt (DateTime)
-- CreatedAt (DateTime)
+- StartedAt (DateTimeOffset)
+- CompletedAt (DateTimeOffset, nullable)
+- CreatedAt (DateTimeOffset)
 
-Index: (ModelId, CreatedAt)
+Index: (ModelId, StartedAt); (ModelId, Status)
 
 ## Kỷ luật sổ cái (Đơn giản hóa cho NCKH)
 
@@ -266,7 +269,8 @@ NCKH MVP không tính credit → không cần CreditTransactions hay UsageLogs.
 | NckhPhase1_FormsAndOAuth | Có | DROP TABLE — không mất dữ liệu quan trọng |
 | NckhPhase2_ModelsAndVariables | Có | DROP TABLE — mất dữ liệu model/biến/mapping |
 | NckhPhase3_Relations | Có | DROP TABLE — mất quan hệ/vị trí canvas |
-| NckhPhase5_Data | Có (cần cảnh báo) | DROP TABLE — mất dữ liệu khảo sát và chuẩn hóa |
+| NckhPhase4_FormGenerationTracking | Có | Xóa các cột/index tracking generated-form |
+| NckhPhase5_DataCollectionNormalization | Có (cần cảnh báo) | DROP TABLE — mất survey responses, normalized data, và collection logs |
 
 Luôn chạy `dotnet ef migrations script` để xem SQL trước khi áp dụng.
 Kiểm tra DOWN script trên bản sao database trước khi hoàn tác production.

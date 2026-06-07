@@ -13,6 +13,7 @@ Use this file as the short entrypoint for AI/operator sessions.
 ## Ready Handoff Packs
 
 - For NCKH Phase 2 immediate delegation, use `templates/chat-starters/nckh-phase2/README.md`.
+- For NCKH Phase 3 immediate delegation, use `templates/chat-starters/nckh-phase3/README.md` after approval of `docs/ai/nckh/NCKH_PHASE_3_SINGLE_APPROVAL_PACKET.md`.
 
 ## Hard Rules
 

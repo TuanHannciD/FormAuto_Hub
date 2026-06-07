@@ -6,7 +6,7 @@ Mô tả entity model cho NCKH Survey Module. Tất cả entity là mới, khôn
 
 ## Contract Status
 
-Proposed conceptual entities. Fields là proposed, cần database review trước implementation.
+Phase 1 through Phase 5 entities are implemented for their approved scopes. Future entities or fields remain proposed until separately approved, reviewed, implemented, and validated.
 
 ## Entity Relationship Diagram
 
@@ -240,18 +240,18 @@ Constraint: CHECK((VariableId IS NOT NULL AND RelationId IS NULL) OR (VariableId
 
 ### SurveyResponses
 
-Raw response data từ Google Forms/Sheets API.
+Raw response data from the approved Phase 5 response collection path. Phase 5 freeze currently prefers Google Forms responses API; Google Sheets collection remains an alternate path only if explicitly approved later.
 
 - Id (GUID, PK)
 - ModelId (FK → ResearchModels.Id)
 - GoogleResponseId (string)
-- RespondentId (string)
+- RespondentId (string, nullable)
 - RawDataJson (nvarchar(max))
-- ResponseTimestamp (DateTime)
-- CreatedAt (DateTime)
-- UpdatedAt (DateTime)
+- ResponseTimestamp (DateTimeOffset, nullable)
+- CreatedAt (DateTimeOffset)
+- UpdatedAt (DateTimeOffset)
 
-Index: UNIQUE(ModelId, GoogleResponseId); (ModelId, RespondentId)
+Index: UNIQUE(ModelId, GoogleResponseId); (ModelId, RespondentId); (ModelId, ResponseTimestamp)
 
 ### NormalizedDatasets
 
@@ -259,14 +259,15 @@ Dữ liệu đã chuẩn hóa theo biến — kết quả của normalization en
 
 - Id (GUID, PK)
 - ModelId (FK → ResearchModels.Id)
-- RespondentId (string)
-- NormalizedDataJson (nvarchar(max), VD: {"TH1":5, "TH2":4, "TH3":5, "AGE":20})
-- ComputedScoresJson (nvarchar(max), VD: {"TH_mean":4.67})
-- NormalizedAt (DateTime)
+- SurveyResponseId (FK → SurveyResponses.Id)
+- RespondentId (string, nullable)
+- NormalizedDataJson (nvarchar(max), includes observed values and computed mean values)
 - IsStale (bool, default: false) — đánh dấu cần re-normalize sau khi sửa biến
-- CreatedAt (DateTime)
+- NormalizedAt (DateTimeOffset)
+- CreatedAt (DateTimeOffset)
+- UpdatedAt (DateTimeOffset)
 
-Index: UNIQUE(ModelId, RespondentId); (ModelId, NormalizedAt)
+Index: UNIQUE(ModelId, SurveyResponseId); (ModelId, RespondentId); (ModelId, IsStale); (ModelId, NormalizedAt)
 
 ### DataCollectionLogs
 
@@ -278,11 +279,11 @@ Audit log cho mỗi lần pull data.
 - ResponsesCollected (int)
 - ResponsesSkipped (int)
 - ErrorMessage (string, nullable)
-- StartedAt (DateTime)
-- CompletedAt (DateTime)
-- CreatedAt (DateTime)
+- StartedAt (DateTimeOffset)
+- CompletedAt (DateTimeOffset, nullable)
+- CreatedAt (DateTimeOffset)
 
-Index: (ModelId, CreatedAt)
+Index: (ModelId, StartedAt); (ModelId, Status)
 
 ## Ledger Discipline (NCKH Simplified)
 
@@ -299,7 +300,8 @@ NCKH MVP không tính credit → không cần CreditTransactions hay UsageLogs.
 | NckhPhase1_FormsAndOAuth | Yes | DROP TABLE — no critical data loss |
 | NckhPhase2_ModelsAndVariables | Yes | DROP TABLE — loses model/variable/mapping data |
 | NckhPhase3_Relations | Yes | DROP TABLE — loses relations/positions |
-| NckhPhase5_Data | Yes (with warning) | DROP TABLE — loses survey responses and normalized data |
+| NckhPhase4_FormGenerationTracking | Yes | Drops generated-form tracking columns/indexes |
+| NckhPhase5_DataCollectionNormalization | Yes (with warning) | DROP TABLE — loses survey responses, normalized data, and collection logs |
 
 Always run `dotnet ef migrations script` to review SQL before applying.
 Test DOWN scripts on a database copy before production rollback.
