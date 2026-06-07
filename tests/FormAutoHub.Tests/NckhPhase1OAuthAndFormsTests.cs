@@ -102,6 +102,7 @@ public sealed class NckhPhase1OAuthAndFormsTests
             ProviderUserId = "google-sub-123",
             Email = "test@example.com",
             EmailVerified = true,
+            EncryptedRefreshToken = "fake-refresh-token",
             CreatedAt = DateTimeOffset.UtcNow,
             UpdatedAt = DateTimeOffset.UtcNow
         });
@@ -139,6 +140,7 @@ public sealed class NckhPhase1OAuthAndFormsTests
             ProviderUserId = "google-sub-123",
             Email = "test@example.com",
             EmailVerified = true,
+            EncryptedRefreshToken = "fake-refresh-token",
             CreatedAt = DateTimeOffset.UtcNow,
             UpdatedAt = DateTimeOffset.UtcNow
         });
@@ -191,6 +193,30 @@ public sealed class NckhPhase1OAuthAndFormsTests
         var result = await service.GetFormDetailAsync(otherUserId, importResult.Value!.Id, CancellationToken.None);
 
         Assert.Equal(ResearchFormServiceStatus.NotFound, result.Status);
+    }
+
+    [Fact]
+    public async Task ListFormsAsync_RequiresNckhGoogleTokenNotOnlyGoogleIdentityLink()
+    {
+        await using var context = CreateContext();
+        var service = CreateService(context);
+
+        context.UserExternalLogins.Add(new global::FormAutoHub.Api.Entities.UserExternalLogin
+        {
+            Id = Guid.NewGuid(),
+            UserId = TestUserId,
+            Provider = "Google",
+            ProviderUserId = "google-sub-123",
+            Email = "test@example.com",
+            EmailVerified = true,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
+
+        var result = await service.ListFormsAsync(TestUserId, null, 1, 20, CancellationToken.None);
+
+        Assert.Equal(ResearchFormServiceStatus.Unauthorized, result.Status);
     }
 
     [Fact]
@@ -255,7 +281,7 @@ public sealed class NckhPhase1OAuthAndFormsTests
             CancellationToken.None);
 
         Assert.Equal(ResearchFormServiceStatus.InvalidRequest, result.Status);
-        Assert.Contains("Forms read permission", result.Message);
+        Assert.Contains("Forms read or write permission", result.Message);
     }
 
     private static readonly Guid TestUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
@@ -357,6 +383,28 @@ public sealed class NckhPhase1OAuthAndFormsTests
                     new("q1", "Age Question", "shortText", true, 0),
                     new("q2", "Name Question", "shortText", false, 1)
                 }));
+        }
+
+        public Task<GoogleFormCreateResult?> CreateFormAsync(string accessToken, string title, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<GoogleFormCreateResult?>(null);
+        }
+
+        public Task<bool> CreateQuestionsAsync(
+            string accessToken,
+            string formId,
+            IReadOnlyList<GoogleFormQuestionDraft> questions,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task<IReadOnlyList<GoogleFormResponseItem>?> ListResponsesAsync(
+            string accessToken,
+            string formId,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IReadOnlyList<GoogleFormResponseItem>?>([]);
         }
     }
 }

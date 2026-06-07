@@ -284,5 +284,27 @@ public sealed class NckhPhase2VariableMappingApiTests
         {
             return Task.FromResult<GoogleFormStructure?>(null);
         }
+
+        public Task<GoogleFormCreateResult?> CreateFormAsync(string accessToken, string title, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<GoogleFormCreateResult?>(null);
+        }
+
+        public Task<bool> CreateQuestionsAsync(
+            string accessToken,
+            string formId,
+            IReadOnlyList<GoogleFormQuestionDraft> questions,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task<IReadOnlyList<GoogleFormResponseItem>?> ListResponsesAsync(
+            string accessToken,
+            string formId,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IReadOnlyList<GoogleFormResponseItem>?>([]);
+        }
     }
 }

@@ -16,9 +16,35 @@ public sealed record GoogleFormQuestionItem(
     bool IsRequired,
     int OrderIndex);
 
+public sealed record GoogleFormCreateResult(
+    string FormId,
+    string FormUrl);
+
+public sealed record GoogleFormQuestionDraft(
+    string QuestionText,
+    string QuestionType,
+    bool IsRequired,
+    int? ScaleLow,
+    int? ScaleHigh);
+
+public sealed record GoogleFormResponseItem(
+    string ResponseId,
+    DateTimeOffset? ResponseTimestamp,
+    IReadOnlyDictionary<string, IReadOnlyList<string>> Answers);
+
 public interface IGoogleFormsApiService
 {
     Task<GoogleFormStructure?> GetFormStructureAsync(string accessToken, string formId, CancellationToken cancellationToken);
+    Task<GoogleFormCreateResult?> CreateFormAsync(string accessToken, string title, CancellationToken cancellationToken);
+    Task<bool> CreateQuestionsAsync(
+        string accessToken,
+        string formId,
+        IReadOnlyList<GoogleFormQuestionDraft> questions,
+        CancellationToken cancellationToken);
+    Task<IReadOnlyList<GoogleFormResponseItem>?> ListResponsesAsync(
+        string accessToken,
+        string formId,
+        CancellationToken cancellationToken);
 }
 
 public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsApiService
@@ -60,7 +86,9 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
                 }
 
                 var question = questionItem.Question;
-                var questionText = question.QuestionId ?? $"Question {orderIndex + 1}";
+                var questionText = string.IsNullOrWhiteSpace(item.Title)
+                    ? $"Question {orderIndex + 1}"
+                    : item.Title.Trim();
                 var questionType = MapQuestionType(question.QuestionId, question);
 
                 questions.Add(new GoogleFormQuestionItem(
@@ -75,6 +103,189 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         }
 
         return new GoogleFormStructure(body.FormId, title, questions);
+    }
+
+    public async Task<GoogleFormCreateResult?> CreateFormAsync(
+        string accessToken,
+        string title,
+        CancellationToken cancellationToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, FormsApiBase)
+        {
+            Content = JsonContent.Create(new
+            {
+                info = new
+                {
+                    title
+                }
+            })
+        };
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await httpClient.SendAsync(request, cancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            return null;
+        }
+
+        var body = await response.Content.ReadFromJsonAsync<GoogleFormsApiResponse>(cancellationToken: cancellationToken);
+        if (string.IsNullOrWhiteSpace(body?.FormId))
+        {
+            return null;
+        }
+
+        return new GoogleFormCreateResult(
+            body.FormId,
+            $"https://docs.google.com/forms/d/{body.FormId}/edit");
+    }
+
+    public async Task<bool> CreateQuestionsAsync(
+        string accessToken,
+        string formId,
+        IReadOnlyList<GoogleFormQuestionDraft> questions,
+        CancellationToken cancellationToken)
+    {
+        if (questions.Count == 0)
+        {
+            return true;
+        }
+
+        var requests = questions.Select((question, index) => new
+        {
+            createItem = new
+            {
+                item = new
+                {
+                    title = question.QuestionText,
+                    questionItem = new
+                    {
+                        question = CreateGoogleQuestion(question)
+                    }
+                },
+                location = new
+                {
+                    index
+                }
+            }
+        }).ToList();
+
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{FormsApiBase}/{formId}:batchUpdate")
+        {
+            Content = JsonContent.Create(new { requests })
+        };
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await httpClient.SendAsync(request, cancellationToken);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<IReadOnlyList<GoogleFormResponseItem>?> ListResponsesAsync(
+        string accessToken,
+        string formId,
+        CancellationToken cancellationToken)
+    {
+        var responses = new List<GoogleFormResponseItem>();
+        string? pageToken = null;
+
+        do
+        {
+            var url = string.IsNullOrWhiteSpace(pageToken)
+                ? $"{FormsApiBase}/{formId}/responses"
+                : $"{FormsApiBase}/{formId}/responses?pageToken={Uri.EscapeDataString(pageToken)}";
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            using var response = await httpClient.SendAsync(request, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var body = await response.Content.ReadFromJsonAsync<GoogleFormsResponsesApiResponse>(cancellationToken: cancellationToken);
+            if (body?.Responses is not null)
+            {
+                foreach (var item in body.Responses)
+                {
+                    if (string.IsNullOrWhiteSpace(item.ResponseId))
+                    {
+                        continue;
+                    }
+
+                    responses.Add(new GoogleFormResponseItem(
+                        item.ResponseId,
+                        item.LastSubmittedTime ?? item.CreateTime,
+                        ExtractAnswers(item.Answers)));
+                }
+            }
+
+            pageToken = body?.NextPageToken;
+        }
+        while (!string.IsNullOrWhiteSpace(pageToken));
+
+        return responses;
+    }
+
+    private static IReadOnlyDictionary<string, IReadOnlyList<string>> ExtractAnswers(
+        Dictionary<string, GoogleFormsAnswer>? answers)
+    {
+        var result = new Dictionary<string, IReadOnlyList<string>>(StringComparer.OrdinalIgnoreCase);
+        if (answers is null)
+        {
+            return result;
+        }
+
+        foreach (var (questionId, answer) in answers)
+        {
+            var values = answer.TextAnswers?.Answers?
+                .Select(item => item.Value?.Trim())
+                .Where(item => !string.IsNullOrWhiteSpace(item))
+                .Select(item => item!)
+                .ToList() ?? [];
+            result[questionId] = values;
+        }
+
+        return result;
+    }
+
+    private static object CreateGoogleQuestion(GoogleFormQuestionDraft question)
+    {
+        if (string.Equals(question.QuestionType, "paragraphText", StringComparison.OrdinalIgnoreCase))
+        {
+            return new
+            {
+                required = question.IsRequired,
+                textQuestion = new
+                {
+                    paragraph = true
+                }
+            };
+        }
+
+        if (string.Equals(question.QuestionType, "linearScale", StringComparison.OrdinalIgnoreCase))
+        {
+            var low = question.ScaleLow ?? 1;
+            var high = question.ScaleHigh ?? 5;
+            return new
+            {
+                required = question.IsRequired,
+                scaleQuestion = new
+                {
+                    low,
+                    high,
+                    lowLabel = low.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    highLabel = high.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                }
+            };
+        }
+
+        return new
+        {
+            required = question.IsRequired,
+            textQuestion = new
+            {
+                paragraph = false
+            }
+        };
     }
 
     private static string MapQuestionType(string? questionId, GoogleFormsQuestion question)
@@ -138,6 +349,9 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
 
     private sealed class GoogleFormsItem
     {
+        [JsonPropertyName("title")]
+        public string? Title { get; set; }
+
         [JsonPropertyName("questionItem")]
         public GoogleFormsQuestionItemWrapper? QuestionItem { get; set; }
     }
@@ -203,5 +417,47 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
 
     private sealed class GoogleFormsRatingQuestion
     {
+    }
+
+    private sealed class GoogleFormsResponsesApiResponse
+    {
+        [JsonPropertyName("responses")]
+        public List<GoogleFormsResponse>? Responses { get; set; }
+
+        [JsonPropertyName("nextPageToken")]
+        public string? NextPageToken { get; set; }
+    }
+
+    private sealed class GoogleFormsResponse
+    {
+        [JsonPropertyName("responseId")]
+        public string? ResponseId { get; set; }
+
+        [JsonPropertyName("createTime")]
+        public DateTimeOffset? CreateTime { get; set; }
+
+        [JsonPropertyName("lastSubmittedTime")]
+        public DateTimeOffset? LastSubmittedTime { get; set; }
+
+        [JsonPropertyName("answers")]
+        public Dictionary<string, GoogleFormsAnswer>? Answers { get; set; }
+    }
+
+    private sealed class GoogleFormsAnswer
+    {
+        [JsonPropertyName("textAnswers")]
+        public GoogleFormsTextAnswers? TextAnswers { get; set; }
+    }
+
+    private sealed class GoogleFormsTextAnswers
+    {
+        [JsonPropertyName("answers")]
+        public List<GoogleFormsTextAnswer>? Answers { get; set; }
+    }
+
+    private sealed class GoogleFormsTextAnswer
+    {
+        [JsonPropertyName("value")]
+        public string? Value { get; set; }
     }
 }

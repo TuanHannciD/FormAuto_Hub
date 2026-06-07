@@ -57,6 +57,17 @@ public sealed class ResearchFormsController(IResearchFormService researchFormSer
         return ToActionResult(result);
     }
 
+    [HttpPost("models/{modelId:guid}/generate-form")]
+    public async Task<ActionResult<NckhGenerateFormResponse>> GenerateForm(
+        Guid modelId,
+        NckhGenerateFormRequest request,
+        CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+        var result = await researchFormService.GenerateFormAsync(userId, modelId, request, cancellationToken);
+        return ToActionResult(result);
+    }
+
     private Guid GetCurrentUserId()
     {
         var claim = User.FindFirst("sub")?.Value
@@ -75,8 +86,10 @@ public sealed class ResearchFormsController(IResearchFormService researchFormSer
         {
             ResearchFormServiceStatus.InvalidRequest => BadRequest(new { title = "Invalid Request", detail = result.Message }),
             ResearchFormServiceStatus.Unauthorized => Unauthorized(new { title = "Unauthorized", detail = result.Message }),
+            ResearchFormServiceStatus.Forbidden => StatusCode(StatusCodes.Status403Forbidden, new { title = "Forbidden", detail = result.Message }),
             ResearchFormServiceStatus.NotFound => NotFound(new { title = "Not Found", detail = result.Message }),
             ResearchFormServiceStatus.Conflict => Conflict(new { title = "Conflict", detail = result.Message }),
+            ResearchFormServiceStatus.ExternalError => StatusCode(StatusCodes.Status502BadGateway, new { title = "Bad Gateway", detail = result.Message }),
             _ => BadRequest()
         };
     }

@@ -35,6 +35,11 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<ResearchModel> ResearchModels => Set<ResearchModel>();
     public DbSet<ResearchVariable> ResearchVariables => Set<ResearchVariable>();
     public DbSet<ObservedQuestionMapping> ObservedQuestionMappings => Set<ObservedQuestionMapping>();
+    public DbSet<ModelRelation> ModelRelations => Set<ModelRelation>();
+    public DbSet<NodePosition> NodePositions => Set<NodePosition>();
+    public DbSet<SurveyResponse> SurveyResponses => Set<SurveyResponse>();
+    public DbSet<NormalizedDataset> NormalizedDatasets => Set<NormalizedDataset>();
+    public DbSet<DataCollectionLog> DataCollectionLogs => Set<DataCollectionLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -154,11 +159,17 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
 
         modelBuilder.Entity<ResearchForm>(entity =>
         {
+            entity.Property(item => item.GenerationSource).HasDefaultValue("Imported");
             entity.HasIndex(item => new { item.UserId, item.GoogleFormId }).IsUnique();
             entity.HasIndex(item => new { item.UserId, item.Status });
+            entity.HasIndex(item => new { item.UserId, item.GeneratedFromModelId });
             entity.HasOne<User>()
                 .WithMany()
                 .HasForeignKey(item => item.UserId);
+            entity.HasOne(item => item.GeneratedFromModel)
+                .WithMany()
+                .HasForeignKey(item => item.GeneratedFromModelId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<ResearchFormQuestion>(entity =>
@@ -210,6 +221,91 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
                 .WithMany(item => item.ObservedQuestionMappings)
                 .HasForeignKey(item => item.FormQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<ModelRelation>(entity =>
+        {
+            entity.HasIndex(item => new { item.ModelId, item.FromVariableId, item.ToVariableId }).IsUnique();
+            entity.HasIndex(item => new { item.ModelId, item.HypothesisCode }).IsUnique();
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_ModelRelations_NoSelfRelation",
+                "[FromVariableId] <> [ToVariableId]"));
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.Relations)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(item => item.FromVariable)
+                .WithMany(item => item.OutgoingRelations)
+                .HasForeignKey(item => item.FromVariableId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(item => item.ToVariable)
+                .WithMany(item => item.IncomingRelations)
+                .HasForeignKey(item => item.ToVariableId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<NodePosition>(entity =>
+        {
+            entity.Property(item => item.PositionX).HasPrecision(18, 2);
+            entity.Property(item => item.PositionY).HasPrecision(18, 2);
+            entity.HasIndex(item => new { item.ModelId, item.NodeType, item.VariableId })
+                .IsUnique()
+                .HasFilter("[VariableId] IS NOT NULL");
+            entity.HasIndex(item => new { item.ModelId, item.NodeType, item.RelationId })
+                .IsUnique()
+                .HasFilter("[RelationId] IS NOT NULL");
+            entity.ToTable(table => table.HasCheckConstraint(
+                "CK_NodePositions_ExactlyOneTarget",
+                "(([VariableId] IS NOT NULL AND [RelationId] IS NULL) OR ([VariableId] IS NULL AND [RelationId] IS NOT NULL))"));
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.NodePositions)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(item => item.Variable)
+                .WithMany(item => item.NodePositions)
+                .HasForeignKey(item => item.VariableId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(item => item.Relation)
+                .WithMany(item => item.NodePositions)
+                .HasForeignKey(item => item.RelationId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SurveyResponse>(entity =>
+        {
+            entity.HasIndex(item => new { item.ModelId, item.GoogleResponseId }).IsUnique();
+            entity.HasIndex(item => new { item.ModelId, item.RespondentId });
+            entity.HasIndex(item => new { item.ModelId, item.ResponseTimestamp });
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.SurveyResponses)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<NormalizedDataset>(entity =>
+        {
+            entity.Property(item => item.IsStale).HasDefaultValue(false);
+            entity.HasIndex(item => new { item.ModelId, item.SurveyResponseId }).IsUnique();
+            entity.HasIndex(item => new { item.ModelId, item.RespondentId });
+            entity.HasIndex(item => new { item.ModelId, item.IsStale });
+            entity.HasIndex(item => new { item.ModelId, item.NormalizedAt });
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.NormalizedDatasets)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(item => item.SurveyResponse)
+                .WithMany(item => item.NormalizedDatasets)
+                .HasForeignKey(item => item.SurveyResponseId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<DataCollectionLog>(entity =>
+        {
+            entity.HasIndex(item => new { item.ModelId, item.StartedAt });
+            entity.HasIndex(item => new { item.ModelId, item.Status });
+            entity.HasOne(item => item.Model)
+                .WithMany(item => item.DataCollectionLogs)
+                .HasForeignKey(item => item.ModelId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

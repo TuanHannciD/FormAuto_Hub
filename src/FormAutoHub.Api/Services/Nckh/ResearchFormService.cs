@@ -12,8 +12,10 @@ public enum ResearchFormServiceStatus
     Success,
     InvalidRequest,
     Unauthorized,
+    Forbidden,
     NotFound,
-    Conflict
+    Conflict,
+    ExternalError
 }
 
 public sealed record ResearchFormServiceResult<T>(ResearchFormServiceStatus Status, T? Value = default, string? Message = null);
@@ -28,6 +30,8 @@ public interface IResearchFormService
         Guid userId, string? status, int page, int pageSize, CancellationToken cancellationToken);
     Task<ResearchFormServiceResult<NckhFormDetailResponse>> GetFormDetailAsync(
         Guid userId, Guid formId, CancellationToken cancellationToken);
+    Task<ResearchFormServiceResult<NckhGenerateFormResponse>> GenerateFormAsync(
+        Guid userId, Guid modelId, NckhGenerateFormRequest request, CancellationToken cancellationToken);
     Task<ResearchFormServiceResult<NckhVariableResponse>> CreateVariableAsync(
         Guid userId, Guid modelId, NckhCreateVariableRequest request, CancellationToken cancellationToken);
     Task<ResearchFormServiceResult<NckhVariableListResponse>> ListVariablesAsync(
@@ -54,7 +58,8 @@ public sealed class ResearchFormService(
     IGoogleFormsApiService googleFormsApiService) : IResearchFormService
 {
     private const string GoogleProvider = "Google";
-    private static readonly string[] RequiredScopes = { "https://www.googleapis.com/auth/forms.body.readonly" };
+    private const string FormsReadScope = "https://www.googleapis.com/auth/forms.body.readonly";
+    private const string FormsWriteScope = "https://www.googleapis.com/auth/forms.body";
     private static readonly string[] AllowedVariableTypes = { "Independent", "Dependent", "Mediator", "Moderator", "Control" };
     private static readonly string[] AllowedScaleTypes = { "Likert", "Nominal", "Ordinal", "Scale" };
     private static readonly Regex CodePattern = new("^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
@@ -78,14 +83,13 @@ public sealed class ResearchFormService(
         }
 
         var grantedScopes = tokens.Scope.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var hasRequiredScopes = RequiredScopes.All(required =>
-            grantedScopes.Any(granted => string.Equals(granted, required, StringComparison.OrdinalIgnoreCase)));
+        var hasRequiredScopes = HasScope(grantedScopes, FormsReadScope) || HasScope(grantedScopes, FormsWriteScope);
 
         if (!hasRequiredScopes)
         {
             return new ResearchFormServiceResult<NckhGoogleLinkResponse>(
                 ResearchFormServiceStatus.InvalidRequest,
-                Message: "Google account must grant Forms read permission.");
+                Message: "Google account must grant Forms read or write permission.");
         }
 
         if (string.IsNullOrWhiteSpace(tokens.Email))
@@ -263,7 +267,11 @@ public sealed class ResearchFormService(
     {
 
         var hasGoogleLink = await dbContext.UserExternalLogins
-            .AnyAsync(item => item.UserId == userId && item.Provider == GoogleProvider, cancellationToken);
+            .AnyAsync(
+                item => item.UserId == userId
+                    && item.Provider == GoogleProvider
+                    && item.EncryptedRefreshToken != null,
+                cancellationToken);
 
         if (!hasGoogleLink)
         {
@@ -332,6 +340,94 @@ public sealed class ResearchFormService(
             new NckhFormDetailResponse(form.Id, form.GoogleFormId, form.Title, questions));
     }
 
+    public async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> GenerateFormAsync(
+        Guid userId,
+        Guid modelId,
+        NckhGenerateFormRequest request,
+        CancellationToken cancellationToken)
+    {
+        var action = request.Action?.Trim().ToLowerInvariant();
+        if (action is not "create" and not "update")
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.InvalidRequest,
+                Message: "Action must be 'create' or 'update'.");
+        }
+
+        var model = await dbContext.ResearchModels
+            .Include(item => item.Form)
+            .Include(item => item.Variables)
+            .ThenInclude(item => item.ObservedQuestionMappings)
+            .ThenInclude(item => item.FormQuestion)
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(item => item.Id == modelId && item.UserId == userId, cancellationToken);
+
+        if (model is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(ResearchFormServiceStatus.NotFound);
+        }
+
+        if (model.Status is not "Draft" and not "Active")
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.InvalidRequest,
+                Message: "Model status is not allowed for form generation.");
+        }
+
+        var login = await dbContext.UserExternalLogins
+            .AsNoTracking()
+            .SingleOrDefaultAsync(item => item.UserId == userId && item.Provider == GoogleProvider, cancellationToken);
+        if (login is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.Unauthorized,
+                Message: "Google account not linked.");
+        }
+
+        var grantedScopes = (login.Scopes ?? string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (!HasScope(grantedScopes, FormsWriteScope))
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.Forbidden,
+                Message: "Google Forms write scope is required. Please re-consent with Forms body permission.");
+        }
+
+        var accessToken = await googleOAuthService.GetValidAccessTokenAsync(userId, cancellationToken);
+        if (accessToken is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.Unauthorized,
+                Message: "Google account not linked or token expired. Please re-link your Google account.");
+        }
+
+        var questionBuild = BuildGoogleQuestionDrafts(model);
+        if (questionBuild.Error is not null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.InvalidRequest,
+                Message: questionBuild.Error);
+        }
+
+        if (action == "create")
+        {
+            var duplicateGeneratedForm = await dbContext.ResearchForms.AnyAsync(
+                item => item.UserId == userId
+                    && item.GeneratedFromModelId == modelId
+                    && item.GenerationSource == "Generated",
+                cancellationToken);
+            if (duplicateGeneratedForm)
+            {
+                return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                    ResearchFormServiceStatus.Conflict,
+                    Message: "A generated form already exists for this model.");
+            }
+
+            return await CreateGeneratedFormAsync(userId, model, accessToken, questionBuild.Questions, cancellationToken);
+        }
+
+        return await UpdateExistingFormAsync(userId, model, accessToken, questionBuild.Questions, cancellationToken);
+    }
+
     public async Task<ResearchFormServiceResult<NckhVariableResponse>> CreateVariableAsync(
         Guid userId,
         Guid modelId,
@@ -385,6 +481,7 @@ public sealed class ResearchFormService(
             UpdatedAt = now
         };
 
+        await MarkDatasetsStaleAsync(modelId, cancellationToken);
         dbContext.ResearchVariables.Add(variable);
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -473,6 +570,7 @@ public sealed class ResearchFormService(
         variable.SortOrder = request.SortOrder;
         variable.UpdatedAt = DateTimeOffset.UtcNow;
 
+        await MarkDatasetsStaleAsync(variable.ModelId, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new ResearchFormServiceResult<NckhVariableResponse>(
@@ -493,6 +591,22 @@ public sealed class ResearchFormService(
             return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.NotFound);
         }
 
+        var hasRelations = await dbContext.ModelRelations.AnyAsync(
+            item => item.FromVariableId == variable.Id || item.ToVariableId == variable.Id,
+            cancellationToken);
+        if (hasRelations)
+        {
+            return new ResearchFormServiceResult<bool>(
+                ResearchFormServiceStatus.Conflict,
+                Message: "Variable cannot be deleted while model relations reference it.");
+        }
+
+        var variablePositions = await dbContext.NodePositions
+            .Where(item => item.VariableId == variable.Id)
+            .ToListAsync(cancellationToken);
+        dbContext.NodePositions.RemoveRange(variablePositions);
+
+        await MarkDatasetsStaleAsync(variable.ModelId, cancellationToken);
         dbContext.ResearchVariables.Remove(variable);
         await dbContext.SaveChangesAsync(cancellationToken);
         return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.Success, true);
@@ -549,6 +663,7 @@ public sealed class ResearchFormService(
             CreatedAt = DateTimeOffset.UtcNow
         };
 
+        await MarkDatasetsStaleAsync(variable.ModelId, cancellationToken);
         dbContext.ObservedQuestionMappings.Add(mapping);
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -644,6 +759,7 @@ public sealed class ResearchFormService(
         mapping.ObservedCode = NormalizeCode(request.ObservedCode);
         mapping.SortOrder = request.SortOrder;
 
+        await MarkDatasetsStaleAsync(mapping.Variable.ModelId, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new ResearchFormServiceResult<NckhMappingResponse>(
@@ -665,9 +781,308 @@ public sealed class ResearchFormService(
             return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.NotFound);
         }
 
+        await MarkDatasetsStaleAsync(mapping.Variable.ModelId, cancellationToken);
         dbContext.ObservedQuestionMappings.Remove(mapping);
         await dbContext.SaveChangesAsync(cancellationToken);
         return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.Success, true);
+    }
+
+    private async Task MarkDatasetsStaleAsync(Guid modelId, CancellationToken cancellationToken)
+    {
+        var now = DateTimeOffset.UtcNow;
+        var datasets = await dbContext.NormalizedDatasets
+            .Where(item => item.ModelId == modelId && !item.IsStale)
+            .ToListAsync(cancellationToken);
+
+        foreach (var dataset in datasets)
+        {
+            dataset.IsStale = true;
+            dataset.UpdatedAt = now;
+        }
+    }
+
+    private async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> CreateGeneratedFormAsync(
+        Guid userId,
+        ResearchModel model,
+        string accessToken,
+        IReadOnlyList<GoogleFormQuestionDraft> questions,
+        CancellationToken cancellationToken)
+    {
+        var created = await googleFormsApiService.CreateFormAsync(accessToken, model.Name.Trim(), cancellationToken);
+        if (created is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.ExternalError,
+                Message: "Google Forms API failed to create the form.");
+        }
+
+        var questionsCreated = questions.Count;
+        if (!await googleFormsApiService.CreateQuestionsAsync(accessToken, created.FormId, questions, cancellationToken))
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.ExternalError,
+                Message: "Google Forms API failed to create form questions.");
+        }
+
+        var structure = await googleFormsApiService.GetFormStructureAsync(accessToken, created.FormId, cancellationToken);
+        if (structure is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.ExternalError,
+                Message: "Google Forms API failed to re-import generated form structure.");
+        }
+
+        var now = DateTimeOffset.UtcNow;
+        var form = new ResearchForm
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            GoogleFormId = created.FormId,
+            FormUrl = created.FormUrl,
+            Title = structure.Title,
+            Status = "Draft",
+            GeneratedFromModelId = model.Id,
+            GenerationSource = "Generated",
+            ImportedAt = now,
+            LastGeneratedAt = now,
+            LastSyncedAt = now,
+            CreatedAt = now,
+            UpdatedAt = now
+        };
+
+        dbContext.ResearchForms.Add(form);
+        AddQuestions(form.Id, structure.Questions, now);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+            ResearchFormServiceStatus.Success,
+            new NckhGenerateFormResponse(
+                form.Id,
+                form.GoogleFormId,
+                form.FormUrl,
+                questionsCreated,
+                0,
+                0,
+                true));
+    }
+
+    private async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> UpdateExistingFormAsync(
+        Guid userId,
+        ResearchModel model,
+        string accessToken,
+        IReadOnlyList<GoogleFormQuestionDraft> questions,
+        CancellationToken cancellationToken)
+    {
+        var existingStructure = await googleFormsApiService.GetFormStructureAsync(accessToken, model.Form.GoogleFormId, cancellationToken);
+        if (existingStructure is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.Forbidden,
+                Message: "Google Form is not accessible with the current Google write authorization.");
+        }
+
+        var questionsCreated = questions.Count;
+        if (!await googleFormsApiService.CreateQuestionsAsync(accessToken, model.Form.GoogleFormId, questions, cancellationToken))
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.ExternalError,
+                Message: "Google Forms API failed to update form questions.");
+        }
+
+        var structure = await googleFormsApiService.GetFormStructureAsync(accessToken, model.Form.GoogleFormId, cancellationToken);
+        if (structure is null)
+        {
+            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                ResearchFormServiceStatus.ExternalError,
+                Message: "Google Forms API failed to re-import updated form structure.");
+        }
+
+        var now = DateTimeOffset.UtcNow;
+        model.Form.Title = structure.Title;
+        model.Form.FormUrl = $"https://docs.google.com/forms/d/{model.Form.GoogleFormId}/edit";
+        model.Form.LastSyncedAt = now;
+        model.Form.UpdatedAt = now;
+        UpsertQuestions(model.Form.Id, structure.Questions, now);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+            ResearchFormServiceStatus.Success,
+            new NckhGenerateFormResponse(
+                model.Form.Id,
+                model.Form.GoogleFormId,
+                model.Form.FormUrl,
+                questionsCreated,
+                0,
+                0,
+                true));
+    }
+
+    private (List<GoogleFormQuestionDraft> Questions, string? Error) BuildGoogleQuestionDrafts(ResearchModel model)
+    {
+        var drafts = new List<GoogleFormQuestionDraft>();
+        var mappings = model.Variables
+            .SelectMany(variable => variable.ObservedQuestionMappings.Select(mapping => new { Variable = variable, Mapping = mapping }))
+            .OrderBy(item => item.Variable.SortOrder)
+            .ThenBy(item => item.Mapping.SortOrder)
+            .ThenBy(item => item.Mapping.FormQuestion.OrderIndex)
+            .ToList();
+
+        if (mappings.Count == 0)
+        {
+            return (drafts, "Model must have at least one observed question mapping before form generation.");
+        }
+
+        foreach (var item in mappings)
+        {
+            var question = item.Mapping.FormQuestion;
+            var questionType = NormalizeQuestionType(question.QuestionType);
+            if (questionType is null)
+            {
+                return (drafts, $"Question type '{question.QuestionType}' cannot be generated without approved option metadata.");
+            }
+
+            var scale = ResolveScaleBounds(item.Variable, questionType);
+            if (scale.Error is not null)
+            {
+                return (drafts, scale.Error);
+            }
+
+            drafts.Add(new GoogleFormQuestionDraft(
+                question.QuestionText,
+                questionType,
+                question.IsRequired,
+                scale.Low,
+                scale.High));
+        }
+
+        return (drafts, null);
+    }
+
+    private static string? NormalizeQuestionType(string questionType)
+    {
+        var normalized = questionType.Trim();
+        if (string.Equals(normalized, "shortText", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(normalized, "text", StringComparison.OrdinalIgnoreCase))
+        {
+            return "shortText";
+        }
+
+        if (string.Equals(normalized, "paragraphText", StringComparison.OrdinalIgnoreCase))
+        {
+            return "paragraphText";
+        }
+
+        if (string.Equals(normalized, "linearScale", StringComparison.OrdinalIgnoreCase))
+        {
+            return "linearScale";
+        }
+
+        return null;
+    }
+
+    private static (int? Low, int? High, string? Error) ResolveScaleBounds(ResearchVariable variable, string questionType)
+    {
+        if (!string.Equals(questionType, "linearScale", StringComparison.OrdinalIgnoreCase))
+        {
+            return (null, null, null);
+        }
+
+        if (string.Equals(variable.ScaleType, "Likert", StringComparison.OrdinalIgnoreCase))
+        {
+            return (1, variable.ScalePoint ?? 5, null);
+        }
+
+        if (string.Equals(variable.ScaleType, "Scale", StringComparison.OrdinalIgnoreCase) &&
+            IsWholeNumber(variable.MinValue) &&
+            IsWholeNumber(variable.MaxValue))
+        {
+            return ((int)variable.MinValue!.Value, (int)variable.MaxValue!.Value, null);
+        }
+
+        return (null, null, "Linear scale questions require Likert scalePoint or integer minValue/maxValue.");
+    }
+
+    private static bool IsWholeNumber(decimal? value)
+    {
+        return value.HasValue && decimal.Truncate(value.Value) == value.Value;
+    }
+
+    private void AddQuestions(Guid formId, IReadOnlyList<GoogleFormQuestionItem> questions, DateTimeOffset now)
+    {
+        foreach (var question in questions)
+        {
+            dbContext.ResearchFormQuestions.Add(new ResearchFormQuestion
+            {
+                Id = Guid.NewGuid(),
+                FormId = formId,
+                GoogleQuestionId = question.QuestionId,
+                QuestionText = question.QuestionText,
+                QuestionType = question.QuestionType,
+                IsRequired = question.IsRequired,
+                OrderIndex = question.OrderIndex,
+                CreatedAt = now
+            });
+        }
+    }
+
+    private void UpsertQuestions(Guid formId, IReadOnlyList<GoogleFormQuestionItem> questions, DateTimeOffset now)
+    {
+        var existingQuestionRows = dbContext.ResearchFormQuestions
+            .Include(item => item.ObservedQuestionMappings)
+            .Where(item => item.FormId == formId)
+            .ToList();
+        var existingQuestions = new Dictionary<string, ResearchFormQuestion>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var group in existingQuestionRows.GroupBy(item => item.GoogleQuestionId, StringComparer.OrdinalIgnoreCase))
+        {
+            var canonical = group
+                .OrderByDescending(item => item.ObservedQuestionMappings.Count > 0)
+                .ThenBy(item => item.OrderIndex)
+                .ThenBy(item => item.CreatedAt)
+                .ThenBy(item => item.Id)
+                .First();
+
+            foreach (var duplicate in group.Where(item => item.Id != canonical.Id))
+            {
+                foreach (var mapping in duplicate.ObservedQuestionMappings.ToList())
+                {
+                    mapping.FormQuestionId = canonical.Id;
+                }
+
+                dbContext.ResearchFormQuestions.Remove(duplicate);
+            }
+
+            existingQuestions[group.Key] = canonical;
+        }
+
+        foreach (var question in questions)
+        {
+            if (existingQuestions.TryGetValue(question.QuestionId, out var existing))
+            {
+                existing.QuestionText = question.QuestionText;
+                existing.QuestionType = question.QuestionType;
+                existing.IsRequired = question.IsRequired;
+                existing.OrderIndex = question.OrderIndex;
+                continue;
+            }
+
+            dbContext.ResearchFormQuestions.Add(new ResearchFormQuestion
+            {
+                Id = Guid.NewGuid(),
+                FormId = formId,
+                GoogleQuestionId = question.QuestionId,
+                QuestionText = question.QuestionText,
+                QuestionType = question.QuestionType,
+                IsRequired = question.IsRequired,
+                OrderIndex = question.OrderIndex,
+                CreatedAt = now
+            });
+        }
+    }
+
+    private static bool HasScope(IEnumerable<string> grantedScopes, string requiredScope)
+    {
+        return grantedScopes.Any(granted => string.Equals(granted, requiredScope, StringComparison.OrdinalIgnoreCase));
     }
 
     private static string? ExtractFormId(Uri formUri)

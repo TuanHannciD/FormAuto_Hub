@@ -13,4 +13,9 @@ public sealed class ResearchModel
 
     public ResearchForm Form { get; set; } = null!;
     public ICollection<ResearchVariable> Variables { get; set; } = new List<ResearchVariable>();
+    public ICollection<ModelRelation> Relations { get; set; } = new List<ModelRelation>();
+    public ICollection<NodePosition> NodePositions { get; set; } = new List<NodePosition>();
+    public ICollection<SurveyResponse> SurveyResponses { get; set; } = new List<SurveyResponse>();
+    public ICollection<NormalizedDataset> NormalizedDatasets { get; set; } = new List<NormalizedDataset>();
+    public ICollection<DataCollectionLog> DataCollectionLogs { get; set; } = new List<DataCollectionLog>();
 }

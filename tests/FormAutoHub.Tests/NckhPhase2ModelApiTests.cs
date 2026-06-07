@@ -68,6 +68,35 @@ public sealed class NckhPhase2ModelApiTests
     }
 
     [Fact]
+    public async Task ListModelsAsync_ExposesGeneratedFormState()
+    {
+        await using var context = CreateContext();
+        var ownedFormId = SeedForm(context, TestUserId);
+        var modelId = SeedModel(context, TestUserId, ownedFormId, "Generated model", "Active");
+        context.ResearchForms.Add(new ResearchForm
+        {
+            Id = Guid.NewGuid(),
+            UserId = TestUserId,
+            GoogleFormId = "generated-google-form",
+            FormUrl = "https://docs.google.com/forms/d/generated-google-form/edit",
+            Title = "Generated Survey",
+            Status = "Draft",
+            GeneratedFromModelId = modelId,
+            GenerationSource = "Generated",
+            ImportedAt = DateTimeOffset.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
+        var service = new ResearchModelService(context);
+
+        var result = await service.ListModelsAsync(TestUserId, null, 1, 20, CancellationToken.None);
+
+        Assert.Equal(ResearchFormServiceStatus.Success, result.Status);
+        Assert.True(result.Value!.Items.Single(item => item.Id == modelId).HasGeneratedForm);
+    }
+
+    [Fact]
     public async Task GetAndUpdateModelAsync_RequireOwnership()
     {
         await using var context = CreateContext();

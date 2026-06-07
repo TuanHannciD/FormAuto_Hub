@@ -4,6 +4,7 @@ using FormAutoHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FormAutoHub.Api.Data.Migrations
 {
     [DbContext(typeof(FormAutoHubDbContext))]
-    partial class FormAutoHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604131107_NckhPhase3_CanvasRelations")]
+    partial class NckhPhase3_CanvasRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -525,46 +528,6 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.ToTable("GeneratedResponses");
                 });
 
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.DataCollectionLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("CompletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("ErrorMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ResponsesCollected")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResponsesSkipped")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("StartedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModelId", "StartedAt");
-
-                    b.HasIndex("ModelId", "Status");
-
-                    b.ToTable("DataCollectionLogs");
-                });
-
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ModelRelation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -672,55 +635,6 @@ namespace FormAutoHub.Api.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.NormalizedDataset", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsStale")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<Guid>("ModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("NormalizedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedDataJson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RespondentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("SurveyResponseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyResponseId");
-
-                    b.HasIndex("ModelId", "IsStale");
-
-                    b.HasIndex("ModelId", "NormalizedAt");
-
-                    b.HasIndex("ModelId", "RespondentId");
-
-                    b.HasIndex("ModelId", "SurveyResponseId")
-                        .IsUnique();
-
-                    b.ToTable("NormalizedDatasets");
-                });
-
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ObservedQuestionMapping", b =>
                 {
                     b.Property<Guid>("Id")
@@ -769,26 +683,11 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("GeneratedFromModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("GenerationSource")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Imported");
-
                     b.Property<string>("GoogleFormId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTimeOffset>("ImportedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("LastGeneratedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("LastSyncedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Status")
@@ -806,10 +705,6 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GeneratedFromModelId");
-
-                    b.HasIndex("UserId", "GeneratedFromModelId");
 
                     b.HasIndex("UserId", "GoogleFormId")
                         .IsUnique();
@@ -951,47 +846,6 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("ResearchVariables");
-                });
-
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.SurveyResponse", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("GoogleResponseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("ModelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RawDataJson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RespondentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTimeOffset?>("ResponseTimestamp")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModelId", "GoogleResponseId")
-                        .IsUnique();
-
-                    b.HasIndex("ModelId", "RespondentId");
-
-                    b.HasIndex("ModelId", "ResponseTimestamp");
-
-                    b.ToTable("SurveyResponses");
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.PaymentProviderSetting", b =>
@@ -1504,17 +1358,6 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.DataCollectionLog", b =>
-                {
-                    b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchModel", "Model")
-                        .WithMany("DataCollectionLogs")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
-                });
-
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ModelRelation", b =>
                 {
                     b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchVariable", "FromVariable")
@@ -1567,25 +1410,6 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("Variable");
                 });
 
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.NormalizedDataset", b =>
-                {
-                    b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchModel", "Model")
-                        .WithMany("NormalizedDatasets")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FormAutoHub.Api.Entities.Nckh.SurveyResponse", "SurveyResponse")
-                        .WithMany("NormalizedDatasets")
-                        .HasForeignKey("SurveyResponseId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Model");
-
-                    b.Navigation("SurveyResponse");
-                });
-
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ObservedQuestionMapping", b =>
                 {
                     b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchFormQuestion", "FormQuestion")
@@ -1607,18 +1431,11 @@ namespace FormAutoHub.Api.Data.Migrations
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ResearchForm", b =>
                 {
-                    b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchModel", "GeneratedFromModel")
-                        .WithMany()
-                        .HasForeignKey("GeneratedFromModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("FormAutoHub.Api.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("GeneratedFromModel");
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ResearchFormQuestion", b =>
@@ -1660,17 +1477,6 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("Model");
                 });
 
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.SurveyResponse", b =>
-                {
-                    b.HasOne("FormAutoHub.Api.Entities.Nckh.ResearchModel", "Model")
-                        .WithMany("SurveyResponses")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
-                });
-
             modelBuilder.Entity("FormAutoHub.Api.Entities.PaymentRecord", b =>
                 {
                     b.HasOne("FormAutoHub.Api.Entities.TopupOrder", "TopupOrder")
@@ -1701,15 +1507,9 @@ namespace FormAutoHub.Api.Data.Migrations
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ResearchModel", b =>
                 {
-                    b.Navigation("DataCollectionLogs");
-
                     b.Navigation("NodePositions");
 
-                    b.Navigation("NormalizedDatasets");
-
                     b.Navigation("Relations");
-
-                    b.Navigation("SurveyResponses");
 
                     b.Navigation("Variables");
                 });
@@ -1723,11 +1523,6 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("ObservedQuestionMappings");
 
                     b.Navigation("OutgoingRelations");
-                });
-
-            modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.SurveyResponse", b =>
-                {
-                    b.Navigation("NormalizedDatasets");
                 });
 #pragma warning restore 612, 618
         }

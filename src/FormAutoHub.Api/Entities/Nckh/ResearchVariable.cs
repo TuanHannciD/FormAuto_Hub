@@ -17,4 +17,7 @@ public sealed class ResearchVariable
 
     public ResearchModel Model { get; set; } = null!;
     public ICollection<ObservedQuestionMapping> ObservedQuestionMappings { get; set; } = new List<ObservedQuestionMapping>();
+    public ICollection<ModelRelation> OutgoingRelations { get; set; } = new List<ModelRelation>();
+    public ICollection<ModelRelation> IncomingRelations { get; set; } = new List<ModelRelation>();
+    public ICollection<NodePosition> NodePositions { get; set; } = new List<NodePosition>();
 }

@@ -121,6 +121,9 @@ builder.Services.AddHttpClient<IGoogleOAuthService, GoogleOAuthService>();
 builder.Services.AddHttpClient<IGoogleFormsApiService, GoogleFormsApiService>();
 builder.Services.AddScoped<IResearchFormService, ResearchFormService>();
 builder.Services.AddScoped<IResearchModelService, ResearchModelService>();
+builder.Services.AddScoped<IResearchCanvasService, ResearchCanvasService>();
+builder.Services.AddScoped<IResearchDataService, ResearchDataService>();
+builder.Services.AddScoped<IResearchExportService, ResearchExportService>();
 
 builder.Services.AddOpenApi();
 

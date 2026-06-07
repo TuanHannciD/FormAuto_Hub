@@ -64,7 +64,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
         await dbContext.SaveChangesAsync(cancellationToken);
 
         model.Form = form;
-        return Success(ToResponse(model, form.Title, 0));
+        return Success(ToResponse(model, form.Title, 0, hasGeneratedForm: false));
     }
 
     public async Task<ResearchFormServiceResult<NckhResearchModelListResponse>> ListModelsAsync(
@@ -106,6 +106,10 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
                 item.Status,
                 item.Form.Title,
                 item.Variables.Count,
+                dbContext.ResearchForms.Any(form =>
+                    form.UserId == userId
+                    && form.GeneratedFromModelId == item.Id
+                    && form.GenerationSource == "Generated"),
                 item.CreatedAt,
                 item.UpdatedAt))
             .ToListAsync(cancellationToken);
@@ -126,7 +130,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
             return NotFound<NckhResearchModelResponse>();
         }
 
-        return Success(ToResponse(model, model.Form.Title, model.Variables.Count));
+        return Success(ToResponse(model, model.Form.Title, model.Variables.Count, await HasGeneratedFormAsync(userId, model.Id, cancellationToken)));
     }
 
     public async Task<ResearchFormServiceResult<NckhResearchModelResponse>> UpdateModelAsync(
@@ -152,7 +156,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
         model.UpdatedAt = DateTimeOffset.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
-        return Success(ToResponse(model, model.Form.Title, model.Variables.Count));
+        return Success(ToResponse(model, model.Form.Title, model.Variables.Count, await HasGeneratedFormAsync(userId, model.Id, cancellationToken)));
     }
 
     public async Task<ResearchFormServiceResult<NckhResearchModelResponse>> ActivateModelAsync(
@@ -168,7 +172,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
 
         if (model.Status == ActiveStatus)
         {
-            return Success(ToResponse(model, model.Form.Title, model.Variables.Count));
+            return Success(ToResponse(model, model.Form.Title, model.Variables.Count, await HasGeneratedFormAsync(userId, model.Id, cancellationToken)));
         }
 
         if (model.Status != DraftStatus)
@@ -191,7 +195,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
         model.UpdatedAt = DateTimeOffset.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
-        return Success(ToResponse(model, model.Form.Title, model.Variables.Count));
+        return Success(ToResponse(model, model.Form.Title, model.Variables.Count, await HasGeneratedFormAsync(userId, model.Id, cancellationToken)));
     }
 
     public async Task<ResearchFormServiceResult<bool>> DeleteModelAsync(
@@ -233,7 +237,16 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
         return query.SingleOrDefaultAsync(cancellationToken);
     }
 
-    private static NckhResearchModelResponse ToResponse(ResearchModel model, string formTitle, int variableCount)
+    private Task<bool> HasGeneratedFormAsync(Guid userId, Guid modelId, CancellationToken cancellationToken)
+    {
+        return dbContext.ResearchForms.AnyAsync(
+            item => item.UserId == userId
+                && item.GeneratedFromModelId == modelId
+                && item.GenerationSource == "Generated",
+            cancellationToken);
+    }
+
+    private static NckhResearchModelResponse ToResponse(ResearchModel model, string formTitle, int variableCount, bool hasGeneratedForm)
     {
         return new NckhResearchModelResponse(
             model.Id,
@@ -243,6 +256,7 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
             model.Status,
             formTitle,
             variableCount,
+            hasGeneratedForm,
             model.CreatedAt,
             model.UpdatedAt);
     }

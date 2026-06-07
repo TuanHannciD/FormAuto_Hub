@@ -29,6 +29,65 @@ public sealed record NckhFormQuestionResponse(
     bool IsRequired,
     int OrderIndex);
 
+public sealed record NckhGenerateFormRequest(string Action);
+
+public sealed record NckhGenerateFormResponse(
+    Guid FormId,
+    string GoogleFormId,
+    string FormUrl,
+    int QuestionsCreated,
+    int QuestionsUpdated,
+    int QuestionsDeleted,
+    bool Reimported);
+
+public sealed record NckhCollectResponsesResponse(
+    Guid LogId,
+    int ResponsesCollected,
+    int ResponsesSkipped,
+    string Status,
+    string? ErrorMessage);
+
+public sealed record NckhRawResponseListResponse(
+    List<NckhRawResponseListItem> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
+
+public sealed record NckhRawResponseListItem(
+    Guid Id,
+    string GoogleResponseId,
+    string? RespondentId,
+    DateTimeOffset? ResponseTimestamp,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt);
+
+public sealed record NckhNormalizeResponsesResponse(
+    int RespondentsProcessed,
+    int VariablesComputed,
+    int MissingDataCount,
+    int StaleDatasetsMarked);
+
+public sealed record NckhDatasetListResponse(
+    List<string> Columns,
+    bool HasStaleData,
+    List<NckhDatasetListItem> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
+
+public sealed record NckhDatasetListItem(
+    string? RespondentId,
+    Dictionary<string, object?> Values,
+    bool IsStale,
+    DateTimeOffset NormalizedAt);
+
+public sealed record NckhExportFileResponse(
+    string FileName,
+    string ContentType,
+    byte[] Content);
+
 public sealed record NckhFormListResponse(
     List<NckhFormListItem> Items,
     int Page,
@@ -130,6 +189,7 @@ public sealed record NckhResearchModelResponse(
     string Status,
     string FormTitle,
     int VariableCount,
+    bool HasGeneratedForm,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt);
 
@@ -139,3 +199,57 @@ public sealed record NckhResearchModelListResponse(
     int PageSize,
     int TotalItems,
     int TotalPages);
+public sealed record NckhCreateRelationRequest(
+    Guid FromVariableId,
+    Guid ToVariableId,
+    string Direction,
+    int SortOrder);
+
+public sealed record NckhUpdateRelationRequest(
+    Guid FromVariableId,
+    Guid ToVariableId,
+    string Direction,
+    int SortOrder);
+
+public sealed record NckhRelationResponse(
+    Guid Id,
+    Guid ModelId,
+    Guid FromVariableId,
+    string FromVariableName,
+    string FromVariableCode,
+    Guid ToVariableId,
+    string ToVariableName,
+    string ToVariableCode,
+    string Direction,
+    string HypothesisCode,
+    string HypothesisText,
+    int SortOrder,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt);
+
+public sealed record NckhRelationListResponse(
+    List<NckhRelationResponse> Items,
+    int Page,
+    int PageSize,
+    int TotalItems,
+    int TotalPages);
+
+public sealed record NckhSavePositionsRequest(List<NckhSavePositionItem> Positions);
+
+public sealed record NckhSavePositionItem(
+    string NodeType,
+    Guid? VariableId,
+    Guid? RelationId,
+    decimal PositionX,
+    decimal PositionY);
+
+public sealed record NckhPositionResponse(
+    Guid Id,
+    string NodeType,
+    Guid? VariableId,
+    Guid? RelationId,
+    decimal PositionX,
+    decimal PositionY,
+    DateTimeOffset UpdatedAt);
+
+public sealed record NckhPositionListResponse(List<NckhPositionResponse> Items);

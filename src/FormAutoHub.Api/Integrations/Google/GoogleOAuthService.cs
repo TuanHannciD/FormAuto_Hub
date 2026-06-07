@@ -140,7 +140,11 @@ public sealed class GoogleOAuthService(
         }
 
         login.TokenExpiresAt = DateTimeOffset.UtcNow.AddSeconds(tokens.ExpiresInSeconds);
-        login.Scopes = tokens.Scope;
+        if (!string.IsNullOrWhiteSpace(tokens.Scope))
+        {
+            login.Scopes = tokens.Scope;
+        }
+
         login.UpdatedAt = DateTimeOffset.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
