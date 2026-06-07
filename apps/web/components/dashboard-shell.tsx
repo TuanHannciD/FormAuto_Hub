@@ -127,7 +127,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <p className="text-[13px] font-extrabold leading-4">FormAuto Hub</p>
-            <p className="text-[11px] text-muted-foreground">Dashboard</p>
+            <p className="text-[11px] text-muted-foreground">Bảng điều khiển</p>
           </div>
         </div>
         {navigation}
@@ -148,7 +148,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 </div>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-extrabold">FormAuto Hub</p>
-                  <p className="truncate text-xs text-muted-foreground">Dashboard</p>
+                  <p className="truncate text-xs text-muted-foreground">Bảng điều khiển</p>
                 </div>
               </div>
               <Button aria-label="Đóng menu" className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setIsMobileNavOpen(false)}>
@@ -173,7 +173,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <Menu size={16} />
               </Button>
               <div className="min-w-0 truncate text-[12px] text-muted-foreground">
-                <span>Dashboard</span>
+                <span>Bảng điều khiển</span>
                 <span className="mx-2">/</span>
                 <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
               </div>

@@ -99,7 +99,7 @@ const MOCK_IMPORT_RESPONSE = {
   id: "33333333-3333-3333-3333-333333333333",
   googleFormId: "form-ghi789",
   formUrl: "https://docs.google.com/forms/d/form-ghi789/edit",
-  title: "Form mới import",
+  title: "Form mới nhập",
   status: "Draft",
   questionCount: 10,
   importedAt: "2026-05-30T12:00:00Z"
@@ -109,6 +109,151 @@ const MOCK_GOOGLE_LINK_RESPONSE = {
   linked: true,
   email: "researcher@gmail.com"
 };
+
+const MOCK_FORM_DETAIL = {
+  id: "11111111-1111-1111-1111-111111111111",
+  googleFormId: "form-abc123",
+  title: "Khảo sát sinh viên 2026",
+  questions: [
+    {
+      id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      googleQuestionId: "q1",
+      questionText: "Bạn hài lòng với khóa học không?",
+      questionType: "Likert",
+      isRequired: true,
+      orderIndex: 1
+    },
+    {
+      id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      googleQuestionId: "q2",
+      questionText: "Góp ý thêm",
+      questionType: "Paragraph",
+      isRequired: false,
+      orderIndex: 2
+    }
+  ]
+};
+
+const MOCK_MODEL = {
+  id: "44444444-4444-4444-4444-444444444444",
+  formId: "11111111-1111-1111-1111-111111111111",
+  name: "Mô hình hài lòng sinh viên",
+  description: "Mô hình nền",
+  status: "Draft",
+  formTitle: "Khảo sát sinh viên 2026",
+  variableCount: 1,
+  hasGeneratedForm: true,
+  createdAt: "2026-06-05T08:00:00Z",
+  updatedAt: "2026-06-05T08:30:00Z"
+};
+
+const MOCK_ACTIVE_MODEL = {
+  ...MOCK_MODEL,
+  status: "Active"
+};
+
+const MOCK_VARIABLE = {
+  id: "55555555-5555-5555-5555-555555555555",
+  modelId: MOCK_MODEL.id,
+  name: "Sự hài lòng",
+  code: "SAT",
+  variableType: "Dependent",
+  scaleType: "Likert",
+  scalePoint: 5,
+  minValue: null,
+  maxValue: null,
+  sortOrder: 1,
+  createdAt: "2026-06-05T08:10:00Z",
+  updatedAt: "2026-06-05T08:10:00Z"
+};
+
+const MOCK_VARIABLE_2 = {
+  id: "66666666-6666-6666-6666-666666666666",
+  modelId: MOCK_MODEL.id,
+  name: "Chất lượng dịch vụ",
+  code: "SER",
+  variableType: "Independent",
+  scaleType: "Likert",
+  scalePoint: 5,
+  minValue: null,
+  maxValue: null,
+  sortOrder: 2,
+  createdAt: "2026-06-05T08:12:00Z",
+  updatedAt: "2026-06-05T08:12:00Z"
+};
+
+const MOCK_RELATION = {
+  id: "77777777-7777-7777-7777-777777777777",
+  modelId: MOCK_MODEL.id,
+  fromVariableId: MOCK_VARIABLE_2.id,
+  fromVariableName: MOCK_VARIABLE_2.name,
+  fromVariableCode: MOCK_VARIABLE_2.code,
+  toVariableId: MOCK_VARIABLE.id,
+  toVariableName: MOCK_VARIABLE.name,
+  toVariableCode: MOCK_VARIABLE.code,
+  direction: "Positive",
+  hypothesisCode: "H1",
+  hypothesisText: "Chất lượng dịch vụ có tác động cùng chiều đến sự hài lòng",
+  sortOrder: 1,
+  createdAt: "2026-06-05T08:20:00Z",
+  updatedAt: "2026-06-05T08:20:00Z"
+};
+
+async function mockWorkspace(page: Page) {
+  await mockRefreshSuccess(page);
+  await mockApi(page, "GET", `/forms/${MOCK_FORM_DETAIL.id}`, MOCK_FORM_DETAIL);
+  await mockApi(page, "GET", "/models?page=1&pageSize=100", {
+    items: [MOCK_MODEL],
+    page: 1,
+    pageSize: 100,
+    totalItems: 1,
+    totalPages: 1
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/variables?page=1&pageSize=100`, {
+    items: [MOCK_VARIABLE, MOCK_VARIABLE_2],
+    page: 1,
+    pageSize: 100,
+    totalItems: 2,
+    totalPages: 1
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/mappings?page=1&pageSize=100`, {
+    items: [],
+    page: 1,
+    pageSize: 100,
+    totalItems: 0,
+    totalPages: 0
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/relations?page=1&pageSize=100`, {
+    items: [MOCK_RELATION],
+    page: 1,
+    pageSize: 100,
+    totalItems: 1,
+    totalPages: 0
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/positions`, {
+    items: [
+      { id: "88888888-8888-8888-8888-888888888888", nodeType: "Variable", variableId: MOCK_VARIABLE_2.id, relationId: null, positionX: 32, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
+      { id: "99999999-9999-9999-9999-999999999999", nodeType: "Variable", variableId: MOCK_VARIABLE.id, relationId: null, positionX: 264, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
+      { id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", nodeType: "Relation", variableId: null, relationId: MOCK_RELATION.id, positionX: 128, positionY: 188, updatedAt: "2026-06-05T08:21:00Z" }
+    ]
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/responses?page=1&pageSize=20`, {
+    items: [],
+    page: 1,
+    pageSize: 20,
+    totalItems: 0,
+    totalPages: 0
+  });
+  await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/dataset?page=1&pageSize=20`, {
+    columns: ["RespondentId", "SAT_1", "SAT_mean"],
+    hasStaleData: false,
+    items: [],
+    page: 1,
+    pageSize: 20,
+    totalItems: 0,
+    totalPages: 0
+  });
+}
 
 // ── TESTS: Auth & Redirect ────────────────────────────────────────
 
@@ -153,7 +298,7 @@ test.describe("NCKH — Google Not Linked", () => {
 
   test("empty state message shown in form list", async ({ page }) => {
     await page.goto("/dashboard/nckh");
-    await expect(page.getByText(/Liên kết Google để import form đầu tiên/)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/Liên kết Google để nhập form đầu tiên/)).toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -177,7 +322,7 @@ test.describe("NCKH — Google Linked", () => {
 
   test("import button is visible", async ({ page }) => {
     await page.goto("/dashboard/nckh");
-    await expect(page.getByRole("button", { name: /Import/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Nhập form/ })).toBeVisible();
   });
 
   test("renders form list table with items", async ({ page }) => {
@@ -213,18 +358,18 @@ test.describe("NCKH — Import Form", () => {
 
     await page.goto("/dashboard/nckh");
     await page.getByPlaceholder(/docs.google.com\/forms/).fill("https://docs.google.com/forms/d/form-ghi789/edit");
-    await page.getByRole("button", { name: /Import/ }).click();
+    await page.getByRole("button", { name: /Nhập form/ }).click();
 
-    await expect(page.getByText(/Đã import form: Form mới import/).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/Đã nhập form: Form mới nhập/).first()).toBeVisible({ timeout: 5000 });
   });
 
   test("import fails with 401 shows error and resets link status", async ({ page }) => {
     await mockApi(page, "POST", "/forms/import", { title: "Unauthorized", detail: "Google account not linked or token expired." }, 401);
 
     await page.goto("/dashboard/nckh");
-    await expect(page.getByRole("button", { name: /Import/ })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: /Nhập form/ })).toBeVisible({ timeout: 10000 });
     await page.getByPlaceholder(/docs.google.com\/forms/).fill("https://docs.google.com/forms/d/bad/edit");
-    await page.getByRole("button", { name: /Import/ }).click();
+    await page.getByRole("button", { name: /Nhập form/ }).click();
 
     await expect(page.getByText(/cần liên kết Google/).first()).toBeVisible({ timeout: 5000 });
   });
@@ -234,9 +379,33 @@ test.describe("NCKH — Import Form", () => {
 
     await page.goto("/dashboard/nckh");
     await page.getByPlaceholder(/docs.google.com\/forms/).fill("https://docs.google.com/forms/d/dup/edit");
-    await page.getByRole("button", { name: /Import/ }).click();
+    await page.getByRole("button", { name: /Nhập form/ }).click();
 
-    await expect(page.getByText(/Form already imported/).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/Không nhập được form/).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("prevents duplicate import submit while request is pending", async ({ page }) => {
+    let importRequestCount = 0;
+    await page.route("**/api/v1/nckh/forms/import", async (route) => {
+      if (route.request().method() !== "POST") {
+        return route.continue();
+      }
+      importRequestCount += 1;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await route.fulfill({
+        status: 201,
+        contentType: "application/json",
+        body: JSON.stringify(MOCK_IMPORT_RESPONSE)
+      });
+    });
+
+    await page.goto("/dashboard/nckh");
+    await page.getByPlaceholder(/docs.google.com\/forms/).fill("https://docs.google.com/forms/d/form-ghi789/edit");
+    const importButton = page.getByRole("button", { name: /Nhập form/ });
+
+    await importButton.click();
+    await expect(page.getByRole("button", { name: /Đang nhập/ })).toBeDisabled();
+    await expect.poll(() => importRequestCount).toBe(1);
   });
 });
 
@@ -259,7 +428,7 @@ test.describe("NCKH — Callback Page", () => {
     await mockNotLinked(page);
 
     await page.goto("/dashboard/nckh?error=access_denied");
-    await expect(page.getByText(/access_denied/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/Không hoàn tất được liên kết Google/).first()).toBeVisible({ timeout: 8000 });
   });
 
   test("direct callback page without code redirects to dashboard", async ({ page }) => {
@@ -273,11 +442,24 @@ test.describe("NCKH — Callback Page", () => {
   test("callback with valid code calls API and redirects with success", async ({ page }) => {
     await loginAsUser(page);
     await mockRefreshSuccess(page);
-    await mockApi(page, "POST", "/auth/google-link", MOCK_GOOGLE_LINK_RESPONSE);
+    let googleLinkRequestCount = 0;
+    await page.route("**/api/v1/nckh/auth/google-link", async (route) => {
+      if (route.request().method() !== "POST") {
+        return route.continue();
+      }
+      googleLinkRequestCount += 1;
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(MOCK_GOOGLE_LINK_RESPONSE)
+      });
+    });
     await mockApi(page, "GET", "/forms?page=1&pageSize=20", MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard/nckh/callback?code=mock-auth-code-12345");
-    await expect(page).toHaveURL(/\/dashboard\/nckh\?linked=true/, { timeout: 10000 });
+    await expect(page.getByText(/Đã liên kết Google thành công/).first()).toBeVisible({ timeout: 10000 });
+    await expect(page).toHaveURL(/\/dashboard\/nckh$/, { timeout: 10000 });
+    expect(googleLinkRequestCount).toBe(1);
   });
 
   test("callback with invalid code shows error then redirects", async ({ page }) => {
@@ -327,5 +509,178 @@ test.describe("NCKH — Navigation", () => {
     await expect(page.getByRole("link", { name: "NCKH" })).toBeVisible({ timeout: 10000 });
     await page.getByRole("link", { name: "NCKH" }).click();
     await expect(page).toHaveURL(/\/dashboard\/nckh/, { timeout: 5000 });
+  });
+});
+
+// ── TESTS: Phase 7 Workspace ─────────────────────────────────────
+
+test.describe("NCKH — Phase 7 Workspace", () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAsUser(page);
+    await mockWorkspace(page);
+  });
+
+  test("renders form workspace with model tabs", async ({ page }) => {
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+
+    await expect(page.getByText("Mã Google Form: form-abc123")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: "Biến" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Ánh xạ" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sơ đồ quan hệ" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Xuất dữ liệu" })).toBeVisible();
+    await expect(page.getByText("Mô hình hài lòng sinh viên").last()).toBeVisible();
+  });
+
+  test("shows variables panel from existing backend contract", async ({ page }) => {
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await expect(page.getByRole("button", { name: "Biến" })).toBeVisible({ timeout: 10000 });
+    await page.getByRole("button", { name: "Biến" }).click();
+
+    await expect(page.getByText("Sự hài lòng").last()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("SAT").last()).toBeVisible();
+  });
+
+  test("renders Phase 9 visual canvas using existing relation and position APIs", async ({ page }) => {
+    let savePositionsPayload: unknown = null;
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/positions`, async (route) => {
+      if (route.request().method() === "GET") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            items: [
+              { id: "88888888-8888-8888-8888-888888888888", nodeType: "Variable", variableId: MOCK_VARIABLE_2.id, relationId: null, positionX: 32, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
+              { id: "99999999-9999-9999-9999-999999999999", nodeType: "Variable", variableId: MOCK_VARIABLE.id, relationId: null, positionX: 264, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
+              { id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", nodeType: "Relation", variableId: null, relationId: MOCK_RELATION.id, positionX: 128, positionY: 188, updatedAt: "2026-06-05T08:21:00Z" }
+            ]
+          })
+        });
+        return;
+      }
+      if (route.request().method() !== "PUT") {
+        await route.continue();
+        return;
+      }
+      savePositionsPayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ items: [] })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+
+    await expect(page.getByText("Sơ đồ quan hệ mô hình")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Chất lượng dịch vụ").last()).toBeVisible();
+    await expect(page.getByText("Sự hài lòng").last()).toBeVisible();
+    await expect(page.getByText("SER -> SAT").first()).toBeVisible();
+    await expect(page.getByText("3 vị trí đã lưu.")).toBeVisible();
+    await expect(page.getByText("Trạng thái sơ đồ")).toBeVisible();
+
+    await page.getByRole("button", { name: "Lưu bố cục" }).click();
+    await expect.poll(() => {
+      const payload = savePositionsPayload as { positions?: Array<{ nodeType: string; variableId?: string | null; relationId?: string | null }> } | null;
+      return Boolean(
+        payload?.positions?.some((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id)
+        && payload.positions.some((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE_2.id)
+        && payload.positions.some((item) => item.nodeType === "Relation" && item.relationId === MOCK_RELATION.id)
+      );
+    }).toBe(true);
+  });
+
+  test("keeps canvas relation and position edits read-only for active models", async ({ page }) => {
+    await page.route("**/api/v1/nckh/models?page=1&pageSize=100", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          items: [MOCK_ACTIVE_MODEL],
+          page: 1,
+          pageSize: 100,
+          totalItems: 1,
+          totalPages: 1
+        })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+
+    await expect(page.getByText("Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: "Lưu bố cục" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Thêm quan hệ" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Xóa quan hệ H1" }).first()).toBeDisabled();
+  });
+
+  test("shows export actions without adding new backend contracts", async ({ page }) => {
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Xuất dữ liệu" }).click();
+
+    await expect(page.getByRole("button", { name: /Bộ dữ liệu CSV/ })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: /Codebook Excel/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Cú pháp SPSS/ })).toBeVisible();
+  });
+
+  test("uses update action when selected model already has a generated form", async ({ page }) => {
+    let generatePayload: unknown = null;
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/generate-form`, async (route) => {
+      if (route.request().method() !== "POST") {
+        return route.continue();
+      }
+      generatePayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          formId: MOCK_FORM_DETAIL.id,
+          googleFormId: MOCK_FORM_DETAIL.googleFormId,
+          formUrl: "https://docs.google.com/forms/d/form-abc123/edit",
+          questionsCreated: 2,
+          questionsUpdated: 0,
+          questionsDeleted: 0,
+          reimported: true
+        })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Tạo form", exact: true }).click();
+    await page.getByRole("button", { name: "Cập nhật form từ mô hình" }).click();
+
+    await expect.poll(() => generatePayload).toEqual({ action: "Update" });
+  });
+
+  test("disables update action while request is submitting", async ({ page }) => {
+    let generateRequestCount = 0;
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/generate-form`, async (route) => {
+      if (route.request().method() !== "POST") {
+        return route.continue();
+      }
+      generateRequestCount += 1;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          formId: MOCK_FORM_DETAIL.id,
+          googleFormId: MOCK_FORM_DETAIL.googleFormId,
+          formUrl: "https://docs.google.com/forms/d/form-abc123/edit",
+          questionsCreated: 2,
+          questionsUpdated: 0,
+          questionsDeleted: 0,
+          reimported: true
+        })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Tạo form", exact: true }).click();
+    const updateButton = page.getByRole("button", { name: "Cập nhật form từ mô hình" });
+
+    await updateButton.click();
+    await expect(page.getByRole("button", { name: "Đang cập nhật..." })).toBeDisabled();
+    await expect.poll(() => generateRequestCount).toBe(1);
   });
 });

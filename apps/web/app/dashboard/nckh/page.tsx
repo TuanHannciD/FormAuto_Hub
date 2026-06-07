@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLink, FileUp, Link2, Loader2, Search } from "lucide-react";
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
@@ -15,7 +15,12 @@ import { readableError } from "@/lib/toast";
 
 const GOOGLE_OAUTH_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID ?? "";
 const GOOGLE_OAUTH_REDIRECT_URI = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI ?? "";
-const GOOGLE_FORMS_SCOPE = "https://www.googleapis.com/auth/forms.body.readonly https://www.googleapis.com/auth/userinfo.email";
+const GOOGLE_FORMS_SCOPE = [
+  "https://www.googleapis.com/auth/forms.body.readonly",
+  "https://www.googleapis.com/auth/forms.body",
+  "https://www.googleapis.com/auth/forms.responses.readonly",
+  "https://www.googleapis.com/auth/userinfo.email"
+].join(" ");
 
 function buildGoogleOAuthUrl(): string {
   const params = new URLSearchParams({
@@ -27,6 +32,21 @@ function buildGoogleOAuthUrl(): string {
     prompt: "consent"
   });
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+
+function readableNckhError(error: unknown, fallback: string) {
+  const message = readableError(error, fallback);
+  const lower = message.toLowerCase();
+  if (lower.includes("scope") || lower.includes("consent") || lower.includes("permission") || lower.includes("forbidden") || lower.includes("403")) {
+    return "Tài khoản Google chưa cấp đủ quyền cần thiết cho thao tác này.";
+  }
+  if (lower.includes("unauthorized") || lower.includes("not linked") || lower.includes("401")) {
+    return "Bạn cần liên kết lại tài khoản Google trước khi tiếp tục.";
+  }
+  if (lower.includes("invalid") || lower.includes("expired")) {
+    return "Dữ liệu xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.";
+  }
+  return /[à-ỹđ]/i.test(message) ? message : fallback;
 }
 
 // ── Main Content ──────────────────────────────────────────────────
@@ -43,6 +63,8 @@ function NckhContent() {
   const [formUrl, setFormUrl] = useState("");
   const [isImporting, setIsImporting] = useState(false);
   const [isLinking, setIsLinking] = useState(false);
+  const isImportingRef = useRef(false);
+  const isLinkingRef = useRef(false);
 
   // ── Form columns ────────────────────────────────────────────────
 
@@ -64,7 +86,7 @@ function NckhContent() {
     { key: "questionCount", header: "Số câu hỏi", render: (item) => item.questionCount },
     {
       key: "importedAt",
-      header: "Ngày import",
+      header: "Ngày nhập",
       render: (item) => new Date(item.importedAt).toLocaleDateString("vi-VN")
     }
   ];
@@ -82,13 +104,12 @@ function NckhContent() {
       setGoogleLinked(true);
     } catch (error) {
       const msg = error instanceof Error ? error.message : "";
-      // 401 Unauthorized or any error on forms endpoint when authenticated
-      // means Google is likely not linked (or token expired)
+      // 401 Unauthorized hoặc lỗi khi gọi endpoint forms sau đăng nhập thường nghĩa là chưa liên kết Google hoặc token đã hết hạn.
       setGoogleLinked(false);
       setForms([]);
-      // Only show toast for non-auth errors to avoid noise on initial load
+      // Chỉ hiện toast cho lỗi không thuộc xác thực để tránh nhiễu khi tải lần đầu.
       if (msg && !msg.includes("401") && !msg.toLowerCase().includes("not linked") && !msg.toLowerCase().includes("unauthorized")) {
-        toast.error(readableError(msg, "Không tải được danh sách form."));
+        toast.error(readableNckhError(msg, "Không tải được danh sách form."));
       }
     } finally {
       setIsLoading(false);
@@ -109,7 +130,7 @@ function NckhContent() {
       loadForms(1);
       router.replace("/dashboard/nckh");
     } else if (error) {
-      toast.error(decodeURIComponent(error));
+      toast.error(readableNckhError(decodeURIComponent(error), "Không hoàn tất được liên kết Google."));
       router.replace("/dashboard/nckh");
     }
   }, [searchParams, loadForms, router]);
@@ -117,10 +138,12 @@ function NckhContent() {
   // ── Link Google ─────────────────────────────────────────────────
 
   function handleLinkGoogle() {
+    if (isLinkingRef.current) return;
     if (!GOOGLE_OAUTH_CLIENT_ID || !GOOGLE_OAUTH_REDIRECT_URI) {
       toast.error("Thiếu cấu hình Google OAuth. Vui lòng kiểm tra biến môi trường.");
       return;
     }
+    isLinkingRef.current = true;
     setIsLinking(true);
     window.location.href = buildGoogleOAuthUrl();
   }
@@ -130,25 +153,28 @@ function NckhContent() {
   async function handleImport(event: React.FormEvent) {
     event.preventDefault();
     if (!formUrl.trim()) return;
+    if (isImportingRef.current) return;
 
+    isImportingRef.current = true;
     setIsImporting(true);
     try {
       const result = await apiFetch<NckhImportFormResponse>("/api/v1/nckh/forms/import", {
         method: "POST",
         json: { formUrl: formUrl.trim() }
       });
-      toast.success(`Đã import form: ${result.title}`);
+      toast.success(`Đã nhập form: ${result.title}`);
       setFormUrl("");
       loadForms(page);
     } catch (error) {
       const msg = error instanceof Error ? error.message : "";
       if (msg.includes("401") || msg.toLowerCase().includes("not linked")) {
-        toast.error("Bạn cần liên kết Google trước khi import form.");
+        toast.error("Bạn cần liên kết Google trước khi nhập form.");
         setGoogleLinked(false);
       } else {
-        toast.error(readableError(msg, "Không import được form."));
+        toast.error(readableNckhError(msg, "Không nhập được form."));
       }
     } finally {
+      isImportingRef.current = false;
       setIsImporting(false);
     }
   }
@@ -181,12 +207,12 @@ function NckhContent() {
           ) : googleLinked ? (
             <div className="flex items-center gap-2 text-sm">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-emerald-700">Đã liên kết Google — có thể import form.</span>
+              <span className="text-emerald-700">Đã liên kết Google — có thể nhập form.</span>
             </div>
           ) : (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                Bạn cần liên kết tài khoản Google để import biểu mẫu khảo sát.
+                Bạn cần liên kết tài khoản Google để nhập biểu mẫu khảo sát.
               </p>
               <Button onClick={handleLinkGoogle} disabled={isLinking}>
                 {isLinking ? (
@@ -212,7 +238,7 @@ function NckhContent() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <FileUp size={18} />
-              Import Google Form
+              Nhập Google Form
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -229,12 +255,12 @@ function NckhContent() {
                 {isImporting ? (
                   <>
                     <Loader2 className="animate-spin" size={16} />
-                    <span className="ml-2">Đang import...</span>
+                    <span className="ml-2">Đang nhập...</span>
                   </>
                 ) : (
                   <>
                     <Search size={16} />
-                    <span className="ml-2">Import</span>
+                    <span className="ml-2">Nhập form</span>
                   </>
                 )}
               </Button>
@@ -246,7 +272,7 @@ function NckhContent() {
       {/* Form List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Danh sách form đã import</CardTitle>
+          <CardTitle className="text-base">Danh sách form đã nhập</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -262,8 +288,8 @@ function NckhContent() {
                 getRowKey={(item) => item.id}
                 emptyTitle="Chưa có form nào"
                 emptyDetail={googleLinked === false
-                  ? "Liên kết Google để import form đầu tiên."
-                  : "Dán URL Google Form vào ô trên để import."}
+                  ? "Liên kết Google để nhập form đầu tiên."
+                  : "Dán URL Google Form vào ô trên để nhập."}
               />
               {forms.length > 0 && (
                 <PaginationControls
@@ -290,7 +316,7 @@ export default function NckhDashboardPage() {
       fallback={
         <div className="flex min-h-[60vh] items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="animate-spin mr-2" size={18} />
-          Đang tải NCKH Dashboard...
+          Đang tải trang NCKH...
         </div>
       }
     >

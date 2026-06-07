@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { apiFetch, type NckhGoogleLinkResponse } from "@/lib/api";
@@ -14,24 +14,30 @@ function NckhCallbackContent() {
   const errorParam = searchParams.get("error");
   const [message, setMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const exchangedCodeRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Handle Google OAuth error
+    // Xử lý lỗi Google OAuth.
     if (errorParam) {
-      const msg = `Google từ chối cấp quyền: ${errorParam}`;
+      const msg = "Google từ chối cấp quyền hoặc phiên xác thực đã bị hủy.";
       setMessage(msg);
       toast.error(msg);
       const timer = setTimeout(() => router.replace("/dashboard/nckh?error=" + encodeURIComponent(msg)), 3000);
       return () => clearTimeout(timer);
     }
 
-    // No code? Redirect back
+    // Không có code thì quay lại trang NCKH.
     if (!code) {
       router.replace("/dashboard/nckh");
       return;
     }
 
-    // Exchange authorization code
+    if (exchangedCodeRef.current === code) {
+      return;
+    }
+    exchangedCodeRef.current = code;
+
+    // Đổi authorization code lấy token liên kết Google.
     setIsProcessing(true);
     apiFetch<NckhGoogleLinkResponse>("/api/v1/nckh/auth/google-link", {
       method: "POST",
@@ -47,7 +53,7 @@ function NckhCallbackContent() {
           ? "Tài khoản Google này đã được liên kết trước đó."
           : errMsg.includes("400") || errMsg.includes("invalid") || errMsg.includes("failed to exchange") || errMsg.includes("expired")
             ? "Mã xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại."
-            : `Không liên kết được: ${error.message}`;
+          : "Không liên kết được tài khoản Google. Vui lòng thử lại.";
         setMessage(msg);
         toast.error(msg);
         const timer = setTimeout(() => router.replace("/dashboard/nckh?error=" + encodeURIComponent(msg)), 4000);
@@ -74,11 +80,11 @@ function NckhCallbackContent() {
             </p>
           ) : !code && !errorParam ? (
             <p className="text-sm text-muted-foreground">
-              Không có mã xác thực. Đang quay lại NCKH Dashboard...
+              Không có mã xác thực. Đang quay lại trang NCKH...
             </p>
           ) : null}
           <p className="text-xs text-muted-foreground">
-            Bạn sẽ được tự động chuyển về trang NCKH Dashboard sau vài giây.
+            Bạn sẽ được tự động chuyển về trang NCKH sau vài giây.
           </p>
         </CardContent>
       </Card>

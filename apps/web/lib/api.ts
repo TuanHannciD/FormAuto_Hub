@@ -92,6 +92,10 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
     throw new Error(message);
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return (await response.json()) as T;
 }
 
@@ -448,7 +452,7 @@ export type NckhFormQuestion = {
 export type NckhFormItem = {
   id: string;
   googleFormId: string;
-  formUrl: string;
+  formUrl?: string;
   title: string;
   status: string;
   questionCount: number;
@@ -466,11 +470,11 @@ export type NckhFormListResponse = {
 export type NckhFormDetailResponse = {
   id: string;
   googleFormId: string;
-  formUrl: string;
+  formUrl?: string;
   title: string;
-  status: string;
+  status?: string;
   questions: NckhFormQuestion[];
-  importedAt: string;
+  importedAt?: string;
 };
 
 export type NckhImportFormRequest = {
@@ -480,9 +484,171 @@ export type NckhImportFormRequest = {
 export type NckhImportFormResponse = {
   id: string;
   googleFormId: string;
-  formUrl: string;
+  formUrl?: string;
   title: string;
   status: string;
   questionCount: number;
   importedAt: string;
+};
+
+export type NckhResearchModel = {
+  id: string;
+  formId: string;
+  name: string;
+  description?: string | null;
+  status: string;
+  formTitle: string;
+  variableCount: number;
+  hasGeneratedForm?: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type NckhResearchModelListResponse = {
+  items: NckhResearchModel[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhVariable = {
+  id: string;
+  modelId: string;
+  name: string;
+  code: string;
+  variableType: string;
+  scaleType: string;
+  scalePoint?: number | null;
+  minValue?: number | null;
+  maxValue?: number | null;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type NckhVariableListResponse = {
+  items: NckhVariable[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhMapping = {
+  id: string;
+  variableId: string;
+  modelId: string;
+  formQuestionId: string;
+  observedCode: string;
+  questionText: string;
+  questionType: string;
+  sortOrder: number;
+  createdAt: string;
+};
+
+export type NckhMappingListResponse = {
+  items: NckhMapping[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhRelation = {
+  id: string;
+  modelId: string;
+  fromVariableId: string;
+  fromVariableName: string;
+  fromVariableCode: string;
+  toVariableId: string;
+  toVariableName: string;
+  toVariableCode: string;
+  direction: string;
+  hypothesisCode: string;
+  hypothesisText: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type NckhRelationListResponse = {
+  items: NckhRelation[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhPosition = {
+  id: string;
+  nodeType: string;
+  variableId?: string | null;
+  relationId?: string | null;
+  positionX: number;
+  positionY: number;
+  updatedAt: string;
+};
+
+export type NckhPositionListResponse = {
+  items: NckhPosition[];
+};
+
+export type NckhGenerateFormResponse = {
+  formId: string;
+  googleFormId: string;
+  formUrl: string;
+  questionsCreated: number;
+  questionsUpdated: number;
+  questionsDeleted: number;
+  reimported: boolean;
+};
+
+export type NckhCollectResponsesResponse = {
+  logId: string;
+  responsesCollected: number;
+  responsesSkipped: number;
+  status: string;
+  errorMessage?: string | null;
+};
+
+export type NckhRawResponse = {
+  id: string;
+  googleResponseId: string;
+  respondentId?: string | null;
+  responseTimestamp?: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type NckhRawResponseListResponse = {
+  items: NckhRawResponse[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type NckhNormalizeResponsesResponse = {
+  respondentsProcessed: number;
+  variablesComputed: number;
+  missingDataCount: number;
+  staleDatasetsMarked: number;
+};
+
+export type NckhDatasetRow = {
+  respondentId?: string | null;
+  values: Record<string, string | number | boolean | null>;
+  isStale: boolean;
+  normalizedAt: string;
+};
+
+export type NckhDatasetListResponse = {
+  columns: string[];
+  hasStaleData: boolean;
+  items: NckhDatasetRow[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
 };
