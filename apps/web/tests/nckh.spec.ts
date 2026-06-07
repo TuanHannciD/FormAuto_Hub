@@ -575,15 +575,31 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(page.getByText("Sơ đồ quan hệ mô hình")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText("Chất lượng dịch vụ").last()).toBeVisible();
     await expect(page.getByText("Sự hài lòng").last()).toBeVisible();
-    await expect(page.getByText("SER -> SAT").first()).toBeVisible();
+    await expect(page.locator(`[data-testid="rf__node-Relation:${MOCK_RELATION.id}"]:visible`)).toContainText("SER -> SAT");
     await expect(page.getByText("3 vị trí đã lưu.")).toBeVisible();
     await expect(page.getByText("Trạng thái sơ đồ")).toBeVisible();
 
+    const satNode = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE.id}"]:visible`);
+    await satNode.scrollIntoViewIfNeeded();
+    const satBox = await satNode.boundingBox();
+    expect(satBox).not.toBeNull();
+    await page.mouse.move(satBox!.x + satBox!.width / 2, satBox!.y + satBox!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(satBox!.x + satBox!.width / 2 + 96, satBox!.y + satBox!.height / 2 + 36, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(async () => {
+      const movedBox = await satNode.boundingBox();
+      return Boolean(movedBox && Math.abs(movedBox.x - satBox!.x) > 10);
+    }).toBe(true);
+
     await page.getByRole("button", { name: "Lưu bố cục" }).click();
     await expect.poll(() => {
-      const payload = savePositionsPayload as { positions?: Array<{ nodeType: string; variableId?: string | null; relationId?: string | null }> } | null;
+      const payload = savePositionsPayload as { positions?: Array<{ nodeType: string; variableId?: string | null; relationId?: string | null; positionX?: number; positionY?: number }> } | null;
+      const movedSat = payload?.positions?.find((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id);
       return Boolean(
-        payload?.positions?.some((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id)
+        movedSat
+        && typeof movedSat.positionX === "number"
+        && movedSat.positionX !== 264
         && payload.positions.some((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE_2.id)
         && payload.positions.some((item) => item.nodeType === "Relation" && item.relationId === MOCK_RELATION.id)
       );

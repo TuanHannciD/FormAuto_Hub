@@ -3,6 +3,18 @@
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
+  Background,
+  Controls,
+  MiniMap,
+  MarkerType,
+  ReactFlow,
+  applyNodeChanges,
+  type Edge,
+  type Node,
+  type NodeChange
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import {
   ArrowLeft,
   CheckCircle2,
   CircleDot,
@@ -74,6 +86,8 @@ type DatasetPreviewRow = NckhDatasetListResponse["items"][number] & {
   previewKey: string;
 };
 
+type CanvasPosition = { x: number; y: number };
+
 const tabs: Array<{ id: WorkspaceTab; label: string }> = [
   { id: "overview", label: "Tổng quan" },
   { id: "variables", label: "Biến" },
@@ -113,6 +127,8 @@ const canvasNodeWidth = 184;
 const canvasNodeHeight = 76;
 const canvasRelationWidth = 176;
 const canvasRelationHeight = 68;
+const variableNodeType = "Variable";
+const relationNodeType = "Relation";
 
 const questionTypeLabels: Record<string, string> = {
   Likert: "Thang Likert",
@@ -248,12 +264,39 @@ export default function NckhFormWorkspacePage() {
   const [mappingQuestionSearch, setMappingQuestionSearch] = useState("");
   const [relationFromSearch, setRelationFromSearch] = useState("");
   const [relationToSearch, setRelationToSearch] = useState("");
+  const [canvasPositions, setCanvasPositions] = useState<Record<string, CanvasPosition>>({});
 
   const selectedModel = useMemo(
     () => models.find((item) => item.id === selectedModelId) ?? null,
     [models, selectedModelId]
   );
   const canEditCanvas = selectedModel?.status === "Draft";
+
+  useEffect(() => {
+    const nextPositions: Record<string, CanvasPosition> = {};
+    variables.forEach((variable, index) => {
+      const saved = positions.find((item) => item.nodeType === variableNodeType && item.variableId === variable.id);
+      nextPositions[canvasNodeId(variableNodeType, variable.id)] = saved ? { x: saved.positionX, y: saved.positionY } : defaultVariablePosition(index);
+    });
+    relations.forEach((relation, index) => {
+      const saved = positions.find((item) => item.nodeType === relationNodeType && item.relationId === relation.id);
+      nextPositions[canvasNodeId(relationNodeType, relation.id)] = saved ? { x: saved.positionX, y: saved.positionY } : defaultRelationPosition(index);
+    });
+    setCanvasPositions(nextPositions);
+  }, [positions, relations, variables]);
+
+  const onCanvasNodesChange = useCallback((changes: NodeChange[]) => {
+    if (!canEditCanvas) return;
+    setCanvasPositions((current) => {
+      const nodeSnapshot = Object.entries(current).map(([id, position]) => ({ id, position, data: {} }) satisfies Node);
+      const updatedNodes = applyNodeChanges(changes, nodeSnapshot);
+      const next = { ...current };
+      updatedNodes.forEach((node) => {
+        next[node.id] = { x: node.position.x, y: node.position.y };
+      });
+      return next;
+    });
+  }, [canEditCanvas]);
 
   const beginPendingAction = useCallback((action: PendingAction) => {
     if (pendingActionRef.current) return false;
@@ -588,18 +631,18 @@ export default function NckhFormWorkspacePage() {
     }
     if (!beginPendingAction("savePositions")) return;
     const variablePositions = variables.map((variable, index) => ({
-      nodeType: "Variable",
+      nodeType: variableNodeType,
       variableId: variable.id,
       relationId: null,
-      positionX: defaultVariablePosition(index).x,
-      positionY: defaultVariablePosition(index).y
+      positionX: currentCanvasPosition(variableNodeType, variable.id, index).x,
+      positionY: currentCanvasPosition(variableNodeType, variable.id, index).y
     }));
     const relationPositions = relations.map((relation, index) => ({
-      nodeType: "Relation",
+      nodeType: relationNodeType,
       variableId: null,
       relationId: relation.id,
-      positionX: defaultRelationPosition(index).x,
-      positionY: defaultRelationPosition(index).y
+      positionX: currentCanvasPosition(relationNodeType, relation.id, index).x,
+      positionY: currentCanvasPosition(relationNodeType, relation.id, index).y
     }));
     try {
       await apiFetch<NckhPositionListResponse>(`/api/v1/nckh/models/${selectedModelId}/positions`, {
@@ -629,13 +672,23 @@ export default function NckhFormWorkspacePage() {
     };
   }
 
+  function canvasNodeId(nodeType: string, id: string) {
+    return `${nodeType}:${id}`;
+  }
+
+  function currentCanvasPosition(nodeType: string, id: string, index: number) {
+    const key = canvasNodeId(nodeType, id);
+    if (canvasPositions[key]) return canvasPositions[key];
+    return nodeType === variableNodeType ? savedVariablePosition(id, index) : savedRelationPosition(id, index);
+  }
+
   function savedVariablePosition(variableId: string, index: number) {
-    const saved = positions.find((item) => item.nodeType === "Variable" && item.variableId === variableId);
+    const saved = positions.find((item) => item.nodeType === variableNodeType && item.variableId === variableId);
     return saved ? { x: saved.positionX, y: saved.positionY } : defaultVariablePosition(index);
   }
 
   function savedRelationPosition(relationId: string, index: number) {
-    const saved = positions.find((item) => item.nodeType === "Relation" && item.relationId === relationId);
+    const saved = positions.find((item) => item.nodeType === relationNodeType && item.relationId === relationId);
     return saved ? { x: saved.positionX, y: saved.positionY } : defaultRelationPosition(index);
   }
 
@@ -937,24 +990,77 @@ export default function NckhFormWorkspacePage() {
   }
 
   function renderCanvasPanel() {
-    const variableNodes = variables.map((variable, index) => ({
-      variable,
-      position: savedVariablePosition(variable.id, index)
-    }));
-    const relationNodes = relations.map((relation, index) => ({
-      relation,
-      position: savedRelationPosition(relation.id, index)
-    }));
-    const canvasWidth = Math.max(
-      760,
-      ...variableNodes.map((node) => node.position.x + canvasNodeWidth + 48),
-      ...relationNodes.map((node) => node.position.x + canvasRelationWidth + 48)
-    );
-    const canvasHeight = Math.max(
-      420,
-      ...variableNodes.map((node) => node.position.y + canvasNodeHeight + 48),
-      ...relationNodes.map((node) => node.position.y + canvasRelationHeight + 48)
-    );
+    const flowNodes: Node[] = [
+      ...variables.map((variable, index) => ({
+        id: canvasNodeId(variableNodeType, variable.id),
+        position: currentCanvasPosition(variableNodeType, variable.id, index),
+        draggable: canEditCanvas,
+        width: canvasNodeWidth,
+        height: canvasNodeHeight,
+        measured: { width: canvasNodeWidth, height: canvasNodeHeight },
+        data: {
+          label: (
+            <div className="w-[184px] rounded-md border border-cyan-200 bg-white px-3 py-3 text-left shadow-sm">
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-mono text-xs font-bold text-primary">{variable.code}</span>
+                <Badge tone="info">{displayVariableType(variable.variableType)}</Badge>
+              </div>
+              <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5">{variable.name}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{displayScaleType(variable.scaleType)}{variable.scalePoint ? ` ${variable.scalePoint}` : ""}</p>
+            </div>
+          )
+        },
+        style: { width: canvasNodeWidth, height: canvasNodeHeight, background: "transparent", border: 0, padding: 0, boxShadow: "none" }
+      })),
+      ...relations.map((relation, index) => ({
+        id: canvasNodeId(relationNodeType, relation.id),
+        position: currentCanvasPosition(relationNodeType, relation.id, index),
+        draggable: canEditCanvas,
+        width: canvasRelationWidth,
+        height: canvasRelationHeight,
+        measured: { width: canvasRelationWidth, height: canvasRelationHeight },
+        data: {
+          label: (
+            <div className="w-[176px] rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-left shadow-sm">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-xs font-bold text-amber-700">{relation.hypothesisCode}</span>
+                <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
+              </div>
+              <p className="mt-2 text-xs font-semibold text-slate-700">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
+            </div>
+          )
+        },
+        style: { width: canvasRelationWidth, height: canvasRelationHeight, background: "transparent", border: 0, padding: 0, boxShadow: "none" }
+      }))
+    ];
+    const flowEdges: Edge[] = relations.flatMap((relation) => {
+      const relationNodeId = canvasNodeId(relationNodeType, relation.id);
+      const fromNodeId = canvasNodeId(variableNodeType, relation.fromVariableId);
+      const toNodeId = canvasNodeId(variableNodeType, relation.toVariableId);
+      const positive = relation.direction === "Positive";
+      const edgeColor = positive ? "#059669" : "#d97706";
+      return [
+        {
+          id: `${relation.id}:from`,
+          source: fromNodeId,
+          target: relationNodeId,
+          type: "smoothstep",
+          animated: canEditCanvas,
+          style: { stroke: edgeColor, strokeWidth: 2, strokeDasharray: positive ? undefined : "6 5" },
+          markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
+        },
+        {
+          id: `${relation.id}:to`,
+          source: relationNodeId,
+          target: toNodeId,
+          type: "smoothstep",
+          animated: canEditCanvas,
+          label: relation.hypothesisCode,
+          style: { stroke: edgeColor, strokeWidth: 2, strokeDasharray: positive ? undefined : "6 5" },
+          markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
+        }
+      ];
+    });
     const positionCount = positions.length;
 
     return (
@@ -1024,62 +1130,40 @@ export default function NckhFormWorkspacePage() {
               {variables.length === 0 ? (
                 <EmptyState title="Chưa có biến để vẽ sơ đồ" detail="Thêm biến nghiên cứu trước khi tạo quan hệ và lưu vị trí nút." />
               ) : (
-                <div className="overflow-auto rounded-lg border border-border/80 bg-white/70 p-3">
-                  <div className="relative rounded-lg bg-[linear-gradient(90deg,rgba(14,116,144,0.07)_1px,transparent_1px),linear-gradient(0deg,rgba(14,116,144,0.07)_1px,transparent_1px)] bg-[size:36px_36px]" style={{ width: canvasWidth, height: canvasHeight }}>
-                    {relations.map((relation, index) => {
-                      const fromIndex = variables.findIndex((item) => item.id === relation.fromVariableId);
-                      const toIndex = variables.findIndex((item) => item.id === relation.toVariableId);
-                      if (fromIndex < 0 || toIndex < 0) return null;
-                      const fromPosition = savedVariablePosition(relation.fromVariableId, fromIndex);
-                      const toPosition = savedVariablePosition(relation.toVariableId, toIndex);
-                      const startX = fromPosition.x + canvasNodeWidth;
-                      const startY = fromPosition.y + canvasNodeHeight / 2;
-                      const endX = toPosition.x;
-                      const endY = toPosition.y + canvasNodeHeight / 2;
-                      const left = Math.min(startX, endX);
-                      const top = Math.min(startY, endY);
-                      const width = Math.max(Math.abs(endX - startX), 1);
-                      const height = Math.max(Math.abs(endY - startY), 1);
-                      const positive = relation.direction === "Positive";
-                      return (
-                        <svg aria-hidden="true" className="pointer-events-none absolute overflow-visible" height={height + 32} key={`edge-${relation.id}`} style={{ left, top: top - 16 }} width={width + 32}>
-                          <defs>
-                            <marker id={`arrow-${relation.id}`} markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
-                              <path d="M0,0 L8,4 L0,8 Z" fill={positive ? "#059669" : "#d97706"} />
-                            </marker>
-                          </defs>
-                          <path
-                            d={`M ${startX <= endX ? 0 : width} 16 C ${width / 2} 16, ${width / 2} ${height + 16}, ${startX <= endX ? width : 0} ${height + 16}`}
-                            fill="none"
-                            markerEnd={`url(#arrow-${relation.id})`}
-                            stroke={positive ? "#059669" : "#d97706"}
-                            strokeDasharray={positive ? undefined : "6 5"}
-                            strokeWidth="2"
-                          />
-                          <text className="fill-slate-500 text-[11px] font-semibold" x={Math.max(8, width / 2 - 14)} y={Math.max(12, height / 2 + 12)}>{relation.hypothesisCode || `H${index + 1}`}</text>
-                        </svg>
-                      );
-                    })}
-                    {variableNodes.map(({ variable, position }) => (
-                      <div className="absolute rounded-lg border border-cyan-200 bg-white px-3 py-3 shadow-sm" key={variable.id} style={{ left: position.x, top: position.y, width: canvasNodeWidth, minHeight: canvasNodeHeight }}>
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-primary">{variable.code}</span>
-                          <Badge tone="info">{displayVariableType(variable.variableType)}</Badge>
-                        </div>
-                        <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5">{variable.name}</p>
-                        <p className="mt-1 text-xs text-muted-foreground">{displayScaleType(variable.scaleType)}{variable.scalePoint ? ` ${variable.scalePoint}` : ""}</p>
-                      </div>
-                    ))}
-                    {relationNodes.map(({ relation, position }) => (
-                      <div className="absolute rounded-lg border border-amber-200 bg-amber-50/95 px-3 py-2 shadow-sm" key={relation.id} style={{ left: position.x, top: position.y, width: canvasRelationWidth, minHeight: canvasRelationHeight }}>
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-amber-700">{relation.hypothesisCode}</span>
-                          <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
-                        </div>
-                        <p className="mt-2 text-xs font-semibold text-slate-700">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="h-[520px] overflow-hidden rounded-lg border border-border/80 bg-white/70">
+                  <ReactFlow
+                    colorMode="light"
+                    defaultViewport={{ x: 16, y: 24, zoom: 1 }}
+                    edges={flowEdges}
+                    fitView
+                    fitViewOptions={{ padding: 0.18 }}
+                    maxZoom={1.5}
+                    minZoom={0.45}
+                    nodes={flowNodes}
+                    nodesDraggable={canEditCanvas}
+                    nodesConnectable={false}
+                    onNodeDrag={(_, node) => {
+                      if (!canEditCanvas) return;
+                      setCanvasPositions((current) => ({
+                        ...current,
+                        [node.id]: { x: node.position.x, y: node.position.y }
+                      }));
+                    }}
+                    onNodeDragStop={(_, node) => {
+                      if (!canEditCanvas) return;
+                      setCanvasPositions((current) => ({
+                        ...current,
+                        [node.id]: { x: node.position.x, y: node.position.y }
+                      }));
+                    }}
+                    onNodesChange={onCanvasNodesChange}
+                    panOnDrag={false}
+                    proOptions={{ hideAttribution: true }}
+                  >
+                    <Background color="#d8eef3" gap={36} />
+                    <Controls showInteractive={false} />
+                    <MiniMap nodeColor={(node) => node.id.startsWith(relationNodeType) ? "#f59e0b" : "#06b6d4"} pannable zoomable />
+                  </ReactFlow>
                 </div>
               )}
             </div>

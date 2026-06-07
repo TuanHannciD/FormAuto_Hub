@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/eslint-plugin-next": "^15.5.18",
+    "@xyflow/react": "^12.11.0",
     "clsx": "2.1.1",
     "lucide-react": "0.468.0",
     "next": "^15.5.18",
