@@ -550,6 +550,53 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(page.getByPlaceholder("Mã quan sát")).toBeVisible();
   });
 
+  test("normalizes Likert variable payload from the canvas popup", async ({ page }) => {
+    let createVariablePayload: { scaleType?: string; scalePoint?: number | null; minValue?: number | null; maxValue?: number | null } | null = null;
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/variables`, async (route) => {
+      if (route.request().method() !== "POST") {
+        await route.continue();
+        return;
+      }
+
+      createVariablePayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 201,
+        contentType: "application/json",
+        body: JSON.stringify({
+          ...MOCK_VARIABLE,
+          id: "99999999-aaaa-bbbb-cccc-999999999999",
+          name: "Cột sống tôi",
+          code: "CST",
+          variableType: "Independent",
+          scaleType: "Likert",
+          scalePoint: 5,
+          minValue: null,
+          maxValue: null,
+          sortOrder: 1
+        })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await expect(page.getByRole("button", { name: "Sơ đồ quan hệ" })).toBeVisible({ timeout: 10000 });
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+    await page.getByRole("button", { name: "Biến", exact: true }).click();
+
+    await page.getByPlaceholder("Tên biến").fill("Cột sống tôi");
+    await page.getByPlaceholder("Mã biến").fill("CST");
+    await page.getByPlaceholder("Điểm thang đo").fill("5");
+    await expect(page.getByPlaceholder("Giá trị nhỏ nhất")).toBeDisabled();
+    await expect(page.getByPlaceholder("Giá trị lớn nhất")).toBeDisabled();
+    await page.getByRole("button", { name: "Thêm" }).click();
+
+    await expect.poll(() => createVariablePayload).toMatchObject({
+      scaleType: "Likert",
+      scalePoint: 5,
+      minValue: null,
+      maxValue: null
+    });
+  });
+
   test("renders Phase 9 visual canvas using existing relation and position APIs", async ({ page }) => {
     let savePositionsPayload: unknown = null;
     let createRelationPayload: { fromVariableId?: string; toVariableId?: string; direction?: string } | null = null;

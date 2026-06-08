@@ -102,7 +102,7 @@ const tabs: Array<{ id: WorkspaceTab; label: string }> = [
 ];
 
 const variableTypes = ["Independent", "Dependent", "Mediator", "Moderator", "Control"];
-const scaleTypes = ["Likert", "Ordinal", "Nominal", "Text", "Numeric"];
+const scaleTypes = ["Likert", "Ordinal", "Nominal", "Scale"];
 const relationDirections = ["Positive", "Negative"];
 
 const variableTypeLabels: Record<string, string> = {
@@ -117,8 +117,7 @@ const scaleTypeLabels: Record<string, string> = {
   Likert: "Thang Likert",
   Ordinal: "Thứ bậc",
   Nominal: "Định danh",
-  Text: "Văn bản",
-  Numeric: "Số"
+  Scale: "Thang tuyến tính"
 };
 
 const relationDirectionLabels: Record<string, string> = {
@@ -203,6 +202,27 @@ function filterDropdownOptions(options: DropdownOption[], searchValue: string) {
 function readableNckhError(error: unknown, fallback: string) {
   const message = readableError(error, fallback);
   const lower = message.toLowerCase();
+  if (lower.includes("variable code") && lower.includes("already exists")) {
+    return "Mã biến đã tồn tại trong mô hình này.";
+  }
+  if (lower.includes("scale type is invalid")) {
+    return "Loại thang đo không hợp lệ theo contract NCKH hiện tại.";
+  }
+  if (lower.includes("likert scalepoint")) {
+    return "Điểm thang Likert phải nằm trong khoảng 2 đến 10.";
+  }
+  if (lower.includes("scale scaletype requires minvalue and maxvalue")) {
+    return "Thang tuyến tính cần đủ giá trị nhỏ nhất và lớn nhất.";
+  }
+  if (lower.includes("scale scaletype must not include scalepoint")) {
+    return "Thang tuyến tính không dùng trường điểm thang đo.";
+  }
+  if (lower.includes("minvalue") && lower.includes("maxvalue")) {
+    return "Giá trị nhỏ nhất và lớn nhất của thang đo chưa hợp lệ.";
+  }
+  if (lower.includes("nominal and ordinal")) {
+    return "Thang định danh và thứ bậc không dùng điểm thang đo hoặc min/max.";
+  }
   if (lower.includes("scope") || lower.includes("consent") || lower.includes("permission") || lower.includes("forbidden") || lower.includes("403")) {
     return "Tài khoản Google chưa cấp đủ quyền cần thiết cho thao tác này.";
   }
@@ -216,9 +236,45 @@ function readableNckhError(error: unknown, fallback: string) {
     return "Không tìm thấy dữ liệu NCKH cần thao tác.";
   }
   if (lower.includes("invalid") || lower.includes("expired")) {
-    return "Dữ liệu xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.";
+    return "Dữ liệu gửi lên chưa hợp lệ. Vui lòng kiểm tra lại các trường trong form.";
   }
   return /[à-ỹđ]/i.test(message) ? message : fallback;
+}
+
+function toOptionalNumber(value: string) {
+  if (!value.trim()) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : Number.NaN;
+}
+
+function buildVariableScalePayload(scaleType: string, scalePointValue: string, minValueValue: string, maxValueValue: string) {
+  if (scaleType === "Likert") {
+    const scalePoint = toOptionalNumber(scalePointValue);
+    if (scalePoint === null || !Number.isInteger(scalePoint) || scalePoint < 2 || scalePoint > 10) {
+      return { error: "Điểm thang Likert phải là số nguyên từ 2 đến 10." };
+    }
+
+    return { scalePoint, minValue: null, maxValue: null };
+  }
+
+  if (scaleType === "Scale") {
+    const minValue = toOptionalNumber(minValueValue);
+    const maxValue = toOptionalNumber(maxValueValue);
+    if (minValue === null || maxValue === null || Number.isNaN(minValue) || Number.isNaN(maxValue)) {
+      return { error: "Thang tuyến tính cần đủ giá trị nhỏ nhất và lớn nhất." };
+    }
+    if (minValue >= maxValue) {
+      return { error: "Giá trị nhỏ nhất phải nhỏ hơn giá trị lớn nhất." };
+    }
+
+    return { scalePoint: null, minValue, maxValue };
+  }
+
+  if (scaleType === "Nominal" || scaleType === "Ordinal") {
+    return { scalePoint: null, minValue: null, maxValue: null };
+  }
+
+  return { error: "Loại thang đo không hợp lệ theo contract NCKH hiện tại." };
 }
 
 export default function NckhFormWorkspacePage() {
@@ -519,6 +575,16 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể thêm biến khi mô hình còn là bản nháp.");
       return;
     }
+    const scalePayload = buildVariableScalePayload(
+      variableDraft.scaleType,
+      variableDraft.scalePoint,
+      variableDraft.minValue,
+      variableDraft.maxValue
+    );
+    if (scalePayload.error) {
+      toast.error(scalePayload.error);
+      return;
+    }
     if (!beginPendingAction("createVariable")) return;
     try {
       await apiFetch<NckhVariable>(`/api/v1/nckh/models/${selectedModelId}/variables`, {
@@ -528,9 +594,9 @@ export default function NckhFormWorkspacePage() {
           code: variableDraft.code.trim(),
           variableType: variableDraft.variableType,
           scaleType: variableDraft.scaleType,
-          scalePoint: variableDraft.scalePoint ? Number(variableDraft.scalePoint) : null,
-          minValue: variableDraft.minValue ? Number(variableDraft.minValue) : null,
-          maxValue: variableDraft.maxValue ? Number(variableDraft.maxValue) : null,
+          scalePoint: scalePayload.scalePoint,
+          minValue: scalePayload.minValue,
+          maxValue: scalePayload.maxValue,
           sortOrder: Number(variableDraft.sortOrder || "1")
         }
       });
@@ -1019,10 +1085,21 @@ export default function NckhFormWorkspacePage() {
             <Input disabled={!canEditCanvas} placeholder="Tên biến" value={variableDraft.name} onChange={(event) => setVariableDraft({ ...variableDraft, name: event.target.value })} required />
             <Input disabled={!canEditCanvas} placeholder="Mã biến" value={variableDraft.code} onChange={(event) => setVariableDraft({ ...variableDraft, code: event.target.value.toUpperCase() })} required />
             <DropdownSelect disabled={!canEditCanvas} value={variableDraft.variableType} options={variableTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, variableType: value })} />
-            <DropdownSelect disabled={!canEditCanvas} value={variableDraft.scaleType} options={scaleTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, scaleType: value })} />
-            <Input disabled={!canEditCanvas} placeholder="Điểm thang đo" type="number" value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} />
-            <Input disabled={!canEditCanvas} placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} />
-            <Input disabled={!canEditCanvas} placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} />
+            <DropdownSelect
+              disabled={!canEditCanvas}
+              value={variableDraft.scaleType}
+              options={scaleTypeOptions}
+              onChange={(value) => setVariableDraft((draft) => ({
+                ...draft,
+                scaleType: value,
+                scalePoint: value === "Likert" ? draft.scalePoint || "5" : "",
+                minValue: value === "Scale" ? draft.minValue : "",
+                maxValue: value === "Scale" ? draft.maxValue : ""
+              }))}
+            />
+            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Likert"} placeholder="Điểm thang đo" type="number" min={2} max={10} step={1} value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} />
+            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} />
+            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} />
             <div className="flex gap-2"><Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={variableDraft.sortOrder} onChange={(event) => setVariableDraft({ ...variableDraft, sortOrder: event.target.value })} /><Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createVariable") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createVariable") ? "Đang thêm..." : "Thêm"}</span></Button></div>
           </form>
           <BaseTable columns={variableColumns} items={variables} getRowKey={(item) => item.id} emptyTitle="Chưa có biến" emptyDetail="Thêm biến để tạo ánh xạ, sơ đồ quan hệ và bộ dữ liệu." />
