@@ -182,6 +182,21 @@ const MOCK_VARIABLE_2 = {
   updatedAt: "2026-06-05T08:12:00Z"
 };
 
+const MOCK_VARIABLE_3 = {
+  id: "99999999-aaaa-bbbb-cccc-999999999999",
+  modelId: MOCK_MODEL.id,
+  name: "Cột sống tôi",
+  code: "CST",
+  variableType: "Independent",
+  scaleType: "Likert",
+  scalePoint: 5,
+  minValue: null,
+  maxValue: null,
+  sortOrder: 1,
+  createdAt: "2026-06-05T08:14:00Z",
+  updatedAt: "2026-06-05T08:14:00Z"
+};
+
 const MOCK_RELATION = {
   id: "77777777-7777-7777-7777-777777777777",
   modelId: MOCK_MODEL.id,
@@ -563,16 +578,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
         status: 201,
         contentType: "application/json",
         body: JSON.stringify({
-          ...MOCK_VARIABLE,
-          id: "99999999-aaaa-bbbb-cccc-999999999999",
-          name: "Cột sống tôi",
-          code: "CST",
-          variableType: "Independent",
-          scaleType: "Likert",
-          scalePoint: 5,
-          minValue: null,
-          maxValue: null,
-          sortOrder: 1
+          ...MOCK_VARIABLE_3
         })
       });
     });
@@ -595,6 +601,36 @@ test.describe("NCKH — Phase 7 Workspace", () => {
       minValue: null,
       maxValue: null
     });
+  });
+
+  test("places unsaved new variables on a visible canvas slot", async ({ page }) => {
+    await page.route(`**/api/v1/nckh/models/${MOCK_MODEL.id}/variables?page=1&pageSize=100`, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          items: [MOCK_VARIABLE_3, MOCK_VARIABLE, MOCK_VARIABLE_2],
+          page: 1,
+          pageSize: 100,
+          totalItems: 3,
+          totalPages: 1
+        })
+      });
+    });
+
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await expect(page.getByRole("button", { name: "Sơ đồ quan hệ" })).toBeVisible({ timeout: 10000 });
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+
+    const newNode = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE_3.id}"]:visible`);
+    const savedNode = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE_2.id}"]:visible`);
+    await expect(page.getByText("Cột sống tôi")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("3", { exact: true }).first()).toBeVisible();
+    const newBox = await newNode.boundingBox();
+    const savedBox = await savedNode.boundingBox();
+    expect(newBox).not.toBeNull();
+    expect(savedBox).not.toBeNull();
+    expect(Math.abs(newBox!.x - savedBox!.x) > 20 || Math.abs(newBox!.y - savedBox!.y) > 20).toBe(true);
   });
 
   test("renders Phase 9 visual canvas using existing relation and position APIs", async ({ page }) => {

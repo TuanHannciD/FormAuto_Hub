@@ -67,7 +67,7 @@ Model response hiện có thêm `hasGeneratedForm`. Trường này là `true` kh
 | POST | /api/v1/nckh/models/{modelId}/variables | Thêm biến |
 | GET | /api/v1/nckh/models/{modelId}/variables | Danh sách biến |
 | PUT | /api/v1/nckh/variables/{variableId} | Sửa biến |
-| DELETE | /api/v1/nckh/variables/{variableId} | Xóa biến (cascade mapping) |
+| DELETE | /api/v1/nckh/variables/{variableId} | Xóa biến; cascade mapping, quan hệ liên quan và vị trí canvas liên quan |
 
 Ghi chú: warning tác động data khi sửa biến vẫn deferred cho đến khi các phase data sau này được approve.
 

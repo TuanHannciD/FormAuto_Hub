@@ -273,7 +273,7 @@ Response 200:
 ---
 
 #### DELETE /api/v1/nckh/variables/{variableId}
-Cascade delete mappings. Do not pull in node-position behavior from Phase 3.
+Cascade delete mappings, model relations that reference the variable, and canvas positions for the deleted variable or deleted relations.
 
 ---
 

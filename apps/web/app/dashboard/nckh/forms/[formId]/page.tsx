@@ -92,6 +92,7 @@ type DatasetPreviewRow = NckhDatasetListResponse["items"][number] & {
 
 type CanvasPosition = { x: number; y: number };
 type CanvasModal = "variables" | "mapping" | null;
+type CanvasNodeSize = { width: number; height: number };
 
 const tabs: Array<{ id: WorkspaceTab; label: string }> = [
   { id: "overview", label: "Tổng quan" },
@@ -131,6 +132,27 @@ const canvasRelationWidth = 176;
 const canvasRelationHeight = 68;
 const variableNodeType = "Variable";
 const relationNodeType = "Relation";
+
+function nextAvailableCanvasPosition(
+  currentPositions: Record<string, CanvasPosition>,
+  positionForIndex: (index: number) => CanvasPosition,
+  size: CanvasNodeSize
+) {
+  for (let index = 0; index < 80; index += 1) {
+    const candidate = positionForIndex(index);
+    if (!Object.values(currentPositions).some((position) => canvasPositionsOverlap(candidate, size, position))) {
+      return candidate;
+    }
+  }
+
+  return positionForIndex(Object.keys(currentPositions).length);
+}
+
+function canvasPositionsOverlap(candidate: CanvasPosition, candidateSize: CanvasNodeSize, existing: CanvasPosition) {
+  const padding = 24;
+  return Math.abs(candidate.x - existing.x) < candidateSize.width + padding
+    && Math.abs(candidate.y - existing.y) < candidateSize.height + padding;
+}
 
 const questionTypeLabels: Record<string, string> = {
   Likert: "Thang Likert",
@@ -334,13 +356,39 @@ export default function NckhFormWorkspacePage() {
 
   useEffect(() => {
     const nextPositions: Record<string, CanvasPosition> = {};
-    variables.forEach((variable, index) => {
+    const unsavedVariables: NckhVariable[] = [];
+    const unsavedRelations: NckhRelation[] = [];
+
+    variables.forEach((variable) => {
       const saved = positions.find((item) => item.nodeType === variableNodeType && item.variableId === variable.id);
-      nextPositions[canvasNodeId(variableNodeType, variable.id)] = saved ? { x: saved.positionX, y: saved.positionY } : defaultVariablePosition(index);
+      if (saved) {
+        nextPositions[canvasNodeId(variableNodeType, variable.id)] = { x: saved.positionX, y: saved.positionY };
+      } else {
+        unsavedVariables.push(variable);
+      }
     });
-    relations.forEach((relation, index) => {
+    relations.forEach((relation) => {
       const saved = positions.find((item) => item.nodeType === relationNodeType && item.relationId === relation.id);
-      nextPositions[canvasNodeId(relationNodeType, relation.id)] = saved ? { x: saved.positionX, y: saved.positionY } : defaultRelationPosition(index);
+      if (saved) {
+        nextPositions[canvasNodeId(relationNodeType, relation.id)] = { x: saved.positionX, y: saved.positionY };
+      } else {
+        unsavedRelations.push(relation);
+      }
+    });
+
+    unsavedVariables.forEach((variable) => {
+      nextPositions[canvasNodeId(variableNodeType, variable.id)] = nextAvailableCanvasPosition(
+        nextPositions,
+        defaultVariablePosition,
+        { width: canvasNodeWidth, height: canvasNodeHeight }
+      );
+    });
+    unsavedRelations.forEach((relation) => {
+      nextPositions[canvasNodeId(relationNodeType, relation.id)] = nextAvailableCanvasPosition(
+        nextPositions,
+        defaultRelationPosition,
+        { width: canvasRelationWidth, height: canvasRelationHeight }
+      );
     });
     setCanvasPositions(nextPositions);
   }, [positions, relations, variables]);

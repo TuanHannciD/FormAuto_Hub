@@ -591,14 +591,18 @@ public sealed class ResearchFormService(
             return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.NotFound);
         }
 
-        var hasRelations = await dbContext.ModelRelations.AnyAsync(
-            item => item.FromVariableId == variable.Id || item.ToVariableId == variable.Id,
-            cancellationToken);
-        if (hasRelations)
+        var relatedRelations = await dbContext.ModelRelations
+            .Where(item => item.FromVariableId == variable.Id || item.ToVariableId == variable.Id)
+            .ToListAsync(cancellationToken);
+        var relatedRelationIds = relatedRelations.Select(item => item.Id).ToList();
+
+        if (relatedRelationIds.Count > 0)
         {
-            return new ResearchFormServiceResult<bool>(
-                ResearchFormServiceStatus.Conflict,
-                Message: "Variable cannot be deleted while model relations reference it.");
+            var relationPositions = await dbContext.NodePositions
+                .Where(item => item.RelationId.HasValue && relatedRelationIds.Contains(item.RelationId.Value))
+                .ToListAsync(cancellationToken);
+            dbContext.NodePositions.RemoveRange(relationPositions);
+            dbContext.ModelRelations.RemoveRange(relatedRelations);
         }
 
         var variablePositions = await dbContext.NodePositions

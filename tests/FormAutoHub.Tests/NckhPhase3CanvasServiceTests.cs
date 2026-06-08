@@ -139,22 +139,32 @@ public sealed class NckhPhase3CanvasServiceTests
     }
 
     [Fact]
-    public async Task DeleteVariableAsync_ReturnsConflictWhenRelationReferencesVariable()
+    public async Task DeleteVariableAsync_CascadesRelationsAndCanvasPositions()
     {
         await using var context = CreateContext();
         var seed = await SeedDraftModelAsync(context);
         var canvasService = new ResearchCanvasService(context);
         var formService = CreateResearchFormService(context);
-        await canvasService.CreateRelationAsync(
+        var relation = await canvasService.CreateRelationAsync(
             TestUserId,
             seed.ModelId,
             new NckhCreateRelationRequest(seed.FromVariableId, seed.ToVariableId, "Positive", 1),
             CancellationToken.None);
+        await canvasService.SavePositionsAsync(
+            TestUserId,
+            seed.ModelId,
+            new NckhSavePositionsRequest([
+                new NckhSavePositionItem("Variable", seed.FromVariableId, null, 10, 20),
+                new NckhSavePositionItem("Relation", null, relation.Value!.Id, 30, 40)
+            ]),
+            CancellationToken.None);
 
         var result = await formService.DeleteVariableAsync(TestUserId, seed.FromVariableId, CancellationToken.None);
 
-        Assert.Equal(ResearchFormServiceStatus.Conflict, result.Status);
-        Assert.Equal(2, await context.ResearchVariables.CountAsync());
+        Assert.Equal(ResearchFormServiceStatus.Success, result.Status);
+        Assert.Single(await context.ResearchVariables.ToListAsync());
+        Assert.Empty(await context.ModelRelations.ToListAsync());
+        Assert.Empty(await context.NodePositions.ToListAsync());
     }
 
     private static readonly Guid TestUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
