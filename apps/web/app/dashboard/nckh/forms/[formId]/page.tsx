@@ -7,8 +7,11 @@ import {
   Controls,
   MiniMap,
   MarkerType,
+  Handle,
+  Position,
   ReactFlow,
   applyNodeChanges,
+  type Connection,
   type Edge,
   type Node,
   type NodeChange
@@ -73,6 +76,7 @@ type PendingAction =
   | "createMapping"
   | "deleteMapping"
   | "createRelation"
+  | "updateRelation"
   | "savePositions"
   | "deleteRelation"
   | "generateForm"
@@ -87,11 +91,10 @@ type DatasetPreviewRow = NckhDatasetListResponse["items"][number] & {
 };
 
 type CanvasPosition = { x: number; y: number };
+type CanvasModal = "variables" | "mapping" | null;
 
 const tabs: Array<{ id: WorkspaceTab; label: string }> = [
   { id: "overview", label: "Tổng quan" },
-  { id: "variables", label: "Biến" },
-  { id: "mapping", label: "Ánh xạ" },
   { id: "canvas", label: "Sơ đồ quan hệ" },
   { id: "generate", label: "Tạo form" },
   { id: "data", label: "Dữ liệu" },
@@ -227,6 +230,7 @@ export default function NckhFormWorkspacePage() {
   const [models, setModels] = useState<NckhResearchModel[]>([]);
   const [selectedModelId, setSelectedModelId] = useState("");
   const [tab, setTab] = useState<WorkspaceTab>("overview");
+  const [canvasModal, setCanvasModal] = useState<CanvasModal>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingModel, setIsSavingModel] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
@@ -511,6 +515,10 @@ export default function NckhFormWorkspacePage() {
   async function createVariable(event: FormEvent) {
     event.preventDefault();
     if (!selectedModelId) return;
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể thêm biến khi mô hình còn là bản nháp.");
+      return;
+    }
     if (!beginPendingAction("createVariable")) return;
     try {
       await apiFetch<NckhVariable>(`/api/v1/nckh/models/${selectedModelId}/variables`, {
@@ -537,6 +545,10 @@ export default function NckhFormWorkspacePage() {
   }
 
   async function deleteVariable(variable: NckhVariable) {
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể xóa biến khi mô hình còn là bản nháp.");
+      return;
+    }
     if (!window.confirm(`Xóa biến "${variable.name}"? Các ánh xạ liên quan sẽ bị xóa theo contract hiện có của backend.`)) return;
     if (!beginPendingAction("deleteVariable")) return;
     try {
@@ -556,6 +568,10 @@ export default function NckhFormWorkspacePage() {
   async function createMapping(event: FormEvent) {
     event.preventDefault();
     if (!selectedModelId || !mappingDraft.variableId || !mappingDraft.formQuestionId) return;
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể thêm ánh xạ khi mô hình còn là bản nháp.");
+      return;
+    }
     if (!beginPendingAction("createMapping")) return;
     try {
       await apiFetch<NckhMapping>(`/api/v1/nckh/variables/${mappingDraft.variableId}/mappings`, {
@@ -578,6 +594,10 @@ export default function NckhFormWorkspacePage() {
   }
 
   async function deleteMapping(mapping: NckhMapping) {
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể xóa ánh xạ khi mô hình còn là bản nháp.");
+      return;
+    }
     if (!window.confirm(`Xóa ánh xạ "${mapping.observedCode}"?`)) return;
     if (!beginPendingAction("deleteMapping")) return;
     try {
@@ -602,16 +622,21 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.");
       return;
     }
+    await createRelationFromPayload({
+      fromVariableId: relationDraft.fromVariableId,
+      toVariableId: relationDraft.toVariableId,
+      direction: relationDraft.direction,
+      sortOrder: Number(relationDraft.sortOrder || "1")
+    });
+  }
+
+  async function createRelationFromPayload(payload: { fromVariableId: string; toVariableId: string; direction: string; sortOrder: number }) {
+    if (!selectedModelId) return;
     if (!beginPendingAction("createRelation")) return;
     try {
       await apiFetch<NckhRelation>(`/api/v1/nckh/models/${selectedModelId}/relations`, {
         method: "POST",
-        json: {
-          fromVariableId: relationDraft.fromVariableId,
-          toVariableId: relationDraft.toVariableId,
-          direction: relationDraft.direction,
-          sortOrder: Number(relationDraft.sortOrder || "1")
-        }
+        json: payload
       });
       toast.success("Đã thêm quan hệ.");
       resetRelationDraft(String(relations.length + 2));
@@ -620,6 +645,58 @@ export default function NckhFormWorkspacePage() {
       toast.error(readableNckhError(relationError, "Không thêm được quan hệ."));
     } finally {
       endPendingAction("createRelation");
+    }
+  }
+
+  async function createRelationFromConnection(connection: Connection) {
+    if (!selectedModelId || !connection.source || !connection.target) return;
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể nối quan hệ khi mô hình còn là bản nháp.");
+      return;
+    }
+    const fromVariableId = variableIdFromCanvasNode(connection.source);
+    const toVariableId = variableIdFromCanvasNode(connection.target);
+    if (!fromVariableId || !toVariableId) return;
+    if (fromVariableId === toVariableId) {
+      toast.error("Biến nguồn và biến đích phải khác nhau.");
+      return;
+    }
+    const alreadyExists = relations.some((relation) => relation.fromVariableId === fromVariableId && relation.toVariableId === toVariableId);
+    if (alreadyExists) {
+      toast.error("Quan hệ có hướng này đã tồn tại trong mô hình.");
+      return;
+    }
+    await createRelationFromPayload({
+      fromVariableId,
+      toVariableId,
+      direction: "Positive",
+      sortOrder: relations.length + 1
+    });
+  }
+
+  async function updateRelationDirection(relation: NckhRelation, direction: string) {
+    if (!canEditCanvas) {
+      toast.error("Chỉ có thể chỉnh sửa quan hệ khi mô hình còn là bản nháp.");
+      return;
+    }
+    if (relation.direction === direction) return;
+    if (!beginPendingAction("updateRelation")) return;
+    try {
+      await apiFetch<NckhRelation>(`/api/v1/nckh/relations/${relation.id}`, {
+        method: "PUT",
+        json: {
+          fromVariableId: relation.fromVariableId,
+          toVariableId: relation.toVariableId,
+          direction,
+          sortOrder: relation.sortOrder
+        }
+      });
+      toast.success("Đã cập nhật hướng quan hệ.");
+      await loadModelData(selectedModelId);
+    } catch (updateError) {
+      toast.error(readableNckhError(updateError, "Không cập nhật được quan hệ."));
+    } finally {
+      endPendingAction("updateRelation");
     }
   }
 
@@ -674,6 +751,10 @@ export default function NckhFormWorkspacePage() {
 
   function canvasNodeId(nodeType: string, id: string) {
     return `${nodeType}:${id}`;
+  }
+
+  function variableIdFromCanvasNode(nodeId: string) {
+    return nodeId.startsWith(`${variableNodeType}:`) ? nodeId.slice(variableNodeType.length + 1) : null;
   }
 
   function currentCanvasPosition(nodeType: string, id: string, index: number) {
@@ -821,7 +902,7 @@ export default function NckhFormWorkspacePage() {
     { key: "type", header: "Loại", render: (item) => <Badge tone="info">{displayVariableType(item.variableType)}</Badge> },
     { key: "scale", header: "Thang đo", render: (item) => `${displayScaleType(item.scaleType)}${item.scalePoint ? ` ${item.scalePoint}` : ""}` },
     { key: "order", header: "Thứ tự", render: (item) => item.sortOrder },
-    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteVariable(item)}>{isActionPending("deleteVariable") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
+    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteVariable(item)}>{isActionPending("deleteVariable") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
   ];
 
   const mappingColumns: BaseTableColumn<NckhMapping>[] = [
@@ -829,7 +910,7 @@ export default function NckhFormWorkspacePage() {
     { key: "question", header: "Câu hỏi", render: (item) => item.questionText },
     { key: "type", header: "Loại", render: (item) => <Badge tone="info">{displayQuestionType(item.questionType)}</Badge> },
     { key: "order", header: "Thứ tự", render: (item) => item.sortOrder },
-    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteMapping(item)}>{isActionPending("deleteMapping") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
+    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteMapping(item)}>{isActionPending("deleteMapping") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
   ];
 
   const relationColumns: BaseTableColumn<NckhRelation>[] = [
@@ -923,6 +1004,7 @@ export default function NckhFormWorkspacePage() {
           {tab === "generate" && renderGeneratePanel()}
           {tab === "data" && renderDataPanel()}
           {tab === "export" && renderExportPanel()}
+          {canvasModal && renderCanvasModal()}
         </>
       )}
     </div>
@@ -934,14 +1016,14 @@ export default function NckhFormWorkspacePage() {
         <CardHeader><CardTitle className="flex items-center gap-2"><FileText size={18} /> Biến nghiên cứu</CardTitle></CardHeader>
         <CardContent className="space-y-5">
           <form className="grid gap-3 md:grid-cols-2 xl:grid-cols-4" onSubmit={createVariable}>
-            <Input placeholder="Tên biến" value={variableDraft.name} onChange={(event) => setVariableDraft({ ...variableDraft, name: event.target.value })} required />
-            <Input placeholder="Mã biến" value={variableDraft.code} onChange={(event) => setVariableDraft({ ...variableDraft, code: event.target.value.toUpperCase() })} required />
-            <DropdownSelect value={variableDraft.variableType} options={variableTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, variableType: value })} />
-            <DropdownSelect value={variableDraft.scaleType} options={scaleTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, scaleType: value })} />
-            <Input placeholder="Điểm thang đo" type="number" value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} />
-            <Input placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} />
-            <Input placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} />
-            <div className="flex gap-2"><Input placeholder="Thứ tự" type="number" value={variableDraft.sortOrder} onChange={(event) => setVariableDraft({ ...variableDraft, sortOrder: event.target.value })} /><Button type="submit" disabled={hasPendingAction}>{isActionPending("createVariable") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createVariable") ? "Đang thêm..." : "Thêm"}</span></Button></div>
+            <Input disabled={!canEditCanvas} placeholder="Tên biến" value={variableDraft.name} onChange={(event) => setVariableDraft({ ...variableDraft, name: event.target.value })} required />
+            <Input disabled={!canEditCanvas} placeholder="Mã biến" value={variableDraft.code} onChange={(event) => setVariableDraft({ ...variableDraft, code: event.target.value.toUpperCase() })} required />
+            <DropdownSelect disabled={!canEditCanvas} value={variableDraft.variableType} options={variableTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, variableType: value })} />
+            <DropdownSelect disabled={!canEditCanvas} value={variableDraft.scaleType} options={scaleTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, scaleType: value })} />
+            <Input disabled={!canEditCanvas} placeholder="Điểm thang đo" type="number" value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} />
+            <Input disabled={!canEditCanvas} placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} />
+            <Input disabled={!canEditCanvas} placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} />
+            <div className="flex gap-2"><Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={variableDraft.sortOrder} onChange={(event) => setVariableDraft({ ...variableDraft, sortOrder: event.target.value })} /><Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createVariable") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createVariable") ? "Đang thêm..." : "Thêm"}</span></Button></div>
           </form>
           <BaseTable columns={variableColumns} items={variables} getRowKey={(item) => item.id} emptyTitle="Chưa có biến" emptyDetail="Thêm biến để tạo ánh xạ, sơ đồ quan hệ và bộ dữ liệu." />
         </CardContent>
@@ -956,6 +1038,7 @@ export default function NckhFormWorkspacePage() {
         <CardContent className="space-y-5">
           <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_180px_120px_auto]" onSubmit={createMapping}>
             <SearchableDropdownSelect
+              disabled={!canEditCanvas}
               value={mappingDraft.variableId}
               searchValue={mappingVariableSearch}
               options={filteredMappingVariableOptions}
@@ -968,6 +1051,7 @@ export default function NckhFormWorkspacePage() {
               }}
             />
             <SearchableDropdownSelect
+              disabled={!canEditCanvas}
               value={mappingDraft.formQuestionId}
               searchValue={mappingQuestionSearch}
               options={filteredMappingQuestionOptions}
@@ -979,9 +1063,9 @@ export default function NckhFormWorkspacePage() {
                 setMappingQuestionSearch(option.label);
               }}
             />
-            <Input placeholder="Mã quan sát" value={mappingDraft.observedCode} onChange={(event) => setMappingDraft({ ...mappingDraft, observedCode: event.target.value.toUpperCase() })} required />
-            <Input placeholder="Thứ tự" type="number" value={mappingDraft.sortOrder} onChange={(event) => setMappingDraft({ ...mappingDraft, sortOrder: event.target.value })} />
-            <Button type="submit" disabled={hasPendingAction}>{isActionPending("createMapping") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createMapping") ? "Đang thêm..." : "Thêm"}</span></Button>
+            <Input disabled={!canEditCanvas} placeholder="Mã quan sát" value={mappingDraft.observedCode} onChange={(event) => setMappingDraft({ ...mappingDraft, observedCode: event.target.value.toUpperCase() })} required />
+            <Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={mappingDraft.sortOrder} onChange={(event) => setMappingDraft({ ...mappingDraft, sortOrder: event.target.value })} />
+            <Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createMapping") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createMapping") ? "Đang thêm..." : "Thêm"}</span></Button>
           </form>
           <BaseTable columns={mappingColumns} items={mappings} getRowKey={(item) => item.id} emptyTitle="Chưa có ánh xạ" emptyDetail="Ánh xạ dùng endpoint hiện có, không nhúng vào payload biến." />
         </CardContent>
@@ -994,16 +1078,33 @@ export default function NckhFormWorkspacePage() {
       ...variables.map((variable, index) => ({
         id: canvasNodeId(variableNodeType, variable.id),
         position: currentCanvasPosition(variableNodeType, variable.id, index),
+        connectable: canEditCanvas,
         draggable: canEditCanvas,
         width: canvasNodeWidth,
         height: canvasNodeHeight,
         measured: { width: canvasNodeWidth, height: canvasNodeHeight },
         data: {
           label: (
-            <div className="w-[184px] rounded-md border border-cyan-200 bg-white px-3 py-3 text-left shadow-sm">
+            <div className="pointer-events-auto relative w-[184px] rounded-md border border-cyan-200 bg-white px-3 py-3 text-left shadow-sm">
+              <Handle type="target" position={Position.Left} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-cyan-700 !bg-white" />
+              <Handle type="source" position={Position.Right} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-cyan-700 !bg-cyan-600" />
               <div className="flex items-start justify-between gap-2">
                 <span className="font-mono text-xs font-bold text-primary">{variable.code}</span>
-                <Badge tone="info">{displayVariableType(variable.variableType)}</Badge>
+                <div className="flex items-center gap-1">
+                  <Badge tone="info">{displayVariableType(variable.variableType)}</Badge>
+                  <button
+                    aria-label={`Xóa biến ${variable.code}`}
+                    className="nodrag pointer-events-auto rounded border border-red-200 bg-red-50 p-1 text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={hasPendingAction || !canEditCanvas}
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      deleteVariable(variable);
+                    }}
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </div>
               </div>
               <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5">{variable.name}</p>
               <p className="mt-1 text-xs text-muted-foreground">{displayScaleType(variable.scaleType)}{variable.scalePoint ? ` ${variable.scalePoint}` : ""}</p>
@@ -1015,18 +1116,36 @@ export default function NckhFormWorkspacePage() {
       ...relations.map((relation, index) => ({
         id: canvasNodeId(relationNodeType, relation.id),
         position: currentCanvasPosition(relationNodeType, relation.id, index),
+        connectable: false,
         draggable: canEditCanvas,
         width: canvasRelationWidth,
         height: canvasRelationHeight,
         measured: { width: canvasRelationWidth, height: canvasRelationHeight },
         data: {
           label: (
-            <div className="w-[176px] rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-left shadow-sm">
+            <div className="pointer-events-auto w-[176px] rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-left shadow-sm">
               <div className="flex items-center justify-between gap-2">
                 <span className="font-mono text-xs font-bold text-amber-700">{relation.hypothesisCode}</span>
                 <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
               </div>
               <p className="mt-2 text-xs font-semibold text-slate-700">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
+              <div className="mt-2 grid grid-cols-2 gap-1">
+                {relationDirections.map((direction) => (
+                  <button
+                    aria-label={`${displayRelationDirection(direction)} ${relation.hypothesisCode}`}
+                    className={`nodrag pointer-events-auto rounded border px-2 py-1 text-[11px] font-semibold disabled:cursor-not-allowed disabled:opacity-50 ${relation.direction === direction ? "border-primary bg-primary text-primary-foreground" : "border-border bg-white text-slate-700 hover:bg-muted"}`}
+                    disabled={hasPendingAction || !canEditCanvas || relation.direction === direction}
+                    key={direction}
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      updateRelationDirection(relation, direction);
+                    }}
+                  >
+                    {direction === "Positive" ? "+" : "-"}
+                  </button>
+                ))}
+              </div>
             </div>
           )
         },
@@ -1066,7 +1185,19 @@ export default function NckhFormWorkspacePage() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><GitBranch size={18} /> Sơ đồ quan hệ mô hình</CardTitle>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CardTitle className="flex items-center gap-2"><GitBranch size={18} /> Sơ đồ quan hệ mô hình</CardTitle>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="secondary" disabled={hasPendingAction} onClick={() => setCanvasModal("variables")}>
+                <FileText size={16} />
+                <span className="ml-2">Biến</span>
+              </Button>
+              <Button type="button" variant="secondary" disabled={hasPendingAction} onClick={() => setCanvasModal("mapping")}>
+                <GitBranch size={16} />
+                <span className="ml-2">Ánh xạ</span>
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-5">
           {!canEditCanvas && (
@@ -1077,49 +1208,6 @@ export default function NckhFormWorkspacePage() {
           )}
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-4">
-              <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_160px_120px_auto]" onSubmit={createRelation}>
-                <SearchableDropdownSelect
-                  disabled={!canEditCanvas}
-                  value={relationDraft.fromVariableId}
-                  searchValue={relationFromSearch}
-                  options={filteredRelationFromOptions}
-                  placeholder="Tìm biến nguồn"
-                  emptyText="Không có biến phù hợp"
-                  onSearchChange={setRelationFromSearch}
-                  onChange={(value, option) => {
-                    setRelationDraft((current) => (
-                      current.toVariableId === value
-                        ? { ...current, fromVariableId: value, toVariableId: "" }
-                        : { ...current, fromVariableId: value }
-                    ));
-                    setRelationFromSearch(option.label);
-                    if (relationDraft.toVariableId === value) setRelationToSearch("");
-                  }}
-                />
-                <SearchableDropdownSelect
-                  disabled={!canEditCanvas}
-                  value={relationDraft.toVariableId}
-                  searchValue={relationToSearch}
-                  options={filteredRelationToOptions}
-                  placeholder="Tìm biến đích"
-                  emptyText="Không có biến phù hợp"
-                  onSearchChange={setRelationToSearch}
-                  onChange={(value, option) => {
-                    setRelationDraft((current) => (
-                      current.fromVariableId === value
-                        ? { ...current, toVariableId: "" }
-                        : { ...current, toVariableId: value }
-                    ));
-                    setRelationToSearch(option.label);
-                    if (relationDraft.fromVariableId === value) setRelationToSearch("");
-                  }}
-                />
-                <DropdownSelect disabled={!canEditCanvas} value={relationDraft.direction} options={relationDirectionOptions} onChange={(value) => setRelationDraft({ ...relationDraft, direction: value })} />
-                <Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={relationDraft.sortOrder} onChange={(event) => setRelationDraft({ ...relationDraft, sortOrder: event.target.value })} />
-                <Button aria-label="Thêm quan hệ" type="submit" disabled={hasPendingAction || !canEditCanvas || Boolean(relationDraftError)}>{isActionPending("createRelation") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createRelation") ? "Đang thêm..." : "Thêm"}</span></Button>
-              </form>
-              {showRelationDraftError && <p className="text-sm font-medium text-amber-700">{relationDraftError}</p>}
-
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-white/65 p-3">
                 <div className="min-w-0 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">{positionCount} vị trí đã lưu.</span>
@@ -1141,7 +1229,8 @@ export default function NckhFormWorkspacePage() {
                     minZoom={0.45}
                     nodes={flowNodes}
                     nodesDraggable={canEditCanvas}
-                    nodesConnectable={false}
+                    nodesConnectable={canEditCanvas}
+                    onConnect={createRelationFromConnection}
                     onNodeDrag={(_, node) => {
                       if (!canEditCanvas) return;
                       setCanvasPositions((current) => ({
@@ -1198,6 +1287,25 @@ export default function NckhFormWorkspacePage() {
           </div>
         </CardContent>
       </Card>
+    );
+  }
+
+  function renderCanvasModal() {
+    return (
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 md:items-center md:p-6" role="dialog" aria-modal="true" onClick={() => setCanvasModal(null)}>
+        <div className="max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-xl border border-border bg-background shadow-2xl" onClick={(event) => event.stopPropagation()}>
+          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+            <div>
+              <p className="text-sm font-semibold">Canvas tools</p>
+              <p className="text-xs text-muted-foreground">Biến và ánh xạ mở trong pop-up từ sơ đồ.</p>
+            </div>
+            <Button variant="secondary" type="button" onClick={() => setCanvasModal(null)}>Đóng</Button>
+          </div>
+          <div className="max-h-[calc(92vh-60px)] overflow-auto p-4">
+            {canvasModal === "variables" ? renderVariablesPanel() : renderMappingPanel()}
+          </div>
+        </div>
+      </div>
     );
   }
 
