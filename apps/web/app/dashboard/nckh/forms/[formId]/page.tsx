@@ -3,16 +3,20 @@
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
+  BaseEdge,
   Background,
   Controls,
+  EdgeLabelRenderer,
   MiniMap,
   MarkerType,
   Handle,
   Position,
   ReactFlow,
   applyNodeChanges,
+  getSmoothStepPath,
   type Connection,
   type Edge,
+  type EdgeProps,
   type Node,
   type NodeChange
 } from "@xyflow/react";
@@ -93,6 +97,13 @@ type DatasetPreviewRow = NckhDatasetListResponse["items"][number] & {
 type CanvasPosition = { x: number; y: number };
 type CanvasModal = "variables" | "mapping" | null;
 type CanvasNodeSize = { width: number; height: number };
+type RelationEdgeData = {
+  [key: string]: unknown;
+  label: string;
+  selected: boolean;
+  onSelect: (relationId: string) => void;
+};
+type RelationFlowEdge = Edge<RelationEdgeData, "relation">;
 
 const tabs: Array<{ id: WorkspaceTab; label: string }> = [
   { id: "overview", label: "Tổng quan" },
@@ -128,10 +139,62 @@ const relationDirectionLabels: Record<string, string> = {
 
 const canvasNodeWidth = 184;
 const canvasNodeHeight = 76;
-const canvasRelationWidth = 176;
-const canvasRelationHeight = 68;
 const variableNodeType = "Variable";
-const relationNodeType = "Relation";
+
+const relationEdgeTypes = { relation: RelationEdge };
+
+function RelationEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerEnd,
+  style,
+  data
+}: EdgeProps<RelationFlowEdge>) {
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition
+  });
+
+  return (
+    <>
+      <BaseEdge markerEnd={markerEnd} path={edgePath} style={style} />
+      <path
+        className="react-flow__edge-interaction cursor-pointer"
+        d={edgePath}
+        fill="none"
+        onClick={(event) => {
+          event.stopPropagation();
+          data?.onSelect(id);
+        }}
+        pointerEvents="stroke"
+        stroke="transparent"
+        strokeWidth={28}
+      />
+      <EdgeLabelRenderer>
+        <button
+          className={`nodrag nopan pointer-events-auto absolute rounded-full border px-2 py-1 text-[11px] font-semibold shadow-sm ${data?.selected ? "border-primary bg-primary text-primary-foreground" : "border-border bg-white text-slate-700"}`}
+          style={{ transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` }}
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            data?.onSelect(id);
+          }}
+        >
+          {data?.label ?? id}
+        </button>
+      </EdgeLabelRenderer>
+    </>
+  );
+}
 
 function nextAvailableCanvasPosition(
   currentPositions: Record<string, CanvasPosition>,
@@ -322,6 +385,7 @@ export default function NckhFormWorkspacePage() {
   const [mappings, setMappings] = useState<NckhMapping[]>([]);
   const [relations, setRelations] = useState<NckhRelation[]>([]);
   const [positions, setPositions] = useState<NckhPosition[]>([]);
+  const [selectedRelationId, setSelectedRelationId] = useState<string | null>(null);
   const [responses, setResponses] = useState<NckhRawResponseListResponse | null>(null);
   const [dataset, setDataset] = useState<NckhDatasetListResponse | null>(null);
   const [panelError, setPanelError] = useState<string | null>(null);
@@ -352,12 +416,15 @@ export default function NckhFormWorkspacePage() {
     () => models.find((item) => item.id === selectedModelId) ?? null,
     [models, selectedModelId]
   );
+  const selectedRelation = useMemo(
+    () => relations.find((item) => item.id === selectedRelationId) ?? null,
+    [relations, selectedRelationId]
+  );
   const canEditCanvas = selectedModel?.status === "Draft";
 
   useEffect(() => {
     const nextPositions: Record<string, CanvasPosition> = {};
     const unsavedVariables: NckhVariable[] = [];
-    const unsavedRelations: NckhRelation[] = [];
 
     variables.forEach((variable) => {
       const saved = positions.find((item) => item.nodeType === variableNodeType && item.variableId === variable.id);
@@ -365,14 +432,6 @@ export default function NckhFormWorkspacePage() {
         nextPositions[canvasNodeId(variableNodeType, variable.id)] = { x: saved.positionX, y: saved.positionY };
       } else {
         unsavedVariables.push(variable);
-      }
-    });
-    relations.forEach((relation) => {
-      const saved = positions.find((item) => item.nodeType === relationNodeType && item.relationId === relation.id);
-      if (saved) {
-        nextPositions[canvasNodeId(relationNodeType, relation.id)] = { x: saved.positionX, y: saved.positionY };
-      } else {
-        unsavedRelations.push(relation);
       }
     });
 
@@ -383,15 +442,14 @@ export default function NckhFormWorkspacePage() {
         { width: canvasNodeWidth, height: canvasNodeHeight }
       );
     });
-    unsavedRelations.forEach((relation) => {
-      nextPositions[canvasNodeId(relationNodeType, relation.id)] = nextAvailableCanvasPosition(
-        nextPositions,
-        defaultRelationPosition,
-        { width: canvasRelationWidth, height: canvasRelationHeight }
-      );
-    });
     setCanvasPositions(nextPositions);
-  }, [positions, relations, variables]);
+  }, [positions, variables]);
+
+  useEffect(() => {
+    if (selectedRelationId && !relations.some((relation) => relation.id === selectedRelationId)) {
+      setSelectedRelationId(null);
+    }
+  }, [relations, selectedRelationId]);
 
   const onCanvasNodesChange = useCallback((changes: NodeChange[]) => {
     if (!canEditCanvas) return;
@@ -828,17 +886,10 @@ export default function NckhFormWorkspacePage() {
       positionX: currentCanvasPosition(variableNodeType, variable.id, index).x,
       positionY: currentCanvasPosition(variableNodeType, variable.id, index).y
     }));
-    const relationPositions = relations.map((relation, index) => ({
-      nodeType: relationNodeType,
-      variableId: null,
-      relationId: relation.id,
-      positionX: currentCanvasPosition(relationNodeType, relation.id, index).x,
-      positionY: currentCanvasPosition(relationNodeType, relation.id, index).y
-    }));
     try {
       await apiFetch<NckhPositionListResponse>(`/api/v1/nckh/models/${selectedModelId}/positions`, {
         method: "PUT",
-        json: { positions: [...variablePositions, ...relationPositions] }
+        json: { positions: variablePositions }
       });
       toast.success("Đã lưu vị trí canvas mặc định.");
       await loadModelData(selectedModelId);
@@ -856,13 +907,6 @@ export default function NckhFormWorkspacePage() {
     };
   }
 
-  function defaultRelationPosition(index: number) {
-    return {
-      x: 128 + (index % 3) * 232,
-      y: 188 + Math.floor(index / 3) * 132
-    };
-  }
-
   function canvasNodeId(nodeType: string, id: string) {
     return `${nodeType}:${id}`;
   }
@@ -874,17 +918,12 @@ export default function NckhFormWorkspacePage() {
   function currentCanvasPosition(nodeType: string, id: string, index: number) {
     const key = canvasNodeId(nodeType, id);
     if (canvasPositions[key]) return canvasPositions[key];
-    return nodeType === variableNodeType ? savedVariablePosition(id, index) : savedRelationPosition(id, index);
+    return savedVariablePosition(id, index);
   }
 
   function savedVariablePosition(variableId: string, index: number) {
     const saved = positions.find((item) => item.nodeType === variableNodeType && item.variableId === variableId);
     return saved ? { x: saved.positionX, y: saved.positionY } : defaultVariablePosition(index);
-  }
-
-  function savedRelationPosition(relationId: string, index: number) {
-    const saved = positions.find((item) => item.nodeType === relationNodeType && item.relationId === relationId);
-    return saved ? { x: saved.positionX, y: saved.positionY } : defaultRelationPosition(index);
   }
 
   async function deleteRelation(relation: NckhRelation) {
@@ -1199,8 +1238,7 @@ export default function NckhFormWorkspacePage() {
   }
 
   function renderCanvasPanel() {
-    const flowNodes: Node[] = [
-      ...variables.map((variable, index) => ({
+    const flowNodes: Node[] = variables.map((variable, index) => ({
         id: canvasNodeId(variableNodeType, variable.id),
         position: currentCanvasPosition(variableNodeType, variable.id, index),
         connectable: canEditCanvas,
@@ -1237,75 +1275,33 @@ export default function NckhFormWorkspacePage() {
           )
         },
         style: { width: canvasNodeWidth, height: canvasNodeHeight, background: "transparent", border: 0, padding: 0, boxShadow: "none" }
-      })),
-      ...relations.map((relation, index) => ({
-        id: canvasNodeId(relationNodeType, relation.id),
-        position: currentCanvasPosition(relationNodeType, relation.id, index),
-        connectable: false,
-        draggable: canEditCanvas,
-        width: canvasRelationWidth,
-        height: canvasRelationHeight,
-        measured: { width: canvasRelationWidth, height: canvasRelationHeight },
-        data: {
-          label: (
-            <div className="pointer-events-auto w-[176px] rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-left shadow-sm">
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-xs font-bold text-amber-700">{relation.hypothesisCode}</span>
-                <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
-              </div>
-              <p className="mt-2 text-xs font-semibold text-slate-700">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
-              <div className="mt-2 grid grid-cols-2 gap-1">
-                {relationDirections.map((direction) => (
-                  <button
-                    aria-label={`${displayRelationDirection(direction)} ${relation.hypothesisCode}`}
-                    className={`nodrag pointer-events-auto rounded border px-2 py-1 text-[11px] font-semibold disabled:cursor-not-allowed disabled:opacity-50 ${relation.direction === direction ? "border-primary bg-primary text-primary-foreground" : "border-border bg-white text-slate-700 hover:bg-muted"}`}
-                    disabled={hasPendingAction || !canEditCanvas || relation.direction === direction}
-                    key={direction}
-                    type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      updateRelationDirection(relation, direction);
-                    }}
-                  >
-                    {direction === "Positive" ? "+" : "-"}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )
-        },
-        style: { width: canvasRelationWidth, height: canvasRelationHeight, background: "transparent", border: 0, padding: 0, boxShadow: "none" }
-      }))
-    ];
-    const flowEdges: Edge[] = relations.flatMap((relation) => {
-      const relationNodeId = canvasNodeId(relationNodeType, relation.id);
+      }));
+    const flowEdges: Edge[] = relations.map((relation) => {
       const fromNodeId = canvasNodeId(variableNodeType, relation.fromVariableId);
       const toNodeId = canvasNodeId(variableNodeType, relation.toVariableId);
       const positive = relation.direction === "Positive";
       const edgeColor = positive ? "#059669" : "#d97706";
-      return [
-        {
-          id: `${relation.id}:from`,
-          source: fromNodeId,
-          target: relationNodeId,
-          type: "smoothstep",
-          animated: canEditCanvas,
-          style: { stroke: edgeColor, strokeWidth: 2, strokeDasharray: positive ? undefined : "6 5" },
-          markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
+      const selected = selectedRelationId === relation.id;
+      return {
+        id: relation.id,
+        source: fromNodeId,
+        target: toNodeId,
+        type: "relation",
+        animated: canEditCanvas || selected,
+        data: {
+          label: `${relation.hypothesisCode} · ${displayRelationDirection(relation.direction)}`,
+          selected,
+          onSelect: setSelectedRelationId
         },
-        {
-          id: `${relation.id}:to`,
-          source: relationNodeId,
-          target: toNodeId,
-          type: "smoothstep",
-          animated: canEditCanvas,
-          label: relation.hypothesisCode,
-          style: { stroke: edgeColor, strokeWidth: 2, strokeDasharray: positive ? undefined : "6 5" },
-          markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
-        }
-      ];
+        style: {
+          stroke: edgeColor,
+          strokeWidth: selected ? 4 : 2.5,
+          strokeDasharray: positive ? undefined : "6 5"
+        },
+        markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
+      };
     });
-    const positionCount = positions.length;
+    const positionCount = positions.filter((item) => item.nodeType === variableNodeType).length;
 
     return (
       <Card>
@@ -1347,6 +1343,7 @@ export default function NckhFormWorkspacePage() {
                   <ReactFlow
                     colorMode="light"
                     defaultViewport={{ x: 16, y: 24, zoom: 1 }}
+                    edgeTypes={relationEdgeTypes}
                     edges={flowEdges}
                     fitView
                     fitViewOptions={{ padding: 0.18 }}
@@ -1355,6 +1352,9 @@ export default function NckhFormWorkspacePage() {
                     nodes={flowNodes}
                     nodesDraggable={canEditCanvas}
                     nodesConnectable={canEditCanvas}
+                    onEdgeClick={(_, edge) => {
+                      setSelectedRelationId(edge.id);
+                    }}
                     onConnect={createRelationFromConnection}
                     onNodeDrag={(_, node) => {
                       if (!canEditCanvas) return;
@@ -1376,7 +1376,7 @@ export default function NckhFormWorkspacePage() {
                   >
                     <Background color="#d8eef3" gap={36} />
                     <Controls showInteractive={false} />
-                    <MiniMap nodeColor={(node) => node.id.startsWith(relationNodeType) ? "#f59e0b" : "#06b6d4"} pannable zoomable />
+                    <MiniMap nodeColor={() => "#06b6d4"} pannable zoomable />
                   </ReactFlow>
                 </div>
               )}
@@ -1387,6 +1387,29 @@ export default function NckhFormWorkspacePage() {
               <KeyValueRow label="Biến" value={variables.length} />
               <KeyValueRow label="Quan hệ" value={relations.length} />
               <KeyValueRow label="Vị trí đã lưu" value={positionCount} />
+              {selectedRelation && (
+                <div className="rounded-md border border-border/70 bg-white/80 p-3 text-sm" data-testid="selected-relation-panel">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono font-semibold">{selectedRelation.hypothesisCode}</span>
+                    <Badge tone={relationTone(selectedRelation.direction)}>{displayRelationDirection(selectedRelation.direction)}</Badge>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">{selectedRelation.fromVariableCode} -&gt; {selectedRelation.toVariableCode}</p>
+                  <p className="mt-2 text-xs leading-5">{selectedRelation.hypothesisText}</p>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {relationDirections.map((direction) => (
+                        <Button
+                          key={direction}
+                          type="button"
+                          variant="secondary"
+                        disabled={hasPendingAction || !canEditCanvas || selectedRelation.direction === direction}
+                        onClick={() => updateRelationDirection(selectedRelation, direction)}
+                      >
+                        {displayRelationDirection(direction)}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="border-t border-border pt-3">
                 <p className="text-xs font-semibold text-muted-foreground">Quan hệ gần nhất</p>
                 <div className="mt-2 space-y-2">
@@ -1398,7 +1421,10 @@ export default function NckhFormWorkspacePage() {
                       </div>
                       <p className="mt-1 text-muted-foreground">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
                       <p className="mt-1 leading-5">{relation.hypothesisText}</p>
-                      <Button aria-label={`Xóa quan hệ ${relation.hypothesisCode}`} className="mt-2 min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(relation)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}<span className="ml-2">Xóa</span></Button>
+                      <div className="mt-2 flex gap-2">
+                        <Button aria-label={`Chọn quan hệ ${relation.hypothesisCode}`} className="min-h-8 px-2 py-1" variant="secondary" type="button" onClick={() => setSelectedRelationId(relation.id)}>Chọn</Button>
+                        <Button aria-label={`Xóa quan hệ ${relation.hypothesisCode}`} className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(relation)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}<span className="ml-2">Xóa</span></Button>
+                      </div>
                     </div>
                   ))}
                   {relations.length === 0 && <p className="text-sm text-muted-foreground">Chưa có quan hệ để hiển thị trong vùng thao tác.</p>}

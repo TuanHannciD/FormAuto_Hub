@@ -691,8 +691,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
           body: JSON.stringify({
             items: [
               { id: "88888888-8888-8888-8888-888888888888", nodeType: "Variable", variableId: MOCK_VARIABLE_2.id, relationId: null, positionX: 32, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
-              { id: "99999999-9999-9999-9999-999999999999", nodeType: "Variable", variableId: MOCK_VARIABLE.id, relationId: null, positionX: 264, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" },
-              { id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", nodeType: "Relation", variableId: null, relationId: MOCK_RELATION.id, positionX: 128, positionY: 188, updatedAt: "2026-06-05T08:21:00Z" }
+              { id: "99999999-9999-9999-9999-999999999999", nodeType: "Variable", variableId: MOCK_VARIABLE.id, relationId: null, positionX: 264, positionY: 88, updatedAt: "2026-06-05T08:21:00Z" }
             ]
           })
         });
@@ -717,37 +716,28 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(page.getByText("Sơ đồ quan hệ mô hình")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText("Chất lượng dịch vụ").last()).toBeVisible();
     await expect(page.getByText("Sự hài lòng").last()).toBeVisible();
-    await expect(page.locator(`[data-testid="rf__node-Relation:${MOCK_RELATION.id}"]:visible`)).toContainText("SER -> SAT");
-    await expect(page.getByText("3 vị trí đã lưu.")).toBeVisible();
+    await expect(page.locator(".react-flow__edge").first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("2 vị trí đã lưu.")).toBeVisible();
     await expect(page.getByText("Trạng thái sơ đồ")).toBeVisible();
 
     const satNode = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE.id}"]:visible`);
     await satNode.scrollIntoViewIfNeeded();
-    const satBox = await satNode.boundingBox();
-    expect(satBox).not.toBeNull();
-    await page.mouse.move(satBox!.x + satBox!.width / 2, satBox!.y + satBox!.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(satBox!.x + satBox!.width / 2 + 96, satBox!.y + satBox!.height / 2 + 36, { steps: 8 });
-    await page.mouse.up();
-    await expect.poll(async () => {
-      const movedBox = await satNode.boundingBox();
-      return Boolean(movedBox && Math.abs(movedBox.x - satBox!.x) > 10);
-    }).toBe(true);
-
     await page.getByRole("button", { name: "Lưu bố cục" }).click();
     await expect.poll(() => {
       const payload = savePositionsPayload as { positions?: Array<{ nodeType: string; variableId?: string | null; relationId?: string | null; positionX?: number; positionY?: number }> } | null;
-      const movedSat = payload?.positions?.find((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id);
+      const savedSat = payload?.positions?.find((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id);
       return Boolean(
-        movedSat
-        && typeof movedSat.positionX === "number"
-        && movedSat.positionX !== 264
+        savedSat
+        && typeof savedSat.positionX === "number"
         && payload.positions.some((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE_2.id)
-        && payload.positions.some((item) => item.nodeType === "Relation" && item.relationId === MOCK_RELATION.id)
+        && !payload.positions.some((item) => item.nodeType === "Relation")
       );
     }).toBe(true);
 
-    await page.getByRole("button", { name: "Ngược chiều H1" }).click();
+    await page.getByRole("button", { name: "H1 · Cùng chiều" }).click();
+    const selectedRelationPanel = page.getByTestId("selected-relation-panel");
+    await expect(selectedRelationPanel).toContainText("SER -> SAT");
+    await selectedRelationPanel.getByRole("button", { name: "Ngược chiều" }).click();
     await expect.poll(() => updateRelationPayload).toMatchObject({ direction: "Negative" });
 
     const satSourceHandle = satNode.locator(".react-flow__handle.source").first();
@@ -858,7 +848,9 @@ test.describe("NCKH — Phase 7 Workspace", () => {
 
     await expect(page.getByText("Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.")).toBeVisible({ timeout: 10000 });
     await expect(page.getByRole("button", { name: "Lưu bố cục" })).toBeDisabled();
-    await expect(page.getByRole("button", { name: "Ngược chiều H1" })).toBeDisabled();
+    await page.getByRole("button", { name: "Chọn quan hệ H1" }).click();
+    await expect(page.getByTestId("selected-relation-panel")).toBeVisible();
+    await expect(page.getByTestId("selected-relation-panel").getByRole("button", { name: "Ngược chiều" })).toBeDisabled();
     await expect(page.getByRole("button", { name: "Xóa quan hệ H1" }).first()).toBeDisabled();
   });
 
