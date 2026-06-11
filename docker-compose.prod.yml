@@ -1,6 +1,6 @@
 services:
   formauto-sql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: formauto-sql
     env_file:
       - /etc/formauto/sql.env
@@ -59,3 +59,4 @@ services:
 
 volumes:
   formauto-sql-data:
+
