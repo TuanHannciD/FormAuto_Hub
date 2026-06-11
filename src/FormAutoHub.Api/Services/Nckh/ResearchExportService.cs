@@ -9,15 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FormAutoHub.Api.Services.Nckh;
 
-public interface IResearchExportService
-{
-    Task<ResearchFormServiceResult<NckhExportFileResponse>> ExportAsync(
-        Guid userId,
-        Guid modelId,
-        string? format,
-        CancellationToken cancellationToken);
-}
-
 public sealed class ResearchExportService(FormAutoHubDbContext dbContext) : IResearchExportService
 {
     private const string FormatCsv = "csv";
@@ -443,3 +434,5 @@ public sealed class ResearchExportService(FormAutoHubDbContext dbContext) : IRes
 
     private sealed record MappingDraft(ResearchVariable Variable, ObservedQuestionMapping Mapping);
 }
+
+

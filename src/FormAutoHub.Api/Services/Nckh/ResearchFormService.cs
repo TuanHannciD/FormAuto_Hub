@@ -7,51 +7,18 @@ using System.Text.RegularExpressions;
 
 namespace FormAutoHub.Api.Services.Nckh;
 
-public enum ResearchFormServiceStatus
-{
-    Success,
-    InvalidRequest,
-    Unauthorized,
-    Forbidden,
-    NotFound,
-    Conflict,
-    ExternalError
-}
-
-public sealed record ResearchFormServiceResult<T>(ResearchFormServiceStatus Status, T? Value = default, string? Message = null);
-
-public interface IResearchFormService
-{
-    Task<ResearchFormServiceResult<NckhGoogleLinkResponse>> LinkGoogleAsync(
-        Guid userId, NckhGoogleLinkRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhImportFormResponse>> ImportFormAsync(
-        Guid userId, NckhImportFormRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhFormListResponse>> ListFormsAsync(
-        Guid userId, string? status, int page, int pageSize, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhFormDetailResponse>> GetFormDetailAsync(
-        Guid userId, Guid formId, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhGenerateFormResponse>> GenerateFormAsync(
-        Guid userId, Guid modelId, NckhGenerateFormRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhVariableResponse>> CreateVariableAsync(
-        Guid userId, Guid modelId, NckhCreateVariableRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhVariableListResponse>> ListVariablesAsync(
-        Guid userId, Guid modelId, int page, int pageSize, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhVariableResponse>> UpdateVariableAsync(
-        Guid userId, Guid variableId, NckhUpdateVariableRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<bool>> DeleteVariableAsync(
-        Guid userId, Guid variableId, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhMappingResponse>> CreateMappingAsync(
-        Guid userId, Guid variableId, NckhCreateMappingRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhMappingListResponse>> ListVariableMappingsAsync(
-        Guid userId, Guid variableId, int page, int pageSize, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhMappingListResponse>> ListModelMappingsAsync(
-        Guid userId, Guid modelId, int page, int pageSize, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhMappingResponse>> UpdateMappingAsync(
-        Guid userId, Guid mappingId, NckhUpdateMappingRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<bool>> DeleteMappingAsync(
-        Guid userId, Guid mappingId, CancellationToken cancellationToken);
-}
-
+// === FILE MAP (ResearchFormService.cs - NCKH form workflow) ===
+// Line    Method/Region                   Purpose
+// 25      LinkGoogleAsync()                Link Google OAuth identity for NCKH usage
+// 130     ImportFormAsync()                Import Google Form metadata and questions
+// 220     List/Get form methods            Query imported form list and detail
+// 300     GenerateFormAsync()              Create/update generated Google Form from active model
+// 390     Variable methods                 Create/list/update/delete research variables
+// 575     Mapping methods                  Create/list/update/delete observed question mappings
+// 750     Generate form helpers            Create/update Google Form payload workflows
+// 900     Question import helpers          Normalize, add, and upsert imported questions
+// 1040    Response mappers                 Convert entities to NCKH API DTOs
+// 1110    Validation helpers               Validate variable and mapping payloads
 public sealed class ResearchFormService(
     FormAutoHubDbContext dbContext,
     IGoogleOAuthService googleOAuthService,
@@ -1302,3 +1269,4 @@ public sealed class ResearchFormService(
         return null;
     }
 }
+

@@ -5,24 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FormAutoHub.Api.Services.Nckh;
 
-public interface IResearchCanvasService
-{
-    Task<ResearchFormServiceResult<NckhRelationResponse>> CreateRelationAsync(
-        Guid userId, Guid modelId, NckhCreateRelationRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhRelationListResponse>> ListRelationsAsync(
-        Guid userId, Guid modelId, int page, int pageSize, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhRelationResponse>> GetRelationAsync(
-        Guid userId, Guid relationId, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhRelationResponse>> UpdateRelationAsync(
-        Guid userId, Guid relationId, NckhUpdateRelationRequest request, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<bool>> DeleteRelationAsync(
-        Guid userId, Guid relationId, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhPositionListResponse>> ListPositionsAsync(
-        Guid userId, Guid modelId, CancellationToken cancellationToken);
-    Task<ResearchFormServiceResult<NckhPositionListResponse>> SavePositionsAsync(
-        Guid userId, Guid modelId, NckhSavePositionsRequest request, CancellationToken cancellationToken);
-}
-
+// === FILE MAP (ResearchCanvasService.cs - NCKH canvas workflow) ===
+// Line    Method/Region                 Purpose
+// 25      Relation CRUD methods          Create/list/get/update/delete model relations
+// 170     Position methods               List and save variable/relation node positions
+// 270     Validation helpers             Validate relation payload and position targets
+// 350     Hypothesis helper              Regenerate deterministic hypothesis text
+// 390     Load/mapping helpers           Load owned model/relation and map responses
 public sealed class ResearchCanvasService(FormAutoHubDbContext dbContext) : IResearchCanvasService
 {
     private const string DraftStatus = "Draft";
@@ -515,3 +504,4 @@ public sealed class ResearchCanvasService(FormAutoHubDbContext dbContext) : IRes
         return new ResearchFormServiceResult<T>(ResearchFormServiceStatus.Conflict, Message: message);
     }
 }
+

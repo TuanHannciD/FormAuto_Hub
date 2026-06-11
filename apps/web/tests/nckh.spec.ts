@@ -1,5 +1,15 @@
 import { test, expect, type Page } from "@playwright/test";
 
+// === FILE MAP (nckh.spec.ts - NCKH browser smoke suite) ===
+// Line    Test Region                    Purpose
+// 5       Helpers and fixtures            Login/session setup, API route mocking, sample payloads
+// 275     Auth and redirect tests         Verify unauthenticated redirect and dashboard access
+// 292     Google not linked tests         Verify link prompt and hidden import workflow
+// 322     Google linked tests             Verify linked dashboard state
+// 365     Import form tests               Verify import flow states and API calls
+// 429     Callback page tests             Verify OAuth callback result handling
+// 510     Navigation tests                Verify dashboard route navigation
+// 532     Phase 7 workspace tests         Verify workspace tabs, canvas, data, export UI flows
 // ── Helpers ───────────────────────────────────────────────────────
 
 const TEST_USER = {
@@ -971,3 +981,4 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect.poll(() => generateRequestCount).toBe(1);
   });
 });
+
