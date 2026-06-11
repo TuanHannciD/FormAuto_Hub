@@ -1,0 +1,15 @@
+.git
+.github
+**/bin
+**/obj
+**/node_modules
+**/.next
+**/publish
+**/test-results
+**/playwright-report
+**/*.log
+.env
+.env.*
+!.env.example
+Dockerfile*
+docker-compose*.yml

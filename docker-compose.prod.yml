@@ -1,0 +1,44 @@
+services:
+  formauto-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: formauto-hub-api:latest
+    env_file:
+      - /etc/formauto/api.env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:5100:8080"
+    restart: unless-stopped
+
+  formauto-web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-https://api-formautohub.servertun.pp.ua}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://formautohub.servertun.pp.ua}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
+        NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID:-}
+        NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI: ${NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI:-}
+    image: formauto-hub-web:latest
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+      FORMAUTO_API_BASE_URL: ${FORMAUTO_API_BASE_URL:-http://formauto-api:8080}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-https://api-formautohub.servertun.pp.ua}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://formautohub.servertun.pp.ua}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
+      NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID:-}
+      NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI: ${NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI:-}
+    depends_on:
+      - formauto-api
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Deploy over SSH
+      - name: Deploy Docker Compose over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -31,17 +31,14 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            dotnet restore FormAutoHub.sln
-            dotnet publish src/FormAutoHub.Api/FormAutoHub.Api.csproj \
-              --configuration Release \
-              --output publish/api
+            if [ -f apps/web/.env.production ]; then
+              set -a
+              . apps/web/.env.production
+              set +a
+            fi
 
-            cd apps/web
-            npm ci
-            npm run build
+            sudo systemctl stop formauto-api || true
+            sudo systemctl stop formauto-web || true
 
-            sudo systemctl restart formauto-api
-            sudo systemctl restart formauto-web
-
-            sudo systemctl status formauto-api --no-pager
-            sudo systemctl status formauto-web --no-pager
+            docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+            docker compose -f docker-compose.prod.yml ps
