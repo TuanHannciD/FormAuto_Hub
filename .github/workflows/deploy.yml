@@ -23,6 +23,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script_stop: true
+          command_timeout: 30m
           script: |
             set -e
 
@@ -37,8 +38,9 @@ jobs:
               set +a
             fi
 
-            sudo systemctl stop formauto-api || true
-            sudo systemctl stop formauto-web || true
+            sudo -n systemctl stop formauto-api || true
+            sudo -n systemctl stop formauto-web || true
 
             docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
             docker compose -f docker-compose.prod.yml ps
+
