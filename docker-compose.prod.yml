@@ -1,4 +1,16 @@
 services:
+  formauto-sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: formauto-sql
+    env_file:
+      - /etc/formauto/sql.env
+    ports:
+      - "1433:1433"
+    volumes:
+      - formauto-sql-data:/var/opt/mssql
+      - /opt/formauto/sql/backups:/var/opt/mssql/backups
+    restart: unless-stopped
+
   formauto-api:
     build:
       context: .
@@ -13,6 +25,8 @@ services:
       - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:5100:8080"
+    depends_on:
+      - formauto-sql
     restart: unless-stopped
 
   formauto-web:
@@ -42,3 +56,6 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     restart: unless-stopped
+
+volumes:
+  formauto-sql-data:

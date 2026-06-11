@@ -13,3 +13,6 @@
 !.env.example
 Dockerfile*
 docker-compose*.yml
+**/*.bak
+**/*.bacpac
+
