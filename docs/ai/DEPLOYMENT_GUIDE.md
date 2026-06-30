@@ -73,13 +73,13 @@ docker compose version    # ≥ 2
 Clone into the deploy path (adjust to your preference):
 
 ```bash
-sudo mkdir -p /home/FormAuto_Hub
-sudo chown $USER:$USER /home/FormAuto_Hub
-cd /home/FormAuto_Hub
+sudo mkdir -p /home/deploy/FormAuto_Hub
+sudo chown $USER:$USER /home/deploy/FormAuto_Hub
+cd /home/deploy/FormAuto_Hub
 git clone https://github.com/<your-org>/FormAuto_Hub.git .
 ```
 
-Default deploy path used in CI: `/home/FormAuto_Hub` (configurable via `DEPLOY_PATH` secret).
+Default deploy path used in CI: `/home/deploy/FormAuto_Hub` (configurable via `DEPLOY_PATH` secret).
 
 ---
 
@@ -160,7 +160,7 @@ sudo chmod 600 /etc/formauto/sql.env /etc/formauto/api.env
 ### 4.1 Build and start all services
 
 ```bash
-cd /home/FormAuto_Hub
+cd /home/deploy/FormAuto_Hub
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
@@ -327,7 +327,7 @@ Set these in GitHub repo → Settings → Secrets and variables → Actions:
 | `DEPLOY_HOST` | Server IP or hostname |
 | `DEPLOY_USER` | SSH user (e.g., `deploy`) |
 | `DEPLOY_SSH_KEY` | Private SSH key for the deploy user |
-| `DEPLOY_PATH` | Repo path on server (e.g., `/home/FormAuto_Hub`) |
+| `DEPLOY_PATH` | Repo path on server (e.g., `/home/deploy/FormAuto_Hub`) |
 
 ### 8.2 Deploy workflow behavior
 
@@ -358,13 +358,13 @@ sudo chmod 600 /home/deploy/.ssh/authorized_keys
 
 | Path | Purpose |
 |---|---|
-| `/home/FormAuto_Hub/` (or `$DEPLOY_PATH`) | Git repo root |
-| `/home/FormAuto_Hub/docker-compose.prod.yml` | Production compose file |
-| `/home/FormAuto_Hub/Dockerfile.api` | API Dockerfile |
-| `/home/FormAuto_Hub/apps/web/Dockerfile` | Web Dockerfile |
+| `/home/deploy/FormAuto_Hub/` (or `$DEPLOY_PATH`) | Git repo root |
+| `/home/deploy/FormAuto_Hub/docker-compose.prod.yml` | Production compose file |
+| `/home/deploy/FormAuto_Hub/Dockerfile.api` | API Dockerfile |
+| `/home/deploy/FormAuto_Hub/apps/web/Dockerfile` | Web Dockerfile |
 | `/etc/formauto/sql.env` | SQL Server credentials |
 | `/etc/formauto/api.env` | API configuration |
-| `/home/FormAuto_Hub/apps/web/.env.production` | Web build-time env vars |
+| `/home/deploy/FormAuto_Hub/apps/web/.env.production` | Web build-time env vars |
 | `/var/opt/mssql` (Docker volume) | SQL Server data |
 
 ---

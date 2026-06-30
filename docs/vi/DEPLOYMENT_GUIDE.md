@@ -73,13 +73,13 @@ docker compose version    # ≥ 2
 Clone vào thư mục deploy (điều chỉnh theo nhu cầu):
 
 ```bash
-sudo mkdir -p /home/FormAuto_Hub
-sudo chown $USER:$USER /home/FormAuto_Hub
-cd /home/FormAuto_Hub
+sudo mkdir -p /home/deploy/FormAuto_Hub
+sudo chown $USER:$USER /home/deploy/FormAuto_Hub
+cd /home/deploy/FormAuto_Hub
 git clone https://github.com/<tổ-chức-của-bạn>/FormAuto_Hub.git .
 ```
 
-Đường dẫn deploy mặc định dùng trong CI: `/home/FormAuto_Hub` (có thể cấu hình qua secret `DEPLOY_PATH`).
+Đường dẫn deploy mặc định dùng trong CI: `/home/deploy/FormAuto_Hub` (có thể cấu hình qua secret `DEPLOY_PATH`).
 
 ---
 
@@ -160,7 +160,7 @@ sudo chmod 600 /etc/formauto/sql.env /etc/formauto/api.env
 ### 4.1 Build và chạy tất cả service
 
 ```bash
-cd /home/FormAuto_Hub
+cd /home/deploy/FormAuto_Hub
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
@@ -327,7 +327,7 @@ Thiết lập trong GitHub repo → Settings → Secrets and variables → Actio
 | `DEPLOY_HOST` | IP hoặc hostname máy chủ |
 | `DEPLOY_USER` | User SSH (vd: `deploy`) |
 | `DEPLOY_SSH_KEY` | Khóa SSH riêng cho user deploy |
-| `DEPLOY_PATH` | Đường dẫn repo trên máy chủ (vd: `/home/FormAuto_Hub`) |
+| `DEPLOY_PATH` | Đường dẫn repo trên máy chủ (vd: `/home/deploy/FormAuto_Hub`) |
 
 ### 8.2 Hành vi của deploy workflow
 
@@ -358,13 +358,13 @@ sudo chmod 600 /home/deploy/.ssh/authorized_keys
 
 | Đường dẫn | Mục đích |
 |---|---|
-| `/home/FormAuto_Hub/` (hoặc `$DEPLOY_PATH`) | Thư mục gốc Git repo |
-| `/home/FormAuto_Hub/docker-compose.prod.yml` | File Compose cho production |
-| `/home/FormAuto_Hub/Dockerfile.api` | Dockerfile cho API |
-| `/home/FormAuto_Hub/apps/web/Dockerfile` | Dockerfile cho Web |
+| `/home/deploy/FormAuto_Hub/` (hoặc `$DEPLOY_PATH`) | Thư mục gốc Git repo |
+| `/home/deploy/FormAuto_Hub/docker-compose.prod.yml` | File Compose cho production |
+| `/home/deploy/FormAuto_Hub/Dockerfile.api` | Dockerfile cho API |
+| `/home/deploy/FormAuto_Hub/apps/web/Dockerfile` | Dockerfile cho Web |
 | `/etc/formauto/sql.env` | Thông tin đăng nhập SQL Server |
 | `/etc/formauto/api.env` | Cấu hình API |
-| `/home/FormAuto_Hub/apps/web/.env.production` | Biến môi trường build-time cho Web |
+| `/home/deploy/FormAuto_Hub/apps/web/.env.production` | Biến môi trường build-time cho Web |
 | `/var/opt/mssql` (Docker volume) | Dữ liệu SQL Server |
 
 ---
