@@ -1,0 +1,4 @@
+interface:
+  display_name: "FormAuto Stitch UI Iterative Designer"
+  short_description: "Generate, review, refine, and archive Stitch UI screens."
+  default_prompt: "Use Stitch to generate a FormAuto Hub UI screen, review it visually against project rules, iterate until it meets the standard, and save the final design artifacts under docs/design."

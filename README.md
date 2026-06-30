@@ -110,6 +110,7 @@ If only one language layer is updated, the documentation is out of sync and comp
 | `docs/ai/ENVIRONMENT_SETUP.md` | `docs/vi/ENVIRONMENT_SETUP.md` | Yes |
 | `docs/ai/TESTING_STRATEGY.md` | `docs/vi/TESTING_STRATEGY.md` | Yes |
 | `docs/ai/DEFINITION_OF_DONE.md` | `docs/vi/DEFINITION_OF_DONE.md` | Yes |
+| `docs/ai/DEPLOYMENT_GUIDE.md` | `docs/vi/DEPLOYMENT_GUIDE.md` | Yes |
 | `docs/ai/REPO_CODING_CONVENTIONS.md` | `docs/vi/REPO_CODING_CONVENTIONS.md` | Yes |
 | `docs/ai/SELF_REVIEW_CHECKLIST.md` | `docs/vi/SELF_REVIEW_CHECKLIST.md` | Yes |
 | `docs/ai/PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | `docs/vi/PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | Yes |
