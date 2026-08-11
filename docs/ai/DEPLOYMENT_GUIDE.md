@@ -221,7 +221,7 @@ Environment variables:
 | `DEPLOY_PORT` | SSH port, for example `1122` |
 | `DEPLOY_USER` | `deploy` |
 | `DEPLOY_PATH` | `/home/deploy/FormAuto_Hub` |
-| `DEPLOY_SSH_FINGERPRINT` | `SHA256:...` value from the VPS |
+| `DEPLOY_SSH_FINGERPRINT` | Only the `SHA256:...` part of the SSH host fingerprint at the exact deploy IP/DNS and port |
 | `PRODUCTION_URL` | `https://formautohub.<domain>` |
 
 Environment secret:
@@ -230,12 +230,13 @@ Environment secret:
 |---|---|
 | `DEPLOY_SSH_KEY` | Complete private key content from `formauto_github_actions`, not the `.pub` file |
 
-Get the host fingerprint on the VPS:
+Get the host fingerprint from your Windows machine, not inside the VPS. Use the exact IP/DNS and SSH port configured in GitHub:
 
-```bash
-sudo ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub -E sha256
+```powershell
+ssh-keyscan -p 1122 203.0.113.10 > "$env:TEMP\formauto_host_key.txt"
+ssh-keygen -lf "$env:TEMP\formauto_host_key.txt" -E sha256
 ```
-
+Replace `203.0.113.10` and `1122` with the real server. If the output is `256 SHA256:... [203.0.113.10]:1122 (ED25519)`, paste only `SHA256:...`; do not paste `256`, host, port, or `(ED25519)`.
 Go to GitHub repo -> Settings -> Secrets and variables -> Actions -> Variables.
 
 Repository variables:
@@ -340,14 +341,16 @@ If local SSH also fails:
 ### GitHub Actions reports missing production setting
 
 Open Environment `production`, not only repository secrets. Verify:
-
 - Environment variables contain `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH`, `DEPLOY_SSH_FINGERPRINT`, `PRODUCTION_URL`.
 - Environment secrets contain `DEPLOY_SSH_KEY`.
+
+If it reports `DEPLOY_SSH_FINGERPRINT must be an SHA256 host-key fingerprint`, keep only the `SHA256:...` value; do not paste the hostname or `(ED25519)`.
+
+If it reports `host key fingerprint mismatch`, collect all VPS fingerprints with `for f in /etc/ssh/ssh_host_ed25519_key.pub /etc/ssh/ssh_host_rsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub; do sudo ssh-keygen -lf "$f" -E sha256; done`, then update `DEPLOY_SSH_FINGERPRINT` with the `SHA256:...` part from each line; in practice `drone-ssh` may use `ECDSA` even when local SSH shows `ED25519`.
 
 ### VPS cannot pull GHCR image
 
 Run on the VPS as `deploy`:
-
 ```bash
 docker login ghcr.io -u '<github-user>'
 docker pull ghcr.io/<owner>/formauto-hub-api:<sha>

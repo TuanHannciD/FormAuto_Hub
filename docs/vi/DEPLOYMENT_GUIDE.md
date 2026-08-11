@@ -221,7 +221,7 @@ Environment variables:
 | `DEPLOY_PORT` | SSH port, ví dụ `1122` |
 | `DEPLOY_USER` | `deploy` |
 | `DEPLOY_PATH` | `/home/deploy/FormAuto_Hub` |
-| `DEPLOY_SSH_FINGERPRINT` | Giá trị `SHA256:...` lấy từ VPS |
+| `DEPLOY_SSH_FINGERPRINT` | Chỉ phần `SHA256:...` của SSH host fingerprint tại đúng IP/DNS và port deploy |
 | `PRODUCTION_URL` | `https://formautohub.<domain>` |
 
 Environment secret:
@@ -230,12 +230,13 @@ Environment secret:
 |---|---|
 | `DEPLOY_SSH_KEY` | Nội dung đầy đủ của private key `formauto_github_actions`, không phải file `.pub` |
 
-Lấy host fingerprint trên VPS:
+Lấy host fingerprint từ máy Windows của bạn, không chạy trong VPS. Dùng đúng IP/DNS và SSH port đã nhập ở GitHub:
 
-```bash
-sudo ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub -E sha256
+```powershell
+ssh-keyscan -p 1122 203.0.113.10 > "$env:TEMP\formauto_host_key.txt"
+ssh-keygen -lf "$env:TEMP\formauto_host_key.txt" -E sha256
 ```
-
+Đổi `203.0.113.10` và `1122` thành server thật. Nếu output là `256 SHA256:... [203.0.113.10]:1122 (ED25519)` thì chỉ dán `SHA256:...`; không dán `256`, host, port, hoặc `(ED25519)`.
 Vào GitHub repo -> Settings -> Secrets and variables -> Actions -> Variables.
 
 Repository variables:
@@ -340,14 +341,16 @@ Nếu local cũng fail:
 ### GitHub Actions báo missing production setting
 
 Vào Environment `production`, không phải chỉ repository secrets. Kiểm tra:
-
 - Environment variables có `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH`, `DEPLOY_SSH_FINGERPRINT`, `PRODUCTION_URL`.
 - Environment secrets có `DEPLOY_SSH_KEY`.
+
+Nếu báo `DEPLOY_SSH_FINGERPRINT must be an SHA256 host-key fingerprint`, sửa value chỉ còn dạng `SHA256:...`; không dán hostname hoặc `(ED25519)`.
+
+Nếu báo `host key fingerprint mismatch`, lấy đủ fingerprint trên VPS bằng `for f in /etc/ssh/ssh_host_ed25519_key.pub /etc/ssh/ssh_host_rsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub; do sudo ssh-keygen -lf "$f" -E sha256; done`, rồi cập nhật `DEPLOY_SSH_FINGERPRINT` bằng phần `SHA256:...` của từng dòng; thực tế `drone-ssh` có thể dùng `ECDSA` dù máy bạn hiện `ED25519`.
 
 ### VPS pull GHCR image fail
 
 Chạy trên VPS bằng user `deploy`:
-
 ```bash
 docker login ghcr.io -u '<github-user>'
 docker pull ghcr.io/<owner>/formauto-hub-api:<sha>
