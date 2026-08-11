@@ -1,46 +1,198 @@
-name: Deploy FormAuto Hub
+name: Release and Deploy Production
 
 on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
   workflow_dispatch:
-  push:
-    branches:
-      - main
+    inputs:
+      release_sha:
+        description: Full commit SHA from main to rebuild and deploy; defaults to the selected ref
+        required: false
+        type: string
+
+permissions:
+  contents: read
 
 concurrency:
-  group: deploy-formauto-hub
+  group: deploy-production
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  release:
+    name: Build immutable release images
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      release_sha: ${{ steps.release.outputs.release_sha }}
+      api_image: ${{ steps.release.outputs.api_image }}
+      web_image: ${{ steps.release.outputs.web_image }}
 
     steps:
-      - name: Deploy Docker Compose over SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Check out release source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          port: 1122
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script_stop: true
-          command_timeout: 30m
-          script: |
-            set -e
+          ref: ${{ github.event.workflow_run.head_sha || inputs.release_sha || github.sha }}
+          fetch-depth: 0
 
-            cd ${{ secrets.DEPLOY_PATH }}
+      - name: Validate release commit
+        id: release
+        shell: bash
+        run: |
+          set -Eeuo pipefail
 
-            git fetch origin main
-            git reset --hard origin/main
+          release_sha="$(git rev-parse HEAD)"
+          if [[ ! "$release_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Release revision is not a full commit SHA." >&2
+            exit 1
+          fi
 
-            if [ -f apps/web/.env.production ]; then
-              set -a
-              . apps/web/.env.production
-              set +a
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$release_sha" origin/main; then
+            echo "Release commit must be reachable from origin/main." >&2
+            exit 1
+          fi
+
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
+          echo "api_image=ghcr.io/$owner/formauto-hub-api" >> "$GITHUB_OUTPUT"
+          echo "web_image=ghcr.io/$owner/formauto-hub-web" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Validate Web release variables
+        shell: bash
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+        run: |
+          set -Eeuo pipefail
+
+          for variable_name in NEXT_PUBLIC_API_BASE_URL NEXT_PUBLIC_SITE_URL; do
+            if [[ -z "${!variable_name:-}" ]]; then
+              echo "Required repository variable is missing: $variable_name" >&2
+              exit 1
             fi
+            if [[ "${!variable_name}" != https://* ]]; then
+              echo "$variable_name must use HTTPS for a production release." >&2
+              exit 1
+            fi
+          done
 
-            sudo -n systemctl stop formauto-api || true
-            sudo -n systemctl stop formauto-web || true
+      - name: Log in to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-            docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
-            docker compose -f docker-compose.prod.yml ps
+      - name: Build and push API image
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: Dockerfile.api
+          push: true
+          tags: ${{ steps.release.outputs.api_image }}:${{ steps.release.outputs.release_sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.release.outputs.release_sha }}
+          cache-from: type=gha,scope=release-api
+          cache-to: type=gha,mode=max,scope=release-api
 
+      - name: Build and push Web image
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: true
+          tags: ${{ steps.release.outputs.web_image }}:${{ steps.release.outputs.release_sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.release.outputs.release_sha }}
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ vars.NEXT_PUBLIC_API_BASE_URL }}
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+            NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID }}
+            NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=${{ vars.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI }}
+          cache-from: type=gha,scope=release-web
+          cache-to: type=gha,mode=max,scope=release-web
+
+  deploy:
+    name: Deploy production
+    needs:
+      - release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out deployment script
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.release.outputs.release_sha }}
+
+      - name: Validate production deployment configuration
+        shell: bash
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT || '1122' }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+          DEPLOY_SSH_FINGERPRINT: ${{ vars.DEPLOY_SSH_FINGERPRINT }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -Eeuo pipefail
+
+          for variable_name in DEPLOY_HOST DEPLOY_USER DEPLOY_PATH DEPLOY_SSH_FINGERPRINT DEPLOY_SSH_KEY; do
+            if [[ -z "${!variable_name:-}" ]]; then
+              echo "Required production setting is missing: $variable_name" >&2
+              exit 1
+            fi
+          done
+
+          if [[ ! "$DEPLOY_PORT" =~ ^[0-9]+$ ]] || (( DEPLOY_PORT < 1 || DEPLOY_PORT > 65535 )); then
+            echo "DEPLOY_PORT must be between 1 and 65535." >&2
+            exit 1
+          fi
+          if [[ "$DEPLOY_PATH" != /* ]]; then
+            echo "DEPLOY_PATH must be an absolute path." >&2
+            exit 1
+          fi
+          if [[ ! "$DEPLOY_SSH_FINGERPRINT" =~ ^SHA256:[A-Za-z0-9+/=]+$ ]]; then
+            echo "DEPLOY_SSH_FINGERPRINT must be an SHA256 host-key fingerprint." >&2
+            exit 1
+          fi
+
+      - name: Deploy exact release over SSH
+        uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
+        env:
+          RELEASE_SHA: ${{ needs.release.outputs.release_sha }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+          API_IMAGE: ${{ needs.release.outputs.api_image }}
+          WEB_IMAGE: ${{ needs.release.outputs.web_image }}
+        with:
+          host: ${{ vars.DEPLOY_HOST }}
+          port: ${{ vars.DEPLOY_PORT || '1122' }}
+          username: ${{ vars.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          fingerprint: ${{ vars.DEPLOY_SSH_FINGERPRINT }}
+          timeout: 30s
+          command_timeout: 15m
+          envs: RELEASE_SHA,DEPLOY_PATH,API_IMAGE,WEB_IMAGE
+          script_path: scripts/deploy-production.sh

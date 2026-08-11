@@ -5,6 +5,7 @@
 - [Purpose](#purpose) (34)
 - [Current Status](#current-status) (38)
 - [REST Naming Rules](#rest-naming-rules) (42)
+- [Operational health](#operational-health)
 - [Proposed API Areas](#proposed-api-areas) (50)
   - [Dashboard](#dashboard) (52)
   - [Packages](#packages) (56)
@@ -46,6 +47,18 @@ Some API areas below are proposed, and some phase slices have approved implement
 - Use action subroutes only for explicit workflows such as `approve`, `reject`, `generate`, `send`, `pause`, and `cancel`.
 - Keep API contracts frontend-agnostic.
 - Do not create undocumented endpoints.
+
+## Operational health
+
+Status: Implemented for production orchestration.
+
+`GET /health`
+
+- Authentication: none.
+- Success: HTTP `200` with the ASP.NET Core health-check response.
+- Purpose: process/container health and deployment readiness polling only.
+- The response must not expose credentials, connection strings, user data, or internal exception details.
+- This endpoint is not a product business API and does not replace authenticated functional smoke tests.
 
 ## Proposed API Areas
 

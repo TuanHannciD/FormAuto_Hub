@@ -15,6 +15,7 @@ Record approved and Deferred technology choices.
 - Frontend framework: Next.js web dashboard.
 - Frontend UI baseline: shadcn/ui with Tailwind CSS.
 - Frontend icon baseline: lucide-react.
+- Production CI/CD foundation: GitHub Actions CI, immutable API/Web images in GHCR tagged by full commit SHA, and single-host Docker Compose deployment over fingerprint-verified SSH.
 
 ## Deferred
 
@@ -30,7 +31,7 @@ Record approved and Deferred technology choices.
 - Final AI provider and model choice.
 - Email notification provider.
 - Webhook platform.
-- Production deployment platform.
+- Production deployment capabilities beyond the approved single-host foundation, including staging, blue-green/zero-downtime rollout, automated backup/restore, monitoring, and log aggregation.
 
 ## Backend Direction
 

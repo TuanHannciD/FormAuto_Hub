@@ -56,7 +56,7 @@ The following must remain Deferred until approved:
 - package management behavior beyond the approved credit package create/update/active-state follow-up
 - email notifications
 - webhooks
-- deployment platform
+- deployment platform beyond the explicitly approved GitHub Actions + GHCR + fingerprint-verified SSH/Docker Compose single-host foundation
 - automated refund behavior
 - subscription billing
 - automatic bug fixes after Phase 9 closeout unless separately approved

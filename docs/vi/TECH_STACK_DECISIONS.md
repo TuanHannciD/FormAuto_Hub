@@ -15,6 +15,7 @@ Ghi lại công nghệ đã duyệt và các phần Deferred.
 - Frontend framework: Next.js web dashboard.
 - Frontend UI baseline: shadcn/ui với Tailwind CSS.
 - Frontend icon baseline: lucide-react.
+- Nền tảng CI/CD production: GitHub Actions CI, API/Web image bất biến trên GHCR với tag full commit SHA và deploy Docker Compose single-host qua SSH có xác minh fingerprint.
 
 ## Deferred
 
@@ -30,7 +31,7 @@ Ghi lại công nghệ đã duyệt và các phần Deferred.
 - lựa chọn AI provider và model cuối.
 - Email notification provider.
 - Webhook platform.
-- Production deployment platform.
+- Các capability deployment production ngoài nền tảng single-host đã duyệt, gồm staging, blue-green/zero-downtime, backup/restore tự động, monitoring và log aggregation.
 
 ## Backend direction
 

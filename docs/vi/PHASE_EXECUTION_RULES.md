@@ -56,7 +56,7 @@ Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
 - package management behavior ngoài follow-up tạo/cập nhật/active-state gói credit đã duyệt
 - email notifications
 - webhooks
-- deployment platform
+- deployment platform ngoài nền tảng single-host GitHub Actions + GHCR + SSH/Docker Compose có xác minh fingerprint đã được duyệt rõ
 - automated refund behavior
 - subscription billing
 - tự động fix bug sau closeout Phase 9 nếu chưa được duyệt riêng

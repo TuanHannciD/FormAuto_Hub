@@ -5,6 +5,7 @@
 - [Mục đích](#mục-đích) (34)
 - [Trạng thái hiện tại](#trạng-thái-hiện-tại) (38)
 - [Quy tắc REST naming](#quy-tắc-rest-naming) (42)
+- [Health vận hành](#health-vận-hành)
 - [API area đề xuất](#api-area-đề-xuất) (50)
   - [Dashboard](#dashboard) (52)
   - [Packages](#packages) (56)
@@ -46,6 +47,18 @@ Một số API area dưới đây vẫn là đề xuất, và một số phase s
 - Chỉ dùng action subroute cho workflow rõ ràng như `approve`, `reject`, `generate`, `send`, `pause`, `cancel`.
 - API contract phải frontend-agnostic.
 - Không tạo undocumented endpoint.
+
+## Health vận hành
+
+Trạng thái: Đã triển khai cho orchestration production.
+
+`GET /health`
+
+- Xác thực: không yêu cầu.
+- Thành công: HTTP `200` với response health check của ASP.NET Core.
+- Mục đích: chỉ dùng để kiểm tra process/container và poll readiness khi deploy.
+- Response không được lộ credential, connection string, dữ liệu user hoặc chi tiết exception nội bộ.
+- Endpoint này không phải business API của sản phẩm và không thay thế functional smoke test có xác thực.
 
 ## API area đề xuất
 

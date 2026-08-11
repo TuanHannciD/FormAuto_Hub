@@ -1,432 +1,397 @@
-# DEPLOYMENT_GUIDE — First-Time Deploy
+# DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-## Purpose
+**Last updated:** 2026-08-11 | **Phase:** Production CI/CD foundation
 
-Step-by-step guide to deploy FormAuto Hub to a fresh Linux server using Docker Compose.
+## Architecture overview
 
-## Target Audience
-
-DevOps engineers and developers deploying FormAuto Hub for the first time.
-
----
-
-## Architecture Overview
-
-| Component | Tech | Port | Notes |
-|---|---|---|---|
-| SQL Server | MSSQL 2025 | 1433 | Data persisted via Docker volume |
-| Backend API | ASP.NET Core 9 | 8080 (internal) → 5100 (host) | Binds to localhost only |
-| Web Dashboard | Next.js 15 | 3000 (internal) → 3000 (host) | Binds to localhost only |
-| Reverse Proxy | nginx / Caddy (external) | 80, 443 | Not included; set up separately |
-
-Typical production topology:
-
-```
-Internet → Reverse Proxy (nginx/Caddy) → [formauto-web:3000, formauto-api:8080]
-                                                    ↕
-                                              formauto-sql:1433
+```text
+Internet
+  |
+  v
+nginx / reverse proxy :80/:443 on the VPS
+  |---> 127.0.0.1:3000 -> formauto-web:3000  (Next.js standalone)
+  |
+  `---> 127.0.0.1:5100 -> formauto-api:8080  (ASP.NET Core .NET 9)
+                                  |
+                                  v
+                         formauto-sql:1433 (SQL Server 2025 CU7)
+                                  |
+                                  v
+                         Docker volume: formauto-sql-data
 ```
 
----
+Application services bind to `127.0.0.1` on the host. Public traffic goes through the reverse proxy. SQL Server also binds only to localhost host port `1433`; it is not public.
 
-## 1. Prerequisites
+Production does not build source on the VPS. GitHub Actions builds API/Web images, pushes them to GHCR with the full commit SHA tag, then SSHes into the VPS and pulls that exact release.
 
-### 1.1 Server
+## Prerequisites
 
-- Ubuntu 24.04 (or newer) with at least:
-  - 2 CPU cores
-  - 4 GB RAM
-  - 30 GB free disk
-- SSH access with a non-root `sudo` user
-- Ports 80 and 443 open (firewall / security group)
-- A domain name pointed to the server IP for HTTPS
+| Requirement | Recommended | Check |
+|---|---|---|
+| Ubuntu | 24.04+ | `lsb_release -a` |
+| Docker Engine | 27+ | `docker --version` |
+| Docker Compose | v2 plugin | `docker compose version` |
+| Git | any | `git --version` |
+| curl | any | `curl --version` |
+| nginx | if self-managing reverse proxy | `nginx -v` |
+| SSH user | `deploy` | `whoami` |
 
-### 1.2 Installed Packages
+Domains should point to the VPS:
+
+- Web: `https://formautohub.<domain>`
+- API: `https://api-formautohub.<domain>`
+
+## Quick start (first-time deploy)
+
+### 1. Prepare the repository on the VPS
+
+Run on the VPS:
 
 ```bash
-sudo apt update
-sudo apt install -y git curl ca-certificates
-```
-
-Install Docker (if not present):
-
-```bash
-curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
-sudo sh /tmp/get-docker.sh
-sudo usermod -aG docker $USER
-newgrp docker   # or log out and back in
-```
-
-> Docker Compose v2 is included with Docker Engine 24+.
-
-Verify:
-
-```bash
-docker --version          # ≥ 27
-docker compose version    # ≥ 2
-```
-
----
-
-## 2. Repository Setup
-
-Clone into the deploy path (adjust to your preference):
-
-```bash
+sudo adduser deploy --disabled-password
+sudo usermod -aG docker deploy
 sudo mkdir -p /home/deploy/FormAuto_Hub
-sudo chown $USER:$USER /home/deploy/FormAuto_Hub
+sudo chown -R deploy:deploy /home/deploy/FormAuto_Hub
+
+sudo -iu deploy
 cd /home/deploy/FormAuto_Hub
-git clone https://github.com/<your-org>/FormAuto_Hub.git .
+git clone https://github.com/<owner>/FormAuto_Hub.git .
 ```
 
-Default deploy path used in CI: `/home/deploy/FormAuto_Hub` (configurable via `DEPLOY_PATH` secret).
+If the repository already exists, just verify it:
 
----
+```bash
+cd /home/deploy/FormAuto_Hub
+git remote -v
+docker compose version
+```
 
-## 3. Environment Configuration
+### 2. Create runtime secrets on the VPS
 
-FormAuto Hub needs **two env files** on the host at `/etc/formauto/`. Create the directory:
+Run on the VPS:
 
 ```bash
 sudo mkdir -p /etc/formauto
+sudo nano /etc/formauto/sql.env
+sudo nano /etc/formauto/api.env
+sudo chown root:root /etc/formauto/sql.env /etc/formauto/api.env
+sudo chmod 600 /etc/formauto/sql.env /etc/formauto/api.env
 ```
 
-### 3.1 `/etc/formauto/sql.env` — SQL Server Credentials
-
-```env
-# Required — change the password to a strong secret
-ACCEPT_EULA=Y
-MSSQL_SA_PASSWORD=<YOUR_STRONG_SA_PASSWORD>
-MSSQL_PID=Express
-```
-
-Example:
+`/etc/formauto/sql.env`:
 
 ```env
 ACCEPT_EULA=Y
-MSSQL_SA_PASSWORD=MyStr0ng!Pass123
+MSSQL_SA_PASSWORD=<strong-sql-password>
 MSSQL_PID=Express
 ```
 
-### 3.2 `/etc/formauto/api.env` — Backend API Configuration
+`/etc/formauto/api.env`:
 
 ```env
-# --- Database ---
-ConnectionStrings__DefaultConnection=Server=formauto-sql,1433;Database=FormAutoHub;User Id=sa;Password=<SAME_SA_PASSWORD>;TrustServerCertificate=True;Encrypt=True;
+ConnectionStrings__DefaultConnection=Server=formauto-sql,1433;Database=FormAutoHub;User Id=sa;Password=<same-sql-password>;TrustServerCertificate=True;Encrypt=True;
 
-# --- Auth ---
 Auth__Issuer=FormAutoHub
 Auth__Audience=FormAutoHub
-Auth__SigningKey=<RANDOM_64_CHAR_STRING>
-Auth__GoogleClientId=<YOUR_GOOGLE_CLIENT_ID>
-Auth__GoogleOAuthClientId=<YOUR_GOOGLE_OAUTH_CLIENT_ID>
-Auth__GoogleOAuthClientSecret=<YOUR_GOOGLE_OAUTH_CLIENT_SECRET>
+Auth__SigningKey=<random-secret>
+Auth__GoogleClientId=<google-client-id>
+Auth__GoogleOAuthClientId=<google-oauth-client-id>
+Auth__GoogleOAuthClientSecret=<google-oauth-client-secret>
 
-# --- AI ---
 AI__ProviderAdapter=OpenAICompatible
 AI__RequestTimeoutSeconds=300
 AI__BatchSize=10
 AI__MaxParallelBatches=5
 ```
 
-> **Important:** `Auth__SigningKey` must be a strong random string (≥ 32 characters). Generate one:
-> ```bash
-> openssl rand -base64 48
-> ```
-
-### 3.3 Web frontend `.env.production`
-
-Create `apps/web/.env.production` in the repo directory:
-
-```env
-NEXT_PUBLIC_API_BASE_URL=https://api-formautohub.<your-domain>
-NEXT_PUBLIC_SITE_URL=https://formautohub.<your-domain>
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
-NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=<YOUR_GOOGLE_OAUTH_CLIENT_ID>
-NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=https://formautohub.<your-domain>/auth/google/callback
-```
-
-### 3.4 Secure the env files
+Generate `Auth__SigningKey`:
 
 ```bash
-sudo chown root:root /etc/formauto/sql.env /etc/formauto/api.env
-sudo chmod 600 /etc/formauto/sql.env /etc/formauto/api.env
+openssl rand -base64 48
 ```
 
----
+### 3. Generate the deploy SSH key on Windows/local
 
-## 4. First-Time Startup
+Run in PowerShell on the administrator machine, not on the VPS:
 
-### 4.1 Build and start all services
+```powershell
+New-Item -ItemType Directory -Force ~/.ssh
+Test-Path ~/.ssh/formauto_github_actions
+ssh-keygen -t ed25519 -C "github-actions-formauto-production" -f ~/.ssh/formauto_github_actions
+```
+
+If `Test-Path` returns `True`, the key file already exists. Do not overwrite it unless you are sure; choose another name. When prompted for a passphrase, press Enter to leave it empty because the current workflow does not accept an SSH key passphrase.
+
+This creates 2 files:
+
+| File | Use |
+|---|---|
+| `formauto_github_actions` | Private key. Paste the complete content into the GitHub secret `DEPLOY_SSH_KEY`. |
+| `formauto_github_actions.pub` | Public key. Install this on the VPS in `authorized_keys`. |
+
+How to obtain `DEPLOY_SSH_KEY`:
+
+```powershell
+notepad ~/.ssh/formauto_github_actions
+```
+
+Copy the entire content in Notepad, from `-----BEGIN OPENSSH PRIVATE KEY-----` through `-----END OPENSSH PRIVATE KEY-----`. That complete text is the value for the GitHub secret `DEPLOY_SSH_KEY`.
+
+### 4. Install the public key on the VPS
+
+Assume the new VPS has example IP `203.0.113.10` and default SSH port `22`. For a real deployment, replace `203.0.113.10` with the VPS IP. If the VPS uses a different SSH port, replace `22` with that port.
+
+Step 1 — open the public key on Windows/local:
+
+```powershell
+notepad ~/.ssh/formauto_github_actions.pub
+```
+
+Copy the full single line from the file. It starts with `ssh-ed25519`.
+
+Step 2 — log in to the VPS as root/password for the first time:
+
+```powershell
+ssh root@203.0.113.10
+```
+
+If the VPS provider does not enable root SSH, open the provider console and log in with the user/password they provide.
+
+Step 3 — create the `deploy` user on the VPS:
+
+```bash
+adduser deploy
+usermod -aG sudo deploy
+```
+
+Step 4 — create `authorized_keys` for the `deploy` user:
+
+```bash
+mkdir -p /home/deploy/.ssh
+nano /home/deploy/.ssh/authorized_keys
+```
+
+Paste the public key copied in step 1 into this file. The file only needs one line starting with `ssh-ed25519`. Save and exit nano.
+
+Step 5 — fix owner and permissions on the VPS:
+
+```bash
+chown -R deploy:deploy /home/deploy/.ssh
+chmod 700 /home/deploy/.ssh
+chmod 600 /home/deploy/.ssh/authorized_keys
+```
+
+Step 6 — return to PowerShell on Windows/local and test the private key:
+
+```powershell
+ssh -i ~/.ssh/formauto_github_actions -p 22 -o IdentitiesOnly=yes deploy@203.0.113.10 "whoami"
+```
+
+Correct output:
+
+```text
+deploy
+```
+
+If it does not return `deploy`, fix SSH first. Do not paste the private key into GitHub while local SSH still fails.
+
+### 5. Log in to GHCR on the VPS
+
+If GHCR packages are private, create a GitHub classic token with `read:packages`, then run on the VPS as `deploy`:
+
+```bash
+printf 'GHCR token: '
+read -s CR_PAT
+echo
+echo "$CR_PAT" | docker login ghcr.io -u '<github-user>' --password-stdin
+unset CR_PAT
+```
+
+The GHCR token is not `DEPLOY_SSH_KEY`. It only lets Docker on the VPS pull private images.
+
+### 6. Fill GitHub Actions settings
+
+Go to GitHub repo -> Settings -> Environments -> create/select `production`.
+
+Environment variables:
+
+| Variable | Value |
+|---|---|
+| `DEPLOY_HOST` | VPS public IP or DNS |
+| `DEPLOY_PORT` | SSH port, for example `1122` |
+| `DEPLOY_USER` | `deploy` |
+| `DEPLOY_PATH` | `/home/deploy/FormAuto_Hub` |
+| `DEPLOY_SSH_FINGERPRINT` | `SHA256:...` value from the VPS |
+| `PRODUCTION_URL` | `https://formautohub.<domain>` |
+
+Environment secret:
+
+| Secret | Value |
+|---|---|
+| `DEPLOY_SSH_KEY` | Complete private key content from `formauto_github_actions`, not the `.pub` file |
+
+Get the host fingerprint on the VPS:
+
+```bash
+sudo ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub -E sha256
+```
+
+Go to GitHub repo -> Settings -> Secrets and variables -> Actions -> Variables.
+
+Repository variables:
+
+| Variable | Value |
+|---|---|
+| `NEXT_PUBLIC_API_BASE_URL` | `https://api-formautohub.<domain>` |
+| `NEXT_PUBLIC_SITE_URL` | `https://formautohub.<domain>` |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google client id if used |
+| `NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID` | Google OAuth client id if used |
+| `NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI` | `https://formautohub.<domain>/dashboard/nckh/callback` |
+
+Do not create `apps/web/.env.production` on the VPS. `NEXT_PUBLIC_*` values are compiled into the Web image in GitHub Actions.
+
+### 7. Deploy
+
+After code is merged/pushed to `main`:
+
+- CI runs API build/test, Web lint/build, and Docker build validation.
+- The deploy workflow builds immutable images and SSHes into the VPS.
+- The production environment may wait for a reviewer if protection is enabled.
+
+Manual deploy: GitHub Actions -> `Release and Deploy Production` -> Run workflow -> enter a full commit SHA reachable from `main`.
+
+## Production directory layout
+
+```text
+/home/deploy/FormAuto_Hub/
+├── docker-compose.prod.yml       # Production Compose
+├── Dockerfile.api                # API image
+├── apps/web/Dockerfile           # Web image
+├── scripts/deploy-production.sh  # Script GitHub Actions runs over SSH
+├── sql/backups/                  # SQL backup mount if used
+└── .deploy/
+    ├── current-release           # Last successful deployed SHA
+    └── docker-compose.prod.previous.yml
+
+/etc/formauto/
+├── api.env                       # API runtime secrets
+└── sql.env                       # SQL Server env
+```
+
+## Deploying updates
+
+```bash
+git status
+git push origin main
+```
+
+After CI passes, deployment runs automatically. Watch it in GitHub Actions.
+
+View the current release on the VPS:
+
+```bash
+cat /home/deploy/FormAuto_Hub/.deploy/current-release
+docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml ps
+```
+
+The deploy script fetches Compose from the exact release commit, pulls API/Web images by SHA, runs Compose with health wait, smoke-checks local API/Web, then writes `.deploy/current-release`.
+
+## Health checks
+
+```bash
+curl -i http://127.0.0.1:5100/health
+curl -i http://127.0.0.1:3000/
+docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml ps
+```
+
+Expected: API returns `HTTP 200` with body `Healthy`, Web returns `HTTP 200`, and all three containers are healthy.
+
+## Logs
 
 ```bash
 cd /home/deploy/FormAuto_Hub
-docker compose -f docker-compose.prod.yml up -d --build
-```
 
-This will:
-1. Pull `mcr.microsoft.com/mssql/server:2025-latest`
-2. Build `formauto-api` from `Dockerfile.api`
-3. Build `formauto-web` from `apps/web/Dockerfile`
-4. Start all three containers
+docker compose -f docker-compose.prod.yml logs --tail=120
+docker compose -f docker-compose.prod.yml logs --tail=120 formauto-api
+docker compose -f docker-compose.prod.yml logs --tail=120 formauto-web
+docker compose -f docker-compose.prod.yml logs --tail=120 formauto-sql
 
-### 4.2 Check container status
-
-```bash
-docker compose -f docker-compose.prod.yml ps
-```
-
-All three should show `Up`:
-
-```
-NAME              STATUS
-formauto-sql      Up (healthy)
-formauto-api      Up
-formauto-web      Up
-```
-
-### 4.3 Check logs
-
-```bash
-# All services
-docker compose -f docker-compose.prod.yml logs --tail=50
-
-# Specific service
-docker compose -f docker-compose.prod.yml logs formauto-api --tail=50
-docker compose -f docker-compose.prod.yml logs formauto-web --tail=50
-docker compose -f docker-compose.prod.yml logs formauto-sql --tail=50
-
-# Follow logs
 docker compose -f docker-compose.prod.yml logs -f formauto-api
 ```
 
----
+## Troubleshooting
 
-## 5. Database Migration
+### GitHub Actions reports `ssh: handshake failed`
 
-EF Core migrations are embedded in the compiled API artifact. The API runs migrations automatically on startup.
+Check in this order:
 
-### Manual migration (if needed)
+```powershell
+ssh -i ~/.ssh/formauto_github_actions -p 22 -o IdentitiesOnly=yes deploy@203.0.113.10 "whoami"
+```
+
+If local SSH also fails:
+
+- `DEPLOY_USER` is wrong.
+- `DEPLOY_PORT` is wrong.
+- The `.pub` key is not in `/home/deploy/.ssh/authorized_keys`.
+- Permissions are wrong: `~/.ssh` must be `700`, `authorized_keys` must be `600`.
+- The `.pub` file was pasted into GitHub secret instead of the private key.
+
+### GitHub Actions reports missing production setting
+
+Open Environment `production`, not only repository secrets. Verify:
+
+- Environment variables contain `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH`, `DEPLOY_SSH_FINGERPRINT`, `PRODUCTION_URL`.
+- Environment secrets contain `DEPLOY_SSH_KEY`.
+
+### VPS cannot pull GHCR image
+
+Run on the VPS as `deploy`:
 
 ```bash
-# Enter API container
-docker exec -it formauto-api bash
-
-# Run migration from inside the container
-# (if auto-migration is disabled)
-dotnet ef database update --connection "<connection-string>"
+docker login ghcr.io -u '<github-user>'
+docker pull ghcr.io/<owner>/formauto-hub-api:<sha>
 ```
 
-> **Assumption:** The API applies pending EF Core migrations at startup. If the project grows to use a separate migration runner, update this section.
+If the package is private, the token needs `read:packages`.
 
----
-
-## 6. Reverse Proxy (nginx)
-
-Install nginx and configure it to forward traffic:
+### API is unhealthy
 
 ```bash
-sudo apt install -y nginx
+docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml logs --tail=120 formauto-api
+docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml logs --tail=120 formauto-sql
 ```
 
-### 6.1 API subdomain: `/etc/nginx/sites-available/api-formautohub`
+Common causes: SQL password mismatch between `sql.env` and `api.env`, SQL is not healthy yet, migration failed, or a runtime secret is missing from `/etc/formauto/api.env`.
 
-```nginx
-server {
-    listen 80;
-    server_name api-formautohub.<your-domain>;
+### Web cannot call API
 
-    location / {
-        proxy_pass http://127.0.0.1:5100;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection keep-alive;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
+Check repository variable:
+
+```text
+NEXT_PUBLIC_API_BASE_URL=https://api-formautohub.<domain>
 ```
 
-### 6.2 Web subdomain: `/etc/nginx/sites-available/formautohub`
-
-```nginx
-server {
-    listen 80;
-    server_name formautohub.<your-domain>;
-
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection keep-alive;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-### 6.3 Enable sites and HTTPS
-
-```bash
-sudo ln -s /etc/nginx/sites-available/api-formautohub /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/formautohub /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-Get HTTPS certificates (Certbot):
-
-```bash
-sudo snap install certbot --classic
-sudo certbot --nginx -d api-formautohub.<your-domain>
-sudo certbot --nginx -d formautohub.<your-domain>
-```
-
----
-
-## 7. Health Check
-
-### 7.1 API health
-
-```bash
-curl -s https://api-formautohub.<your-domain>/health
-# Expected: HTTP 200 or 204 (depending on health check endpoint implementation)
-```
-
-Or check the API directly on localhost:
-
-```bash
-curl -s http://127.0.0.1:5100/health
-```
-
-### 7.2 Web dashboard
-
-Open `https://formautohub.<your-domain>` in a browser. You should see the login/landing page.
-
-### 7.3 Database connectivity
-
-```bash
-docker exec formauto-api dotnet ef database status --connection "<connection-string>"
-```
-
----
-
-## 8. GitHub Actions CI/CD
-
-### 8.1 Required secrets
-
-Set these in GitHub repo → Settings → Secrets and variables → Actions:
-
-| Secret | Description |
-|---|---|
-| `DEPLOY_HOST` | Server IP or hostname |
-| `DEPLOY_USER` | SSH user (e.g., `deploy`) |
-| `DEPLOY_SSH_KEY` | Private SSH key for the deploy user |
-| `DEPLOY_PATH` | Repo path on server (e.g., `/home/deploy/FormAuto_Hub`) |
-
-### 8.2 Deploy workflow behavior
-
-- **Trigger:** Push to `main` branch or manual dispatch (`workflow_dispatch`)
-- **Process:**
-  1. SSH into server
-  2. `git fetch origin main && git reset --hard origin/main`
-  3. Stop existing containers
-  4. `docker compose up -d --build --remove-orphans`
-
-### 8.3 SSH user setup on server
-
-```bash
-# As root on the server
-sudo adduser deploy --disabled-password
-sudo usermod -aG docker deploy
-sudo mkdir -p /home/deploy/.ssh
-# Paste the public key matching DEPLOY_SSH_KEY into:
-sudo vim /home/deploy/.ssh/authorized_keys
-sudo chown -R deploy:deploy /home/deploy/.ssh
-sudo chmod 700 /home/deploy/.ssh
-sudo chmod 600 /home/deploy/.ssh/authorized_keys
-```
-
----
-
-## 9. Directory Reference
-
-| Path | Purpose |
-|---|---|
-| `/home/deploy/FormAuto_Hub/` (or `$DEPLOY_PATH`) | Git repo root |
-| `/home/deploy/FormAuto_Hub/docker-compose.prod.yml` | Production compose file |
-| `/home/deploy/FormAuto_Hub/Dockerfile.api` | API Dockerfile |
-| `/home/deploy/FormAuto_Hub/apps/web/Dockerfile` | Web Dockerfile |
-| `/etc/formauto/sql.env` | SQL Server credentials |
-| `/etc/formauto/api.env` | API configuration |
-| `/home/deploy/FormAuto_Hub/apps/web/.env.production` | Web build-time env vars |
-| `/var/opt/mssql` (Docker volume) | SQL Server data |
-
----
-
-## 10. Troubleshooting
-
-### API crashes on startup
-
-1. Check the connection string in `/etc/formauto/api.env` — `Server` must be `formauto-sql` (the Docker Compose service name).
-2. Verify SQL Server is running: `docker compose -f docker-compose.prod.yml ps formauto-sql`.
-3. Check if SA password matches between `sql.env` and the API connection string.
-
-### Web cannot reach API
-
-- The web container uses `FORMAUTO_API_BASE_URL=http://formauto-api:8080` (Docker internal network).
-- For browser-side Next.js API calls, `NEXT_PUBLIC_API_BASE_URL` must use the public URL (reverse proxy).
-
-### Docker permission errors
-
-```bash
-sudo usermod -aG docker $USER
-# Log out and back in, or:
-newgrp docker
-```
+After changing this value, build/deploy a new Web image. Do not edit `.env.production` on the VPS.
 
 ### Port already in use
 
 ```bash
-sudo lsof -i :1433   # SQL Server
-sudo lsof -i :5100   # API
-sudo lsof -i :3000   # Web
+sudo lsof -i :1433
+sudo lsof -i :5100
+sudo lsof -i :3000
+sudo lsof -i :80
+sudo lsof -i :443
 ```
 
-### Migration failures
+## Rollback
 
-- Check that `formauto-sql` is healthy before API starts.
-- The API depends on `formauto-sql` via `depends_on`, but readiness is not guaranteed — if the API starts before SQL Server accepts connections, restart the API:
+Rollback the image by manually running the workflow with the previous good commit SHA:
 
 ```bash
-docker compose -f docker-compose.prod.yml restart formauto-api
+git log --oneline -10
 ```
 
----
+Then GitHub Actions -> `Release and Deploy Production` -> Run workflow -> `release_sha=<good-full-sha>`.
 
-## 11. Post-Deploy Checklist
-
-- [ ] All three containers running (`docker compose ps`)
-- [ ] API health endpoint responds
-- [ ] Web dashboard loads over HTTPS
-- [ ] Reverse proxy configured with SSL
-- [ ] Firewall allows only 80/443 (and 1122 for CI SSH)
-- [ ] Env files have `600` permissions
-- [ ] CI deploy workflow tested (push to main or manual dispatch)
-- [ ] Database migrations applied (check container logs)
-- [ ] Google OAuth callbacks configured in Google Cloud Console with production URIs
-
----
-
-## Deferred
-
-- Backup/restore automation
-- Monitoring and alerting setup
-- Log aggregation (ELK/Loki/etc.)
-- Staging environment setup
-- Blue-green / zero-downtime deploys
+Important: database rollback is not automatic. If the new release ran a non-backward-compatible migration, review the database before rolling back the image.

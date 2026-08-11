@@ -128,6 +128,7 @@ builder.Services.AddScoped<IResearchDataService, ResearchDataService>();
 builder.Services.AddScoped<IResearchExportService, ResearchExportService>();
 
 builder.Services.AddOpenApi();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -149,6 +150,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
