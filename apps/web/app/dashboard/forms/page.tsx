@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react";
@@ -849,7 +849,7 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-[200] flex flex-col gap-4 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
                     <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
                       Tạo bản xem trước
@@ -999,7 +999,7 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div className="sticky bottom-3 z-10 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
+              <div className="sticky bottom-3 z-[200] rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}

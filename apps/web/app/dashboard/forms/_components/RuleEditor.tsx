@@ -1,4 +1,4 @@
-import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, SlidersHorizontal } from "lucide-react";
+﻿import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, SlidersHorizontal } from "lucide-react";
 import { Badge, Button, Input, Textarea } from "@/components/ui";
 import { DropdownSelect } from "@/components/dropdown-select";
 import {
@@ -146,7 +146,8 @@ export function RuleEditor({
 
   return (
     <div
-      className={`rounded-lg border bg-surface/72 p-4 shadow-sm backdrop-blur transition ${expanded ? "border-border/70" : "border-primary-border"}`}
+      className={`relative rounded-lg border bg-surface/72 p-4 shadow-sm backdrop-blur transition ${expanded ? "border-border/70" : "border-primary-border"}`}
+      style={{ zIndex: expanded ? Math.max(1, 100 - index) : undefined }}
     >
       <div className="mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3">
