@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "next start -p 3020",
+    "start": "next start",
     "dev": "npm run dev:full",
     "dev:web": "cross-env NEXT_PUBLIC_API_BASE_URL=https://localhost:7039 NEXT_PUBLIC_SITE_URL=http://localhost:3020 NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3020/dashboard/nckh/callback next dev -p 3020",
     "dev:api": "dotnet run --project ../../src/FormAutoHub.Api/FormAutoHub.Api.csproj --launch-profile https",
