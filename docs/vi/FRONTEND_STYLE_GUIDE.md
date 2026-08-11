@@ -39,6 +39,17 @@ Tránh:
 - layout card-inside-card
 - giấu business actions sau icon không rõ nghĩa
 
+## Hướng triển khai public homepage
+
+Public homepage được chủ đích dùng như một marketing surface nên không bị ràng buộc bởi quy tắc tránh hero section dành cho authenticated dashboard.
+
+- Implement homepage bằng Tailwind CSS utilities và `lucide-react`, đồng nhất với frontend stack hiện có.
+- Giữ presentation riêng của page trong `apps/web/app/page.tsx` trừ khi pattern trở thành reusable cho nhiều public page.
+- Tái sử dụng global treatment `app-aura-bg` cho long-form landing background đã duyệt.
+- Không thêm plain CSS stylesheet riêng cho page khi layout có thể biểu diễn bằng Tailwind baseline đã duyệt.
+- Giữ homepage là Server Component với metadata và structured data, trừ khi interactive behavior cần một Client Component có phạm vi hẹp.
+- Visual của homepage không được giới thiệu hoặc ngụ ý capability sản phẩm chưa được duyệt.
+
 ## Quy tắc layout
 
 - Dùng dashboard shell cho các khu vực app đã đăng nhập.

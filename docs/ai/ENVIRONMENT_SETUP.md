@@ -25,6 +25,19 @@ Configuration:
 - payment settings only after payment gateway approval
 - AI settings only after AI feature approval
 
+## Local Full-App Launcher
+
+The repository provides `run-local.bat` for the standard Windows local-development workflow.
+
+- Run `run-local.bat` from the repository root to start the web app and API together.
+- The web app listens on `http://localhost:3020`.
+- The API uses the existing HTTPS launch profile at `https://localhost:7039`.
+- `npm run dev` in `apps/web` starts the same full-app workflow.
+- `npm run dev:web` starts only the Next.js app on port `3020`.
+- `npm run dev:api` starts only the ASP.NET Core API.
+- The local API CORS allowlist includes `localhost` and `127.0.0.1` on port `3020`.
+- The launcher installs missing frontend dependencies and reports missing Node.js, npm, .NET SDK, or HTTPS development certificate prerequisites.
+
 Phase 6 AI provider setup direction:
 
 - AI provider API keys should be entered through admin AI provider settings, not committed to source-controlled configuration.

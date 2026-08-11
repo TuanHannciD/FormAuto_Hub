@@ -39,6 +39,17 @@ Avoid:
 - card-inside-card layouts
 - hidden business actions behind unclear icons
 
+## Public Homepage Direction
+
+The public homepage is intentionally a marketing surface and is not governed by the authenticated dashboard restriction against hero sections.
+
+- Implement the homepage with Tailwind CSS utilities and `lucide-react`, consistent with the existing frontend stack.
+- Keep page-specific presentation in `apps/web/app/page.tsx` unless a pattern becomes reusable across multiple public pages.
+- Reuse the global `app-aura-bg` treatment for the approved long-form landing background.
+- Do not add a page-specific plain CSS stylesheet when the layout can be expressed with the approved Tailwind baseline.
+- Preserve the homepage as a Server Component with metadata and structured data unless interactive behavior requires a narrowly scoped Client Component.
+- Homepage visuals must not introduce or imply unapproved product capabilities.
+
 ## Layout Rules
 
 - Use a dashboard shell for authenticated app areas.
