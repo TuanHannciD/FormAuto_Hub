@@ -13,6 +13,7 @@ Use this file to choose the smallest sufficient skill combination.
 | Module/layer ownership | `formauto-module-router` | `formauto-phase-gate` |
 | Phase fit | `formauto-phase-gate` | `formauto-requirement-analyst` |
 | Runtime bug/log symptom | `formauto-bug-triage` | `formauto-http-behavior-tester` |
+| Production VPS health/log/incident check | `formauto-server-debugger` | `formauto-bug-triage`, `formauto-http-behavior-tester` |
 | Endpoint behavior check | `formauto-http-behavior-tester` | `formauto-contract-guard` |
 | Documentation edit | `formauto-controlled-doc-editor` | matching `docs/ai` and `docs/vi` files |
 | Stitch UI design generation | `formauto-stitch-ui-iterative-designer` | `formauto-phase-gate`, `formauto-reviewer` |
@@ -24,6 +25,7 @@ Use this file to choose the smallest sufficient skill combination.
 - Requirement -> module/phase/contract -> delivery -> worker -> reviewer.
 - Database recommendation -> risk review -> controlled doc editor after approval.
 - Bug symptom -> triage -> HTTP behavior tester when a live route check is useful -> worker -> reviewer.
+- Production symptom -> read-only server debugger -> bug triage or HTTP behavior tester when deeper analysis is needed.
 - Stitch UI screen -> iterative Stitch designer -> save design artifact -> reviewer when implementation risk exists.
 
 ## Ready Packs
