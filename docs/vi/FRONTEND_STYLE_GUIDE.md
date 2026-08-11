@@ -119,6 +119,37 @@ Checklist review:
 - Không dùng hero-scale typography trong dashboard panels.
 - Giữ contrast đủ tốt cho text, controls, và status badges.
 
+## Design token sản phẩm
+
+Palette sản phẩm đã duyệt được lấy từ public homepage và áp dụng cho cả public surface, authenticated dashboard và admin surface.
+
+- Violet là màu thương hiệu và hành động chính.
+- Navy là màu chữ chính và màu inverse surface.
+- Cyan là màu nhấn phụ có tiết chế và là màu semantic cho thông tin.
+- Emerald, amber và red tiếp tục là các màu semantic độc lập cho success, warning và destructive.
+- Trắng và gray-blue trung tính chiếm phần lớn nền ứng dụng và diện tích component.
+
+Nguồn chuẩn của token là:
+
+- `apps/web/app/globals.css` cho primitive và semantic CSS variables
+- `apps/web/tailwind.config.ts` cho Tailwind semantic utility mappings
+
+Frontend code phải dùng semantic utilities như `bg-surface`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-primary`, `bg-primary-soft`, `text-info` hoặc `bg-success-surface`. Page và component không được thêm trực tiếp mã hex/RGB hoặc Tailwind palette utilities như `cyan-*`, `violet-*`, `slate-*`, `emerald-*`, `amber-*` hoặc `red-*` khi đã có semantic token phù hợp.
+
+Chạy `npm run check:colors` trong `apps/web` để enforce quy tắc này. Check tương tự tự động chạy trước `npm run build`. Gate sẽ từ chối direct color literal, Tailwind palette utility, absolute white/black utility và arbitrary color utility trong source file của app và shared component. Dạng dùng token như `rgb(var(--success))` vẫn được phép với API của third-party component khi API đó yêu cầu một giá trị CSS color cụ thể.
+
+Treatment `app-aura-bg` đã duyệt tiếp tục được dùng cho homepage và application shells. Màu của treatment này phải tham chiếu product token để mọi thay đổi palette được quản lý tập trung.
+
+Trạng thái component phải tuân theo các vai trò sau:
+
+- primary action, selected và active navigation: primary tokens
+- visual accent phụ và charts: accent tokens
+- thông báo mang tính thông tin: info tokens
+- feedback success, warning và destructive: semantic state token tương ứng
+- panels, controls, dialogs và tables: surface, border và content tokens
+
+Thay đổi token phải giữ contrast, focus visibility, preview-before-submit controls và sự phân biệt rõ giữa trạng thái informational với destructive.
+
 ## UI cho dữ liệu và state
 
 Mỗi trang có dữ liệu cần định nghĩa:

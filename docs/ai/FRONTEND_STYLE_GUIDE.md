@@ -119,6 +119,37 @@ Review check:
 - Do not use hero-scale typography inside dashboard panels.
 - Maintain accessible contrast for text, controls, and status badges.
 
+## Product Design Tokens
+
+The approved product palette is derived from the public homepage and applies to public, authenticated dashboard, and admin surfaces.
+
+- Violet is the primary brand and action color.
+- Navy is the primary text and inverse-surface color.
+- Cyan is a restrained secondary accent and the semantic information color.
+- Emerald, amber, and red remain independent semantic colors for success, warning, and destructive states.
+- Neutral white and cool gray-blue surfaces provide the majority of the application background and component area.
+
+The token source of truth is:
+
+- `apps/web/app/globals.css` for primitive and semantic CSS variables
+- `apps/web/tailwind.config.ts` for Tailwind semantic utility mappings
+
+Frontend code must use semantic utilities such as `bg-surface`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-primary`, `bg-primary-soft`, `text-info`, or `bg-success-surface`. Page and component files must not introduce direct hex/RGB colors or Tailwind palette utilities such as `cyan-*`, `violet-*`, `slate-*`, `emerald-*`, `amber-*`, or `red-*` when an approved semantic token exists.
+
+Run `npm run check:colors` in `apps/web` to enforce this rule. The same check runs automatically before `npm run build`. It rejects direct color literals, Tailwind palette utilities, absolute white/black utilities, and arbitrary color utilities in app and shared-component source files. Token-driven forms such as `rgb(var(--success))` remain allowed for third-party component APIs that require a concrete CSS color value.
+
+The approved `app-aura-bg` treatment remains available for the homepage and application shells. Its colors must reference product tokens so palette changes stay centralized.
+
+Component states must follow these roles:
+
+- primary action, selected, and active navigation: primary tokens
+- secondary visual accent and charts: accent tokens
+- informational message: info tokens
+- success, warning, and destructive feedback: matching semantic state tokens
+- panels, controls, dialogs, and tables: surface, border, and content tokens
+
+Token changes must preserve contrast, focus visibility, preview-before-submit controls, and clear distinction between informational and destructive states.
+
 ## Data And State UI
 
 Every page with data should define:
