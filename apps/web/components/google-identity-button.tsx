@@ -91,7 +91,7 @@ export function GoogleIdentityButton({
   if (!GOOGLE_CLIENT_ID) {
     return (
       <button
-        className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/80 bg-white/78 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm"
+        className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/80 bg-surface/78 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm"
         onClick={onUnavailable}
         type="button"
       >

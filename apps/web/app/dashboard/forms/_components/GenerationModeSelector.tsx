@@ -22,12 +22,8 @@ export function GenerationModeSelector({
           <button
             className={`relative flex min-h-[92px] flex-col items-start justify-between rounded-lg border p-3 text-left transition ${
               active
-                ? isRules
-                  ? "border-cyan-300 bg-cyan-50/85 text-cyan-950 shadow-sm ring-1 ring-cyan-100"
-                  : isAiDefault
-                    ? "border-cyan-500 bg-cyan-50 text-cyan-950 shadow-md shadow-cyan-200/30 ring-2 ring-cyan-300"
-                    : "border-violet-500 bg-violet-50 text-violet-950 shadow-md shadow-violet-200/30 ring-2 ring-violet-300"
-                : "border-border/70 bg-white/70 text-slate-700 shadow-sm hover:border-cyan-300 hover:bg-cyan-50/60 hover:shadow-md"
+                ? "border-primary bg-primary-soft text-primary shadow-raised ring-2 ring-primary-border"
+                : "border-border/70 bg-surface/70 text-secondary-foreground shadow-sm hover:border-primary-border hover:bg-primary-soft/60 hover:shadow-md"
             }`}
             key={option.value}
             type="button"
@@ -36,7 +32,7 @@ export function GenerationModeSelector({
             {active && !isRules && (
               <div
                 className={`absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full ${
-                  isAiDefault ? "bg-cyan-400" : "bg-violet-400"
+                  isAiDefault ? "bg-accent" : "bg-primary"
                 }`}
               />
             )}
@@ -45,8 +41,8 @@ export function GenerationModeSelector({
                 <Icon className={`h-4 w-4 ${
                   active && !isRules
                     ? isAiDefault
-                      ? "text-cyan-600"
-                      : "text-violet-600"
+                      ? "text-accent"
+                      : "text-primary"
                     : ""
                 }`} />
                 {option.title}
@@ -63,7 +59,7 @@ export function GenerationModeSelector({
                         : "warning"
               }>{option.badge}</Badge>
             </span>
-            <span className="mt-3 text-xs font-medium text-muted-foreground group-hover:text-slate-700">
+            <span className="mt-3 text-xs font-medium text-muted-foreground group-hover:text-secondary-foreground">
               {option.description}
             </span>
           </button>

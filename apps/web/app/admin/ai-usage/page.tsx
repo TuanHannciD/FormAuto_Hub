@@ -104,12 +104,12 @@ const perfColumns: Array<BaseTableColumn<AiProviderPerf>> = [
   {
     key: "successfulRuns",
     header: "Thành công",
-    render: (p) => <span className="text-green-600 font-semibold">{p.successfulRuns}</span>
+    render: (p) => <span className="text-success font-semibold">{p.successfulRuns}</span>
   },
   {
     key: "failedRuns",
     header: "Thất bại",
-    render: (p) => <span className={p.failedRuns > 0 ? "text-red-600 font-semibold" : ""}>{p.failedRuns}</span>
+    render: (p) => <span className={p.failedRuns > 0 ? "text-destructive font-semibold" : ""}>{p.failedRuns}</span>
   },
   { key: "avgDurationMs", header: "TB thời gian", render: (p) => displayDuration(Math.round(p.avgDurationMs)) }
 ];
@@ -329,7 +329,7 @@ export default function AdminAiUsagePage() {
                         <div className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                           {day.runs} runs
                         </div>
-                        <div className="w-3 rounded-t bg-cyan-400 transition-all hover:bg-cyan-500" style={{ height: `${Math.max(height, 2)}px` }} />
+                        <div className="w-3 rounded-t bg-accent transition-all hover:bg-accent" style={{ height: `${Math.max(height, 2)}px` }} />
                         <div className="mt-1 text-[10px] text-muted-foreground">{day.date.slice(5)}</div>
                       </div>
                     );
@@ -456,8 +456,8 @@ export default function AdminAiUsagePage() {
 // ── Metric card ──
 
 function MetricCard({ title, value, tone = "neutral" }: { title: string; value: string; tone?: string }) {
-  const borderColors: Record<string, string> = { neutral: "border-border/70", green: "border-green-300", violet: "border-violet-300", blue: "border-cyan-300" };
-  const textColors: Record<string, string> = { neutral: "text-foreground", green: "text-green-700", violet: "text-violet-700", blue: "text-cyan-700" };
+  const borderColors: Record<string, string> = { neutral: "border-border/70", green: "border-success-border", violet: "border-primary-border", blue: "border-info-border" };
+  const textColors: Record<string, string> = { neutral: "text-foreground", green: "text-success", violet: "text-primary", blue: "text-info" };
   return (
     <Card className={borderColors[tone] ?? borderColors.neutral}>
       <CardContent className="pt-6">

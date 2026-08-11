@@ -206,8 +206,8 @@ function NckhContent() {
             </div>
           ) : googleLinked ? (
             <div className="flex items-center gap-2 text-sm">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-emerald-700">Đã liên kết Google — có thể nhập form.</span>
+              <span className="flex h-2 w-2 rounded-full bg-success" />
+              <span className="text-success">Đã liên kết Google — có thể nhập form.</span>
             </div>
           ) : (
             <div className="space-y-3">

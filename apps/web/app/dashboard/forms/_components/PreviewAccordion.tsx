@@ -18,14 +18,14 @@ export function PreviewAccordion({
   onToggle: () => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
+    <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/72 shadow-sm backdrop-blur">
       <button
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-muted/40"
         onClick={onToggle}
         type="button"
       >
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-sm font-semibold text-cyan-700">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-info-surface text-sm font-semibold text-info">
           {index + 1}
         </span>
         <span className="min-w-0 flex-1">
@@ -38,15 +38,15 @@ export function PreviewAccordion({
           </span>
         </span>
         <span className="hidden sm:inline-flex"><StatusBadge status={preview.status} /></span>
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-white/80 text-muted-foreground">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-surface/80 text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </span>
       </button>
 
       {open && (
-        <div className="max-h-[420px] space-y-2 overflow-y-auto border-t border-border/70 bg-white/45 p-3">
+        <div className="max-h-[420px] space-y-2 overflow-y-auto border-t border-border/70 bg-surface/45 p-3">
           {preview.answers.map((answer, answerIndex) => (
-            <div className="rounded-lg border border-border/70 bg-white/80 px-3 py-3" key={`${preview.id}-${answer.questionId}-${answerIndex}`}>
+            <div className="rounded-lg border border-border/70 bg-surface/80 px-3 py-3" key={`${preview.id}-${answer.questionId}-${answerIndex}`}>
               <div className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <FileText className="h-3.5 w-3.5" />
                 <span className="truncate">{answer.label || "Không có tiêu đề"}</span>

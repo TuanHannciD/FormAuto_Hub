@@ -103,7 +103,7 @@ export default function TopUpOrderDetailPage() {
         <DialogBody className="space-y-5">
           <Alert>Credit được cộng sau khi thanh toán được xác minh hoặc yêu cầu được quản trị viên xử lý.</Alert>
           <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <section className="rounded-lg border border-border/70 bg-white/45 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
               <div className="border-b border-border/70 px-4 py-3">
                 <h3 className="font-semibold">Thông tin yêu cầu</h3>
               </div>
@@ -119,7 +119,7 @@ export default function TopUpOrderDetailPage() {
               </div>
             </section>
 
-            <section className="rounded-lg border border-border/70 bg-white/45 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
               <div className="border-b border-border/70 px-4 py-3">
                 <h3 className="font-semibold">Tiến trình xử lý</h3>
               </div>
@@ -134,16 +134,16 @@ export default function TopUpOrderDetailPage() {
             </section>
           </div>
           {evidenceUrl && (
-            <section className="rounded-lg border border-border/70 bg-white/45 p-4 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 p-4 backdrop-blur">
               <h3 className="font-semibold">Ảnh minh chứng</h3>
-              <div className="relative mt-3 h-[480px] w-full overflow-hidden rounded-md bg-white/55">
+              <div className="relative mt-3 h-[480px] w-full overflow-hidden rounded-md bg-surface/55">
                 <Image unoptimized fill className="object-contain" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 100vw, 896px" />
               </div>
             </section>
           )}
         </DialogBody>
         <DialogFooter className="flex-col sm:flex-row">
-          <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-white/75 px-4 py-2 text-sm font-medium transition hover:bg-white sm:w-auto" href="/dashboard/top-up">
+          <Link className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-surface/75 px-4 py-2 text-sm font-medium transition hover:bg-surface sm:w-auto" href="/dashboard/top-up">
             Quay lại yêu cầu nạp
           </Link>
           <Button className="w-full sm:w-auto" type="button" onClick={closeDialog}>Đóng</Button>
@@ -164,7 +164,7 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-white/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-surface/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>

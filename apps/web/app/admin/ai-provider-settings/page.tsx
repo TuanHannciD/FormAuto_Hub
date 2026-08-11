@@ -96,10 +96,10 @@ export default function AiProviderSettingsPage() {
         }
       />
 
-      <Alert className="border-amber-200/80 bg-amber-50/85 text-amber-900">
+      <Alert className="border-warning-border/80 bg-warning-surface/85 text-warning">
         API key thật không được trả về frontend. Nếu để trống API key khi lưu, backend sẽ giữ key hiện có.
       </Alert>
-      <Alert className="border-sky-200/80 bg-sky-50/85 text-sky-950">
+      <Alert className="border-info-border/80 bg-info-surface/85 text-info">
         Provider, model và API endpoint do admin nhập, được lưu server-side và không cho normal user tự quyết khi generate. Kiểm tra cấu hình không tạo preview, không trừ credit và không gọi luồng submit.
       </Alert>
 
@@ -174,18 +174,18 @@ export default function AiProviderSettingsPage() {
 
                 <label className="block text-sm font-medium">
                   Bật AI provider
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border/70 bg-white/55 px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border/70 bg-surface/55 px-3 py-2 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép luồng AI preview dùng provider/model đã lưu trên server.</span>
                     <input checked={isEnabled} disabled={isLoading || isSaving} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
                 </label>
 
-                <div className="rounded-md border border-cyan-200/80 bg-cyan-50/85 p-4 text-sm text-cyan-950 shadow-sm backdrop-blur">
+                <div className="rounded-md border border-info-border/80 bg-info-surface/85 p-4 text-sm text-info shadow-sm backdrop-blur">
                   <div className="flex items-start gap-3">
                     <Bot className="mt-0.5 shrink-0 text-primary" size={18} />
                     <div>
                       <p className="font-semibold">Cấu hình này là quyền server-side</p>
-                      <p className="mt-1 text-cyan-800">
+                      <p className="mt-1 text-info">
                         Người dùng thường không được gửi provider, model, API endpoint hoặc API key trong request generate. Backend dùng cấu hình đang bật tại đây.
                       </p>
                     </div>
@@ -229,7 +229,7 @@ export default function AiProviderSettingsPage() {
               <Detail label="Base URL" value={baseUrl || "Không cấu hình"} />
               <Detail label="Model mặc định" value={defaultModel || "Chưa chọn"} />
               <Detail label="Đang bật" value={isEnabled ? "Có" : "Chưa"} />
-              <div className="rounded-md border border-border/70 bg-white/55 p-3 shadow-sm backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-surface/55 p-3 shadow-sm backdrop-blur">
                 <p className="text-xs text-muted-foreground">Kết quả kiểm tra</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <StatusBadge status={settings?.lastCheckStatus || "NotChecked"} />
@@ -248,13 +248,13 @@ export default function AiProviderSettingsPage() {
               {(savedModels.length > 0 ? savedModels : [defaultModel].filter(Boolean)).map((model) => (
                 <div
                   className={cn(
-                    "flex items-center justify-between rounded-md border border-border/70 bg-white/55 p-3",
-                    model === defaultModel && "border-cyan-200 bg-cyan-50/80 text-cyan-950"
+                    "flex items-center justify-between rounded-md border border-border/70 bg-surface/55 p-3",
+                    model === defaultModel && "border-primary-border bg-primary-soft/80 text-primary"
                   )}
                   key={model}
                 >
                   <span className="font-mono text-xs">{model}</span>
-                  {model === defaultModel && <CheckCircle2 className="text-emerald-600" size={16} />}
+                  {model === defaultModel && <CheckCircle2 className="text-success" size={16} />}
                 </div>
               ))}
               {savedModels.length === 0 && !defaultModel && <p className="text-muted-foreground">Chưa có model được lưu.</p>}
@@ -298,9 +298,9 @@ function Detail({
   tone?: "default" | "success" | "warning";
 }) {
   const toneClass = {
-    default: "border-border/70 bg-white/55",
-    success: "border-emerald-200 bg-emerald-50/85 text-emerald-900",
-    warning: "border-amber-200 bg-amber-50/85 text-amber-900"
+    default: "border-border/70 bg-surface/55",
+    success: "border-success-border bg-success-surface/85 text-success",
+    warning: "border-warning-border bg-warning-surface/85 text-warning"
   }[tone];
 
   return (
@@ -316,9 +316,9 @@ function Detail({
 
 function CheckRow({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-white/55 p-3">
+    <div className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-surface/55 p-3">
       <span>{label}</span>
-      {ok ? <CheckCircle2 className="shrink-0 text-emerald-600" size={16} /> : <AlertCircle className="shrink-0 text-red-600" size={16} />}
+      {ok ? <CheckCircle2 className="shrink-0 text-success" size={16} /> : <AlertCircle className="shrink-0 text-destructive" size={16} />}
     </div>
   );
 }

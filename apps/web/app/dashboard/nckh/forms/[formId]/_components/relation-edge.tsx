@@ -39,7 +39,7 @@ export function RelationEdge({
       />
       <EdgeLabelRenderer>
         <button
-          className={`nodrag nopan pointer-events-auto absolute rounded-full border px-2 py-1 text-[11px] font-semibold shadow-sm ${data?.selected ? "border-primary bg-primary text-primary-foreground" : "border-border bg-white text-slate-700"}`}
+          className={`nodrag nopan pointer-events-auto absolute rounded-full border px-2 py-1 text-[11px] font-semibold shadow-sm ${data?.selected ? "border-primary bg-primary text-primary-foreground" : "border-border bg-surface text-secondary-foreground"}`}
           style={{ transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` }}
           type="button"
           onClick={(event) => {

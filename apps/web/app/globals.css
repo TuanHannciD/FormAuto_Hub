@@ -3,15 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --background: 196 100% 98%;
-  --foreground: 222 50% 10%;
-  --muted: 199 56% 95%;
-  --muted-foreground: 215 18% 46%;
-  --border: 205 36% 90%;
-  --primary: 189 96% 31%;
-  --primary-foreground: 0 0% 100%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
+  /* Brand primitives: sourced from the public homepage. */
+  --brand-600: 92 85 231;
+  --brand-700: 71 63 209;
+  --brand-100: 239 239 255;
+  --brand-200: 217 215 255;
+  --accent-500: 82 199 238;
+  --accent-200: 185 243 255;
+  --accent-100: 147 237 255;
+
+  /* Semantic product tokens. */
+  --background: 247 249 255;
+  --foreground: 24 36 74;
+  --surface: 255 255 255;
+  --surface-subtle: 247 248 252;
+  --surface-inverse: 24 36 74;
+  --secondary-foreground: 89 101 132;
+  --muted: 245 244 255;
+  --muted-foreground: 119 131 162;
+  --border: 223 228 241;
+  --border-strong: 174 183 207;
+  --primary: var(--brand-600);
+  --primary-hover: var(--brand-700);
+  --primary-foreground: 255 255 255;
+  --primary-soft: var(--brand-100);
+  --primary-border: var(--brand-200);
+  --accent: var(--accent-500);
+  --accent-soft: var(--accent-200);
+  --accent-highlight: var(--accent-100);
+  --inverse-foreground: 255 255 255;
+  --inverse-muted: 200 206 225;
+
+  /* Semantic states stay independent from the brand palette. */
+  --info: 14 116 144;
+  --info-surface: 236 254 255;
+  --info-border: 165 243 252;
+  --success: 4 120 87;
+  --success-surface: 236 253 245;
+  --success-border: 167 243 208;
+  --warning: 180 83 9;
+  --warning-surface: 255 251 235;
+  --warning-border: 253 230 138;
+  --destructive: 220 38 38;
+  --destructive-surface: 254 242 242;
+  --destructive-border: 254 202 202;
+  --destructive-foreground: 255 255 255;
+
+  /* Elevation and interaction tokens. */
+  --shadow-color: 40 54 102;
+  --overlay: 24 36 74;
+  --focus-ring: var(--brand-600);
 }
 
 * {
@@ -20,8 +61,8 @@
 
 body {
   margin: 0;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
   overflow-x: hidden;
   font-size: 14px;
   letter-spacing: 0;
@@ -33,18 +74,18 @@ a {
 }
 
 ::selection {
-  background: hsl(var(--primary) / 0.16);
+  background: rgb(var(--primary) / 0.16);
 }
 
 .app-aura-bg {
-  background-color: #f7fbff;
+  background-color: rgb(var(--background));
   background-image:
-    radial-gradient(ellipse at 50% 0%, rgb(6 182 212 / 0.16) 0%, transparent 48%),
-    radial-gradient(ellipse at 14% 34%, rgb(20 184 166 / 0.13) 0%, transparent 42%),
-    radial-gradient(ellipse at 88% 46%, rgb(132 85 239 / 0.095) 0%, transparent 44%),
-    radial-gradient(ellipse at 24% 68%, rgb(244 114 182 / 0.07) 0%, transparent 44%),
-    radial-gradient(ellipse at 76% 100%, rgb(245 158 11 / 0.075) 0%, transparent 48%),
-    linear-gradient(135deg, #f8feff 0%, #effbff 42%, #f8fbff 100%);
+    radial-gradient(ellipse at 50% 0%, rgb(var(--primary) / 0.14) 0%, transparent 48%),
+    radial-gradient(ellipse at 14% 34%, rgb(var(--accent) / 0.12) 0%, transparent 42%),
+    radial-gradient(ellipse at 88% 46%, rgb(var(--primary) / 0.09) 0%, transparent 44%),
+    radial-gradient(ellipse at 24% 68%, rgb(var(--accent) / 0.055) 0%, transparent 44%),
+    radial-gradient(ellipse at 76% 100%, rgb(var(--primary-border) / 0.18) 0%, transparent 48%),
+    linear-gradient(135deg, rgb(var(--surface)) 0%, rgb(var(--background)) 48%, rgb(var(--surface-subtle)) 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100vw 100vh, 100vw 100vh, 100vw 100vh, 100vw 100vh, 100vw 100vh, 100% 100%;
@@ -66,21 +107,21 @@ main.app-aura-bg::after {
 
 main.app-aura-bg::before {
   background-image:
-    repeating-linear-gradient(0deg, transparent 0 47px, rgb(6 104 122 / 0.035) 48px 49px),
-    repeating-linear-gradient(90deg, transparent 0 47px, rgb(6 104 122 / 0.03) 48px 49px),
-    linear-gradient(115deg, transparent 0 16%, rgb(255 255 255 / 0.42) 17%, transparent 23%),
-    linear-gradient(102deg, transparent 0 47%, rgb(255 255 255 / 0.36) 49%, transparent 56%),
-    linear-gradient(78deg, transparent 0 70%, rgb(255 255 255 / 0.34) 72%, transparent 79%);
-  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.85), rgb(0 0 0 / 0.32) 45%, rgb(0 0 0 / 0.72));
+    repeating-linear-gradient(0deg, transparent 0 47px, rgb(var(--primary) / 0.025) 48px 49px),
+    repeating-linear-gradient(90deg, transparent 0 47px, rgb(var(--primary) / 0.022) 48px 49px),
+    linear-gradient(115deg, transparent 0 16%, rgb(var(--surface) / 0.44) 17%, transparent 23%),
+    linear-gradient(102deg, transparent 0 47%, rgb(var(--surface) / 0.38) 49%, transparent 56%),
+    linear-gradient(78deg, transparent 0 70%, rgb(var(--surface) / 0.34) 72%, transparent 79%);
+  mask-image: linear-gradient(to bottom, rgb(var(--overlay) / 0.85), rgb(var(--overlay) / 0.32) 45%, rgb(var(--overlay) / 0.72));
 }
 
 main.app-aura-bg::after {
   background-image:
-    linear-gradient(105deg, transparent 5%, rgb(255 255 255 / 0.54) 14%, rgb(125 211 252 / 0.12) 18%, transparent 31%),
-    linear-gradient(73deg, transparent 38%, rgb(255 255 255 / 0.42) 47%, rgb(196 181 253 / 0.11) 53%, transparent 66%),
-    linear-gradient(113deg, transparent 63%, rgb(255 255 255 / 0.44) 73%, rgb(251 191 36 / 0.08) 78%, transparent 88%),
-    radial-gradient(ellipse at 20% 30%, rgb(6 182 212 / 0.08), transparent 36%),
-    radial-gradient(ellipse at 86% 58%, rgb(244 114 182 / 0.055), transparent 34%);
+    linear-gradient(105deg, transparent 5%, rgb(var(--surface) / 0.54) 14%, rgb(var(--accent) / 0.1) 18%, transparent 31%),
+    linear-gradient(73deg, transparent 38%, rgb(var(--surface) / 0.42) 47%, rgb(var(--primary-border) / 0.15) 53%, transparent 66%),
+    linear-gradient(113deg, transparent 63%, rgb(var(--surface) / 0.44) 73%, rgb(var(--accent-soft) / 0.1) 78%, transparent 88%),
+    radial-gradient(ellipse at 20% 30%, rgb(var(--accent) / 0.075), transparent 36%),
+    radial-gradient(ellipse at 86% 58%, rgb(var(--primary) / 0.045), transparent 34%);
   filter: blur(0.2px);
   opacity: 0.92;
 }
@@ -90,26 +131,30 @@ main.app-aura-bg > :not(header) {
   z-index: 1;
 }
 
+.brand-radial-bg {
+  background: radial-gradient(circle at center, rgb(var(--accent) / 0.22), transparent 43%);
+}
+
 .glass-panel {
-  border: 1px solid rgb(226 238 246 / 0.92);
-  background: rgb(255 255 255 / 0.9);
-  box-shadow: 0 14px 36px rgb(15 23 42 / 0.055);
+  border: 1px solid rgb(var(--border) / 0.92);
+  background: rgb(var(--surface) / 0.9);
+  box-shadow: 0 14px 36px rgb(var(--shadow-color) / 0.055);
   backdrop-filter: blur(20px);
 }
 
 .glass-sidebar {
-  border-color: rgb(226 238 246 / 0.86);
-  background: rgb(248 253 255 / 0.86);
-  box-shadow: 12px 0 30px rgb(15 23 42 / 0.035);
+  border-color: rgb(var(--border) / 0.86);
+  background: rgb(var(--surface) / 0.86);
+  box-shadow: 12px 0 30px rgb(var(--shadow-color) / 0.035);
   backdrop-filter: blur(24px);
 }
 
 .aura-divider {
-  background: linear-gradient(90deg, rgb(0 169 195 / 0.68), rgb(105 113 255 / 0.28), transparent);
+  background: linear-gradient(90deg, rgb(var(--primary) / 0.68), rgb(var(--accent) / 0.3), transparent);
 }
 
 .metric-accent {
-  background: linear-gradient(90deg, rgb(0 169 195 / 0.46), rgb(124 58 237 / 0.22));
+  background: linear-gradient(90deg, rgb(var(--primary) / 0.46), rgb(var(--accent) / 0.24));
 }
 
 .scroll-reveal {
@@ -147,8 +192,8 @@ main.app-aura-bg > :not(header) {
 }
 
 .motion-card:hover {
-  border-color: rgb(147 197 253 / 0.88);
-  box-shadow: 0 18px 42px rgb(15 23 42 / 0.105);
+  border-color: rgb(var(--primary-border) / 0.88);
+  box-shadow: 0 18px 42px rgb(var(--shadow-color) / 0.105);
   transform: translateY(-4px);
 }
 
@@ -170,7 +215,7 @@ main.app-aura-bg > :not(header) {
 }
 
 .motion-button:hover {
-  box-shadow: 0 14px 30px rgb(37 99 235 / 0.18);
+  box-shadow: 0 14px 30px rgb(var(--primary) / 0.18);
   transform: translateY(-2px);
 }
 
@@ -206,8 +251,8 @@ main.app-aura-bg > :not(header) {
 }
 
 .motion-details:hover {
-  border-color: rgb(147 197 253 / 0.78);
-  box-shadow: 0 14px 34px rgb(15 23 42 / 0.085);
+  border-color: rgb(var(--primary-border) / 0.78);
+  box-shadow: 0 14px 34px rgb(var(--shadow-color) / 0.085);
   transform: translateY(-2px);
 }
 

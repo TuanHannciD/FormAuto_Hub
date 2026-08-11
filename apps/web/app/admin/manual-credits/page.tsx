@@ -308,7 +308,7 @@ function RequestDetailDialog({
           <Detail label="Ghi chú chuyển khoản" value={request.paymentNote || "-"} />
 
           {evidenceUrl ? (
-            <div className="relative h-[420px] w-full overflow-hidden rounded-md border border-border/70 bg-white/55">
+            <div className="relative h-[420px] w-full overflow-hidden rounded-md border border-border/70 bg-surface/55">
               <Image unoptimized fill className="object-contain" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 100vw, 896px" />
             </div>
           ) : (
@@ -350,7 +350,7 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-white/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-surface/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>
@@ -363,9 +363,9 @@ function Metric({ icon, label, value }: { icon: ReactNode; label: string; value:
       <CardContent className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
         </div>
-        <span className="rounded-md bg-cyan-50 p-2 text-primary">{icon}</span>
+        <span className="rounded-md bg-info-surface p-2 text-primary">{icon}</span>
       </CardContent>
     </Card>
   );
@@ -373,7 +373,7 @@ function Metric({ icon, label, value }: { icon: ReactNode; label: string; value:
 
 function Detail({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="min-w-0 rounded-md border border-border/70 bg-white/55 p-3">
+    <div className="min-w-0 rounded-md border border-border/70 bg-surface/55 p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
       <div className="mt-1 break-words text-sm font-medium">{value}</div>
     </div>

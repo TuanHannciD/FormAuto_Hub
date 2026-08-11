@@ -85,17 +85,17 @@ export default function AdminDashboardPage() {
         </Card>
 
         <div className="space-y-4">
-          <Card className="border-amber-200 bg-amber-50/70">
+          <Card className="border-warning-border bg-warning-surface/70">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-amber-900">
+              <CardTitle className="flex items-center gap-2 text-warning">
                 <AlertTriangle size={18} />
                 Cảnh báo webhook/payment
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm text-amber-900">
+            <CardContent className="space-y-3 text-sm text-warning">
               <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
-              <div className="rounded-md border border-amber-200 bg-white/75 p-3 backdrop-blur">
-                <p className="text-xs font-medium uppercase text-amber-700">Cần theo dõi</p>
+              <div className="rounded-md border border-warning-border bg-surface/75 p-3 backdrop-blur">
+                <p className="text-xs font-medium uppercase text-warning">Cần theo dõi</p>
                 <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
               </div>
             </CardContent>
@@ -136,11 +136,11 @@ function Metric({
   tone: "blue" | "emerald" | "violet" | "amber" | "red";
 }) {
   const toneClass = {
-    blue: "bg-blue-50 text-blue-700",
-    emerald: "bg-emerald-50 text-emerald-700",
-    violet: "bg-violet-50 text-violet-700",
-    amber: "bg-amber-50 text-amber-700",
-    red: "bg-red-50 text-red-700"
+    blue: "bg-info-surface text-info",
+    emerald: "bg-success-surface text-success",
+    violet: "bg-primary-soft text-primary",
+    amber: "bg-warning-surface text-warning",
+    red: "bg-destructive-surface text-destructive"
   }[tone];
 
   return (
@@ -152,7 +152,7 @@ function Metric({
             <Icon size={15} />
           </span>
         </div>
-        <p className="text-[24px] font-extrabold leading-tight text-slate-950">{value}</p>
+        <p className="text-[24px] font-extrabold leading-tight text-foreground">{value}</p>
       </CardContent>
     </Card>
   );
@@ -160,7 +160,7 @@ function Metric({
 
 function Detail({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "danger" }) {
   return (
-    <div className={tone === "danger" ? "rounded-md border border-red-200 bg-red-50/85 p-3" : "rounded-md border border-border/70 bg-white/55 p-3"}>
+    <div className={tone === "danger" ? "rounded-md border border-destructive-border bg-destructive-surface/85 p-3" : "rounded-md border border-border/70 bg-surface/55 p-3"}>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>

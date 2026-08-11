@@ -49,8 +49,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {navItems.map((item) => (
         <Link
           className={cn(
-            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-cyan-50/80 hover:text-foreground",
-            isActiveHref(item.href) && "bg-cyan-100/80 text-primary shadow-sm ring-1 ring-cyan-200/70"
+            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-primary-soft/70 hover:text-foreground",
+            isActiveHref(item.href) && "bg-primary-soft/85 text-primary shadow-sm ring-1 ring-primary-border/80"
           )}
           href={item.href}
           key={item.href}
@@ -61,7 +61,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </Link>
       ))}
       <Link
-        className="flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-cyan-50/80 hover:text-foreground"
+        className="flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-primary-soft/70 hover:text-foreground"
         href="/dashboard"
         onClick={() => setIsMobileNavOpen(false)}
       >
@@ -79,7 +79,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     return (
       <main className="app-aura-bg flex min-h-screen items-center justify-center px-5">
         <div className="glass-panel max-w-md rounded-lg p-6 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50 text-amber-700">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-warning-surface text-warning">
             <ShieldCheck size={22} />
           </div>
           <h1 className="text-lg font-semibold">Bạn chưa có quyền admin</h1>
@@ -106,7 +106,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </div>
         {navigation}
         <div className="mt-auto space-y-4 border-t border-border/70 pt-4">
-          <Link className="flex items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-cyan-50/80 hover:text-foreground" href="/dashboard">
+          <Link className="flex items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-primary-soft/70 hover:text-foreground" href="/dashboard">
             <HelpCircle size={18} />
             Hỗ trợ kỹ thuật
           </Link>
@@ -125,7 +125,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
             aria-label="Đóng menu bằng lớp phủ"
-            className="absolute inset-0 bg-slate-950/40"
+            className="absolute inset-0 bg-surface-inverse/40"
             onClick={() => setIsMobileNavOpen(false)}
             type="button"
           />
@@ -160,7 +160,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <main className="lg:pl-56">
-        <header className="sticky top-0 z-10 border-b border-white/70 bg-white/62 px-4 py-3 backdrop-blur-xl sm:px-5">
+        <header className="sticky top-0 z-10 border-b border-inverse-foreground/70 bg-surface/62 px-4 py-3 backdrop-blur-xl sm:px-5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Button

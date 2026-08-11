@@ -147,7 +147,7 @@ function displayPaymentUser(item: AdminPayment) {
 
 function CompactStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border/70 bg-white/65 px-3 py-2 shadow-sm backdrop-blur">
+    <div className="rounded-md border border-border/70 bg-surface/65 px-3 py-2 shadow-sm backdrop-blur">
       <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
       <p className="mt-1 text-lg font-semibold">{value}</p>
     </div>
@@ -166,10 +166,10 @@ function Stat({
   tone: "amber" | "emerald" | "red" | "slate";
 }) {
   const toneClass = {
-    amber: "bg-amber-50 text-amber-700",
-    emerald: "bg-emerald-50 text-emerald-700",
-    red: "bg-red-50 text-red-700",
-    slate: "bg-slate-100 text-slate-700"
+    amber: "bg-warning-surface text-warning",
+    emerald: "bg-success-surface text-success",
+    red: "bg-destructive-surface text-destructive",
+    slate: "bg-surface-subtle text-secondary-foreground"
   }[tone];
 
   return (
@@ -177,7 +177,7 @@ function Stat({
       <CardContent className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
         </div>
         <span className={`rounded-md p-2 ${toneClass}`}>
           <Icon size={18} />

@@ -169,7 +169,7 @@ export default function TopUpPage() {
         title="Nạp credit bằng PayOS"
         description="Chọn gói credit, tạo liên kết thanh toán và chờ hệ thống xác minh PayOS."
         actions={
-        <div className="rounded-md border border-border/70 bg-white/75 px-3 py-2 text-sm shadow-sm backdrop-blur">
+        <div className="rounded-md border border-border/70 bg-surface/75 px-3 py-2 text-sm shadow-sm backdrop-blur">
           <span className="text-muted-foreground">Số dư: </span>
           <span className="font-semibold">{summary ? `${summary.currentCreditBalance} credit` : "-"}</span>
         </div>
@@ -198,7 +198,7 @@ export default function TopUpPage() {
               <div className="grid gap-3 md:grid-cols-3">
                 {packages.map((item) => (
                   <button
-                    className={`rounded-lg border p-4 text-left shadow-sm backdrop-blur transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border/70 bg-white/65"}`}
+                    className={`rounded-lg border p-4 text-left shadow-sm backdrop-blur transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border/70 bg-surface/65"}`}
                     key={item.id}
                     onClick={() => setPackageId(item.id)}
                     type="button"
@@ -231,7 +231,7 @@ export default function TopUpPage() {
             </summary>
             <div className="border-t border-border/70 p-5">
               {pendingManualOrder && (
-                <Alert className="mb-4 border-amber-200 bg-amber-50 text-amber-950">
+                <Alert className="mb-4 border-warning-border bg-warning-surface text-warning">
                   Bạn đang có một yêu cầu đối soát thủ công đang chờ xử lý. Mã yêu cầu: <RequestCode id={pendingManualOrder.id} />.
                 </Alert>
               )}
@@ -245,7 +245,7 @@ export default function TopUpPage() {
                       type="file"
                       onChange={(event) => uploadEvidence(event.target.files?.[0] ?? null)}
                     />
-                    <span className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border/70 bg-white/65 px-3 text-sm text-muted-foreground">
+                    <span className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border/70 bg-surface/65 px-3 text-sm text-muted-foreground">
                       {isUploadingEvidence ? <Upload size={15} /> : <FileImage size={15} />}
                       {isUploadingEvidence ? "Đang tải..." : evidenceName || "Chưa chọn ảnh"}
                     </span>
@@ -270,7 +270,7 @@ export default function TopUpPage() {
             <Metric label="Gói sản phẩm" value={selectedPackage?.name ?? "-"} />
             <Metric label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "-"} />
             <Metric label="Tổng số tiền" value={selectedPackage ? formatCurrency(selectedPackage.price) : "-"} />
-            <p className="rounded-md border border-cyan-100 bg-cyan-50 px-3 py-2 text-xs leading-5 text-cyan-900">
+            <p className="rounded-md border border-info-border bg-info-surface px-3 py-2 text-xs leading-5 text-info">
               Đây là luồng chính. Sau khi tạo liên kết, hoàn tất thanh toán trên PayOS và chờ xác minh trước khi credit được cộng.
             </p>
               <Button className="w-full shadow-md" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
@@ -309,7 +309,7 @@ export default function TopUpPage() {
               <div className="space-y-2 border-t border-border/70 pt-3">
                 <span className="block text-xs text-muted-foreground">Mã yêu cầu: <RequestCode id={order.id} /></span>
                 {order.evidenceFileId && <span className="block text-xs text-primary">Có ảnh minh chứng đã tải lên</span>}
-                <button className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-white/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-white" type="button" onClick={() => setSelectedOrderId(order.id)}>
+                <button className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-surface/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface" type="button" onClick={() => setSelectedOrderId(order.id)}>
                   Xem chi tiết
                 </button>
               </div>
@@ -338,7 +338,7 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-white/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-surface/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>
@@ -347,7 +347,7 @@ function RequestCode({ id }: { id: string }) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border/70 bg-white/55 p-3">
+    <div className="rounded-md border border-border/70 bg-surface/55 p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>
@@ -357,7 +357,7 @@ function Metric({ label, value }: { label: string; value: string }) {
 function CheckItem({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-2">
-      <CheckCircle2 className="mt-0.5 text-emerald-600" size={15} />
+      <CheckCircle2 className="mt-0.5 text-success" size={15} />
       <span>{text}</span>
     </div>
   );
@@ -386,7 +386,7 @@ function TopupOrderDetailDialog({
         <DialogBody className="space-y-5">
           <Alert>Credit được cộng sau khi thanh toán được xác minh hoặc yêu cầu được quản trị viên xử lý.</Alert>
           <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <section className="rounded-lg border border-border/70 bg-white/45 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
               <div className="border-b border-border/70 px-4 py-3">
                 <h3 className="font-semibold">Thông tin yêu cầu</h3>
               </div>
@@ -402,7 +402,7 @@ function TopupOrderDetailDialog({
               </div>
             </section>
 
-            <section className="rounded-lg border border-border/70 bg-white/45 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
               <div className="border-b border-border/70 px-4 py-3">
                 <h3 className="font-semibold">Tiến trình xử lý</h3>
               </div>
@@ -417,9 +417,9 @@ function TopupOrderDetailDialog({
             </section>
           </div>
           {evidenceUrl && (
-            <section className="rounded-lg border border-border/70 bg-white/45 p-4 backdrop-blur">
+            <section className="rounded-lg border border-border/70 bg-surface/45 p-4 backdrop-blur">
               <h3 className="font-semibold">Ảnh minh chứng</h3>
-              <div className="relative mt-3 h-[480px] w-full overflow-hidden rounded-md bg-white/55">
+              <div className="relative mt-3 h-[480px] w-full overflow-hidden rounded-md bg-surface/55">
                 <Image unoptimized fill className="object-contain" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 100vw, 896px" />
               </div>
             </section>

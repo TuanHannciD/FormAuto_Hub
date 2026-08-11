@@ -65,8 +65,8 @@ export function SearchableDropdownSelect({
     <div className={cn("relative", className)} ref={rootRef}>
       <div
         className={cn(
-          "flex min-h-10 w-full items-center gap-2 rounded-md border border-border/80 bg-white/85 px-3 py-2 text-sm outline-none transition",
-          "focus-within:border-primary focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/15 hover:border-primary/70",
+          "flex min-h-10 w-full items-center gap-2 rounded-md border border-border/80 bg-surface/85 px-3 py-2 text-sm outline-none transition",
+          "focus-within:border-primary focus-within:bg-surface focus-within:ring-2 focus-within:ring-primary/15 hover:border-primary/70",
           disabled && "cursor-not-allowed opacity-50"
         )}
       >
@@ -75,7 +75,7 @@ export function SearchableDropdownSelect({
           aria-autocomplete="list"
           aria-controls={id}
           aria-expanded={open}
-          className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-slate-400 disabled:cursor-not-allowed"
+          className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
           disabled={disabled}
           onChange={(event) => {
             onSearchChange(event.target.value);
@@ -100,7 +100,7 @@ export function SearchableDropdownSelect({
 
       {open && !disabled && (
         <div
-          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-md border border-border/80 bg-white/95 p-1 text-sm shadow-lg backdrop-blur"
+          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-md border border-border/80 bg-surface/95 p-1 text-sm shadow-lg backdrop-blur"
           id={id}
           role="listbox"
         >
@@ -113,7 +113,7 @@ export function SearchableDropdownSelect({
                 aria-selected={active}
                 className={cn(
                   "flex w-full items-start justify-between gap-3 rounded-sm px-3 py-2 text-left transition",
-                  active ? "bg-cyan-50 font-medium text-cyan-900" : "text-foreground hover:bg-muted",
+                  active ? "bg-primary-soft font-medium text-primary" : "text-foreground hover:bg-muted",
                   option.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
                 )}
                 disabled={option.disabled}

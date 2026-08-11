@@ -8,6 +8,8 @@
     "dev:web": "cross-env NEXT_PUBLIC_API_BASE_URL=https://localhost:7039 NEXT_PUBLIC_SITE_URL=http://localhost:3020 NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3020/dashboard/nckh/callback next dev -p 3020",
     "dev:api": "dotnet run --project ../../src/FormAutoHub.Api/FormAutoHub.Api.csproj --launch-profile https",
     "dev:full": "concurrently --kill-others --names API,WEB --prefix-colors blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "check:colors": "node scripts/check-color-tokens.mjs",
+    "prebuild": "npm run check:colors",
     "build": "next build",
     "lint": "next lint"
   },

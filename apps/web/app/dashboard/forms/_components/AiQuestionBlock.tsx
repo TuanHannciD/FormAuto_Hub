@@ -25,8 +25,8 @@ export function AiQuestionBlock({
   onToggle: () => void;
 }) {
   return (
-    <div className={`overflow-hidden rounded-lg border bg-white/72 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md ${
-      mode === "ai-custom" ? "border-violet-100 hover:border-violet-200" : "border-cyan-100 hover:border-cyan-200"
+    <div className={`overflow-hidden rounded-lg border bg-surface/72 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md ${
+      mode === "ai-custom" ? "border-primary-border hover:border-primary-border" : "border-info-border hover:border-info-border"
     }`}>
       <button
         aria-expanded={open}
@@ -35,7 +35,7 @@ export function AiQuestionBlock({
         onClick={onToggle}
       >
         <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
-          mode === "ai-custom" ? "bg-violet-50 text-violet-700" : "bg-cyan-50 text-cyan-700"
+          mode === "ai-custom" ? "bg-primary-soft text-primary" : "bg-info-surface text-info"
         }`}>
           <Bot className="h-4 w-4" />
         </span>
@@ -50,12 +50,12 @@ export function AiQuestionBlock({
             Khối AI thu gọn; không hiển thị danh sách lựa chọn chi tiết trong Option 2/3.
           </span>
         </span>
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-white/80 text-muted-foreground">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-surface/80 text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </span>
       </button>
       {open && (
-        <div className="border-t border-border/70 bg-white/45 p-4">
+        <div className="border-t border-border/70 bg-surface/45 p-4">
           <div className="grid gap-3 text-sm md:grid-cols-3">
             <div>
               <p className="text-xs text-muted-foreground">Loại câu hỏi</p>

@@ -46,13 +46,13 @@ export default function DashboardPage() {
             <CardTitle>Việc nên làm tiếp</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 text-sm md:grid-cols-2">
-            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/forms">
+            <Link className="block rounded-md border border-border/70 bg-surface/55 p-3 transition hover:bg-surface" href="/dashboard/forms">
               Phân tích link Google Form và cài đặt cách trả lời
             </Link>
-            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/top-up">
+            <Link className="block rounded-md border border-border/70 bg-surface/55 p-3 transition hover:bg-surface" href="/dashboard/top-up">
               Nạp credit hoặc theo dõi giao dịch PayOS
             </Link>
-            <Link className="block rounded-md border border-border/70 bg-white/55 p-3 transition hover:bg-white" href="/dashboard/usage-logs">
+            <Link className="block rounded-md border border-border/70 bg-surface/55 p-3 transition hover:bg-surface" href="/dashboard/usage-logs">
               Kiểm tra lịch sử sử dụng và hành động bị chặn
             </Link>
           </CardContent>
@@ -67,8 +67,8 @@ export default function DashboardPage() {
               <EmptyState title="Chưa có lịch sử sử dụng" detail="Các thao tác gần đây sẽ xuất hiện tại đây." />
             ) : (
               summary.recentUsageLogs.slice(0, 4).map((log) => (
-                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md border border-border/70 bg-white/55 p-3 2xl:grid-cols-[auto_minmax(0,1fr)_auto]" key={log.id}>
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-cyan-50 text-primary">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md border border-border/70 bg-surface/55 p-3 2xl:grid-cols-[auto_minmax(0,1fr)_auto]" key={log.id}>
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-info-surface text-primary">
                     {log.creditsUsed}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -117,9 +117,9 @@ export default function DashboardPage() {
 function Metric({ title, value, tone = "cyan" }: { title: string; value: string; tone?: "cyan" | "green" | "violet" | "red" }) {
   const toneClass = {
     cyan: "metric-accent",
-    green: "bg-emerald-200",
-    violet: "bg-violet-200",
-    red: "bg-red-200"
+    green: "bg-success",
+    violet: "bg-primary-border",
+    red: "bg-destructive"
   }[tone];
 
   return (
@@ -127,7 +127,7 @@ function Metric({ title, value, tone = "cyan" }: { title: string; value: string;
       <CardContent>
         <div className={`mb-4 h-1 w-10 rounded-full ${toneClass}`} />
         <p className="text-sm text-muted-foreground">{title}</p>
-        <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+        <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
       </CardContent>
     </Card>
   );

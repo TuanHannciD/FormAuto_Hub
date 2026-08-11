@@ -63,8 +63,8 @@ const displayDuration = (ms: number | null) => {
 };
 
 const modeColors: Record<string, string> = {
-  FullAi: "border-cyan-400 bg-cyan-50 text-cyan-900",
-  CustomAi: "border-violet-400 bg-violet-50 text-violet-900"
+  FullAi: "border-info-border bg-info-surface text-info",
+  CustomAi: "border-primary-border bg-primary-soft text-primary"
 };
 
 const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
@@ -195,7 +195,7 @@ export default function AiUsagePage() {
       {/* ── Mode breakdown ── */}
       <div className="grid gap-4 sm:grid-cols-2">
         {stats.modeBreakdown.map((mode) => {
-          const colorClass = modeColors[mode.mode] ?? "border-gray-300 bg-gray-50 text-gray-900";
+          const colorClass = modeColors[mode.mode] ?? "border-border bg-surface-subtle text-foreground";
           const label = modeLabels[mode.mode] ?? mode.mode;
           return (
             <Card key={mode.mode}>
@@ -233,7 +233,7 @@ export default function AiUsagePage() {
                       {day.runs} runs
                     </div>
                     <div
-                      className="w-3 rounded-t bg-cyan-400 transition-all hover:bg-cyan-500"
+                      className="w-3 rounded-t bg-accent transition-all hover:bg-accent"
                       style={{ height: `${Math.max(height, 2)}px` }}
                     />
                     <div className="mt-1 text-[10px] text-muted-foreground">
@@ -279,18 +279,18 @@ function MetricCard({
 }) {
   const borderColors: Record<string, string> = {
     neutral: "border-border/70",
-    green: "border-green-300",
-    violet: "border-violet-300",
-    blue: "border-cyan-300",
-    red: "border-red-300"
+    green: "border-success-border",
+    violet: "border-primary-border",
+    blue: "border-info-border",
+    red: "border-destructive-border"
   };
 
   const textColors: Record<string, string> = {
     neutral: "text-foreground",
-    green: "text-green-700",
-    violet: "text-violet-700",
-    blue: "text-cyan-700",
-    red: "text-red-700"
+    green: "text-success",
+    violet: "text-primary",
+    blue: "text-info",
+    red: "text-destructive"
   };
 
   return (

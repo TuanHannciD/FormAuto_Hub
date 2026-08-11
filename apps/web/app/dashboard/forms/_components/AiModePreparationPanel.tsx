@@ -57,8 +57,8 @@ export function AiModePreparationPanel({
     <div className="space-y-4">
       <div className={`rounded-lg border p-4 shadow-sm ring-1 ${
         isCustom
-          ? "border-violet-200 bg-violet-50/75 text-violet-950 ring-violet-100"
-          : "border-cyan-200 bg-cyan-50/80 text-cyan-950 ring-cyan-100"
+          ? "border-primary-border bg-primary-soft/75 text-primary ring-primary-border"
+          : "border-info-border bg-info-surface/80 text-info ring-info-border"
       }`}>
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
@@ -80,9 +80,9 @@ export function AiModePreparationPanel({
       </div>
 
       {isCustom && (
-        <div className="rounded-lg border border-violet-200 bg-white/72 p-4 shadow-sm backdrop-blur">
+        <div className="rounded-lg border border-primary-border bg-surface/72 p-4 shadow-sm backdrop-blur">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <Sparkles className="h-4 w-4 text-violet-600" />
+            <Sparkles className="h-4 w-4 text-primary" />
             <p className="text-sm font-semibold">Hướng trả lời AI</p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
@@ -96,7 +96,7 @@ export function AiModePreparationPanel({
         </div>
       )}
 
-      <div className="rounded-lg border border-border/70 bg-white/72 p-4 shadow-sm backdrop-blur">
+      <div className="rounded-lg border border-border/70 bg-surface/72 p-4 shadow-sm backdrop-blur">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <label className="block flex-1 text-sm font-medium">
             Prompt chung
@@ -111,16 +111,16 @@ export function AiModePreparationPanel({
             </span>
           </label>
           {isCustom && (
-            <div className="grid shrink-0 grid-cols-2 gap-2 rounded-lg border border-border/70 bg-white/75 p-2 text-sm font-semibold md:w-64">
+            <div className="grid shrink-0 grid-cols-2 gap-2 rounded-lg border border-border/70 bg-surface/75 p-2 text-sm font-semibold md:w-64">
               <button
-                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "global" ? "bg-cyan-600 text-white shadow-sm" : "text-muted-foreground hover:bg-cyan-50"}`}
+                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "global" ? "bg-primary text-inverse-foreground shadow-sm" : "text-muted-foreground hover:bg-primary-soft"}`}
                 type="button"
                 onClick={() => onPromptScopeChange("global")}
               >
                 Prompt chung
               </button>
               <button
-                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "per-question" ? "bg-cyan-600 text-white shadow-sm" : "text-muted-foreground hover:bg-cyan-50"}`}
+                className={`rounded-md px-3 py-2 transition ${aiPromptScope === "per-question" ? "bg-primary text-inverse-foreground shadow-sm" : "text-muted-foreground hover:bg-primary-soft"}`}
                 type="button"
                 onClick={() => onPromptScopeChange("per-question")}
               >
@@ -149,16 +149,16 @@ export function AiModePreparationPanel({
 
       <div className={`sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border p-4 shadow-soft ring-1 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between ${
         isCustom
-          ? "border-violet-200/80 bg-violet-50/90 ring-violet-100"
-          : "border-cyan-200/80 bg-cyan-50/90 ring-cyan-100/70"
+          ? "border-primary-border/80 bg-primary-soft/90 ring-primary-border"
+          : "border-info-border/80 bg-info-surface/90 ring-info-border/70"
       }`}>
         <div className="w-full sm:w-auto">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-800 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
             <LockKeyhole className="h-3.5 w-3.5" />
             AI preview chỉ đọc
           </div>
-          <p className="mt-3 text-sm font-semibold text-slate-950">Số câu trả lời xem trước</p>
-          <p className="mt-1 text-xs text-slate-600">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}; chi phí thật sẽ là {previewCount * multiplier} credit.</p>
+          <p className="mt-3 text-sm font-semibold text-foreground">Số câu trả lời xem trước</p>
+          <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}; chi phí thật sẽ là {previewCount * multiplier} credit.</p>
           <Input
             className="mt-2 w-full sm:w-32"
             inputMode="numeric"
@@ -169,11 +169,11 @@ export function AiModePreparationPanel({
             value={previewCount}
             onChange={(event) => onPreviewCountChange(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
           />
-          <p className="mt-2 text-xs font-medium text-cyan-800">
+          <p className="mt-2 text-xs font-medium text-info">
             Prompt sẽ được lưu trước, sau đó backend tạo AI preview read-only và trừ credit theo số preview hợp lệ.
           </p>
         </div>
-        <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-violet-600 text-white hover:bg-violet-700" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">
+        <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-primary text-inverse-foreground hover:bg-primary-hover" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">
           <Sparkles className="h-4 w-4" />
           Lưu và tạo AI preview
         </Button>

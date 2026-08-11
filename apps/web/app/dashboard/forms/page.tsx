@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react";
@@ -724,7 +724,7 @@ export default function FormsPage() {
         ].map((step) => (
           <div
             className={`rounded-md border px-3 py-2 text-sm font-medium ${
-              step.active ? "border-primary bg-primary/5 text-primary shadow-sm" : "border-border/70 bg-white/65 text-muted-foreground backdrop-blur"
+              step.active ? "border-primary bg-primary/5 text-primary shadow-sm" : "border-border/70 bg-surface/65 text-muted-foreground backdrop-blur"
             }`}
             key={step.label}
           >
@@ -773,8 +773,8 @@ export default function FormsPage() {
                 aria-pressed={allRuleEditorsOpen}
                 className={`inline-flex min-h-10 items-center justify-between gap-3 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition ${
                   allRuleEditorsOpen
-                    ? "border-cyan-300 bg-cyan-500 text-white"
-                    : "border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-50"
+                    ? "border-info-border bg-accent text-inverse-foreground"
+                    : "border-info-border bg-surface text-info hover:bg-info-surface"
                 }`}
                 type="button"
                 onClick={() => {
@@ -783,14 +783,14 @@ export default function FormsPage() {
                 }}
               >
                 <span>{allRuleEditorsOpen ? "Đóng tất cả" : "Mở tất cả"}</span>
-                <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-white/35" : "bg-cyan-100"}`}>
-                  <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
+                <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-surface/35" : "bg-info-surface"}`}>
+                  <span className={`absolute top-1 h-4 w-4 rounded-full bg-surface shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
                 </span>
               </button>
             )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg border border-border/70 bg-white/55 p-4 backdrop-blur">
+            <div className="rounded-lg border border-border/70 bg-surface/55 p-4 backdrop-blur">
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <Badge tone="info">{analysis.formTitle}</Badge>
                 <StatusBadge status={analysis.status} />
@@ -849,13 +849,13 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-cyan-200/80 bg-cyan-50/88 p-4 shadow-soft ring-1 ring-cyan-100/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
-                    <div className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm">
+                    <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
                       Tạo bản xem trước
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-slate-950">Số câu trả lời xem trước</p>
-                    <p className="mt-1 text-xs text-slate-600">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
+                    <p className="mt-3 text-sm font-semibold text-foreground">Số câu trả lời xem trước</p>
+                    <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
                     <Input
                       className="mt-2 w-full sm:w-32"
                       inputMode="numeric"
@@ -866,7 +866,7 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
-                    <p className="mt-2 text-xs font-medium text-cyan-800">
+                    <p className="mt-2 text-xs font-medium text-info">
                       Mỗi câu trả lời xem trước tương ứng 1 credit. Khi bấm lưu và tạo bản xem trước, hệ thống sẽ trừ credit theo số lượng đã chọn.
                     </p>
                   </div>
@@ -892,32 +892,32 @@ export default function FormsPage() {
             ) : (
               <>
               {generationCreditNotice && (
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950 shadow-sm ring-1 ring-amber-100">
+                <div className="rounded-lg border border-warning-border bg-warning-surface p-4 text-sm text-warning shadow-sm ring-1 ring-warning-border">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Credit chưa đủ để tạo toàn bộ số lượng đã chọn</p>
-                      <p className="mt-1 leading-6 text-amber-900">
+                      <p className="mt-1 leading-6 text-warning">
                         Bạn yêu cầu {generationCreditNotice.requestedCount} bản xem trước, hệ thống đã tạo {generationCreditNotice.generatedCount} theo số credit hiện có.
                         Còn thiếu {generationCreditNotice.missingCredits} credit để tạo đủ số lượng.
                       </p>
                       {recommendedPackage ? (
-                        <p className="mt-2 text-xs font-medium text-amber-900">
+                        <p className="mt-2 text-xs font-medium text-warning">
                           Gói đề xuất: {recommendedPackage.name} - {recommendedPackage.credits} credit.
                         </p>
                       ) : (
-                        <p className="mt-2 text-xs font-medium text-amber-900">
+                        <p className="mt-2 text-xs font-medium text-warning">
                           Chưa có gói credit phù hợp với số lượng còn thiếu. Vui lòng kiểm tra trang nạp credit.
                         </p>
                       )}
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                       {resumeContext && resumeCreditReady && (
-                        <Button className="bg-cyan-600 text-white hover:bg-cyan-700" disabled={busy} type="button" onClick={continueMissingGeneration}>
+                        <Button className="bg-primary text-inverse-foreground hover:bg-primary" disabled={busy} type="button" onClick={continueMissingGeneration}>
                           Tiếp tục tạo phần còn thiếu
                         </Button>
                       )}
                       <Button
-                        className="bg-amber-500 text-amber-950 hover:bg-amber-400"
+                        className="bg-warning text-inverse-foreground hover:bg-warning/90"
                         disabled={!recommendedPackage || topupBusy}
                         type="button"
                         onClick={createRecommendedTopupLink}
@@ -929,11 +929,11 @@ export default function FormsPage() {
                 </div>
               )}
               {resumeContext && !generationCreditNotice && (
-                <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/85 p-4 text-sm text-cyan-950 shadow-sm ring-1 ring-cyan-100/70 backdrop-blur">
+                <div className="rounded-lg border border-info-border/80 bg-info-surface/85 p-4 text-sm text-info shadow-sm ring-1 ring-info-border/70 backdrop-blur">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Có tiến trình tạo preview đang chờ tiếp tục</p>
-                      <p className="mt-1 leading-6 text-cyan-900">
+                      <p className="mt-1 leading-6 text-info">
                         Hãy bấm tiếp tục để tạo phần còn thiếu sau khi credit đã được cập nhật.
                       </p>
                     </div>
@@ -943,7 +943,7 @@ export default function FormsPage() {
                   </div>
                 </div>
               )}
-              <div className="rounded-lg border border-border/70 bg-white/55 p-4 backdrop-blur">
+              <div className="rounded-lg border border-border/70 bg-surface/55 p-4 backdrop-blur">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="text-sm font-medium">Câu trả lời xem trước đã tạo</p>
@@ -959,13 +959,13 @@ export default function FormsPage() {
                   </div>
                 </div>
                 {aiPreviewMode && (
-                  <div className="mt-3 rounded-md border border-cyan-200 bg-cyan-50/80 px-3 py-2 text-xs font-medium text-cyan-900">
+                  <div className="mt-3 rounded-md border border-info-border bg-info-surface/80 px-3 py-2 text-xs font-medium text-info">
                     Bản xem trước AI đã được lưu read-only. Người dùng chỉ xác nhận gửi sau khi đã mở xem lại nội dung.
                   </div>
                 )}
               </div>
 
-              <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
+              <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/72 shadow-sm backdrop-blur">
                 <button
                   aria-expanded={previewListOpen}
                   className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -978,7 +978,7 @@ export default function FormsPage() {
                       {previews.length} bản xem trước, {previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời
                     </span>
                   </span>
-                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-white/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-surface/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                     {previewListOpen ? "Thu gọn" : "Mở danh sách"}
                     {previewListOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                   </span>
@@ -999,7 +999,7 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div className="sticky bottom-3 z-10 rounded-lg border border-cyan-200/80 bg-cyan-50/88 p-4 shadow-soft ring-1 ring-cyan-100/70 backdrop-blur-xl">
+              <div className="sticky bottom-3 z-10 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
@@ -1008,19 +1008,19 @@ export default function FormsPage() {
                     onChange={(event) => setConfirmed(event.target.checked)}
                   />
                   <span>
-                    <span className="block font-semibold text-slate-950">Xác nhận sau khi xem lại bản xem trước</span>
-                    <span className="mt-1 block text-cyan-900">
+                    <span className="block font-semibold text-foreground">Xác nhận sau khi xem lại bản xem trước</span>
+                    <span className="mt-1 block text-info">
                       Tôi xác nhận gửi đúng các câu trả lời xem trước này và hiểu hệ thống không hỗ trợ spam, proxy, vượt captcha hoặc gửi khi không được phép.
                     </span>
                   </span>
                 </label>
-                <div className="mt-4 flex flex-col gap-3 border-t border-cyan-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs font-medium text-cyan-800">
+                <div className="mt-4 flex flex-col gap-3 border-t border-info-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs font-medium text-info">
                     {submissionLocked
                       ? "Lượt gửi này đã hoàn tất. Hãy thực hiện lại bước 2 để tạo bản xem trước mới nếu muốn gửi tiếp."
                       : "Hệ thống chỉ gửi sau khi ô xác nhận được bật."}
                   </p>
-                  <Button className="w-full bg-cyan-600 text-white hover:bg-cyan-700 sm:w-auto" disabled={busy || !confirmed || submissionLocked} onClick={submitConfirmed} type="button">
+                  <Button className="w-full bg-primary text-inverse-foreground hover:bg-primary sm:w-auto" disabled={busy || !confirmed || submissionLocked} onClick={submitConfirmed} type="button">
                     {submissionLocked ? "Đã gửi xong" : "Gửi các bản xem trước đã xác nhận"}
                   </Button>
                 </div>
@@ -1053,11 +1053,11 @@ export default function FormsPage() {
               <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
             {(submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
-              <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/85 p-4 text-cyan-950 shadow-sm backdrop-blur">
+              <div className="rounded-lg border border-info-border/80 bg-info-surface/85 p-4 text-info shadow-sm backdrop-blur">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-semibold">Thực hiện lại một lần nữa</p>
-                    <p className="mt-1 text-xs text-cyan-900">
+                    <p className="mt-1 text-xs text-info">
                       Làm mới bản xem trước, kết quả gửi và trạng thái xác nhận; giữ nguyên cách trả lời đã cài đặt ở bước 2.
                     </p>
                   </div>
@@ -1067,7 +1067,7 @@ export default function FormsPage() {
                 </div>
               </div>
             )}
-            <div className="overflow-hidden rounded-lg border border-border/70 bg-white/72 shadow-sm backdrop-blur">
+            <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/72 shadow-sm backdrop-blur">
               <button
                 aria-expanded={submissionLogsOpen}
                 className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -1080,7 +1080,7 @@ export default function FormsPage() {
                     {buildSubmissionBatches(submission.logs).length} pack, thành công {submission.successCount}, lỗi {submission.failedCount}
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-white/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-surface/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                   {submissionLogsOpen ? "Thu gọn" : "Mở chi tiết"}
                   {submissionLogsOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                 </span>
@@ -1091,7 +1091,7 @@ export default function FormsPage() {
                     const successCount = batch.filter((log) => log.status === "Success").length;
                     const failedCount = batch.length - successCount;
                     return (
-                      <div className="rounded-lg border border-border/70 bg-white/55 p-3" key={`submission-pack-${batchIndex}`}>
+                      <div className="rounded-lg border border-border/70 bg-surface/55 p-3" key={`submission-pack-${batchIndex}`}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <p className="text-sm font-semibold">Pack {batchIndex + 1}</p>
                           <div className="flex flex-wrap gap-2 text-xs font-medium">

@@ -219,11 +219,11 @@ export default function AdminPackagesPage() {
                 Giá VND
                 <Input className="mt-2" min={1} step={1} type="number" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: Number(event.target.value) }))} />
               </label>
-              <label className="flex items-center justify-between rounded-md border border-border/70 bg-white/55 p-3 text-sm font-medium">
+              <label className="flex items-center justify-between rounded-md border border-border/70 bg-surface/55 p-3 text-sm font-medium">
                 <span>Bật gói cho người dùng</span>
                 <input checked={form.isActive} onChange={(event) => setForm((current) => ({ ...current, isActive: event.target.checked }))} type="checkbox" />
               </label>
-              <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+              <Alert className="border-warning-border bg-warning-surface text-warning">
                 Giá sử dụng cho PayOS phải là số nguyên VNĐ và lớn hơn 0. Đơn hàng nạp tiền đã được tạo sẽ giữ tín dụng chụp nhanh và số tiền cũ.
               </Alert>
             </DialogBody>
@@ -240,7 +240,7 @@ export default function AdminPackagesPage() {
 
 function PackageStatus({ isActive }: { isActive: boolean }) {
   return (
-    <span className={isActive ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"}>
+    <span className={isActive ? "rounded-full bg-success-surface px-2.5 py-1 text-xs font-medium text-success" : "rounded-full bg-surface-subtle px-2.5 py-1 text-xs font-medium text-secondary-foreground"}>
       {isActive ? "Đang bật" : "Đang tắt"}
     </span>
   );
@@ -259,8 +259,8 @@ function Stat({
 }) {
   const toneClass = {
     default: "bg-primary/10 text-primary",
-    success: "bg-emerald-50 text-emerald-700",
-    warning: "bg-amber-50 text-amber-700"
+    success: "bg-success-surface text-success",
+    warning: "bg-warning-surface text-warning"
   }[tone];
 
   return (
@@ -269,7 +269,7 @@ function Stat({
         <div>
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
           <div className="metric-accent mt-3 h-1 w-10 rounded-full" />
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
         </div>
         <span className={`rounded-md p-2 ${toneClass}`}>
           <Icon size={18} />

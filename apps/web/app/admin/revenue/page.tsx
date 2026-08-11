@@ -54,7 +54,7 @@ export default function RevenueReportPage() {
             <CardTitle>Doanh thu theo ngày</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-72 items-center justify-center rounded-md border border-dashed border-border/80 bg-white/45 p-5 text-center backdrop-blur">
+            <div className="flex h-72 items-center justify-center rounded-md border border-dashed border-border/80 bg-surface/45 p-5 text-center backdrop-blur">
               <div>
                 <p className="font-medium">Biểu đồ doanh thu đang cập nhật</p>
                 <p className="mt-2 max-w-sm text-sm text-muted-foreground">Dữ liệu tổng hợp hiện được hiển thị ở các chỉ số phía trên.</p>
@@ -105,12 +105,12 @@ function Metric({
       <CardContent>
         <div className="flex items-center justify-between gap-2">
           <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <span className={tone === "danger" ? "rounded-md bg-red-50 p-1.5 text-red-700" : "rounded-md bg-primary/10 p-1.5 text-primary"}>
+          <span className={tone === "danger" ? "rounded-md bg-destructive-surface p-1.5 text-destructive" : "rounded-md bg-primary/10 p-1.5 text-primary"}>
             <Icon size={15} />
           </span>
         </div>
         <div className="metric-accent mt-4 h-1 w-10 rounded-full" />
-        <p className="mt-3 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+        <p className="mt-3 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
       </CardContent>
     </Card>
   );

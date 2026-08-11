@@ -190,7 +190,7 @@ export default function ProfileSecurityPage() {
               <CardTitle>Phiên hiện tại</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm">
-              <div className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-white/55 p-3">
+              <div className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-surface/55 p-3">
                 <span className="text-muted-foreground">Trạng thái</span>
                 <Badge tone="success">Đang đăng nhập</Badge>
               </div>
@@ -205,7 +205,7 @@ export default function ProfileSecurityPage() {
               <CardTitle>Tài khoản Google</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <div className="space-y-3 rounded-md border border-border/70 bg-white/55 p-3">
+              <div className="space-y-3 rounded-md border border-border/70 bg-surface/55 p-3">
                 <div className="flex items-center justify-between gap-3">
                   <span className="text-muted-foreground">Liên kết</span>
                   <Badge tone={googleLinked ? "success" : "warning"}>{googleLinked ? "Đã liên kết" : "Chưa liên kết"}</Badge>

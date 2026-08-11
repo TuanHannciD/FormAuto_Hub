@@ -142,7 +142,7 @@ export default function CreditTransactionsPage() {
           ) : (
             <>
               {error && (
-                <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                <div className="rounded-md border border-warning-border bg-warning-surface px-3 py-2 text-sm text-warning">
                   {error}
                 </div>
               )}
@@ -242,7 +242,7 @@ function Metric({ label, value }: { label: string; value: string }) {
       <CardContent>
         <div className="metric-accent mb-4 h-1 w-10 rounded-full" />
         <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="mt-2 text-[28px] font-extrabold leading-none text-slate-950">{value}</p>
+        <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
       </CardContent>
     </Card>
   );

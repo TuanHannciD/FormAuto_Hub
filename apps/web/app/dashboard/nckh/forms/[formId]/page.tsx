@@ -822,7 +822,7 @@ export default function NckhFormWorkspacePage() {
     return (
       <div className="space-y-4">
         <Button variant="secondary" type="button" onClick={() => router.push("/dashboard/nckh")}><ArrowLeft size={16} /><span className="ml-2">Quay lại</span></Button>
-        <Alert className="border-red-200 bg-red-50 text-red-900">
+        <Alert className="border-destructive-border bg-destructive-surface text-destructive">
           <p className="font-semibold">Không mở được không gian làm việc</p>
           <p className="mt-1">{error ?? "Không tìm thấy form."}</p>
         </Alert>
@@ -863,7 +863,7 @@ export default function NckhFormWorkspacePage() {
         <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để dùng không gian làm việc Phase 7." />
       ) : (
         <>
-          <div className="flex flex-wrap gap-2 rounded-lg border border-border/80 bg-white/70 p-2">
+          <div className="flex flex-wrap gap-2 rounded-lg border border-border/80 bg-surface/70 p-2">
             {tabs.map((item) => (
               <button
                 key={item.id}
@@ -877,7 +877,7 @@ export default function NckhFormWorkspacePage() {
           </div>
 
           {panelError && (
-            <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+            <Alert className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Một phần dữ liệu chưa sẵn sàng</p>
               <p className="mt-1">{panelError}</p>
             </Alert>
@@ -982,16 +982,16 @@ export default function NckhFormWorkspacePage() {
         measured: { width: canvasNodeWidth, height: canvasNodeHeight },
         data: {
           label: (
-            <div className="pointer-events-auto relative w-[184px] rounded-md border border-cyan-200 bg-white px-3 py-3 text-left shadow-sm">
-              <Handle type="target" position={Position.Left} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-cyan-700 !bg-white" />
-              <Handle type="source" position={Position.Right} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-cyan-700 !bg-cyan-600" />
+            <div className="pointer-events-auto relative w-[184px] rounded-md border border-info-border bg-surface px-3 py-3 text-left shadow-sm">
+              <Handle type="target" position={Position.Left} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-primary !bg-surface" />
+              <Handle type="source" position={Position.Right} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-primary !bg-primary" />
               <div className="flex items-start justify-between gap-2">
                 <span className="font-mono text-xs font-bold text-primary">{variable.code}</span>
                 <div className="flex items-center gap-1">
                   <Badge tone="info">{displayVariableType(variable.variableType)}</Badge>
                   <button
                     aria-label={`Xóa biến ${variable.code}`}
-                    className="nodrag pointer-events-auto rounded border border-red-200 bg-red-50 p-1 text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="nodrag pointer-events-auto rounded border border-destructive-border bg-destructive-surface p-1 text-destructive hover:bg-destructive-surface disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={hasPendingAction || !canEditCanvas}
                     type="button"
                     onClick={(event) => {
@@ -1014,7 +1014,7 @@ export default function NckhFormWorkspacePage() {
       const fromNodeId = canvasNodeId(variableNodeType, relation.fromVariableId);
       const toNodeId = canvasNodeId(variableNodeType, relation.toVariableId);
       const positive = relation.direction === "Positive";
-      const edgeColor = positive ? "#059669" : "#d97706";
+      const edgeColor = positive ? "rgb(var(--success))" : "rgb(var(--warning))";
       const selected = selectedRelationId === relation.id;
       return {
         id: relation.id,
@@ -1056,14 +1056,14 @@ export default function NckhFormWorkspacePage() {
         </CardHeader>
         <CardContent className="space-y-5">
           {!canEditCanvas && (
-            <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+            <Alert className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Mô hình đang ở chế độ chỉ xem</p>
               <p className="mt-1">Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.</p>
             </Alert>
           )}
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-white/65 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-surface/65 p-3">
                 <div className="min-w-0 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">{positionCount} vị trí đã lưu.</span>
                 </div>
@@ -1073,7 +1073,7 @@ export default function NckhFormWorkspacePage() {
               {variables.length === 0 ? (
                 <EmptyState title="Chưa có biến để vẽ sơ đồ" detail="Thêm biến nghiên cứu trước khi tạo quan hệ và lưu vị trí nút." />
               ) : (
-                <div className="h-[520px] overflow-hidden rounded-lg border border-border/80 bg-white/70">
+                <div className="h-[520px] overflow-hidden rounded-lg border border-border/80 bg-surface/70">
                   <ReactFlow
                     colorMode="light"
                     defaultViewport={{ x: 16, y: 24, zoom: 1 }}
@@ -1108,21 +1108,21 @@ export default function NckhFormWorkspacePage() {
                     panOnDrag={false}
                     proOptions={{ hideAttribution: true }}
                   >
-                    <Background color="#d8eef3" gap={36} />
+                    <Background color="rgb(var(--border))" gap={36} />
                     <Controls showInteractive={false} />
-                    <MiniMap nodeColor={() => "#06b6d4"} pannable zoomable />
+                    <MiniMap nodeColor={() => "rgb(var(--primary))"} pannable zoomable />
                   </ReactFlow>
                 </div>
               )}
             </div>
 
-            <div className="space-y-3 rounded-lg border border-border/80 bg-white/65 p-4">
+            <div className="space-y-3 rounded-lg border border-border/80 bg-surface/65 p-4">
               <div className="flex items-center gap-2 text-sm font-semibold"><CircleDot size={16} /> Trạng thái sơ đồ</div>
               <KeyValueRow label="Biến" value={variables.length} />
               <KeyValueRow label="Quan hệ" value={relations.length} />
               <KeyValueRow label="Vị trí đã lưu" value={positionCount} />
               {selectedRelation && (
-                <div className="rounded-md border border-border/70 bg-white/80 p-3 text-sm" data-testid="selected-relation-panel">
+                <div className="rounded-md border border-border/70 bg-surface/80 p-3 text-sm" data-testid="selected-relation-panel">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono font-semibold">{selectedRelation.hypothesisCode}</span>
                     <Badge tone={relationTone(selectedRelation.direction)}>{displayRelationDirection(selectedRelation.direction)}</Badge>
@@ -1148,7 +1148,7 @@ export default function NckhFormWorkspacePage() {
                 <p className="text-xs font-semibold text-muted-foreground">Quan hệ gần nhất</p>
                 <div className="mt-2 space-y-2">
                   {relations.slice(0, 4).map((relation) => (
-                    <div className="rounded-md border border-border/70 bg-white/70 p-2 text-xs" key={relation.id}>
+                    <div className="rounded-md border border-border/70 bg-surface/70 p-2 text-xs" key={relation.id}>
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-mono font-semibold">{relation.hypothesisCode}</span>
                         <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
@@ -1177,7 +1177,7 @@ export default function NckhFormWorkspacePage() {
 
   function renderCanvasModal() {
     return (
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 md:items-center md:p-6" role="dialog" aria-modal="true" onClick={() => setCanvasModal(null)}>
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-overlay/40 p-3 md:items-center md:p-6" role="dialog" aria-modal="true" onClick={() => setCanvasModal(null)}>
         <div className="max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-xl border border-border bg-background shadow-2xl" onClick={(event) => event.stopPropagation()}>
           <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
             <div>
@@ -1199,7 +1199,7 @@ export default function NckhFormWorkspacePage() {
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><RefreshCw size={18} /> Tạo Google Form</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+          <Alert className="border-warning-border bg-warning-surface text-warning">
             <p className="font-semibold">Cần quyền chỉnh sửa Google Form</p>
             <p className="mt-1">Nếu chưa cấp đủ quyền, thao tác tạo/cập nhật form sẽ bị chặn. Vui lòng liên kết lại Google.</p>
           </Alert>
@@ -1212,7 +1212,7 @@ export default function NckhFormWorkspacePage() {
             </span>
           </Button>
           {lastGenerate && (
-            <div className="rounded-lg border border-border/80 bg-white/60 p-4 text-sm">
+            <div className="rounded-lg border border-border/80 bg-surface/60 p-4 text-sm">
               <p className="font-semibold">Kết quả gần nhất</p>
               <p className="mt-2">Tạo: {lastGenerate.questionsCreated}, cập nhật: {lastGenerate.questionsUpdated}, xóa: {lastGenerate.questionsDeleted}</p>
               <p>Nhập lại: {lastGenerate.reimported ? "Có" : "Không"}</p>
@@ -1234,17 +1234,17 @@ export default function NckhFormWorkspacePage() {
             <Button type="button" variant="secondary" disabled={hasPendingAction} onClick={normalizeResponses}>{isActionPending("normalizeResponses") ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}<span className="ml-2">{isActionPending("normalizeResponses") ? "Đang chuẩn hóa..." : "Chuẩn hóa bộ dữ liệu"}</span></Button>
           </div>
           {lastCollect && (
-            <Alert className="border-emerald-200 bg-emerald-50 text-emerald-900">
+            <Alert className="border-success-border bg-success-surface text-success">
               <span className="font-semibold">Thu thập: </span>{lastCollect.responsesCollected} mới, {lastCollect.responsesSkipped} bỏ qua, trạng thái {displayCollectionStatus(lastCollect.status)}
             </Alert>
           )}
           {lastNormalize && (
-            <Alert className="border-emerald-200 bg-emerald-50 text-emerald-900">
+            <Alert className="border-success-border bg-success-surface text-success">
               <span className="font-semibold">Chuẩn hóa: </span>{lastNormalize.respondentsProcessed} người trả lời, {lastNormalize.variablesComputed} biến, {lastNormalize.missingDataCount} giá trị thiếu
             </Alert>
           )}
           {dataset?.hasStaleData && (
-            <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+            <Alert className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Bộ dữ liệu đã cũ</p>
               <p className="mt-1">Bộ dữ liệu đã cũ sau thay đổi biến hoặc ánh xạ. Hãy chuẩn hóa lại trước khi xuất dữ liệu.</p>
             </Alert>
@@ -1268,7 +1268,7 @@ export default function NckhFormWorkspacePage() {
         <CardHeader><CardTitle className="flex items-center gap-2"><FileDown size={18} /> Xuất bộ dữ liệu</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           {dataset?.hasStaleData && (
-            <Alert className="border-amber-200 bg-amber-50 text-amber-900">
+            <Alert className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Không nên xuất bộ dữ liệu đã cũ</p>
               <p className="mt-1">Backend có thể trả 409 Conflict. Hãy chuẩn hóa lại trước khi tải file.</p>
             </Alert>

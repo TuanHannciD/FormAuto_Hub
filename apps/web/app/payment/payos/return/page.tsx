@@ -91,7 +91,7 @@ function PaymentResultShell({
               <Link className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground" href="/dashboard">
                 Về tổng quan
               </Link>
-              <Link className="inline-flex min-h-10 items-center justify-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium" href="/dashboard/top-up">
+              <Link className="inline-flex min-h-10 items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium" href="/dashboard/top-up">
                 Xem lịch sử nạp
               </Link>
             </div>
