@@ -1,216 +1,40 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { LandingDashboardTabs } from "@/components/landing-dashboard-tabs";
-import { ScrollReveal } from "@/components/scroll-reveal";
-import { siteUrl } from "@/lib/site";
 import {
+  ArrowRight,
   BarChart3,
-  CheckCircle2,
-  ClipboardList,
-  CreditCard,
-  ArrowUpRight,
-  FileSearch,
-  GraduationCap,
-  History,
-  LinkIcon,
-  ListChecks,
-  Presentation,
+  Check,
+  ChevronRight,
+  CircleCheck,
+  Clock3,
+  Coins,
+  FileSpreadsheet,
+  Gift,
+  Link2,
+  Menu,
+  MessageSquareText,
+  Plus,
   ShieldCheck,
-  ReceiptText,
-  Search,
   Sparkles,
-  Wallet,
-  Eye
+  X
 } from "lucide-react";
-// === FILE MAP (page.tsx – 699 dòng) ===
-// Dòng    Section                         Mục đích
-// 1-20    Imports                         React, Next.js, lucide, components, lib
-// 22-24   SEO constants                   siteName, title, description
-// 27-33   workflowSteps                   Các bước workflow hiển thị trên landing
-// 35-66   featureCards                    6 thẻ tính năng chính
-// 68-94   seoUseCaseLinks                 Internal links cho SEO landing pages
-// 96-112  creditCards                     3 thẻ gói credit
-// 114-143 faqs                            10 câu hỏi thường gặp
-// 145-183 metadata                        Next.js Metadata export (SEO tags)
-// 185     LandingPage()                   Trang landing chính: hero, tabs, features, FAQ, CTA
-// 533     DashboardPreview()              Mockup dashboard minh họa giao diện
-// 617     Metric()                        Component hiển thị số liệu trong mockup
-// 626     EmptyPreview()                  Empty state trong mockup
-// 635     Footer()                        Footer với copyright + links
+import { siteUrl } from "@/lib/site";
 
 const siteName = "FormAuto Hub";
-const title = "FormAuto Hub | Dữ liệu mẫu Google Forms cho báo cáo";
+const title = "FormAuto Hub | Điền Google Form tự động và xử lý số liệu";
 const description =
-  "Tạo dữ liệu phản hồi mẫu để kiểm tra Google Forms, Google Sheets và biểu đồ báo cáo trước khi thu thập phản hồi thật.";
+  "Tự động điền Google Form theo cách bạn thiết lập, hỗ trợ xử lý số liệu theo yêu cầu và tặng 5 credit cho tài khoản mới.";
 
-const workflowSteps = [
-  { title: "Thêm URL biểu mẫu", icon: LinkIcon },
-  { title: "Nhận diện câu hỏi", icon: FileSearch },
-  { title: "Cấu hình quy tắc", icon: ListChecks },
-  { title: "Xem trước phản hồi", icon: Eye },
-  { title: "Xác nhận gửi", icon: CheckCircle2 }
-];
-
-const landingAccents = [
-  {
-    card: "border-cyan-100 bg-gradient-to-br from-white via-cyan-50/70 to-white hover:border-cyan-200",
-    icon: "border-cyan-100 bg-cyan-500 text-white shadow-cyan-500/25",
-    line: "from-cyan-400 to-sky-500"
-  },
-  {
-    card: "border-emerald-100 bg-gradient-to-br from-white via-emerald-50/70 to-white hover:border-emerald-200",
-    icon: "border-emerald-100 bg-emerald-500 text-white shadow-emerald-500/25",
-    line: "from-emerald-400 to-teal-500"
-  },
-  {
-    card: "border-amber-100 bg-gradient-to-br from-white via-amber-50/75 to-white hover:border-amber-200",
-    icon: "border-amber-100 bg-amber-500 text-white shadow-amber-500/25",
-    line: "from-amber-400 to-orange-500"
-  },
-  {
-    card: "border-fuchsia-100 bg-gradient-to-br from-white via-fuchsia-50/65 to-white hover:border-fuchsia-200",
-    icon: "border-fuchsia-100 bg-fuchsia-500 text-white shadow-fuchsia-500/25",
-    line: "from-fuchsia-400 to-pink-500"
-  },
-  {
-    card: "border-indigo-100 bg-gradient-to-br from-white via-indigo-50/65 to-white hover:border-indigo-200",
-    icon: "border-indigo-100 bg-indigo-500 text-white shadow-indigo-500/25",
-    line: "from-indigo-400 to-violet-500"
-  }
-];
-
-const useCaseIcons = [GraduationCap, Presentation, BarChart3, Search, ShieldCheck];
-
-function getLandingAccent(index: number) {
-  return landingAccents[index % landingAccents.length];
-}
-
-const featureCards = [
-  {
-    title: "Test form trước khi gửi khảo sát",
-    body: "Kiểm tra câu hỏi bắt buộc, lựa chọn, text field và dữ liệu xuất ra trước khi gửi form thật.",
-    icon: BarChart3
-  },
-  {
-    title: "Demo dữ liệu cho bài thuyết trình",
-    body: "Tạo dữ liệu mẫu để minh họa bảng tính, biểu đồ hoặc dashboard khi dữ liệu thật chưa sẵn sàng.",
-    icon: ClipboardList
-  },
-  {
-    title: "Kiểm thử Google Forms to Sheets",
-    body: "Rà soát dữ liệu đổ về Google Sheets, biểu đồ và báo cáo trước khi nhóm chạy khảo sát thật.",
-    icon: Eye
-  },
-  {
-    title: "Quản lý credit",
-    body: "Theo dõi số dư, yêu cầu nạp credit và giao dịch credit.",
-    icon: Wallet
-  },
-  {
-    title: "Nhật ký sử dụng",
-    body: "Kiểm tra thao tác công cụ, trạng thái và credit đã dùng.",
-    icon: History
-  },
-  {
-    title: "Đối soát nạp credit",
-    body: "Theo dõi yêu cầu nạp, thanh toán PayOS và trạng thái cộng credit.",
-    icon: ShieldCheck
-  }
-];
-
-const seoUseCaseLinks = [
-  {
-    href: "/google-forms/sample-data",
-    title: "Tạo dữ liệu mẫu cho Google Forms",
-    body: "Landing page chính cho nhu cầu kiểm thử biểu mẫu, xem trước phản hồi và demo Google Sheets."
-  },
-  {
-    href: "/google-forms/student-report",
-    title: "Dữ liệu mẫu Google Forms cho báo cáo sinh viên",
-    body: "Dành cho nhóm học tập cần dữ liệu minh họa, biểu đồ và báo cáo nhưng không thay thế phản hồi thật."
-  },
-  {
-    href: "/google-forms/survey-demo",
-    title: "Demo dữ liệu khảo sát Google Forms",
-    body: "Chuẩn bị dữ liệu mẫu để trình bày form, bảng tính, dashboard hoặc prototype khảo sát."
-  },
-  {
-    href: "/google-forms/sheets-report",
-    title: "Kiểm tra dữ liệu Google Forms trong Google Sheets",
-    body: "Rà soát cột, kiểu dữ liệu, chart, dashboard, công thức và pivot table trước khi chạy khảo sát thật."
-  },
-  {
-    href: "/anti-abuse",
-    title: "Chính sách chống lạm dụng Google Forms automation",
-    body: "Làm rõ ranh giới an toàn: không spam, không captcha bypass, không làm giả khảo sát."
-  }
-];
-
-const creditCards = [
-  {
-    title: "Nạp credit",
-    body: "Chọn gói credit và thanh toán qua PayOS hoặc gửi yêu cầu đối soát khi cần.",
-    icon: CreditCard
-  },
-  {
-    title: "Theo dõi giao dịch",
-    body: "Mọi thay đổi credit đều được ghi vào giao dịch credit.",
-    icon: ReceiptText
-  },
-  {
-    title: "Rà soát lượt dùng",
-    body: "Nhật ký sử dụng hiển thị thao tác, trạng thái và credit đã dùng.",
-    icon: Search
-  }
-];
-
-const faqs = [
-  {
-    question: "FormAuto Hub có tự động gửi phản hồi không?",
-    answer:
-      "Không. Hệ thống yêu cầu xem trước và người dùng xác nhận trước khi gửi."
-  },
-  {
-    question: "Có được dùng dữ liệu mẫu để nộp như dữ liệu khảo sát thật không?",
-    answer:
-      "Không. Dữ liệu mẫu chỉ dùng để kiểm thử, demo hoặc chuẩn bị báo cáo; kết luận học thuật vẫn cần phản hồi thật hợp lệ."
-  },
-  {
-    question: "Có thể tạo bao nhiêu phản hồi mỗi lần?",
-    answer: "Mỗi thao tác hỗ trợ từ 1 đến 100 câu trả lời xem trước."
-  },
-  {
-    question: "Có thể nạp credit tự động không?",
-    answer:
-      "Có. FormAuto Hub hỗ trợ nạp credit tự động qua PayOS. Các phương thức thanh toán khác đang cập nhật."
-  },
-  {
-    question: "Công cụ có vượt captcha hoặc giới hạn của Google không?",
-    answer:
-      "Không. FormAuto Hub không hỗ trợ vượt captcha, xoay proxy, tạo tài khoản giả hoặc né giới hạn của Google."
-  },
-  {
-    question: "Dashboard theo dõi những gì?",
-    answer: "Credit, yêu cầu nạp credit, nhật ký sử dụng, giao dịch credit và dữ liệu hồ sơ/tài khoản."
-  }
-];
+const primaryButtonClass =
+  "inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-xl bg-[#5c55e7] px-[22px] text-sm font-bold leading-none text-white shadow-[0_10px_24px_rgba(92,85,231,.24)] transition hover:-translate-y-0.5 hover:bg-[#473fd1] hover:shadow-[0_14px_30px_rgba(92,85,231,.3)] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-orange-400 [&>svg]:transition-transform hover:[&>svg]:translate-x-0.5";
+const sectionHeadingClass =
+  "text-balance text-[clamp(2.5rem,4.4vw,4.125rem)] font-[780] leading-[1.08] tracking-[-0.025em] text-[#18244a]";
 
 export const metadata: Metadata = {
   title,
   description,
-  keywords: [
-    "FormAuto Hub",
-    "Google Forms",
-    "google forms báo cáo sinh viên",
-    "tạo dữ liệu mẫu cho Google Forms",
-    "tạo dữ liệu mẫu Google Forms",
-    "demo dữ liệu khảo sát",
-    "Google Forms to Sheets báo cáo",
-    "kiểm tra Google Form trước khi gửi"
-  ],
-  alternates: {
-    canonical: "/"
-  },
+  keywords: ["FormAuto Hub", "Google Forms", "điền Google Form tự động", "tạo dữ liệu mẫu Google Forms", "xử lý số liệu"],
+  alternates: { canonical: "/" },
   openGraph: {
     title,
     description,
@@ -218,22 +42,74 @@ export const metadata: Metadata = {
     siteName,
     locale: "vi_VN",
     type: "website",
-    images: [
-      {
-        url: "/images/landing/login-screen.png",
-        width: 1440,
-        height: 1000,
-        alt: "FormAuto Hub web screen"
-      }
-    ]
+    images: [{ url: "/images/landing/login-screen.png", width: 1440, height: 1000, alt: "FormAuto Hub" }]
   },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: ["/images/landing/login-screen.png"]
-  }
+  twitter: { card: "summary_large_image", title, description, images: ["/images/landing/login-screen.png"] }
 };
+
+function Brand() {
+  return (
+    <span className="inline-flex items-center gap-3">
+      <span className="grid h-[34px] w-[34px] grid-cols-3 items-end gap-0.5 rounded-[10px] bg-[#5c55e7] p-[7px] shadow-[0_8px_18px_rgba(92,85,231,.25)]" aria-hidden="true">
+        <i className="h-[42%] rounded-t-sm bg-white/75" />
+        <i className="h-[68%] rounded-t-sm bg-white/90" />
+        <i className="h-full rounded-t-sm bg-white" />
+      </span>
+      <strong className="text-[15px] font-extrabold tracking-[-0.02em]">FormAuto Hub</strong>
+    </span>
+  );
+}
+
+function ProductIllustration() {
+  return (
+    <div className="relative grid min-h-[520px] place-items-center max-md:-mx-[6%] max-md:-mb-6 max-md:-mt-8 max-md:min-h-[460px] max-md:w-[112%] max-md:scale-[.88]" aria-label="Minh họa luồng điền Google Form tự động">
+      <div className="absolute h-[470px] w-[470px] rounded-full bg-gradient-to-br from-[#5c55e7]/15 to-[#52c7ee]/20 max-md:h-[390px] max-md:w-[390px]" />
+      <div className="absolute h-[414px] w-[414px] rounded-full border border-dashed border-[#5c55e7]/25 max-md:h-[342px] max-md:w-[342px]" />
+      <div className="absolute h-[530px] w-[530px] rounded-full border border-dashed border-[#5c55e7]/25 max-md:h-[450px] max-md:w-[450px]" />
+
+      <div className="relative z-[2] min-h-[430px] w-[360px] -rotate-2 overflow-hidden rounded-2xl bg-white p-7 shadow-[0_30px_70px_rgba(40,54,102,.2)] max-md:min-h-[390px] max-md:w-[300px] max-md:p-[22px]">
+        <div className="mb-5 flex items-center gap-2 text-[11px] font-bold text-[#5c55e7]"><span className="h-[19px] w-[15px] rounded-sm bg-[#5c55e7]" />Google Forms</div>
+        <h3 className="mb-1 text-[21px] font-bold tracking-tight">Khảo sát trải nghiệm</h3>
+        <p className="mb-[22px] text-[10px] text-[#7783a2]">Minh họa cấu trúc câu hỏi</p>
+        <div className="mt-3 rounded-xl bg-[#f7f8fc] p-[17px] text-[10px] text-[#5d6885]">
+          <span className="mb-3 block text-[11px] font-bold text-[#18244a]">Bạn đánh giá trải nghiệm thế nào?</span>
+          <div className="mt-2 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full border-[3px] border-[#5c55e7]" />Rất hài lòng</div>
+          <div className="mt-2 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full border border-[#aab2c5]" />Hài lòng</div>
+          <div className="mt-2 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full border border-[#aab2c5]" />Bình thường</div>
+        </div>
+        <div className="mt-3 rounded-xl bg-[#f7f8fc] p-[17px] text-[10px]">
+          <span className="mb-3 block text-[11px] font-bold">Chia sẻ thêm ý kiến</span>
+          <div className="rounded-lg bg-white px-2.5 py-2 text-[#5d6885]">Câu trả lời được chuẩn bị theo chỉ dẫn…</div>
+        </div>
+      </div>
+
+      <div className="motion-float absolute left-0 top-[62px] z-[3] flex min-w-[155px] items-center gap-2.5 rounded-[13px] bg-white px-[15px] py-[13px] shadow-[0_16px_35px_rgba(40,54,102,.18)] [animation-duration:4s] max-md:-left-1 max-md:top-[70px]">
+        <Coins className="h-7 w-7 rounded-lg bg-amber-50 p-1.5 text-amber-700" /><span className="flex flex-col text-[9px] leading-snug text-[#7783a2]"><strong className="text-[13px] text-[#18244a]">5 credit</strong>Dùng thử miễn phí</span>
+      </div>
+      <div className="motion-float absolute -right-4 top-[135px] z-[3] flex min-w-[155px] items-center gap-2.5 rounded-[13px] bg-white px-[15px] py-[13px] shadow-[0_16px_35px_rgba(40,54,102,.18)] [animation-delay:.5s] [animation-direction:alternate-reverse] [animation-duration:4.6s] max-md:-right-2 max-md:top-[150px]">
+        <Sparkles className="h-7 w-7 rounded-lg bg-[#efefff] p-1.5 text-[#5c55e7]" /><span className="flex flex-col text-[9px] leading-snug text-[#7783a2]"><strong className="text-[13px] text-[#18244a]">1–100</strong>Phản hồi mỗi lần</span>
+      </div>
+      <div className="absolute bottom-[38px] right-1 z-[3] flex items-center gap-2.5 rounded-[13px] bg-white px-[18px] py-[15px] shadow-[0_16px_35px_rgba(40,54,102,.18)] max-md:bottom-5 max-md:right-0">
+        <CircleCheck className="h-[30px] w-[30px] text-emerald-600" /><span className="flex flex-col text-[9px] leading-snug text-[#7783a2]"><strong className="text-[13px] text-[#18244a]">Sẵn sàng xem lại</strong>Chỉ gửi sau khi bạn xác nhận</span>
+      </div>
+    </div>
+  );
+}
+
+function MobileNavigation() {
+  return (
+    <details className="group relative ml-auto md:hidden">
+      <summary className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-lg hover:bg-slate-100 [&::-webkit-details-marker]:hidden">
+        <Menu className="group-open:hidden" aria-hidden="true" />
+        <X className="hidden group-open:block" aria-hidden="true" />
+        <span className="sr-only">Mở menu</span>
+      </summary>
+      <nav className="absolute right-[-20px] top-[55px] flex w-screen flex-col gap-5 border-b border-slate-200 bg-white px-5 py-6 text-[13px] font-semibold text-[#475473] shadow-lg" aria-label="Điều hướng mobile">
+        <Link href="#top">Trang chủ</Link><Link href="#dich-vu">Dịch vụ</Link><Link href="#cach-hoat-dong">Cách hoạt động</Link><Link href="#bang-gia">Bảng giá</Link><Link href="/google-forms/sample-data">Hướng dẫn</Link><Link href="#faq">FAQ</Link>
+      </nav>
+    </details>
+  );
+}
 
 export default function LandingPage() {
   const structuredData = {
@@ -245,541 +121,123 @@ export default function LandingPage() {
     url: `${siteUrl}/`,
     inLanguage: "vi-VN",
     description,
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "VND"
-    },
-    featureList: [
-      "Phân tích Google Forms",
-      "Cấu hình quy tắc trả lời",
-      "Xem trước phản hồi trước khi gửi",
-      "Theo dõi credit và usage logs"
-    ],
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer
-      }
-    }))
-  };
-  const websiteStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    url: siteUrl,
-    inLanguage: "vi-VN"
+    offers: { "@type": "Offer", price: "0", priceCurrency: "VND" },
+    featureList: ["Phân tích Google Forms", "Cấu hình quy tắc trả lời", "Xem trước phản hồi trước khi gửi", "Theo dõi credit và nhật ký sử dụng"]
   };
 
   return (
-    <main className="app-aura-bg min-h-screen overflow-x-hidden text-slate-950">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, websiteStructuredData]) }}
-      />
+    <main className="app-aura-bg min-h-screen overflow-x-clip text-[#18244a]" id="top">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/82 backdrop-blur">
-        <nav
-          aria-label="Điều hướng chính"
-          className="mx-auto flex max-w-[1120px] items-center justify-between px-4 py-4 md:px-8"
-        >
-          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-85" aria-label="FormAuto Hub home">
-            <span className="grid h-8 w-8 place-items-center rounded bg-blue-600 text-white">
-              <BarChart3 size={18} />
-            </span>
-            <span className="text-lg font-semibold tracking-tight text-slate-950">FormAuto Hub</span>
-          </Link>
-          <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <a href="#tinh-nang" className="motion-link hover:text-blue-600">
-              Báo cáo
-            </a>
-            <a href="#quy-trinh" className="motion-link hover:text-blue-600">
-              Quy trình
-            </a>
-            <a href="#an-toan" className="motion-link hover:text-blue-600">
-              An toàn
-            </a>
-            <a href="#credit" className="motion-link hover:text-blue-600">
-              Credit
-            </a>
-            <a href="#faq" className="motion-link hover:text-blue-600">
-              FAQ
-            </a>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/login" className="motion-link text-sm font-medium text-slate-700 hover:text-blue-600">
-              Đăng nhập
-            </Link>
-            <Link
-              href="/register"
-              className="motion-button inline-flex rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 sm:px-4"
-            >
-              Bắt đầu
-            </Link>
-          </div>
+      <header className="sticky top-0 z-20 grid min-h-[76px] grid-cols-[1fr_auto_1fr] items-center border-b border-[#dfe4f1]/75 bg-white/[.88] px-[clamp(1.5rem,5vw,4.75rem)] backdrop-blur-xl max-xl:grid-cols-[1fr_auto] max-md:min-h-[66px] max-md:px-5">
+        <Link href="#top" aria-label="FormAuto Hub - Trang chủ"><Brand /></Link>
+        <nav className="flex items-center gap-[30px] text-[13px] font-semibold text-[#475473] max-xl:hidden" aria-label="Điều hướng chính">
+          <Link className="transition hover:text-[#5c55e7]" href="#top">Trang chủ</Link><Link className="transition hover:text-[#5c55e7]" href="#dich-vu">Dịch vụ</Link><Link className="transition hover:text-[#5c55e7]" href="#cach-hoat-dong">Cách hoạt động</Link><Link className="transition hover:text-[#5c55e7]" href="#bang-gia">Bảng giá</Link><Link className="transition hover:text-[#5c55e7]" href="/google-forms/sample-data">Hướng dẫn</Link><Link className="transition hover:text-[#5c55e7]" href="#faq">FAQ</Link>
         </nav>
+        <div className="flex items-center justify-end gap-[22px] text-[13px] font-semibold max-md:hidden">
+          <Link className="transition hover:text-[#5c55e7]" href="/login">Đăng nhập</Link>
+          <Link className={`${primaryButtonClass} min-h-[42px] rounded-[10px] px-[17px] text-xs`} href="/register">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Link>
+        </div>
+        <MobileNavigation />
       </header>
 
-      <section className="border-b border-slate-200 bg-transparent">
-        <div className="mx-auto grid max-w-[1120px] grid-cols-1 items-center gap-8 px-4 py-8 md:px-8 md:py-20 lg:grid-cols-2">
-          <div className="min-w-0 space-y-8">
-            <ScrollReveal>
-            <p className="inline-flex rounded border border-blue-100 bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
-              GOOGLE FORMS CHO BÁO CÁO VÀ DEMO DỮ LIỆU
-            </p>
-            <h1 className="mb-6 mt-6 max-w-[22rem] break-words text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:max-w-3xl sm:text-4xl md:text-5xl">
-              Tạo dữ liệu phản hồi mẫu cho Google Forms của bạn
-            </h1>
-            <p className="mt-6 max-w-[22rem] text-base leading-8 text-slate-600 sm:max-w-2xl md:text-lg">
-              Kiểm thử form, demo dashboard và rà soát dữ liệu trước khi gửi khảo sát thật. Không
-              dùng để làm giả kết quả báo cáo, spam form hoặc né giới hạn của Google.
-            </p>
-            </ScrollReveal>
-            <ScrollReveal delay={90} className="flex max-w-[22rem] flex-col flex-wrap gap-4 sm:max-w-none sm:flex-row">
-              <Link
-                href="/register"
-                className="motion-button rounded bg-blue-600 px-6 py-2.5 text-center text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-              >
-                Bắt đầu với 5 credit
-              </Link>
-              <Link
-                href="/google-forms/student-report"
-                className="motion-button rounded border border-slate-200 bg-white px-6 py-2.5 text-center text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-              >
-                Xem cho báo cáo sinh viên
-              </Link>
-            </ScrollReveal>
-            <ScrollReveal delay={160} className="hidden max-w-[22rem] flex-wrap gap-3 border-t border-slate-100 pt-6 sm:flex sm:max-w-none">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-                <Eye size={16} />
-                Dữ liệu mẫu để kiểm thử
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-                <ListChecks size={16} />
-                Preview 1-100 phản hồi
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
-                <Wallet size={16} />
-                Theo dõi credit
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
-                <ShieldCheck size={16} />
-                Không làm giả khảo sát
-              </span>
-            </ScrollReveal>
+      <section className="relative grid min-h-[710px] grid-cols-[minmax(0,1fr)_minmax(470px,.9fr)] items-center gap-[clamp(3rem,7vw,7.5rem)] overflow-hidden bg-white/15 px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(4.375rem,8vw,7.375rem)] max-xl:grid-cols-1 max-md:min-h-0 max-md:gap-10 max-md:px-5 max-md:pb-11 max-md:pt-16">
+        <div className="absolute -bottom-[135px] -left-[110px] h-[250px] w-[250px] rounded-full border-[44px] border-[#5c55e7]/[.07]" aria-hidden="true" />
+        <div className="relative z-[2] max-xl:mx-auto max-xl:max-w-[820px] max-xl:text-center max-md:text-left">
+          <Link className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-[#d9d7ff] bg-white/75 px-3 py-2 text-xs font-bold text-[#473fd1]" href="#bang-gia"><Sparkles className="text-orange-500" aria-hidden="true" /> Tài khoản mới được tặng 5 credit <ChevronRight aria-hidden="true" /></Link>
+          <h1 className="mb-6 max-w-[770px] text-balance text-[clamp(3.25rem,5.2vw,5rem)] font-extrabold leading-[1.04] tracking-[-0.025em] max-md:text-[clamp(2.625rem,11.5vw,3.375rem)]">Công cụ điền Google Form tự động <span className="block text-[#5c55e7]">theo cách bạn thiết lập</span></h1>
+          <p className="mb-8 max-w-[690px] text-[clamp(1.0625rem,1.35vw,1.25rem)] text-[#596584] max-xl:mx-auto max-md:mx-0 max-md:text-base">Dán link form, chọn số lượng và định hướng câu trả lời. FormAuto Hub chuẩn bị phản hồi để bạn xem lại trước khi xác nhận gửi.</p>
+          <div className="flex items-center gap-6 max-xl:justify-center max-md:flex-col max-md:items-start">
+            <Link className={`${primaryButtonClass} min-h-[58px] px-[27px]`} href="/register">Nhận 5 credit miễn phí <ArrowRight aria-hidden="true" /></Link>
+            <Link className="border-b border-[#18244a] pb-1 text-sm font-bold" href="#bang-gia">Xem bảng giá</Link>
           </div>
+          <div className="mt-5 flex gap-5 text-xs font-semibold text-[#53607e] max-xl:justify-center max-md:flex-col max-md:gap-2">
+            <span className="flex items-center gap-1.5"><Check className="text-[#5c55e7]" /> Bắt đầu bằng chính form của bạn</span><span className="flex items-center gap-1.5"><Check className="text-[#5c55e7]" /> Bạn luôn là người quyết định</span>
+          </div>
+        </div>
+        <div className="mx-auto w-full max-w-[680px]"><ProductIllustration /></div>
+      </section>
 
-          <ScrollReveal className="relative hidden sm:block" delay={140} variant="scale">
-            <DashboardPreview />
-          </ScrollReveal>
+      <section className="grid min-h-28 grid-cols-3 border-y border-[#dfe4f1] bg-white/[.86] px-[clamp(1.5rem,6vw,5.75rem)] backdrop-blur-xl max-md:grid-cols-1 max-md:px-5 max-md:py-4" aria-label="Ưu điểm chính">
+        {[
+          { icon: Link2, title: "Dán link và bắt đầu", text: "Hệ thống tự đọc câu hỏi" },
+          { icon: MessageSquareText, title: "Chủ động nội dung", text: "Đặt quy tắc hoặc dùng AI" },
+          { icon: ShieldCheck, title: "Bạn quyết định", text: "Xác nhận rồi mới gửi" }
+        ].map((item, index) => (
+          <div className={`flex items-center gap-4 px-[clamp(1.125rem,3vw,2.875rem)] py-6 max-md:border-b max-md:border-[#dfe4f1] max-md:px-0 max-md:py-4 ${index === 0 ? "pl-0" : ""} ${index < 2 ? "border-r border-[#dfe4f1] max-md:border-r-0" : "pr-0 max-md:border-b-0"}`} key={item.title}>
+            <item.icon className="h-8 w-8 shrink-0 text-[#5c55e7]" /><span className="flex flex-col text-[11px] leading-normal text-[#7783a2]"><strong className="text-[13px] text-[#18244a]">{item.title}</strong>{item.text}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="grid grid-cols-[.92fr_1.08fr] items-center gap-[clamp(4.375rem,10vw,10.625rem)] bg-white/40 px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(6.25rem,10vw,9.375rem)] max-xl:grid-cols-1 max-xl:gap-14 max-md:px-5 max-md:py-[88px]" id="loi-ich">
+        <div><h2 className={`${sectionHeadingClass} mb-6`}>Bớt thao tác lặp lại.<br />Vẫn kiểm soát từng lần tạo.</h2><p className="max-w-[590px] text-[17px] text-[#596584]">FormAuto Hub tập trung vào một việc: giúp bạn chuẩn bị nhiều phản hồi Google Form theo định hướng rõ ràng, nhanh hơn cách nhập thủ công.</p></div>
+        <div className="border-t border-[#dfe4f1]">
+          {[
+            { icon: Sparkles, title: "Thiết lập theo mục tiêu của bạn", text: "Đặt quy tắc cho lựa chọn hoặc mô tả cách AI nên trả lời, kể cả câu hỏi tự luận." },
+            { icon: CircleCheck, title: "Xem kết quả trước khi gửi", text: "Phản hồi được chuẩn bị để bạn kiểm tra. Hệ thống chỉ gửi sau bước xác nhận." },
+            { icon: Coins, title: "Biết chi phí trước khi tiếp tục", text: "Mức credit của cách tạo bạn chọn được hiển thị trực tiếp trong sản phẩm." }
+          ].map((item) => <article className="grid grid-cols-[auto_1fr] gap-5 border-b border-[#dfe4f1] py-7" key={item.title}><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#efefff] text-[#5c55e7]"><item.icon /></span><div><h3 className="mb-2 text-[19px] font-bold">{item.title}</h3><p className="m-0 max-w-[58ch] text-sm text-[#596584]">{item.text}</p></div></article>)}
         </div>
       </section>
 
-      <section id="quy-trinh" className="border-y border-slate-200 bg-white/45 py-12 md:py-20">
-        <ScrollReveal className="mx-auto max-w-[1120px] px-4 text-center md:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Từ Google Form đến dữ liệu mẫu có thể kiểm tra
-            </h2>
-            <p className="mx-auto mb-12 max-w-2xl text-lg text-slate-600">
-              Mỗi thao tác đều đi qua bước phân tích, preview, giới hạn và xác nhận rõ ràng.
-            </p>
-          </div>
-          <div className="relative grid gap-4 md:grid-cols-5">
-            <div className="absolute left-[10%] right-[10%] top-12 z-0 hidden h-1 rounded-full bg-gradient-to-r from-cyan-200 via-emerald-200 to-amber-200 md:block" />
-            {workflowSteps.map((step, index) => {
-              const accent = getLandingAccent(index);
-
-              return (
-              <ScrollReveal key={step.title} delay={index * 70} as="article" className={`motion-card relative z-10 overflow-hidden rounded-lg border p-5 text-center shadow-sm ${accent.card}`}>
-                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent.line}`} />
-                <div className={`motion-icon mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg ${accent.icon}`}>
-                  <step.icon size={20} />
-                </div>
-                <h3 className="mb-1 text-sm font-semibold text-slate-900">{step.title}</h3>
-              </ScrollReveal>
-              );
-            })}
-          </div>
-        </ScrollReveal>
-      </section>
-
-      <section className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
-        <ScrollReveal className="mb-10 max-w-3xl">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">
-            Các trường hợp sử dụng Google Forms phổ biến
-          </h2>
-          <p className="mt-4 text-base leading-7 text-slate-600">
-            Các trang dưới đây là nhóm nội dung chính để Google index từng nhu cầu riêng: tạo dữ
-            liệu mẫu, demo khảo sát, báo cáo sinh viên và kiểm tra dữ liệu trong Google Sheets.
-          </p>
-        </ScrollReveal>
-        <div className="grid gap-4 md:grid-cols-2">
-          {seoUseCaseLinks.map((item, index) => {
-            const accent = getLandingAccent(index);
-            const Icon = useCaseIcons[index] ?? Sparkles;
-
-            return (
-            <ScrollReveal key={item.href} delay={(index % 2) * 70} as="article" className={`motion-card group rounded-lg border p-5 shadow-sm ${accent.card}`}>
-              <div className="mb-4 flex items-center justify-between gap-4">
-                <span className={`motion-icon flex h-11 w-11 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
-                  <Icon size={20} />
-                </span>
-                <ArrowUpRight className="text-slate-300 transition-colors group-hover:text-slate-500" size={18} />
-              </div>
-              <Link href={item.href} className="text-base font-semibold text-slate-950 hover:text-blue-700">
-                {item.title}
-              </Link>
-              <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
-            </ScrollReveal>
-            );
-          })}
+      <section className="bg-[#18244a] px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(6.25rem,10vw,9.375rem)] text-white max-md:px-5 max-md:py-[88px]" id="dich-vu">
+        <div className="mb-16 max-w-[760px]"><span className="mb-4 block text-[11px] font-extrabold uppercase tracking-[.11em] text-[#93edff]">Dịch vụ dành cho bạn</span><h2 className={`${sectionHeadingClass} mb-5 text-white`}>Từ lúc cần phản hồi<br />đến khi cần đọc số liệu.</h2><p className="max-w-[620px] text-[17px] text-[#c8cee1]">Chọn tự thao tác với công cụ hoặc gửi yêu cầu để được hỗ trợ ở phần việc phù hợp.</p></div>
+        <div className="grid grid-cols-[1.15fr_.925fr_.925fr] gap-[18px] max-xl:grid-cols-2 max-md:grid-cols-1">
+          <ServiceCard icon={FileSpreadsheet} number="01" title="Dịch vụ điền form" primary><p>Dán link Google Form, đặt cách trả lời và số lượng. Hệ thống chuẩn bị phản hồi để bạn xem lại trước khi xác nhận.</p><ul><li><Check /> Tự thao tác trực tiếp</li><li><Check /> Quy tắc hoặc AI hỗ trợ</li><li><Check /> Tính phí theo credit</li></ul><Link className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-white" href="/register">Thử điền form <ArrowRight /></Link></ServiceCard>
+          <ServiceCard icon={BarChart3} number="02" title="Xử lý số liệu"><p>Dành cho nhu cầu làm sạch, tổng hợp hoặc phân tích dữ liệu theo đầu bài riêng. Phạm vi và báo giá được trao đổi trước khi thực hiện.</p><span className="mt-auto w-max rounded-full bg-[#52c7ee]/10 px-3 py-2 text-[11px] font-bold text-[#c5f5ff]">Dịch vụ theo yêu cầu</span></ServiceCard>
+          <ServiceCard icon={Gift} number="03" title="Ưu đãi dễ bắt đầu"><p>Tài khoản mới có 5 credit để thử bằng form của mình. Khi cần nhiều hơn, bạn chọn gói credit phù hợp ngay bên dưới.</p><Link className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-[#b9f3ff]" href="#bang-gia">Xem gói credit <ArrowRight /></Link></ServiceCard>
         </div>
       </section>
 
-      <section id="tinh-nang" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
-          <ScrollReveal className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Dành cho sinh viên, nhóm học tập và người làm khảo sát nhỏ
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-slate-600">
-              Cùng một app, nhiều tình huống: test form, demo dữ liệu, kiểm tra sheet và chuẩn bị báo cáo.
-            </p>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featureCards.map((feature, index) => {
-              const accent = getLandingAccent(index);
+      <section className="bg-[#f7f9ff]/80 backdrop-blur-xl" id="cach-hoat-dong"><div className="px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(4.5rem,7vw,6rem)] max-md:px-5 max-md:py-[88px]"><div className="mx-auto mb-12 max-w-[830px] text-center max-md:text-left"><h2 className={`${sectionHeadingClass} mb-5`}>Bạn chỉ cần làm ba việc</h2><p className="text-[17px] text-[#596584]">Nói điều bạn cần, phần nhập liệu lặp lại để FormAuto Hub lo.</p></div><div className="relative grid grid-cols-3 gap-5 max-md:grid-cols-1 max-md:gap-8"><div className="absolute left-[15%] right-[15%] top-7 h-px bg-[#cbcffa] max-md:bottom-9 max-md:left-7 max-md:right-auto max-md:h-auto max-md:w-px" />{[
+        ["1", "Đưa form của bạn vào", "Dán link Google Form công khai. Các câu hỏi và lựa chọn sẽ được đọc tự động."],
+        ["2", "Nói bạn muốn câu trả lời thế nào", "Chọn số lượng từ 1–100, rồi đặt quy tắc hoặc mô tả hướng trả lời mong muốn."],
+        ["3", "Xem lại, ưng rồi mới gửi", "Bạn xem những gì đã được chuẩn bị và chỉ xác nhận khi cảm thấy phù hợp."]
+      ].map(([number, heading, text]) => <article className="relative px-6 text-center max-md:min-h-[110px] max-md:pl-[84px] max-md:pr-0 max-md:text-left" key={number}><span className="relative z-[1] mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full border-[7px] border-[#f7f9ff] bg-[#5c55e7] font-extrabold text-white max-md:absolute max-md:left-0 max-md:top-0">{number}</span><h3 className="mb-2.5 text-xl font-bold">{heading}</h3><p className="mx-auto max-w-[36ch] text-[13px] text-[#596584] max-md:mx-0">{text}</p></article>)}</div></div></section>
 
-              return (
-              <ScrollReveal key={feature.title} delay={(index % 3) * 80} as="article" className={`motion-card relative overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card} ${index > 2 ? "hidden md:block" : ""}`}>
-                <div className={`absolute right-4 top-4 h-16 w-16 rounded-full bg-gradient-to-br ${accent.line} opacity-10`} />
-                <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
-                  <feature.icon size={20} />
-                </div>
-                <h3 className="mb-2 text-lg font-semibold text-slate-900">{feature.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-600">{feature.body}</p>
-              </ScrollReveal>
-              );
-            })}
-          </div>
+      <section className="bg-[#f8f9ff]/70 px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(6.25rem,10vw,9.375rem)] backdrop-blur-xl max-md:px-5 max-md:py-[88px]" id="bang-gia">
+        <div className="mb-16 max-w-[820px]"><span className="mb-4 block text-[11px] font-extrabold uppercase tracking-[.11em] text-[#7770f2]">Bảng giá credit</span><h2 className={`${sectionHeadingClass} mb-5`}>Thử miễn phí.<br />Cần thêm thì nạp đúng gói.</h2><p className="max-w-[690px] text-[17px] text-[#596584]">Một credit có giá tương đương 20₫ theo các gói đang hiển thị trong khu vực nạp. Credit không phải gói thuê bao tháng.</p></div>
+        <div className="grid grid-cols-3 items-stretch gap-[18px] max-md:grid-cols-1">
+          <PlanCard label="Dùng thử" credits="5 credit" price="0₫" text="Dành cho tài khoản mới để thử luồng với form của bạn." items={["Khoảng 5 lượt theo quy tắc", "Không cần mua gói trước"]} href="/register" action="Nhận 5 credit" trial />
+          <PlanCard label="Gói 100" badge="Dễ bắt đầu" credits="100 credit" price="2.000₫" text="Tương đương 20₫ cho mỗi credit." items={["100 lượt theo quy tắc", "50 lượt AI hỗ trợ", "Khoảng 33 lượt AI chỉ dẫn riêng"]} href="/login" action="Đăng nhập để nạp" featured />
+          <PlanCard label="Gói 500" credits="500 credit" price="10.000₫" text="Tương đương 20₫ cho mỗi credit." items={["500 lượt theo quy tắc", "250 lượt AI hỗ trợ", "Khoảng 166 lượt AI chỉ dẫn riêng"]} href="/login" action="Đăng nhập để nạp" />
+        </div>
+        <div className="mt-7 grid grid-cols-3 overflow-hidden rounded-[14px] border border-[#dfe4f1] bg-white max-md:grid-cols-1">{[["Theo quy tắc", "1 credit ≈ 20₫/lượt"], ["AI hỗ trợ", "2 credit ≈ 40₫/lượt"], ["AI chỉ dẫn riêng", "3 credit ≈ 60₫/lượt"]].map(([label, value], index) => <div className={`flex min-h-[92px] flex-col justify-center px-6 py-5 ${index < 2 ? "border-r border-[#dfe4f1] max-md:border-b max-md:border-r-0" : ""}`} key={label}><span className="text-[10px] font-bold uppercase tracking-wide text-[#7783a2]">{label}</span><strong className="text-[15px]">{value}</strong></div>)}</div>
+        <p className="mt-4 max-w-[920px] text-[11px] text-[#7783a2]">Số lượt là mức quy đổi tối đa theo hệ số credit; lượt AI 3× được làm tròn xuống.</p>
       </section>
 
-      <section className="hidden border-y border-slate-200 bg-white/45 py-12 md:block md:py-20">
-        <ScrollReveal className="mx-auto max-w-[1120px] px-4 md:px-8">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900">
-              Theo dõi credit, lượt dùng và bản xem trước trong một dashboard
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-slate-600">
-              Dành cho nhóm cần nhìn rõ dữ liệu mẫu, credit và lịch sử thao tác trước khi chạy khảo sát thật.
-            </p>
-          </div>
-          <LandingDashboardTabs />
-        </ScrollReveal>
+      <section className="grid min-h-[650px] grid-cols-2 bg-[#18244a] text-white max-md:grid-cols-1">
+        <div className="relative grid min-h-[520px] place-items-center overflow-hidden bg-[radial-gradient(circle_at_center,rgba(82,199,238,.22),transparent_43%)] max-md:min-h-[460px]"><div className="absolute h-[440px] w-[440px] rounded-full border border-white/10" /><div className="absolute h-[300px] w-[300px] rounded-full border border-white/10" /><div className="relative z-[2] grid h-[132px] w-[132px] place-items-center rounded-full bg-[#5c55e7] shadow-[0_24px_55px_rgba(0,0,0,.28)]"><ShieldCheck className="h-[58px] w-[58px]" /></div><ControlTag className="left-[16%] top-[25%]" icon={Clock3}>Xem trước</ControlTag><ControlTag className="right-[13%] top-[44%]" icon={Check}>Xác nhận</ControlTag><ControlTag className="bottom-[20%] left-[24%]" icon={ArrowRight}>Gửi theo nhóm</ControlTag></div>
+        <div className="flex flex-col justify-center px-[clamp(2.125rem,7vw,6.875rem)] py-[clamp(5rem,9vw,8.75rem)] max-md:px-5 max-md:py-[75px]"><h2 className={`${sectionHeadingClass} mb-7 max-w-[760px] text-white`}>Tự động hóa không đồng nghĩa với mất kiểm soát.</h2><p className="mb-7 max-w-[620px] text-[17px] text-[#c8cee1]">Bạn chủ động từ đầu vào đến bước xác nhận cuối. Phản hồi chỉ được gửi khi bạn đã xem lại và đồng ý tiếp tục.</p><Link className="inline-flex w-max items-center gap-2 text-sm font-bold text-[#b9f3ff]" href="/register">Trải nghiệm với form của bạn <ArrowRight /></Link></div>
       </section>
 
-      <section id="an-toan" className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
-        <ScrollReveal className="grid grid-cols-1 items-center gap-12 overflow-hidden rounded-lg border border-emerald-100 bg-gradient-to-br from-white via-emerald-50/60 to-cyan-50/60 p-8 shadow-sm md:p-12 lg:grid-cols-2">
-          <div>
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/80 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm">
-              <Sparkles size={14} />
-              Quy trình an toàn
-            </span>
-            <h2 className="mb-6 text-3xl font-bold tracking-tight text-slate-900">
-              Thiết kế xoay quanh giới hạn, rà soát và khả năng truy vết
-            </h2>
-            <p className="mb-8 text-base leading-relaxed text-slate-600">
-              FormAuto Hub giữ quy trình phản hồi trong phạm vi kiểm soát bằng bước xem trước, xác
-              nhận, giới hạn thao tác và lịch sử kiểm tra. Dữ liệu mẫu không thay thế phản hồi thật
-              trong báo cáo học thuật.
-            </p>
-            <ul className="space-y-4">
-              {[
-                "Xem trước trước khi gửi",
-                "Cần người dùng xác nhận",
-                "1-100 câu trả lời xem trước mỗi thao tác",
-                "Ghi nhật ký sử dụng cho thao tác công cụ",
-                "Không dùng dữ liệu mẫu như kết quả khảo sát thật"
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 text-emerald-600" size={20} />
-                  <span className="text-sm text-slate-700">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-lg border border-rose-100 bg-white/86 p-8 shadow-lg shadow-rose-100/40">
-            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-red-600">
-              <ShieldCheck size={20} />
-              Không hỗ trợ
-            </h3>
-            <ul className="space-y-3 text-sm text-slate-600">
-              {[
-                "Không có công cụ spam",
-                "Không vượt captcha",
-                "Không xoay proxy",
-                "Không tạo tài khoản giả",
-                "Không làm giả dữ liệu khảo sát"
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </ScrollReveal>
+      <section className="grid grid-cols-[.8fr_1.2fr] gap-[clamp(3.75rem,10vw,10rem)] bg-white/45 px-[clamp(1.5rem,6vw,5.75rem)] py-[clamp(6.25rem,10vw,9.375rem)] max-md:grid-cols-1 max-md:gap-10 max-md:px-5 max-md:py-[88px]" id="faq">
+        <div><h2 className={`${sectionHeadingClass} mb-5 text-[clamp(2.5rem,4vw,3.625rem)]`}>Câu hỏi thường gặp</h2><p className="text-[#596584]">Những điều quan trọng trước khi bạn bắt đầu.</p></div>
+        <div className="border-t border-[#aeb7cf]">{[
+          ["Form nào có thể sử dụng?", "Hiện tại, sản phẩm làm việc với URL Google Form được đặt ở chế độ công khai."],
+          ["Tôi có được xem lại trước khi gửi không?", "Có. Kết quả được chuẩn bị để bạn kiểm tra và cần xác nhận trước khi hệ thống tiến hành gửi."],
+          ["Mỗi lần có thể tạo bao nhiêu phản hồi?", "Bạn có thể chọn từ 1 đến 100 phản hồi trong một lần tạo."],
+          ["Credit được tính như thế nào?", "Theo quy tắc dùng 1 credit/lượt; AI hỗ trợ dùng 2 credit/lượt; AI theo chỉ dẫn riêng dùng 3 credit/lượt."],
+          ["Dịch vụ xử lý số liệu gồm những gì?", "Đây là dịch vụ theo yêu cầu. Phạm vi làm sạch, tổng hợp hoặc phân tích dữ liệu và báo giá cần được thống nhất trước khi bắt đầu."]
+        ].map(([question, answer]) => <details className="group border-b border-[#dfe4f1]" key={question}><summary className="flex min-h-[82px] cursor-pointer list-none items-center justify-between gap-5 text-base font-bold group-open:text-[#5c55e7] [&::-webkit-details-marker]:hidden">{question}<Plus className="shrink-0 transition-transform group-open:rotate-45" /></summary><p className="-mt-1 mb-6 mr-12 max-w-[65ch] text-sm text-[#596584]">{answer}</p></details>)}</div>
       </section>
 
-      <section id="credit" className="hidden border-y border-slate-200 bg-white/45 py-12 md:block md:py-20">
-        <ScrollReveal className="mx-auto max-w-[1120px] px-4 md:px-8">
-          <h2 className="mx-auto mb-12 max-w-3xl text-center text-3xl font-bold tracking-tight text-slate-900">
-              Mô hình credit rõ ràng cho từng thao tác
-          </h2>
-          <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {creditCards.map((item, index) => {
-              const accent = getLandingAccent(index + 2);
+      <section className="relative mx-[clamp(1.5rem,5vw,4.75rem)] flex items-center justify-between gap-12 overflow-hidden rounded-2xl bg-gradient-to-r from-[#473fd1] via-[#6259ea] to-[#4bbfe9] px-[clamp(1.75rem,6vw,5.5rem)] py-[clamp(3.5rem,6vw,5.375rem)] text-white max-md:mx-5 max-md:flex-col max-md:items-start max-md:px-6 max-md:py-14"><div className="absolute -bottom-[185px] right-1/4 h-[260px] w-[260px] rounded-full border-[38px] border-white/10" /><div><h2 className={`${sectionHeadingClass} mb-2.5 text-[clamp(2.375rem,4.3vw,3.875rem)] text-white`}>Bắt đầu với 5 credit miễn phí</h2><p className="m-0 text-[#ececff]">Dùng thử toàn bộ luồng bằng một form công khai của bạn.</p></div><Link className="relative z-[2] inline-flex min-h-[58px] shrink-0 items-center justify-center gap-2.5 rounded-xl bg-white px-[27px] text-sm font-bold text-[#473fd1] shadow-[0_12px_28px_rgba(34,30,104,.18)] transition hover:-translate-y-0.5" href="/register">Tạo tài khoản ngay <ArrowRight /></Link></section>
 
-              return (
-              <ScrollReveal key={item.title} delay={index * 80} as="article" className={`motion-card overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
-                <div className={`mb-5 h-1.5 w-16 rounded-full bg-gradient-to-r ${accent.line}`} />
-                <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
-                  <item.icon size={20} />
-                </div>
-                <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-600">
-                  {item.body}
-                </p>
-              </ScrollReveal>
-              );
-            })}
-          </div>
-          <p className="text-center text-sm italic text-slate-500">
-            Thanh toán PayOS được xác minh trước khi credit được cộng vào tài khoản.
-          </p>
-        </ScrollReveal>
-      </section>
-
-      <section id="faq" className="mx-auto max-w-3xl px-4 py-12 md:px-8 md:py-20">
-          <ScrollReveal>
-          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight text-slate-900">
-            Câu hỏi thường gặp
-          </h2>
-          </ScrollReveal>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <ScrollReveal key={faq.question} delay={index * 45}>
-              <details className="motion-details group rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-                <summary className="flex cursor-pointer list-none items-center justify-between text-base font-semibold text-slate-900">
-                  {faq.question}
-                  <span className="text-slate-400 transition-transform group-open:rotate-180">⌄</span>
-                </summary>
-                <p className="mt-4 text-sm leading-relaxed text-slate-600">{faq.answer}</p>
-              </details>
-              </ScrollReveal>
-            ))}
-          </div>
-      </section>
-
-      <section className="mx-auto mb-20 hidden max-w-[1120px] px-4 md:block md:px-8">
-        <ScrollReveal className="overflow-hidden rounded-lg border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 px-6 py-16 text-center shadow-sm" variant="scale">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-cyan-500 text-white shadow-lg shadow-cyan-500/25">
-            <Sparkles size={24} />
-          </div>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
-            Bắt đầu với quy trình biểu mẫu có kiểm soát
-          </h2>
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-blue-900/70">
-            Tạo dữ liệu mẫu để kiểm thử, demo và chuẩn bị báo cáo mà vẫn giữ preview, giới hạn và log rõ ràng.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/register"
-              className="motion-button rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-            >
-              Bắt đầu với 5 credit
-            </Link>
-            <Link
-              href="/anti-abuse"
-              className="motion-button rounded border border-blue-200 bg-white px-8 py-3 text-sm font-medium text-blue-900 shadow-sm hover:bg-blue-50"
-            >
-              Xem chính sách chống lạm dụng
-            </Link>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      <Footer />
+      <footer className="grid min-h-[150px] grid-cols-[1fr_auto_1fr] items-center gap-8 bg-white/50 px-[clamp(1.5rem,5vw,4.75rem)] py-10 max-md:grid-cols-1 max-md:justify-items-start max-md:px-5"><Brand /><p className="m-0 text-center text-[11px] text-[#7783a2] max-md:text-left">Công cụ điền Google Form tự động theo cách bạn thiết lập.</p><div className="flex justify-end gap-6 text-xs font-semibold text-[#52607e] max-md:flex-wrap max-md:justify-start"><Link className="hover:text-[#5c55e7]" href="#dich-vu">Dịch vụ</Link><Link className="hover:text-[#5c55e7]" href="#bang-gia">Bảng giá</Link><Link className="hover:text-[#5c55e7]" href="/login">Đăng nhập</Link><Link className="hover:text-[#5c55e7]" href="#faq">FAQ</Link></div></footer>
     </main>
   );
 }
 
-function DashboardPreview() {
-  const nextActions = [
-    "Phân tích link Google Form và cài đặt cách trả lời",
-    "Nạp credit hoặc theo dõi giao dịch PayOS",
-    "Kiểm tra lịch sử sử dụng và hành động bị chặn"
-  ];
-
-  return (
-    <div className="motion-float flex h-[420px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl sm:h-[520px]">
-      <div className="flex h-12 items-center justify-between border-b border-slate-100 bg-slate-50/50 px-4">
-        <div className="flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-slate-200" />
-          <span className="h-3 w-3 rounded-full bg-slate-200" />
-          <span className="h-3 w-3 rounded-full bg-slate-200" />
-        </div>
-        <span className="max-w-[160px] truncate text-xs font-medium text-slate-500 sm:max-w-none">
-          app.formautohub.com
-        </span>
-        <div className="w-12" />
-      </div>
-      <div className="flex flex-1 overflow-hidden">
-        <aside className="hidden w-48 space-y-6 border-r border-slate-100 bg-white p-4 text-xs text-slate-600 sm:block">
-          <div className="space-y-1">
-            <p className="rounded bg-blue-50 px-2 py-1.5 font-semibold text-blue-600">Tổng quan</p>
-            <p className="rounded px-2 py-1.5">Yêu cầu nạp credit</p>
-            <p className="rounded px-2 py-1.5">Nhật ký sử dụng</p>
-            <p className="rounded px-2 py-1.5">Giao dịch credit</p>
-            <p className="rounded px-2 py-1.5">Hồ sơ</p>
-          </div>
-        </aside>
-        <div className="min-w-0 flex-1 space-y-5 overflow-y-auto bg-slate-50/30 p-4 sm:space-y-6 sm:p-5">
-          <div>
-            <h2 className="text-base font-bold text-slate-900">Tổng quan vận hành</h2>
-            <p className="mt-1 text-xs leading-5 text-slate-500">
-              Theo dõi credit, yêu cầu nạp và các thao tác biểu mẫu gần đây.
-            </p>
-          </div>
-          <div className="rounded border border-cyan-100 bg-cyan-50 px-3 py-2 text-[11px] leading-5 text-cyan-900">
-            Tự động hóa biểu mẫu luôn phải xem trước, người dùng phải xác nhận rõ ràng, và mỗi lần chỉ tạo 1 đến 100 câu trả lời xem trước.
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Metric label="Credit hiện có" value="-" />
-            <Metric label="Đã nạp" value="-" />
-            <Metric label="Đã dùng" value="-" />
-            <Metric label="Yêu cầu chờ duyệt" value="-" />
-          </div>
-          <div className="grid gap-4 lg:grid-cols-[0.95fr_1.35fr]">
-            <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-4 py-3">
-                <h3 className="text-sm font-semibold text-slate-900">Việc nên làm tiếp</h3>
-              </div>
-              <div className="space-y-2 p-4">
-                {nextActions.map((action) => (
-                  <div key={action} className="rounded border border-slate-200 bg-white px-3 py-2 text-[11px] leading-5 text-slate-700">
-                    {action}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-4 py-3">
-                <h3 className="text-sm font-semibold text-slate-900">Yêu cầu nạp gần đây</h3>
-              </div>
-              <EmptyPreview
-                title="Chưa có yêu cầu nạp gần đây"
-                detail="Nạp thêm credit khi cần tiếp tục sử dụng."
-              />
-            </div>
-          </div>
-          <div className="rounded-lg border border-slate-100 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-4 py-3">
-              <h3 className="text-sm font-semibold text-slate-900">Lịch sử sử dụng gần đây</h3>
-            </div>
-            <EmptyPreview
-              title="Chưa có lịch sử sử dụng gần đây"
-              detail="Các lần phân tích, tạo bản xem trước và gửi câu trả lời sẽ xuất hiện tại đây."
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+function ServiceCard({ icon: Icon, number, title, primary = false, children }: { icon: typeof Sparkles; number: string; title: string; primary?: boolean; children: React.ReactNode }) {
+  return <article className={`relative flex min-h-[440px] flex-col rounded-2xl border p-[34px] max-md:min-h-[390px] max-md:p-7 ${primary ? "border-transparent bg-gradient-to-br from-[#5c55e7] to-[#4941d1] max-xl:col-span-2 max-md:col-span-1" : "border-white/15 bg-white/[.055]"}`}><span className={`mb-14 grid h-[52px] w-[52px] place-items-center rounded-[14px] ${primary ? "bg-white text-[#473fd1]" : "bg-white/10 text-[#c5f5ff]"}`}><Icon className="h-6 w-6" /></span><span className="absolute right-[34px] top-[35px] text-[11px] font-extrabold tracking-[.1em] text-[#8f98b4]">{number}</span><h3 className="mb-3.5 text-[26px] font-bold text-white">{title}</h3><div className="contents [&>p]:mb-5 [&>p]:text-sm [&>p]:text-[#c8cee1] [&>ul]:mb-6 [&>ul]:space-y-2.5 [&>ul]:text-xs [&>ul]:text-[#e5e7f2] [&_li]:flex [&_li]:items-center [&_li]:gap-2">{children}</div></article>;
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-slate-100 bg-white p-3 shadow-sm">
-      <p className="text-xs text-slate-500">{label}</p>
-      <p className="mt-2 text-xl font-semibold text-slate-900">{value}</p>
-    </div>
-  );
+function PlanCard({ label, badge, credits, price, text, items, href, action, trial = false, featured = false }: { label: string; badge?: string; credits: string; price: string; text: string; items: string[]; href: string; action: string; trial?: boolean; featured?: boolean }) {
+  return <article className={`flex min-h-[510px] flex-col rounded-2xl p-8 shadow-[0_18px_48px_rgba(40,54,102,.07)] max-md:min-h-[485px] max-md:p-7 ${trial ? "border border-transparent bg-gradient-to-br from-[#473fd1] to-[#6c63ef] text-white" : featured ? "border-2 border-[#5c55e7] bg-white shadow-[0_22px_54px_rgba(71,63,209,.15)]" : "border border-[#dfe4f1] bg-white"}`}><div className={`flex min-h-[30px] items-center justify-between gap-3 text-[11px] font-extrabold uppercase tracking-[.08em] ${trial ? "text-[#dcdaff]" : "text-[#7783a2]"}`}><span>{label}</span>{badge ? <span className="rounded-full bg-[#efefff] px-2.5 py-1.5 text-[9px] text-[#473fd1]">{badge}</span> : trial ? <Gift className="h-5 w-5" /> : <Coins className="h-5 w-5" />}</div><h3 className={`mb-1 mt-8 text-[26px] font-bold ${trial ? "text-white" : "text-[#18244a]"}`}>{credits}</h3><div className={`mb-4 text-[clamp(2.5rem,4vw,3.625rem)] font-[820] leading-none tracking-[-.05em] ${trial ? "text-white" : "text-[#18244a]"}`}>{price}</div><p className={`mb-5 min-h-[52px] text-[13px] ${trial ? "text-[#e6e5ff]" : "text-[#596584]"}`}>{text}</p><ul className={`mb-6 space-y-2.5 text-xs ${trial ? "text-[#f1f0ff]" : "text-[#4f5c7c]"}`}>{items.map((item) => <li className="flex items-center gap-2" key={item}><Check className={`shrink-0 ${trial ? "text-[#baf4ff]" : "text-[#5c55e7]"}`} />{item}</li>)}</ul><Link className={`mt-auto inline-flex min-h-[52px] items-center justify-center rounded-xl px-5 text-sm font-bold transition hover:-translate-y-0.5 ${trial ? "bg-white text-[#473fd1] shadow-lg" : featured ? "bg-[#5c55e7] text-white shadow-lg" : "border border-[#c9c9f4] bg-white text-[#473fd1]"}`} href={href}>{action}</Link></article>;
 }
 
-function EmptyPreview({ title, detail }: { title: string; detail: string }) {
-  return (
-    <div className="m-4 rounded-lg border border-dashed border-slate-200 bg-white px-4 py-6 text-center">
-      <p className="text-sm font-semibold text-slate-900">{title}</p>
-      <p className="mt-2 text-xs leading-5 text-slate-500">{detail}</p>
-    </div>
-  );
-}
-
-function Footer() {
-  const groups = [
-    {
-      title: "Sản phẩm",
-      links: [
-        { label: "Tạo dữ liệu mẫu cho Google Forms", href: "/google-forms/sample-data" },
-        { label: "Dữ liệu mẫu Google Forms cho báo cáo sinh viên", href: "/google-forms/student-report" },
-        { label: "Demo dữ liệu khảo sát Google Forms", href: "/google-forms/survey-demo" },
-        { label: "Kiểm tra dữ liệu Google Forms trong Google Sheets", href: "/google-forms/sheets-report" }
-      ]
-    },
-    {
-      title: "Tài nguyên",
-      links: [
-        { label: "Chống lạm dụng", href: "/anti-abuse" },
-        { label: "FAQ", href: "#faq" },
-        { label: "Quy trình", href: "#quy-trinh" }
-      ]
-    },
-    {
-      title: "Tài khoản",
-      links: [
-        { label: "Đăng nhập", href: "/login" },
-        { label: "Tạo tài khoản", href: "/register" }
-      ]
-    },
-    {
-      title: "Pháp lý",
-      links: [
-        { label: "Điều khoản", href: "#" },
-        { label: "Quyền riêng tư", href: "#" }
-      ]
-    }
-  ];
-
-  return (
-    <footer className="border-t border-slate-200 bg-white/82 backdrop-blur">
-      <div className="mx-auto grid max-w-[1120px] grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4 md:px-8">
-        {groups.map((group) => (
-          <div key={group.title}>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-900">{group.title}</h4>
-            <ul className="space-y-3">
-              {group.links.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-slate-600 transition-colors hover:text-blue-600">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="mx-auto flex max-w-[1120px] flex-col items-center justify-between gap-4 border-t border-slate-200 px-4 py-6 md:flex-row md:px-8">
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded bg-blue-600 text-white">
-            <BarChart3 size={14} />
-          </div>
-          <span className="text-sm font-semibold text-slate-900">FormAuto Hub</span>
-        </div>
-        <p className="text-sm text-slate-500">© 2026 FormAuto Hub. Đã đăng ký bản quyền.</p>
-      </div>
-    </footer>
-  );
+function ControlTag({ icon: Icon, className, children }: { icon: typeof Check; className: string; children: React.ReactNode }) {
+  return <span className={`absolute z-[3] flex items-center gap-2 rounded-full bg-white px-3.5 py-2.5 text-[11px] font-bold text-[#18244a] shadow-[0_14px_30px_rgba(0,0,0,.2)] ${className}`}><Icon />{children}</span>;
 }

@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "next start",
-    "dev": "next dev",
+    "start": "next start -p 3020",
+    "dev": "npm run dev:full",
+    "dev:web": "cross-env NEXT_PUBLIC_API_BASE_URL=https://localhost:7039 NEXT_PUBLIC_SITE_URL=http://localhost:3020 NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3020/dashboard/nckh/callback next dev -p 3020",
+    "dev:api": "dotnet run --project ../../src/FormAutoHub.Api/FormAutoHub.Api.csproj --launch-profile https",
+    "dev:full": "concurrently --kill-others --names API,WEB --prefix-colors blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
     "build": "next build",
     "lint": "next lint"
   },
@@ -25,6 +28,8 @@
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
     "autoprefixer": "10.4.20",
+    "concurrently": "9.2.1",
+    "cross-env": "7.0.3",
     "eslint": "8.57.1",
     "eslint-config-next": "^15.5.18",
     "postcss": "8.5.10",
