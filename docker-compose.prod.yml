@@ -28,10 +28,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
+      DataProtection__KeysPath: /var/lib/formautohub/data-protection-keys
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:5100:8080"
+    volumes:
+      - formauto-data-protection-keys:/var/lib/formautohub/data-protection-keys
     depends_on:
       formauto-sql:
         condition: service_healthy
@@ -85,3 +88,4 @@ services:
 
 volumes:
   formauto-sql-data:
+  formauto-data-protection-keys:

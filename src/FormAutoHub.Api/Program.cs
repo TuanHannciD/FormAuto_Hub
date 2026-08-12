@@ -1,5 +1,6 @@
 using FormAutoHub.Api.Data;
 using FormAutoHub.Api.Auth;
+using FormAutoHub.Api.Configuration;
 using FormAutoHub.Api.Integrations.AI;
 using FormAutoHub.Api.Integrations.GoogleForms;
 using FormAutoHub.Api.Integrations.Google;
@@ -33,6 +34,7 @@ var allowedCorsOrigins = builder.Configuration
     ];
 
 builder.Services.AddControllers();
+builder.Services.AddFormAutoHubDataProtection(builder.Configuration);
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.SectionName));
 builder.Services.AddCors(options =>
 {

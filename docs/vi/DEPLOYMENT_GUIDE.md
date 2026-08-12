@@ -1,6 +1,6 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Cập nhật lần cuối:** 2026-08-11 | **Phase:** Production CI/CD foundation
+**Cập nhật lần cuối:** 2026-08-12 | **Phase:** Production CI/CD foundation
 
 ## Tổng quan kiến trúc
 
@@ -18,9 +18,14 @@ nginx / reverse proxy :80/:443 trên VPS
                                   |
                                   v
                          Docker volume: formauto-sql-data
+
+formauto-api
+  `---> Docker volume: formauto-data-protection-keys
 ```
 
 Các service app chỉ bind ra `127.0.0.1`. Public internet đi qua reverse proxy. SQL Server cũng chỉ bind localhost host port `1433`, không mở public.
+
+API lưu bền vững ASP.NET Core Data Protection key ring trong `formauto-data-protection-keys`. Database lưu các provider secret đã mã hóa, còn volume riêng này lưu các khóa cần thiết để giải mã chúng sau khi API container bị thay thế.
 
 Production deploy không build source trên VPS. GitHub Actions build API/Web image, push lên GHCR với tag full commit SHA, rồi SSH vào VPS để pull đúng image đó.
 
@@ -297,6 +302,27 @@ docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml ps
 
 Deploy script lấy Compose từ đúng commit release, pull API/Web image theo SHA, chạy Compose với health wait, smoke check API/Web localhost, rồi ghi `.deploy/current-release`.
 
+## Lưu bền vững Data Protection key
+
+Production đặt `DataProtection__KeysPath=/var/lib/formautohub/data-protection-keys` và mount named volume `formauto-data-protection-keys` vào đường dẫn đó. Giữ nguyên API container content root (`/app`) và đường dẫn key đã cấu hình qua các release trừ khi có một quy trình migration key được phê duyệt. Không đưa một giá trị `SetApplicationName` mới vào trong lần khôi phục này vì thay đổi Data Protection application discriminator có thể làm ciphertext hiện có không đọc được ngay cả khi đã tìm lại file key tương ứng.
+
+Trước lần deploy đầu tiên đưa volume này vào sử dụng:
+
+1. Kiểm tra API container hiện tại hoặc backup bảo mật còn giữ Data Protection key ring cũ hay không.
+2. Bảo toàn và nhập toàn bộ key ring đó vào persistent volume bằng runbook xử lý secret đã được phê duyệt trước khi thay container.
+3. Nếu key cũ cần thiết không còn, deploy persistent volume trước, sau đó nhập lại AI/PayOS credentials bị ảnh hưởng và kết nối lại các tài khoản Google OAuth bị ảnh hưởng.
+
+Không thể khôi phục các giá trị mã hóa chỉ từ database backup khi thiếu key ring tương ứng. Hãy backup database và Data Protection key ring dưới dạng hai tài sản được bảo vệ riêng. Không commit file key XML, không in nội dung key và không đưa chúng vào log ứng dụng thông thường. Named volume chỉ tạo độ bền, không mã hóa key khi lưu trữ; cần giới hạn quyền truy cập Docker/VPS. Bảo vệ key ring bằng certificate hoặc external KMS vẫn là một follow-up hardening bảo mật riêng.
+
+Kiểm tra read-only sau deploy:
+
+```bash
+docker inspect --format='{{range .Mounts}}{{.Destination}} {{.Type}}{{println}}{{end}}' formauto_hub-formauto-api-1
+docker exec formauto_hub-formauto-api-1 ls -1 /var/lib/formautohub/data-protection-keys
+```
+
+Kỳ vọng: mount có `/var/lib/formautohub/data-protection-keys` và thư mục chứa ít nhất một file `key-*.xml`. Việc tạo lại API container phải giữ được cùng key ring có thể sử dụng. Không dùng `docker compose down -v` trong quy trình deploy vì lệnh này xóa named volume.
+
 ## Health checks
 
 ```bash
@@ -366,6 +392,10 @@ docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml logs --tail=
 ```
 
 Nguyên nhân thường gặp: mật khẩu SQL không khớp giữa `sql.env` và `api.env`, SQL chưa healthy, migration lỗi, hoặc thiếu runtime secret trong `/etc/formauto/api.env`.
+
+### API báo `The key {...} was not found in the key ring`
+
+Giá trị mã hóa trong database đang tham chiếu đến một Data Protection key không có trong key ring được mount. Không xóa giá trị database hoặc xóa key volume hiện tại như phản ứng đầu tiên. Hãy tìm key bị thiếu trong backup đã được phê duyệt và nơi lưu key ring cũ còn được giữ lại. Nếu không thể khôi phục, tiếp tục giữ persistent volume và chỉ nhập lại provider credentials bị ảnh hưởng hoặc kết nối lại tài khoản ngoài bị ảnh hưởng. Xác nhận provider check và một runtime smoke có giới hạn sau khi khôi phục.
 
 ### Web không gọi được API
 

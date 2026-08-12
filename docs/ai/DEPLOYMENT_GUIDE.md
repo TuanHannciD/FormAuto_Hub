@@ -1,6 +1,6 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Last updated:** 2026-08-11 | **Phase:** Production CI/CD foundation
+**Last updated:** 2026-08-12 | **Phase:** Production CI/CD foundation
 
 ## Architecture overview
 
@@ -18,9 +18,14 @@ nginx / reverse proxy :80/:443 on the VPS
                                   |
                                   v
                          Docker volume: formauto-sql-data
+
+formauto-api
+  `---> Docker volume: formauto-data-protection-keys
 ```
 
 Application services bind to `127.0.0.1` on the host. Public traffic goes through the reverse proxy. SQL Server also binds only to localhost host port `1433`; it is not public.
+
+The API persists its ASP.NET Core Data Protection key ring in `formauto-data-protection-keys`. The database stores encrypted provider secrets, while this separate volume stores the keys required to decrypt them after an API container replacement.
 
 Production does not build source on the VPS. GitHub Actions builds API/Web images, pushes them to GHCR with the full commit SHA tag, then SSHes into the VPS and pulls that exact release.
 
@@ -297,6 +302,27 @@ docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml ps
 
 The deploy script fetches Compose from the exact release commit, pulls API/Web images by SHA, runs Compose with health wait, smoke-checks local API/Web, then writes `.deploy/current-release`.
 
+## Data Protection key persistence
+
+Production sets `DataProtection__KeysPath=/var/lib/formautohub/data-protection-keys` and mounts the named volume `formauto-data-protection-keys` at that path. Keep the API container content root (`/app`) and the configured key path unchanged across releases unless an approved key migration is performed. Do not introduce a new `SetApplicationName` value during this recovery because changing the Data Protection application discriminator can make existing ciphertext unreadable even when its key file is recovered.
+
+Before the first deployment that introduces this volume:
+
+1. Check whether the current API container or a secure backup still contains the existing Data Protection key ring.
+2. Preserve and import that complete key ring into the persistent volume through an approved secret-handling runbook before replacing the container.
+3. If the required old key no longer exists, deploy the persistent volume first, then re-enter affected AI/PayOS credentials and reconnect affected Google OAuth accounts.
+
+The encrypted database values cannot be recovered from a database backup alone when the corresponding key ring is missing. Back up the database and Data Protection key ring as separate protected assets. Never commit key XML files, print their contents, or include them in ordinary application logs. The named volume provides durability, not key encryption at rest; restrict Docker/VPS access. Certificate- or external-KMS-based key-ring protection remains a separate security-hardening follow-up.
+
+Read-only verification after deployment:
+
+```bash
+docker inspect --format='{{range .Mounts}}{{.Destination}} {{.Type}}{{println}}{{end}}' formauto_hub-formauto-api-1
+docker exec formauto_hub-formauto-api-1 ls -1 /var/lib/formautohub/data-protection-keys
+```
+
+Expected: the mount includes `/var/lib/formautohub/data-protection-keys`, and the directory contains at least one `key-*.xml` file. Recreating the API container must retain the same usable key ring. Do not use `docker compose down -v` in the deployment workflow because it removes named volumes.
+
 ## Health checks
 
 ```bash
@@ -366,6 +392,10 @@ docker compose -f /home/deploy/FormAuto_Hub/docker-compose.prod.yml logs --tail=
 ```
 
 Common causes: SQL password mismatch between `sql.env` and `api.env`, SQL is not healthy yet, migration failed, or a runtime secret is missing from `/etc/formauto/api.env`.
+
+### API reports `The key {...} was not found in the key ring`
+
+The encrypted database value references a Data Protection key that is absent from the mounted key ring. Do not clear the database value or delete the current key volume as a first response. Search approved backups and previous retained key-ring storage for the missing key. If it cannot be recovered, keep the persistent volume in place and re-enter only the affected provider credentials or reconnect the affected external account. Confirm the provider check and a bounded runtime smoke after recovery.
 
 ### Web cannot call API
 
