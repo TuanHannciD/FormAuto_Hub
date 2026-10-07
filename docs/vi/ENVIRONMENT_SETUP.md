@@ -6,7 +6,7 @@
 
 ## Trạng thái hiện tại
 
-Initial Phase 1 backend scaffold đã tồn tại. Environment details vẫn là foundation guidance cho đến khi business implementation và deployment decisions được duyệt.
+Repository có backend và Next.js dashboard đã triển khai. Global Phase 9 đã closeout; chưa chọn global phase tiếp theo. Xem `DEPLOYMENT_GUIDE.md` về nền tảng CI/CD production đã duyệt và tài liệu NCKH cho module riêng đó. Khôi phục môi trường local hiện có không phê duyệt tính năng mới hay integration Deferred.
 
 ## Nhóm local dự kiến
 
@@ -20,10 +20,10 @@ Backend:
 Configuration:
 
 - database connection string
-- auth settings khi đã duyệt
-- Google integration settings khi đã duyệt
-- payment settings chỉ sau khi payment gateway được duyệt
-- AI settings chỉ sau khi AI feature được duyệt
+- JWT settings cho authentication hiện có
+- Google client settings cho identity login hiện có và phạm vi NCKH OAuth/import riêng đã duyệt
+- PayOS settings cho chức năng Phase 8 đã duyệt
+- AI settings cho chức năng có phạm vi của Phase 6 đã hoàn tất
 
 ## Launcher chạy full app tại local
 
@@ -57,7 +57,7 @@ Hướng setup AI provider cho Phase 6:
 - Test/integration validation
 - Production
 
-Exact hosting và deployment platform: Deferred.
+Production dùng nền tảng một host với Docker Compose/GHCR/GitHub Actions đã duyệt, được mô tả trong `DEPLOYMENT_GUIDE.md`. Các khả năng deployment bổ sung vẫn Deferred.
 
 ## Kỷ luật SQL Server
 
@@ -70,19 +70,29 @@ Exact hosting và deployment platform: Deferred.
 
 - Không commit secrets.
 - Không document real credentials.
-- Dùng environment variables hoặc secret storage khi hosting được duyệt.
+- Dùng environment variables, cấu hình local được Git bỏ qua hoặc secret storage được bảo vệ phù hợp với từng môi trường.
 
-## Deferred configuration
+## Khôi phục cấu hình local
+
+- Backend local overrides nằm trong `src/FormAutoHub.Api/appsettings.Development.json`; frontend local overrides nằm trong `apps/web/.env.local`. Git bỏ qua cả hai đường dẫn. Không đặt secrets trong biến `NEXT_PUBLIC_*`; trình duyệt nhìn thấy các giá trị này.
+- Dùng SQL instance local. Connection string lấy từ production không được khiến app local kết nối production. Tạo khóa ký JWT riêng cho local.
+- `run-local.bat` / `npm run dev:web` cung cấp URL localhost cho API, site và NCKH callback. `.env.example` có các URL fallback cũ và không phải cấu hình local đầy đủ; không sao chép máy móc API/site URL từ file đó.
+- Chỉ khôi phục Google client configuration khi có yêu cầu rõ. OAuth callback của launcher này là `http://localhost:3020/dashboard/nckh/callback`; Google phải cho phép redirect URI đó và local origin tương ứng. Sao chép client secret không chứng minh Google allowlist đã đúng.
+- AI/PayOS credentials là settings được mã hóa trong database. Khôi phục env values không đủ để lấy lại chúng. Key ring gắn với application discriminator và protector purpose; dùng tài liệu khôi phục có phạm vi được liên kết từ `DEPLOYMENT_GUIDE.md`, giữ nguyên key/ciphertext local hiện có và xác minh giải mã trước khi báo khôi phục thành công.
+- Lưu key ring của runtime local bên ngoài thư mục tạm, ví dụ `%LOCALAPPDATA%/FormAutoHub/DataProtection-Keys`, với quyền Windows được giới hạn. Đặt `DataProtection:KeysPath` trong cấu hình backend được Git bỏ qua. Bảo toàn thư mục này cùng các bản backup database local.
+- Đối chiếu SQL migration history hiện có với source trước khi khởi động: API gọi `Database.Migrate()` lúc startup. Bảo toàn database có migration thiếu trong source và báo sự lệch; không xóa migration history.
+- Cài frontend dependencies bằng `npm ci` tại `apps/web`, rồi chạy launcher và xác minh API health, route local, authentication và log liên quan. Báo trạng thái integration ngoài riêng với trạng thái khởi động local.
+
+## Ranh giới cấu hình và các mục Deferred
+
+Google identity configuration, NCKH OAuth/import configuration thuộc phạm vi riêng đã duyệt, PayOS credentials/webhook URLs của Phase 8 và AI provider configuration có phạm vi của Phase 6 phục vụ hành vi đã được phê duyệt. Giá trị của chúng là secrets theo môi trường, không phải phê duyệt tính năng mới. Google Forms integration cho core và AI rollout rộng hơn vẫn Deferred.
 
 Deferred:
 
-- Google OAuth client settings
-- official Google Forms API credentials
-- payment gateway credentials
-- AI provider keys
-- AI provider encryption key material trước khi AI provider settings được duyệt
-- lựa chọn production AI provider adapter
+- Google Forms integration ngoài phạm vi NCKH riêng đã duyệt
+- payment providers khác PayOS
+- AI adapters ngoài OpenAI-compatible path có phạm vi đã duyệt
 - live provider/model catalog validation ngoài OpenAI-compatible adapter path đã duyệt
 - queue/background job settings
-- webhook URLs
+- webhook platforms ngoài PayOS flow đã duyệt
 - email provider settings

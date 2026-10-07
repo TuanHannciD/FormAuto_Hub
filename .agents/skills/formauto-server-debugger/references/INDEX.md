@@ -2,6 +2,8 @@
 
 Read only the references needed for the current production check:
 
+- `LOCAL_CONFIGURATION_RECOVERY.md`: only for an explicit request to recover required application configuration into ignored local files; production remains read-only.
+
 - `docker-compose.prod.yml`: authoritative Compose services, health checks, internal ports, host bindings, volumes, and default public URLs.
 - `scripts/deploy-production.sh`: exact release deployment smoke checks and `.deploy/current-release` behavior. Read only; never execute under this skill.
 - `docs/ai/DEPLOYMENT_GUIDE.md`: production topology, paths, health checks, logs, reverse proxy, and troubleshooting.

@@ -1,11 +1,11 @@
 ---
 name: formauto-server-debugger
-description: Remotely diagnose and verify the FormAuto Hub production VPS over SSH using strictly read-only commands. Use for production health checks, bounded log investigation, safe HTTP smoke tests, incident triage, resource snapshots, and before/after deploy verification. Never change code, configuration, containers, files, services, or data.
+description: Diagnose and verify the FormAuto Hub production VPS over SSH without changing production. Use for health checks, bounded logs, safe HTTP smoke tests, incident triage, and deploy verification. Explicitly requested recovery of required application configuration to ignored local files uses the scoped secret-recovery reference.
 ---
 
 # Purpose
 
-Inspect the FormAuto Hub production VPS without changing production state. Establish current evidence, separate confirmed findings from hypotheses, and recommend the smallest safe next action.
+Inspect the FormAuto Hub production VPS without changing production state. Establish current evidence, separate confirmed findings from hypotheses, and recommend the smallest safe next action. Ordinary diagnostics never read secrets. If the user explicitly requests restoring application configuration to local, read [references/LOCAL_CONFIGURATION_RECOVERY.md](references/LOCAL_CONFIGURATION_RECOVERY.md) and use its narrow exception.
 
 # Read project context
 
@@ -21,12 +21,12 @@ Keep these existing Windows environment-variable names and values unchanged. The
 
 | Variable | Current value |
 |---|---|
-| `CASHBACK_VPS_HOST` | `1.52.121.37` |
+| `CASHBACK_VPS_HOST` | `113.23.68.58` |
 | `CASHBACK_VPS_USER` | `deploy` |
 | `CASHBACK_VPS_SSH_KEY` | `C:\Users\Tuan\.ssh\cashback_skill` |
 | `CASHBACK_VPS_SSH_PORT` | `1122` |
 
-Do not rename, rewrite, migrate, or persist these settings elsewhere unless the user explicitly asks. Never read or display private-key contents.
+The host was updated by the user on 2026-10-06. Resolve the actual environment values before connecting; report a stale host instead of connecting to it. Do not rename, rewrite, migrate, or persist these settings elsewhere unless the user explicitly asks. Never read or display SSH private-key contents.
 
 Resolve each setting in this order:
 
@@ -60,7 +60,7 @@ Ask only for a specific missing setting. Do not guess a replacement.
 Before every remote command:
 
 1. Confirm that the command only reads, discovers, or displays state.
-2. Reject commands that create, modify, delete, restart, deploy, migrate, authenticate, or persist data.
+2. Reject commands that create, modify, delete, restart, deploy, migrate, authenticate, or persist production data. Local writes are allowed only within an explicitly requested configuration-recovery task.
 3. Run one bounded remote command per SSH invocation.
 4. Add `-o StrictHostKeyChecking=accept-new`, `-o ConnectTimeout=10`, and `-o BatchMode=yes` to every SSH invocation.
 5. Use a 15-second local process timeout for quick checks and 30 seconds for bounded log checks when the available shell tool supports it.
@@ -86,9 +86,9 @@ Never execute:
 - `rm`, `mv`, `cp`, redirection to files, `tee`, or in-place text editing.
 - `kill`, `pkill`, `killall`, package installation, or background processes.
 - Login, registration, refresh-token, logout, payment, AI generation, submission, webhook, or other mutation HTTP requests.
-- Reads of `/etc/formauto/*.env`, private keys, tokens, passwords, connection strings, or container environment dumps.
+- During ordinary diagnostics: reads of `/etc/formauto/*.env`, tokens, passwords, connection strings, or container environment dumps. Explicit local configuration recovery permits only the selected application values described in the recovery reference; it never permits SSH private-key reads or unfiltered environment dumps.
 
-When a fix requires mutation, state the evidence, the required action, risks, and pre-flight checks. Provide an exact command only when it can be shown without exposing secrets, and require the user to run it.
+When a production fix requires mutation, state the evidence, the required action, risks, and pre-flight checks. Provide an exact command only when it can be shown without exposing secrets, and require the user to run it. Authorized local recovery writes follow the recovery reference instead.
 
 # Production baseline
 

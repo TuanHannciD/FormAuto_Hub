@@ -1,6 +1,14 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Cập nhật lần cuối:** 2026-08-12 | **Phase:** Production CI/CD foundation
+**Cập nhật lần cuối:** 2026-10-06 | **Phase:** Production CI/CD foundation
+
+## Kết nối server hiện tại
+
+VPS FormAuto Hub được cấu hình tại `113.23.68.58` (người dùng xác nhận ngày 06/10/2026), với SSH user `deploy` và port `1122`. Chẩn đoán từ local đọc các biến Windows hiện có: `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT` và `CASHBACK_VPS_SSH_KEY`; giữ nguyên các tên cũ này. Dùng `.agents/skills/formauto-server-debugger/SKILL.md` để đọc trạng thái production có giới hạn.
+
+Ví dụ setup lần đầu bên dưới dùng địa chỉ minh họa `203.0.113.10`; thay bằng host và SSH port đã cấu hình khi chạy thật. GitHub Environment `production` cần có riêng `DEPLOY_HOST=113.23.68.58` và `DEPLOY_PORT=1122`. Sửa tài liệu hoặc biến Windows không tự cập nhật GitHub settings. Xác minh `DEPLOY_SSH_FINGERPRINT` cho endpoint mới trước khi deploy; không tắt xác minh host.
+
+Chẩn đoán thông thường không đọc secrets. Khi người dùng yêu cầu rõ việc khôi phục cấu hình ứng dụng về local, dùng `.agents/skills/formauto-server-debugger/references/LOCAL_CONFIGURATION_RECOVERY.md`. Tách SQL/JWT/deploy credentials của production khỏi runtime local và không commit secrets đã khôi phục. Xem `ENVIRONMENT_SETUP.md` về vị trí cấu hình local và giới hạn xác minh.
 
 ## Tổng quan kiến trúc
 

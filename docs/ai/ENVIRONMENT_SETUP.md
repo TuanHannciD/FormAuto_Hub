@@ -6,7 +6,7 @@ Define environment expectations without inventing unapproved deployment details.
 
 ## Current Status
 
-Initial Phase 1 backend scaffold exists. Environment details remain foundation guidance until business implementation and deployment decisions are approved.
+The repository contains the implemented backend and Next.js dashboard. The global Phase 9 closeout is complete; no next global phase is selected. Use `DEPLOYMENT_GUIDE.md` for the approved production CI/CD foundation and the NCKH documents for that separate module track. Restoring an existing local environment does not approve new features or Deferred integrations.
 
 ## Expected Local Groups
 
@@ -20,10 +20,10 @@ Backend:
 Configuration:
 
 - database connection string
-- auth settings once approved
-- Google integration settings once approved
-- payment settings only after payment gateway approval
-- AI settings only after AI feature approval
+- JWT settings for existing authentication
+- Google client settings for existing identity login and the separate approved NCKH OAuth/import scope
+- PayOS settings for approved Phase 8 functionality
+- AI settings for the completed Phase 6 scoped functionality
 
 ## Local Full-App Launcher
 
@@ -57,7 +57,7 @@ Phase 6 AI provider setup direction:
 - Test/integration validation
 - Production
 
-Exact hosting and deployment platform: Deferred.
+Production uses the approved single-host Docker Compose/GHCR/GitHub Actions foundation described in `DEPLOYMENT_GUIDE.md`. Additional deployment capabilities remain Deferred.
 
 ## SQL Server Discipline
 
@@ -70,19 +70,29 @@ Exact hosting and deployment platform: Deferred.
 
 - Do not commit secrets.
 - Do not document real credentials.
-- Use environment variables or secret storage once hosting is approved.
+- Use environment variables, ignored local configuration, or protected secret storage appropriate to the environment.
 
-## Deferred Configuration
+## Restore local configuration
+
+- Backend local overrides belong in `src/FormAutoHub.Api/appsettings.Development.json`; frontend local overrides belong in `apps/web/.env.local`. Both paths are ignored by Git. Never put secrets in `NEXT_PUBLIC_*` variables; these are browser-visible.
+- Use the local SQL instance. A recovered production connection string must not point the local app at production. Generate a separate local JWT signing key.
+- `run-local.bat` / `npm run dev:web` supplies the localhost API, site, and NCKH callback URLs. `.env.example` contains historical fallback URLs and is not a complete local configuration; do not copy its API/site URLs blindly.
+- Recover Google client configuration only when explicitly requested. The OAuth callback for this launcher is `http://localhost:3020/dashboard/nckh/callback`; Google must allow that redirect URI and the relevant local origin. Copying a client secret does not verify the Google allowlist.
+- AI/PayOS credentials are encrypted database settings. Restoring env values alone does not recover them. A key ring is tied to its application discriminator and protector purpose; use the scoped recovery reference linked from `DEPLOYMENT_GUIDE.md`, preserve existing local keys/ciphertext, and verify decryption before claiming recovery.
+- Persist the local runtime key ring outside temporary folders, for example `%LOCALAPPDATA%/FormAutoHub/DataProtection-Keys`, with restricted Windows permissions. Set `DataProtection:KeysPath` in the ignored backend configuration. Preserve this directory together with local database backups.
+- Compare existing SQL migration history with source before startup: the API calls `Database.Migrate()` at startup. Preserve a database with migrations missing from source and report the mismatch; do not erase migration history.
+- Install frontend dependencies with `npm ci` in `apps/web`, then start the launcher and verify API health, local routes, authentication, and relevant logs. Report external integrations separately from local startup.
+
+## Configuration Boundaries and Deferred Items
+
+Google identity configuration, separate approved NCKH OAuth/import configuration, Phase 8 PayOS credentials/webhook URLs, and Phase 6 scoped AI provider configuration support existing approved behavior. Their values are environment secrets, not new feature approvals. Broader core Google Forms integration and AI rollout remain Deferred.
 
 Deferred:
 
-- Google OAuth client settings
-- official Google Forms API credentials
-- payment gateway credentials
-- AI provider keys
-- AI provider encryption key material before AI provider settings approval
-- production AI provider adapter selection
+- Google Forms integrations outside the approved separate NCKH scope
+- payment providers other than PayOS
+- AI adapters outside the approved scoped OpenAI-compatible path
 - live provider/model catalog validation beyond the approved OpenAI-compatible adapter path
 - queue/background job settings
-- webhook URLs
+- webhook platforms outside the approved PayOS flow
 - email provider settings

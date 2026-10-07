@@ -1,6 +1,14 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Last updated:** 2026-08-12 | **Phase:** Production CI/CD foundation
+**Last updated:** 2026-10-06 | **Phase:** Production CI/CD foundation
+
+## Current server connection
+
+The configured FormAuto Hub VPS host is `113.23.68.58` (user-confirmed on 2026-10-06), with SSH user `deploy` and port `1122`. Local diagnostics resolve the existing Windows variables `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT`, and `CASHBACK_VPS_SSH_KEY`; these legacy names are retained. Use `.agents/skills/formauto-server-debugger/SKILL.md` for bounded production reads.
+
+The first-time setup examples below use the documentation-only address `203.0.113.10`; substitute the configured host and SSH port for real commands. GitHub Environment `production` must separately have `DEPLOY_HOST=113.23.68.58` and `DEPLOY_PORT=1122`. Editing this document or a Windows variable does not update GitHub settings. Verify `DEPLOY_SSH_FINGERPRINT` for the new endpoint before deployment; do not disable host verification.
+
+Ordinary diagnostics do not read secrets. Explicit application-configuration recovery to local uses `.agents/skills/formauto-server-debugger/references/LOCAL_CONFIGURATION_RECOVERY.md`. Keep production SQL/JWT/deploy credentials separate from local runtime, and never commit recovered secrets. See `ENVIRONMENT_SETUP.md` for local destinations and validation boundaries.
 
 ## Architecture overview
 

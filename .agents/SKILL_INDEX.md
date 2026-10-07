@@ -14,6 +14,7 @@ Use this file to choose the smallest sufficient skill combination.
 | Phase fit | `formauto-phase-gate` | `formauto-requirement-analyst` |
 | Runtime bug/log symptom | `formauto-bug-triage` | `formauto-http-behavior-tester` |
 | Production VPS health/log/incident check | `formauto-server-debugger` | `formauto-bug-triage`, `formauto-http-behavior-tester` |
+| Explicit recovery of server application configuration to local | `formauto-server-debugger` recovery reference | `formauto-http-behavior-tester`; ignored local files or protected storage outside the repository |
 | Endpoint behavior check | `formauto-http-behavior-tester` | `formauto-contract-guard` |
 | Documentation edit | `formauto-controlled-doc-editor` | matching `docs/ai` and `docs/vi` files |
 | Stitch UI design generation | `formauto-stitch-ui-iterative-designer` | `formauto-phase-gate`, `formauto-reviewer` |
