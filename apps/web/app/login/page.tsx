@@ -7,7 +7,7 @@ import { LockKeyhole, Mail } from "lucide-react";
 import { GoogleIdentityButton } from "@/components/google-identity-button";
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
-import { getStoredSession, saveSession } from "@/lib/auth";
+import { clearStoredSession, getStoredSession, hasUsableSession, saveSession } from "@/lib/auth";
 import { readableError } from "@/lib/toast";
 import { toast } from "sonner";
 
@@ -39,12 +39,16 @@ function LoginContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (searchParams.get("reason") === "session-expired") {
-      toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-    }
-
-    if (getStoredSession()) {
+    if (hasUsableSession()) {
       router.replace("/dashboard");
+      return;
+    }
+    if (getStoredSession()) {
+      clearStoredSession();
+    }
+    if (searchParams.get("reason") === "session-expired") {
+      toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", { id: "session-expired" });
+      router.replace("/login");
     }
   }, [router, searchParams]);
 

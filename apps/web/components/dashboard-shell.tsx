@@ -45,7 +45,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     function syncSession() {
       const nextSession = getStoredSession();
-      setSession(nextSession);
+      setSession(hasUsableSession() ? nextSession : null);
       if (!hasUsableSession()) {
         router.replace("/login?reason=session-expired");
       }

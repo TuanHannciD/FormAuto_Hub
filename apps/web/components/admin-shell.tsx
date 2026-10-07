@@ -27,12 +27,20 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    const nextSession = getStoredSession();
-    setSession(nextSession);
-    if (!hasUsableSession()) {
-      router.replace("/login?reason=session-expired");
+    function syncSession() {
+      setSession(hasUsableSession() ? getStoredSession() : null);
+      if (!hasUsableSession()) {
+        router.replace("/login?reason=session-expired");
+      }
+      setIsChecking(false);
     }
-    setIsChecking(false);
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener("formauto-auth-session-changed", syncSession);
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener("formauto-auth-session-changed", syncSession);
+    };
   }, [router]);
 
   async function logout() {

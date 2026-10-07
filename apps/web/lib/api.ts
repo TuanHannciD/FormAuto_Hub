@@ -1,4 +1,4 @@
-import { getValidAccessToken, refreshSession } from "@/lib/auth";
+import { clearStoredSession, getStoredSession, getValidAccessToken, refreshSession, SessionExpiredError } from "@/lib/auth";
 
 export const API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000");
 
@@ -15,9 +15,12 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   return apiFetchInternal<T>(path, options, false);
 }
 
-export async function apiFetchBlob(path: string): Promise<Blob> {
+export async function apiFetchBlob(path: string, retried = false): Promise<Blob> {
   const headers = new Headers();
   const accessToken = await getValidAccessToken();
+  if (!accessToken) {
+    throw new SessionExpiredError();
+  }
   if (accessToken) {
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
@@ -28,10 +31,12 @@ export async function apiFetchBlob(path: string): Promise<Blob> {
   });
 
   if (response.status === 401) {
-    const refreshed = await refreshSession();
+    const refreshed = !retried ? await refreshSession(accessToken) : null;
     if (refreshed) {
-      return apiFetchBlob(path);
+      return apiFetchBlob(path, true);
     }
+    if (getStoredSession()?.accessToken === accessToken) clearStoredSession();
+    throw new SessionExpiredError();
   }
 
   if (!response.ok) {
@@ -47,6 +52,9 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
 
   if (!options.skipAuth) {
     const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      throw new SessionExpiredError();
+    }
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
@@ -66,11 +74,14 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
     cache: "no-store"
   });
 
-  if (response.status === 401 && !retried && !options.skipAuth) {
-    const refreshed = await refreshSession();
+  if (response.status === 401 && !options.skipAuth) {
+    const rejectedToken = headers.get("Authorization")?.replace(/^Bearer /, "");
+    const refreshed = !retried ? await refreshSession(rejectedToken) : null;
     if (refreshed) {
       return apiFetchInternal<T>(path, options, true);
     }
+    if (getStoredSession()?.accessToken === rejectedToken) clearStoredSession();
+    throw new SessionExpiredError();
   }
 
   if (!response.ok) {
