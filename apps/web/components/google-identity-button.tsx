@@ -47,6 +47,7 @@ export function GoogleIdentityButton({
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
+  const [scriptFailed, setScriptFailed] = useState(false);
   const [renderNonce, setRenderNonce] = useState(0);
 
   const renderGoogleButton = useCallback(() => {
@@ -91,11 +92,11 @@ export function GoogleIdentityButton({
   if (!GOOGLE_CLIENT_ID) {
     return (
       <button
-        className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/80 bg-surface/78 px-4 py-2 text-sm font-semibold text-muted-foreground shadow-sm"
-        onClick={onUnavailable}
+        className="inline-flex min-h-[54px] w-full items-center justify-center rounded-xl border border-border bg-surface-subtle px-4 py-2 text-sm font-semibold text-secondary-foreground"
+        disabled
         type="button"
       >
-        Google Client ID chưa được cấu hình
+        Đăng nhập với Google hiện chưa khả dụng
       </button>
     );
   }
@@ -105,10 +106,18 @@ export function GoogleIdentityButton({
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
-        onError={onUnavailable}
+        onReady={() => setScriptReady(true)}
+        onError={() => {
+          setScriptFailed(true);
+          onUnavailable?.();
+        }}
       />
-      <div ref={containerRef} className="flex min-h-10 w-full items-center justify-center" />
+      {(!scriptReady || scriptFailed) && (
+        <p role="status" className="flex min-h-[54px] items-center justify-center rounded-xl border border-border bg-surface-subtle px-4 text-center text-sm text-secondary-foreground">
+          {scriptFailed ? "Đăng nhập với Google hiện chưa khả dụng" : "Đang tải đăng nhập với Google..."}
+        </p>
+      )}
+      <div ref={containerRef} className={scriptReady && !scriptFailed ? "flex min-h-10 w-full items-center justify-center" : "flex w-full items-center justify-center"} />
     </div>
   );
 }

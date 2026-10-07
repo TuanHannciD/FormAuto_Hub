@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import { Loader2, CircleAlert } from "lucide-react";
+import { AuthShell, AuthHeading } from "@/components/auth-shell";
 import { apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { saveSession } from "@/lib/auth";
 import { toast } from "sonner";
@@ -73,31 +73,23 @@ function AuthCallbackContent() {
   }, [idToken, message, router]);
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-6 sm:px-5 sm:py-10">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Xác thực Google</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isLoading ? (
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Loader2 className="animate-spin" size={18} />
-              Đang xác thực tài khoản Google...
-            </div>
-          ) : message ? (
-            <p className="text-sm text-muted-foreground">Không hoàn tất xác thực. Vui lòng thử lại hoặc quay lại đăng nhập.</p>
-          ) : (
-            <p className="text-sm text-muted-foreground">Đăng nhập thành công. Đang chuyển vào bảng điều khiển...</p>
-          )}
-          <Link
-            className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium transition hover:bg-muted"
-            href="/login"
-          >
-            Quay lại đăng nhập
-          </Link>
-        </CardContent>
-      </Card>
-    </main>
+    <AuthShell mode="callback">
+      <AuthHeading title="Xác thực Google" description="Hoàn tất đăng nhập để tiếp tục vào FormAuto Hub." />
+      <div className="space-y-6">
+        {isLoading ? (
+          <div role="status" className="flex items-center gap-3 rounded-xl bg-primary-soft p-5 text-sm text-primary">
+            <Loader2 aria-hidden="true" className="animate-spin" size={22} />Đang xác thực tài khoản Google...
+          </div>
+        ) : message ? (
+          <div role="alert" className="flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive">
+            <CircleAlert aria-hidden="true" className="mt-0.5 shrink-0" size={22} />{message}
+          </div>
+        ) : (
+          <p role="status" className="rounded-xl bg-info-surface p-5 text-sm leading-6 text-info">Vui lòng quay lại đăng nhập để xác thực tài khoản Google.</p>
+        )}
+        <Link className="flex min-h-[54px] w-full items-center justify-center rounded-xl border border-border-strong bg-surface px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" href="/login">Quay lại đăng nhập</Link>
+      </div>
+    </AuthShell>
   );
 }
 

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import {
   FlaskConical,
   BarChart3,
-  ClipboardCheck,
   CreditCard,
   FileClock,
   FormInput,
@@ -67,31 +66,32 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   }
 
   function isActiveHref(href: string) {
-    return href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+    const activeItem = [...navItems]
+      .sort((left, right) => right.href.length - left.href.length)
+      .find((item) => pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`)));
+    return activeItem?.href === href;
   }
 
   const navigation = (
-    <nav className="space-y-1">
+    <nav aria-label="Điều hướng bảng điều khiển" className="space-y-1">
       {navItems.map((item) => (
         <Link
           className={cn(
-            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-primary-soft/70 hover:text-foreground",
-            isActiveHref(item.href) && "bg-primary-soft/85 text-primary shadow-sm ring-1 ring-primary-border/80"
+            "group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold text-inverse-muted transition hover:bg-inverse-foreground/10 hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+            isActiveHref(item.href) && "bg-primary/35 text-inverse-foreground"
           )}
           href={item.href}
           key={item.href}
+          aria-current={isActiveHref(item.href) ? "page" : undefined}
           onClick={() => setIsMobileNavOpen(false)}
         >
-          <item.icon className={cn("transition", isActiveHref(item.href) && "text-primary")} size={18} />
+          <item.icon className={cn("transition", isActiveHref(item.href) && "text-accent-soft")} size={18} />
           {item.label}
         </Link>
       ))}
       {session?.role === "Admin" && (
         <Link
-          className={cn(
-            "group flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:bg-primary-soft/70 hover:text-foreground",
-            pathname.startsWith("/admin") && "bg-primary-soft/85 text-primary shadow-sm ring-1 ring-primary-border/80"
-          )}
+          className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold text-inverse-muted hover:bg-inverse-foreground/10 hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           href="/admin"
           onClick={() => setIsMobileNavOpen(false)}
         >
@@ -118,79 +118,46 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  const brand = (
+    <Link href="/" className="flex min-h-11 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+      <span aria-hidden="true" className="grid h-[34px] w-[34px] shrink-0 grid-cols-3 items-end gap-0.5 rounded-[10px] bg-primary p-[7px]">
+        <span className="h-[42%] rounded-sm bg-inverse-foreground/75" /><span className="h-[68%] rounded-sm bg-inverse-foreground/90" /><span className="h-full rounded-sm bg-inverse-foreground" />
+      </span>
+      <span className="min-w-0"><strong className="block text-[13px] font-extrabold">FormAuto Hub</strong><span className="block text-[11px] text-inverse-muted">Bảng điều khiển</span></span>
+    </Link>
+  );
+  const account = (
+    <div className="mt-auto border-t border-inverse-foreground/15 pt-4">
+      <div className="flex items-center gap-3 px-1">
+        <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-sm font-bold">{(session.fullName || "F").slice(0, 1).toLocaleUpperCase("vi-VN")}</span>
+        <div className="min-w-0"><p className="truncate text-xs font-semibold">{session.fullName}</p><p className="mt-1 truncate text-[11px] text-inverse-muted">{session.email}</p></div>
+      </div>
+      <Button type="button" onClick={logout} className="mt-3 w-full justify-start gap-3 rounded-xl bg-transparent text-inverse-muted shadow-none hover:bg-inverse-foreground/10 hover:text-inverse-foreground"><LogOut aria-hidden="true" size={18} />Đăng xuất</Button>
+    </div>
+  );
   return (
-    <div className="app-aura-bg min-h-screen">
-      <aside className="glass-sidebar fixed inset-y-0 left-0 hidden w-56 border-r px-3 py-4 lg:block">
-        <div className="mb-6 flex items-center gap-2.5 px-1.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
-            <ClipboardCheck size={20} />
-          </div>
-          <div>
-            <p className="text-[13px] font-extrabold leading-4">FormAuto Hub</p>
-            <p className="text-[11px] text-muted-foreground">Bảng điều khiển</p>
-          </div>
-        </div>
-        {navigation}
+    <div className="min-h-dvh bg-surface-subtle">
+      <aside className="fixed inset-y-4 left-4 z-20 hidden w-[244px] flex-col gap-7 overflow-y-auto rounded-2xl bg-surface-inverse px-[18px] py-6 text-inverse-foreground shadow-soft lg:flex">
+        {brand}{navigation}{account}
       </aside>
       {isMobileNavOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          <button
-            aria-label="Đóng menu bằng lớp phủ"
-            className="absolute inset-0 bg-surface-inverse/40"
-            onClick={() => setIsMobileNavOpen(false)}
-            type="button"
-          />
-          <aside className="glass-sidebar relative flex h-full w-[min(18rem,calc(100vw-3rem))] flex-col border-r px-4 py-5 shadow-xl">
-            <div className="mb-7 flex items-center justify-between gap-3 px-2">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-soft">
-                  <ClipboardCheck size={20} />
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-extrabold">FormAuto Hub</p>
-                  <p className="truncate text-xs text-muted-foreground">Bảng điều khiển</p>
-                </div>
-              </div>
-              <Button aria-label="Đóng menu" className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setIsMobileNavOpen(false)}>
-                <X size={16} />
-              </Button>
-            </div>
-            {navigation}
+        <div className="fixed inset-0 z-40 p-3 lg:hidden">
+          <button type="button" aria-label="Đóng menu bằng lớp phủ" className="absolute inset-0 bg-overlay/50" onClick={() => setIsMobileNavOpen(false)} />
+          <aside aria-label="Menu di động" className="relative flex h-full w-[min(290px,84vw)] flex-col gap-6 overflow-y-auto rounded-2xl bg-surface-inverse px-[18px] py-5 text-inverse-foreground shadow-soft">
+            <div className="flex items-center justify-between gap-2">{brand}<button type="button" aria-label="Đóng menu" onClick={() => setIsMobileNavOpen(false)} className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><X aria-hidden="true" size={18} /></button></div>
+            {navigation}{account}
           </aside>
         </div>
       )}
-      <main className="lg:pl-56">
-        <header className="sticky top-0 z-10 border-b border-inverse-foreground/70 bg-surface/62 px-4 py-3 backdrop-blur-xl sm:px-5 sm:py-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <Button
-                aria-label="Mở menu"
-                className="min-h-9 px-3 lg:hidden"
-                type="button"
-                variant="secondary"
-                onClick={() => setIsMobileNavOpen(true)}
-              >
-                <Menu size={16} />
-              </Button>
-              <div className="min-w-0 truncate text-[12px] text-muted-foreground">
-                <span>Bảng điều khiển</span>
-                <span className="mx-2">/</span>
-                <span className="font-medium text-primary">Bảng điều khiển vận hành</span>
-              </div>
-            </div>
-            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              <div className="hidden text-right text-xs text-muted-foreground sm:block">
-                <p className="font-medium text-foreground">{session?.fullName ?? "Người dùng FormAuto"}</p>
-                <p>{session?.email ?? ""}</p>
-              </div>
-              <Button className="min-h-9 px-3 sm:min-h-10 sm:px-4" type="button" variant="secondary" onClick={logout}>
-                <LogOut size={16} />
-                <span className="ml-2 hidden sm:inline">Đăng xuất</span>
-              </Button>
-            </div>
+      <main className="min-w-0 pt-4 lg:pl-[260px]">
+        <header className="sticky top-4 z-10 mx-4 flex min-h-[76px] items-center justify-between gap-3 rounded-2xl border border-border bg-surface/95 px-4 shadow-soft backdrop-blur sm:mx-6 sm:px-6 xl:mx-12">
+          <div className="flex min-w-0 items-center gap-3">
+            <Button type="button" variant="secondary" aria-label="Mở menu" className="h-10 w-10 shrink-0 rounded-xl px-0 lg:hidden" onClick={() => setIsMobileNavOpen(true)}><Menu aria-hidden="true" size={20} /></Button>
+            <p className="min-w-0 truncate text-xs text-secondary-foreground">Chào bạn, <strong className="text-foreground">{session.fullName}</strong></p>
           </div>
+          <Link href="/dashboard/top-up" className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-primary transition hover:bg-primary-soft"><CreditCard aria-hidden="true" size={18} />Nạp credit</Link>
         </header>
-        <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 sm:py-8 xl:px-8">{children}</div>
+        <div className="mx-auto w-full max-w-[1260px] px-4 py-8 sm:px-6 sm:py-[42px] xl:px-12">{children}</div>
       </main>
     </div>
   );

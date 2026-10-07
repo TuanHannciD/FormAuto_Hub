@@ -22,6 +22,10 @@ export type FormPreviewResumeContext = {
   aiGlobalPrompt?: string;
   aiPromptScope?: AiPromptScope;
   aiQuestionPrompts?: Record<string, string>;
+  previewIds?: string[];
+  previewSnapshot?: string;
+  creditsUsed?: number;
+  userId?: string;
   requestedCount: number;
   generatedCount: number;
   missingCredits: number;

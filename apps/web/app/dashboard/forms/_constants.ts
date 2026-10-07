@@ -45,20 +45,20 @@ export const generationModeOptions: Array<{
 }> = [
   {
     value: "rules",
-    title: "Option 1",
-    description: "Quy tắc hiện tại",
+    title: "Quy tắc",
+    description: "Dùng mẫu và lựa chọn bạn cấu hình",
     badge: "x1"
   },
   {
     value: "ai-default",
-    title: "Option 2",
-    description: "AI mặc định",
+    title: "AI mặc định",
+    description: "Tạo câu trả lời theo prompt chung",
     badge: "x2"
   },
   {
     value: "ai-custom",
-    title: "Option 3",
-    description: "AI tùy chỉnh",
+    title: "AI tùy chỉnh",
+    description: "Điều chỉnh hướng trả lời và từng câu hỏi",
     badge: "x3"
   }
 ];

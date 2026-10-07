@@ -63,13 +63,12 @@ export function AiModePreparationPanel({
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone={isCustom ? "warning" : "info"}>{isCustom ? "Option 3" : "Option 2"}</Badge>
-              <Badge tone="neutral">API thật</Badge>
+              <Badge tone={isCustom ? "warning" : "info"}>{isCustom ? "AI tùy chỉnh" : "AI mặc định"}</Badge>
               <Badge tone={isCustom ? "warning" : "info"}>x{multiplier} credit</Badge>
             </div>
-            <p className="mt-2 text-sm font-semibold">{isCustom ? "AI tùy chỉnh theo hướng dẫn" : "AI mặc định với câu hỏi thu gọn"}</p>
+            <p className="mt-2 text-sm font-semibold">{isCustom ? "AI tùy chỉnh theo hướng dẫn" : "AI mặc định theo prompt chung"}</p>
             <p className="mt-1 text-xs leading-5 opacity-80">
-              Backend dùng câu hỏi/options đã lưu, kiểm tra output trước khi lưu preview và không trả raw provider payload về giao diện.
+              Câu trả lời hợp lệ được lưu thành bản xem trước. Hãy kiểm tra nội dung trước khi xác nhận gửi.
             </p>
           </div>
           <Button className="w-full gap-2 md:w-auto" disabled={busy} type="button" variant="secondary" onClick={onAutoFill}>
@@ -147,7 +146,7 @@ export function AiModePreparationPanel({
         ))}
       </div>
 
-      <div className={`sticky bottom-3 z-10 flex flex-col gap-4 rounded-lg border p-4 shadow-soft ring-1 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between ${
+      <div className={`sticky bottom-3 z-[200] flex flex-col gap-4 rounded-lg border p-4 shadow-soft ring-1 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between ${
         isCustom
           ? "border-primary-border/80 bg-primary-soft/90 ring-primary-border"
           : "border-info-border/80 bg-info-surface/90 ring-info-border/70"
@@ -170,7 +169,7 @@ export function AiModePreparationPanel({
             onChange={(event) => onPreviewCountChange(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
           />
           <p className="mt-2 text-xs font-medium text-info">
-            Prompt sẽ được lưu trước, sau đó backend tạo AI preview read-only và trừ credit theo số preview hợp lệ.
+            Chỉ trừ credit cho bản xem trước hợp lệ được tạo và lưu thành công. Nội dung AI chỉ đọc.
           </p>
         </div>
         <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-primary text-inverse-foreground hover:bg-primary-hover" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">

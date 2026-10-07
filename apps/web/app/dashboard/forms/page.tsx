@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Bot, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Bot, ChevronDown, ChevronUp, ClipboardPaste, Loader2 } from "lucide-react";
 import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import {
@@ -19,6 +19,8 @@ import {
   type GenerateResponsesResult,
   type SubmissionJob
 } from "@/lib/api";
+import { getStoredSession } from "@/lib/auth";
+import { WorkflowSummary } from "./_components/WorkflowSummary";
 import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
 import { toast } from "sonner";
@@ -55,31 +57,29 @@ import { AiModePreparationPanel } from "./_components/AiModePreparationPanel";
 import { GenerationModeSelector } from "./_components/GenerationModeSelector";
 import { PreviewAccordion } from "./_components/PreviewAccordion";
 import { RuleEditor } from "./_components/RuleEditor";
-// === FILE MAP (page.tsx – 1089 dòng) ===
-// Dòng    Function                        Mục đích
-// 59      FormsPage()                     Trang chính: phân tích form, cấu hình rule, preview, submit
-// 78-154  State declarations              useState/useRef/useMemo: formUrl, analysis, ruleConfigs, previews, submission, AI mode
-// 155     useEffect                       Khôi phục resume context + lắng nghe BroadcastChannel/storage/focus
-// 177     clearPreviewWorkflow()          Reset toàn bộ trạng thái preview
-// 191     resetAiPreparation()            Reset trạng thái AI preparation
-// 201     selectGenerationMode()          Chọn chế độ sinh: rules / AI default / custom
-// 213     analyze()                       Phân tích Google Form từ URL
-// 234     saveRulesAndGenerate()          Lưu rule config + tạo preview (rules mode)
-// 297     continueMissingGeneration()     Tiếp tục generate khi thiếu credit (hiển thị gợi ý nạp)
-// 360     createRecommendedTopupLink()    Tạo link nạp credit PayOS
-// 405     restoreResumeContext()          Khôi phục context từ localStorage
-// 426     refreshResumeCreditState()      Làm mới trạng thái credit sau resume
-// 435     submitConfirmed()               Gửi batch submission đã xác nhận
-// 461     pauseSubmission()               Tạm dừng submission
-// 480     cancelSubmission()              Hủy submission
-// 499     restartFromAnswerRules()        Quay lại bước cấu hình rule
-// 511     loadAiPromptProfile()           Tải AI prompt profile đã lưu từ backend
-// 533     autoFillAiPrompt()              Tự động điền AI prompt dựa trên direction
-// 564     saveAiPromptProfile()           Lưu AI prompt profile lên backend
-// 595     generateAiResponses()           Gọi API generate AI responses (backend)
-// 605     loadGeneratedPreviews()         Tải preview đã generate từ backend
-// 617     createAiPreviews()              Tạo AI preview từ prompt đã lưu
-// 675     return (...)                    JSX render: form analysis, rules section, preview list, submission panel
+// === FILE MAP ===
+// loadGeneratedPreviews: load and verify exact response IDs.
+// FormsPage state: analysis, rules/AI configuration, preview identity, credit and submission.
+// restoreResumeContext / refreshResumeCreditState: recover paid previews and current balance.
+// Effects: resume signals, package suggestions and final submission locking.
+// analyze / saveRulesAndGenerate: import questions and generate rule previews.
+// continueMissingGeneration / createRecommendedTopupLink: partial generation recovery.
+// submitConfirmed / pauseSubmission / cancelSubmission: existing submission APIs.
+// AI helpers: prompt loading, auto-fill, saving and preview generation.
+// Render: five workflow steps with shared shell and WorkflowSummary.
+
+  async function loadGeneratedPreviews(projectId: string, ids: string[]) {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const searchParams = new URLSearchParams();
+    ids.forEach((id) => searchParams.append("ids", id));
+    const response = await apiFetch<GeneratedResponseListResponse>(`/api/projects/${projectId}/responses?${searchParams.toString()}`);
+    const byId = new Map(response.items.map((preview) => [preview.id, preview]));
+    if (ids.some((id) => !byId.has(id))) throw new Error("Không tải đủ các bản xem trước đã lưu. Vui lòng thử lại.");
+    return ids.map((id) => byId.get(id)!);
+  }
 
 export default function FormsPage() {
   const [formUrl, setFormUrl] = useState("");
@@ -108,6 +108,19 @@ export default function FormsPage() {
   const [submission, setSubmission] = useState<SubmissionJob | null>(null);
   const [submissionLogsOpen, setSubmissionLogsOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [isPasting, setIsPasting] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [previewSnapshot, setPreviewSnapshot] = useState<string | null>(null);
+  const [generationResult, setGenerationResult] = useState<{ requestedCount: number; generatedCount: number; creditsUsed: number; balanceAfter: number; partial: boolean } | null>(null);
+  const [creditBalance, setCreditBalance] = useState<number | null>(null);
+  const restoredContextRef = useRef<string | null>(null);
+  const currentPreviewSnapshot = JSON.stringify({ projectId: analysis?.projectId, generationMode, config: generationMode === "rules" ? ruleConfigs : { aiDirection, aiGlobalPrompt, aiPromptScope, aiQuestionPrompts } });
+  const previewStale = previews.length > 0 && previewSnapshot !== currentPreviewSnapshot;
+
+  useEffect(() => { setConfirmed(false); }, [currentPreviewSnapshot]);
+  useEffect(() => {
+    apiFetch<DashboardSummary>("/api/dashboard/summary").then((value) => setCreditBalance(value.currentCreditBalance)).catch(() => {});
+  }, []);
   const rulesSectionRef = useRef<HTMLElement | null>(null);
   const previewSectionRef = useRef<HTMLElement | null>(null);
 
@@ -126,6 +139,53 @@ export default function FormsPage() {
   const allRuleEditorsOpen = analysis ? ruleOpenCount === analysis.questions.length : false;
   const aiCreditMultiplier = generationMode === "ai-custom" ? 3 : generationMode === "ai-default" ? 2 : 1;
   const canGenerateAi = Boolean(analysis && analysis.questions.length > 0 && generationMode !== "rules" && aiGlobalPrompt.trim());
+
+  const restoreResumeContext = useCallback((context: FormPreviewResumeContext) => {
+    if (context.userId !== getStoredSession()?.userId || !context.userId) return;
+    if (!context.previewIds || !context.previewSnapshot) return;
+    if (restoredContextRef.current === context.createdAt) return;
+    restoredContextRef.current = context.createdAt;
+    setFormUrl(context.analysis.formUrl);
+    setName(context.analysis.name);
+    setConfirmed(false);
+    setResumeContext(context);
+    setAnalysis(context.analysis);
+    setRuleConfigs(context.ruleConfigs);
+    const contextMode = context.generationMode ?? "rules";
+    setGenerationMode(contextMode);
+    setPreviewCount(clampInteger(String(context.requestedCount), PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX));
+    setOpenRuleEditors(Object.fromEntries(context.analysis.questions.map((question) => [question.id, true])));
+    setAiDirection(context.aiDirection ?? defaultAiDirection);
+    setAiGlobalPrompt(context.aiGlobalPrompt ?? DEFAULT_AI_GLOBAL_PROMPT);
+    setAiPromptScope(context.aiPromptScope ?? "global");
+    setAiQuestionBlocksOpen(Object.fromEntries(context.analysis.questions.map((question) => [question.id, false])));
+    setAiQuestionPrompts(context.aiQuestionPrompts ?? Object.fromEntries(context.analysis.questions.map((question) => [question.id, ""])));
+    if (context.previewIds?.length) {
+      setBusy(true);
+      void loadGeneratedPreviews(context.projectId, context.previewIds).then((items) => {
+        setPreviews(items);
+        setPreviewSnapshot(context.previewSnapshot ?? null);
+        setAiPreviewMode(contextMode === "rules" ? null : contextMode);
+        setGenerationResult({ requestedCount: context.requestedCount, generatedCount: items.length, creditsUsed: context.creditsUsed ?? 0, balanceAfter: 0, partial: true });
+        setSubmissionLocked(items.some((item) => item.status !== "Previewed"));
+      }).catch((error) => { restoredContextRef.current = null; showError(error, "Không khôi phục được bản xem trước đã lưu."); }).finally(() => setBusy(false));
+    }
+    setGenerationCreditNotice({
+      requestedCount: context.requestedCount,
+      generatedCount: context.generatedCount,
+      missingCredits: context.missingCredits
+    });
+  }, []);
+
+  const refreshResumeCreditState = useCallback(async (context: FormPreviewResumeContext) => {
+    try {
+      const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
+      setCreditBalance(summary.currentCreditBalance);
+      setResumeCreditReady(summary.currentCreditBalance >= context.missingCredits);
+    } catch {
+      setResumeCreditReady(false);
+    }
+  }, []);
 
   useEffect(() => {
     const stored = readResumeContext();
@@ -156,7 +216,7 @@ export default function FormsPage() {
       window.removeEventListener("focus", handleResumeSignal);
       document.removeEventListener("visibilitychange", handleResumeSignal);
     };
-  }, []);
+  }, [restoreResumeContext, refreshResumeCreditState]);
 
   useEffect(() => {
     if (!resumeContext) {
@@ -165,7 +225,7 @@ export default function FormsPage() {
     }
 
     refreshResumeCreditState(resumeContext);
-  }, [resumeContext]);
+  }, [resumeContext, refreshResumeCreditState]);
 
   useEffect(() => {
     if (!generationCreditNotice) {
@@ -201,6 +261,8 @@ export default function FormsPage() {
 
   function clearPreviewWorkflow() {
     setPreviews([]);
+    setPreviewSnapshot(null);
+    setGenerationResult(null);
     setPreviewListOpen(false);
     setOpenPreviews({});
     setGenerationCreditNotice(null);
@@ -231,7 +293,30 @@ export default function FormsPage() {
     setGenerationMode(mode);
     clearPreviewWorkflow();
     if (mode !== "rules") {
-      void loadAiPromptProfile(mode);
+      setBusy(true);
+      void loadAiPromptProfile(mode).finally(() => setBusy(false));
+    }
+  }
+
+  function updateFormUrl(value: string) {
+    setFormUrl(limitText(value, FORM_URL_MAX_LENGTH));
+    setAnalysis(null);
+    clearPreviewWorkflow();
+  }
+
+  async function pasteFormUrl() {
+    setIsPasting(true);
+    try {
+      const value = (await navigator.clipboard.readText()).trim();
+      if (!value) {
+        toast.info("Clipboard chưa có nội dung. Hãy sao chép link biểu mẫu trước.");
+        return;
+      }
+      updateFormUrl(value);
+    } catch {
+      toast.error("Không đọc được clipboard. Bạn có thể dán link bằng Ctrl+V vào ô Link Google Form.");
+    } finally {
+      setIsPasting(false);
     }
   }
 
@@ -239,6 +324,7 @@ export default function FormsPage() {
     event.preventDefault();
     setBusy(true);
     clearPreviewWorkflow();
+    setAnalysis(null);
     try {
       const result = await apiFetch<AnalyzeFormResponse>("/api/forms/analyze", {
         method: "POST",
@@ -281,6 +367,9 @@ export default function FormsPage() {
         json: { count: previewCount }
       });
       setPreviews(result.items);
+      setPreviewSnapshot(currentPreviewSnapshot);
+      setGenerationResult({ ...result, partial: result.generatedCount < result.requestedCount });
+      setCreditBalance(result.balanceAfter);
       setAiPreviewMode(null);
       setPreviewListOpen(false);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
@@ -300,9 +389,14 @@ export default function FormsPage() {
           requestedCount: result.requestedCount,
           generatedCount: result.generatedCount,
           missingCredits: result.missingCredits,
+          previewIds: result.items.map((item) => item.id),
+          previewSnapshot: currentPreviewSnapshot,
+          creditsUsed: result.creditsUsed,
+          userId: getStoredSession()?.userId,
           createdAt: new Date().toISOString()
         };
         saveResumeContext(nextContext);
+        restoredContextRef.current = nextContext.createdAt;
         setResumeContext(nextContext);
       } else {
         clearResumeContext();
@@ -326,6 +420,10 @@ export default function FormsPage() {
       return;
     }
 
+    if (submissionLocked || previewStale || (context.previewIds?.length && context.previewIds.some((id) => !previews.some((item) => item.id === id)))) {
+      toast.error("Hãy khôi phục bản xem trước và giữ cấu hình đã dùng trước khi tạo tiếp.");
+      return;
+    }
     setBusy(true);
     try {
       const contextMode = context.generationMode ?? "rules";
@@ -343,7 +441,13 @@ export default function FormsPage() {
       const resultItems = "items" in result
         ? result.items
         : await loadGeneratedPreviews(context.projectId, result.generatedPreviewIds);
-      setPreviews((current) => [...current, ...resultItems]);
+      const allItems = [...previews, ...resultItems];
+      const creditsUsed = (context.creditsUsed ?? 0) + result.creditsUsed;
+      setPreviews(allItems);
+      setConfirmed(false);
+      setPreviewSnapshot(context.previewSnapshot ?? currentPreviewSnapshot);
+      setGenerationResult({ requestedCount: context.requestedCount, generatedCount: allItems.length, creditsUsed, balanceAfter: result.balanceAfter, partial: allItems.length < context.requestedCount });
+      setCreditBalance(result.balanceAfter);
       setAiPreviewMode(isAiContext ? contextMode : null);
       setPreviewListOpen(false);
       setOpenPreviews((current) => ({
@@ -353,12 +457,15 @@ export default function FormsPage() {
       if (result.missingCredits > 0) {
         const nextContext = {
           ...context,
-          requestedCount: continueCount,
-          generatedCount: result.generatedCount,
+          requestedCount: context.requestedCount,
+          generatedCount: allItems.length,
+          previewIds: allItems.map((item) => item.id),
+          creditsUsed,
           missingCredits: result.missingCredits,
           createdAt: new Date().toISOString()
         };
         saveResumeContext(nextContext);
+        restoredContextRef.current = nextContext.createdAt;
         setResumeContext(nextContext);
         setGenerationCreditNotice({
           requestedCount: nextContext.requestedCount,
@@ -383,7 +490,7 @@ export default function FormsPage() {
   }
 
   async function createRecommendedTopupLink() {
-    if (!generationCreditNotice || !recommendedPackage || !analysis) {
+    if (previewStale || submissionLocked || !generationCreditNotice || !recommendedPackage || !analysis) {
       toast.error("Chưa có gói credit phù hợp để nạp thêm.");
       return;
     }
@@ -397,12 +504,17 @@ export default function FormsPage() {
       aiGlobalPrompt,
       aiPromptScope,
       aiQuestionPrompts,
+      previewIds: previews.map((item) => item.id),
+      previewSnapshot: previewSnapshot ?? undefined,
+      creditsUsed: generationResult?.creditsUsed,
+      userId: getStoredSession()?.userId,
       requestedCount: generationCreditNotice.requestedCount,
       generatedCount: generationCreditNotice.generatedCount,
       missingCredits: generationCreditNotice.missingCredits,
       createdAt: new Date().toISOString()
     };
     saveResumeContext(nextContext);
+    restoredContextRef.current = nextContext.createdAt;
     setResumeContext(nextContext);
     setResumeCreditReady(false);
 
@@ -427,43 +539,14 @@ export default function FormsPage() {
     }
   }
 
-  function restoreResumeContext(context: FormPreviewResumeContext) {
-    setResumeContext(context);
-    setAnalysis(context.analysis);
-    setRuleConfigs(context.ruleConfigs);
-    const contextMode = context.generationMode ?? "rules";
-    const multiplier = contextMode === "ai-custom" ? 3 : contextMode === "ai-default" ? 2 : 1;
-    setGenerationMode(contextMode);
-    setPreviewCount(contextMode === "rules" ? context.missingCredits : Math.max(1, Math.ceil(context.missingCredits / multiplier)));
-    setOpenRuleEditors(Object.fromEntries(context.analysis.questions.map((question) => [question.id, true])));
-    setAiDirection(context.aiDirection ?? defaultAiDirection);
-    setAiGlobalPrompt(context.aiGlobalPrompt ?? DEFAULT_AI_GLOBAL_PROMPT);
-    setAiPromptScope(context.aiPromptScope ?? "global");
-    setAiQuestionBlocksOpen(Object.fromEntries(context.analysis.questions.map((question) => [question.id, false])));
-    setAiQuestionPrompts(context.aiQuestionPrompts ?? Object.fromEntries(context.analysis.questions.map((question) => [question.id, ""])));
-    setGenerationCreditNotice({
-      requestedCount: context.requestedCount,
-      generatedCount: context.generatedCount,
-      missingCredits: context.missingCredits
-    });
-  }
-
-  async function refreshResumeCreditState(context: FormPreviewResumeContext) {
-    try {
-      const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
-      setResumeCreditReady(summary.currentCreditBalance >= context.missingCredits);
-    } catch {
-      setResumeCreditReady(false);
-    }
-  }
-
   async function submitConfirmed() {
-    if (!analysis || previews.length === 0 || !confirmed) {
+    if (!analysis || previews.length === 0 || !confirmed || previewStale || submissionLocked) {
       toast.error("Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.");
       return;
     }
 
     setBusy(true);
+    setIsSending(true);
     try {
       const result = await apiFetch<SubmissionJob>(`/api/projects/${analysis.projectId}/submissions/send`, {
         method: "POST",
@@ -473,12 +556,17 @@ export default function FormsPage() {
         }
       });
       setSubmission(result);
+      clearResumeContext();
+      setResumeContext(null);
+      setGenerationCreditNotice(null);
       setSubmissionLocked(result.status === "Completed" || result.status === "Failed");
       setSubmissionLogsOpen(false);
-      toast.success("Đã bắt đầu gửi các câu trả lời đã xác nhận.");
+      if (result.status === "Completed") toast.success(`Đã gửi thành công ${result.successCount} lượt.`);
+      else toast.info(`Lượt gửi kết thúc: ${result.successCount} thành công, ${result.failedCount} lỗi.`);
     } catch (error) {
       showError(error, "Không gửi được bản xem trước.");
     } finally {
+      setIsSending(false);
       setBusy(false);
     }
   }
@@ -627,18 +715,6 @@ export default function FormsPage() {
     });
   }
 
-  async function loadGeneratedPreviews(projectId: string, ids: string[]) {
-    if (ids.length === 0) {
-      return [];
-    }
-
-    const searchParams = new URLSearchParams();
-    ids.forEach((id) => searchParams.append("ids", id));
-    const response = await apiFetch<GeneratedResponseListResponse>(`/api/projects/${projectId}/responses?${searchParams.toString()}`);
-    const byId = new Map(response.items.map((preview) => [preview.id, preview]));
-    return ids.map((id) => byId.get(id)).filter((preview): preview is GeneratedResponse => Boolean(preview));
-  }
-
   async function createAiPreviews() {
     if (!analysis || generationMode === "rules") {
       return;
@@ -651,6 +727,9 @@ export default function FormsPage() {
       const result = await generateAiResponses(analysis.projectId, generationMode, previewCount);
       const resultItems = await loadGeneratedPreviews(analysis.projectId, result.generatedPreviewIds);
       setPreviews(resultItems);
+      setPreviewSnapshot(currentPreviewSnapshot);
+      setGenerationResult({ ...result, partial: result.generatedCount < result.requestedCount });
+      setCreditBalance(result.balanceAfter);
       setAiPreviewMode(generationMode);
       setPreviewListOpen(false);
       setOpenPreviews(Object.fromEntries(resultItems.map((preview, index) => [preview.id, index === 0])));
@@ -674,9 +753,14 @@ export default function FormsPage() {
           requestedCount: result.requestedCount,
           generatedCount: result.generatedCount,
           missingCredits: result.missingCredits,
+          previewIds: result.generatedPreviewIds,
+          previewSnapshot: currentPreviewSnapshot,
+          creditsUsed: result.creditsUsed,
+          userId: getStoredSession()?.userId,
           createdAt: new Date().toISOString()
         };
         saveResumeContext(nextContext);
+        restoredContextRef.current = nextContext.createdAt;
         setResumeContext(nextContext);
       } else {
         clearResumeContext();
@@ -699,73 +783,56 @@ export default function FormsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Tự động hóa Google Form"
-        description="Phân tích biểu mẫu, cài đặt câu trả lời, xem trước và chỉ gửi sau khi xác nhận."
-        actions={
-        <div className="flex flex-wrap gap-2">
-          <Badge tone="info">Tối đa 100 bản xem trước</Badge>
-          <Badge tone="neutral">Mỗi lượt gửi {SUBMISSION_BATCH_SIZE}</Badge>
-          <Badge tone="success">Cần xác nhận trước khi gửi</Badge>
-        </div>
-        }
-      />
-
-      <Alert className="flex items-start gap-3">
-        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
-        <span>Không tự gửi hàng loạt. Mỗi lần chỉ tạo tối đa 100 câu trả lời xem trước, gửi tuần tự theo nhóm {SUBMISSION_BATCH_SIZE} và phải xác nhận trước khi gửi.</span>
-      </Alert>
-
-      <div className="grid gap-2 sm:grid-cols-3">
-        {[
-          { label: "1. Phân tích", active: true },
-          { label: "2. Cài đặt và xem trước", active: Boolean(analysis) },
-          { label: "3. Xác nhận gửi", active: previews.length > 0 }
-        ].map((step) => (
-          <div
-            className={`rounded-md border px-3 py-2 text-sm font-medium ${
-              step.active ? "border-primary bg-primary/5 text-primary shadow-sm" : "border-border/70 bg-surface/65 text-muted-foreground backdrop-blur"
-            }`}
-            key={step.label}
-          >
-            {step.label}
-          </div>
-        ))}
-      </div>
-
-      <Card>
+      <PageHeader title="Tự động hóa biểu mẫu" description="Chuẩn bị câu trả lời cho biểu mẫu bạn có quyền vận hành, xem lại rồi xác nhận gửi." />
+      <nav aria-label="Các bước tự động hóa" className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        {["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"].map((label, index) => {
+          const enabled = index === 0 || (index <= 2 && Boolean(analysis)) || (index === 3 && previews.length > 0) || (index === 4 && Boolean(submission));
+          const currentStep = submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
+          const content = <><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">{index + 1}</span>{label}</>;
+          const className = `flex min-h-12 items-center gap-2 rounded-xl border px-3 text-xs font-semibold ${index === currentStep ? "border-primary bg-primary-soft text-primary" : "border-border bg-surface text-muted-foreground"}`;
+          return enabled ? <a key={label} aria-current={index === currentStep ? "step" : undefined} href={`#workflow-step-${index + 1}`} className={`${className} hover:border-primary hover:text-primary`}>{content}</a> : <span key={label} aria-disabled="true" className={`${className} opacity-60`}>{content}</span>;
+        })}
+      </nav>
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_260px]">
+      <fieldset disabled={busy || topupBusy || isPasting} className="isolate m-0 min-w-0 space-y-6 border-0 p-0">
+      <Card id="workflow-step-1" className="scroll-mt-24 rounded-2xl bg-surface shadow-none">
         <CardHeader>
-          <CardTitle>1. Phân tích Google Form</CardTitle>
+          <CardTitle>1. Chọn và phân tích form</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]" onSubmit={analyze}>
-            <Input
+          <form className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end" onSubmit={analyze}>
+            <label className="grid min-w-0 gap-2 text-sm font-semibold">Link Google Form<Input
               maxLength={FORM_URL_MAX_LENGTH}
+              type="url"
+              required
               placeholder="https://docs.google.com/forms/..."
               value={formUrl}
-              onChange={(event) => setFormUrl(limitText(event.target.value, FORM_URL_MAX_LENGTH))}
-            />
-            <Input
+              onChange={(event) => updateFormUrl(event.target.value)}
+            /></label>
+            <Button className="w-full gap-2" disabled={busy || isPasting} onClick={pasteFormUrl} type="button" variant="secondary">
+              <ClipboardPaste aria-hidden="true" size={16} />{isPasting ? "Đang dán..." : "Dán link"}
+            </Button>
+            <label className="grid min-w-0 gap-2 text-sm font-semibold">Tên nội bộ (không bắt buộc)<Input
               maxLength={PROJECT_NAME_MAX_LENGTH}
               placeholder="Tên nội bộ"
               value={name}
               onChange={(event) => setName(limitText(event.target.value, PROJECT_NAME_MAX_LENGTH))}
-            />
-            <Button className="w-full lg:w-auto" disabled={busy || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
+            /></label>
+            <Button className="w-full" disabled={busy || isPasting || !formUrl.trim()} type="submit">Phân tích biểu mẫu</Button>
           </form>
         </CardContent>
       </Card>
 
       {analysis && (
-        <section ref={rulesSectionRef}>
-        <Card>
+        <section id="workflow-step-2" className="scroll-mt-24" ref={rulesSectionRef}>
+        <Card className="rounded-2xl bg-surface shadow-none">
           <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
               <p className="mt-1 text-xs text-muted-foreground">
                 {generationMode === "rules"
                   ? `Đang mở ${ruleOpenCount}/${analysis.questions.length} câu hỏi. Có thể mở từng câu để chỉnh nhanh.`
-                  : "AI dùng prompt đã lưu, tạo preview read-only và chỉ trừ credit cho preview hợp lệ."}
+                  : "AI tạo câu trả lời theo hướng dẫn của bạn. Chỉ trừ credit cho bản xem trước hợp lệ đã lưu."}
               </p>
             </div>
             {generationMode === "rules" && (
@@ -867,7 +934,7 @@ export default function FormsPage() {
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
                     <p className="mt-2 text-xs font-medium text-info">
-                      Mỗi câu trả lời xem trước tương ứng 1 credit. Khi bấm lưu và tạo bản xem trước, hệ thống sẽ trừ credit theo số lượng đã chọn.
+                      Mỗi bản xem trước là một bộ câu trả lời cho cả biểu mẫu. Chỉ trừ 1 credit cho mỗi bản được tạo và lưu thành công.
                     </p>
                   </div>
                   <Button className="w-full sm:w-auto" disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
@@ -881,24 +948,24 @@ export default function FormsPage() {
         </section>
       )}
 
-      <section ref={previewSectionRef}>
-        <Card>
+      <section id="workflow-step-3" className="scroll-mt-24" ref={previewSectionRef}>
+        <Card className="rounded-2xl bg-surface shadow-none">
           <CardHeader>
-            <CardTitle>3. Xem trước và xác nhận</CardTitle>
+            <CardTitle>3. Xem trước · 4. Xác nhận gửi</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {previews.length === 0 ? (
-              <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
-            ) : (
-              <>
+            {previewStale && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">Cấu hình đã thay đổi. Các preview dưới đây thuộc cấu hình trước; hãy tạo lại và xác nhận lại trước khi gửi.</Alert>}
+            {generationResult && <div role="status" className="rounded-xl border border-border bg-surface-subtle p-4 text-sm leading-6">Đã tạo {generationResult.generatedCount}/{generationResult.requestedCount} bản xem trước · Đã trừ {generationResult.creditsUsed} credit.{generationResult.partial && !generationCreditNotice ? " Chưa tạo đủ số lượng yêu cầu; hãy kiểm tra kết quả trước khi tạo thêm." : ""}</div>}
+            {isSending && <Alert role="status" className="flex items-center gap-3"><Loader2 aria-hidden="true" className="animate-spin shrink-0" size={20} />Đang gửi các preview đã xác nhận. Vui lòng chờ kết quả, không đóng hoặc tải lại trang.</Alert>}
               {generationCreditNotice && (
                 <div className="rounded-lg border border-warning-border bg-warning-surface p-4 text-sm text-warning shadow-sm ring-1 ring-warning-border">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Credit chưa đủ để tạo toàn bộ số lượng đã chọn</p>
                       <p className="mt-1 leading-6 text-warning">
-                        Bạn yêu cầu {generationCreditNotice.requestedCount} bản xem trước, hệ thống đã tạo {generationCreditNotice.generatedCount} theo số credit hiện có.
-                        Còn thiếu {generationCreditNotice.missingCredits} credit để tạo đủ số lượng.
+                        Đã tạo {generationCreditNotice.generatedCount}/{generationCreditNotice.requestedCount} bản xem trước hợp lệ.
+                        Theo số dư, yêu cầu tạo còn thiếu {generationCreditNotice.missingCredits} credit.
+                        {generationMode !== "rules" && " AI có thể tạo ít hơn yêu cầu nếu câu trả lời không hợp lệ."}
                       </p>
                       {recommendedPackage ? (
                         <p className="mt-2 text-xs font-medium text-warning">
@@ -912,13 +979,13 @@ export default function FormsPage() {
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                       {resumeContext && resumeCreditReady && (
-                        <Button className="bg-primary text-inverse-foreground hover:bg-primary" disabled={busy} type="button" onClick={continueMissingGeneration}>
+                        <Button className="bg-primary text-inverse-foreground hover:bg-primary" disabled={busy || previewStale || submissionLocked} type="button" onClick={continueMissingGeneration}>
                           Tiếp tục tạo phần còn thiếu
                         </Button>
                       )}
                       <Button
                         className="bg-warning text-inverse-foreground hover:bg-warning/90"
-                        disabled={!recommendedPackage || topupBusy}
+                        disabled={!recommendedPackage || topupBusy || previewStale || submissionLocked}
                         type="button"
                         onClick={createRecommendedTopupLink}
                       >
@@ -937,12 +1004,16 @@ export default function FormsPage() {
                         Hãy bấm tiếp tục để tạo phần còn thiếu sau khi credit đã được cập nhật.
                       </p>
                     </div>
-                    <Button disabled={busy} type="button" onClick={continueMissingGeneration}>
+                    <Button disabled={busy || previewStale || submissionLocked} type="button" onClick={continueMissingGeneration}>
                       Tiếp tục tạo phần còn thiếu
                     </Button>
                   </div>
                 </div>
               )}
+            {previews.length === 0 ? (
+              <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
+            ) : (
+              <>
               <div className="rounded-lg border border-border/70 bg-surface/55 p-4 backdrop-blur">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
@@ -952,7 +1023,7 @@ export default function FormsPage() {
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {aiPreviewMode && <Badge tone="info">AI {aiPreviewMode === "ai-custom" ? "Option 3" : "Option 2"}</Badge>}
+                    {aiPreviewMode && <Badge tone="info">AI {aiPreviewMode === "ai-custom" ? "tùy chỉnh" : "mặc định"}</Badge>}
                     {aiPreviewMode && <Badge tone="warning">Chỉ đọc</Badge>}
                     <Badge tone="info">{previews.length} bản xem trước</Badge>
                     <Badge tone="neutral">{previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời</Badge>
@@ -960,7 +1031,7 @@ export default function FormsPage() {
                 </div>
                 {aiPreviewMode && (
                   <div className="mt-3 rounded-md border border-info-border bg-info-surface/80 px-3 py-2 text-xs font-medium text-info">
-                    Bản xem trước AI đã được lưu read-only. Người dùng chỉ xác nhận gửi sau khi đã mở xem lại nội dung.
+                    Bản xem trước AI chỉ đọc. Hãy kiểm tra nội dung trước khi xác nhận gửi.
                   </div>
                 )}
               </div>
@@ -999,10 +1070,11 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div className="sticky bottom-3 z-[200] rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
+              <div id="workflow-step-4" className="scroll-mt-24 sticky bottom-3 z-[200] rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
+                    disabled={busy || previewStale || submissionLocked}
                     className="mt-1 h-4 w-4 accent-primary"
                     type="checkbox"
                     onChange={(event) => setConfirmed(event.target.checked)}
@@ -1020,8 +1092,8 @@ export default function FormsPage() {
                       ? "Lượt gửi này đã hoàn tất. Hãy thực hiện lại bước 2 để tạo bản xem trước mới nếu muốn gửi tiếp."
                       : "Hệ thống chỉ gửi sau khi ô xác nhận được bật."}
                   </p>
-                  <Button className="w-full bg-primary text-inverse-foreground hover:bg-primary sm:w-auto" disabled={busy || !confirmed || submissionLocked} onClick={submitConfirmed} type="button">
-                    {submissionLocked ? "Đã gửi xong" : "Gửi các bản xem trước đã xác nhận"}
+                  <Button className="w-full bg-primary text-inverse-foreground hover:bg-primary sm:w-auto" disabled={busy || !confirmed || submissionLocked || previewStale} onClick={submitConfirmed} type="button">
+                    {isSending ? "Đang gửi, chờ kết quả..." : submissionLocked ? "Lượt gửi đã kết thúc" : `Xác nhận gửi ${previews.length} lượt`}
                   </Button>
                 </div>
               </div>
@@ -1032,9 +1104,9 @@ export default function FormsPage() {
       </section>
 
       {submission && (
-        <Card>
+        <Card id="workflow-step-5" className="scroll-mt-24 rounded-2xl bg-surface shadow-none">
           <CardHeader>
-            <CardTitle>4. Kết quả gửi</CardTitle>
+            <CardTitle>5. Kết quả gửi</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div className="flex flex-wrap items-center gap-3">
@@ -1077,7 +1149,7 @@ export default function FormsPage() {
                 <span>
                   <span className="block text-sm font-semibold">Chi tiết các lượt gửi</span>
                   <span className="mt-1 block text-xs text-muted-foreground">
-                    {buildSubmissionBatches(submission.logs).length} pack, thành công {submission.successCount}, lỗi {submission.failedCount}
+                    {buildSubmissionBatches(submission.logs).length} nhóm, thành công {submission.successCount}, lỗi {submission.failedCount}
                   </span>
                 </span>
                 <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-surface/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
@@ -1093,7 +1165,7 @@ export default function FormsPage() {
                     return (
                       <div className="rounded-lg border border-border/70 bg-surface/55 p-3" key={`submission-pack-${batchIndex}`}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <p className="text-sm font-semibold">Pack {batchIndex + 1}</p>
+                          <p className="text-sm font-semibold">Nhóm {batchIndex + 1}</p>
                           <div className="flex flex-wrap gap-2 text-xs font-medium">
                             <Badge tone="neutral">Tổng {batch.length}</Badge>
                             <Badge tone="success">Thành công {successCount}</Badge>
@@ -1109,6 +1181,9 @@ export default function FormsPage() {
           </CardContent>
         </Card>
       )}
+      </fieldset>
+      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={previewCount} previewCount={previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationResult?.creditsUsed} stale={previewStale} />
+      </div>
     </div>
   );
 }
