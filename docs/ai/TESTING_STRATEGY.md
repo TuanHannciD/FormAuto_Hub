@@ -69,6 +69,20 @@ Runtime smoke must verify:
 
 Build/test without runtime smoke is insufficient for closeout when runtime smoke is applicable.
 
+### Session-expiry Regression Checks
+
+For changes to frontend authentication/session handling:
+
+- Run `npm run test:auth` in `apps/web` for deterministic refresh races and session preservation checks.
+- Run `npx playwright test tests/auth-session.spec.ts` in `apps/web` for the browser regressions. The checked-in Playwright configuration uses port 3000; a custom configuration may target an already-running app on port 3020. State which runtime and browser were used.
+- Verify an expired stored session settles on login with one expiry notification; it must not bounce back to dashboard.
+- Verify concurrent requests share refresh, late responses do not erase a newer login, and network/503 failures preserve the session.
+- Check authenticated JSON and blob requests have a bounded refresh retry; do not infer blob coverage from a JSON-only browser test.
+- Verify refresh rotation with real local HTTP requests when the change affects that path, and remove any temporary test session rows.
+- Report fixture/intercepted browser responses separately from real backend HTTP results. Report multi-tab behavior separately; same-page tests do not verify Web Locks coordination across tabs.
+
+The dated repair evidence and unrun gates are recorded in `PHASE_7_CLOSEOUT.md#session-expiry-follow-up--2026-10-07`.
+
 ### Migration Validation
 
 Database changes must validate:

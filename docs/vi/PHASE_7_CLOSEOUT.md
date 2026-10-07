@@ -4,6 +4,35 @@
 
 Đóng Phase 7 authentication và account access.
 
+Validation closeout gốc, các mục Not Run và danh sách Deferred bên dưới ghi lại baseline Phase 7 tại thời điểm đó. Phần follow-up có ngày ghi nhận bản sửa phiên đăng nhập sau này; không mở lại Phase 7, không chọn phase mới và không ghi đè các phê duyệt được ghi nhận ở phase sau.
+
+## Follow-up sửa hết hạn phiên — 07/10/2026
+
+Implementation: `54502eb` (`fix(auth): prevent expiry redirects and concurrent refresh session loss`). Bản sửa frontend này không đổi API backend, schema, thời hạn token hay quy tắc thay refresh token.
+
+### Hành vi đã sửa
+
+- Login chỉ chuyển về dashboard khi thời hạn refresh của phiên được lưu còn sử dụng được. Login xóa dữ liệu phiên hết hạn thay vì chuyển qua lại giữa login và dashboard.
+- Login quản lý toast hết phiên, dùng một ID toast cố định và bỏ query `reason=session-expired` sau khi xử lý. Hàm `showError` dùng chung bỏ qua `SessionExpiredError` để các request song song không tạo thêm cùng thông báo hết phiên.
+- Các request song song trong một trang dùng chung promise refresh đang chạy. Khi trình duyệt có Web Locks API (cơ chế khóa giữa các tab), các tab cùng origin cũng làm refresh tuần tự và đọc lại phiên hiện tại trước khi gửi. Nếu không có Web Locks, việc phối hợp chỉ nằm trong từng trang.
+- HTTP 401 đến muộn cho access token cũ dùng lại phiên đã được thay token. Phản hồi refresh cũ không được ghi đè hoặc xóa một phiên đăng nhập khác được lưu trong lúc nó đang chờ.
+- Refresh timestamp hết hạn hoặc HTTP 401 từ refresh kết thúc phiên. Lỗi mạng và lỗi refresh khác 401, gồm HTTP 503, được trả thành lỗi request nhưng không xóa phiên đang lưu.
+- Request JSON và blob có xác thực chỉ retry sau refresh tối đa một lần. Guard dashboard và admin ngừng render nội dung được bảo vệ khi không còn phiên dùng được; cả hai theo dõi sự kiện thay đổi phiên.
+
+### Validation cho follow-up
+
+Verified trong kiểm tra local của bản sửa:
+
+- `npm run test:auth` tại `apps/web`: 5/5 tests pass, bao phủ refresh song song, dùng lại phiên khi 401 đến muộn, giữ phiên khi lỗi mạng/503, refresh bị từ chối, phản hồi cũ so với phiên đăng nhập mới và dữ liệu phiên hết hạn.
+- `tests/auth-session.spec.ts`: 2/2 Playwright tests pass với web local đã restart tại port 3020 bằng Edge. Dùng phiên giả lập và phản hồi API được chặn/thay thế để xác minh một toast hết phiên không kèm vòng lặp redirect, cùng một lần refresh cho các request dashboard song song.
+- Browser smoke bổ sung với phản hồi API được chặn/thay thế: phiên hết hạn, refresh song song, refresh không hợp lệ, HTTP 503 và lỗi mạng đều pass; không ghi nhận lỗi runtime trình duyệt hoặc JS/CSS chunk tải thất bại.
+- API smoke local thật dùng một refresh-session row tạm: refresh HTTP 200, dashboard có xác thực HTTP 200 và dùng lại refresh token cũ sau khi thay token HTTP 401. Các row smoke tạm đã được xóa. Không kiểm tra đăng nhập password/Google trong lượt này.
+- Web lint và production build pass. Log web runtime được đọc sau smoke không có dấu hiệu lỗi.
+
+Blocked: `tsc --noEmit` riêng báo lỗi nullability có sẵn ở `tests/nckh.spec.ts:742-743`, ngoài phạm vi sửa. Kết quả Next.js build pass được báo riêng, không thay thế kết quả này.
+
+Not run: deploy/smoke production của bản sửa, tái hiện bằng phiên user thật trên production, đăng nhập password/Google cho follow-up này và browser regression test với nhiều tab. Code có xử lý Web Locks nhưng chưa tuyên bố hành vi nhiều tab đã được xác minh.
+
 ## Scope đã hoàn tất
 
 - Đăng ký bằng email/password.

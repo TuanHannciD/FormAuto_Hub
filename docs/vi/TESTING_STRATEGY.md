@@ -69,6 +69,20 @@ Runtime smoke phải verify:
 
 Build/test mà thiếu runtime smoke là chưa đủ để closeout khi runtime smoke áp dụng.
 
+### Kiểm tra hồi quy hết hạn phiên
+
+Khi thay đổi xử lý authentication/session ở frontend:
+
+- Chạy `npm run test:auth` tại `apps/web` để kiểm tra race refresh có kiểm soát và việc giữ phiên.
+- Chạy `npx playwright test tests/auth-session.spec.ts` tại `apps/web` cho browser regression. Cấu hình Playwright trong repo dùng port 3000; có thể dùng cấu hình riêng để kiểm tra app đang chạy tại port 3020. Ghi rõ runtime và browser đã dùng.
+- Xác minh dữ liệu phiên hết hạn kết thúc tại login với một thông báo hết phiên; không chuyển ngược về dashboard.
+- Xác minh các request đồng thời dùng chung refresh, phản hồi đến muộn không xóa phiên đăng nhập mới và lỗi mạng/503 giữ nguyên phiên.
+- Kiểm tra request JSON và blob có xác thực giới hạn số lần retry refresh; không suy ra blob đã được kiểm tra từ browser test chỉ dùng JSON.
+- Xác minh thay refresh token bằng HTTP local thật khi thay đổi ảnh hưởng luồng này và xóa các test session row tạm.
+- Báo riêng phản hồi browser giả lập/chặn-thay thế với kết quả HTTP backend thật. Báo hành vi nhiều tab riêng; test trong một trang không xác minh Web Locks phối hợp giữa các tab.
+
+Bằng chứng bản sửa có ngày và các gate chưa chạy nằm tại `PHASE_7_CLOSEOUT.md#follow-up-sửa-hết-hạn-phiên--07102026`.
+
 ### Migration validation
 
 Database changes phải validate:
