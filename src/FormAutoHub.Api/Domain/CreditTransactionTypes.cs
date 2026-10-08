@@ -5,4 +5,5 @@ public static class CreditTransactionTypes
     public const string TopupApproved = "TopupApproved";
     public const string CreditUsed = "CreditUsed";
     public const string InitialGrant = "InitialGrant";
+    public const string ManualGrant = "ManualGrant";
 }

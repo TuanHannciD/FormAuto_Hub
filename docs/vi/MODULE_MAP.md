@@ -28,7 +28,7 @@
 | SubmissionLogs | kết quả từng response submission | refund policy khi chưa duyệt |
 | AuditLogs | audit admin/security-sensitive | thay thế usage log thông thường |
 | Integrations.GoogleForms | boundary analyze/submit Google Forms | account/credit logic |
-| Integrations.Payment | payment provider boundary đang Deferred | MVP manual approval |
+| Integrations.Payment | boundary PayOS Phase 8; provider khác Deferred | MVP manual approval |
 | Integrations.AI | boundary AI provider Phase 6, provider calls, provider response parsing | credit deduction, submission execution |
 | AiProviderSettings | cấu hình AI provider cho admin | prompt behavior của normal user |
 | AiPromptProfiles | cấu hình AI prompt cấp project | lưu generated preview |
@@ -62,3 +62,7 @@ Các answer-generation modes được hỗ trợ trong MVP:
 - sample text lines cho text answers
 - khoảng ngày tuần tự cho câu hỏi ngày
 - khoảng giờ tuần tự cho câu hỏi giờ
+
+## Follow-up UI và credit thủ công đã duyệt
+
+UI dùng chung chỉ sở hữu trình bày. `AdminCreditOperationsService` sở hữu tìm user, điều phối cộng thủ công và lịch sử; `CreditService` sở hữu ghi credit. Lịch sử đọc sổ giao dịch/audit hiện có. Xem `UI_CREDIT_FOLLOWUP_SYNC.md`.

@@ -24,7 +24,7 @@ Follow-up NCKH đang active: **không có**.
 | DbContext Phase 1 | `src/FormAutoHub.Api/Data/FormAutoHubDbContext.cs` | Đã implement `ResearchForms` |
 | API Phase 1 | `src/FormAutoHub.Api/Controllers/Nckh/ResearchFormsController.cs` | Đã implement |
 | Service Phase 1 | `src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs` | Đã implement |
-| DTO Phase 1 | `src/FormAutoHub.Api/Contracts/NckhDtos.cs` | Đã implement |
+| DTO Phase 1 | `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Đã implement |
 | Frontend Phase 1 | `apps/web/app/dashboard/nckh/page.tsx`, `apps/web/app/dashboard/nckh/callback/page.tsx` | Đã implement |
 | Test Phase 1 | `tests/FormAutoHub.Tests/NckhPhase1OAuthAndFormsTests.cs`, `apps/web/tests/nckh.spec.ts` | Có test file |
 | Entity Phase 2 | `src/FormAutoHub.Api/Entities/Nckh/ResearchModel.cs`, `ResearchVariable.cs`, `ObservedQuestionMapping.cs` | Đã implement |
@@ -50,7 +50,7 @@ Follow-up NCKH đang active: **không có**.
 | Test Phase 5 | `tests/FormAutoHub.Tests/NckhPhase5DataServiceTests.cs` | Test pass trong validation mới nhất |
 | Closeout Phase 5 | `docs/ai/nckh/NCKH_PHASE_5_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_5_CLOSEOUT.md` | Completed với local runtime validation; live Google response-read smoke bị blocked |
 | Planning Phase 6 | `docs/ai/nckh/NCKH_PHASE_6_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_6_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_6_SINGLE_APPROVAL_PACKET.md` | Baseline đã approve và đã dùng để implement |
-| API/service Phase 6 | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhDtos.cs` | Đã implement |
+| API/service Phase 6 | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Đã implement |
 | Test Phase 6 | `tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs` | Test pass trong validation mới nhất |
 | Closeout Phase 6 | `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_6_CLOSEOUT.md` | Completed với local runtime validation |
 | Planning Phase 7 | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Đã chuẩn bị; implementation cần approval rõ |
@@ -255,3 +255,7 @@ Closeout evidence Phase 9 mới nhất:
 
 - API contracts, database fields, lifecycle states, hoặc Google scopes ngoài packet Phase 6 đã chấp nhận và implementation Phase 6 đã hoàn tất cho đến khi được review và approve.
 - Claim production-readiness cho đến khi chạy validation hiện tại.
+
+## Follow-up frontend đã duyệt (2026-10-08)
+
+Khung chung/pop-up tài khoản, xác nhận/animation và style workspace đã đồng bộ với app chính. Lỗi 401 Google được nhận diện giữ session core; 401 khác vẫn qua phục hồi JWT. Không thêm endpoint/entity/lifecycle NCKH. Xem `../UI_CREDIT_FOLLOWUP_SYNC.md` và `NCKH_API_CONTRACT_GUIDE.md` về validation và khoảng thiếu xác nhận xóa model hiện có.

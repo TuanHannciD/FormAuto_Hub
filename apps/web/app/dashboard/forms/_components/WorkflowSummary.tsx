@@ -16,7 +16,7 @@ export function WorkflowSummary({ title, questionCount, mode, requestedCount, pr
 }) {
   return (
     <aside aria-label="Tóm tắt lượt tạo" className="min-w-0 xl:sticky xl:top-24 xl:self-start">
-      <Card className="rounded-2xl bg-surface shadow-none">
+      <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><ClipboardList size={18} className="text-primary" />Tóm tắt lượt tạo</CardTitle></CardHeader>
         <CardContent className="space-y-5 text-sm">
           <div><p className="break-words font-semibold">{title || "Chưa chọn biểu mẫu"}</p><p className="mt-1 text-xs text-muted-foreground">{questionCount} câu hỏi được hỗ trợ</p></div>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FormAuto Hub · Duyệt chuyển đổi giao diện</title>
+<style>
+:root{--primary:#5c55e7;--soft:#efefff;--text:#18244a;--muted:#596584;--border:#dfe4f1;--surface:#fff;--bg:#f7f9ff;--error:#b91c1c;--success:#047857;--radius:20px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:9px 13px}button:hover{background:var(--soft)}button:disabled{opacity:.55;cursor:default}button.primary,button[aria-selected=true]{background:var(--primary);border-color:var(--primary);color:white}:focus-visible{outline:3px solid var(--primary);outline-offset:3px}input,select{width:100%;padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text)}input[type=checkbox]{width:auto;accent-color:var(--primary)}input[type=range]{padding:0;accent-color:var(--primary)}h1{font-size:24px;margin:0}h2{font-size:18px;margin:0}h3{font-size:16px;margin:0 0 12px}p{margin:8px 0;color:var(--muted)}small{color:var(--muted)}header.page{max-width:1420px;margin:auto;padding:28px 24px 16px}.tag{display:inline-block;border-radius:99px;background:var(--soft);color:var(--primary);padding:3px 10px;font-size:12px;margin-bottom:8px}.layout{max-width:1420px;margin:auto;padding:0 24px 32px;display:grid;grid-template-columns:310px minmax(0,1fr);gap:20px}.settings,.workspace{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;min-width:0}.settings{align-self:start}.control{display:block;margin:0 0 16px}.control>span{display:block;font-weight:600;margin-bottom:6px}.check{display:flex;gap:8px;align-items:center;margin:12px 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.help{font-size:12px;padding:12px;background:var(--bg);border-radius:10px;margin-top:16px}.preview-heading{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:16px}.stage{min-height:480px;border:1px dashed var(--border);background:var(--bg);border-radius:16px;display:flex;justify-content:center;align-items:flex-start;padding:24px 12px;overflow:hidden}.host{width:100%;max-width:900px;min-width:0}.shell{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:0 12px 36px #28366612;margin:auto;overflow:hidden;max-width:100%}.shell-head{padding:18px 20px 12px}.shell-head p{font-size:12px}.tabs{display:flex;gap:6px;padding:0 20px 14px}.tabs button{flex:1}.shell-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface)}
+/* Each layer has one job: frame clips; viewport scrolls; content is measured. */
+.size-frame{position:relative;overflow:hidden;width:100%;height:0}.scroll-viewport{width:100%;overflow-x:hidden;overflow-y:hidden;scrollbar-gutter:stable;overscroll-behavior:contain}.content{padding:18px 20px;display:flow-root;min-width:0}.outgoing{position:absolute;top:0;left:0;width:100%;pointer-events:none;overflow:hidden}.field{display:block;margin-bottom:14px}.field:last-child{margin-bottom:0}.field span{display:block;font-weight:500;margin-bottom:6px}.notice{padding:12px;border-radius:10px;background:var(--soft);color:var(--text);margin-bottom:14px}.error{background:#fef2f2;color:var(--error)}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}.row:last-child{border-bottom:0}.empty{text-align:center;padding:24px 0}.empty strong{display:block}.placeholder{height:14px;border-radius:6px;background:var(--soft);margin:14px 0}.placeholder:nth-child(2n){width:70%}.fixed-demo{height:210px;display:grid;place-content:center;text-align:center}.wide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wide-grid .field{margin:0}.diagnostics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.metric{padding:10px;background:var(--bg);border-radius:10px;min-width:0}.metric small{display:block}.metric strong{font-size:14px}.log{font:12px/1.5 ui-monospace,monospace;background:var(--bg);padding:12px;border-radius:10px;max-height:140px;overflow:auto;white-space:pre-wrap;margin-top:12px}.expect{padding:12px 0;font-size:13px}.checklist{margin:12px 0 0;padding-left:20px;color:var(--muted);font-size:13px}dialog{padding:0;border:0;background:transparent;max-width:calc(100vw - 24px);width:760px;max-height:calc(100dvh - 24px);overflow:auto}dialog::backdrop{background:#18244a66}dialog .host{margin:0 auto}.close{padding:5px 10px}.dialog-close{display:none}dialog .dialog-close{display:block}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}.settings h2,.settings .actions,.settings .help{grid-column:1/-1}.settings h2{margin-bottom:16px}.stage{min-height:420px}.diagnostics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){header.page{padding:20px 12px 12px}.layout{padding:0 12px 20px}.settings,.workspace{padding:14px}.settings{display:block}.stage{padding:14px 4px}.shell-head,.content{padding-left:14px;padding-right:14px}.tabs{padding-left:14px;padding-right:14px}.wide-grid{grid-template-columns:1fr}.preview-heading{flex-wrap:wrap}h1{font-size:20px}}
+</style>
+<style>
+/* Native scrolling stays active. A separate overlay appears only during user scroll. */
+.scroll-viewport{scrollbar-width:none;scrollbar-gutter:auto}
+.scroll-viewport::-webkit-scrollbar{display:none;width:0;height:0}
+.scroll-indicator{position:absolute;right:4px;top:4px;width:6px;opacity:0;pointer-events:none;z-index:2;transition:opacity 160ms ease}
+.scroll-indicator.visible{opacity:1;pointer-events:auto}
+.scroll-thumb{position:absolute;top:0;width:6px;border-radius:99px;background:var(--muted);opacity:.65;touch-action:none;cursor:grab}
+.scroll-thumb:active{cursor:grabbing}
+@media(prefers-reduced-motion:reduce){.scroll-indicator{transition:none}}
+</style>
+</head>
+<body>
+<header class="page"><span class="tag">Bản mẫu độc lập · Không kết nối API</span><h1>Duyệt chuyển đổi giao diện</h1><p>Chọn tình huống, đổi giữa A / B và quan sát khung, nội dung, thanh cuộn. Mở trực tiếp file này, không cần cài thư viện.</p></header>
+<main class="layout">
+<aside class="settings" aria-label="Cấu hình thử nghiệm">
+<h2>Tình huống thử</h2>
+<label class="control"><span>Kịch bản</span><select id="scenario">
+<option value="profile">01 · Hồ sơ ↔ Bảo mật (ngắn / dài)</option><option value="equal">02 · Hai nội dung cùng kích thước</option><option value="width">03 · Chỉ đổi chiều rộng</option><option value="both">04 · Đổi cả rộng và cao</option><option value="fixed">05 · Khung cố định, chỉ đổi nội dung</option><option value="async">06 · Đang tải → nội dung tải về</option><option value="validation">07 · Xuất hiện / hết lỗi nhập liệu</option><option value="empty">08 · Trống ↔ danh sách</option><option value="long">09 · Hai nội dung đều cần cuộn</option><option value="text">10 · Văn bản dài, URL không có khoảng trắng</option>
+</select></label>
+<label class="control"><span>Không gian hiển thị</span><select id="screen"><option value="auto">Theo cửa sổ hiện tại</option><option value="360">Mobile · rộng 360px</option><option value="320">Mobile nhỏ · rộng 320px</option><option value="760">Desktop · rộng 760px</option></select></label>
+<label class="control"><span>Chế độ kích thước</span><select id="resize"><option value="height">Co giãn chiều cao</option><option value="width">Co giãn chiều rộng</option><option value="both">Co giãn cả hai chiều</option><option value="none">Giữ kích thước khung</option></select></label>
+<label class="control"><span>Hiệu ứng nội dung</span><select id="effect"><option value="fade-slide">Mờ + dịch nhẹ</option><option value="fade">Chỉ mờ</option><option value="slide">Chỉ dịch nhẹ</option><option value="none">Không có hiệu ứng nội dung</option></select></label>
+<label class="control"><span>Thứ tự chuyển đổi</span><select id="order"><option value="size-first">Khung co giãn trước → đổi nội dung</option><option value="together">Khung và nội dung đổi đồng thời (so sánh)</option></select></label>
+<label class="control"><span>Thời gian: <output id="duration-value">240</output> ms</span><input id="duration" type="range" min="80" max="1000" step="20" value="240"></label>
+<label class="control"><span>Chiều cao tối đa phần thân (px)</span><input id="limit" type="number" min="120" max="800" value="420"></label>
+<label class="check"><input type="checkbox" id="reduced"> Giảm chuyển động (cũng tôn trọng cài đặt hệ điều hành)</label>
+<label class="check"><input type="checkbox" id="preserve"> Giữ vị trí cuộn khi đổi nội dung</label>
+<label class="check"><input type="checkbox" id="gutter" checked> Chừa khoảng trống cạnh thanh cuộn</label>
+<div class="actions"><button id="rapid">Thử đổi nhanh 12 lần</button><button id="reset">Đặt lại</button></div>
+<div class="help">Assumption: đây là bản mẫu để duyệt cảm giác chuyển động. Nội dung tài khoản là dữ liệu giả; cấu hình ở đây chưa áp dụng vào app.</div>
+</aside>
+<section class="workspace" aria-label="Khu vực xem thử">
+<div class="preview-heading"><div><h2>Xem và thao tác</h2><p id="description"></p></div><button id="open-dialog">Thử trong popup</button></div>
+<div class="stage" id="stage"><div class="host" id="host">
+<section class="shell" id="shell" aria-label="Bản mẫu tài khoản">
+<div class="shell-head"><div class="preview-heading" style="margin:0"><h3 id="shell-title">Quản lý tài khoản</h3><button class="close dialog-close" id="close-dialog" aria-label="Đóng popup">✕</button></div><p>Đầu và chân giữ bên ngoài vùng cuộn.</p></div>
+<div class="tabs" role="tablist" aria-label="Chọn nội dung"><button id="tab-a" role="tab" aria-selected="true" aria-controls="viewport">A · Hồ sơ</button><button id="tab-b" role="tab" aria-selected="false" aria-controls="viewport" tabindex="-1">B · Bảo mật</button></div>
+<div class="size-frame" id="frame"><div class="scroll-viewport" id="viewport" role="tabpanel" aria-labelledby="tab-a" tabindex="0"><div class="content" id="content"></div></div><div id="scroll-indicator" class="scroll-indicator" aria-hidden="true"><div id="scroll-thumb" class="scroll-thumb"></div></div></div>
+<div class="shell-footer"><small>Dữ liệu minh họa</small><button id="add">Thêm / bớt nội dung</button></div>
+</section></div></div>
+<div class="expect" id="expect"></div>
+<div class="diagnostics" aria-label="Thông số quan sát"><div class="metric"><small>Trạng thái</small><strong id="status">Ổn định</strong></div><div class="metric"><small>Khung thân · rộng × cao</small><strong id="size">—</strong></div><div class="metric"><small>Cuộn thực sự cần thiết</small><strong id="scroll">—</strong></div><div class="metric"><small>Khung hình cuộn thừa</small><strong id="flash">0</strong></div></div>
+<div class="log" id="log" aria-label="Nhật ký chuyển đổi"></div>
+<ul class="checklist"><li>Chuyển A → B → A: thanh cuộn vẫn ẩn, kể cả khi nội dung dài; di chuột vào cũng không làm hiện.</li><li>Cuộn thật bằng chuột, cảm ứng hoặc bàn phím: thanh cuộn hiện và tự ẩn sau 700ms khi dừng. Khi hiện, có thể kéo thanh cuộn.</li><li>Đổi nhanh, thêm nội dung giữa hiệu ứng, thu hẹp cửa sổ: kết quả cuối phải là lựa chọn mới nhất.</li><li>Popup: thử Tab, Shift+Tab, Escape, đóng rồi mở lại. Input trong A giữ giá trị khi quay về.</li></ul>
+<p><small>Bộ đếm đo vùng cuộn thừa bằng kích thước DOM; không phải phép đo pixel của thanh cuộn do hệ điều hành vẽ. Không thể bao phủ mọi trình duyệt hay mọi nội dung tương lai.</small></p>
+</section>
+</main>
+<dialog id="dialog" aria-label="Duyệt popup tài khoản"></dialog>
+<span class="sr-only" id="announcement" aria-live="polite"></span>
+<script>
+'use strict';
+// Standalone prototype. No imports, storage, requests or application mutations.
+const $=id=>document.getElementById(id);
+const frame=$('frame'), viewport=$('viewport'), content=$('content'), shell=$('shell'), host=$('host');
+const media=matchMedia('(prefers-reduced-motion: reduce)');
+const indicator=$('scroll-indicator'),thumb=$('scroll-thumb');
+let scrollIntent=0,hideScrollTimer=null,drag=null;
+function hideScrollIndicator(){clearTimeout(hideScrollTimer);indicator.classList.remove('visible');scrollIntent=0}
+function updateScrollIndicator(){
+ const height=Math.max(0,Math.min(frame.clientHeight,viewport.clientHeight)-8);
+ const thumbHeight=Math.min(height,Math.max(28,height*viewport.clientHeight/Math.max(1,viewport.scrollHeight)));
+ const maxScroll=Math.max(1,viewport.scrollHeight-viewport.clientHeight);
+ indicator.style.height=height+'px';thumb.style.height=thumbHeight+'px';
+ thumb.style.transform=`translateY(${Math.max(0,viewport.scrollTop)/maxScroll*(height-thumbHeight)}px)`;
+}
+function showScrollIndicator(){
+ if(!state.needsScroll)return;
+ updateScrollIndicator();indicator.classList.add('visible');clearTimeout(hideScrollTimer);
+ if(!drag)hideScrollTimer=setTimeout(()=>{indicator.classList.remove('visible');scrollIntent=0},700);
+}
+viewport.addEventListener('wheel',()=>{scrollIntent=performance.now()},{passive:true});
+viewport.addEventListener('touchmove',()=>{scrollIntent=performance.now()},{passive:true});
+viewport.addEventListener('keydown',e=>{if(!e.target.matches('input,textarea,select,button')&&['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key))scrollIntent=performance.now()});
+viewport.addEventListener('scroll',()=>{if(scrollIntent&&performance.now()-scrollIntent<1500)showScrollIndicator()},{passive:true});
+thumb.addEventListener('pointerdown',e=>{e.preventDefault();drag={pointerId:e.pointerId,y:e.clientY,top:viewport.scrollTop};thumb.setPointerCapture(e.pointerId);clearTimeout(hideScrollTimer)});
+thumb.addEventListener('pointermove',e=>{if(!drag)return;const travel=indicator.clientHeight-thumb.clientHeight;if(travel<=0)return;scrollIntent=performance.now();viewport.scrollTop=drag.top+(e.clientY-drag.y)*(viewport.scrollHeight-viewport.clientHeight)/travel;showScrollIndicator()});
+function finishDrag(){if(drag){drag=null;showScrollIndicator()}}
+thumb.addEventListener('pointerup',finishDrag);thumb.addEventListener('pointercancel',finishDrag);thumb.addEventListener('lostpointercapture',finishDrag);
+const state={key:'a',version:0,animations:[],busy:false,extra:false,loaded:false,error:false,timer:null,rapidTimer:null,flash:0,name:'Nguyễn Văn An',logs:[],natural:0,target:0,needsScroll:false};
+const scenarios={
+ profile:['Hồ sơ ↔ Bảo mật','Hồ sơ','Bảo mật','Khung đổi chiều cao theo nội dung. Thanh cuộn chỉ hiện khi thực sự cuộn.','height'],
+ equal:['Hai nội dung cùng kích thước','Nội dung A','Nội dung B','Kích thước giữ nguyên; chỉ nội dung chuyển đổi.','height'],
+ width:['Chỉ đổi chiều rộng','Hẹp','Rộng','Chiều cao giữ nguyên. Nội dung không bị phóng thu theo chiều rộng.','width'],
+ both:['Đổi cả rộng và cao','Gọn','Mở rộng','Hai chiều chuyển từ kích thước đang nhìn thấy sang mục tiêu mới.','both'],
+ fixed:['Khung cố định','Ngắn','Dài','Khung đứng yên; nội dung dài cuộn trong phần thân.','none'],
+ async:['Nội dung tải bất đồng bộ','Đang tải / Kết quả','Mục khác','Kết quả giả lập sau 900ms. Đổi sang B trước đó: kết quả cũ không ghi đè B.','height'],
+ validation:['Lỗi nhập liệu','Biểu mẫu','Thông tin','Bấm “Kiểm tra” để thêm / bỏ thông báo lỗi ngay trong cùng mục.','height'],
+ empty:['Trống ↔ danh sách','Trống','Danh sách','Chuyển từ trạng thái trống sang nhiều dòng dữ liệu.','height'],
+ long:['Nội dung đều cần cuộn','Danh sách A','Danh sách B','Nội dung dài vẫn cuộn được nhưng thanh cuộn chỉ hiện khi cuộn. Thử tùy chọn giữ vị trí cuộn.','height'],
+ text:['Văn bản khó bố trí','Ngắn','Văn bản dài','URL dài xuống dòng; không tạo cuộn ngang. Thử rộng 320px.','height']
+};
+function field(label,value,type='text'){return `<label class="field"><span>${label}</span><input type="${type}" value="${value}" autocomplete="off"></label>`}
+function rows(n,prefix='Bản ghi'){return Array.from({length:n},(_,i)=>`<div class="row"><span>${prefix} ${i+1}<br><small>Thông tin minh họa cho vùng cuộn</small></span><small>Đã lưu</small></div>`).join('')}
+function render(){
+ const s=$('scenario').value, b=state.key==='b';let html='';
+ switch(s){
+ case 'profile':html=b?'<h3>Bảo mật</h3><div class="notice">Quản lý mật khẩu và phương thức đăng nhập.</div>'+field('Mật khẩu hiện tại','','password')+field('Mật khẩu mới','','password')+field('Nhập lại mật khẩu','','password')+'<div class="row"><span>Google<br><small>Chưa liên kết · minh họa</small></span><button>Liên kết</button></div>':`<h3>Hồ sơ cá nhân</h3>${field('Họ và tên',state.name)}${field('Email','an@example.com','email')}`;break;
+ case 'equal':case 'width':html=`<div class="fixed-demo"><h3>${b?'Không gian B':'Không gian A'}</h3><p>Hai nội dung cùng chiều cao.</p><button>Thao tác minh họa</button></div>`;break;
+ case 'both':html=b?'<h3>Cấu hình mở rộng</h3><div class="wide-grid">'+field('Tên','Dự án mẫu')+field('Email','an@example.com')+field('Mô tả','Nội dung mở rộng')+field('Ghi chú','Có nhiều tùy chọn')+'</div>'+rows(3):'<h3>Cấu hình gọn</h3>'+field('Tên','Dự án mẫu');break;
+ case 'fixed':html=b?rows(12):'<h3>Nội dung ngắn</h3><p>Khung cố định có thể có khoảng trống phía dưới.</p>'+field('Tên','Nguyễn Văn An');break;
+ case 'async':html=b?'<h3>Mục khác</h3><p>Kết quả tải của A không được thay thế nội dung này.</p>':state.loaded?'<h3>Kết quả đã tải</h3>'+rows(8):'<h3>Đang tải dữ liệu giả lập…</h3><div class="placeholder"></div><div class="placeholder"></div><div class="placeholder"></div>';break;
+ case 'validation':html=b?'<h3>Hướng dẫn</h3><p>Quay về A để thử thông báo lỗi làm tăng chiều cao.</p>':'<h3>Kiểm tra biểu mẫu</h3>'+field('Email','an@example.com','email')+(state.error?'<div class="notice error" role="alert">Thông báo lỗi giả lập: vui lòng kiểm tra email và bổ sung thông tin trước khi tiếp tục.</div>':'')+'<button id="validate" class="primary">'+(state.error?'Xóa lỗi giả lập':'Kiểm tra · hiện lỗi giả lập')+'</button>';break;
+ case 'empty':html=b?'<h3>Danh sách dữ liệu</h3>'+rows(8):'<div class="empty"><strong>Chưa có dữ liệu</strong><p>Chuyển sang B để xem danh sách.</p></div>';break;
+ case 'long':html=`<h3>Danh sách ${b?'B':'A'}</h3>`+rows(b?20:14,b?'Mục B':'Mục A');break;
+ case 'text':html=b?'<h3>Nội dung dài</h3><p style="overflow-wrap:anywhere">https://example.com/'+('duongdanratdaikhongcokhoangtrang'.repeat(10))+'</p>'+Array.from({length:6},()=>'<p>Đây là một đoạn văn bản dài để thử việc xuống dòng khi chiều rộng thay đổi. Nội dung cần giữ rõ ràng và không tràn sang bên ngoài khung.</p>').join(''):'<h3>Nội dung ngắn</h3><p>Thử ở màn hình nhỏ và trong popup.</p>';break;
+ }
+ if(state.extra)html+='<div class="notice" style="margin-top:16px">Nội dung bổ sung trong cùng mục</div>'+rows(4,'Dòng bổ sung');
+ content.innerHTML=html;
+ if(s==='profile'&&!b){const input=content.querySelector('input');input.value=state.name;input.addEventListener('input',()=>state.name=input.value)}
+ $('validate')?.addEventListener('click',()=>{state.error=!state.error;replaceContent()});
+}
+function record(message){state.logs.unshift(new Date().toLocaleTimeString('vi-VN')+' · '+message);state.logs=state.logs.slice(0,8);$('log').textContent=state.logs.join('\n')}
+function cancelAnimations(){state.animations.forEach(a=>a.cancel());state.animations=[];frame.querySelectorAll('.outgoing').forEach(n=>n.remove());viewport.style.visibility='';viewport.inert=false}
+function snapshotContent(){const source=frame.querySelector('.outgoing')||viewport;const clone=source.cloneNode(true);clone.dataset.snapshotScroll=String(source.scrollTop);return clone}
+function effectFrames(enter){const e=$('effect').value,fade=e.includes('fade'),slide=e.includes('slide');return [{opacity:fade?(enter?0:1):1,transform:`translateY(${slide?(enter?6:0):0}px)`},{opacity:fade?(enter?1:0):1,transform:`translateY(${slide?(enter?0:-4):0}px)`}]}
+// Retarget from the visible frame. Completion callbacks are fenced by version.
+async function transition({old=null,animate=true}={}){
+ const fromH=frame.getBoundingClientRect().height,fromW=shell.getBoundingClientRect().width;
+ hideScrollIndicator();
+ indicator.style.transition=$('reduced').checked?'none':'';
+ const version=++state.version;cancelAnimations();
+ const available=host.clientWidth, mode=$('resize').value, scenario=$('scenario').value;
+ const desired=(mode==='width'||mode==='both')?(state.key==='b'?660:360):520;
+ const width=Math.min(desired,available);shell.style.width=width+'px';
+ const cap=Math.max(80,Math.min(Number($('limit').value)||420,$('dialog').open?window.innerHeight-230:800));
+ viewport.style.paddingRight=$('gutter').checked?'12px':'0';
+ // Optional spacing is constant; revealing the overlay never changes content width.
+ viewport.style.overflowY='hidden';viewport.style.width=Math.max(0,width-2)+'px';
+ const natural=content.getBoundingClientRect().height;
+ const target=(mode==='width'||mode==='none')?Math.min(300,cap):Math.min(natural,cap);
+ const needs=natural>target+1;
+ viewport.style.height=target+'px';viewport.style.overflowY=needs?'auto':'hidden';
+ if(!$('preserve').checked&&old)viewport.scrollTop=0;
+ state.natural=natural;state.target=target;state.needsScroll=needs;
+ updateScrollIndicator();
+ frame.style.height=target+'px';
+ const duration=(!$('reduced').checked&&!media.matches&&animate)?Number($('duration').value):0;
+ state.busy=duration>0;frame.dataset.phase=state.busy?'resize':'stable';
+ if(duration){
+  const opts={duration,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'};
+  const sizes=[];
+  if(Math.abs(fromH-target)>.5)sizes.push(frame.animate([{height:fromH+'px'},{height:target+'px'}],opts));
+  if(Math.abs(fromW-width)>.5)sizes.push(shell.animate([{width:fromW+'px'},{width:width+'px'}],opts));
+  state.animations.push(...sizes);
+  const sequential=$('order').value==='size-first';
+  if(old&&(sequential||$('effect').value!=='none')){
+   old.className='outgoing';old.style.visibility='visible';old.style.overflow='hidden';old.inert=true;old.setAttribute('aria-hidden','true');old.removeAttribute('id');old.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));frame.append(old);old.scrollTop=Number(old.dataset.snapshotScroll)||0;
+  }
+  if(sequential&&old&&sizes.length){
+   // New content is laid out for measurement, but is invisible and cannot receive focus.
+   viewport.style.visibility='hidden';viewport.inert=true;
+   await Promise.allSettled(sizes.map(a=>a.finished));
+   if(version!==state.version)return;
+   viewport.style.visibility='';viewport.inert=false;
+  }
+  if(old&&$('effect').value!=='none'){
+   frame.dataset.phase=sequential?'content':'together';
+   const contentOpts=sequential?{...opts,duration:Math.min(160,duration*.65)}:opts;
+   state.animations.push(old.animate(effectFrames(false),contentOpts),content.animate(effectFrames(true),contentOpts));
+  }else if(old){
+   old.remove();
+  }
+  await Promise.allSettled(state.animations.map(a=>a.finished));
+ }
+ if(version!==state.version)return;
+ cancelAnimations();state.busy=false;frame.dataset.phase='stable';
+ $('announcement').textContent=`${scenarios[scenario][state.key==='a'?1:2]} đã hiển thị`;
+ record(`${state.key.toUpperCase()} · ${Math.round(width)} × ${Math.round(target)} · ${needs?'có cuộn':'vừa khung'}`);
+}
+function replaceContent(){const old=snapshotContent();render();transition({old})}
+function select(key){
+ const old=snapshotContent();state.key=key;clearTimeout(state.timer);state.timer=null;
+ ['a','b'].forEach(k=>{$('tab-'+k).setAttribute('aria-selected',String(k===key));$('tab-'+k).tabIndex=k===key?0:-1});
+ viewport.setAttribute('aria-labelledby','tab-'+key);render();transition({old});
+ if($('scenario').value==='async'&&key==='a'&&!state.loaded){state.timer=setTimeout(()=>{if($('scenario').value==='async'&&state.key==='a'){state.loaded=true;replaceContent()}},900)}
+}
+function stopRapid(){clearInterval(state.rapidTimer);state.rapidTimer=null;$('rapid').textContent='Thử đổi nhanh 12 lần'}
+function setScenario(){stopRapid();state.extra=false;state.loaded=false;state.error=false;state.flash=0;const s=scenarios[$('scenario').value];$('resize').value=s[4];$('shell-title').textContent=s[0];$('tab-a').textContent='A · '+s[1];$('tab-b').textContent='B · '+s[2];$('description').textContent=s[0];$('expect').textContent='Kỳ vọng: '+s[3];select('a')}
+function setScreen(){host.style.maxWidth=$('screen').value==='auto'?'900px':$('screen').value+'px';transition()}
+// Content observer only: never observe the animated frame as a sizing input.
+let pending=false;
+const observer=new ResizeObserver(()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;if(Math.abs(content.getBoundingClientRect().height-state.natural)>.5)transition()})}});observer.observe(content);
+let resizePending=false;window.addEventListener('resize',()=>{if(!resizePending){resizePending=true;requestAnimationFrame(()=>{resizePending=false;transition({animate:false})})}});
+media.addEventListener('change',()=>transition({animate:false}));
+['a','b'].forEach(k=>$('tab-'+k).addEventListener('click',()=>select(k)));
+document.querySelector('.tabs').addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const k=e.key==='Home'?'a':e.key==='End'?'b':state.key==='a'?'b':'a';select(k);$('tab-'+k).focus()}});
+$('scenario').addEventListener('change',setScenario);$('screen').addEventListener('change',setScreen);
+['resize','effect','order','limit','reduced','gutter'].forEach(id=>$(id).addEventListener('change',()=>transition()));
+$('duration').addEventListener('input',()=>{$('duration-value').value=$('duration').value});
+$('add').addEventListener('click',()=>{state.extra=!state.extra;replaceContent()});
+$('rapid').addEventListener('click',()=>{if(state.rapidTimer){stopRapid();return}let n=0;$('rapid').textContent='Dừng đổi nhanh';select('b');state.rapidTimer=setInterval(()=>{select(state.key==='a'?'b':'a');if(++n===11)stopRapid()},70)});
+$('reset').addEventListener('click',()=>{clearTimeout(state.timer);$('scenario').value='profile';$('screen').value='auto';$('effect').value='fade-slide';$('order').value='size-first';$('duration').value='240';$('duration-value').value='240';$('limit').value='420';$('reduced').checked=false;$('preserve').checked=false;$('gutter').checked=true;state.name='Nguyễn Văn An';host.style.maxWidth='900px';setScenario()});
+let previousOverflow='';
+$('open-dialog').addEventListener('click',()=>{previousOverflow=document.body.style.overflow;$('dialog').append(host);$('dialog').showModal();document.body.style.overflow='hidden';transition({animate:false});$('close-dialog').focus()});
+$('close-dialog').addEventListener('click',()=>$('dialog').close());
+$('dialog').addEventListener('keydown',e=>{
+ if(e.key!=='Tab')return;
+ const nodes=[...$('dialog').querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex="0"]')].filter(n=>!n.closest('[inert]')&&n.getClientRects().length);
+ if(!nodes.length){e.preventDefault();return}
+ const first=nodes[0],last=nodes[nodes.length-1];
+ if(e.shiftKey&&(document.activeElement===first||!$('dialog').contains(document.activeElement))){e.preventDefault();last.focus()}
+ else if(!e.shiftKey&&(document.activeElement===last||!$('dialog').contains(document.activeElement))){e.preventDefault();first.focus()}
+});
+$('dialog').addEventListener('close',()=>{$('stage').append(host);document.body.style.overflow=previousOverflow;stopRapid();transition({animate:false});$('open-dialog').focus()});
+$('dialog').addEventListener('click',e=>{if(e.target===$('dialog')){const r=$('dialog').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('dialog').close()}});
+function monitor(){
+ const rect=frame.getBoundingClientRect();$('size').textContent=Math.round(rect.width)+' × '+Math.round(rect.height)+' px';$('status').textContent=state.busy?({resize:'1 · Co giãn khung',content:'2 · Đổi nội dung',together:'Đổi đồng thời'}[frame.dataset.phase]||'Đang chuyển'):'Ổn định';$('scroll').textContent=state.needsScroll?'Có · cuộn phần thân':'Không';
+ if(!state.needsScroll&&getComputedStyle(viewport).overflowY==='auto'&&viewport.scrollHeight>viewport.clientHeight+1)state.flash++;
+ if(indicator.classList.contains('visible'))updateScrollIndicator();
+ $('flash').textContent=state.flash;requestAnimationFrame(monitor);
+}
+setScenario();monitor();
+</script>
+</body>
+</html>

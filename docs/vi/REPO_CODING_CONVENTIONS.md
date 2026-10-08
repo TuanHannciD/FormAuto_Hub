@@ -6,7 +6,7 @@
 
 ## Trạng thái hiện tại
 
-Initial Phase 1 backend scaffold đã tồn tại. Các convention này áp dụng cho mọi implementation work sau này.
+API, kiểm thử và app Next.js đã triển khai. Convention áp dụng cho source hiện tại và implementation được duyệt sau này.
 
 ## Quy tắc chung
 

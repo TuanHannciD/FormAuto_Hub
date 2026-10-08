@@ -1,4 +1,5 @@
 import { clearStoredSession, getStoredSession, getValidAccessToken, refreshSession, SessionExpiredError } from "@/lib/auth";
+import { readNckhGoogleAuthorizationError } from "@/lib/nckh-google-auth";
 
 export const API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000");
 
@@ -31,6 +32,8 @@ export async function apiFetchBlob(path: string, retried = false): Promise<Blob>
   });
 
   if (response.status === 401) {
+    const googleError = await readNckhGoogleAuthorizationError(path, response);
+    if (googleError) throw googleError;
     const refreshed = !retried ? await refreshSession(accessToken) : null;
     if (refreshed) {
       return apiFetchBlob(path, true);
@@ -75,6 +78,8 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
   });
 
   if (response.status === 401 && !options.skipAuth) {
+    const googleError = await readNckhGoogleAuthorizationError(path, response);
+    if (googleError) throw googleError;
     const rejectedToken = headers.get("Authorization")?.replace(/^Bearer /, "");
     const refreshed = !retried ? await refreshSession(rejectedToken) : null;
     if (refreshed) {
@@ -151,6 +156,15 @@ export type ManualCreditGrantResponse = {
   userEmail: string;
   creditTransactionId: string;
   balanceAfter: number;
+};
+
+export type ManualCreditHistoryItem = {
+  id: string; userId: string; userEmail: string; userFullName: string; credits: number;
+  balanceAfter: number; reason: string; createdAt: string;
+  adminId: string | null; adminEmail: string | null; adminFullName: string | null;
+};
+export type ManualCreditHistoryResponse = {
+  items: ManualCreditHistoryItem[]; page: number; pageSize: number; totalItems: number; totalPages: number;
 };
 
 export type AdminCreditUserOption = {

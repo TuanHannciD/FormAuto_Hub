@@ -11,6 +11,7 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<UserCreditAccount> UserCreditAccounts => Set<UserCreditAccount>();
     public DbSet<CreditPackage> CreditPackages => Set<CreditPackage>();
     public DbSet<TopupOrder> TopupOrders => Set<TopupOrder>();
+    public DbSet<TopupEvidence> TopupEvidence => Set<TopupEvidence>();
     public DbSet<CreditTransaction> CreditTransactions => Set<CreditTransaction>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<UserExternalLogin> UserExternalLogins => Set<UserExternalLogin>();
@@ -62,6 +63,7 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
 
         modelBuilder.Entity<UserCreditAccount>(entity =>
         {
+            entity.Property(item => item.RowVersion).IsRowVersion();
             entity.Property(item => item.Balance).HasPrecision(18, 2);
             entity.Property(item => item.TotalDeposited).HasPrecision(18, 2);
             entity.Property(item => item.TotalUsed).HasPrecision(18, 2);
@@ -74,6 +76,18 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
         modelBuilder.Entity<TopupOrder>()
             .Property(item => item.Amount)
             .HasPrecision(18, 2);
+
+        modelBuilder.Entity<TopupOrder>()
+            .HasOne<TopupEvidence>().WithMany().HasForeignKey(item => item.EvidenceFileId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<TopupOrder>().Property(item => item.RowVersion).IsRowVersion();
+        modelBuilder.Entity<TopupEvidence>(entity =>
+        {
+            entity.ToTable("TopupOrderEvidenceFiles");
+            entity.Property(item => item.FileName).HasColumnName("OriginalFileName").HasMaxLength(200);
+            entity.Property(item => item.ContentType).HasMaxLength(50);
+            entity.HasIndex(item => item.UserId);
+        });
 
         modelBuilder.Entity<CreditTransaction>(entity =>
         {

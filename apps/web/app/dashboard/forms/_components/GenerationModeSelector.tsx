@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { panelStyles } from "@/components/ui-styles";
 import { Bot, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui";
 import type { GenerationMode } from "../_types";
@@ -20,11 +22,11 @@ export function GenerationModeSelector({
         const Icon = option.value === "rules" ? SlidersHorizontal : option.value === "ai-default" ? Bot : Sparkles;
         return (
           <button
-            className={`relative flex min-h-[92px] flex-col items-start justify-between rounded-lg border p-3 text-left transition ${
+            className={cn(panelStyles, `relative flex min-h-[92px] flex-col items-start justify-between p-3 text-left transition ${
               active
-                ? "border-primary bg-primary-soft text-primary shadow-raised ring-2 ring-primary-border"
-                : "border-border/70 bg-surface/70 text-secondary-foreground shadow-sm hover:border-primary-border hover:bg-primary-soft/60 hover:shadow-md"
-            }`}
+                ? "border-primary bg-primary-soft text-primary ring-1 ring-primary"
+                : "border-border bg-surface text-secondary-foreground hover:border-primary-border hover:bg-primary-soft "
+            }`)}
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}

@@ -79,15 +79,15 @@ export default function PayosSettingsPage() {
         </Button>
         }
       />
-      <Alert className="border-warning-border/80 bg-warning-surface/85 text-warning">
+      <Alert className="border-warning-border/80 bg-warning-surface text-warning">
         Không hiển thị API key hoặc checksum key thật trên giao diện. Nếu để trống khóa bí mật khi lưu, hệ thống sẽ giữ khóa hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface/85 text-info">
+      <Alert className="border-info-border/80 bg-info-surface text-info">
         PayOS cần 3 đường dẫn: Return URL và Cancel URL trỏ về trang frontend bên dưới; Webhook URL cấu hình trong PayOS dashboard và có thể dùng chính domain frontend nhờ proxy `/api/payments/payos/webhook`.
       </Alert>
-      <div className="grid gap-4 xl:grid-cols-[1.35fr_0.75fr]">
-        <div className="space-y-4">
-          <Card>
+      <div className="grid items-start gap-4 xl:grid-cols-[1.35fr_0.75fr]">
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0">
             <CardContent className="grid gap-4 md:grid-cols-3">
               <Detail icon={ShieldCheck} label="Trạng thái tích hợp" value={settings?.isEnabled ? "Đang bật" : "Chưa bật"} tone={settings?.isEnabled ? "success" : "warning"} />
               <Detail icon={KeyRound} label="Có API key" value={settings?.hasApiKey ? "Có" : "Chưa"} tone={settings?.hasApiKey ? "success" : "warning"} />
@@ -95,7 +95,7 @@ export default function PayosSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Thông tin kết nối</CardTitle>
           </CardHeader>
@@ -104,7 +104,7 @@ export default function PayosSettingsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   Bật PayOS
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border/70 bg-surface/55 px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép khách thanh toán qua cổng PayOS.</span>
                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -140,7 +140,7 @@ export default function PayosSettingsPage() {
                   <Input className="mt-2" value={cancelUrl} onChange={(event) => setCancelUrl(event.target.value)} />
                 </label>
               </div>
-              <div className="rounded-md border border-info-border/80 bg-info-surface/85 p-4 text-sm text-info shadow-sm backdrop-blur">
+              <div className="rounded-xl border border-info-border/80 bg-info-surface p-4 text-sm text-info">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <p className="font-semibold">Webhook URL cấu hình trong PayOS dashboard</p>
@@ -165,7 +165,7 @@ export default function PayosSettingsPage() {
             </form>
           </CardContent>
         </Card>
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Kiểm tra cấu hình</CardTitle>
             </CardHeader>
@@ -180,8 +180,8 @@ export default function PayosSettingsPage() {
           </Card>
         </div>
 
-        <div className="space-y-4">
-          <Card>
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Trạng thái</CardTitle>
           </CardHeader>
@@ -194,7 +194,7 @@ export default function PayosSettingsPage() {
             <Detail label="Kết quả kiểm tra" value={settings?.lastCheckMessage || "Chưa có"} />
           </CardContent>
         </Card>
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Lịch sử thay đổi</CardTitle>
             </CardHeader>
@@ -204,7 +204,7 @@ export default function PayosSettingsPage() {
               <p className="text-xs text-muted-foreground">Nhật ký audit chi tiết đang cập nhật.</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Tài liệu tham khảo</CardTitle>
             </CardHeader>
@@ -232,13 +232,13 @@ function Detail({
   tone?: "default" | "success" | "warning";
 }) {
   const toneClass = {
-    default: "border-border/70 bg-surface/55",
+    default: "border-border bg-surface-subtle",
     success: "border-success-border bg-success-surface/85 text-success",
-    warning: "border-warning-border bg-warning-surface/85 text-warning"
+    warning: "border-warning-border bg-warning-surface text-warning"
   }[tone];
 
   return (
-    <div className={`rounded-md border p-3 shadow-sm backdrop-blur ${toneClass}`}>
+    <div className={`rounded-xl border p-3 ${toneClass}`}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
         {Icon && <Icon size={15} />}
@@ -250,7 +250,7 @@ function Detail({
 
 function CheckRow({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between rounded-md border border-border/70 bg-surface/55 p-3">
+    <div className="flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3">
       <span>{label}</span>
       {ok ? <CheckCircle2 className="text-success" size={16} /> : <AlertCircle className="text-destructive" size={16} />}
     </div>
@@ -259,7 +259,7 @@ function CheckRow({ label, ok }: { label: string; ok: boolean }) {
 
 function Reference({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-md border border-border/70 bg-surface/55 p-3 text-muted-foreground">
+    <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-subtle p-3 text-muted-foreground">
       <BookOpen size={15} />
       <span>{label}</span>
     </div>

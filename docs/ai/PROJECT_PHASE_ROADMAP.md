@@ -367,3 +367,7 @@ Closeout:
 ## Phase Rule
 
 No full next global phase is selected after Phase 9 closeout. The Phase 6 AI scoped follow-up slice is completed. New phase work or implementation/fix follow-up requires explicit approval.
+
+## Approved post-closeout follow-up record
+
+The user-approved UI/shared-popup/NCKH-auth/manual-credit work is an implementation/fix follow-up, not a new global phase. See `UI_CREDIT_FOLLOWUP_SYNC.md` for implemented scope, validation and open gaps. Historical phase approvals remain unchanged.

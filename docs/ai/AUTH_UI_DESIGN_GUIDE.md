@@ -174,3 +174,7 @@ Before implementing these screens:
 3. Read `docs/ai/API_CONTRACT_GUIDE.md` and task-specific backend contract docs.
 4. Confirm which auth behavior is approved for implementation.
 5. Keep Google OAuth, password recovery email, and session architecture Deferred unless explicitly approved by the task.
+
+## Current account UI follow-up
+
+Profile and security now share the topbar account popup in both dashboard and admin. The two old profile routes are retired. Existing profile/password/Google identity contracts are preserved; NCKH Google authorization failure is independent from core JWT session expiry. Password-recovery email remains Deferred. See `UI_CREDIT_FOLLOWUP_SYNC.md`.

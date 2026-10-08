@@ -2,35 +2,38 @@
 
 ## TOC
 
-- [Purpose](#purpose) (34)
-- [Current Status](#current-status) (38)
-- [REST Naming Rules](#rest-naming-rules) (42)
-- [Operational health](#operational-health)
-- [Proposed API Areas](#proposed-api-areas) (50)
-  - [Dashboard](#dashboard) (52)
-  - [Packages](#packages) (56)
-  - [Top-up orders](#top-up-orders) (101)
-  - [Admin top-up orders](#admin-top-up-orders) (146)
-  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
-  - [PayOS webhooks](#payos-webhooks) (266)
-  - [Usage logs](#usage-logs) (304)
-  - [Credit transactions](#credit-transactions) (334)
-  - [Profile](#profile) (356)
-  - [Authentication and account access](#authentication-and-account-access) (362)
-  - [Forms](#forms) (409)
-  - [Answer rules](#answer-rules) (414)
-  - [Generated responses](#generated-responses) (432)
-  - [AI prompt profiles](#ai-prompt-profiles) (454)
-  - [AI generated responses](#ai-generated-responses) (478)
-  - [Submissions](#submissions) (545)
-- [DTO Rules](#dto-rules) (560)
-- [Error Response Rules](#error-response-rules) (568)
-- [Pagination And Filtering](#pagination-and-filtering) (574)
-- [Status Discipline](#status-discipline) (581)
-- [Approved Status And Type Values](#approved-status-and-type-values) (587)
-- [Temporary User Context](#temporary-user-context) (637)
-- [Versioning And OpenAPI](#versioning-and-openapi) (646)
-- [Change Rule](#change-rule) (651)
+- [Purpose](#purpose) — line 38
+- [Current Status](#current-status) — line 42
+- [REST Naming Rules](#rest-naming-rules) — line 46
+- [Operational health](#operational-health) — line 54
+- [Proposed API Areas](#proposed-api-areas) — line 66
+  - [Dashboard](#dashboard) — line 68
+  - [Packages](#packages) — line 72
+  - [Top-up orders](#top-up-orders) — line 117
+  - [Admin top-up orders](#admin-top-up-orders) — line 162
+  - [Admin AI provider settings](#admin-ai-provider-settings) — line 221
+  - [PayOS webhooks](#payos-webhooks) — line 296
+  - [Usage logs](#usage-logs) — line 334
+  - [Credit transactions](#credit-transactions) — line 364
+  - [Profile](#profile) — line 386
+  - [Authentication and account access](#authentication-and-account-access) — line 397
+  - [Forms](#forms) — line 447
+  - [Answer rules](#answer-rules) — line 452
+  - [Generated responses](#generated-responses) — line 470
+  - [AI prompt profiles](#ai-prompt-profiles) — line 492
+  - [AI generated responses](#ai-generated-responses) — line 516
+  - [AI usage analytics](#ai-usage-analytics) — line 583
+  - [GET /api/admin/ai-usage/runs — Admin paged AI runs](#get-apiadminai-usageruns--admin-paged-ai-runs) — line 604
+  - [Submissions](#submissions) — line 659
+- [DTO Rules](#dto-rules) — line 674
+- [Error Response Rules](#error-response-rules) — line 682
+- [Pagination And Filtering](#pagination-and-filtering) — line 688
+- [Status Discipline](#status-discipline) — line 695
+- [Approved Status And Type Values](#approved-status-and-type-values) — line 701
+- [Temporary User Context](#temporary-user-context) — line 752
+- [Versioning And OpenAPI](#versioning-and-openapi) — line 761
+- [Change Rule](#change-rule) — line 766
+- [Current UI follow-up clarification](#current-ui-follow-up-clarification) — line 770
 
 ## Purpose
 
@@ -157,6 +160,20 @@ Pending contract review before implementation:
 - whether `paymentLinkId` is available immediately from PayOS for every successful create-link response
 
 ### Admin top-up orders
+
+Approved manual-credit flow completion (2026-10-08):
+
+- `GET /api/admin/topup-orders/manual`: admin-only array of manual orders, including processed orders; excludes PayOS. Adds `userEmail`, `packageName`, and nullable `evidenceFileId` to the existing admin order fields.
+- `GET /api/admin/credit-operations/users?search=`: admin-only email search, at most 20 options ordered by email; returns `{ items: [{ id, email, fullName }] }`.
+- Approved history follow-up (2026-10-08): `GET /api/admin/credit-operations/manual-grants?search=&page=1&pageSize=20` is JWT Admin only. Returns `{ items, page, pageSize, totalItems, totalPages }`; page starts at 1, pageSize is clamped to 1..50, out-of-range pages clamp to the last page. Items contain `id`, `userId`, `userEmail`, `userFullName`, `credits`, `balanceAfter`, `reason`, `createdAt`, nullable `adminId`, `adminEmail`, `adminFullName`. Reads only `ManualGrant` ledger entries, newest first (ID tie-breaker); searches recipient/actor email or name and reason. Actor comes from the latest matching `ManualGrant` / `CreditTransaction` audit for that ledger ID. Missing legacy audit/user information stays absent; never attribute it to the current admin. No new persistence or credit writes are introduced by viewing history.
+- `POST /api/admin/credit-operations/manual-grants`: admin-only `{ userId, credits, reason }`, with positive integer credits and a nonblank reason up to 1000 characters. Returns `{ userId, userEmail, creditTransactionId, balanceAfter }`. Unknown user: 404; invalid input: 400.
+- Direct grants go through `CreditService`, write a `ManualGrant` ledger entry and an audit recording the admin, recipient, amount, reason, and resulting balance in the same transaction. Each accepted request is a distinct grant; the browser disables repeated submission while pending and does not automatically replay failed writes. Internal SQL retry keeps a fixed ledger ID and checks for an already committed transaction before repeating the write.
+- Manual approve/reject only accept `Pending` orders with `paymentMethod = Manual`. Other orders return 409; rejection requires a nonblank reason up to 1000 characters. Approval writes credit, status, ledger, and admin audit atomically. PayOS approval remains owned by verified payment handling.
+- `POST /api/topup-orders/evidence`: authenticated multipart `file`; returns `{ fileId, fileName, contentType, length, createdAt }`. Optional evidence uses PNG/JPEG/WebP signatures, max 5 MB; filenames are sanitized. Raw files are private database content, never static public URLs.
+- `POST /api/topup-orders`: retains `packageId`, `paymentMethod`, `paymentNote`; accepts optional `fileId`, which must belong to the authenticated user and not already be attached to another order. Normalizes manual orders to `Manual`; other payment methods must use the dedicated PayOS endpoint. Payment note is nonblank, max 1000 characters. User order responses additionally return nullable `evidenceFileId`.
+- `GET /api/topup-orders/evidence/{id}`: owner only. `GET /api/admin/topup-orders/evidence/{id}`: JWT Admin only and evidence must be attached to a manual order. Missing or inaccessible evidence: 404. Responses use `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.
+- Admin role checks use authenticated JWT role authorization; caller-supplied admin headers do not grant access to these routes. Row versions reject stale updates to orders and credit accounts; conflicts return 409 for admin writes.
+- Deferred: file retention/cleanup jobs and external object storage. Evidence is optional; no new order lifecycle state is introduced.
 
 - `GET /api/admin/topup-orders`
 - `POST /api/admin/topup-orders/{id}/approve`
@@ -702,6 +719,7 @@ CreditTransaction.Type:
 - TopupApproved
 - CreditUsed
 - InitialGrant
+- ManualGrant (approved direct admin credit grant follow-up, 2026-10-08)
 
 Phase 8 rule:
 
@@ -748,3 +766,7 @@ These headers are not the final authentication contract.
 ## Change Rule
 
 Any API contract change must update both `docs/ai` and `docs/vi`.
+
+## Current UI follow-up clarification
+
+Account profile/security are rendered in a topbar popup; underlying profile/password/Google identity endpoints are unchanged. `GET /api/topup-orders` still returns `{ items }` without server pagination; user history displays 10 rows per client page. Admin `GET /api/admin/credit-operations/manual-grants` uses server pagination. Earlier Phase 8 proposed DTO/review wording is historical; implemented contracts in `Contracts/Phase2Dtos.cs`, `Contracts/Phase8Dtos.cs`, `Contracts/AuthDtos.cs` and their controllers are authoritative. No extra approval is inferred for other providers or future fields. See `UI_CREDIT_FOLLOWUP_SYNC.md`.

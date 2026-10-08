@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
-import { ArrowRight, CheckCircle2, Copy, CreditCard, Eye, FileImage, Upload } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, CheckCircle2, ChevronDown, Copy, CreditCard, Eye, FileImage, History, RefreshCw, Wallet } from "lucide-react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { DropdownSelect } from "@/components/dropdown-select";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, PageHeader, Textarea } from "@/components/ui";
+import { PaginationControls } from "@/components/pagination-controls";
+import { TopupOrderDetailDialog } from "./_components/topup-order-detail";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, KeyValueRow, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, apiFetchBlob, type CreatePayosTopupOrderResponse, type CreditPackage, type DashboardSummary, type TopupOrder, type UploadTopupEvidenceResponse } from "@/lib/api";
 import { displayPaymentMethod } from "@/lib/labels";
@@ -33,7 +32,7 @@ function createTopupOrderColumns(onOpenDetail: (orderId: string) => void): Array
     key: "detail",
     header: "Chi tiết",
     render: (order) => (
-      <Button className="min-h-9 px-3" type="button" variant="secondary" onClick={() => onOpenDetail(order.id)}>
+      <Button className="min-h-9 px-3" type="button" variant="secondary" aria-label="Xem chi tiết yêu cầu" onClick={() => onOpenDetail(order.id)}>
         <Eye size={15} />
       </Button>
     ),
@@ -44,6 +43,10 @@ function createTopupOrderColumns(onOpenDetail: (orderId: string) => void): Array
 
 export default function TopUpPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
+  const [historyPage, setHistoryPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [evidenceError, setEvidenceError] = useState(false);
   const [orders, setOrders] = useState<TopupOrder[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [packageId, setPackageId] = useState("");
@@ -53,6 +56,8 @@ export default function TopUpPage() {
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [selectedEvidenceUrl, setSelectedEvidenceUrl] = useState<string | null>(null);
   const [isUploadingEvidence, setIsUploadingEvidence] = useState(false);
+  const [isSubmittingManual, setIsSubmittingManual] = useState(false);
+  const submittingManualRef = useRef(false);
   const [isCreatingPayos, setIsCreatingPayos] = useState(false);
 
   const selectedPackage = useMemo(() => packages.find((item) => item.id === packageId), [packageId, packages]);
@@ -63,16 +68,25 @@ export default function TopUpPage() {
     [orders]
   );
 
+  const totalPages = Math.ceil(orders.length / 10);
+  const currentPage = Math.min(historyPage, Math.max(1, totalPages));
+  const pagedOrders = orders.slice((currentPage - 1) * 10, currentPage * 10);
+
   async function loadData() {
-    const [packageData, orderData, summaryData] = await Promise.all([
-      apiFetch<CreditPackage[]>("/api/packages"),
-      apiFetch<{ items: TopupOrder[] }>("/api/topup-orders"),
-      apiFetch<DashboardSummary>("/api/dashboard/summary")
-    ]);
-    setPackages(packageData.filter((item) => item.isActive));
-    setOrders(orderData.items);
-    setSummary(summaryData);
-    setPackageId((current) => current || packageData[0]?.id || "");
+    setIsLoading(true); setLoadError(false);
+    try {
+      const [packageData, orderData, summaryData] = await Promise.all([
+        apiFetch<CreditPackage[]>("/api/packages"),
+        apiFetch<{ items: TopupOrder[] }>("/api/topup-orders"),
+        apiFetch<DashboardSummary>("/api/dashboard/summary")
+      ]);
+      const activePackages = packageData.filter((item) => item.isActive);
+      setPackages(activePackages);
+      setOrders([...orderData.items].sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id)));
+      setSummary(summaryData);
+      setPackageId((current) => activePackages.some(item => item.id === current) ? current : activePackages[0]?.id || "");
+    } catch (error) { setLoadError(true); throw error; }
+    finally { setIsLoading(false); }
   }
 
   useEffect(() => {
@@ -80,23 +94,30 @@ export default function TopUpPage() {
   }, []);
 
   useEffect(() => {
+    setEvidenceError(false);
     if (!selectedOrder?.evidenceFileId) {
       setSelectedEvidenceUrl(null);
       return;
     }
 
     let objectUrl: string | null = null;
+    let cancelled = false;
+    setSelectedEvidenceUrl(null);
     apiFetchBlob(`/api/topup-orders/evidence/${selectedOrder.evidenceFileId}`)
       .then((blob) => {
+        if (cancelled) return;
         objectUrl = URL.createObjectURL(blob);
         setSelectedEvidenceUrl(objectUrl);
       })
       .catch((error) => {
+        if (cancelled) return;
         setSelectedEvidenceUrl(null);
+        setEvidenceError(true);
         showError(error, "Không tải được ảnh minh chứng.");
       });
 
     return () => {
+      cancelled = true;
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
@@ -105,6 +126,10 @@ export default function TopUpPage() {
 
   async function uploadEvidence(file: File | null) {
     if (!file) {
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024 || !["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+      toast.error("Chọn ảnh PNG, JPEG hoặc WebP, tối đa 5 MB.");
       return;
     }
 
@@ -130,19 +155,23 @@ export default function TopUpPage() {
 
   async function submitOrder(event: React.FormEvent) {
     event.preventDefault();
+    if (submittingManualRef.current || isUploadingEvidence) return;
+    submittingManualRef.current = true;
+    setIsSubmittingManual(true);
     try {
       await apiFetch<TopupOrder>("/api/topup-orders", {
         method: "POST",
-        json: { packageId, paymentNote, fileId: evidenceFileId || null }
+        json: { packageId, paymentMethod: "Manual", paymentNote, fileId: evidenceFileId || null }
       });
       setPaymentNote("");
       setEvidenceFileId("");
       setEvidenceName("");
       toast.success("Đã tạo yêu cầu nạp credit. Quản trị viên sẽ đối soát và xử lý.");
+      setHistoryPage(1);
       await loadData();
     } catch (error) {
       showError(error, "Không tạo được yêu cầu đối soát thủ công.");
-    }
+    } finally { submittingManualRef.current = false; setIsSubmittingManual(false); }
   }
 
   async function createPayosLink() {
@@ -164,165 +193,73 @@ export default function TopUpPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        eyebrow="Tài khoản / Nạp credit"
-        title="Nạp credit bằng PayOS"
-        description="Chọn gói credit, tạo liên kết thanh toán và chờ hệ thống xác minh PayOS."
-        actions={
-        <div className="rounded-md border border-border/70 bg-surface/75 px-3 py-2 text-sm shadow-sm backdrop-blur">
-          <span className="text-muted-foreground">Số dư: </span>
-          <span className="font-semibold">{summary ? `${summary.currentCreditBalance} credit` : "-"}</span>
-        </div>
-        }
-      />
-
-      <Alert>Credit chỉ được cộng sau khi hệ thống xác minh thanh toán thành công. Giao diện không tự cộng credit.</Alert>
-
-      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-        {["Chọn gói", "Tạo liên kết PayOS", "Thanh toán", "Chờ xác minh"].map((step, index) => (
-          <div className="glass-panel flex items-center gap-3 rounded-lg p-3 text-sm" key={step}>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{index + 1}</span>
-            <span>{step}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="space-y-4">
+      <PageHeader eyebrow="Tài khoản / Nạp credit" title="Nạp credit" description="Chọn gói phù hợp, thanh toán và theo dõi yêu cầu nạp của bạn."
+        actions={<div className="flex items-center gap-3 rounded-xl border border-primary-border bg-primary-soft px-4 py-3"><Wallet size={20} className="text-primary" /><div><p className="text-xs text-muted-foreground">Số dư hiện tại</p><p className="font-bold text-primary">{summary ? `${summary.currentCreditBalance} credit` : "—"}</p></div></div>} />
+      {loadError && <Alert><p>Không tải được dữ liệu nạp credit.</p><Button type="button" variant="secondary" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}>Thử lại</Button></Alert>}
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="min-w-0 space-y-5">
           <Card>
-          <CardHeader>
-            <CardTitle>Chọn gói credit</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid gap-3 md:grid-cols-3">
-                {packages.map((item) => (
-                  <button
-                    className={`rounded-lg border p-4 text-left shadow-sm backdrop-blur transition hover:border-primary ${packageId === item.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border/70 bg-surface/65"}`}
-                    key={item.id}
-                    onClick={() => setPackageId(item.id)}
-                    type="button"
-                  >
-                    <p className="text-sm text-muted-foreground">{item.name}</p>
-                    <p className="mt-3 text-2xl font-semibold">{item.credits} credit</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{formatCurrency(item.price)}</p>
-                    {packageId === item.id && <span className="mt-3 inline-flex rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground">Đang chọn</span>}
-                  </button>
-                ))}
-              </div>
-              {packages.length === 0 && (
-                <DropdownSelect
-                  value={packageId}
-                  onChange={setPackageId}
-                  options={packages.map((item) => ({
-                    value: item.id,
-                    label: `${item.name} - ${item.credits} credit - ${formatCurrency(item.price)}`
-                  }))}
-                />
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-          <details className="glass-panel rounded-lg">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-semibold">
-              <span>Yêu cầu đối soát thủ công</span>
-              <span className="text-xs font-medium text-muted-foreground">Dùng khi PayOS chưa cập nhật</span>
-            </summary>
-            <div className="border-t border-border/70 p-5">
-              {pendingManualOrder && (
-                <Alert className="mb-4 border-warning-border bg-warning-surface text-warning">
-                  Bạn đang có một yêu cầu đối soát thủ công đang chờ xử lý. Mã yêu cầu: <RequestCode id={pendingManualOrder.id} />.
-                </Alert>
-              )}
-              <form className="space-y-4" onSubmit={submitOrder}>
-                <label className="block text-sm font-medium">
-                  Ảnh minh chứng <span className="text-muted-foreground">(không bắt buộc)</span>
-                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
-                    <Input
-                      accept="image/gif,image/jpeg,image/png,image/webp"
-                      disabled={isUploadingEvidence || Boolean(pendingManualOrder)}
-                      type="file"
-                      onChange={(event) => uploadEvidence(event.target.files?.[0] ?? null)}
-                    />
-                    <span className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border/70 bg-surface/65 px-3 text-sm text-muted-foreground">
-                      {isUploadingEvidence ? <Upload size={15} /> : <FileImage size={15} />}
-                      {isUploadingEvidence ? "Đang tải..." : evidenceName || "Chưa chọn ảnh"}
-                    </span>
-                  </div>
-                </label>
-                <label className="block text-sm font-medium">
-                  Ghi chú chuyển khoản <span className="text-destructive">*</span>
-                  <Textarea className="mt-2" disabled={Boolean(pendingManualOrder)} placeholder="Nhập nội dung chuyển khoản, ngân hàng hoặc thông tin để quản trị viên đối soát." value={paymentNote} onChange={(event) => setPaymentNote(event.target.value)} />
-                </label>
-                <Button className="w-full sm:w-auto" disabled={!packageId || !paymentNote.trim() || Boolean(pendingManualOrder)} type="submit">Gửi yêu cầu đối soát</Button>
-              </form>
-            </div>
-          </details>
-        </div>
-
-        <div className="space-y-4">
-          <Card className="lg:sticky lg:top-24">
-          <CardHeader>
-            <CardTitle>Thanh toán PayOS</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <Metric label="Gói sản phẩm" value={selectedPackage?.name ?? "-"} />
-            <Metric label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "-"} />
-            <Metric label="Tổng số tiền" value={selectedPackage ? formatCurrency(selectedPackage.price) : "-"} />
-            <p className="rounded-md border border-info-border bg-info-surface px-3 py-2 text-xs leading-5 text-info">
-              Đây là luồng chính. Sau khi tạo liên kết, hoàn tất thanh toán trên PayOS và chờ xác minh trước khi credit được cộng.
-            </p>
-              <Button className="w-full shadow-md" disabled={!packageId || isCreatingPayos} type="button" onClick={createPayosLink}>
-              <CreditCard size={16} />
-              <span className="ml-2">{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>
-              {!isCreatingPayos && <ArrowRight className="ml-2" size={16} />}
-            </Button>
-          </CardContent>
-        </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Lưu ý xác minh</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <CheckItem text="Không cộng tiền trực tiếp từ trang return PayOS." />
-              <CheckItem text="Hệ thống xác minh webhook trước khi ghi sổ giao dịch credit." />
-              <CheckItem text="Nếu thanh toán chưa cập nhật, vui lòng kiểm tra lại giao dịch." />
+            <CardHeader><CardTitle>Chọn gói credit</CardTitle><p className="mt-1 text-sm text-muted-foreground">Giá và số credit được xác định theo gói bạn chọn.</p></CardHeader>
+            <CardContent>
+              {isLoading ? <p className="py-4 text-sm text-muted-foreground">Đang tải các gói credit...</p> : packages.length === 0 ? <p className="py-4 text-sm text-muted-foreground">Hiện chưa có gói credit khả dụng.</p> : <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
+                {packages.map(item => <button type="button" key={item.id} aria-pressed={packageId === item.id} disabled={isCreatingPayos || isSubmittingManual} onClick={() => setPackageId(item.id)}
+                  className={`relative flex min-w-0 flex-col rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 ${packageId === item.id ? "border-primary bg-primary-soft ring-1 ring-primary" : "border-border-strong bg-surface hover:border-primary-border hover:bg-surface-subtle"}`}>
+                  <div className="flex items-start justify-between gap-2"><p className="break-words text-sm font-semibold">{item.name}</p><CheckCircle2 size={18} aria-hidden="true" className={`shrink-0 ${packageId === item.id ? "text-primary" : "text-border-strong"}`} /></div>
+                  <p className="mt-4 text-2xl font-extrabold tracking-tight text-primary">{item.credits} <span className="text-sm font-semibold">credit</span></p>
+                  <p className="mt-3 border-t border-border/70 pt-3 text-base font-bold">{formatCurrency(item.price)}</p>
+                </button>)}
+              </div>}
             </CardContent>
           </Card>
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Lịch sử yêu cầu nạp</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BaseTable
-            items={orders}
-            columns={topupOrderColumns}
-            getRowKey={(order) => order.id}
-            emptyTitle="Chưa có yêu cầu nạp"
-            emptyDetail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán."
-            mobileFooter={(order) => (
-              <div className="space-y-2 border-t border-border/70 pt-3">
-                <span className="block text-xs text-muted-foreground">Mã yêu cầu: <RequestCode id={order.id} /></span>
-                {order.evidenceFileId && <span className="block text-xs text-primary">Có ảnh minh chứng đã tải lên</span>}
-                <button className="inline-flex min-h-10 w-full items-center justify-center rounded-md border border-border/70 bg-surface/75 px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface" type="button" onClick={() => setSelectedOrderId(order.id)}>
-                  Xem chi tiết
-                </button>
+          <Card>
+            <details className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
+                <div><h2 className="text-[17px] font-bold leading-6">Yêu cầu đối soát thủ công</h2><p className="mt-1 text-sm font-normal text-muted-foreground">Gửi thông tin nếu thanh toán của bạn chưa được cập nhật.</p></div>
+                <ChevronDown size={18} className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="border-t border-border p-5">
+                {pendingManualOrder && <Alert className="mb-4 border-warning-border bg-warning-surface text-warning">Bạn đang có một yêu cầu đối soát thủ công đang chờ xử lý. Mã yêu cầu: <RequestCode id={pendingManualOrder.id} />.</Alert>}
+                <form className="space-y-4" onSubmit={submitOrder}>
+                  <p className="text-sm text-muted-foreground">Gói đang chọn: <span className="font-semibold text-foreground">{selectedPackage?.name ?? "Chưa chọn gói"}</span></p>
+                  <label className="block text-sm font-semibold">Ảnh minh chứng <span className="font-normal text-muted-foreground">(không bắt buộc)</span>
+                    <div className="mt-2 rounded-xl border border-dashed border-border-strong bg-surface-subtle p-3">
+                      <Input accept="image/jpeg,image/png,image/webp" disabled={isSubmittingManual || isUploadingEvidence || Boolean(pendingManualOrder)} type="file" onChange={event => uploadEvidence(event.target.files?.[0] ?? null)} />
+                      <p className="mt-2 flex items-start gap-2 break-all text-xs font-normal text-muted-foreground"><FileImage size={14} className="shrink-0" />{isUploadingEvidence ? "Đang tải..." : evidenceName || "PNG, JPEG hoặc WebP · tối đa 5 MB"}</p>
+                    </div>
+                  </label>
+                  <label className="block text-sm font-semibold">Ghi chú chuyển khoản <span className="text-destructive">*</span>
+                    <Textarea className="mt-2" rows={3} maxLength={1000} disabled={isSubmittingManual || Boolean(pendingManualOrder)} placeholder="Nhập nội dung chuyển khoản, ngân hàng hoặc thông tin để quản trị viên đối soát." value={paymentNote} onChange={event => setPaymentNote(event.target.value)} />
+                  </label>
+                  <Button className="w-full sm:w-auto" disabled={isLoading || isSubmittingManual || isUploadingEvidence || !selectedPackage || !paymentNote.trim() || Boolean(pendingManualOrder)} type="submit">{isSubmittingManual ? "Đang gửi..." : "Gửi yêu cầu đối soát"}</Button>
+                </form>
               </div>
-            )}
-          />
+            </details>
+          </Card>
+        </div>
+        <Card className="min-w-0 xl:sticky xl:top-28">
+          <CardHeader><CardTitle className="flex items-center gap-2"><CreditCard size={18} className="text-primary" />Thanh toán PayOS</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2 text-sm"><KeyValueRow label="Gói credit" value={selectedPackage?.name ?? "Chưa chọn"} /><KeyValueRow label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "—"} /></div>
+            <div className="rounded-xl border border-primary-border bg-primary-soft p-4"><p className="text-xs text-muted-foreground">Tổng thanh toán</p><p className="mt-1 text-2xl font-extrabold text-primary">{selectedPackage ? formatCurrency(selectedPackage.price) : "—"}</p></div>
+            <Button className="w-full" disabled={isLoading || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
+            <p className="text-xs leading-5 text-muted-foreground">Bạn sẽ được chuyển sang PayOS để thanh toán. Credit được cộng sau khi giao dịch được xác minh thành công.</p>
+            <ol className="space-y-3 border-t border-border pt-4 text-sm">
+              {["Chọn gói credit", "Hoàn tất thanh toán trên PayOS", "Theo dõi trạng thái trong lịch sử"].map((step, index) => <li key={step} className="flex items-center gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{index + 1}</span><span>{step}</span></li>)}
+            </ol>
+          </CardContent>
+        </Card>
+      </div>
+      <Card className="min-w-0">
+        <CardHeader className="flex flex-wrap items-center justify-between gap-3"><div><CardTitle className="flex items-center gap-2"><History size={18} className="text-primary" />Lịch sử yêu cầu nạp</CardTitle><p className="mt-1 text-sm text-muted-foreground">Theo dõi thanh toán và kết quả đối soát của bạn.</p></div><Button type="button" variant="secondary" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}><RefreshCw size={16} />Làm mới</Button></CardHeader>
+        <CardContent>
+          {isLoading ? <p className="py-5 text-sm text-muted-foreground">Đang tải lịch sử nạp...</p> : loadError ? <p className="py-5 text-sm text-muted-foreground">Chưa tải được lịch sử. Bấm “Làm mới” để thử lại.</p> : <>
+            <BaseTable items={pagedOrders} columns={topupOrderColumns} getRowKey={order => order.id} emptyTitle="Chưa có yêu cầu nạp" emptyDetail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán."
+              mobileFooter={order => <Button className="w-full" type="button" variant="secondary" onClick={() => setSelectedOrderId(order.id)}>Xem chi tiết</Button>} />
+            <PaginationControls page={currentPage} totalPages={totalPages} totalItems={orders.length} onPrevious={() => setHistoryPage(Math.max(1, currentPage - 1))} onNext={() => setHistoryPage(Math.min(totalPages, currentPage + 1))} />
+          </>}
         </CardContent>
       </Card>
-
-      <TopupOrderDetailDialog
-        evidenceUrl={selectedEvidenceUrl}
-        order={selectedOrder}
-        onClose={() => setSelectedOrderId("")}
-      />
+      <TopupOrderDetailDialog order={selectedOrder} evidenceUrl={selectedEvidenceUrl} evidenceError={evidenceError} onClose={() => setSelectedOrderId("")} />
     </div>
   );
 }
@@ -338,106 +275,9 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-surface/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-border-strong bg-surface-subtle text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-border/70 bg-surface/55 p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1 font-medium">{value}</p>
-    </div>
-  );
-}
-
-function CheckItem({ text }: { text: string }) {
-  return (
-    <div className="flex items-start gap-2">
-      <CheckCircle2 className="mt-0.5 text-success" size={15} />
-      <span>{text}</span>
-    </div>
-  );
-}
-
-function TopupOrderDetailDialog({
-  evidenceUrl,
-  order,
-  onClose
-}: {
-  evidenceUrl: string | null;
-  order: TopupOrder | null;
-  onClose: () => void;
-}) {
-  if (!order) {
-    return null;
-  }
-
-  return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>Chi tiết yêu cầu nạp</DialogTitle>
-          <DialogDescription>Theo dõi trạng thái thanh toán, xác minh và cộng credit.</DialogDescription>
-        </DialogHeader>
-        <DialogBody className="space-y-5">
-          <Alert>Credit được cộng sau khi thanh toán được xác minh hoặc yêu cầu được quản trị viên xử lý.</Alert>
-          <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
-              <div className="border-b border-border/70 px-4 py-3">
-                <h3 className="font-semibold">Thông tin yêu cầu</h3>
-              </div>
-              <div className="space-y-4 p-4 text-sm">
-                <Detail label="Mã yêu cầu" value={<RequestCode id={order.id} />} />
-                <Detail label="Gói credit" value={order.packageName || "-"} />
-                <Detail label="Số credit" value={`${order.credits} credit`} />
-                <Detail label="Số tiền" value={formatCurrency(order.amount)} />
-                <div>
-                  <p className="text-muted-foreground">Trạng thái</p>
-                  <div className="mt-1"><StatusBadge status={order.status} /></div>
-                </div>
-              </div>
-            </section>
-
-            <section className="rounded-lg border border-border/70 bg-surface/45 backdrop-blur">
-              <div className="border-b border-border/70 px-4 py-3">
-                <h3 className="font-semibold">Tiến trình xử lý</h3>
-              </div>
-              <div className="space-y-4 p-4 text-sm">
-                <Detail label="Cách ghi nhận thanh toán" value={displayPaymentMethod(order.paymentMethod)} />
-                <Detail label="Ghi chú thanh toán" value={order.paymentNote || "-"} />
-                <Detail label="Ảnh minh chứng" value={order.evidenceFileId ? "Đã tải ảnh" : "Không có"} />
-                <Detail label="Tạo lúc" value={formatDate(order.createdAt)} />
-                <Detail label="Đã thanh toán lúc" value={formatDate(order.paidAt)} />
-                <Detail label="Được duyệt lúc" value={formatDate(order.approvedAt)} />
-              </div>
-            </section>
-          </div>
-          {evidenceUrl && (
-            <section className="rounded-lg border border-border/70 bg-surface/45 p-4 backdrop-blur">
-              <h3 className="font-semibold">Ảnh minh chứng</h3>
-              <div className="relative mt-3 h-[480px] w-full overflow-hidden rounded-md bg-surface/55">
-                <Image unoptimized fill className="object-contain" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 100vw, 896px" />
-              </div>
-            </section>
-          )}
-        </DialogBody>
-        <DialogFooter>
-          <Button className="w-full sm:w-auto" type="button" variant="secondary" onClick={onClose}>Đóng</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function Detail({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div>
-      <p className="text-muted-foreground">{label}</p>
-      <p className="mt-1 break-words font-medium">{value}</p>
-    </div>
   );
 }

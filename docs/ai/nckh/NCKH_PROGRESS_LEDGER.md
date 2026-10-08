@@ -24,7 +24,7 @@ Active NCKH follow-up: **none**.
 | Phase 1 DbContext | `src/FormAutoHub.Api/Data/FormAutoHubDbContext.cs` | Implemented for `ResearchForms` |
 | Phase 1 API | `src/FormAutoHub.Api/Controllers/Nckh/ResearchFormsController.cs` | Implemented |
 | Phase 1 service | `src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs` | Implemented |
-| Phase 1 DTOs | `src/FormAutoHub.Api/Contracts/NckhDtos.cs` | Implemented |
+| Phase 1 DTOs | `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Implemented |
 | Phase 1 frontend | `apps/web/app/dashboard/nckh/page.tsx`, `apps/web/app/dashboard/nckh/callback/page.tsx` | Implemented |
 | Phase 1 tests | `tests/FormAutoHub.Tests/NckhPhase1OAuthAndFormsTests.cs`, `apps/web/tests/nckh.spec.ts` | Test files exist |
 | Phase 2 entities | `src/FormAutoHub.Api/Entities/Nckh/ResearchModel.cs`, `ResearchVariable.cs`, `ObservedQuestionMapping.cs` | Implemented |
@@ -50,7 +50,7 @@ Active NCKH follow-up: **none**.
 | Phase 5 tests | `tests/FormAutoHub.Tests/NckhPhase5DataServiceTests.cs` | Tests pass in latest validation |
 | Phase 5 closeout | `docs/ai/nckh/NCKH_PHASE_5_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_5_CLOSEOUT.md` | Completed with local runtime validation; live Google response-read smoke blocked |
 | Phase 6 planning | `docs/ai/nckh/NCKH_PHASE_6_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_6_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_6_SINGLE_APPROVAL_PACKET.md` | Approved baseline used for implementation |
-| Phase 6 API/service | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhDtos.cs` | Implemented |
+| Phase 6 API/service | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Implemented |
 | Phase 6 tests | `tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs` | Tests pass in latest validation |
 | Phase 6 closeout | `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_6_CLOSEOUT.md` | Completed with local runtime validation |
 | Phase 7 planning | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Prepared; implementation requires explicit approval |
@@ -256,3 +256,7 @@ Latest NCKH Phase 9 closeout evidence:
 
 - Any API contracts, database fields, lifecycle states, or Google scopes outside the accepted Phase 6 packet and completed Phase 6 implementation until reviewed and approved.
 - Production-readiness claims until current validation is run.
+
+## Approved frontend follow-up (2026-10-08)
+
+Shared shells/account popups, confirmation/motion and workspace style were aligned with the main app. Recognized Google authorization 401 responses preserve the core session; other 401s retain JWT recovery. No NCKH endpoint, entity or lifecycle was added. See `../UI_CREDIT_FOLLOWUP_SYNC.md` and `NCKH_API_CONTRACT_GUIDE.md` for validation and the existing model-delete confirmation gap.

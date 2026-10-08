@@ -3,6 +3,7 @@
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { controlStyles } from "./ui-styles";
 
 export type DropdownOption = {
   value: string;
@@ -58,11 +59,7 @@ export function DropdownSelect({
       <button
         aria-controls={id}
         aria-expanded={open}
-        className={cn(
-          "flex min-h-10 w-full items-center justify-between gap-3 rounded-md border border-border/80 bg-surface/85 px-3 py-2 text-left text-sm outline-none transition",
-          "hover:border-primary/70 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15",
-          disabled && "cursor-not-allowed opacity-50"
-        )}
+        className={controlStyles({ className: "flex items-center justify-between gap-3 text-left hover:border-primary/70" })}
         disabled={disabled}
         onClick={() => setOpen((current) => !current)}
         type="button"
@@ -73,7 +70,7 @@ export function DropdownSelect({
 
       {open && (
         <div
-          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-md border border-border/80 bg-surface/95 p-1 text-sm shadow-lg backdrop-blur"
+          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-xl border border-border bg-surface p-1 text-sm shadow-soft"
           id={id}
           role="listbox"
         >
@@ -83,7 +80,7 @@ export function DropdownSelect({
               <button
                 aria-selected={active}
                 className={cn(
-                  "flex w-full items-center justify-between gap-3 rounded-sm px-3 py-2 text-left transition",
+                  "flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left transition",
                   active ? "bg-primary-soft font-medium text-primary" : "text-foreground hover:bg-muted",
                   option.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
                 )}

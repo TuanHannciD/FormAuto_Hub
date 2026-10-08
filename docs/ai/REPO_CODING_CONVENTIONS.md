@@ -6,7 +6,7 @@ Define coding conventions for future implementation.
 
 ## Current Status
 
-Initial Phase 1 backend scaffold exists. These conventions apply to all future implementation work.
+The API, tests and Next.js app are implemented. These conventions apply to existing source and future approved implementation work.
 
 ## General Rules
 

@@ -178,7 +178,7 @@ Phase 2 account and credit UI should prioritize:
 - usage log and credit transaction tables
 - profile and password forms
 
-Payment gateway UI remains Deferred.
+Historical Phase 2 boundary: payment gateway UI was Deferred then. Phase 8 PayOS UI and the explicitly approved manual-credit follow-up are now implemented; other payment providers remain Deferred.
 
 Package management UI, admin user management UI, and manual credit adjustment UI remain Deferred unless explicitly approved.
 
@@ -212,3 +212,15 @@ Any frontend UI baseline change must update both:
 
 - `docs/ai/FRONTEND_STYLE_GUIDE.md`
 - `docs/vi/FRONTEND_STYLE_GUIDE.md`
+
+## Current shared UI implementation (2026-10-08)
+
+- `ui-styles.ts`: panel (`rounded-2xl`, opaque surface), controls/buttons (`rounded-xl`) and semantic colors. Dashboard workflow panels must not reintroduce glass/translucent surfaces; the shell topbar keeps intentional blur. Public landing/SEO pages retain their distinct marketing layouts.
+- `shell-layout.tsx`: dashboard/admin navigation and topbar; standalone brand panel above the scrollable sidebar.
+- `account-menu.tsx`, `account-dialog.tsx`, profile/security panels: one topbar entry and shared popup. Standalone `/dashboard/profile` and `/dashboard/profile/security` routes were removed.
+- `dialog.tsx`, `confirm-dialog.tsx`: shared modal/focus/dismissal and confirmation. `TransitionRegion`: resize first for growth and shrink, then replace content. Popup opening grows an empty frame before reveal; closing hides content before shrinking. Clip overflow during motion, allow native scrolling afterward; reduced-motion and interrupted transitions supported. No fade/stagger/custom scrollbar mechanism is required.
+- `metric-card.tsx`, `BaseTable`, `PaginationControls`, `KeyValueRow`, `Alert`: reuse across dashboard/admin. Manual-grant history uses API pagination, 10 rows per UI page. Top-up history uses client pagination, 10 rows per page; its existing API still returns all orders. Do not treat client pagination as server pagination.
+- User top-up list/direct-link detail share `topup-order-detail.tsx`; compact two-column desktop layout and scrolling body with fixed header/footer on mobile.
+- Form automation, NCKH workspace, PayOS result pages and minor history/AI panels were aligned with shared styles; workflow anchors, preview/confirmation and contracts stay unchanged.
+
+See `UI_CREDIT_FOLLOWUP_SYNC.md` for evidence and remaining gaps.

@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { DropdownSelect } from "@/components/dropdown-select";
 import { PaginationControls } from "@/components/pagination-controls";
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
+import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
 import { apiFetch, type CreditTransaction, type CreditTransactionPageResponse } from "@/lib/api";
 import { displayCreditTransactionType } from "@/lib/labels";
 import { formatDate } from "@/lib/utils";
@@ -15,7 +15,8 @@ const typeOptions = [
   { value: "", label: "Tất cả loại" },
   { value: "TopupApproved", label: "Nạp credit đã duyệt" },
   { value: "CreditUsed", label: "Credit đã sử dụng" },
-  { value: "InitialGrant", label: "Credit khởi tạo" }
+  { value: "InitialGrant", label: "Credit khởi tạo" },
+  { value: "ManualGrant", label: "Cộng credit thủ công" }
 ];
 
 const transactionColumns: Array<BaseTableColumn<CreditTransaction>> = [
@@ -142,9 +143,7 @@ export default function CreditTransactionsPage() {
           ) : (
             <>
               {error && (
-                <div className="rounded-md border border-warning-border bg-warning-surface px-3 py-2 text-sm text-warning">
-                  {error}
-                </div>
+                <Alert className="border-warning-border bg-warning-surface text-warning">{error}</Alert>
               )}
               <BaseTable
                 items={transactions}

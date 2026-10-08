@@ -2,36 +2,36 @@
 
 ## TOC
 
-- [Purpose](#purpose) (36)
-- [Contract Status](#contract-status) (40)
-- [Confirmed Conceptual Entities](#confirmed-conceptual-entities) (44)
-- [Proposed MVP Fields](#proposed-mvp-fields) (69)
-  - [Users](#users) (71)
-  - [UserCreditAccounts](#usercreditaccounts) (82)
-  - [CreditPackages](#creditpackages) (91)
-  - [TopupOrders](#topuporders) (108)
-  - [CreditTransactions](#credittransactions) (129)
-  - [PaymentRecords](#paymentrecords) (146)
-  - [PaymentProviderSettings](#paymentprovidersettings) (176)
-  - [AiProviderSettings](#aiprovidersettings) (205)
-  - [AiPromptProfiles](#aipromptprofiles) (237)
-  - [AiQuestionPrompts](#aiquestionprompts) (259)
-  - [RefreshTokens](#refreshtokens) (280)
-  - [UserExternalLogins](#userexternallogins) (291)
-  - [UsageLogs](#usagelogs) (305)
-  - [FormProjects](#formprojects) (317)
-  - [FormQuestions](#formquestions) (328)
-  - [AnswerRules](#answerrules) (339)
-  - [GeneratedResponses](#generatedresponses) (348)
-  - [SubmissionJobs](#submissionjobs) (359)
-  - [SubmissionLogs](#submissionlogs) (372)
-  - [AuditLogs](#auditlogs) (382)
-  - [AiGenerationRuns](#aigenerationruns) (392)
-  - [AiGenerationRunItems](#aigenerationrunitems) (428)
-- [Deferred Fields And Decisions](#deferred-fields-and-decisions) (450)
-- [Forbidden Invented Fields](#forbidden-invented-fields) (469)
-- [Ledger Discipline](#ledger-discipline) (481)
-- [Form Automation MVP Scope](#form-automation-mvp-scope) (489)
+- [Purpose](#purpose) — line 36
+- [Contract Status](#contract-status) — line 40
+- [Confirmed Conceptual Entities](#confirmed-conceptual-entities) — line 44
+- [Proposed MVP Fields](#proposed-mvp-fields) — line 69
+  - [Users](#users) — line 71
+  - [UserCreditAccounts](#usercreditaccounts) — line 82
+  - [CreditPackages](#creditpackages) — line 91
+  - [TopupOrders](#topuporders) — line 108
+  - [CreditTransactions](#credittransactions) — line 133
+  - [PaymentRecords](#paymentrecords) — line 150
+  - [PaymentProviderSettings](#paymentprovidersettings) — line 180
+  - [AiProviderSettings](#aiprovidersettings) — line 209
+  - [AiPromptProfiles](#aipromptprofiles) — line 241
+  - [AiQuestionPrompts](#aiquestionprompts) — line 263
+  - [RefreshTokens](#refreshtokens) — line 284
+  - [UserExternalLogins](#userexternallogins) — line 295
+  - [UsageLogs](#usagelogs) — line 309
+  - [FormProjects](#formprojects) — line 321
+  - [FormQuestions](#formquestions) — line 332
+  - [AnswerRules](#answerrules) — line 343
+  - [GeneratedResponses](#generatedresponses) — line 352
+  - [SubmissionJobs](#submissionjobs) — line 363
+  - [SubmissionLogs](#submissionlogs) — line 376
+  - [AuditLogs](#auditlogs) — line 386
+  - [AiGenerationRuns](#aigenerationruns) — line 396
+  - [AiGenerationRunItems](#aigenerationrunitems) — line 432
+- [Deferred Fields And Decisions](#deferred-fields-and-decisions) — line 454
+- [Forbidden Invented Fields](#forbidden-invented-fields) — line 473
+- [Ledger Discipline](#ledger-discipline) — line 485
+- [Form Automation MVP Scope](#form-automation-mvp-scope) — line 493
 
 ## Purpose
 
@@ -106,6 +106,10 @@ Approved admin package management follow-up:
 - Do not add package colors, marketing labels, discount fields, or subscription fields without separate approval.
 
 ### TopupOrders
+
+Approved manual-credit flow follow-up (2026-10-08): nullable `EvidenceFileId` references `TopupEvidence`, with restricted deletion. `RowVersion` on `TopupOrders` and `UserCreditAccounts` is a SQL Server concurrency token. No existing lifecycle fields or statuses are replaced.
+
+`TopupEvidence` maps to `TopupOrderEvidenceFiles`, reusing the older local schema. Stores `Id`, owning `UserId`, nullable `TopupOrderId`, sanitized `FileName` mapped to `OriginalFileName` (200 characters), detected `ContentType` (50 characters), `Length`, private binary `Content` (upload limit 5 MB), and `CreatedAt`; indexed by `UserId`. Evidence is optional. API metadata/read projections exclude binary content. The migration creates missing storage/links on clean databases and adopts existing storage/links without deleting old evidence. Rollback removes row versions but retains evidence storage and order links to avoid destroying older data.
 
 - Id
 - UserId

@@ -8,4 +8,5 @@ public sealed class UserCreditAccount
     public decimal TotalDeposited { get; set; }
     public decimal TotalUsed { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
+    public byte[] RowVersion { get; set; } = [];
 }

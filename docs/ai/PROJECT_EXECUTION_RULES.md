@@ -79,3 +79,7 @@ To minimize unnecessary token usage when reading documentation:
 3. Do not re-read a file already loaded in the same session.
 4. Priority order: rules/contracts -> architecture overviews -> implementation details.
 5. When a file has a TOC with line ranges, use the TOC to jump to the needed section instead of loading the entire file.
+
+## Approved post-closeout follow-up record
+
+The user-approved UI/shared-popup/NCKH-auth/manual-credit work is an implementation/fix follow-up, not a new global phase. See `UI_CREDIT_FOLLOWUP_SYNC.md` for implemented scope, validation and open gaps. Historical phase approvals remain unchanged.

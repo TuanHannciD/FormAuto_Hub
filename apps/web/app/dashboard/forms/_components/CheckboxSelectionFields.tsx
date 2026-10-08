@@ -14,7 +14,7 @@ export function CheckboxSelectionFields({
   const maxAllowed = Math.min(maxOptionCount, MAX_RULE_VALUES);
 
   return (
-    <div className="mt-3 grid gap-3 border-t border-border/70 pt-3 sm:grid-cols-2">
+    <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
       <label className="block text-sm font-medium">
         Số lựa chọn tối thiểu
         <Input

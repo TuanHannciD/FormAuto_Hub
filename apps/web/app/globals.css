@@ -135,20 +135,6 @@ main.app-aura-bg > :not(header) {
   background: radial-gradient(circle at center, rgb(var(--accent) / 0.22), transparent 43%);
 }
 
-.glass-panel {
-  border: 1px solid rgb(var(--border) / 0.92);
-  background: rgb(var(--surface) / 0.9);
-  box-shadow: 0 14px 36px rgb(var(--shadow-color) / 0.055);
-  backdrop-filter: blur(20px);
-}
-
-.glass-sidebar {
-  border-color: rgb(var(--border) / 0.86);
-  background: rgb(var(--surface) / 0.86);
-  box-shadow: 12px 0 30px rgb(var(--shadow-color) / 0.035);
-  backdrop-filter: blur(24px);
-}
-
 .aura-divider {
   background: linear-gradient(90deg, rgb(var(--primary) / 0.68), rgb(var(--accent) / 0.3), transparent);
 }

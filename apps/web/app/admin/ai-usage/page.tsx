@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader, Button, Input, Select } from "@/components/ui";
 import { PaginationControls } from "@/components/pagination-controls";
+import { MetricCard } from "@/components/metric-card";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
@@ -228,7 +229,7 @@ export default function AdminAiUsagePage() {
         <PageHeader title="Thống kê AI" description="Đang tải..." />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Card key={i}><CardContent className="h-24 animate-pulse bg-muted/30 rounded-lg" /></Card>
+            <Card key={i}><CardContent className="h-24 animate-pulse rounded-2xl bg-muted/30" /></Card>
           ))}
         </div>
       </div>
@@ -255,16 +256,17 @@ export default function AdminAiUsagePage() {
       />
 
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-border/70">
+      <div className="inline-flex flex-wrap gap-2 rounded-2xl border border-border bg-surface p-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
+            aria-pressed={activeTab === tab.id}
             className={
               activeTab === tab.id
-                ? "whitespace-nowrap border-b-2 border-primary pb-3 text-sm font-semibold text-primary transition-colors"
-                : "whitespace-nowrap border-b-2 border-transparent pb-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                ? "rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors"
+                : "rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
             }
           >
             {tab.label}
@@ -275,11 +277,11 @@ export default function AdminAiUsagePage() {
       {activeTab === "overview" && (
         <>
           {/* Metric cards */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
-            <MetricCard title="Tỉ lệ thành công" value={successRate} tone="green" />
-            <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="violet" />
-            <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="blue" />
+            <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
+            <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
+            <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
             <MetricCard title="Người dùng" value={String(stats.totalUsers)} tone="neutral" />
           </div>
 
@@ -300,7 +302,7 @@ export default function AdminAiUsagePage() {
           </div>
 
           {/* Provider performance */}
-          <Card>
+          <Card className="min-w-0">
             <CardHeader><CardTitle>Hiệu suất provider</CardTitle></CardHeader>
             <CardContent>
               <BaseTable columns={perfColumns} items={stats.providerPerformance} getRowKey={(p) => p.provider + p.model} emptyTitle="Chưa có provider" emptyDetail="Không có dữ liệu provider." />
@@ -308,7 +310,7 @@ export default function AdminAiUsagePage() {
           </Card>
 
           {/* Top users */}
-          <Card>
+          <Card className="min-w-0">
             <CardHeader><CardTitle>Người dùng nhiều nhất</CardTitle></CardHeader>
             <CardContent>
               <BaseTable columns={topUserColumns} items={stats.topUsers} getRowKey={(u) => u.userId} emptyTitle="Chưa có người dùng" emptyDetail="Không có dữ liệu người dùng." />
@@ -317,7 +319,7 @@ export default function AdminAiUsagePage() {
 
           {/* Daily usage bar chart */}
           {stats.usageByDay.length > 0 && (
-            <Card>
+            <Card className="min-w-0">
               <CardHeader><CardTitle>Sử dụng theo ngày (30 ngày qua)</CardTitle></CardHeader>
               <CardContent>
                 <div className="flex items-end gap-1 overflow-x-auto pb-2">
@@ -342,7 +344,7 @@ export default function AdminAiUsagePage() {
       )}
 
       {activeTab === "history" && (
-        <Card>
+        <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Lịch sử AI generation</CardTitle>
           </CardHeader>
@@ -450,20 +452,5 @@ export default function AdminAiUsagePage() {
         </Card>
       )}
     </div>
-  );
-}
-
-// ── Metric card ──
-
-function MetricCard({ title, value, tone = "neutral" }: { title: string; value: string; tone?: string }) {
-  const borderColors: Record<string, string> = { neutral: "border-border/70", green: "border-success-border", violet: "border-primary-border", blue: "border-info-border" };
-  const textColors: Record<string, string> = { neutral: "text-foreground", green: "text-success", violet: "text-primary", blue: "text-info" };
-  return (
-    <Card className={borderColors[tone] ?? borderColors.neutral}>
-      <CardContent className="pt-6">
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <p className={`mt-1 text-2xl font-bold ${textColors[tone] ?? textColors.neutral}`}>{value}</p>
-      </CardContent>
-    </Card>
   );
 }

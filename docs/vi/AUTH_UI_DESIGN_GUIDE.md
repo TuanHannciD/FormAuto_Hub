@@ -174,3 +174,7 @@ Trước khi implement các màn này:
 3. Đọc `docs/vi/API_CONTRACT_GUIDE.md` và docs backend contract liên quan theo task.
 4. Xác nhận auth behavior nào đã được duyệt để implement.
 5. Giữ Google OAuth, password recovery email, và session architecture là Deferred trừ khi task duyệt rõ.
+
+## Follow-up UI tài khoản hiện tại
+
+Hồ sơ và bảo mật dùng chung pop-up tài khoản trên topbar của dashboard/admin. Đã bỏ hai route hồ sơ cũ. Giữ nguyên contract hồ sơ/mật khẩu/danh tính Google; lỗi cấp quyền Google NCKH độc lập với session JWT core hết hạn. Email khôi phục mật khẩu vẫn Deferred. Xem `UI_CREDIT_FOLLOWUP_SYNC.md`.

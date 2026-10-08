@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
+import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
@@ -50,7 +51,7 @@ export default function AdminDashboardPage() {
         </Button>
         }
       />
-      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <Metric icon={CircleDollarSign} label="Tổng doanh thu" tone="blue" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={CreditCard} label="Credit đã bán" tone="emerald" value={summary ? `${summary.creditSold} cr` : "-"} />
         <Metric icon={CreditCard} label="Credit đã dùng" tone="violet" value={summary ? `${summary.creditUsed} cr` : "-"} />
@@ -59,8 +60,8 @@ export default function AdminDashboardPage() {
         <Metric icon={AlertTriangle} label="Thất bại" tone="red" value={summary ? String(summary.failedPayments) : "-"} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1.5fr_0.9fr]">
-        <Card>
+      <div className="grid items-start gap-4 xl:grid-cols-[1.5fr_0.9fr]">
+        <Card className="min-w-0">
           <CardHeader className="flex flex-row items-center justify-between gap-3">
             <CardTitle>Thanh toán gần đây</CardTitle>
             <Link className="inline-flex items-center gap-1 text-sm font-medium text-primary" href="/admin/payments">
@@ -84,8 +85,8 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
-          <Card className="border-warning-border bg-warning-surface/70">
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0 border-warning-border bg-warning-surface/70">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-warning">
                 <AlertTriangle size={18} />
@@ -94,14 +95,14 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-warning">
               <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
-              <div className="rounded-md border border-warning-border bg-surface/75 p-3 backdrop-blur">
+              <div className="rounded-xl border border-warning-border bg-surface-subtle p-3">
                 <p className="text-xs font-medium uppercase text-warning">Cần theo dõi</p>
                 <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Đối soát nhanh</CardTitle>
             </CardHeader>
@@ -135,32 +136,12 @@ function Metric({
   value: string;
   tone: "blue" | "emerald" | "violet" | "amber" | "red";
 }) {
-  const toneClass = {
-    blue: "bg-info-surface text-info",
-    emerald: "bg-success-surface text-success",
-    violet: "bg-primary-soft text-primary",
-    amber: "bg-warning-surface text-warning",
-    red: "bg-destructive-surface text-destructive"
-  }[tone];
-
-  return (
-    <Card>
-      <CardContent className="space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <span className={`rounded-md p-1.5 ${toneClass}`}>
-            <Icon size={15} />
-          </span>
-        </div>
-        <p className="text-[24px] font-extrabold leading-tight text-foreground">{value}</p>
-      </CardContent>
-    </Card>
-  );
+  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={({ blue: "info", emerald: "success", violet: "primary", amber: "warning", red: "danger" } as const)[tone]} />;
 }
 
 function Detail({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "danger" }) {
   return (
-    <div className={tone === "danger" ? "rounded-md border border-destructive-border bg-destructive-surface/85 p-3" : "rounded-md border border-border/70 bg-surface/55 p-3"}>
+    <div className={tone === "danger" ? "rounded-xl border border-destructive-border bg-destructive-surface p-3" : "rounded-xl border border-border bg-surface-subtle p-3"}>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="mt-1 font-medium">{value}</p>
     </div>

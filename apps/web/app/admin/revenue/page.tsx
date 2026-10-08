@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { AlertTriangle, BarChart3, CircleDollarSign, Download, RefreshCw, TrendingUp } from "lucide-react";
+import { MetricCard } from "@/components/metric-card";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, PageHeader, Select } from "@/components/ui";
 import { apiFetch, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
@@ -41,20 +42,20 @@ export default function RevenueReportPage() {
         </>
         }
       />
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Metric icon={CircleDollarSign} label="Tiền đến đã thanh toán" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={TrendingUp} label="Tổng credit đã cấp" value={summary ? `${summary.creditSold} cr` : "-"} />
         <Metric icon={BarChart3} label="Số giao dịch thành công" value={summary ? String(summary.successfulTopupOrders) : "-"} />
         <Metric icon={AlertTriangle} label="Giao dịch cần đối soát" tone="danger" value={summary ? String(summary.failedPayments) : "-"} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1.4fr_0.8fr]">
-        <Card>
+      <div className="grid items-start gap-4 xl:grid-cols-[1.4fr_0.8fr]">
+        <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Doanh thu theo ngày</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-72 items-center justify-center rounded-md border border-dashed border-border/80 bg-surface/45 p-5 text-center backdrop-blur">
+            <div className="flex h-72 items-center justify-center rounded-xl border border-dashed border-border bg-surface-subtle p-5 text-center">
               <div>
                 <p className="font-medium">Biểu đồ doanh thu đang cập nhật</p>
                 <p className="mt-2 max-w-sm text-sm text-muted-foreground">Dữ liệu tổng hợp hiện được hiển thị ở các chỉ số phía trên.</p>
@@ -63,8 +64,8 @@ export default function RevenueReportPage() {
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
-          <Card>
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Xu hướng doanh thu</CardTitle>
             </CardHeader>
@@ -73,7 +74,7 @@ export default function RevenueReportPage() {
               <p className="mt-2 text-sm text-muted-foreground">Xu hướng sẽ hiển thị khi có dữ liệu theo kỳ.</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Tỷ lệ xác minh thành công</CardTitle>
             </CardHeader>
@@ -100,20 +101,7 @@ function Metric({
   value: string;
   tone?: "default" | "danger";
 }) {
-  return (
-    <Card>
-      <CardContent>
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <span className={tone === "danger" ? "rounded-md bg-destructive-surface p-1.5 text-destructive" : "rounded-md bg-primary/10 p-1.5 text-primary"}>
-            <Icon size={15} />
-          </span>
-        </div>
-        <div className="metric-accent mt-4 h-1 w-10 rounded-full" />
-        <p className="mt-3 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
-      </CardContent>
-    </Card>
-  );
+  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={tone === "danger" ? "danger" : "primary"} />;
 }
 
 function successRate(summary: AdminRevenueSummary) {

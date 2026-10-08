@@ -79,3 +79,7 @@ Mọi luồng submit phải có:
 3. Không đọc lại file đã đọc trong cùng phiên.
 4. Thứ tự ưu tiên: rules/contracts -> overview kiến trúc -> chi tiết implementation.
 5. Khi file có TOC kèm dòng, dùng TOC để nhảy đến section cần thay vì đọc toàn bộ file.
+
+## Ghi nhận follow-up sau closeout đã duyệt
+
+Các task UI/pop-up dùng chung/NCKH auth/credit thủ công được user duyệt là follow-up implementation/fix, không phải global phase mới. Xem `UI_CREDIT_FOLLOWUP_SYNC.md` về phạm vi, validation và khoảng thiếu. Giữ nguyên các approval phase lịch sử.

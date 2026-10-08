@@ -3,13 +3,15 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLink, FileUp, Link2, Loader2, Search } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { PaginationControls } from "@/components/pagination-controls";
 import { apiFetch, type NckhFormItem, type NckhFormListResponse, type NckhImportFormResponse } from "@/lib/api";
 import { toast } from "sonner";
 import { readableError } from "@/lib/toast";
+import { SessionExpiredError } from "@/lib/auth";
+import { NckhGoogleAuthorizationError } from "@/lib/nckh-google-auth";
 
 // ── Google OAuth URL Builder ──────────────────────────────────────
 
@@ -60,6 +62,7 @@ function NckhContent() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [googleLinked, setGoogleLinked] = useState<boolean | null>(null);
+  const [loadError, setLoadError] = useState("");
   const [formUrl, setFormUrl] = useState("");
   const [isImporting, setIsImporting] = useState(false);
   const [isLinking, setIsLinking] = useState(false);
@@ -95,6 +98,7 @@ function NckhContent() {
 
   const loadForms = useCallback(async (pageNum: number) => {
     setIsLoading(true);
+    setLoadError("");
     try {
       const data = await apiFetch<NckhFormListResponse>(`/api/v1/nckh/forms?page=${pageNum}&pageSize=20`);
       setForms(data.items);
@@ -103,13 +107,13 @@ function NckhContent() {
       setPage(data.page);
       setGoogleLinked(true);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "";
-      // 401 Unauthorized hoặc lỗi khi gọi endpoint forms sau đăng nhập thường nghĩa là chưa liên kết Google hoặc token đã hết hạn.
-      setGoogleLinked(false);
-      setForms([]);
-      // Chỉ hiện toast cho lỗi không thuộc xác thực để tránh nhiễu khi tải lần đầu.
-      if (msg && !msg.includes("401") && !msg.toLowerCase().includes("not linked") && !msg.toLowerCase().includes("unauthorized")) {
-        toast.error(readableNckhError(msg, "Không tải được danh sách form."));
+      if (error instanceof NckhGoogleAuthorizationError) {
+        setGoogleLinked(false);
+        setForms([]);
+        setTotalItems(0);
+        setTotalPages(0);
+      } else if (!(error instanceof SessionExpiredError)) {
+        setLoadError(readableNckhError(error, "Không tải được danh sách form. Vui lòng thử lại."));
       }
     } finally {
       setIsLoading(false);
@@ -166,12 +170,11 @@ function NckhContent() {
       setFormUrl("");
       loadForms(page);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "";
-      if (msg.includes("401") || msg.toLowerCase().includes("not linked")) {
+      if (error instanceof NckhGoogleAuthorizationError) {
         toast.error("Bạn cần liên kết Google trước khi nhập form.");
         setGoogleLinked(false);
-      } else {
-        toast.error(readableNckhError(msg, "Không nhập được form."));
+      } else if (!(error instanceof SessionExpiredError)) {
+        toast.error(readableNckhError(error, "Không nhập được form."));
       }
     } finally {
       isImportingRef.current = false;
@@ -183,12 +186,7 @@ function NckhContent() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold">NCKH — Nghiên cứu Khoa học</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Quản lý Google Forms khảo sát cho nghiên cứu khoa học.
-        </p>
-      </div>
+      <PageHeader title="NCKH — Nghiên cứu Khoa học" description="Quản lý Google Forms khảo sát cho nghiên cứu khoa học." />
 
       {/* Google Link Status */}
       <Card>
@@ -199,7 +197,12 @@ function NckhContent() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {googleLinked === null ? (
+          {loadError ? (
+            <div role="alert" className="space-y-3">
+              <p className="text-sm text-destructive">{loadError}</p>
+              <Button variant="secondary" onClick={() => loadForms(page)} disabled={isLoading}>Thử lại</Button>
+            </div>
+          ) : googleLinked === null ? (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="animate-spin" size={14} />
               Đang kiểm tra trạng thái liên kết...

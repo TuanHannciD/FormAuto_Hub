@@ -28,7 +28,7 @@ Define canonical module ownership for FormAuto Hub.
 | SubmissionLogs | per-response submission result | credit refund policy unless approved |
 | AuditLogs | admin/security-sensitive audit records | normal usage log replacement |
 | Integrations.GoogleForms | Google Forms analysis/submission integration boundary | account/credit business logic |
-| Integrations.Payment | Deferred payment provider boundary | MVP manual approval implementation |
+| Integrations.Payment | Phase 8 PayOS payment provider boundary; other providers Deferred | MVP manual approval implementation |
 | Integrations.AI | Phase 6 AI provider boundary, provider calls, provider response parsing | credit deduction, submission execution |
 | AiProviderSettings | admin AI provider configuration | normal-user prompt behavior |
 | AiPromptProfiles | project-level AI prompt configuration | generated preview persistence |
@@ -62,3 +62,7 @@ Supported MVP answer-generation modes:
 - sample text lines for text answers
 - sequential date ranges for date questions
 - sequential time ranges for time questions
+
+## Approved UI and manual-credit follow-up
+
+Shared UI owns presentation only. `AdminCreditOperationsService` owns admin user search/manual-grant orchestration/history; `CreditService` owns credit writes. History reads existing ledger/audit rows. See `UI_CREDIT_FOLLOWUP_SYNC.md`.

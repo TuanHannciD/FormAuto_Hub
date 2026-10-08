@@ -2,15 +2,15 @@
 
 ## Purpose
 
-Define source placement and naming rules before implementation exists.
+Define source placement and naming rules for the implemented repository.
 
 ## Repository State
 
-Production source structure is not approved yet. These rules guide future scaffolding only.
+The API is implemented under `src/FormAutoHub.Api`, backend tests under `tests/FormAutoHub.Tests`, and Next.js dashboard under `apps/web`. These rules apply to existing source and future approved changes.
 
 ## Expected Backend Placement
 
-When backend code is approved, use a clear ASP.NET Core Web API structure such as:
+Current backend placement:
 
 ```text
 src/
@@ -26,7 +26,7 @@ tests/
   FormAutoHub.Tests/
 ```
 
-This is a proposed structure, not an immutable contract.
+Extend the current structure within approved scope; do not redesign it implicitly.
 
 ## Naming Rules
 

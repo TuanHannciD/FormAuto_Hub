@@ -178,7 +178,7 @@ UI account và credit trong Phase 2 nên ưu tiên:
 - usage log và credit transaction tables
 - forms profile và đổi mật khẩu
 
-Payment gateway UI vẫn là Deferred.
+Boundary lịch sử Phase 2: UI payment gateway khi đó Deferred. UI PayOS Phase 8 và follow-up credit thủ công được duyệt rõ đã triển khai; provider khác vẫn Deferred.
 
 Package management UI, admin user management UI, và manual credit adjustment UI vẫn là Deferred trừ khi được duyệt rõ.
 
@@ -212,3 +212,15 @@ Mọi thay đổi frontend UI baseline phải cập nhật cả:
 
 - `docs/ai/FRONTEND_STYLE_GUIDE.md`
 - `docs/vi/FRONTEND_STYLE_GUIDE.md`
+
+## UI dùng chung hiện tại (2026-10-08)
+
+- `ui-styles.ts`: panel (`rounded-2xl`, nền đặc), control/nút (`rounded-xl`) và màu ngữ nghĩa. Panel nghiệp vụ dashboard không dùng lại nền kính/trong suốt; topbar giữ hiệu ứng mờ có chủ đích. Landing/SEO giữ bố cục marketing riêng.
+- `shell-layout.tsx`: navigation/topbar dashboard và admin; logo tách thành panel phía trên vùng sidebar cuộn.
+- `account-menu.tsx`, `account-dialog.tsx`, panel hồ sơ/bảo mật: một mục trên topbar và pop-up chung. Đã bỏ route `/dashboard/profile` và `/dashboard/profile/security` riêng.
+- `dialog.tsx`, `confirm-dialog.tsx`: modal/focus/đóng và xác nhận chung. `TransitionRegion`: đổi kích thước trước khi thay nội dung, cả tăng lẫn giảm. Mở pop-up: giãn khung trống rồi hiện nội dung; đóng: ẩn nội dung rồi thu khung. Chặn overflow khi chuyển động, cho cuộn native sau đó; hỗ trợ reduced-motion và ngắt chuyển tiếp. Không yêu cầu fade/stagger/thanh cuộn tự viết.
+- `metric-card.tsx`, `BaseTable`, `PaginationControls`, `KeyValueRow`, `Alert`: tái sử dụng cho dashboard/admin. Lịch sử cộng thủ công phân trang tại API, UI 10 dòng/trang. Lịch sử nạp phân trang tại client, 10 dòng/trang; API hiện vẫn trả toàn bộ đơn. Không xem phân trang client là phân trang server.
+- Danh sách/đường dẫn chi tiết nạp dùng chung `topup-order-detail.tsx`; desktop hai cột gọn, mobile cuộn nội dung với tiêu đề/nút cố định.
+- Tự động hóa, workspace NCKH, kết quả PayOS và các hộp lịch sử/AI đã đồng bộ style; giữ nguyên phần neo, preview/xác nhận và contract.
+
+Xem `UI_CREDIT_FOLLOWUP_SYNC.md` về bằng chứng và khoảng thiếu còn lại.

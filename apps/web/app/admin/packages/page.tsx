@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { Boxes, CheckCircle2, Pencil, Plus, Search, XCircle } from "lucide-react";
+import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import {
   Alert,
@@ -13,6 +14,7 @@ import {
   CardTitle,
   Dialog,
   DialogBody,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -144,7 +146,7 @@ export default function AdminPackagesPage() {
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
         <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={String(packages.filter((item) => item.isActive).length)} />
         <Stat icon={XCircle} label="Đang tắt" tone="warning" value={String(packages.filter((item) => !item.isActive).length)} />
@@ -152,7 +154,7 @@ export default function AdminPackagesPage() {
       </div>
 
       <div className="grid gap-4">
-        <Card>
+        <Card className="min-w-0">
           <CardHeader className="space-y-4">
             <CardTitle>Danh sách gói credit</CardTitle>
             <div className="grid gap-3 md:grid-cols-[1fr_220px]">
@@ -187,7 +189,7 @@ export default function AdminPackagesPage() {
               emptyTitle="Chưa có gói phù hợp"
               emptyDetail="Tạo gói credit đầu tiên hoặc đổi bộ lọc hiện tại."
               mobileFooter={(item) => (
-                <div className="border-t border-border/70 pt-3">
+                <div className="border-t border-border pt-3">
                   <Button className="w-full" type="button" variant="secondary" onClick={() => editPackage(item)}>
                     <Pencil size={14} />
                     <span className="ml-2">Sửa</span>
@@ -199,7 +201,7 @@ export default function AdminPackagesPage() {
         </Card>
       </div>
 
-      <Dialog open={isFormOpen} className="lg:pl-64" onOpenChange={(open) => !open && closeFormDialog()}>
+      <Dialog open={isFormOpen} className="max-w-xl" onOpenChange={(open) => !open && closeFormDialog()}>
         <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingId ? "Sửa gói credit" : "Tạo gói credit"}</DialogTitle>
@@ -219,7 +221,7 @@ export default function AdminPackagesPage() {
                 Giá VND
                 <Input className="mt-2" min={1} step={1} type="number" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: Number(event.target.value) }))} />
               </label>
-              <label className="flex items-center justify-between rounded-md border border-border/70 bg-surface/55 p-3 text-sm font-medium">
+              <label className="flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3 text-sm font-medium">
                 <span>Bật gói cho người dùng</span>
                 <input checked={form.isActive} onChange={(event) => setForm((current) => ({ ...current, isActive: event.target.checked }))} type="checkbox" />
               </label>
@@ -228,7 +230,7 @@ export default function AdminPackagesPage() {
               </Alert>
             </DialogBody>
             <DialogFooter>
-              <Button type="button" variant="secondary" onClick={closeFormDialog}>Hủy</Button>
+              <DialogClose>Hủy</DialogClose>
               <Button disabled={isSaving} type="submit">{isSaving ? "Đang lưu..." : "Lưu gói"}</Button>
             </DialogFooter>
           </form>
@@ -257,24 +259,5 @@ function Stat({
   value: string;
   tone?: "default" | "success" | "warning";
 }) {
-  const toneClass = {
-    default: "bg-primary/10 text-primary",
-    success: "bg-success-surface text-success",
-    warning: "bg-warning-surface text-warning"
-  }[tone];
-
-  return (
-    <Card>
-      <CardContent className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <div className="metric-accent mt-3 h-1 w-10 rounded-full" />
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
-        </div>
-        <span className={`rounded-md p-2 ${toneClass}`}>
-          <Icon size={18} />
-        </span>
-      </CardContent>
-    </Card>
-  );
+  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={({ default: "primary", success: "success", warning: "warning" } as const)[tone]} />;
 }

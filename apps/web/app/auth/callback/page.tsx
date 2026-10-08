@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { buttonStyles } from "@/components/ui-styles";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Loader2, CircleAlert } from "lucide-react";
@@ -87,7 +88,7 @@ function AuthCallbackContent() {
         ) : (
           <p role="status" className="rounded-xl bg-info-surface p-5 text-sm leading-6 text-info">Vui lòng quay lại đăng nhập để xác thực tài khoản Google.</p>
         )}
-        <Link className="flex min-h-[54px] w-full items-center justify-center rounded-xl border border-border-strong bg-surface px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" href="/login">Quay lại đăng nhập</Link>
+        <Link className={buttonStyles({ variant: "secondary", size: "lg", className: "w-full text-primary hover:bg-primary-soft" })} href="/login">Quay lại đăng nhập</Link>
       </div>
     </AuthShell>
   );

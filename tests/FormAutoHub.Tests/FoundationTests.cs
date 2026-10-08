@@ -44,6 +44,7 @@ public sealed class FoundationTests
                 "SubmissionJob",
                 "SubmissionLog",
                 "SurveyResponse",
+                "TopupEvidence",
                 "TopupOrder",
                 "UsageLog",
                 "User",

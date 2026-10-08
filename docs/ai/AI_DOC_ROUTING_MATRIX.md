@@ -58,10 +58,10 @@ Some docs files exceed the 400-line threshold. Before reading them in full, scan
 
 | File | Approx. Lines |
 |---|---|
-| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
-| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~150 |
-| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~200 |
-| `API_CONTRACT_GUIDE.md` | ~450 |
+| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~720 |
+| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~676 |
+| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~323 |
+| `API_CONTRACT_GUIDE.md` | ~772 |
 
 Line counts are approximate and may drift over time. When opening a file not listed here but appearing large, apply the same TOC-first approach.
 
@@ -74,3 +74,7 @@ Before loading any docs file, apply these rules to avoid unnecessary token usage
 3. Do not re-read a file already loaded in the same session.
 4. Priority: rules/contracts → architecture overviews → implementation details.
 5. Use TOC line ranges to jump to sections instead of loading entire large files.
+
+## Current UI/credit follow-up routing
+
+For shared UI, account popup/motion, NCKH frontend auth handling or manual-credit follow-up: read `UI_CREDIT_FOLLOWUP_SYNC.md`, then `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md`, and the NCKH contract/architecture files when affected.

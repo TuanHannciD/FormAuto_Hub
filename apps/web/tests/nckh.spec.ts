@@ -66,7 +66,7 @@ async function mockRefreshSuccess(page: Page) {
 
 async function mockNotLinked(page: Page) {
   await mockRefreshSuccess(page);
-  await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google not linked" }, 401);
+  await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google account not linked." }, 401);
 }
 
 async function mockLinked(page: Page, forms = MOCK_FORMS_LIST) {
@@ -329,6 +329,48 @@ test.describe("NCKH — Google Not Linked", () => {
 
 // ── TESTS: Google Linked — Import & List ──────────────────────────
 
+test("Google authorization failure retains session without attempting JWT refresh", async ({ page }) => {
+  await loginAsUser(page);
+  await mockNotLinked(page);
+  let refreshes = 0;
+  await page.route("**/api/auth/refresh", async route => {
+    refreshes++;
+    await route.fulfill({ status: 401 });
+  });
+  await page.goto("/dashboard/nckh");
+  await expect(page.getByRole("button", { name: /Liên kết Google/ })).toBeVisible();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.auth.session") ?? "null")?.accessToken)).toBe(MOCK_SESSION.accessToken);
+  expect(refreshes).toBe(0);
+  await expect(page).toHaveURL(/\/dashboard\/nckh$/);
+});
+
+test("forms server failure offers retry without claiming Google is unlinked", async ({ page }) => {
+  await loginAsUser(page);
+  await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Service unavailable" }, 503);
+  await page.goto("/dashboard/nckh");
+  const loadAlert = page.getByRole("alert").filter({ hasText: "Không tải được danh sách form" });
+  await expect(loadAlert).toBeVisible();
+  await expect(page.getByRole("button", { name: /Liên kết Google/ })).toHaveCount(0);
+  await mockLinked(page, MOCK_EMPTY_LIST);
+  await page.getByRole("button", { name: "Thử lại", exact: true }).click();
+  await expect(page.getByText("Đã liên kết Google — có thể nhập form.")).toBeVisible();
+  await expect(loadAlert).toHaveCount(0);
+});
+
+test("genuine NCKH JWT failure still clears invalid session and redirects to login", async ({ page }) => {
+  await loginAsUser(page);
+  await page.route("**/api/v1/nckh/forms?*", route => route.fulfill({ status: 401 }));
+  let refreshes = 0;
+  await page.route("**/api/auth/refresh", async route => {
+    refreshes++;
+    await route.fulfill({ status: 401 });
+  });
+  await page.goto("/dashboard/nckh");
+  await expect(page).toHaveURL(/\/login/);
+  expect(await page.evaluate(() => localStorage.getItem("formauto.auth.session"))).toBeNull();
+  expect(refreshes).toBe(1);
+});
+
 test.describe("NCKH — Google Linked", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
@@ -389,7 +431,7 @@ test.describe("NCKH — Import Form", () => {
   });
 
   test("import fails with 401 shows error and resets link status", async ({ page }) => {
-    await mockApi(page, "POST", "/forms/import", { title: "Unauthorized", detail: "Google account not linked or token expired." }, 401);
+    await mockApi(page, "POST", "/forms/import", { title: "Unauthorized", detail: "Google account not linked or token expired. Please re-link your Google account." }, 401);
 
     await page.goto("/dashboard/nckh");
     await expect(page.getByRole("button", { name: /Nhập form/ })).toBeVisible({ timeout: 10000 });
@@ -491,7 +533,7 @@ test.describe("NCKH — Callback Page", () => {
     await loginAsUser(page);
     await mockRefreshSuccess(page);
     await mockApi(page, "POST", "/auth/google-link", { title: "Invalid Request", detail: "Failed to exchange authorization code." }, 400);
-    await mockApi(page, "GET", "/forms?page=1&pageSize=20", MOCK_EMPTY_LIST, 401);
+    await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google account not linked." }, 401);
 
     await page.goto("/dashboard/nckh/callback?code=bad-code");
     // Callback page shows error message for 4s then redirects
@@ -505,7 +547,7 @@ test.describe("NCKH — Callback Page", () => {
     await loginAsUser(page);
     await mockRefreshSuccess(page);
     await mockApi(page, "POST", "/auth/google-link", { title: "Conflict", detail: "Already linked." }, 409);
-    await mockApi(page, "GET", "/forms?page=1&pageSize=20", MOCK_EMPTY_LIST, 401);
+    await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google account not linked." }, 401);
 
     await page.goto("/dashboard/nckh/callback?code=dup-code");
     // Should show error about already linked
@@ -568,11 +610,38 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(page.getByText("Biến nghiên cứu").last()).toBeVisible();
     await expect(page.getByText("Sự hài lòng").last()).toBeVisible();
     await page.getByRole("button", { name: "Đóng" }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
 
     await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
     await expect(page.getByRole("dialog")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText("Ánh xạ câu hỏi - biến").last()).toBeVisible();
     await expect(page.getByPlaceholder("Mã quan sát")).toBeVisible();
+  });
+
+  test("cancels model and mapping deletion through the shared confirmation without sending DELETE", async ({ page }) => {
+    const deletes: string[] = [];
+    page.on("request", request => { if (request.method() === "DELETE") deletes.push(request.url()); });
+    await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/mappings?page=1&pageSize=100`, {
+      items: [{ id: "confirmation-mapping", variableId: MOCK_VARIABLE.id, modelId: MOCK_MODEL.id, formQuestionId: MOCK_FORM_DETAIL.questions[0].id, observedCode: "SAT1", questionText: "Câu hỏi thử", questionType: "Radio", sortOrder: 1, createdAt: "2026-10-07T00:00:00Z" }], page: 1, pageSize: 100, totalItems: 1, totalPages: 1
+    });
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("row").filter({ hasText: MOCK_MODEL.name }).getByRole("button").last().click();
+    const confirmation = page.getByRole("dialog", { name: "Xác nhận xóa" });
+    await expect(confirmation).toContainText(`Xóa mô hình "${MOCK_MODEL.name}"?`);
+    await confirmation.getByRole("button", { name: "Hủy", exact: true }).click();
+    await expect(confirmation).toHaveCount(0);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
+    await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
+    const parent = page.getByRole("dialog", { name: "Canvas tools" });
+    await parent.getByRole("row").filter({ hasText: "SAT1" }).getByRole("button").last().click();
+    await expect(confirmation).toContainText('Xóa ánh xạ "SAT1"?');
+    await page.keyboard.press("Escape");
+    await expect(confirmation).toHaveCount(0);
+    await expect(parent).toBeVisible();
+    expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+    expect(deletes).toEqual([]);
+    await parent.getByRole("button", { name: "Đóng", exact: true }).click();
+    await expect(parent).toHaveCount(0);
   });
 
   test("normalizes Likert variable payload from the canvas popup", async ({ page }) => {
@@ -735,7 +804,8 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await page.getByRole("button", { name: "Lưu bố cục" }).click();
     await expect.poll(() => {
       const payload = savePositionsPayload as { positions?: Array<{ nodeType: string; variableId?: string | null; relationId?: string | null; positionX?: number; positionY?: number }> } | null;
-      const savedSat = payload?.positions?.find((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id);
+      if (!payload?.positions) return false;
+      const savedSat = payload.positions.find((item) => item.nodeType === "Variable" && item.variableId === MOCK_VARIABLE.id);
       return Boolean(
         savedSat
         && typeof savedSat.positionX === "number"
@@ -798,12 +868,12 @@ test.describe("NCKH — Phase 7 Workspace", () => {
       await route.fulfill({ status: 204, body: "" });
     });
 
-    page.on("dialog", (dialog) => dialog.accept());
     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
     await expect(page.getByRole("button", { name: "Sơ đồ quan hệ" })).toBeVisible({ timeout: 10000 });
     await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
 
     await page.getByRole("button", { name: "Xóa quan hệ H1" }).first().click();
+    await page.getByRole("dialog", { name: "Xác nhận xóa" }).getByRole("button", { name: "Xóa", exact: true }).click();
     await expect(page.getByText("Chưa có quan hệ", { exact: true }).first()).toBeVisible({ timeout: 10000 });
   });
 
@@ -900,7 +970,6 @@ test.describe("NCKH — Phase 7 Workspace", () => {
       await route.fulfill({ status: 204, body: "" });
     });
 
-    page.on("dialog", (dialog) => dialog.accept());
     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
     await expect(page.getByRole("button", { name: "Sơ đồ quan hệ" })).toBeVisible({ timeout: 10000 });
     await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
@@ -908,6 +977,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     const deleteButton = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE.id}"]:visible`).getByRole("button", { name: `Xóa biến ${MOCK_VARIABLE.code}` });
     await expect(deleteButton).toBeVisible({ timeout: 10000 });
     await deleteButton.click();
+    await page.getByRole("dialog", { name: "Xác nhận xóa" }).getByRole("button", { name: "Xóa", exact: true }).click();
     await expect.poll(() => deletedVariableId).toBe(MOCK_VARIABLE.id);
   });
 

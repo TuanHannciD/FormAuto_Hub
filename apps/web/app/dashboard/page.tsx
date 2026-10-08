@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, Coins, CreditCard, History, Loader2, RefreshCw } from "lucide-react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
+import { buttonStyles } from "@/components/ui-styles";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary, type TopupOrder } from "@/lib/api";
 import { getStoredSession } from "@/lib/auth";
@@ -52,13 +53,9 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-[22px]">
-      <header className="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="break-words text-[27px] font-bold leading-tight tracking-tight sm:text-[36px]">Xin chào, {accountName}</h1>
-          <p className="mt-2 text-[13px] leading-6 text-secondary-foreground">Theo dõi credit và hoạt động gần đây của tài khoản.</p>
-        </div>
-        <Link href="/dashboard/forms" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-xs font-bold text-primary-foreground shadow-soft transition hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">Bắt đầu điền form <ArrowRight aria-hidden="true" size={18} /></Link>
-      </header>
+      <PageHeader title={`Xin chào, ${accountName}`} description="Theo dõi credit và hoạt động gần đây của tài khoản." actions={
+        <Link href="/dashboard/forms" className={buttonStyles({ className: "shrink-0" })}>Bắt đầu điền form <ArrowRight aria-hidden="true" size={18} /></Link>
+      } />
 
       {errorMessage && (
         <Alert role="alert" className="flex flex-col gap-3 border-destructive-border bg-destructive-surface text-destructive sm:flex-row sm:items-center sm:justify-between">
@@ -67,7 +64,7 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      <Card className="grid overflow-hidden rounded-2xl bg-surface shadow-none sm:grid-cols-2 xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
+      <Card className="grid overflow-hidden sm:grid-cols-2 xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
         {metrics.map(({ key, title, icon: Icon }, index) => (
           <div key={key} className={`flex min-h-[120px] items-center gap-4 border-border px-6 py-6 ${index < 3 ? "border-b" : ""} ${index % 2 === 0 ? "sm:border-r" : ""} ${index < 2 ? "sm:border-b" : "sm:border-b-0"} ${index < 3 ? "xl:border-b-0 xl:border-r" : ""}`}>
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary"><Icon aria-hidden="true" size={22} /></span>
@@ -77,7 +74,7 @@ export default function DashboardPage() {
       </Card>
 
       <div className="grid items-start gap-[22px] xl:grid-cols-2">
-        <Card className="min-w-0 overflow-hidden rounded-2xl bg-surface shadow-none">
+        <Card className="min-w-0 overflow-hidden">
           <CardHeader className="flex min-h-[86px] items-start justify-between gap-3 px-6 py-5">
             <div><CardTitle className="text-[17px]">Sử dụng gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Các lượt tạo và gửi phản hồi mới nhất.</p></div>
             <Link href="/dashboard/usage-logs" className="shrink-0 text-xs font-semibold text-primary hover:underline">Xem tất cả</Link>
@@ -96,7 +93,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="min-w-0 overflow-hidden rounded-2xl bg-surface shadow-none">
+        <Card className="min-w-0 overflow-hidden">
           <CardHeader className="flex min-h-[86px] items-start justify-between gap-3 px-6 py-5">
             <div><CardTitle className="text-[17px]">Yêu cầu nạp gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Theo dõi số tiền, credit và trạng thái yêu cầu.</p></div>
             <Link href="/dashboard/top-up" className="shrink-0 text-xs font-semibold text-primary hover:underline">Nạp credit</Link>

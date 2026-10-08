@@ -20,14 +20,11 @@ Record approved and Deferred technology choices.
 ## Deferred
 
 - Flutter Web / Flutter Android.
-- Authentication implementation details.
-- JWT claim structure.
-- Google OAuth.
+
 - Official Google Forms API integration.
-- Payment gateway integration.
+
 - Background job framework.
-- AI answer generation.
-- AI mapping.
+
 - Final AI provider and model choice.
 - Email notification provider.
 - Webhook platform.
@@ -97,3 +94,7 @@ API contracts must stay frontend-agnostic even though Next.js is approved.
 ## Upgrade Rule
 
 Do not introduce new frameworks, providers, infrastructure, or libraries as project commitments without updating both `docs/ai` and `docs/vi`.
+
+## Implemented scoped approvals
+
+JWT access/refresh sessions and identity-only Google login/linking are implemented. NCKH OAuth is a separate approved track. Phase 8 PayOS and the scoped Phase 6 OpenAI-compatible adapter are implemented; other payment providers, broader AI rollout, and core official Google Forms API remain Deferred. Dashboard primitives are repository-owned React/Tailwind components following shadcn/ui patterns; do not assume Radix or an installed shadcn component library. See `UI_CREDIT_FOLLOWUP_SYNC.md`.

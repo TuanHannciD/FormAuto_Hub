@@ -348,3 +348,7 @@ Closeout:
 ## Phase Rule
 
 Chưa chọn full global phase tiếp theo sau closeout Phase 9. Phase 6 AI scoped follow-up slice đã hoàn thành. Công việc phase mới hoặc implementation/fix follow-up ngoài slice đã duyệt cần approval rõ.
+
+## Ghi nhận follow-up sau closeout đã duyệt
+
+Các task UI/pop-up dùng chung/NCKH auth/credit thủ công được user duyệt là follow-up implementation/fix, không phải global phase mới. Xem `UI_CREDIT_FOLLOWUP_SYNC.md` về phạm vi, validation và khoảng thiếu. Giữ nguyên các approval phase lịch sử.

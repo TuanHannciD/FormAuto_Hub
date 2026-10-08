@@ -1228,6 +1228,46 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.ToTable("SubmissionLogs");
                 });
 
+            modelBuilder.Entity("FormAutoHub.Api.Entities.TopupEvidence", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("OriginalFileName");
+
+                    b.Property<long>("Length")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("TopupOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TopupOrderEvidenceFiles", (string)null);
+                });
+
             modelBuilder.Entity("FormAutoHub.Api.Entities.TopupOrder", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1247,6 +1287,9 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("EvidenceFileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("PackageId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1261,6 +1304,12 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1269,6 +1318,8 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EvidenceFileId");
 
                     b.ToTable("TopupOrders");
                 });
@@ -1359,6 +1410,12 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<decimal>("Balance")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<decimal>("TotalDeposited")
                         .HasPrecision(18, 2)
@@ -1680,6 +1737,14 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("TopupOrder");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.TopupOrder", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.TopupEvidence", null)
+                        .WithMany()
+                        .HasForeignKey("EvidenceFileId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ModelRelation", b =>

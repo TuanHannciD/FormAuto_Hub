@@ -99,7 +99,7 @@ When adding NCKH entities to `FormAutoHubDbContext.OnModelCreating`, the followi
 - NCKH entities: `FormAutoHub.Api.Entities.Nckh`
 - NCKH services: `FormAutoHub.Api.Services.Nckh`
 - NCKH controllers: `FormAutoHub.Api.Controllers.Nckh` (or route prefix `/api/v1/nckh`)
-- NCKH DTOs: `FormAutoHub.Api.DTOs.Nckh`
+- NCKH DTOs: `FormAutoHub.Api.Contracts`
 - Google integrations: `FormAutoHub.Api.Integrations.Google`
 
 This keeps NCKH code visually separated from FormAuto Hub code and prevents accidental coupling.
@@ -118,9 +118,9 @@ Deferred: Separate `NckhDbContext` — cân nhắc nếu sau này NCKH cần dat
 
 ## Data Integrity Rules
 
-- Hard delete Model: cascade xóa Variables → Mappings → Relations → NodePositions. SurveyResponses và NormalizedDatasets được giữ lại.
+- Current model deletion uses EF cascade, including owned SurveyResponses and NormalizedDatasets. Do not claim retention: `ResearchModelService.DeleteModelAsync` and `FormAutoHubDbContext` define the current behavior.
 - Sửa Variable khi đã có data: `NormalizedDatasets.IsStale = true` — yêu cầu re-normalize.
-- Archived Model: read-only, không cho phép sửa biến/quan hệ, không cho phép collect data.
+- Only `Draft` and `Active` are implemented. `Archived` is not an implemented lifecycle state.
 
 
 

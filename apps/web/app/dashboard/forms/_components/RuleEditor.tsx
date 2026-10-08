@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { panelStyles } from "@/components/ui-styles";
 ﻿import { CheckCircle2, ChevronDown, ChevronUp, FileQuestion, SlidersHorizontal } from "lucide-react";
 import { Badge, Button, Input, Textarea } from "@/components/ui";
 import { DropdownSelect } from "@/components/dropdown-select";
@@ -146,12 +148,12 @@ export function RuleEditor({
 
   return (
     <div
-      className={`relative rounded-lg border bg-surface/72 p-4 shadow-sm backdrop-blur transition ${expanded ? "border-border/70" : "border-primary-border"}`}
+      className={cn(panelStyles, `relative p-4 transition ${expanded ? "border-border" : "border-primary-border"}`)}
       style={{ zIndex: expanded ? Math.max(1, 100 - index) : undefined }}
     >
       <div className="mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-info-surface text-info">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-info-surface text-info">
             <FileQuestion className="h-4 w-4" />
           </div>
           <div className="min-w-0">
@@ -167,10 +169,10 @@ export function RuleEditor({
           <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
           <button
             aria-expanded={expanded}
-            className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition ${
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
               expanded
-                ? "border-border/70 bg-surface/80 text-muted-foreground hover:bg-muted/50"
-                : "border-primary-border bg-primary-soft/85 text-primary hover:bg-primary-soft"
+                ? "border-border bg-surface text-muted-foreground hover:bg-muted/50"
+                : "border-primary-border bg-primary-soft text-primary hover:bg-primary-soft"
             }`}
             type="button"
             onClick={onToggle}
@@ -185,7 +187,7 @@ export function RuleEditor({
         <div className="mt-4">
 
       {!isTextQuestion && question.options.length > 0 && (
-        <div className="mb-4 rounded-md border border-border/70 bg-surface/55 p-3">
+        <div className="mb-4 rounded-xl border border-border bg-surface p-3">
           <p className="mb-2 text-xs font-medium text-muted-foreground">Lựa chọn lấy từ form gốc</p>
           <div className="flex flex-wrap gap-2">
             {question.options.map((option) => {
@@ -193,7 +195,7 @@ export function RuleEditor({
               return (
                 <button
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
-                    active ? "border-primary-border bg-primary-soft text-primary" : "border-border/70 bg-surface/75 text-muted-foreground"
+                    active ? "border-primary-border bg-primary-soft text-primary" : "border-border bg-surface text-muted-foreground"
                   }`}
                   key={option}
                   onClick={() => toggleOption(option)}
@@ -222,7 +224,7 @@ export function RuleEditor({
         </label>
 
         {value.mode === "DateRangeSequential" ? (
-          <div className="rounded-md border border-border/70 bg-surface/55 p-3">
+          <div className="rounded-xl border border-border bg-surface p-3">
             <p className="text-sm font-medium">Khoảng ngày tuần tự</p>
             <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt từ ngày bắt đầu đến ngày kết thúc.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -247,7 +249,7 @@ export function RuleEditor({
             </div>
           </div>
         ) : value.mode === "TimeRangeSequential" ? (
-          <div className="rounded-md border border-border/70 bg-surface/55 p-3">
+          <div className="rounded-xl border border-border bg-surface p-3">
             <p className="text-sm font-medium">Khoảng giờ tuần tự</p>
             <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt theo các mốc giờ trong khoảng đã chọn.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -298,7 +300,7 @@ export function RuleEditor({
             </span>
           </label>
         ) : value.mode === "RandomByPercentage" || value.mode === "RandomByQuantity" ? (
-          <div className="rounded-md border border-border/70 bg-surface/55 p-3">
+          <div className="rounded-xl border border-border bg-surface p-3">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-sm font-medium">
@@ -319,7 +321,7 @@ export function RuleEditor({
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {(question.options.length > 0 ? question.options : selectedOptions).map((option) => (
-                <label className="grid grid-cols-1 gap-2 rounded-md border border-border/70 bg-surface/75 px-3 py-2 text-sm sm:grid-cols-[1fr_120px] sm:items-center sm:gap-3" key={option}>
+                <label className="grid grid-cols-1 gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-sm sm:grid-cols-[1fr_120px] sm:items-center sm:gap-3" key={option}>
                   <span className="min-w-0 break-words font-medium sm:truncate">{option}</span>
                   <div className="relative">
                     <Input
@@ -348,7 +350,7 @@ export function RuleEditor({
             )}
           </div>
         ) : (
-          <div className="rounded-md border border-border/70 bg-surface/55 p-3 text-sm">
+          <div className="rounded-xl border border-border bg-surface p-3 text-sm">
             <p className="font-medium">Cách trả lời sẽ dùng các lựa chọn đang bật.</p>
             <p className="mt-1 text-muted-foreground">
               Với chế độ hiện tại, hệ thống tự tạo cấu hình từ lựa chọn thật của biểu mẫu, không cần nhập JSON thủ công.

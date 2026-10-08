@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import Image from "next/image";
-import { CheckCircle2, Copy, Eye, HandCoins, XCircle } from "lucide-react";
+import { CheckCircle2, Copy, Eye, FileImage, HandCoins, X, XCircle } from "lucide-react";
+import { ManualGrantHistory } from "./_components/manual-grant-history";
+import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { SearchableDropdownSelect } from "@/components/searchable-dropdown-select";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, PageHeader, Textarea } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, KeyValueRow, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, apiFetchBlob, type AdminCreditUserOption, type AdminCreditUserOptionListResponse, type ManualCreditGrantResponse, type TopupOrder } from "@/lib/api";
 import { displayPaymentMethod } from "@/lib/labels";
@@ -20,6 +22,9 @@ export default function AdminManualCreditsPage() {
   const [requests, setRequests] = useState<AdminTopupOrder[]>([]);
   const [selectedRequestId, setSelectedRequestId] = useState("");
   const [selectedEvidenceUrl, setSelectedEvidenceUrl] = useState<string | null>(null);
+  const [evidenceLoading, setEvidenceLoading] = useState(false);
+  const [evidenceError, setEvidenceError] = useState(false);
+  const [historyRefresh, setHistoryRefresh] = useState(0);
   const [rejectReason, setRejectReason] = useState("");
   const [grantEmail, setGrantEmail] = useState("");
   const [grantUserId, setGrantUserId] = useState("");
@@ -28,6 +33,11 @@ export default function AdminManualCreditsPage() {
   const [userOptions, setUserOptions] = useState<AdminCreditUserOption[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isWorking, setIsWorking] = useState(false);
+  const workingRef = useRef(false);
+  const userSearchVersion = useRef(0);
+  const invalidateUserSearch = useCallback(() => { userSearchVersion.current++; }, []);
+  const [requestsError, setRequestsError] = useState("");
+  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
 
   const selectedRequest = useMemo(
     () => requests.find((request) => request.id === selectedRequestId) ?? null,
@@ -47,7 +57,7 @@ export default function AdminManualCreditsPage() {
       key: "detail",
       header: "Chi tiết",
       render: (item) => (
-        <Button className="min-h-9 px-3" type="button" variant="secondary" onClick={() => setSelectedRequestId(item.id)}>
+        <Button className="min-h-9 px-3" type="button" variant="secondary" aria-label="Xem chi tiết yêu cầu" onClick={() => { setRejectReason(""); setSelectedRequestId(item.id); }}>
           <Eye size={15} />
         </Button>
       ),
@@ -56,54 +66,69 @@ export default function AdminManualCreditsPage() {
   ];
 
   async function loadRequests() {
-    const data = await apiFetch<AdminTopupOrder[]>("/api/admin/topup-orders/manual");
-    setRequests(data);
+    setIsLoadingRequests(true);
+    try {
+      const data = await apiFetch<AdminTopupOrder[]>("/api/admin/topup-orders/manual");
+      setRequests(data);
+      setRequestsError("");
+    } catch (error) {
+      setRequestsError("Không tải được danh sách yêu cầu đối soát.");
+      throw error;
+    } finally { setIsLoadingRequests(false); }
   }
 
   async function loadUsers(search: string) {
+    const version = ++userSearchVersion.current;
     const query = search.trim() ? `?search=${encodeURIComponent(search.trim())}` : "";
     setIsLoadingUsers(true);
-    const data = await apiFetch<AdminCreditUserOptionListResponse>(`/api/admin/credit-operations/users${query}`);
-    setUserOptions(data.items);
-    setIsLoadingUsers(false);
+    try {
+      const data = await apiFetch<AdminCreditUserOptionListResponse>(`/api/admin/credit-operations/users${query}`);
+      if (version === userSearchVersion.current) setUserOptions(data.items);
+    } finally {
+      if (version === userSearchVersion.current) setIsLoadingUsers(false);
+    }
   }
 
   useEffect(() => {
     loadRequests().catch((error: Error) => showError(error, "Không tải được danh sách yêu cầu đối soát."));
-    loadUsers("").catch((error: Error) => {
-      setIsLoadingUsers(false);
-      showError(error, "Không tải được danh sách người dùng.");
-    });
   }, []);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       loadUsers(grantEmail).catch((error: Error) => {
-        setIsLoadingUsers(false);
         showError(error, "Không tìm được người dùng theo email.");
       });
     }, 300);
-    return () => window.clearTimeout(timeout);
-  }, [grantEmail]);
+    return () => { window.clearTimeout(timeout); invalidateUserSearch(); };
+  }, [grantEmail, invalidateUserSearch]);
 
   useEffect(() => {
     if (!selectedRequest?.evidenceFileId) {
       setSelectedEvidenceUrl(null);
+      setEvidenceLoading(false); setEvidenceError(false);
       return;
     }
 
     let objectUrl: string | null = null;
+    let cancelled = false;
+    setSelectedEvidenceUrl(null);
+    setEvidenceLoading(true); setEvidenceError(false);
     apiFetchBlob(`/api/admin/topup-orders/evidence/${selectedRequest.evidenceFileId}`)
       .then((blob) => {
+        if (cancelled) return;
         objectUrl = URL.createObjectURL(blob);
         setSelectedEvidenceUrl(objectUrl);
+        setEvidenceLoading(false);
       })
       .catch((error) => {
+        if (cancelled) return;
         setSelectedEvidenceUrl(null);
+        setEvidenceLoading(false); setEvidenceError(true);
         showError(error, "Không tải được ảnh minh chứng.");
       });
 
     return () => {
+      cancelled = true;
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
@@ -111,6 +136,8 @@ export default function AdminManualCreditsPage() {
   }, [selectedRequest?.evidenceFileId]);
 
   function changeGrantEmail(value: string) {
+    userSearchVersion.current++;
+    setIsLoadingUsers(true);
     setGrantEmail(value);
     const matchedUser = userOptions.find((user) => user.email.toLowerCase() === value.trim().toLowerCase());
     setGrantUserId(matchedUser?.id ?? "");
@@ -122,10 +149,11 @@ export default function AdminManualCreditsPage() {
   }
 
   async function approveRequest() {
-    if (!selectedRequest) {
+    if (!selectedRequest || workingRef.current) {
       return;
     }
 
+    workingRef.current = true;
     setIsWorking(true);
     try {
       await apiFetch(`/api/admin/topup-orders/${selectedRequest.id}/approve`, {
@@ -138,15 +166,17 @@ export default function AdminManualCreditsPage() {
     } catch (error) {
       showError(error, "Không duyệt được yêu cầu đối soát.");
     } finally {
+      workingRef.current = false;
       setIsWorking(false);
     }
   }
 
   async function rejectRequest() {
-    if (!selectedRequest) {
+    if (!selectedRequest || workingRef.current) {
       return;
     }
 
+    workingRef.current = true;
     setIsWorking(true);
     try {
       await apiFetch(`/api/admin/topup-orders/${selectedRequest.id}/reject`, {
@@ -160,18 +190,25 @@ export default function AdminManualCreditsPage() {
     } catch (error) {
       showError(error, "Không từ chối được yêu cầu đối soát.");
     } finally {
+      workingRef.current = false;
       setIsWorking(false);
     }
   }
 
   async function submitManualGrant(event: FormEvent) {
     event.preventDefault();
+    if (workingRef.current) return;
     const selectedUserId = grantUserId || userOptions.find((user) => user.email.toLowerCase() === grantEmail.trim().toLowerCase())?.id || "";
     if (!selectedUserId) {
       toast.error("Vui lòng chọn người dùng theo email hợp lệ.");
       return;
     }
+    if (!Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || Number(grantCredits) > 2147483647 || !grantReason.trim()) {
+      toast.error("Nhập số credit nguyên dương và lý do cộng credit.");
+      return;
+    }
 
+    workingRef.current = true;
     setIsWorking(true);
     try {
       const result = await apiFetch<ManualCreditGrantResponse>("/api/admin/credit-operations/manual-grants", {
@@ -183,9 +220,11 @@ export default function AdminManualCreditsPage() {
       setGrantUserId("");
       setGrantCredits("");
       setGrantReason("");
+      setHistoryRefresh(value => value + 1);
     } catch (error) {
       showError(error, "Không cộng được credit thủ công.");
     } finally {
+      workingRef.current = false;
       setIsWorking(false);
     }
   }
@@ -204,13 +243,14 @@ export default function AdminManualCreditsPage() {
         <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={String(requests.length - pendingCount)} />
       </div>
 
-            <Card>
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Cộng credit thủ công</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="grid gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
             <SearchableDropdownSelect
+              disabled={isWorking}
               emptyText="Không tìm thấy email người dùng phù hợp"
               loading={isLoadingUsers}
               options={userOptions.map((user) => ({ value: user.id, label: user.email, description: user.fullName }))}
@@ -220,20 +260,23 @@ export default function AdminManualCreditsPage() {
               onChange={(value, option) => chooseGrantUser(value, option.label)}
               onSearchChange={changeGrantEmail}
             />
-            <Input min={1} placeholder="Số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
-            <Input placeholder="Lý do cộng credit" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
-            <Button disabled={isWorking || !grantEmail.trim() || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
+            <Input aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
+            <Input aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Lý do cộng credit" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
+            <Button disabled={isWorking || isLoadingUsers || !grantUserId || !Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
               Cộng credit
             </Button>
           </form>
         </CardContent>
       </Card>
 
-      <Card>
+      <ManualGrantHistory refreshKey={historyRefresh} />
+
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Danh sách yêu cầu đối soát</CardTitle>
         </CardHeader>
         <CardContent>
+          {requestsError ? <Alert><p>{requestsError}</p><Button type="button" variant="secondary" disabled={isLoadingRequests} onClick={() => loadRequests().catch(error => showError(error))}>Thử lại</Button></Alert> : isLoadingRequests ? <p className="text-sm text-muted-foreground">Đang tải yêu cầu đối soát...</p> :
           <BaseTable
             items={requests}
             columns={requestColumns}
@@ -242,16 +285,18 @@ export default function AdminManualCreditsPage() {
             emptyDetail="Yêu cầu mới sẽ xuất hiện sau khi người dùng gửi ghi chú chuyển khoản."
             minWidthClassName="min-w-[980px]"
             mobileFooter={(item) => (
-              <Button className="w-full" type="button" variant="secondary" onClick={() => setSelectedRequestId(item.id)}>
+              <Button className="w-full" type="button" variant="secondary" onClick={() => { setRejectReason(""); setSelectedRequestId(item.id); }}>
                 Xem chi tiết
               </Button>
             )}
-          />
+          />}
         </CardContent>
       </Card>
 
       <RequestDetailDialog
         evidenceUrl={selectedEvidenceUrl}
+        evidenceLoading={evidenceLoading}
+        evidenceError={evidenceError}
         isWorking={isWorking}
         rejectReason={rejectReason}
         request={selectedRequest}
@@ -266,6 +311,8 @@ export default function AdminManualCreditsPage() {
 
 function RequestDetailDialog({
   evidenceUrl,
+  evidenceLoading,
+  evidenceError,
   isWorking,
   rejectReason,
   request,
@@ -275,6 +322,8 @@ function RequestDetailDialog({
   onRejectReasonChange
 }: {
   evidenceUrl: string | null;
+  evidenceLoading: boolean;
+  evidenceError: boolean;
   isWorking: boolean;
   rejectReason: string;
   request: AdminTopupOrder | null;
@@ -284,47 +333,59 @@ function RequestDetailDialog({
   onRejectReasonChange: (value: string) => void;
 }) {
   if (!request) {
-    return null;
+    return <Dialog open={false} className="max-w-3xl" />;
   }
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>Chi tiết yêu cầu nạp</DialogTitle>
-          <DialogDescription>Xem thông tin người dùng, gói credit, ghi chú và ảnh minh chứng trước khi xử lý.</DialogDescription>
+    <Dialog open className="max-w-3xl" onOpenChange={(open) => !open && onClose()}>
+      <DialogContent contentClassName="flex max-h-[calc(100dvh-2rem)] flex-col">
+        <DialogHeader className="flex shrink-0 items-start justify-between gap-3">
+          <div><DialogTitle>Chi tiết yêu cầu nạp</DialogTitle>
+          <DialogDescription>Kiểm tra thông tin và minh chứng trước khi xử lý.</DialogDescription></div>
+          <DialogClose size="icon" aria-label="Đóng chi tiết"><X size={16} /></DialogClose>
         </DialogHeader>
-        <DialogBody className="space-y-4">
-          <div className="grid gap-3 text-sm sm:grid-cols-2">
-            <Detail label="Mã yêu cầu" value={<RequestCode id={request.id} />} />
-            <Detail label="Người dùng" value={request.userEmail || "-"} />
-            <Detail label="Gói" value={request.packageName || "-"} />
-            <Detail label="Số credit" value={`${request.credits} credit`} />
-            <Detail label="Số tiền" value={formatCurrency(request.amount)} />
-            <Detail label="Phương thức" value={displayPaymentMethod(request.paymentMethod)} />
-            <Detail label="Trạng thái" value={<StatusBadge status={request.status} />} />
-            <Detail label="Ảnh minh chứng" value={request.evidenceFileId ? "Đã có ảnh" : "Không có"} />
-          </div>
-          <Detail label="Ghi chú chuyển khoản" value={request.paymentNote || "-"} />
-
-          {evidenceUrl ? (
-            <div className="relative h-[420px] w-full overflow-hidden rounded-md border border-border/70 bg-surface/55">
-              <Image unoptimized fill className="object-contain" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 100vw, 896px" />
+        <DialogBody className="min-h-0 space-y-4 overflow-y-auto">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-primary-border bg-primary-soft/60 p-4">
+            <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <div><p className="text-xs text-muted-foreground">Số tiền chuyển</p><p className="mt-1 text-xl font-extrabold">{formatCurrency(request.amount)}</p></div>
+              <div><p className="text-xs text-muted-foreground">Credit nhận</p><p className="mt-1 text-xl font-extrabold text-primary">{request.credits} <span className="text-sm font-semibold">credit</span></p></div>
             </div>
-          ) : (
-            <Alert>Yêu cầu này không có ảnh minh chứng.</Alert>
-          )}
-
+            <StatusBadge status={request.status} />
+          </div>
+          <div className="grid items-start gap-5 md:grid-cols-2">
+            <div className="min-w-0 space-y-4">
+              <section aria-label="Thông tin yêu cầu" className="space-y-2 text-sm">
+                <h3 className="mb-3 font-bold">Thông tin yêu cầu</h3>
+                <KeyValueRow label="Người dùng" value={request.userEmail || "-"} />
+                <KeyValueRow label="Gói credit" value={request.packageName || "-"} />
+                <KeyValueRow label="Tạo lúc" value={formatDate(request.createdAt)} />
+                <KeyValueRow label="Phương thức" value={displayPaymentMethod(request.paymentMethod)} />
+                <KeyValueRow label="Mã yêu cầu" value={<RequestCode id={request.id} />} />
+              </section>
+              <div><p className="mb-2 text-xs font-semibold text-muted-foreground">{request.status === "Rejected" ? "Lý do từ chối" : "Ghi chú chuyển khoản"}</p><p className="whitespace-pre-wrap break-words rounded-xl bg-surface-subtle p-3 text-sm">{request.paymentNote || "Không có ghi chú"}</p></div>
+            </div>
+            <section aria-label="Minh chứng chuyển khoản" className="min-w-0 space-y-3">
+              <h3 className="flex items-center gap-2 text-sm font-bold"><FileImage size={16} className="text-primary" />Minh chứng chuyển khoản</h3>
+              {evidenceUrl ? <div className="relative h-[240px] overflow-hidden rounded-xl border border-border bg-surface-subtle">
+                <Image unoptimized fill className="object-contain p-2" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 90vw, 350px" />
+              </div> : <div className="flex min-h-32 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-subtle px-4 py-5 text-center text-sm text-muted-foreground">
+                <FileImage size={24} aria-hidden="true" />
+                <p>{evidenceLoading || (request.evidenceFileId && !evidenceError) ? "Đang tải minh chứng..." : evidenceError ? "Không tải được ảnh minh chứng." : "Yêu cầu này không có ảnh minh chứng."}</p>
+              </div>}
+            </section>
+          </div>
           {request.status === "Pending" && (
-            <div className="space-y-3 border-t border-border/70 pt-4">
-              <Textarea placeholder="Lý do từ chối" value={rejectReason} onChange={(event) => onRejectReasonChange(event.target.value)} />
+            <div className="border-t border-border pt-4">
+              <label className="block text-xs font-semibold text-muted-foreground">Lý do từ chối <span className="font-normal">(chỉ nhập khi từ chối yêu cầu)</span>
+                <Textarea className="mt-2 min-h-16" rows={2} maxLength={1000} disabled={isWorking} placeholder="Lý do từ chối" value={rejectReason} onChange={(event) => onRejectReasonChange(event.target.value)} />
+              </label>
             </div>
           )}
         </DialogBody>
-        <DialogFooter className="flex-col sm:flex-row">
+        <DialogFooter className={request.status === "Pending" ? "grid shrink-0 grid-cols-2 sm:flex" : "shrink-0"}>
           {request.status === "Pending" && (
             <>
-              <Button className="w-full sm:w-auto" disabled={isWorking} type="button" onClick={onApprove}>
+              <Button className="col-span-2 w-full sm:w-auto" disabled={isWorking} type="button" onClick={onApprove}>
                 Duyệt và cộng credit
               </Button>
               <Button className="w-full sm:w-auto" disabled={isWorking || !rejectReason.trim()} type="button" variant="danger" onClick={onReject}>
@@ -332,7 +393,7 @@ function RequestDetailDialog({
               </Button>
             </>
           )}
-          <Button className="w-full sm:w-auto" type="button" variant="secondary" onClick={onClose}>Đóng</Button>
+          <DialogClose className="w-full sm:w-auto">Đóng</DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -350,7 +411,7 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-surface/75 text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-border bg-surface-subtle text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>
@@ -358,24 +419,5 @@ function RequestCode({ id }: { id: string }) {
 }
 
 function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
-  return (
-    <Card>
-      <CardContent className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
-        </div>
-        <span className="rounded-md bg-info-surface p-2 text-primary">{icon}</span>
-      </CardContent>
-    </Card>
-  );
-}
-
-function Detail({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div className="min-w-0 rounded-md border border-border/70 bg-surface/55 p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <div className="mt-1 break-words text-sm font-medium">{value}</div>
-    </div>
-  );
+  return <MetricCard title={label} value={value} icon={icon} tone="info" />;
 }

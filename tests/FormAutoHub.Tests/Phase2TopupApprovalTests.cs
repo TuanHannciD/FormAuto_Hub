@@ -4,6 +4,7 @@ using FormAutoHub.Api.Domain;
 using FormAutoHub.Api.Entities;
 using FormAutoHub.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using FormAutoHub.Api.Auth;
 
 namespace FormAutoHub.Tests;
 
@@ -50,7 +51,7 @@ public sealed class Phase2TopupApprovalTests
         await context.SaveChangesAsync();
 
         var creditService = new CreditService(context);
-        var adminService = new AdminTopupOrderService(context, creditService);
+        var adminService = new AdminTopupOrderService(context, creditService, new AdminContext());
 
         var result = await adminService.ApproveAsync(orderId, new ApproveTopupOrderRequest("Approved"), CancellationToken.None);
 
@@ -77,5 +78,11 @@ public sealed class Phase2TopupApprovalTests
             .Options;
 
         return new FormAutoHubDbContext(options);
+    }
+
+    private sealed class AdminContext : ICurrentUserContext
+    {
+        public Guid UserId => Guid.Parse("00000000-0000-0000-0000-000000000002");
+        public bool IsAdmin => true;
     }
 }

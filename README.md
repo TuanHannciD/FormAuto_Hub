@@ -4,7 +4,7 @@ FormAuto Hub is a web-based form automation and usage-management platform.
 
 The product helps authorized users analyze Google Forms, detect questions, configure answer-generation rules, preview generated responses, and submit a small controlled number of responses. It also includes account and credit management for balances, top-up orders, usage history, credit transactions, profile management, and admin approval of top-up orders.
 
-This repository contains the documentation baseline and the initial Phase 1 backend foundation scaffold. Production business workflows should not be created or changed unless a later task explicitly asks for implementation.
+This repository contains the bilingual documentation, implemented ASP.NET Core API and Next.js dashboard, and approved phase/follow-up work. New production workflows require explicit approval; current local implementation and validation are summarized in `docs/ai/UI_CREDIT_FOLLOWUP_SYNC.md` and `docs/vi/UI_CREDIT_FOLLOWUP_SYNC.md`.
 
 ## Current Phase
 
@@ -14,7 +14,7 @@ Phase 6 AI scoped follow-up: **Completed (see docs/ai/PHASE_6_CLOSEOUT.md)**.
 
 No active follow-up slice. No new global phase is selected. New phase work, deferred-item activation, or implementation/fix follow-up requires explicit approval.
 
-Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under `tests/FormAutoHub.Tests`. Agents must read existing source code and docs before changing docs or implementation.
+Implemented API source is under `src/FormAutoHub.Api`, tests under `tests/FormAutoHub.Tests`, and the Next.js app under `apps/web`. Agents must read existing source and task docs before changing files.
 
 ## How To Use These Docs
 
@@ -43,7 +43,7 @@ Phase 1 backend foundation exists under `src/FormAutoHub.Api`, with tests under 
 - Credit changes must be written to `CreditTransactions`.
 - Tool actions must be written to `UsageLogs`.
 - Supported MVP answer modes: random equally, random by percentage, random by quantity, sample text lines for text answers, sequential date ranges, and sequential time ranges.
-- Dashboard/account tabs: overview, top-up credits, top-up orders, tool usage history, credit transactions, and profile.
+- Dashboard navigation: overview, form automation, top-up credits, usage logs, credit transactions, NCKH, and AI usage. Profile/security share the topbar account popup; old standalone profile routes are retired.
 - Abuse features are forbidden.
 
 ## Important Non-Goals

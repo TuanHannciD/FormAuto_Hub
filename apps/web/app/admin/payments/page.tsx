@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { CheckCircle2, Clock3, Filter, Search, XCircle } from "lucide-react";
+import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
@@ -94,7 +95,7 @@ export default function AdminPaymentsPage() {
         <Stat icon={Filter} label="Cần đối soát" tone="slate" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
       </div>
 
-      <Card>
+      <Card className="min-w-0">
         <CardHeader className="space-y-4">
           <CardTitle>Danh sách thanh toán PayOS</CardTitle>
           <form className="grid gap-3 md:grid-cols-[1.2fr_0.8fr_0.8fr_auto]" onSubmit={applyFilters}>
@@ -146,12 +147,7 @@ function displayPaymentUser(item: AdminPayment) {
 }
 
 function CompactStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-border/70 bg-surface/65 px-3 py-2 shadow-sm backdrop-blur">
-      <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
-      <p className="mt-1 text-lg font-semibold">{value}</p>
-    </div>
-  );
+  return <MetricCard title={label} value={value} />;
 }
 
 function Stat({
@@ -165,24 +161,5 @@ function Stat({
   value: string;
   tone: "amber" | "emerald" | "red" | "slate";
 }) {
-  const toneClass = {
-    amber: "bg-warning-surface text-warning",
-    emerald: "bg-success-surface text-success",
-    red: "bg-destructive-surface text-destructive",
-    slate: "bg-surface-subtle text-secondary-foreground"
-  }[tone];
-
-  return (
-    <Card>
-      <CardContent className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase text-muted-foreground">{label}</p>
-          <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
-        </div>
-        <span className={`rounded-md p-2 ${toneClass}`}>
-          <Icon size={18} />
-        </span>
-      </CardContent>
-    </Card>
-  );
+  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={({ amber: "warning", emerald: "success", red: "danger", slate: "neutral" } as const)[tone]} />;
 }

@@ -2,15 +2,15 @@
 
 ## Mục đích
 
-Định nghĩa quy tắc đặt source và naming trước khi có implementation.
+Định nghĩa quy tắc đặt source và naming cho repository đã có implementation.
 
 ## Trạng thái repo
 
-Production source structure chưa được duyệt. Các quy tắc này chỉ định hướng cho lần scaffold sau này.
+API đã triển khai trong `src/FormAutoHub.Api`, kiểm thử backend trong `tests/FormAutoHub.Tests`, dashboard Next.js trong `apps/web`. Quy tắc áp dụng cho source hiện tại và thay đổi được duyệt sau này.
 
 ## Cấu trúc backend dự kiến
 
-Khi backend code được duyệt, có thể dùng cấu trúc ASP.NET Core Web API rõ ràng như:
+Cấu trúc backend hiện tại:
 
 ```text
 src/
@@ -26,7 +26,7 @@ tests/
   FormAutoHub.Tests/
 ```
 
-Đây là cấu trúc đề xuất, chưa phải contract bất biến.
+Mở rộng cấu trúc hiện tại trong phạm vi được duyệt; không tự thiết kế lại.
 
 ## Quy tắc naming
 

@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { DropdownSelect } from "@/components/dropdown-select";
 import { PaginationControls } from "@/components/pagination-controls";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog, type UsageLogPageResponse } from "@/lib/api";
 import { displayAction, displayToolName } from "@/lib/labels";
@@ -147,9 +147,7 @@ export default function UsageLogsPage() {
           ) : (
             <>
             {error && (
-              <div className="rounded-md border border-warning-border bg-warning-surface px-3 py-2 text-sm text-warning">
-                {error}
-              </div>
+              <Alert className="border-warning-border bg-warning-surface text-warning">{error}</Alert>
             )}
             <BaseTable
               items={logs}

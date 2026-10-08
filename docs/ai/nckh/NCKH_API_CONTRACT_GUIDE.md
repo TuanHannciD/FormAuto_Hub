@@ -1,5 +1,61 @@
 # NCKH_API_CONTRACT_GUIDE
 
+## TOC
+
+- [Purpose](#purpose) — line 59
+- [Base Path](#base-path) — line 74
+- [Auth](#auth) — line 78
+- [Implemented Phase 1 Endpoints](#implemented-phase-1-endpoints) — line 82
+  - [1. Google OAuth & Forms Import](#1-google-oauth--forms-import) — line 84
+    - [POST /api/v1/nckh/auth/google-link](#post-apiv1nckhauthgoogle-link) — line 86
+    - [POST /api/v1/nckh/forms/import](#post-apiv1nckhformsimport) — line 108
+    - [GET /api/v1/nckh/forms](#get-apiv1nckhforms) — line 135
+    - [GET /api/v1/nckh/forms/{formId}](#get-apiv1nckhformsformid) — line 153
+- [Implemented Phase 2 Endpoints](#implemented-phase-2-endpoints) — line 177
+  - [2. Research Models](#2-research-models) — line 179
+    - [POST /api/v1/nckh/models](#post-apiv1nckhmodels) — line 181
+    - [GET /api/v1/nckh/models](#get-apiv1nckhmodels) — line 211
+    - [GET /api/v1/nckh/models/{modelId}](#get-apiv1nckhmodelsmodelid) — line 220
+    - [PUT /api/v1/nckh/models/{modelId}](#put-apiv1nckhmodelsmodelid) — line 241
+    - [POST /api/v1/nckh/models/{modelId}/activate](#post-apiv1nckhmodelsmodelidactivate) — line 246
+    - [DELETE /api/v1/nckh/models/{modelId}](#delete-apiv1nckhmodelsmodelid) — line 257
+  - [3. Variables](#3-variables) — line 264
+    - [POST /api/v1/nckh/models/{modelId}/variables](#post-apiv1nckhmodelsmodelidvariables) — line 266
+    - [GET /api/v1/nckh/models/{modelId}/variables](#get-apiv1nckhmodelsmodelidvariables) — line 298
+    - [PUT /api/v1/nckh/variables/{variableId}](#put-apiv1nckhvariablesvariableid) — line 303
+    - [DELETE /api/v1/nckh/variables/{variableId}](#delete-apiv1nckhvariablesvariableid) — line 331
+  - [4. Observed Question Mappings](#4-observed-question-mappings) — line 336
+- [Implemented Phase 3 Endpoints](#implemented-phase-3-endpoints) — line 356
+  - [5. Relations](#5-relations) — line 362
+    - [POST /api/v1/nckh/models/{modelId}/relations](#post-apiv1nckhmodelsmodelidrelations) — line 364
+    - [GET /api/v1/nckh/models/{modelId}/relations](#get-apiv1nckhmodelsmodelidrelations) — line 400
+    - [GET /api/v1/nckh/relations/{relationId}](#get-apiv1nckhrelationsrelationid) — line 405
+    - [PUT /api/v1/nckh/relations/{relationId}](#put-apiv1nckhrelationsrelationid) — line 410
+    - [DELETE /api/v1/nckh/relations/{relationId}](#delete-apiv1nckhrelationsrelationid) — line 415
+  - [6. Canvas Positions](#6-canvas-positions) — line 420
+    - [PUT /api/v1/nckh/models/{modelId}/positions](#put-apiv1nckhmodelsmodelidpositions) — line 422
+    - [GET /api/v1/nckh/models/{modelId}/positions](#get-apiv1nckhmodelsmodelidpositions) — line 437
+- [Implemented Phase 4 Endpoint](#implemented-phase-4-endpoint) — line 442
+  - [7. Form Generation](#7-form-generation) — line 448
+    - [POST /api/v1/nckh/models/{modelId}/generate-form](#post-apiv1nckhmodelsmodelidgenerate-form) — line 450
+- [Implemented Phase 5 Endpoints](#implemented-phase-5-endpoints) — line 483
+  - [8. Data Collection](#8-data-collection) — line 493
+    - [POST /api/v1/nckh/models/{modelId}/collect](#post-apiv1nckhmodelsmodelidcollect) — line 495
+    - [GET /api/v1/nckh/models/{modelId}/responses](#get-apiv1nckhmodelsmodelidresponses) — line 520
+  - [9. Data Normalization](#9-data-normalization) — line 529
+    - [POST /api/v1/nckh/models/{modelId}/normalize](#post-apiv1nckhmodelsmodelidnormalize) — line 531
+    - [GET /api/v1/nckh/models/{modelId}/dataset](#get-apiv1nckhmodelsmodeliddataset) — line 554
+- [Implemented Phase 6 Endpoint](#implemented-phase-6-endpoint) — line 585
+  - [10. Export](#10-export) — line 591
+    - [GET /api/v1/nckh/models/{modelId}/export?format=csv](#get-apiv1nckhmodelsmodelidexportformatcsv) — line 593
+    - [GET /api/v1/nckh/models/{modelId}/export?format=codebook](#get-apiv1nckhmodelsmodelidexportformatcodebook) — line 607
+    - [GET /api/v1/nckh/models/{modelId}/export?format=spss](#get-apiv1nckhmodelsmodelidexportformatspss) — line 619
+- [Proposed Future Endpoints](#proposed-future-endpoints) — line 635
+- [Pagination Standard](#pagination-standard) — line 639
+- [Error Response Format](#error-response-format) — line 654
+- [Current browser authorization distinction](#current-browser-authorization-distinction) — line 666
+- [Existing UI confirmation gap](#existing-ui-confirmation-gap) — line 674
+
 ## Purpose
 
 API contract guide cho NCKH Survey Module.
@@ -21,7 +77,7 @@ Tất cả NCKH API endpoints bắt đầu với `/api/v1/nckh`.
 
 ## Auth
 
-Tất cả endpoints yêu cầu JWT Bearer token. Role: Researcher (default user role) hoặc Admin.
+All endpoints require JWT Bearer authentication and enforce user ownership. Existing core roles are `User` and `Admin`; no `Researcher` role is defined by the current implementation.
 
 ## Implemented Phase 1 Endpoints
 
@@ -606,3 +662,15 @@ pageSize clamped: 1..100.
   "instance": "/api/v1/nckh/models/guid/variables"
 }
 ```
+
+## Current browser authorization distinction
+
+For `/api/v1/nckh/`, only a 401 ProblemDetails with `title = "Unauthorized"` and one of the existing exact messages below becomes `NckhGoogleAuthorizationError`, preserving the core session and requesting Google relink. Other 401 responses use ordinary JWT refresh/expiry recovery; 5xx/network failures show retry without claiming Google is unlinked. No backend endpoint/status/code was added.
+
+- `Google account not linked.`
+- `Google account not linked. Please link your Google account.`
+- `Google account not linked or token expired. Please re-link your Google account.`
+
+## Existing UI confirmation gap
+
+The documented model-delete requirement includes impact summary, approximate affected-record count and exact-name entry. Current shared `ConfirmDialog` supports confirm/cancel but does not implement count/name entry. Preserve that requirement; this documentation sync does not claim the gap is fixed or approve weaker deletion rules. Backend model deletion currently cascades owned data, including responses/datasets.

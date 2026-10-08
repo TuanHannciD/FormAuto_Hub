@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
+import { MetricCard } from "@/components/metric-card";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
@@ -143,7 +144,7 @@ export default function AiUsagePage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Card key={i}>
-              <CardContent className="h-24 animate-pulse bg-muted/30 rounded-lg" />
+              <CardContent className="h-24 animate-pulse bg-muted/30 rounded-xl" />
             </Card>
           ))}
         </div>
@@ -187,9 +188,9 @@ export default function AiUsagePage() {
       {/* ── Metric cards ── */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
-        <MetricCard title="Tỉ lệ thành công" value={successRate} tone="green" />
-        <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="violet" />
-        <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="blue" />
+        <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
+        <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
+        <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
       </div>
 
       {/* ── Mode breakdown ── */}
@@ -203,7 +204,7 @@ export default function AiUsagePage() {
                 <CardTitle>{label}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`rounded-lg border p-4 ${colorClass}`}>
+                <div className={`rounded-xl border p-4 ${colorClass}`}>
                   <p className="text-sm font-medium">Số lần dùng: <span className="font-bold">{mode.runs}</span></p>
                   <p className="mt-1 text-sm font-medium">Credit tiêu hao: <span className="font-bold">{mode.creditsUsed}</span></p>
                 </div>
@@ -263,42 +264,5 @@ export default function AiUsagePage() {
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-// ── Metric card sub-component ──
-
-function MetricCard({
-  title,
-  value,
-  tone = "neutral"
-}: {
-  title: string;
-  value: string;
-  tone?: "neutral" | "green" | "violet" | "blue" | "red";
-}) {
-  const borderColors: Record<string, string> = {
-    neutral: "border-border/70",
-    green: "border-success-border",
-    violet: "border-primary-border",
-    blue: "border-info-border",
-    red: "border-destructive-border"
-  };
-
-  const textColors: Record<string, string> = {
-    neutral: "text-foreground",
-    green: "text-success",
-    violet: "text-primary",
-    blue: "text-info",
-    red: "text-destructive"
-  };
-
-  return (
-    <Card className={borderColors[tone]}>
-      <CardContent className="pt-6">
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <p className={`mt-1 text-2xl font-bold ${textColors[tone]}`}>{value}</p>
-      </CardContent>
-    </Card>
   );
 }

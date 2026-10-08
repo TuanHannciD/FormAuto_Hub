@@ -795,7 +795,7 @@ export default function FormsPage() {
       </nav>
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_260px]">
       <fieldset disabled={busy || topupBusy || isPasting} className="isolate m-0 min-w-0 space-y-6 border-0 p-0">
-      <Card id="workflow-step-1" className="scroll-mt-24 rounded-2xl bg-surface shadow-none">
+      <Card id="workflow-step-1" className="scroll-mt-24">
         <CardHeader>
           <CardTitle>1. Chọn và phân tích form</CardTitle>
         </CardHeader>
@@ -825,7 +825,7 @@ export default function FormsPage() {
 
       {analysis && (
         <section id="workflow-step-2" className="scroll-mt-24" ref={rulesSectionRef}>
-        <Card className="rounded-2xl bg-surface shadow-none">
+        <Card>
           <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
@@ -850,14 +850,14 @@ export default function FormsPage() {
                 }}
               >
                 <span>{allRuleEditorsOpen ? "Đóng tất cả" : "Mở tất cả"}</span>
-                <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-surface/35" : "bg-info-surface"}`}>
+                <span className={`relative h-6 w-11 rounded-full transition ${allRuleEditorsOpen ? "bg-inverse-foreground/25" : "bg-info-surface"}`}>
                   <span className={`absolute top-1 h-4 w-4 rounded-full bg-surface shadow transition ${allRuleEditorsOpen ? "left-6" : "left-1"}`} />
                 </span>
               </button>
             )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg border border-border/70 bg-surface/55 p-4 backdrop-blur">
+            <div className="rounded-xl border border-border bg-surface p-4">
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <Badge tone="info">{analysis.formTitle}</Badge>
                 <StatusBadge status={analysis.status} />
@@ -916,7 +916,7 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-[200] flex flex-col gap-4 rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-[200] flex flex-col gap-4 rounded-xl border border-info-border bg-info-surface p-4 shadow-soft ring-1 ring-info-border sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
                     <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
                       Tạo bản xem trước
@@ -949,7 +949,7 @@ export default function FormsPage() {
       )}
 
       <section id="workflow-step-3" className="scroll-mt-24" ref={previewSectionRef}>
-        <Card className="rounded-2xl bg-surface shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>3. Xem trước · 4. Xác nhận gửi</CardTitle>
           </CardHeader>
@@ -958,7 +958,7 @@ export default function FormsPage() {
             {generationResult && <div role="status" className="rounded-xl border border-border bg-surface-subtle p-4 text-sm leading-6">Đã tạo {generationResult.generatedCount}/{generationResult.requestedCount} bản xem trước · Đã trừ {generationResult.creditsUsed} credit.{generationResult.partial && !generationCreditNotice ? " Chưa tạo đủ số lượng yêu cầu; hãy kiểm tra kết quả trước khi tạo thêm." : ""}</div>}
             {isSending && <Alert role="status" className="flex items-center gap-3"><Loader2 aria-hidden="true" className="animate-spin shrink-0" size={20} />Đang gửi các preview đã xác nhận. Vui lòng chờ kết quả, không đóng hoặc tải lại trang.</Alert>}
               {generationCreditNotice && (
-                <div className="rounded-lg border border-warning-border bg-warning-surface p-4 text-sm text-warning shadow-sm ring-1 ring-warning-border">
+                <div className="rounded-xl border border-warning-border bg-warning-surface p-4 text-sm text-warning shadow-sm ring-1 ring-warning-border">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Credit chưa đủ để tạo toàn bộ số lượng đã chọn</p>
@@ -996,7 +996,7 @@ export default function FormsPage() {
                 </div>
               )}
               {resumeContext && !generationCreditNotice && (
-                <div className="rounded-lg border border-info-border/80 bg-info-surface/85 p-4 text-sm text-info shadow-sm ring-1 ring-info-border/70 backdrop-blur">
+                <div className="rounded-xl border border-info-border bg-info-surface p-4 text-sm text-info shadow-sm ring-1 ring-info-border">
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="font-semibold">Có tiến trình tạo preview đang chờ tiếp tục</p>
@@ -1014,7 +1014,7 @@ export default function FormsPage() {
               <EmptyState title="Chưa có bản xem trước" detail="Hãy tạo bản xem trước trước khi gửi. Hệ thống sẽ chặn nếu chưa có bản xem trước hoặc chưa xác nhận." />
             ) : (
               <>
-              <div className="rounded-lg border border-border/70 bg-surface/55 p-4 backdrop-blur">
+              <div className="rounded-xl border border-border bg-surface p-4">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="text-sm font-medium">Câu trả lời xem trước đã tạo</p>
@@ -1030,13 +1030,13 @@ export default function FormsPage() {
                   </div>
                 </div>
                 {aiPreviewMode && (
-                  <div className="mt-3 rounded-md border border-info-border bg-info-surface/80 px-3 py-2 text-xs font-medium text-info">
+                  <div className="mt-3 rounded-xl border border-info-border bg-info-surface px-3 py-2 text-xs font-medium text-info">
                     Bản xem trước AI chỉ đọc. Hãy kiểm tra nội dung trước khi xác nhận gửi.
                   </div>
                 )}
               </div>
 
-              <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/72 shadow-sm backdrop-blur">
+              <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
                 <button
                   aria-expanded={previewListOpen}
                   className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -1049,13 +1049,13 @@ export default function FormsPage() {
                       {previews.length} bản xem trước, {previews.reduce((sum, preview) => sum + preview.answers.length, 0)} câu trả lời
                     </span>
                   </span>
-                  <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-surface/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                  <span className="inline-flex items-center gap-2 self-start rounded-xl border border-border bg-surface px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                     {previewListOpen ? "Thu gọn" : "Mở danh sách"}
                     {previewListOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                   </span>
                 </button>
                 {previewListOpen && (
-                  <div className="space-y-2 border-t border-border/70 p-3">
+                  <div className="space-y-2 border-t border-border p-3">
                     {previews.map((preview, index) => (
                       <PreviewAccordion
                         key={preview.id}
@@ -1070,7 +1070,7 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div id="workflow-step-4" className="scroll-mt-24 sticky bottom-3 z-[200] rounded-lg border border-info-border/80 bg-info-surface/88 p-4 shadow-soft ring-1 ring-info-border/70 backdrop-blur-xl">
+              <div id="workflow-step-4" className="scroll-mt-24 sticky bottom-3 z-[200] rounded-xl border border-info-border bg-info-surface p-4 shadow-soft ring-1 ring-info-border">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
@@ -1104,7 +1104,7 @@ export default function FormsPage() {
       </section>
 
       {submission && (
-        <Card id="workflow-step-5" className="scroll-mt-24 rounded-2xl bg-surface shadow-none">
+        <Card id="workflow-step-5" className="scroll-mt-24">
           <CardHeader>
             <CardTitle>5. Kết quả gửi</CardTitle>
           </CardHeader>
@@ -1125,7 +1125,7 @@ export default function FormsPage() {
               <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
             {(submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
-              <div className="rounded-lg border border-info-border/80 bg-info-surface/85 p-4 text-info shadow-sm backdrop-blur">
+              <div className="rounded-xl border border-info-border bg-info-surface p-4 text-info shadow-sm">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-semibold">Thực hiện lại một lần nữa</p>
@@ -1139,7 +1139,7 @@ export default function FormsPage() {
                 </div>
               </div>
             )}
-            <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/72 shadow-sm backdrop-blur">
+            <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
               <button
                 aria-expanded={submissionLogsOpen}
                 className="flex w-full flex-col gap-3 px-4 py-3 text-left transition hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -1152,18 +1152,18 @@ export default function FormsPage() {
                     {buildSubmissionBatches(submission.logs).length} nhóm, thành công {submission.successCount}, lỗi {submission.failedCount}
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-2 self-start rounded-md border border-border/70 bg-surface/80 px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
+                <span className="inline-flex items-center gap-2 self-start rounded-xl border border-border bg-surface px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                   {submissionLogsOpen ? "Thu gọn" : "Mở chi tiết"}
                   {submissionLogsOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                 </span>
               </button>
               {submissionLogsOpen && (
-                <div className="space-y-3 border-t border-border/70 p-3">
+                <div className="space-y-3 border-t border-border p-3">
                   {buildSubmissionBatches(submission.logs).map((batch, batchIndex) => {
                     const successCount = batch.filter((log) => log.status === "Success").length;
                     const failedCount = batch.length - successCount;
                     return (
-                      <div className="rounded-lg border border-border/70 bg-surface/55 p-3" key={`submission-pack-${batchIndex}`}>
+                      <div className="rounded-xl border border-border bg-surface p-3" key={`submission-pack-${batchIndex}`}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <p className="text-sm font-semibold">Nhóm {batchIndex + 1}</p>
                           <div className="flex flex-wrap gap-2 text-xs font-medium">

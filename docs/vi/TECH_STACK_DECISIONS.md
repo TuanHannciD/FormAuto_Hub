@@ -20,14 +20,11 @@ Ghi lại công nghệ đã duyệt và các phần Deferred.
 ## Deferred
 
 - Flutter Web / Flutter Android.
-- Authentication implementation details.
-- JWT claim structure.
-- Google OAuth.
+
 - Official Google Forms API integration.
-- Payment gateway integration.
+
 - Background job framework.
-- AI answer generation.
-- AI mapping.
+
 - lựa chọn AI provider và model cuối.
 - Email notification provider.
 - Webhook platform.
@@ -97,3 +94,7 @@ API contracts vẫn phải frontend-agnostic dù Next.js đã được duyệt.
 ## Quy tắc upgrade
 
 Không đưa framework, provider, infrastructure hoặc library mới thành project commitment nếu chưa cập nhật cả `docs/ai` và `docs/vi`.
+
+## Các phạm vi đã duyệt và triển khai
+
+Đã triển khai session JWT access/refresh và đăng nhập/liên kết Google chỉ cho danh tính. OAuth NCKH là track riêng đã duyệt. PayOS Phase 8 và adapter OpenAI-compatible trong scope Phase 6 đã triển khai; provider thanh toán khác, triển khai AI rộng hơn và Google Forms API chính thức của core vẫn Deferred. Primitive dashboard là React/Tailwind do repo quản lý theo pattern shadcn/ui; không mặc định là Radix hay thư viện shadcn đã cài. Xem `UI_CREDIT_FOLLOWUP_SYNC.md`.

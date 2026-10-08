@@ -94,11 +94,11 @@ export default function RegisterPage() {
       <form className="grid gap-5" onSubmit={submit} aria-busy={isSubmitting}>
         <label className="grid gap-2 text-[13px] font-bold">
           Họ tên
-          <Input className="min-h-[54px] rounded-xl border-border-strong bg-surface text-[15px]" name="fullName" autoComplete="name" placeholder="Nguyễn Minh Anh" value={fullName} onChange={(event) => setFullName(event.target.value)} disabled={isSubmitting} required />
+          <Input controlSize="lg" name="fullName" autoComplete="name" placeholder="Nguyễn Minh Anh" value={fullName} onChange={(event) => setFullName(event.target.value)} disabled={isSubmitting} required />
         </label>
         <label className="grid gap-2 text-[13px] font-bold">
           Email
-          <Input className="min-h-[54px] rounded-xl border-border-strong bg-surface text-[15px]" name="email" type="email" autoComplete="email" inputMode="email" placeholder="ban@example.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSubmitting} required />
+          <Input controlSize="lg" name="email" type="email" autoComplete="email" inputMode="email" placeholder="ban@example.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSubmitting} required />
         </label>
         <label className="grid gap-2 text-[13px] font-bold">
           Mật khẩu
@@ -106,7 +106,7 @@ export default function RegisterPage() {
           <span id="password-help" className="text-[11px] font-medium leading-5 text-secondary-foreground">Mật khẩu tối thiểu 8 ký tự. Bạn có thể dán mật khẩu từ trình quản lý mật khẩu.</span>
         </label>
         {formError && <p role="alert" className="rounded-xl bg-destructive-surface px-4 py-3 text-sm text-destructive">{formError}</p>}
-        <Button className="min-h-14 w-full rounded-xl" type="submit" disabled={isSubmitting}>
+        <Button className="w-full" size="lg" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Đang tạo tài khoản..." : "Tạo tài khoản và nhận 5 credit"}
         </Button>
       </form>

@@ -104,7 +104,7 @@ function LoginContent() {
       <form className="grid gap-5" onSubmit={submit} aria-busy={isSubmitting}>
         <label className="grid gap-2 text-[13px] font-bold">
           Email
-          <Input className="min-h-[54px] rounded-xl border-border-strong bg-surface text-[15px]" name="email" type="email" autoComplete="email" inputMode="email" placeholder="ban@example.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSubmitting} required />
+          <Input controlSize="lg" name="email" type="email" autoComplete="email" inputMode="email" placeholder="ban@example.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSubmitting} required />
         </label>
         <label className="grid gap-2 text-[13px] font-bold">
           Mật khẩu
@@ -112,7 +112,7 @@ function LoginContent() {
         </label>
         <p className="text-right text-xs text-secondary-foreground">Quên mật khẩu – Đang cập nhật</p>
         {formError && <p role="alert" className="rounded-xl bg-destructive-surface px-4 py-3 text-sm text-destructive">{formError}</p>}
-        <Button className="min-h-14 w-full rounded-xl" type="submit" disabled={isSubmitting}>
+        <Button className="w-full" size="lg" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
         </Button>
       </form>

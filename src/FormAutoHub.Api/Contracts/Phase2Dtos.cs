@@ -33,7 +33,8 @@ public sealed record UpdateCreditPackageRequest(
 public sealed record CreateTopupOrderRequest(
     Guid PackageId,
     string PaymentMethod,
-    string PaymentNote);
+    string PaymentNote,
+    Guid? FileId = null);
 
 public sealed record TopupOrderResponse(
     Guid Id,
@@ -45,7 +46,8 @@ public sealed record TopupOrderResponse(
     string PaymentNote,
     DateTimeOffset CreatedAt,
     DateTimeOffset? PaidAt,
-    DateTimeOffset? ApprovedAt);
+    DateTimeOffset? ApprovedAt,
+    Guid? EvidenceFileId = null);
 
 public sealed record TopupOrderListResponse(IReadOnlyList<TopupOrderResponse> Items);
 
@@ -62,7 +64,10 @@ public sealed record AdminTopupOrderResponse(
     string PaymentNote,
     DateTimeOffset CreatedAt,
     DateTimeOffset? PaidAt,
-    DateTimeOffset? ApprovedAt);
+    DateTimeOffset? ApprovedAt,
+    string UserEmail = "",
+    string PackageName = "",
+    Guid? EvidenceFileId = null);
 
 public sealed record ApproveTopupOrderRequest(string PaymentNote);
 

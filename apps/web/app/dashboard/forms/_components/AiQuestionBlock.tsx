@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { panelStyles } from "@/components/ui-styles";
 import { Bot, ChevronDown, ChevronUp } from "lucide-react";
 import { Badge, Textarea } from "@/components/ui";
 import type { AiGenerationMode } from "../_types";
@@ -25,16 +27,16 @@ export function AiQuestionBlock({
   onToggle: () => void;
 }) {
   return (
-    <div className={`overflow-hidden rounded-lg border bg-surface/72 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md ${
+    <div className={cn(panelStyles, `overflow-hidden transition hover:border-primary-border ${
       mode === "ai-custom" ? "border-primary-border hover:border-primary-border" : "border-info-border hover:border-info-border"
-    }`}>
+    }`)}>
       <button
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left"
         type="button"
         onClick={onToggle}
       >
-        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
           mode === "ai-custom" ? "bg-primary-soft text-primary" : "bg-info-surface text-info"
         }`}>
           <Bot className="h-4 w-4" />
@@ -50,12 +52,12 @@ export function AiQuestionBlock({
             Khối AI thu gọn; không hiển thị danh sách lựa chọn chi tiết trong Option 2/3.
           </span>
         </span>
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-surface/80 text-muted-foreground">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </span>
       </button>
       {open && (
-        <div className="border-t border-border/70 bg-surface/45 p-4">
+        <div className="border-t border-border bg-surface p-4">
           <div className="grid gap-3 text-sm md:grid-cols-3">
             <div>
               <p className="text-xs text-muted-foreground">Loại câu hỏi</p>

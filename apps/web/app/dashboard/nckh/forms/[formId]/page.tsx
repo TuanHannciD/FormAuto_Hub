@@ -38,8 +38,9 @@ import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { DropdownSelect, type DropdownOption } from "@/components/dropdown-select";
 import { PaginationControls } from "@/components/pagination-controls";
 import { SearchableDropdownSelect } from "@/components/searchable-dropdown-select";
-import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, PageHeader } from "@/components/ui";
+import { Dialog, DialogClose, DialogContent, DialogTitle, Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Input, KeyValueRow, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 import {
   apiFetch,
   apiFetchBlob,
@@ -97,6 +98,7 @@ import type { CanvasModal, CanvasPosition, PendingAction, RelationFlowEdge, Work
 // 1250    renderGenerate/Data/Export panels  Google Form generation, data collection, normalization, export UI
 const relationEdgeTypes = { relation: RelationEdge };
 export default function NckhFormWorkspacePage() {
+  const confirmation = useConfirmDialog();
   const params = useParams<{ formId: string }>();
   const router = useRouter();
   const formId = params.formId;
@@ -394,7 +396,7 @@ export default function NckhFormWorkspacePage() {
   }
 
   async function deleteModel(model: NckhResearchModel) {
-    if (!window.confirm(`Xóa mô hình "${model.name}"? Các dữ liệu liên quan sẽ bị xử lý theo quy tắc xóa hiện có của backend.`)) return;
+    if (!await confirmation.confirm(`Xóa mô hình "${model.name}"? Các dữ liệu liên quan sẽ bị xử lý theo quy tắc xóa hiện có của backend.`)) return;
     if (!beginPendingAction("deleteModel")) return;
     try {
       await apiFetch<void>(`/api/v1/nckh/models/${model.id}`, { method: "DELETE" });
@@ -455,7 +457,7 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể xóa biến khi mô hình còn là bản nháp.");
       return;
     }
-    if (!window.confirm(`Xóa biến "${variable.name}"? Các ánh xạ liên quan sẽ bị xóa theo contract hiện có của backend.`)) return;
+    if (!await confirmation.confirm(`Xóa biến "${variable.name}"? Các ánh xạ liên quan sẽ bị xóa theo contract hiện có của backend.`)) return;
     if (!beginPendingAction("deleteVariable")) return;
     try {
       await apiFetch<void>(`/api/v1/nckh/variables/${variable.id}`, { method: "DELETE" });
@@ -504,7 +506,7 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể xóa ánh xạ khi mô hình còn là bản nháp.");
       return;
     }
-    if (!window.confirm(`Xóa ánh xạ "${mapping.observedCode}"?`)) return;
+    if (!await confirmation.confirm(`Xóa ánh xạ "${mapping.observedCode}"?`)) return;
     if (!beginPendingAction("deleteMapping")) return;
     try {
       await apiFetch<void>(`/api/v1/nckh/mappings/${mapping.id}`, { method: "DELETE" });
@@ -665,7 +667,7 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.");
       return;
     }
-    if (!window.confirm(`Xóa quan hệ "${relation.hypothesisCode}"?`)) return;
+    if (!await confirmation.confirm(`Xóa quan hệ "${relation.hypothesisCode}"?`)) return;
     if (!beginPendingAction("deleteRelation")) return;
     try {
       await apiFetch<void>(`/api/v1/nckh/relations/${relation.id}`, { method: "DELETE" });
@@ -832,6 +834,7 @@ export default function NckhFormWorkspacePage() {
 
   return (
     <div className="space-y-6">
+      {confirmation.dialog}
       <PageHeader
         eyebrow="NCKH"
         title={form.title || "Form NCKH"}
@@ -863,11 +866,11 @@ export default function NckhFormWorkspacePage() {
         <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để dùng không gian làm việc Phase 7." />
       ) : (
         <>
-          <div className="flex flex-wrap gap-2 rounded-lg border border-border/80 bg-surface/70 p-2">
+          <div className="flex flex-wrap gap-2 rounded-xl border border-border bg-surface p-2">
             {tabs.map((item) => (
               <button
                 key={item.id}
-                className={`rounded-md px-3 py-2 text-sm font-semibold transition ${tab === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
+                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${tab === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
                 type="button"
                 onClick={() => setTab(item.id)}
               >
@@ -982,7 +985,7 @@ export default function NckhFormWorkspacePage() {
         measured: { width: canvasNodeWidth, height: canvasNodeHeight },
         data: {
           label: (
-            <div className="pointer-events-auto relative w-[184px] rounded-md border border-info-border bg-surface px-3 py-3 text-left shadow-sm">
+            <div className="pointer-events-auto relative w-[184px] rounded-xl border border-info-border bg-surface px-3 py-3 text-left shadow-sm">
               <Handle type="target" position={Position.Left} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-primary !bg-surface" />
               <Handle type="source" position={Position.Right} isConnectable={canEditCanvas} className="!h-3 !w-3 !border-primary !bg-primary" />
               <div className="flex items-start justify-between gap-2">
@@ -1063,7 +1066,7 @@ export default function NckhFormWorkspacePage() {
           )}
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-surface/65 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3">
                 <div className="min-w-0 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">{positionCount} vị trí đã lưu.</span>
                 </div>
@@ -1073,7 +1076,7 @@ export default function NckhFormWorkspacePage() {
               {variables.length === 0 ? (
                 <EmptyState title="Chưa có biến để vẽ sơ đồ" detail="Thêm biến nghiên cứu trước khi tạo quan hệ và lưu vị trí nút." />
               ) : (
-                <div className="h-[520px] overflow-hidden rounded-lg border border-border/80 bg-surface/70">
+                <div className="h-[520px] overflow-hidden rounded-xl border border-border bg-surface">
                   <ReactFlow
                     colorMode="light"
                     defaultViewport={{ x: 16, y: 24, zoom: 1 }}
@@ -1116,13 +1119,13 @@ export default function NckhFormWorkspacePage() {
               )}
             </div>
 
-            <div className="space-y-3 rounded-lg border border-border/80 bg-surface/65 p-4">
+            <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
               <div className="flex items-center gap-2 text-sm font-semibold"><CircleDot size={16} /> Trạng thái sơ đồ</div>
               <KeyValueRow label="Biến" value={variables.length} />
               <KeyValueRow label="Quan hệ" value={relations.length} />
               <KeyValueRow label="Vị trí đã lưu" value={positionCount} />
               {selectedRelation && (
-                <div className="rounded-md border border-border/70 bg-surface/80 p-3 text-sm" data-testid="selected-relation-panel">
+                <div className="rounded-xl border border-border bg-surface p-3 text-sm" data-testid="selected-relation-panel">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono font-semibold">{selectedRelation.hypothesisCode}</span>
                     <Badge tone={relationTone(selectedRelation.direction)}>{displayRelationDirection(selectedRelation.direction)}</Badge>
@@ -1148,7 +1151,7 @@ export default function NckhFormWorkspacePage() {
                 <p className="text-xs font-semibold text-muted-foreground">Quan hệ gần nhất</p>
                 <div className="mt-2 space-y-2">
                   {relations.slice(0, 4).map((relation) => (
-                    <div className="rounded-md border border-border/70 bg-surface/70 p-2 text-xs" key={relation.id}>
+                    <div className="rounded-xl border border-border bg-surface p-2 text-xs" key={relation.id}>
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-mono font-semibold">{relation.hypothesisCode}</span>
                         <Badge tone={relationTone(relation.direction)}>{displayRelationDirection(relation.direction)}</Badge>
@@ -1177,20 +1180,20 @@ export default function NckhFormWorkspacePage() {
 
   function renderCanvasModal() {
     return (
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-overlay/40 p-3 md:items-center md:p-6" role="dialog" aria-modal="true" onClick={() => setCanvasModal(null)}>
-        <div className="max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-xl border border-border bg-background shadow-2xl" onClick={(event) => event.stopPropagation()}>
-          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+      <Dialog open className="max-w-6xl" onOpenChange={open => { if (!open) setCanvasModal(null); }}>
+        <DialogContent className="max-w-6xl overflow-hidden" contentClassName="flex max-h-[calc(100dvh-2rem-2px)] flex-col">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border px-4 py-3">
             <div>
-              <p className="text-sm font-semibold">Canvas tools</p>
+              <DialogTitle className="text-sm">Canvas tools</DialogTitle>
               <p className="text-xs text-muted-foreground">Biến và ánh xạ mở trong pop-up từ sơ đồ.</p>
             </div>
-            <Button variant="secondary" type="button" onClick={() => setCanvasModal(null)}>Đóng</Button>
+            <DialogClose>Đóng</DialogClose>
           </div>
-          <div className="max-h-[calc(92vh-60px)] overflow-auto p-4">
+          <div className="min-h-0 overflow-auto p-4">
             {canvasModal === "variables" ? renderVariablesPanel() : renderMappingPanel()}
           </div>
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 
@@ -1212,7 +1215,7 @@ export default function NckhFormWorkspacePage() {
             </span>
           </Button>
           {lastGenerate && (
-            <div className="rounded-lg border border-border/80 bg-surface/60 p-4 text-sm">
+            <div className="rounded-xl border border-border bg-surface p-4 text-sm">
               <p className="font-semibold">Kết quả gần nhất</p>
               <p className="mt-2">Tạo: {lastGenerate.questionsCreated}, cập nhật: {lastGenerate.questionsUpdated}, xóa: {lastGenerate.questionsDeleted}</p>
               <p>Nhập lại: {lastGenerate.reimported ? "Có" : "Không"}</p>

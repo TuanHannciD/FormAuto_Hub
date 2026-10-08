@@ -96,16 +96,16 @@ export default function AiProviderSettingsPage() {
         }
       />
 
-      <Alert className="border-warning-border/80 bg-warning-surface/85 text-warning">
+      <Alert className="border-warning-border/80 bg-warning-surface text-warning">
         API key thật không được trả về frontend. Nếu để trống API key khi lưu, backend sẽ giữ key hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface/85 text-info">
+      <Alert className="border-info-border/80 bg-info-surface text-info">
         Provider, model và API endpoint do admin nhập, được lưu server-side và không cho normal user tự quyết khi generate. Kiểm tra cấu hình không tạo preview, không trừ credit và không gọi luồng submit.
       </Alert>
 
-      <div className="grid gap-4 xl:grid-cols-[1.25fr_0.75fr]">
-        <div className="space-y-4">
-          <Card>
+      <div className="grid items-start gap-4 xl:grid-cols-[1.25fr_0.75fr]">
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0">
             <CardContent className="grid gap-4 md:grid-cols-3">
               <Detail icon={ShieldCheck} label="Trạng thái AI" value={settings?.isEnabled ? "Đang bật" : "Chưa bật"} tone={settings?.isEnabled ? "success" : "warning"} />
               <Detail icon={KeyRound} label="API key" value={settings?.hasApiKey ? settings.apiKeyPreview || "Đã lưu dạng ẩn" : "Chưa có"} tone={settings?.hasApiKey ? "success" : "warning"} />
@@ -113,7 +113,7 @@ export default function AiProviderSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Thông tin kết nối</CardTitle>
             </CardHeader>
@@ -174,13 +174,13 @@ export default function AiProviderSettingsPage() {
 
                 <label className="block text-sm font-medium">
                   Bật AI provider
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-md border border-border/70 bg-surface/55 px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép luồng AI preview dùng provider/model đã lưu trên server.</span>
                     <input checked={isEnabled} disabled={isLoading || isSaving} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
                 </label>
 
-                <div className="rounded-md border border-info-border/80 bg-info-surface/85 p-4 text-sm text-info shadow-sm backdrop-blur">
+                <div className="rounded-xl border border-info-border/80 bg-info-surface p-4 text-sm text-info">
                   <div className="flex items-start gap-3">
                     <Bot className="mt-0.5 shrink-0 text-primary" size={18} />
                     <div>
@@ -206,7 +206,7 @@ export default function AiProviderSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Điều kiện tối thiểu</CardTitle>
             </CardHeader>
@@ -219,8 +219,8 @@ export default function AiProviderSettingsPage() {
           </Card>
         </div>
 
-        <div className="space-y-4">
-          <Card>
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Trạng thái</CardTitle>
             </CardHeader>
@@ -229,7 +229,7 @@ export default function AiProviderSettingsPage() {
               <Detail label="Base URL" value={baseUrl || "Không cấu hình"} />
               <Detail label="Model mặc định" value={defaultModel || "Chưa chọn"} />
               <Detail label="Đang bật" value={isEnabled ? "Có" : "Chưa"} />
-              <div className="rounded-md border border-border/70 bg-surface/55 p-3 shadow-sm backdrop-blur">
+              <div className="rounded-xl border border-border bg-surface-subtle p-3">
                 <p className="text-xs text-muted-foreground">Kết quả kiểm tra</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <StatusBadge status={settings?.lastCheckStatus || "NotChecked"} />
@@ -240,7 +240,7 @@ export default function AiProviderSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Model đã lưu</CardTitle>
             </CardHeader>
@@ -248,7 +248,7 @@ export default function AiProviderSettingsPage() {
               {(savedModels.length > 0 ? savedModels : [defaultModel].filter(Boolean)).map((model) => (
                 <div
                   className={cn(
-                    "flex items-center justify-between rounded-md border border-border/70 bg-surface/55 p-3",
+                    "flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3",
                     model === defaultModel && "border-primary-border bg-primary-soft/80 text-primary"
                   )}
                   key={model}
@@ -261,7 +261,7 @@ export default function AiProviderSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="min-w-0">
             <CardHeader>
               <CardTitle>Lịch sử thay đổi</CardTitle>
             </CardHeader>
@@ -298,13 +298,13 @@ function Detail({
   tone?: "default" | "success" | "warning";
 }) {
   const toneClass = {
-    default: "border-border/70 bg-surface/55",
+    default: "border-border bg-surface-subtle",
     success: "border-success-border bg-success-surface/85 text-success",
-    warning: "border-warning-border bg-warning-surface/85 text-warning"
+    warning: "border-warning-border bg-warning-surface text-warning"
   }[tone];
 
   return (
-    <div className={cn("rounded-md border p-3 shadow-sm backdrop-blur", toneClass)}>
+    <div className={cn("rounded-xl border p-3", toneClass)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
         {Icon && <Icon size={15} />}
@@ -316,7 +316,7 @@ function Detail({
 
 function CheckRow({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-surface/55 p-3">
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-subtle p-3">
       <span>{label}</span>
       {ok ? <CheckCircle2 className="shrink-0 text-success" size={16} /> : <AlertCircle className="shrink-0 text-destructive" size={16} />}
     </div>

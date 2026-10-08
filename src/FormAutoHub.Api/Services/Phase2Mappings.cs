@@ -10,7 +10,7 @@ internal static class Phase2Mappings
 
     public static TopupOrderResponse ToResponse(this TopupOrder order) =>
         new(order.Id, order.PackageId, order.Credits, order.Amount, order.Status, order.PaymentMethod,
-            order.PaymentNote, order.CreatedAt, order.PaidAt, order.ApprovedAt);
+            order.PaymentNote, order.CreatedAt, order.PaidAt, order.ApprovedAt, order.EvidenceFileId);
 
     public static AdminTopupOrderResponse ToAdminResponse(this TopupOrder order) =>
         new(order.Id, order.UserId, order.PackageId, order.Credits, order.Amount, order.Status,

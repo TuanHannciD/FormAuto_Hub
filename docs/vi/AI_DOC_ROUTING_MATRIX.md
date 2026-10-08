@@ -56,10 +56,10 @@ Một số file docs vượt ngưỡng 400 dòng. Trước khi đọc toàn bộ
 
 | File | ~Dòng |
 |---|---|
-| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~500 |
+| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~720 |
 | docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~150 |
 | docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~200 |
-| `API_CONTRACT_GUIDE.md` | ~450 |
+| `API_CONTRACT_GUIDE.md` | ~789 |
 
 Số dòng là gần đúng và có thể lệch theo thời gian. Khi mở file không có trong danh sách nhưng có vẻ lớn, áp dụng cùng cách tiếp cận TOC-first.
 
@@ -72,3 +72,7 @@ Trước khi đọc bất kỳ file docs nào, áp dụng các quy tắc sau đ�
 3. Không đọc lại file đã đọc trong cùng phiên.
 4. Thứ tự ưu tiên: rules/contracts → overview kiến trúc → chi tiết implementation.
 5. Dùng TOC kèm dòng để nhảy đến section cần thay vì đọc toàn bộ file lớn.
+
+## Routing follow-up UI/credit hiện tại
+
+Với UI dùng chung, pop-up/animation tài khoản, xử lý auth NCKH ở frontend hoặc follow-up credit thủ công: đọc `UI_CREDIT_FOLLOWUP_SYNC.md`, rồi `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md` và contract/kiến trúc NCKH khi liên quan.

@@ -79,3 +79,33 @@ Cấm: Code NCKH trong dịch vụ FormAuto Hub; entity FormAuto Hub trong dịc
 - AI sinh giả thuyết
 - Đồng bộ dữ liệu real-time
 - Tích hợp thanh toán/credit cho NCKH
+
+## Cấu hình DbContext bắt buộc
+
+| Entity | FK | DeleteBehavior | Lý do |
+|---|---|---|---|
+| ObservedQuestionMappings | FormQuestionId → ResearchFormQuestions | Restrict | Tránh mất mapping khi nhập lại form |
+| ModelRelations | FromVariableId → ResearchVariables | Restrict | Hai FK cùng trỏ bảng biến |
+| ModelRelations | ToVariableId → ResearchVariables | Restrict | Hai FK cùng trỏ bảng biến |
+| ModelRelations | ModelId → ResearchModels | Cascade | Xóa model xóa quan hệ |
+| ResearchVariables | ModelId → ResearchModels | Cascade | Xóa model xóa biến |
+| ObservedQuestionMappings | VariableId → ResearchVariables | Cascade | Xóa biến xóa mapping |
+| NodePositions | VariableId → ResearchVariables | Restrict / NoAction | Tránh nhiều đường cascade SQL Server; service dọn vị trí trước khi xóa biến |
+| NodePositions | RelationId → ModelRelations | Cascade | Xóa quan hệ xóa vị trí |
+
+Hai FK của ModelRelations phải cấu hình rõ bằng `HasForeignKey()` trong `OnModelCreating`. CHECK constraint của NodePositions chỉ cho một trong VariableId/RelationId có giá trị. Phase 3 dùng restrict/no-action trên NodePositions.ModelId và VariableId; việc dọn dữ liệu không thể cascade an toàn thuộc service.
+
+## Namespace và persistence
+
+- Entity: `FormAutoHub.Api.Entities.Nckh`; service: `FormAutoHub.Api.Services.Nckh`.
+- Controller: `FormAutoHub.Api.Controllers.Nckh`, route `/api/v1/nckh`.
+- DTO hiện nằm trong `FormAutoHub.Api.Contracts`; tích hợp Google: `FormAutoHub.Api.Integrations.Google`.
+- Dùng chung `FormAutoHubDbContext`, database và folder `Data/Migrations/`; tên migration `NckhPhase{number}_{Description}`.
+- Migration NCKH phụ thuộc migration FormAuto Hub trước đó; đồng bộ migration hiện tại trước khi tạo migration mới.
+- Deferred: `NckhDbContext` riêng nếu sau này có database riêng.
+
+## Toàn vẹn dữ liệu hiện tại
+
+- Xóa model dùng EF cascade, bao gồm SurveyResponses và NormalizedDatasets thuộc model. Không claim giữ lại dữ liệu: `ResearchModelService.DeleteModelAsync` và `FormAutoHubDbContext` quyết định hành vi hiện tại.
+- Sửa biến khi có dữ liệu đánh dấu `NormalizedDatasets.IsStale = true`, cần chuẩn hóa lại.
+- Chỉ `Draft` và `Active` đã triển khai; `Archived` chưa phải trạng thái lifecycle đã implement.

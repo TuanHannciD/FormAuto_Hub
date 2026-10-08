@@ -1,37 +1,37 @@
 # DOMAIN_ENTITIES_OVERVIEW
 
-## TOC
+## Mục lục
 
-- [Mục đích](#mục-đích) (36)
-- [Trạng thái contract](#trạng-thái-contract) (40)
-- [Conceptual entities đã chốt](#conceptual-entities-đã-chốt) (44)
-- [Proposed MVP fields](#proposed-mvp-fields) (69)
-  - [Users](#users) (71)
-  - [UserCreditAccounts](#usercreditaccounts) (82)
-  - [CreditPackages](#creditpackages) (91)
-  - [TopupOrders](#topuporders) (108)
-  - [CreditTransactions](#credittransactions) (129)
-  - [PaymentRecords](#paymentrecords) (146)
-  - [PaymentProviderSettings](#paymentprovidersettings) (176)
-  - [AiProviderSettings](#aiprovidersettings) (205)
-  - [AiPromptProfiles](#aipromptprofiles) (237)
-  - [AiQuestionPrompts](#aiquestionprompts) (259)
-  - [RefreshTokens](#refreshtokens) (280)
-  - [UserExternalLogins](#userexternallogins) (291)
-  - [UsageLogs](#usagelogs) (305)
-  - [FormProjects](#formprojects) (317)
-  - [FormQuestions](#formquestions) (328)
-  - [AnswerRules](#answerrules) (339)
-  - [GeneratedResponses](#generatedresponses) (348)
-  - [SubmissionJobs](#submissionjobs) (359)
-  - [SubmissionLogs](#submissionlogs) (372)
-  - [AuditLogs](#auditlogs) (382)
-  - [AiGenerationRuns](#aigenerationruns) (392)
-  - [AiGenerationRunItems](#aigenerationrunitems) (428)
-- [Deferred fields và decisions](#deferred-fields-và-decisions) (450)
-- [Field không được tự bịa](#field-không-được-tự-bịa) (469)
-- [Kỷ luật ledger](#kỷ-luật-ledger) (481)
-- [Scope Form Automation MVP](#scope-form-automation-mvp) (489)
+- [Mục đích](#mục-đích) — line 36
+- [Trạng thái contract](#trạng-thái-contract) — line 40
+- [Conceptual entities đã chốt](#conceptual-entities-đã-chốt) — line 44
+- [Proposed MVP fields](#proposed-mvp-fields) — line 69
+  - [Users](#users) — line 71
+  - [UserCreditAccounts](#usercreditaccounts) — line 82
+  - [CreditPackages](#creditpackages) — line 91
+  - [TopupOrders](#topuporders) — line 108
+  - [CreditTransactions](#credittransactions) — line 133
+  - [PaymentRecords](#paymentrecords) — line 150
+  - [PaymentProviderSettings](#paymentprovidersettings) — line 180
+  - [AiProviderSettings](#aiprovidersettings) — line 209
+  - [AiPromptProfiles](#aipromptprofiles) — line 241
+  - [AiQuestionPrompts](#aiquestionprompts) — line 263
+  - [RefreshTokens](#refreshtokens) — line 284
+  - [UserExternalLogins](#userexternallogins) — line 295
+  - [UsageLogs](#usagelogs) — line 309
+  - [FormProjects](#formprojects) — line 321
+  - [FormQuestions](#formquestions) — line 332
+  - [AnswerRules](#answerrules) — line 343
+  - [GeneratedResponses](#generatedresponses) — line 352
+  - [SubmissionJobs](#submissionjobs) — line 363
+  - [SubmissionLogs](#submissionlogs) — line 376
+  - [AuditLogs](#auditlogs) — line 386
+  - [AiGenerationRuns](#aigenerationruns) — line 396
+  - [AiGenerationRunItems](#aigenerationrunitems) — line 432
+- [Deferred fields và decisions](#deferred-fields-và-decisions) — line 454
+- [Field không được tự bịa](#field-không-được-tự-bịa) — line 473
+- [Kỷ luật ledger](#kỷ-luật-ledger) — line 485
+- [Scope Form Automation MVP](#scope-form-automation-mvp) — line 493
 
 ## Mục đích
 
@@ -106,6 +106,10 @@ Follow-up admin package management đã duyệt:
 - Không thêm màu package, marketing label, discount field hoặc subscription field nếu chưa có approval riêng.
 
 ### TopupOrders
+
+Follow-up credit thủ công đã duyệt (2026-10-08): `EvidenceFileId` có thể null, tham chiếu `TopupEvidence` và hạn chế xóa. `RowVersion` trên `TopupOrders` và `UserCreditAccounts` là dấu kiểm tra xung đột của SQL Server. Không thay các field vòng đời hay trạng thái hiện có.
+
+`TopupEvidence` ánh xạ tới `TopupOrderEvidenceFiles`, dùng lại schema local cũ. Lưu `Id`, `UserId` chủ file, `TopupOrderId` nullable, `FileName` đã làm sạch ánh xạ sang `OriginalFileName` (200 ký tự), `ContentType` nhận diện (50 ký tự), `Length`, nội dung nhị phân `Content` riêng tư (giới hạn tải lên 5 MB), `CreatedAt`; có index theo `UserId`. Minh chứng là tùy chọn. API metadata/projection đọc không chứa nội dung nhị phân. Migration tạo phần lưu trữ/liên kết còn thiếu trên database mới và dùng lại phần đã có mà không xóa ảnh cũ. Rollback bỏ row version nhưng giữ bảng ảnh và liên kết với đơn để tránh phá dữ liệu cũ.
 
 - Id
 - UserId

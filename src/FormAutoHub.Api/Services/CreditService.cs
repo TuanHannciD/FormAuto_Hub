@@ -7,6 +7,8 @@ namespace FormAutoHub.Api.Services;
 
 public interface ICreditService
 {
+    Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddManualCreditsAsync(
+        Guid userId, int credits, string reason, CancellationToken cancellationToken, Guid? transactionId = null);
     Task<(CreditTransaction Transaction, UserCreditAccount Account)> GrantInitialCreditsAsync(
         Guid userId,
         int credits,
@@ -16,7 +18,8 @@ public interface ICreditService
     Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddTopupCreditsAsync(
         TopupOrder order,
         string description,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken,
+        Guid? transactionId = null);
 
     Task<(CreditTransaction Transaction, UserCreditAccount Account)?> DeductUsageCreditsAsync(
         Guid userId,
@@ -29,6 +32,30 @@ public interface ICreditService
 
 public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditService
 {
+    public async Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddManualCreditsAsync(
+        Guid userId, int credits, string reason, CancellationToken cancellationToken, Guid? transactionId = null)
+    {
+        if (credits <= 0 || string.IsNullOrWhiteSpace(reason))
+            throw new ArgumentException("Số credit phải lớn hơn 0 và phải có lý do cộng credit.");
+        var account = await dbContext.UserCreditAccounts.SingleOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+        if (account is null)
+        {
+            account = new UserCreditAccount { Id = Guid.NewGuid(), UserId = userId };
+            dbContext.UserCreditAccounts.Add(account);
+        }
+        account.Balance += credits;
+        account.TotalDeposited += credits;
+        account.UpdatedAt = DateTimeOffset.UtcNow;
+        var transaction = new CreditTransaction
+        {
+            Id = transactionId ?? Guid.NewGuid(), UserId = userId, Amount = credits, BalanceAfter = account.Balance,
+            Type = CreditTransactionTypes.ManualGrant, Description = reason.Trim(),
+            ReferenceType = nameof(User), ReferenceId = userId, CreatedAt = DateTimeOffset.UtcNow
+        };
+        dbContext.CreditTransactions.Add(transaction);
+        return (transaction, account);
+    }
+
     public async Task<(CreditTransaction Transaction, UserCreditAccount Account)> GrantInitialCreditsAsync(
         Guid userId,
         int credits,
@@ -81,7 +108,8 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
     public async Task<(CreditTransaction Transaction, UserCreditAccount Account)> AddTopupCreditsAsync(
         TopupOrder order,
         string description,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        Guid? transactionId = null)
     {
         var account = await dbContext.UserCreditAccounts
             .SingleOrDefaultAsync(item => item.UserId == order.UserId, cancellationToken);
@@ -116,7 +144,7 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
             ReferenceId = order.Id,
             CreatedAt = DateTimeOffset.UtcNow
         };
-
+        if (transactionId.HasValue) transaction.Id = transactionId.Value;
         dbContext.CreditTransactions.Add(transaction);
         return (transaction, account);
     }

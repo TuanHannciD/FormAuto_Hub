@@ -21,6 +21,12 @@ public sealed class TopupOrderService(FormAutoHubDbContext dbContext, ICurrentUs
 {
     public async Task<TopupOrderResponse?> CreateAsync(CreateTopupOrderRequest request, CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(request.PaymentMethod) && !string.Equals(request.PaymentMethod, "Manual", StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException("Đơn đối soát phải dùng phương thức Manual. Tạo đơn PayOS qua API thanh toán.");
+        if (string.IsNullOrWhiteSpace(request.PaymentNote) || request.PaymentNote.Length > 1000)
+            throw new ArgumentException("Ghi chú chuyển khoản là bắt buộc, tối đa 1000 ký tự.");
+        if (request.FileId.HasValue && !await dbContext.TopupEvidence.AnyAsync(x => x.Id == request.FileId && x.UserId == currentUser.UserId, cancellationToken))
+            throw new ArgumentException("Ảnh minh chứng không tồn tại hoặc không thuộc tài khoản của bạn.");
         var package = await dbContext.CreditPackages
             .AsNoTracking()
             .SingleOrDefaultAsync(item => item.Id == request.PackageId && item.IsActive, cancellationToken);
@@ -38,12 +44,20 @@ public sealed class TopupOrderService(FormAutoHubDbContext dbContext, ICurrentUs
             Credits = package.Credits,
             Amount = package.Price,
             Status = TopupOrderStatuses.Pending,
-            PaymentMethod = request.PaymentMethod,
-            PaymentNote = request.PaymentNote,
+            PaymentMethod = "Manual",
+            PaymentNote = request.PaymentNote.Trim(),
+            EvidenceFileId = request.FileId,
             CreatedAt = DateTimeOffset.UtcNow
         };
 
         dbContext.TopupOrders.Add(order);
+        if (request.FileId.HasValue)
+        {
+            var evidence = await dbContext.TopupEvidence.SingleAsync(x => x.Id == request.FileId, cancellationToken);
+            if (evidence.TopupOrderId.HasValue)
+                throw new ArgumentException("Ảnh minh chứng đã được gắn với một đơn khác. Hãy tải ảnh cho đơn mới.");
+            evidence.TopupOrderId = order.Id;
+        }
         await dbContext.SaveChangesAsync(cancellationToken);
         return order.ToResponse();
     }

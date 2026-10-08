@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, KeyValueRow } from "@/components/ui";
+import { buttonStyles } from "@/components/ui-styles";
 import { displayStatus } from "@/lib/labels";
 
 const FORM_PREVIEW_RESUME_KEY = "formauto.formPreviewResume";
@@ -78,9 +79,9 @@ function PaymentResultShell({
               Credit không được cộng từ trang này. Hệ thống chỉ cập nhật số dư sau khi backend nhận và xác minh webhook PayOS hợp lệ.
             </Alert>
             <div className="grid gap-3 text-sm">
-              <Detail label="Mã giao dịch PayOS" value={orderCode || "Chưa có"} />
-              <Detail label="Trạng thái từ PayOS" value={displayStatus(status)} />
-              <Detail label="Kết quả hủy" value={cancelled ? "Đã hủy" : "Không"} />
+              <KeyValueRow label="Mã giao dịch PayOS" value={orderCode || "Chưa có"} />
+              <KeyValueRow label="Trạng thái từ PayOS" value={displayStatus(status)} />
+              <KeyValueRow label="Kết quả hủy" value={cancelled ? "Đã hủy" : "Không"} />
             </div>
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               {hasFormPreviewResume && (
@@ -88,10 +89,10 @@ function PaymentResultShell({
                   Quay lại tiếp tục tạo preview
                 </Button>
               )}
-              <Link className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground" href="/dashboard">
+              <Link className={buttonStyles()} href="/dashboard">
                 Về tổng quan
               </Link>
-              <Link className="inline-flex min-h-10 items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium" href="/dashboard/top-up">
+              <Link className={buttonStyles({ variant: "secondary" })} href="/dashboard/top-up">
                 Xem lịch sử nạp
               </Link>
             </div>
@@ -99,14 +100,5 @@ function PaymentResultShell({
         </Card>
       </div>
     </main>
-  );
-}
-
-function Detail({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-border p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1 break-words font-medium">{value}</p>
-    </div>
   );
 }

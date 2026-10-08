@@ -79,6 +79,8 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<ITopupOrderService, TopupOrderService>();
 builder.Services.AddScoped<IAdminTopupOrderService, AdminTopupOrderService>();
+builder.Services.AddScoped<AdminCreditOperationsService>();
+builder.Services.AddScoped<TopupEvidenceService>();
 builder.Services.AddScoped<ICreditService, CreditService>();
 builder.Services.AddScoped<IUsageLogService, UsageLogService>();
 builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>();

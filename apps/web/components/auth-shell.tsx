@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buttonStyles } from "./ui-styles";
 import { Coins, FileCheck2, ShieldCheck } from "lucide-react";
 
 export function AuthShell({ mode, children }: { mode: "login" | "register" | "callback"; children: React.ReactNode }) {
@@ -46,5 +47,5 @@ export function AuthHeading({ title, description }: { title: string; description
 }
 
 export function AuthSwitch({ mode }: { mode: "login" | "register" }) {
-  return <div className="mt-5"><div className="flex items-center gap-3 text-[11px] text-secondary-foreground"><span className="h-px flex-1 bg-border" />hoặc<span className="h-px flex-1 bg-border" /></div><p className="mt-4 text-center text-xs font-semibold text-secondary-foreground">{mode === "login" ? "Chưa có tài khoản?" : "Đã có tài khoản?"}</p><Link className="mt-2 flex min-h-[54px] items-center justify-center rounded-xl border border-border-strong bg-surface text-sm font-bold text-primary transition hover:border-primary hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" href={mode === "login" ? "/register" : "/login"}>{mode === "login" ? "Tạo tài khoản" : "Đăng nhập ngay"}</Link></div>;
+  return <div className="mt-5"><div className="flex items-center gap-3 text-[11px] text-secondary-foreground"><span className="h-px flex-1 bg-border" />hoặc<span className="h-px flex-1 bg-border" /></div><p className="mt-4 text-center text-xs font-semibold text-secondary-foreground">{mode === "login" ? "Chưa có tài khoản?" : "Đã có tài khoản?"}</p><Link className={buttonStyles({ variant: "secondary", size: "lg", className: "mt-2 flex w-full text-primary hover:border-primary hover:bg-primary-soft" })} href={mode === "login" ? "/register" : "/login"}>{mode === "login" ? "Tạo tài khoản" : "Đăng nhập ngay"}</Link></div>;
 }

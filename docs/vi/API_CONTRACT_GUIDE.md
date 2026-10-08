@@ -1,36 +1,41 @@
 # API_CONTRACT_GUIDE
 
-## TOC
+## Mục lục
 
-- [Mục đích](#mục-đích) (34)
-- [Trạng thái hiện tại](#trạng-thái-hiện-tại) (38)
-- [Quy tắc REST naming](#quy-tắc-rest-naming) (42)
-- [Health vận hành](#health-vận-hành)
-- [API area đề xuất](#api-area-đề-xuất) (50)
-  - [Dashboard](#dashboard) (52)
-  - [Packages](#packages) (56)
-  - [Top-up orders](#top-up-orders) (101)
-  - [Admin top-up orders](#admin-top-up-orders) (146)
-  - [Admin AI provider settings](#admin-ai-provider-settings) (191)
-  - [PayOS webhooks](#payos-webhooks) (266)
-  - [Usage logs](#usage-logs) (304)
-  - [Credit transactions](#credit-transactions) (334)
-  - [Profile](#profile) (356)
-  - [Authentication and account access](#authentication-and-account-access) (362)
-  - [Forms](#forms) (409)
-  - [Answer rules](#answer-rules) (414)
-  - [Generated responses](#generated-responses) (432)
-  - [AI prompt profiles](#ai-prompt-profiles) (454)
-  - [AI generated responses](#ai-generated-responses) (478)
-  - [Submissions](#submissions) (545)
-- [Quy tắc DTO](#quy-tắc-dto) (560)
-- [Error response](#error-response) (568)
-- [Pagination và filtering](#pagination-và-filtering) (574)
-- [Kỷ luật status](#kỷ-luật-status) (581)
-- [Status và type values đã duyệt](#status-và-type-values-đã-duyệt) (587)
-- [User context tạm thời](#user-context-tạm-thời) (637)
-- [Versioning và OpenAPI](#versioning-và-openapi) (646)
-- [Quy tắc thay đổi](#quy-tắc-thay-đổi) (651)
+- [Mục đích](#mục-đích) — line 40
+- [Trạng thái hiện tại](#trạng-thái-hiện-tại) — line 44
+- [Quy tắc REST naming](#quy-tắc-rest-naming) — line 48
+- [Health vận hành](#health-vận-hành) — line 56
+- [API area đề xuất](#api-area-đề-xuất) — line 68
+  - [Dashboard](#dashboard) — line 70
+  - [Packages](#packages) — line 74
+  - [Top-up orders](#top-up-orders) — line 119
+  - [Admin top-up orders](#admin-top-up-orders) — line 164
+  - [Admin AI provider settings](#admin-ai-provider-settings) — line 223
+  - [PayOS webhooks](#payos-webhooks) — line 298
+  - [Usage logs](#usage-logs) — line 336
+  - [Credit transactions](#credit-transactions) — line 366
+  - [Profile](#profile) — line 388
+  - [Authentication and account access](#authentication-and-account-access) — line 399
+  - [Forms](#forms) — line 449
+  - [Answer rules](#answer-rules) — line 454
+  - [Generated responses](#generated-responses) — line 472
+  - [AI prompt profiles](#ai-prompt-profiles) — line 494
+  - [AI generated responses](#ai-generated-responses) — line 518
+  - [AI usage analytics](#ai-usage-analytics) — line 585
+  - [GET /api/admin/ai-usage/runs — Admin danh sách lượt AI (phân trang)](#get-apiadminai-usageruns--admin-danh-sách-lượt-ai-phân-trang) — line 604
+  - [Submissions](#submissions) — line 645
+- [Quy tắc DTO](#quy-tắc-dto) — line 660
+- [Error response](#error-response) — line 668
+- [Pagination và filtering](#pagination-và-filtering) — line 674
+- [Kỷ luật status](#kỷ-luật-status) — line 681
+- [Status và type values đã duyệt](#status-và-type-values-đã-duyệt) — line 687
+- [User context tạm thời](#user-context-tạm-thời) — line 738
+- [Versioning và OpenAPI](#versioning-và-openapi) — line 748
+- [Quy tắc thay đổi](#quy-tắc-thay-đổi) — line 753
+- [Ví dụ payload đồng bộ với bản AI](#ví-dụ-payload-đồng-bộ-với-bản-ai) — line 757
+  - [GET /api/admin/ai-usage/runs — Admin paged AI runs — Response / định dạng minh họa](#get-apiadminai-usageruns--admin-paged-ai-runs--response--định-dạng-minh-họa) — line 761
+- [Làm rõ follow-up UI hiện tại](#làm-rõ-follow-up-ui-hiện-tại) — line 787
 
 ## Mục đích
 
@@ -157,6 +162,20 @@ Cần contract review trước implementation:
 - `paymentLinkId` có luôn trong mọi create-link response thành công từ PayOS hay không
 
 ### Admin top-up orders
+
+Hoàn thiện luồng credit thủ công đã được duyệt (2026-10-08):
+
+- `GET /api/admin/topup-orders/manual`: chỉ admin, trả mảng đơn thủ công gồm cả đơn đã xử lý, loại trừ PayOS. Bổ sung `userEmail`, `packageName`, `evidenceFileId` có thể null vào các field đơn admin hiện có.
+- `GET /api/admin/credit-operations/users?search=`: chỉ admin, tìm email, tối đa 20 lựa chọn sắp theo email; trả `{ items: [{ id, email, fullName }] }`.
+- Follow-up lịch sử đã duyệt (2026-10-08): `GET /api/admin/credit-operations/manual-grants?search=&page=1&pageSize=20` chỉ dành cho JWT Admin. Trả `{ items, page, pageSize, totalItems, totalPages }`; trang bắt đầu từ 1, pageSize giới hạn 1..50, trang vượt phạm vi được đưa về trang cuối. Mỗi item có `id`, `userId`, `userEmail`, `userFullName`, `credits`, `balanceAfter`, `reason`, `createdAt`, cùng `adminId`, `adminEmail`, `adminFullName` có thể null. Chỉ đọc sổ `ManualGrant`, mới nhất trước (mã giao dịch làm thứ tự phụ); tìm theo email/tên người nhận hoặc người thực hiện và lý do. Người thực hiện lấy từ audit `ManualGrant` / `CreditTransaction` mới nhất khớp mã sổ giao dịch. Audit/tài khoản cũ bị thiếu giữ trạng thái chưa có dữ liệu, không gán cho admin hiện tại. Xem lịch sử không thêm cấu trúc lưu trữ hay ghi credit.
+- `POST /api/admin/credit-operations/manual-grants`: chỉ admin, nhận `{ userId, credits, reason }`; credit là số nguyên dương, lý do không trống và tối đa 1000 ký tự. Trả `{ userId, userEmail, creditTransactionId, balanceAfter }`. Không có người dùng: 404; dữ liệu không hợp lệ: 400.
+- Cộng trực tiếp đi qua `CreditService`, ghi sổ `ManualGrant` và audit gồm admin, người nhận, số credit, lý do, số dư sau trong cùng transaction. Mỗi request được chấp nhận là một lần cộng riêng; trình duyệt khóa gửi lặp khi đang xử lý và không tự gửi lại thao tác ghi bị lỗi. SQL thử lại nội bộ giữ nguyên mã sổ giao dịch và kiểm tra giao dịch đã commit trước khi ghi lại.
+- Duyệt/từ chối thủ công chỉ nhận đơn `Pending` có `paymentMethod = Manual`; đơn khác trả 409. Từ chối cần lý do không trống, tối đa 1000 ký tự. Duyệt ghi số dư, trạng thái, sổ giao dịch và audit admin nguyên tử. PayOS vẫn chỉ được duyệt qua xử lý thanh toán đã xác minh.
+- `POST /api/topup-orders/evidence`: cần đăng nhập, multipart `file`; trả `{ fileId, fileName, contentType, length, createdAt }`. Minh chứng tùy chọn nhận chữ ký file PNG/JPEG/WebP, tối đa 5 MB, làm sạch tên file. Nội dung file lưu riêng tư trong database, không dùng URL tĩnh công khai.
+- `POST /api/topup-orders`: giữ `packageId`, `paymentMethod`, `paymentNote`, thêm `fileId` tùy chọn, phải thuộc người dùng đang đăng nhập và chưa gắn với đơn khác. Chuẩn hóa đơn thủ công thành `Manual`; phương thức khác dùng API PayOS riêng. Ghi chú không trống, tối đa 1000 ký tự. Phản hồi đơn người dùng thêm `evidenceFileId` có thể null.
+- `GET /api/topup-orders/evidence/{id}`: chỉ chủ file. `GET /api/admin/topup-orders/evidence/{id}`: chỉ JWT Admin, file phải gắn với đơn thủ công. Không có/không được truy cập: 404. Trả `Cache-Control: no-store` và `X-Content-Type-Options: nosniff`.
+- Quyền admin dựa trên role JWT đã xác thực; header tự khai admin không cấp quyền vào các route này. Row version chặn ghi dữ liệu cũ vào đơn và tài khoản credit; xung đột thao tác admin trả 409.
+- Deferred: tác vụ dọn file/lưu trữ theo thời hạn và kho file ngoài. Minh chứng là tùy chọn; không thêm trạng thái vòng đời đơn.
 
 - `GET /api/admin/topup-orders`
 - `POST /api/admin/topup-orders/{id}/approve`
@@ -686,6 +705,7 @@ CreditTransaction.Type:
 - TopupApproved
 - CreditUsed
 - InitialGrant
+- ManualGrant (follow-up cộng credit trực tiếp của admin đã duyệt, 2026-10-08)
 
 Quy tắc Phase 8:
 
@@ -733,3 +753,37 @@ Các headers này không phải authentication contract cuối.
 ## Quy tắc thay đổi
 
 Mọi API contract change phải cập nhật cả `docs/ai` và `docs/vi`.
+
+## Ví dụ payload đồng bộ với bản AI
+
+Các ví dụ dưới đây giữ nguyên tên field và giá trị mẫu của bản AI; không thêm contract, endpoint hay nghiệp vụ. `[...]` biểu thị phần được rút gọn. DTO/controller hiện tại là nguồn chính xác cho field và validation runtime.
+
+### GET /api/admin/ai-usage/runs — Admin paged AI runs — Response / định dạng minh họa
+
+```json
+{
+  "items": [
+    {
+      "id": "guid",
+      "mode": "Option2",
+      "status": "Succeeded",
+      "provider": "Deepseek",
+      "model": "deepseek-v4-flash",
+      "requestedCount": 5,
+      "generatedCount": 5,
+      "creditsUsed": 15,
+      "durationMs": 24073,
+      "createdAt": "2026-05-30T01:59:12.7650167+00:00",
+      "projectName": "test"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 122,
+  "totalPages": 7
+}
+```
+
+## Làm rõ follow-up UI hiện tại
+
+Hồ sơ/bảo mật hiển thị trong pop-up topbar; endpoint hồ sơ/mật khẩu/danh tính Google giữ nguyên. `GET /api/topup-orders` vẫn trả `{ items }`, chưa phân trang server; lịch sử user hiển thị 10 dòng/trang client. Admin `GET /api/admin/credit-operations/manual-grants` phân trang server. Cách ghi DTO/review proposed Phase 8 trước đây là lịch sử; contract đã triển khai trong `Contracts/Phase2Dtos.cs`, `Contracts/Phase8Dtos.cs`, `Contracts/AuthDtos.cs` và controller tương ứng là nguồn chính. Không suy ra approval thêm cho provider/field tương lai. Xem `UI_CREDIT_FOLLOWUP_SYNC.md`.
