@@ -57,11 +57,11 @@ Not run in this closeout: production deployment/push, real PayOS payment/webhook
 
 ## Remaining gaps and Deferred
 
-- NCKH model-delete documentation requires impact/count summary and exact-name confirmation. The shared confirmation currently has confirm/cancel without those fields. This gap is recorded, not fixed or weakened by this sync; a separately scoped implementation is recommended.
+- NCKH model-delete confirmation was missing in this sync. A subsequent user-approved implementation closes that gap; see [NCKH_MODEL_DELETE_FOLLOWUP.md](nckh/NCKH_MODEL_DELETE_FOLLOWUP.md) for current behavior and separate validation evidence.
 - Client top-up pagination still downloads all orders. Server pagination is a future scoped improvement, not implemented here.
 - Evidence retention/cleanup and external object storage, other payment providers, broader AI rollout and background jobs remain Deferred unless separately approved.
 - No new global phase, refund policy, Google restriction bypass or submission automation without preview/confirmation is approved.
 
 ## Next step
 
-Commit the reviewed source/tests/prototype and paired documentation locally. A later request is required for push/deploy or implementation of the remaining gaps.
+The UI/credit source/tests/prototype and paired documentation were committed locally as `f50f062`. The subsequent NCKH delete follow-up was user-tested and accepted, with final review/local commit/merge into main authorized; see its report. Push/deploy and other remaining gaps require a separate request.

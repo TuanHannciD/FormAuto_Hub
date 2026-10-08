@@ -54,7 +54,7 @@
 - [Pagination Standard](#pagination-standard) — line 639
 - [Error Response Format](#error-response-format) — line 654
 - [Current browser authorization distinction](#current-browser-authorization-distinction) — line 666
-- [Existing UI confirmation gap](#existing-ui-confirmation-gap) — line 674
+- [Model-delete confirmation follow-up](#model-delete-confirmation-follow-up) — line 674
 
 ## Purpose
 
@@ -671,6 +671,8 @@ For `/api/v1/nckh/`, only a 401 ProblemDetails with `title = "Unauthorized"` and
 - `Google account not linked. Please link your Google account.`
 - `Google account not linked or token expired. Please re-link your Google account.`
 
-## Existing UI confirmation gap
+## Model-delete confirmation follow-up
 
-The documented model-delete requirement includes impact summary, approximate affected-record count and exact-name entry. Current shared `ConfirmDialog` supports confirm/cancel but does not implement count/name entry. Preserve that requirement; this documentation sync does not claim the gap is fixed or approve weaker deletion rules. Backend model deletion currently cascades owned data, including responses/datasets.
+The user-approved 2026-10-08 follow-up closes the previously recorded UI gap. The model-specific popup uses existing owned GETs for variables/mappings/relations/responses/dataset `totalItems` and positions `items.length`; counts represent the time of checking, not an atomic deletion snapshot. It requires exact-name entry, blocks incomplete/error states, rechecks the current name/generated-form state, and prevents repeated requests/dismissal during deletion. Typing the name is a frontend safeguard; the existing DELETE request has no new payload.
+
+DELETE keeps its route and 204/401/404 behavior. A model referenced by a generated `ResearchForm` now returns the existing 409 Conflict shape with detail `Model has a generated form. Deletion is not allowed.` instead of falling through to a database FK error. The existing FK restriction is preserved; generated forms are not detached/deleted. Canvas positions and relations are removed with the model in one SaveChanges transaction; existing cascades remove variables, mappings, responses, normalized datasets and collection logs. Original imported forms/questions remain. See [NCKH_MODEL_DELETE_FOLLOWUP.md](NCKH_MODEL_DELETE_FOLLOWUP.md) for files, cases and validation limits.

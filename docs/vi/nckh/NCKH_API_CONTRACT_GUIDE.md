@@ -48,7 +48,7 @@
   - [POST /api/v1/nckh/models/{modelId}/normalize — Response / định dạng minh họa](#post-apiv1nckhmodelsmodelidnormalize--response--định-dạng-minh-họa) — line 557
   - [GET /api/v1/nckh/models/{modelId}/dataset — Response / định dạng minh họa](#get-apiv1nckhmodelsmodeliddataset--response--định-dạng-minh-họa) — line 568
   - [Error Response Format — Response / định dạng minh họa](#error-response-format--response--định-dạng-minh-họa) — line 593
-- [Khoảng thiếu xác nhận xóa trên UI hiện tại](#khoảng-thiếu-xác-nhận-xóa-trên-ui-hiện-tại) — line 605
+- [Follow-up xác nhận xóa model](#follow-up-xác-nhận-xóa-model) — line 605
 
 ## Mục đích
 
@@ -602,6 +602,8 @@ Các ví dụ dưới đây giữ nguyên tên field và giá trị mẫu của 
 }
 ```
 
-## Khoảng thiếu xác nhận xóa trên UI hiện tại
+## Follow-up xác nhận xóa model
 
-Yêu cầu xóa model đã ghi trong tài liệu gồm tóm tắt tác động, số bản ghi ảnh hưởng gần đúng và nhập đúng tên. `ConfirmDialog` dùng chung hiện có xác nhận/hủy nhưng chưa có số lượng/nhập tên. Giữ yêu cầu này; doc sync không claim đã sửa hoặc duyệt giảm yêu cầu xóa. Backend hiện cascade dữ liệu thuộc model, gồm responses/datasets.
+Follow-up user duyệt ngày 2026-10-08 đã hoàn thiện khoảng thiếu UI được ghi trước đó. Pop-up riêng cho model dùng GET thuộc sở hữu hiện có: `totalItems` của variables/mappings/relations/responses/dataset và `items.length` của positions. Số lượng tại thời điểm kiểm tra, không phải snapshot nguyên tử của lệnh xóa. Yêu cầu nhập tên chính xác, chặn khi thiếu/lỗi thông tin, kiểm tra lại tên/trạng thái form sinh, chặn gửi lặp/đóng trong khi xóa. Nhập tên là bảo vệ trên frontend; request DELETE hiện có không thêm payload.
+
+DELETE giữ route và hành vi 204/401/404. Model đang được `ResearchForm` sinh tham chiếu trả định dạng 409 Conflict hiện có, detail `Model has a generated form. Deletion is not allowed.`, thay vì rơi vào lỗi FK database. Giữ ràng buộc FK; không gỡ liên kết/xóa form sinh. Dọn vị trí canvas và quan hệ cùng model trong một transaction SaveChanges; cascade hiện có xóa biến, ánh xạ, responses, datasets chuẩn hóa và nhật ký thu thập. Form nhập gốc/câu hỏi được giữ. Xem [NCKH_MODEL_DELETE_FOLLOWUP.md](NCKH_MODEL_DELETE_FOLLOWUP.md) về file, case và giới hạn validation.

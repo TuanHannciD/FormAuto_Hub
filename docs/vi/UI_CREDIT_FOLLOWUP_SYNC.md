@@ -57,11 +57,11 @@ Not run trong closeout này: deploy/push production, thanh toán/webhook PayOS t
 
 ## Khoảng thiếu và Deferred
 
-- Tài liệu xóa model NCKH yêu cầu tóm tắt tác động/số lượng và nhập đúng tên. Xác nhận chung hiện chỉ có xác nhận/hủy, chưa có các trường đó. Ghi nhận khoảng thiếu, không sửa hoặc giảm yêu cầu qua doc sync; đề xuất task implementation riêng.
+- Xác nhận xóa model NCKH còn thiếu tại lần sync này. Task implementation tiếp theo được user duyệt đã hoàn thiện khoảng thiếu; xem [NCKH_MODEL_DELETE_FOLLOWUP.md](nckh/NCKH_MODEL_DELETE_FOLLOWUP.md) về hành vi hiện tại và bằng chứng validation riêng.
 - Phân trang nạp client vẫn tải mọi đơn. Phân trang server là cải tiến cần scope riêng, chưa triển khai ở đây.
 - Retention/dọn ảnh và object storage ngoài, provider thanh toán khác, AI rollout rộng hơn và background jobs vẫn Deferred nếu chưa duyệt riêng.
 - Không duyệt global phase mới, refund policy, vượt hạn chế Google hoặc gửi tự động không preview/xác nhận.
 
 ## Bước tiếp theo
 
-Commit local source/kiểm thử/prototype và tài liệu song ngữ đã rà. Push/deploy hoặc triển khai khoảng thiếu cần request sau này.
+Source/kiểm thử/prototype UI/credit và tài liệu song ngữ đã commit local tại `f50f062`. Follow-up xóa NCKH tiếp theo đã được user thử và nghiệm thu, duyệt rà cuối/commit local/merge vào main; xem báo cáo tương ứng. Push/deploy và các khoảng thiếu khác cần request riêng.

@@ -174,6 +174,79 @@ public sealed class NckhPhase2ModelApiTests
         Assert.Single(context.ResearchFormQuestions);
     }
 
+    [Theory]
+    [InlineData("Draft")]
+    [InlineData("Active")]
+    public async Task DeleteModelAsync_RemovesCanvasDependentsAndPreservesOtherModel(string status)
+    {
+        await using var context = CreateContext();
+        var formId = SeedForm(context, TestUserId);
+        var modelId = SeedModel(context, TestUserId, formId, "To delete", status);
+        var otherModelId = SeedModel(context, TestUserId, formId, "Keep", "Draft");
+        var fromId = SeedVariable(context, modelId);
+        var toId = SeedVariable(context, modelId);
+        var otherVariableId = SeedVariable(context, otherModelId);
+        var relationId = Guid.NewGuid();
+        context.ModelRelations.Add(new ModelRelation { Id = relationId, ModelId = modelId,
+            FromVariableId = fromId, ToVariableId = toId, Direction = "Positive", HypothesisCode = "H1" });
+        context.NodePositions.AddRange(
+            new NodePosition { Id = Guid.NewGuid(), ModelId = modelId, NodeType = "Variable", VariableId = fromId },
+            new NodePosition { Id = Guid.NewGuid(), ModelId = modelId, NodeType = "Relation", RelationId = relationId },
+            new NodePosition { Id = Guid.NewGuid(), ModelId = otherModelId, NodeType = "Variable", VariableId = otherVariableId });
+        await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
+
+        var service = new ResearchModelService(context);
+        var result = await service.DeleteModelAsync(TestUserId, modelId, CancellationToken.None);
+
+        Assert.Equal(ResearchFormServiceStatus.Success, result.Status);
+        Assert.Equal(otherModelId, (await context.ResearchModels.SingleAsync()).Id);
+        Assert.Equal(otherVariableId, (await context.ResearchVariables.SingleAsync()).Id);
+        Assert.Empty(context.ModelRelations);
+        Assert.Equal(otherModelId, (await context.NodePositions.SingleAsync()).ModelId);
+        Assert.Single(context.ResearchForms);
+        Assert.Equal(ResearchFormServiceStatus.NotFound,
+            (await service.DeleteModelAsync(TestUserId, modelId, CancellationToken.None)).Status);
+    }
+
+    [Fact]
+    public async Task DeleteModelAsync_RejectsUnknownOrForeignModelWithoutDeletingAnything()
+    {
+        await using var context = CreateContext();
+        var formId = SeedForm(context, TestUserId);
+        var modelId = SeedModel(context, TestUserId, formId, "Keep", "Draft");
+        SeedVariable(context, modelId);
+        await context.SaveChangesAsync();
+        var service = new ResearchModelService(context);
+        Assert.Equal(ResearchFormServiceStatus.NotFound,
+            (await service.DeleteModelAsync(OtherUserId, modelId, CancellationToken.None)).Status);
+        Assert.Equal(ResearchFormServiceStatus.NotFound,
+            (await service.DeleteModelAsync(TestUserId, Guid.NewGuid(), CancellationToken.None)).Status);
+        Assert.Single(context.ResearchModels);
+        Assert.Single(context.ResearchVariables);
+    }
+
+    [Fact]
+    public async Task DeleteModelAsync_ConflictsWhenGeneratedFormReferencesModelAndPreservesData()
+    {
+        await using var context = CreateContext();
+        var formId = SeedForm(context, TestUserId);
+        var modelId = SeedModel(context, TestUserId, formId, "Keep", "Active");
+        var variableId = SeedVariable(context, modelId);
+        var generatedFormId = SeedForm(context, TestUserId);
+        var generated = await context.ResearchForms.FindAsync(generatedFormId);
+        generated!.GeneratedFromModelId = modelId;
+        generated.GenerationSource = "Generated";
+        context.NodePositions.Add(new NodePosition { Id = Guid.NewGuid(), ModelId = modelId, NodeType = "Variable", VariableId = variableId });
+        await context.SaveChangesAsync();
+        var result = await new ResearchModelService(context).DeleteModelAsync(TestUserId, modelId, CancellationToken.None);
+        Assert.Equal(ResearchFormServiceStatus.Conflict, result.Status);
+        Assert.Single(context.ResearchModels);
+        Assert.Single(context.ResearchVariables);
+        Assert.Single(context.NodePositions);
+        Assert.Equal(2, await context.ResearchForms.CountAsync());
+    }
+
     private static readonly Guid TestUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
     private static readonly Guid OtherUserId = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 

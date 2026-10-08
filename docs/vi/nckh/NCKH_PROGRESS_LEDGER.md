@@ -258,4 +258,4 @@ Closeout evidence Phase 9 mới nhất:
 
 ## Follow-up frontend đã duyệt (2026-10-08)
 
-Khung chung/pop-up tài khoản, xác nhận/animation và style workspace đã đồng bộ với app chính. Lỗi 401 Google được nhận diện giữ session core; 401 khác vẫn qua phục hồi JWT. Không thêm endpoint/entity/lifecycle NCKH. Xem `../UI_CREDIT_FOLLOWUP_SYNC.md` và `NCKH_API_CONTRACT_GUIDE.md` về validation và khoảng thiếu xác nhận xóa model hiện có.
+Khung chung/pop-up tài khoản, xác nhận/animation và style workspace đã đồng bộ với app chính. Lỗi 401 Google được nhận diện giữ session core; 401 khác vẫn qua phục hồi JWT. Không thêm endpoint/entity/lifecycle NCKH. Xem `../UI_CREDIT_FOLLOWUP_SYNC.md` và `NCKH_API_CONTRACT_GUIDE.md` về validation đó. Follow-up xóa model được duyệt tiếp theo đã hoàn thiện khoảng thiếu xác nhận, dọn phụ thuộc canvas nguyên tử và giữ bảo vệ FK form sinh; bằng chứng riêng trong [NCKH_MODEL_DELETE_FOLLOWUP.md](NCKH_MODEL_DELETE_FOLLOWUP.md). Không chọn phase mới.

@@ -259,4 +259,4 @@ Latest NCKH Phase 9 closeout evidence:
 
 ## Approved frontend follow-up (2026-10-08)
 
-Shared shells/account popups, confirmation/motion and workspace style were aligned with the main app. Recognized Google authorization 401 responses preserve the core session; other 401s retain JWT recovery. No NCKH endpoint, entity or lifecycle was added. See `../UI_CREDIT_FOLLOWUP_SYNC.md` and `NCKH_API_CONTRACT_GUIDE.md` for validation and the existing model-delete confirmation gap.
+Shared shells/account popups, confirmation/motion and workspace style were aligned with the main app. Recognized Google authorization 401 responses preserve the core session; other 401s retain JWT recovery. No NCKH endpoint, entity or lifecycle was added. See `../UI_CREDIT_FOLLOWUP_SYNC.md` and `NCKH_API_CONTRACT_GUIDE.md` for that validation. The subsequently approved model-delete follow-up closes the confirmation gap, cleans canvas dependencies atomically and preserves generated-form FK protection; separate evidence is in [NCKH_MODEL_DELETE_FOLLOWUP.md](NCKH_MODEL_DELETE_FOLLOWUP.md). No new phase selected.

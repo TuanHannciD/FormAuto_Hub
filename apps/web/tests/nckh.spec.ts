@@ -618,7 +618,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(page.getByPlaceholder("Mã quan sát")).toBeVisible();
   });
 
-  test("cancels model and mapping deletion through the shared confirmation without sending DELETE", async ({ page }) => {
+  test("cancels model impact dialog and shared mapping confirmation without sending DELETE", async ({ page }) => {
     const deletes: string[] = [];
     page.on("request", request => { if (request.method() === "DELETE") deletes.push(request.url()); });
     await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/mappings?page=1&pageSize=100`, {
@@ -626,10 +626,11 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     });
     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
     await page.getByRole("row").filter({ hasText: MOCK_MODEL.name }).getByRole("button").last().click();
+    const modelConfirmation = page.getByRole("dialog", { name: "Xóa mô hình nghiên cứu" });
+    await expect(modelConfirmation).toHaveAttribute("data-popup-phase", "open");
+    await modelConfirmation.getByRole("button", { name: "Hủy", exact: true }).click();
+    await expect(modelConfirmation).toHaveCount(0);
     const confirmation = page.getByRole("dialog", { name: "Xác nhận xóa" });
-    await expect(confirmation).toContainText(`Xóa mô hình "${MOCK_MODEL.name}"?`);
-    await confirmation.getByRole("button", { name: "Hủy", exact: true }).click();
-    await expect(confirmation).toHaveCount(0);
     await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
     await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
     const parent = page.getByRole("dialog", { name: "Canvas tools" });

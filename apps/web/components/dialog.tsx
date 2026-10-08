@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { buttonStyles, panelStyles, type ButtonSize, type ButtonVariant } from "./ui-styles";
 import { usePopupMotion } from "./motion/use-popup-motion";
 
-type DialogProps = { open: boolean; onOpenChange?: (open: boolean) => void; children?: ReactNode; className?: string };
+type DialogProps = { open: boolean; onOpenChange?: (open: boolean) => void; onAfterClose?: () => void; children?: ReactNode; className?: string; dismissible?: boolean };
 type DialogState = ReturnType<typeof usePopupMotion> & {
   frame: React.RefObject<HTMLDivElement | null>;
   content: React.RefObject<HTMLDivElement | null>;
@@ -25,10 +25,14 @@ export function Dialog(props: DialogProps) {
   useEffect(() => { setMounted(true); }, []);
   useLayoutEffect(() => { if (props.open) setPresent(true); }, [props.open]);
   if (!mounted || !present) return null;
-  return <MountedDialog {...props} onClosed={() => { setPresent(false); if (props.open) props.onOpenChange?.(false); }}>{content.current}</MountedDialog>;
+  return <MountedDialog {...props} onClosed={() => {
+    setPresent(false);
+    if (props.open) props.onOpenChange?.(false);
+    props.onAfterClose?.();
+  }}>{content.current}</MountedDialog>;
 }
 
-function MountedDialog({ open: requestedOpen, children, className, onClosed }: DialogProps & { onClosed: () => void }) {
+function MountedDialog({ open: requestedOpen, children, className, dismissible = true, onClosed }: DialogProps & { onClosed: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -61,8 +65,8 @@ function MountedDialog({ open: requestedOpen, children, className, onClosed }: D
   return createPortal(
     <DialogContext.Provider value={{ ...motion, frame, content, titleId }}>
       <dialog ref={dialog} aria-labelledby={titleId} data-popup-phase={motion.phase}
-        onCancel={event => { event.preventDefault(); motion.close(); }}
-        onClick={event => { if (event.target === event.currentTarget) motion.close(); }}
+        onCancel={event => { event.preventDefault(); if (dismissible) motion.close(); }}
+        onClick={event => { if (dismissible && event.target === event.currentTarget) motion.close(); }}
         onKeyDown={event => {
           if (event.key !== "Tab") return;
           const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>("button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], iframe, [tabindex='0']"))

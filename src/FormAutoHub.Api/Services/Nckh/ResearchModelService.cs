@@ -190,6 +190,9 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
         var model = await dbContext.ResearchModels
             .Include(item => item.Variables)
             .ThenInclude(item => item.ObservedQuestionMappings)
+            .Include(item => item.NodePositions)
+            .Include(item => item.Relations)
+            .AsSplitQuery()
             .SingleOrDefaultAsync(item => item.Id == modelId && item.UserId == userId, cancellationToken);
 
         if (model is null)
@@ -197,6 +200,17 @@ public sealed class ResearchModelService(FormAutoHubDbContext dbContext) : IRese
             return NotFound<bool>();
         }
 
+        // Preserve the existing generated-form FK restriction, with a usable HTTP error.
+        if (await dbContext.ResearchForms.AnyAsync(item => item.GeneratedFromModelId == modelId, cancellationToken))
+        {
+            return new ResearchFormServiceResult<bool>(ResearchFormServiceStatus.Conflict,
+                Message: "Model has a generated form. Deletion is not allowed.");
+        }
+
+        // SQL Server cannot cascade these restrict/no-action canvas FKs.
+        // One SaveChanges transaction removes dependents before the model.
+        dbContext.NodePositions.RemoveRange(model.NodePositions);
+        dbContext.ModelRelations.RemoveRange(model.Relations);
         dbContext.ResearchModels.Remove(model);
         await dbContext.SaveChangesAsync(cancellationToken);
         return Success(true);

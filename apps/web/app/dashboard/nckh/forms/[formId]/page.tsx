@@ -65,6 +65,7 @@ import {
 } from "@/lib/api";
 
 import { DatasetPreview } from "./_components/dataset-preview";
+import { DeleteModelDialog } from "./_components/delete-model-dialog";
 import { LoadingState } from "./_components/loading-state";
 import { OverviewPanel } from "./_components/overview-panel";
 import { RelationEdge } from "./_components/relation-edge";
@@ -106,6 +107,7 @@ export default function NckhFormWorkspacePage() {
   const [form, setForm] = useState<NckhFormDetailResponse | null>(null);
   const [models, setModels] = useState<NckhResearchModel[]>([]);
   const [selectedModelId, setSelectedModelId] = useState("");
+  const [deletingModelId, setDeletingModelId] = useState<string | null>(null);
   const [tab, setTab] = useState<WorkspaceTab>("overview");
   const [canvasModal, setCanvasModal] = useState<CanvasModal>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -395,19 +397,9 @@ export default function NckhFormWorkspacePage() {
     }
   }
 
-  async function deleteModel(model: NckhResearchModel) {
-    if (!await confirmation.confirm(`Xóa mô hình "${model.name}"? Các dữ liệu liên quan sẽ bị xử lý theo quy tắc xóa hiện có của backend.`)) return;
+  function deleteModel(model: NckhResearchModel) {
     if (!beginPendingAction("deleteModel")) return;
-    try {
-      await apiFetch<void>(`/api/v1/nckh/models/${model.id}`, { method: "DELETE" });
-      toast.success("Đã xóa mô hình.");
-      setSelectedModelId("");
-      await loadWorkspace();
-    } catch (deleteError) {
-      toast.error(readableNckhError(deleteError, "Không xóa được mô hình."));
-    } finally {
-      endPendingAction("deleteModel");
-    }
+    setDeletingModelId(model.id);
   }
 
   async function createVariable(event: FormEvent) {
@@ -777,8 +769,8 @@ export default function NckhFormWorkspacePage() {
           <Button className="min-h-8 px-2 py-1" variant="secondary" type="button" disabled={hasPendingAction || item.status === "Active"} onClick={() => activateModel(item.id)}>
             {isActionPending("activateModel") ? <Loader2 className="animate-spin" size={14} /> : "Kích hoạt"}
           </Button>
-          <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteModel(item)}>
-            {isActionPending("deleteModel") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}
+          <Button aria-label={`Xóa mô hình ${item.name}`} className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteModel(item)}>
+            {isActionPending("deleteModel") && deletingModelId === item.id ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}
           </Button>
         </div>
       )
@@ -835,6 +827,13 @@ export default function NckhFormWorkspacePage() {
   return (
     <div className="space-y-6">
       {confirmation.dialog}
+      {deletingModelId && <DeleteModelDialog key={deletingModelId} modelId={deletingModelId}
+        onClosed={() => { setDeletingModelId(null); endPendingAction("deleteModel"); }}
+        onDeleted={modelId => {
+          toast.success("Đã xóa mô hình.");
+          setModels(items => items.filter(item => item.id !== modelId));
+          setSelectedModelId(current => current === modelId ? "" : current);
+        }} />}
       <PageHeader
         eyebrow="NCKH"
         title={form.title || "Form NCKH"}
