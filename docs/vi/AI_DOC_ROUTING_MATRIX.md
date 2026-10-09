@@ -76,3 +76,7 @@ Trước khi đọc bất kỳ file docs nào, áp dụng các quy tắc sau đ�
 ## Routing follow-up UI/credit hiện tại
 
 Với UI dùng chung, pop-up/animation tài khoản, xử lý auth NCKH ở frontend hoặc follow-up credit thủ công: đọc `UI_CREDIT_FOLLOWUP_SYNC.md`, rồi `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md` và contract/kiến trúc NCKH khi liên quan.
+
+## Routing follow-up SEO/GEO
+
+Với các ưu tiên chỉ mục/phát hiện trang/nhận diện thương hiệu được người dùng đồng ý, đọc `SEO_GEO_IMPLEMENTATION_PLAN.md`, rồi `SEO_GEO_VALIDATION_RUNBOOK.md`, `FRONTEND_STYLE_GUIDE.md` và `TESTING_STRATEGY.md`. Ngày 09/10/2026, triển khai P1/P2 đã phê duyệt và kiểm tra local đạt; đã ghi mốc GSC. Không mở global phase mới. Giữ UI đã chấp nhận; deploy và xác minh hiệu quả tìm kiếm là các điều kiện riêng.

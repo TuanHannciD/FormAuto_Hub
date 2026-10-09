@@ -1,0 +1,44 @@
+[
+  {
+    "view": "home-1440",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": true
+  },
+  {
+    "view": "sample-1440",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": true
+  },
+  {
+    "view": "home-390",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": true
+  },
+  {
+    "view": "sample-390",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": true
+  },
+  {
+    "view": "home-320",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": false
+  },
+  {
+    "view": "sample-320",
+    "textEqual": true,
+    "linksEqual": true,
+    "h1Equal": true,
+    "imageEqual": true
+  }
+]

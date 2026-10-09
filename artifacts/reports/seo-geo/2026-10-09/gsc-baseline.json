@@ -1,0 +1,21 @@
+{
+  "observedDate": "2026-10-09",
+  "source": "Google Search Console authenticated UI, user-selected authorized account; stored URL Inspection, not live test",
+  "property": "https://formautohub.servertun.pp.ua/",
+  "propertyType": "URL-prefix",
+  "preRelease": true,
+  "accountIdentifiersStored": false,
+  "urls": [
+    { "path": "/", "indexed": true, "status": "URL nằm trên Google", "lastCrawlDisplayed": "05:45:35 29 thg 8, 2026", "crawler": "Googlebot trên điện thoại thông minh", "fetch": "Thành công", "crawlAllowed": true, "indexAllowed": true, "declaredCanonical": "https://formautohub.servertun.pp.ua/", "googleCanonical": "URL được kiểm tra", "referringSitemap": null },
+    { "path": "/google-forms/sample-data", "indexed": false, "reason": "Google không xác định được URL", "referringSitemap": null, "referringPage": null, "crawl": "Không áp dụng", "canonical": "Không áp dụng" },
+    { "path": "/google-forms/student-report", "indexed": false, "reason": "Google không xác định được URL", "referringSitemap": null, "referringPage": null, "crawl": "Không áp dụng", "canonical": "Không áp dụng" },
+    { "path": "/google-forms/survey-demo", "indexed": false, "reason": "Google không xác định được URL", "referringSitemap": null, "referringPage": null, "crawl": "Không áp dụng", "canonical": "Không áp dụng" },
+    { "path": "/google-forms/sheets-report", "indexed": false, "reason": "Google không xác định được URL", "referringSitemap": null, "referringPage": null, "crawl": "Không áp dụng", "canonical": "Không áp dụng" },
+    { "path": "/anti-abuse", "indexed": false, "reason": "Google không xác định được URL", "referringSitemap": null, "referringPage": null, "crawl": "Không áp dụng", "canonical": "Không áp dụng" }
+  ],
+  "submittedSitemaps": { "rowCount": 0, "displayedPagination": "0-0/0" },
+  "performance": { "searchType": "Web", "selectedPeriodDays": 28, "displayedStart": "2026-09-09", "displayedEnd": "2026-10-06", "clicks": 0, "impressions": 0, "ctrDisplayed": "0%", "averagePositionDisplayed": 0, "averagePositionInterpretation": "No measurement because no impressions; not rank zero", "queryRows": 0, "countryFilter": null, "deviceFilter": null },
+  "mutationsPerformed": [],
+  "notRun": [ "Live URL test", "Sitemap submission", "Request indexing", "Post-release comparison", "Actual AI indexing/citation measurement" ],
+  "limitations": [ "Stored inspection is historical Google state, not proof of current live fetch", "Unknown URL is not a diagnosed content-quality exclusion", "No referring sitemap is Google's reported discovery state, not proof the public sitemap is absent" ]
+}

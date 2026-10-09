@@ -7,7 +7,7 @@
 ## Trạng thái hiện tại
 
 - Trạng thái global phase hiện tại: Closeout Phase 9 đã hoàn tất; chưa chọn phase tiếp theo.
-- Active approved follow-up slice: không có. Phase 6 AI mapping/generation scoped implementation đã hoàn thành.
+- Phase 6 AI mapping/generation scoped implementation đã hoàn thành. Follow-up SEO/GEO được người dùng duyệt riêng có triển khai/kiểm tra local và mốc GSC trong `SEO_GEO_IMPLEMENTATION_PLAN.md`; phát hành public/đo hiệu quả vẫn Not run. Không chọn global phase mới.
 - Phase 1 backend foundation tồn tại trong `src/FormAutoHub.Api`.
 - Initial test project tồn tại trong `tests/FormAutoHub.Tests`.
 - Backend đã chốt: ASP.NET Core Web API .NET 9, SQL Server, EF Core.
@@ -83,3 +83,5 @@ Mọi luồng submit phải có:
 ## Ghi nhận follow-up sau closeout đã duyệt
 
 Các task UI/pop-up dùng chung/NCKH auth/credit thủ công được user duyệt là follow-up implementation/fix, không phải global phase mới. Xem `UI_CREDIT_FOLLOWUP_SYNC.md` về phạm vi, validation và khoảng thiếu. Giữ nguyên các approval phase lịch sử.
+
+Với follow-up SEO/GEO đã duyệt, đọc `SEO_GEO_IMPLEMENTATION_PLAN.md` và `SEO_GEO_VALIDATION_RUNBOOK.md`. Chỉ dẫn đồng bộ tài liệu/commit local tiếp theo không cho phép push/deploy hoặc kích hoạt nội dung/UI đang Deferred.

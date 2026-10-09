@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import type { SeoPageConfig } from "@/lib/seo-pages";
 import { siteUrl } from "@/lib/site";
+import { applicationId, applicationSchema, serializeJsonLd, websiteId, websiteSchema } from "@/lib/seo";
 
 type SeoKeywordPageProps = {
   config: SeoPageConfig;
@@ -75,32 +76,17 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
+      "@id": `${pageUrl}#webpage`,
       name: config.title,
       url: pageUrl,
       inLanguage: "vi-VN",
       description: config.description,
-      isPartOf: {
-        "@type": "WebSite",
-        name: "FormAuto Hub",
-        url: siteUrl
-      },
+      isPartOf: { "@id": websiteId },
+      mentions: { "@id": applicationId },
       about: config.primaryKeyword
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      name: "FormAuto Hub",
-      applicationCategory: "ProductivityApplication",
-      operatingSystem: "Web",
-      url: siteUrl,
-      description:
-        "FormAuto Hub helps users create sample data for Google Forms to test forms, preview responses, demo Google Sheets dashboards, and prepare reports safely.",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "VND"
-      }
-    },
+    { "@context": "https://schema.org", ...websiteSchema() },
+    { "@context": "https://schema.org", ...applicationSchema() },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -116,10 +102,13 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
   ];
 
   return (
-    <main className="app-aura-bg min-h-screen text-foreground">
+    <main className="seo-keyword-page app-aura-bg min-h-screen text-foreground">
+      <noscript>
+        <style>{`.seo-keyword-page .scroll-reveal { opacity: 1; transform: none; }`}</style>
+      </noscript>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <MarketingHeader />
 

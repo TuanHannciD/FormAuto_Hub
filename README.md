@@ -12,7 +12,9 @@ Current global phase: **Phase 9 closeout completed; next phase not selected**.
 
 Phase 6 AI scoped follow-up: **Completed (see docs/ai/PHASE_6_CLOSEOUT.md)**.
 
-No active follow-up slice. No new global phase is selected. New phase work, deferred-item activation, or implementation/fix follow-up requires explicit approval.
+The user-approved SEO/GEO follow-up has verified local P1/P2 implementation, local runtime checks and a pre-release Search Console baseline as of 2026-10-09. Public deployment and outcome measurement remain Not run. See [implementation record](docs/ai/SEO_GEO_IMPLEMENTATION_PLAN.md), [Vietnamese record](docs/vi/SEO_GEO_IMPLEMENTATION_PLAN.md) and [validation runbook](docs/ai/SEO_GEO_VALIDATION_RUNBOOK.md).
+
+No new global phase is selected. New phase work, deferred-item activation, or additional implementation/fix follow-up requires explicit approval.
 
 Implemented API source is under `src/FormAutoHub.Api`, tests under `tests/FormAutoHub.Tests`, and the Next.js app under `apps/web`. Agents must read existing source and task docs before changing files.
 
@@ -79,6 +81,8 @@ If only one language layer is updated, the documentation is out of sync and comp
 | AI document | Vietnamese document | Required |
 |---|---|---|
 | `docs/ai/AI_DOC_ROUTING_MATRIX.md` | `docs/vi/AI_DOC_ROUTING_MATRIX.md` | Yes |
+| `docs/ai/SEO_GEO_IMPLEMENTATION_PLAN.md` | `docs/vi/SEO_GEO_IMPLEMENTATION_PLAN.md` | Yes |
+| `docs/ai/SEO_GEO_VALIDATION_RUNBOOK.md` | `docs/vi/SEO_GEO_VALIDATION_RUNBOOK.md` | Yes |
 | `docs/ai/PROJECT_EXECUTION_RULES.md` | `docs/vi/PROJECT_EXECUTION_RULES.md` | Yes |
 | `docs/ai/TASK_EXECUTION_FLOW.md` | `docs/vi/TASK_EXECUTION_FLOW.md` | Yes |
 | `docs/ai/AI_RESPONSE_RULES.md` | `docs/vi/AI_RESPONSE_RULES.md` | Yes |

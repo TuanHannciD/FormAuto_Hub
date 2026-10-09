@@ -1,0 +1,30 @@
+
+Running 26 tests using 1 worker
+
+[1A[2K[1/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /
+[1A[2K[2/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /
+[1A[2K[3/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /google-forms/sample-data
+[1A[2K[4/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /google-forms/sample-data
+[1A[2K[5/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /google-forms/student-report
+[1A[2K[6/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /google-forms/student-report
+[1A[2K[7/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /google-forms/survey-demo
+[1A[2K[8/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /google-forms/survey-demo
+[1A[2K[9/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /google-forms/sheets-report
+[1A[2K[10/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /google-forms/sheets-report
+[1A[2K[11/26] tests\seo.spec.ts:15:7 › public SEO and hydration: /anti-abuse
+[1A[2K[12/26] tests\seo.spec.ts:61:7 › public content readable without JavaScript: /anti-abuse
+[1A[2K[13/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /login
+[1A[2K[14/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /register
+[1A[2K[15/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /auth/callback
+[1A[2K[16/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /payment/payos/return
+[1A[2K[17/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /payment/payos/cancel
+[1A[2K[18/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /dashboard
+[1A[2K[19/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /dashboard/forms
+[1A[2K[20/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /dashboard/nckh
+[1A[2K[21/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /dashboard/nckh/forms/seo-smoke
+[1A[2K[22/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /dashboard/nckh/callback
+[1A[2K[23/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /admin
+[1A[2K[24/26] tests\seo.spec.ts:80:7 › utility/private initial HTML is noindex: /admin/manual-credits
+[1A[2K[25/26] tests\seo.spec.ts:89:5 › discovery files share only approved public URLs
+[1A[2K[26/26] tests\seo.spec.ts:107:5 › robots retains search/training separation and missing URL returns 404
+[1A[2K  26 passed (11.4s)

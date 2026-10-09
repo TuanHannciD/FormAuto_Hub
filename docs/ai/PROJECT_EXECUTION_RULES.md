@@ -7,7 +7,7 @@ Define non-negotiable execution discipline for FormAuto Hub.
 ## Current State
 
 - Current global phase state: Phase 9 closeout completed; next phase not selected.
-- Active approved follow-up slice: none. Phase 6 AI mapping/generation scoped implementation is completed.
+- Phase 6 AI mapping/generation scoped implementation is completed. The separately user-approved SEO/GEO follow-up has local implementation/validation and a GSC baseline recorded in `SEO_GEO_IMPLEMENTATION_PLAN.md`; public release/outcome checks remain Not run. No new global phase is selected.
 - Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
 - Initial test project exists under `tests/FormAutoHub.Tests`.
 - Backend stack is confirmed: ASP.NET Core Web API .NET 9, SQL Server, EF Core.
@@ -83,3 +83,5 @@ To minimize unnecessary token usage when reading documentation:
 ## Approved post-closeout follow-up record
 
 The user-approved UI/shared-popup/NCKH-auth/manual-credit work is an implementation/fix follow-up, not a new global phase. See `UI_CREDIT_FOLLOWUP_SYNC.md` for implemented scope, validation and open gaps. Historical phase approvals remain unchanged.
+
+For the approved SEO/GEO follow-up, read `SEO_GEO_IMPLEMENTATION_PLAN.md` and `SEO_GEO_VALIDATION_RUNBOOK.md`. The subsequent documentation-sync/local-commit instruction does not authorize push/deployment or activate Deferred content/UI work.

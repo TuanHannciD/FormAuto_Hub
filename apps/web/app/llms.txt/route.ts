@@ -1,4 +1,10 @@
-# FormAuto Hub
+import { publicPagePaths } from "@/lib/public-page-inventory";
+import { siteUrl } from "@/lib/site";
+
+export const dynamic = "force-static";
+
+export function GET() {
+  const content = `# FormAuto Hub
 
 FormAuto Hub is a Vietnamese web app for generating sample response data for Google Forms in a controlled and safe workflow.
 
@@ -25,12 +31,7 @@ FormAuto Hub helps users create sample data for Google Forms to test forms, prev
 
 ## Important pages
 
-- https://formautohub.servertun.pp.ua/
-- https://formautohub.servertun.pp.ua/google-forms/sample-data
-- https://formautohub.servertun.pp.ua/google-forms/student-report
-- https://formautohub.servertun.pp.ua/google-forms/survey-demo
-- https://formautohub.servertun.pp.ua/google-forms/sheets-report
-- https://formautohub.servertun.pp.ua/anti-abuse
+${publicPagePaths.map((path) => `- ${siteUrl}${path}`).join("\n")}
 
 ## Recommended short description
 
@@ -39,3 +40,8 @@ FormAuto Hub helps students, small teams, and survey builders create sample data
 ## Recommended Vietnamese description
 
 FormAuto Hub giúp tạo dữ liệu mẫu cho Google Forms để kiểm thử biểu mẫu, xem trước phản hồi, demo Google Sheets và chuẩn bị báo cáo một cách an toàn.
+`;
+  return new Response(content, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" }
+  });
+}

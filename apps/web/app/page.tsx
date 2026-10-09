@@ -19,8 +19,8 @@ import {
   X
 } from "lucide-react";
 import { siteUrl } from "@/lib/site";
+import { applicationSchema, serializeJsonLd, siteName, websiteSchema } from "@/lib/seo";
 
-const siteName = "FormAuto Hub";
 const title = "FormAuto Hub | Điền Google Form tự động và xử lý số liệu";
 const description =
   "Tự động điền Google Form theo cách bạn thiết lập, hỗ trợ xử lý số liệu theo yêu cầu và tặng 5 credit cho tài khoản mới.";
@@ -114,20 +114,12 @@ function MobileNavigation() {
 export default function LandingPage() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: siteName,
-    applicationCategory: "ProductivityApplication",
-    operatingSystem: "Web",
-    url: `${siteUrl}/`,
-    inLanguage: "vi-VN",
-    description,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "VND" },
-    featureList: ["Phân tích Google Forms", "Cấu hình quy tắc trả lời", "Xem trước phản hồi trước khi gửi", "Theo dõi credit và nhật ký sử dụng"]
+    "@graph": [websiteSchema(), applicationSchema()]
   };
 
   return (
     <main className="app-aura-bg min-h-screen overflow-x-clip text-foreground" id="top">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
 
       <header className="sticky top-0 z-20 grid min-h-[76px] grid-cols-[1fr_auto_1fr] items-center border-b border-border/75 bg-surface/[.88] px-[clamp(1.5rem,5vw,4.75rem)] backdrop-blur-xl max-xl:grid-cols-[1fr_auto] max-md:min-h-[66px] max-md:px-5">
         <Link href="#top" aria-label="FormAuto Hub - Trang chủ"><Brand /></Link>

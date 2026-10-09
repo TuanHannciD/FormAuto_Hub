@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-09",
+  "scope": "Approved SEO P1/P2; local P3, no deployment",
+  "build": { "status": "Verified", "command": "npm.cmd run build", "colorSourceFiles": 100, "lintAndTypes": "passed", "generatedPages": 33 },
+  "runtime": { "status": "Verified", "server": "Owned next start -p 3034, restarted after each build", "browser": "Playwright Chromium", "localOrigin": { "origin": "http://localhost:3020", "passed": 26, "failed": 0 }, "publicOrigin": { "origin": "https://formautohub.servertun.pp.ua", "passed": 26, "failed": 0 }, "serverOutputAfterSmoke": "No new errors", "initialFailedRun": "Stale pre-change process and wrong expected origin; replaced owned process and reran. Excluded from acceptance." },
+  "typesAfterTestConfigChange": "npx.cmd tsc --noEmit passed",
+  "visual": { "views": 6, "pages": ["/", "/google-forms/sample-data"], "widths": [1440, 390, 320], "textLinksH1Equal": true, "byteIdenticalImages": 5, "remainingImage": { "name": "home-320", "differentPixels": 14087, "bounds": [0, 130, 319, 254], "maxChannelDelta": 2, "review": "No visible layout/content change" }, "overflow": false, "browserErrors": [], "sampleNoJsH1OpacityBefore": 0, "sampleNoJsH1OpacityAfter": 1, "captureNormalization": "Animations/transitions disabled and scroll-reveal settled only for screenshots; separate tests exercise actual hydration" },
+  "review": { "scope": "P1/P2 only", "backendDatabaseAuthBusinessChanges": false, "visibleCopyCtaNavigationChanges": false, "unrelatedDropdownPreserved": true, "existingHtmlReportPreserved": true },
+  "notRun": ["Commit/push/deploy", "Post-release public smoke", "GSC live test/sitemap submission/index request", "Authenticated private workflows", "Verified AI crawler logs/citations", "D+7/14/28 outcomes"]
+}

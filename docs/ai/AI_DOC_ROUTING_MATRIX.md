@@ -37,6 +37,8 @@ Always read `README.md` and `AGENTS.md` first.
 
 
 
+## Sync Rules
+
 Every file in `docs/ai/` must have a same-name counterpart in `docs/vi/`.
 
 If a task changes one side, update the other side in the same task.
@@ -78,3 +80,7 @@ Before loading any docs file, apply these rules to avoid unnecessary token usage
 ## Current UI/credit follow-up routing
 
 For shared UI, account popup/motion, NCKH frontend auth handling or manual-credit follow-up: read `UI_CREDIT_FOLLOWUP_SYNC.md`, then `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md`, and the NCKH contract/architecture files when affected.
+
+## SEO/GEO follow-up routing
+
+For the user-approved indexing/discovery/brand-identity priorities, read `SEO_GEO_IMPLEMENTATION_PLAN.md`, then `SEO_GEO_VALIDATION_RUNBOOK.md`, `FRONTEND_STYLE_GUIDE.md` and `TESTING_STRATEGY.md`. On 2026-10-09, approved P1/P2 implementation and local validation passed; GSC baseline is captured. This is not a new global phase. Preserve the accepted UI; deployment and search-outcome verification remain separate gates.
