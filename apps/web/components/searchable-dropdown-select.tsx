@@ -4,6 +4,7 @@ import { Check, ChevronDown, Search } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import type { DropdownOption } from "@/components/dropdown-select";
 import { cn } from "@/lib/utils";
+import { controlStyles } from "./ui-styles";
 
 export type SearchableDropdownOption = DropdownOption & {
   description?: string;
@@ -65,8 +66,7 @@ export function SearchableDropdownSelect({
     <div className={cn("relative", className)} ref={rootRef}>
       <div
         className={cn(
-          "flex min-h-10 w-full items-center gap-2 rounded-md border border-border/80 bg-surface/85 px-3 py-2 text-sm outline-none transition",
-          "focus-within:border-primary focus-within:bg-surface focus-within:ring-2 focus-within:ring-primary/15 hover:border-primary/70",
+          controlStyles({ className: "flex items-center gap-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 hover:border-primary/70" }),
           disabled && "cursor-not-allowed opacity-50"
         )}
       >
@@ -89,7 +89,7 @@ export function SearchableDropdownSelect({
         />
         <button
           aria-label="Mở danh sách kết quả"
-          className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition hover:text-primary disabled:cursor-not-allowed"
+          className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition hover:text-primary disabled:cursor-not-allowed"
           disabled={disabled}
           onClick={() => setOpen((current) => !current)}
           type="button"
@@ -100,7 +100,7 @@ export function SearchableDropdownSelect({
 
       {open && !disabled && (
         <div
-          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-md border border-border/80 bg-surface/95 p-1 text-sm shadow-lg backdrop-blur"
+          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-xl border border-border bg-surface p-1 text-sm shadow-soft"
           id={id}
           role="listbox"
         >
@@ -112,7 +112,7 @@ export function SearchableDropdownSelect({
               <button
                 aria-selected={active}
                 className={cn(
-                  "flex w-full items-start justify-between gap-3 rounded-sm px-3 py-2 text-left transition",
+                  "flex w-full items-start justify-between gap-3 rounded-lg px-3 py-2 text-left transition",
                   active ? "bg-primary-soft font-medium text-primary" : "text-foreground hover:bg-muted",
                   option.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
                 )}

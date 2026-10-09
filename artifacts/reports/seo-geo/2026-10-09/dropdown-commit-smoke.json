@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-09",
+  "source": "Production-preview Chromium with mocked APIs; no real account or credit mutation",
+  "results": [
+    {
+      "width": 1440,
+      "dimensions": {
+        "radius": "12px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "radius": "12px",
+        "blur": "none"
+      },
+      "selection": "passed",
+      "escape": "passed",
+      "outside": "passed",
+      "overflow": false,
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "dimensions": {
+        "radius": "12px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "radius": "12px",
+        "blur": "none"
+      },
+      "selection": "passed",
+      "escape": "passed",
+      "outside": "passed",
+      "overflow": false,
+      "writes": 0,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "dimensions": {
+        "radius": "12px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "radius": "12px",
+        "blur": "none"
+      },
+      "selection": "passed",
+      "escape": "passed",
+      "outside": "passed",
+      "overflow": false,
+      "writes": 0,
+      "errors": []
+    }
+  ]
+}

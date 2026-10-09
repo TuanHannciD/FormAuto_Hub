@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-09",
+  "source": "Local offline HTML in Chromium",
+  "results": [
+    {
+      "width": 1440,
+      "images": 4,
+      "archiveNotice": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "images": 4,
+      "archiveNotice": true,
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}

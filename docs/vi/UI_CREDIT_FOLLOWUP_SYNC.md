@@ -65,3 +65,12 @@ Not run trong closeout này: deploy/push production, thanh toán/webhook PayOS t
 ## Bước tiếp theo
 
 Source/kiểm thử/prototype UI/credit và tài liệu song ngữ đã commit local tại `f50f062`. Follow-up xóa NCKH tiếp theo đã được user thử và nghiệm thu, duyệt rà cuối/commit local/merge vào main; xem báo cáo tương ứng. Push/deploy và các khoảng thiếu khác cần request riêng.
+
+## Follow-up dropdown tìm kiếm và báo cáo lịch sử — 09/10/2026
+
+- Người dùng cho phép commit các thay đổi dropdown/báo cáo UI còn lại riêng với commit SEO `2a6363b`.
+- `apps/web/components/searchable-dropdown-select.tsx` dùng lại `controlStyles`, nền/viền đặc, popup rounded-xl và option/nút mở rounded-lg; bỏ blur popup và dùng shadow chung. Giữ props, callback tìm/chọn, hành vi disabled, hợp đồng API và luồng credit.
+- Verified trên server production-preview sở hữu vừa khởi động ở 3034: 3 test fixture hiện có đạt (chi tiết/lịch sử credit thủ công ở 1440/320px và popup biến/ánh xạ NCKH). Smoke riêng trên trình duyệt thật với fixture ở 1440/390/320px đạt tìm/chọn/Escape/bấm ngoài, control/popup bo 12px, popup không blur, không tràn ngang/page error và không request ghi. Bằng chứng: [dropdown-commit-smoke.json](../../artifacts/reports/seo-geo/2026-10-09/dropdown-commit-smoke.json). Output server không có lỗi mới. Build production đã xác minh có diff style không đổi này; lượt tài liệu/commit không cần build lại.
+- Lưu trữ: [báo cáo HTML SEO/GEO/UI](../../artifacts/reports/seo-geo-ui-report-2026-10-09.html). Giữ nguyên bốn ảnh trước/sau nhúng; ảnh trước là tái dựng và đã ghi rõ. Thêm thông báo nổi bật đây là mốc lịch sử, dẫn doc SEO hiện tại; quan sát gốc không phải phép đo mới. Riêng style dropdown chưa có mức tăng SEO/GEO được đo.
+- Verified: HTML offline hiển thị ở 1440/390px, bốn ảnh giải mã được, thông báo lịch sử hiện đúng, không tràn ngang/page error; [report-commit-smoke.json](../../artifacts/reports/seo-geo/2026-10-09/report-commit-smoke.json). Đã xem ảnh render báo cáo mobile.
+- Not run: thao tác ghi bằng tài khoản/backend thật, kiểm tra provider/thanh toán ngoài, push/deploy và đo hiệu quả sau phát hành. HTML là artifact xem offline, không phải route ứng dụng hoặc tính năng đã deploy.

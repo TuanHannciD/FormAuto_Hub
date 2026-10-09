@@ -65,3 +65,12 @@ Not run in this closeout: production deployment/push, real PayOS payment/webhook
 ## Next step
 
 The UI/credit source/tests/prototype and paired documentation were committed locally as `f50f062`. The subsequent NCKH delete follow-up was user-tested and accepted, with final review/local commit/merge into main authorized; see its report. Push/deploy and other remaining gaps require a separate request.
+
+## Searchable dropdown and historical report follow-up — 2026-10-09
+
+- The user authorized committing the remaining dropdown/UI report changes separately from SEO commit `2a6363b`.
+- `apps/web/components/searchable-dropdown-select.tsx` reuses `controlStyles`, solid surface/borders, rounded-xl popup and rounded-lg options/toggle; removed popup blur and uses shared shadow. Props, search/selection callbacks, disabled behavior, API contracts and credit workflow are unchanged.
+- Verified on a freshly started owned production-preview server at 3034: 3 existing fixture tests passed (manual-credit detail/history at 1440/320px and NCKH variables/mapping popup). Separate real-browser fixture smoke at 1440/390/320px passed search/selection/Escape/outside-click, 12px control/popup radius, no popup blur, no horizontal overflow/page errors and zero write requests. Evidence: [dropdown-commit-smoke.json](../../artifacts/reports/seo-geo/2026-10-09/dropdown-commit-smoke.json). Server output had no new errors. The already validated production build includes this unchanged style diff; no rebuild was needed for this documentation/commit pass.
+- Archive: [SEO/GEO/UI HTML report](../../artifacts/reports/seo-geo-ui-report-2026-10-09.html). Its four embedded before/after images remain unchanged; before images are reconstructed and explicitly labelled. Added a prominent historical-snapshot notice linking current SEO docs; original observations are not new measurements. The dropdown style itself has no measured SEO/GEO uplift.
+- Verified: offline HTML renders at 1440/390px, all four images decode, archive notice is visible, no horizontal overflow/page errors; [report-commit-smoke.json](../../artifacts/reports/seo-geo/2026-10-09/report-commit-smoke.json). Reviewed the rendered mobile report.
+- Not run: live-account/backend mutation, external provider/payment checks, push/deployment and post-release outcome measurement. The HTML is an offline review artifact, not an application route or deployed feature.
