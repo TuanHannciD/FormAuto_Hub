@@ -4,7 +4,7 @@
 
 - Date: 2026-10-09.
 - User approved the three priorities, then implementation, then bilingual documentation sync and a selective local commit. Push/deployment are not authorized by that commit request.
-- Status: subsequent user approval authorized implementation. P0 GSC baseline, P1/P2 code and P3 local validation are Verified; public release P4 and outcome observation P5 are Not run.
+- Status: P0 GSC baseline, P1/P2 code, P3 local validation and P4 public smoke are Verified. The user deployed release `8a4f18e`; sitemap processing is Blocked and P5 search/AI outcomes are Not run. See the post-deployment record below.
 - This is a scoped post-closeout follow-up, not a new global phase. Existing Phase 9 closeouts remain historical authority.
 - Preserve the current accepted UI, routes, CTA destinations and business workflows. Existing dropdown changes and report artifacts are separate work and must be preserved.
 - Companion execution/evidence guide: [SEO_GEO_VALIDATION_RUNBOOK.md](SEO_GEO_VALIDATION_RUNBOOK.md).
@@ -154,6 +154,22 @@ Web Performance selected 28 days, displayed 2026-09-09 through 2026-10-06: 0 cli
 
 Review: P1/P2 scope retained; no visible copy/CTA/navigation, backend/API/database or crawler-policy changes. Existing dropdown diff and standalone HTML report preserved.
 
-Not run: push/deploy, post-release public smoke, GSC live test/recrawl/sitemap submission, detailed Page indexing report, Performance exports/preceding-28-day comparison, authenticated private workflows, reduced-motion browser check, verified AI crawler logs/citations and D+7/14/28 outcomes. P0 covers stored URL inspections, submitted-sitemap list and displayed Performance totals; it does not complete every investigative/export step in the runbook. Next: separately authorize deployment, verify public output, submit validated sitemap and inspect/request the five public pages. Google indexing and AI citations are external outcomes, not guaranteed by local technical success.
+At the pre-release checkpoint, public smoke, GSC live tests/index requests/sitemap submission and outcome checks were Not run. The post-deployment record below supersedes those release gates; detailed Performance exports, authenticated workflows, reduced-motion checks and verified AI traffic/citations remain Not run. Google indexing and AI citations are external outcomes, not guaranteed by technical success.
 
 Documentation/commit review: synchronized the current GSC state, implementation inventory, actual coverage and remaining gates in both languages. The user authorized a selective local commit of SEO code, tests, paired docs and dated sanitized evidence, recorded as `2a6363b`. That commit excluded the dropdown UI diff and standalone HTML report; the user subsequently authorized their separate commit, documented in `UI_CREDIT_FOLLOWUP_SYNC.md`. The validation JSON records the earlier pre-commit snapshot.
+
+## Post-deployment verification — 2026-10-09
+
+The user reported deployment. Read-only VPS checks confirm release `8a4f18ee77453857c550ff7be0279c5cc9e415f1`; API/web containers were recreated and are healthy, SQL is healthy. Bounded web logs show Next.js 15.5.18 ready in 765ms without errors in the inspected window. No deployment or server change was performed by this verification.
+
+Verified: the existing SEO suite against `https://formautohub.servertun.pp.ua` passed **26/26 (30.2s)**. This covers six public pages/metadata/JSON-LD/static-chunk responses, six no-JS checks, twelve unauthenticated noindex routes, discovery consistency and robots/404. It does not verify authenticated business workflows or every console/hydration event.
+
+Google Live Test for `/google-forms/sample-data` at displayed 23:35:25 on 2026-10-09 reports successful fetch, crawl/index allowed and self canonical; "Google can index this URL" is eligibility, not stored index inclusion. Sitemap Live Test at displayed 23:36:38 also reports successful fetch and crawl allowed. The sitemap XML does not need search-result indexing; no XML index request was sent.
+
+Blocked: the sitemap submission was accepted, but the submitted-sitemap row reports "Couldn't fetch", unknown type and zero discovered URLs. This conflicts with a later successful live fetch; the cause is not established. Do not label sitemap processing successful or assume Cloudflare/code failure. Retain the submission; recheck processing and bounded proxy/crawler evidence if the error persists. [Google troubleshooting](https://support.google.com/webmasters/answer/7451001) distinguishes submission, fetch and processing.
+
+This verification preserves the accepted UI and all application/business/server configuration. Evidence is in `artifacts/reports/seo-geo/2026-10-09/`, including `post-deploy-tests.txt`, `gsc-sitemap-submitted.jpg` and `gsc-sitemap-live.jpg`. Historical baseline and standalone HTML report remain unchanged.
+
+Not run: measured new index inclusion, traffic/ranking uplift, AI citations/verified AI crawler logs, detailed Performance exports/preceding-period comparison, authenticated workflows and reduced-motion checks. D = verified public release **2026-10-09**; observation dates are 2026-10-16 / 2026-10-23 / 2026-11-06 (D+7/14/28), not indexing deadlines. No scheduled monitoring job was created.
+
+Verified index-request acceptance (each submitted once): `/google-forms/sample-data`, `/google-forms/student-report`, `/google-forms/survey-demo`, `/google-forms/sheets-report` and `/anti-abuse`. Each showed “Indexing requested” and addition to the priority crawl queue; screenshots are retained. The four latter requests ran Google's prerequisite eligibility check, but their separate detailed Live Test reports were not run. Stored status before requests remains unknown/not indexed; no new index inclusion is claimed. Detailed sanitized record: [post-deploy-results.json](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-results.json).

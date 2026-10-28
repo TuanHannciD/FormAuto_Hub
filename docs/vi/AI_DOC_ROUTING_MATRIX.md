@@ -1,82 +1,32 @@
-# AI_DOC_ROUTING_MATRIX
+# Điều hướng tài liệu
 
-## Mục đích
+Bắt đầu README → AGENTS → [authority](agent/AUTHORITY_MAP.md) → task/handoff đã có. Chọn bộ đủ nhỏ bên dưới; [skill matrix](../../SKILL_USAGE_MATRIX.md) chọn phương pháp, không phải file này.
 
-Định tuyến tài liệu tối thiểu cần đọc trước khi AI lập kế hoạch, viết code, review hoặc sửa tài liệu.
+## Theo công việc
 
-Luôn đọc `README.md` và `AGENTS.md` trước.
+| Công việc | Đọc |
+| --- | --- |
+| Plan, thực hiện, tài liệu, bàn giao/tiếp tục hoặc quyền | [execution](agent/EXECUTION_RULES.md); task được duyệt và nguồn sở hữu bị ảnh hưởng |
+| Test, review, browser hoặc Done | [quality](agent/QUALITY_GATES.md), [test nghiệp vụ](TESTING_STRATEGY.md) |
+| Chọn/cài skill/tool hoặc claim năng lực | [tooling](agent/TOOLING.md), [skill matrix](../../SKILL_USAGE_MATRIX.md) |
+| Phase hoặc yêu cầu mới | [phase rules](PHASE_EXECUTION_RULES.md), [roadmap](PROJECT_PHASE_ROADMAP.md), approval/closeout liên quan; [task brief](../../templates/TASK_BRIEF.md) |
+| Backend hoặc điều hướng source | [stack](TECH_STACK_DECISIONS.md), [boundaries](ARCHITECTURE_BOUNDARIES.md), [source rules](SOURCE_STRUCTURE_AND_NAMING_RULES.md), [modules](MODULE_MAP.md) |
+| Frontend/shared UI | [frontend guide](FRONTEND_STYLE_GUIDE.md), source rules, modules, shared component và consumer bị ảnh hưởng |
+| Auth UI | [auth UI](AUTH_UI_DESIGN_GUIDE.md), frontend guide, [API](API_CONTRACT_GUIDE.md) |
+| UI sinh ra/Stitch | frontend guide, [artifacts](UI_DESIGN_ARTIFACTS.md), thư mục `docs/design/stitch/` liên quan |
+| API/auth/credit/top-up/payment | API, modules, [entities](DOMAIN_ENTITIES_OVERVIEW.md), scope đã duyệt và test nghiệp vụ; payment thêm [Phase 8](PHASE_8_KICKOFF_PLAN.md) |
+| Database/migration | entities, stack, boundaries, migration/test và contract bị ảnh hưởng |
+| Form automation/Google | modules, boundaries, API, [events](EVENT_AND_WEBHOOK_CONTRACTS.md); giữ phân biệt core/NCKH |
+| AI | phase rules, [scope Phase 6](PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md), [closeout](PHASE_6_CLOSEOUT.md), API và integration thật |
+| NCKH | [ledger](nckh/NCKH_PROGRESS_LEDGER.md) → [transition](nckh/NCKH_PHASE_TRANSITION_GUIDE.md) → module/architecture/contract NCKH và chỉ phase/follow-up liên quan |
+| Local/server/deploy | [environment](ENVIRONMENT_SETUP.md), [deployment](DEPLOYMENT_GUIDE.md), cấu hình thật; server specialist để chẩn đoán production chỉ đọc |
+| Follow-up UI/credit | [UI_CREDIT_FOLLOWUP_SYNC](UI_CREDIT_FOLLOWUP_SYNC.md), frontend guide, API; contract NCKH khi ảnh hưởng |
+| Follow-up SEO/GEO | [implementation record](SEO_GEO_IMPLEMENTATION_PLAN.md), [validation runbook](SEO_GEO_VALIDATION_RUNBOOK.md), frontend guide và test liên quan; giữ UI đã chấp nhận |
 
-## Bảng định tuyến
+## Cách đọc và đồng bộ
 
-| Loại việc | Đọc trước | Đọc tiếp |
-|---|---|---|
-| Mọi task | `AGENTS.md` | file này |
-| Yêu cầu mới | `PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | `PROJECT_EXECUTION_RULES.md`, `TASK_EXECUTION_FLOW.md` |
-| Hỏi về phase/scope | `PROJECT_PHASE_ROADMAP.md` | `PHASE_EXECUTION_RULES.md`, `PHASE_0_CLOSEOUT.md`, `PHASE_1_CLOSEOUT.md`, `PHASE_2_CLOSEOUT.md`, `PHASE_7_CLOSEOUT.md`, `PHASE_8_KICKOFF_PLAN.md`, `PHASE_8_CLOSEOUT.md`, `PHASE_9_KICKOFF_PLAN.md`, `PHASE_9_CLOSEOUT.md` |
-| Kickoff Phase 3 | `PHASE_3_KICKOFF_PLAN.md` | `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
-| Kickoff Phase 8 | `PHASE_8_KICKOFF_PLAN.md` | `PROJECT_PHASE_ROADMAP.md`, `PHASE_EXECUTION_RULES.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
-| Kickoff, thực thi hoặc closeout Phase 9 | `PHASE_9_KICKOFF_PLAN.md` | `PHASE_9_CLOSEOUT.md`, `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md`, `PROJECT_PHASE_ROADMAP.md`, `PHASE_EXECUTION_RULES.md` |
-| Triển khai backend | `TECH_STACK_DECISIONS.md` | `ARCHITECTURE_BOUNDARIES.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
-| Triển khai frontend | `TECH_STACK_DECISIONS.md` | `FRONTEND_STYLE_GUIDE.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
-| Triển khai UI từ design đã generate | `FRONTEND_STYLE_GUIDE.md` | `UI_DESIGN_ARTIFACTS.md`, thư mục `docs/design/stitch/<page>/` tương ứng |
-| Thiết kế hoặc triển khai Auth UI | `AUTH_UI_DESIGN_GUIDE.md` | `FRONTEND_STYLE_GUIDE.md`, `UI_DESIGN_ARTIFACTS.md`, `API_CONTRACT_GUIDE.md` |
-| Authentication/JWT backend | `API_CONTRACT_GUIDE.md` | `DOMAIN_ENTITIES_OVERVIEW.md`, `PROJECT_PHASE_ROADMAP.md`, `TESTING_STRATEGY.md` |
-| Thiết kế API contract | `API_CONTRACT_GUIDE.md` | `MODULE_MAP.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
-| Database/entity | `DOMAIN_ENTITIES_OVERVIEW.md` | `TECH_STACK_DECISIONS.md`, `TESTING_STRATEGY.md` |
-| Credit/top-up | `MODULE_MAP.md` | `DOMAIN_ENTITIES_OVERVIEW.md`, `API_CONTRACT_GUIDE.md`, `TESTING_STRATEGY.md` |
-| Form automation | `MODULE_MAP.md` | `ARCHITECTURE_BOUNDARIES.md`, `API_CONTRACT_GUIDE.md`, `TESTING_STRATEGY.md` |
-| Google Forms integration | `ARCHITECTURE_BOUNDARIES.md` | `EVENT_AND_WEBHOOK_CONTRACTS.md`, `TECH_STACK_DECISIONS.md` |
-| Tính năng AI | `PHASE_EXECUTION_RULES.md` | `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md`, `TECH_STACK_DECISIONS.md`, `ARCHITECTURE_BOUNDARIES.md` |
-| Payment | `PHASE_EXECUTION_RULES.md` | `PHASE_8_KICKOFF_PLAN.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
-| Testing/validation | `PHASE_9_KICKOFF_PLAN.md` | `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md` |
-| Sửa tài liệu | `PROJECT_EXECUTION_RULES.md` | cặp file tương ứng trong `docs/ai` và `docs/vi` |
-| Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, tài liệu theo task |
-| Task NCKH | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_PHASE_1_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_3_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_3_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_3_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_3_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_4_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_4_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_4_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_4_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_5_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_5_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_5_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_5_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_6_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_6_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_6_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_7_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_7_5_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_8_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_9_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_9_CLOSEOUT.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
+Tài liệu trên 200 dòng đọc heading trước để chọn phần cần. Không đọc lại nội dung chưa đổi đã nạp; mở rộng khi tính đúng cần. Rule/contract trước kiến trúc rồi implementation. TOC không thay đọc đầy đủ source/dependency/test bị ảnh hưởng.
 
-## Quy tắc đồng bộ
+Mỗi Markdown trong `docs/ai/` có file cùng đường dẫn tương đối trong `docs/vi/`; sửa cả hai, cùng mức cam kết. Kickoff/report lịch sử là ngữ cảnh, không là quyền hiện tại. Quyết định mới về contract/schema/safety/phase theo execution rules; không suy approval từ pack cũ.
 
-Mỗi file trong `docs/ai/` phải có file cùng tên trong `docs/vi/`.
-
-Nếu task sửa một bên, phải sửa bên còn lại trong cùng task.
-
-## Điều kiện phải dừng
-
-Dừng và xin duyệt khi task:
-
-- phê duyệt một mục đang `Deferred:`
-- biến API đề xuất thành contract cuối
-- chốt field DB hoặc status đang ở mức đề xuất
-- làm yếu quy tắc chống abuse
-- cam kết frontend framework
-- tự bịa hành vi Google OAuth, payment gateway, AI, refund hoặc background job
-
-## File vượt 400 dòng
-
-Một số file docs vượt ngưỡng 400 dòng. Trước khi đọc toàn bộ, nên quét headers để xác nhận task có thực sự cần nội dung bên trong (xem chiến lược đọc trong `PROJECT_EXECUTION_RULES.md#tổ-chức-file--chiến-lược-đọc`).
-
-| File | ~Dòng |
-|---|---|
-| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~720 |
-| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~150 |
-| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~200 |
-| `API_CONTRACT_GUIDE.md` | ~789 |
-
-Số dòng là gần đúng và có thể lệch theo thời gian. Khi mở file không có trong danh sách nhưng có vẻ lớn, áp dụng cùng cách tiếp cận TOC-first.
-
-## Chiến lược đọc
-
-Trước khi đọc bất kỳ file docs nào, áp dụng các quy tắc sau để tránh tốn token không cần thiết (quy tắc đầy đủ trong `PROJECT_EXECUTION_RULES.md#tổ-chức-file--chiến-lược-đọc`):
-
-1. File này là điểm xuất phát — xác định bộ file tối thiểu cho task trước khi đọc bất cứ file nào khác.
-2. Với file > 200 dòng: quét headers/TOC trước, chỉ đọc full các section liên quan.
-3. Không đọc lại file đã đọc trong cùng phiên.
-4. Thứ tự ưu tiên: rules/contracts → overview kiến trúc → chi tiết implementation.
-5. Dùng TOC kèm dòng để nhảy đến section cần thay vì đọc toàn bộ file lớn.
-
-## Routing follow-up UI/credit hiện tại
-
-Với UI dùng chung, pop-up/animation tài khoản, xử lý auth NCKH ở frontend hoặc follow-up credit thủ công: đọc `UI_CREDIT_FOLLOWUP_SYNC.md`, rồi `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md` và contract/kiến trúc NCKH khi liên quan.
-
-## Routing follow-up SEO/GEO
-
-Với các ưu tiên chỉ mục/phát hiện trang/nhận diện thương hiệu được người dùng đồng ý, đọc `SEO_GEO_IMPLEMENTATION_PLAN.md`, rồi `SEO_GEO_VALIDATION_RUNBOOK.md`, `FRONTEND_STYLE_GUIDE.md` và `TESTING_STRATEGY.md`. Ngày 09/10/2026, triển khai P1/P2 đã phê duyệt và kiểm tra local đạt; đã ghi mốc GSC. Không mở global phase mới. Giữ UI đã chấp nhận; deploy và xác minh hiệu quả tìm kiếm là các điều kiện riêng.
+Evidence SEO/GEO vẫn theo ngày: check local/public release 09/10/2026 là Verified, xử lý sitemap GSC là Blocked, hiệu quả search/AI là Not run. Recovery plan là đề xuất riêng; đọc khi liên quan. Đổi routing không chạy lại check đó, không cấp quyền release hoặc global phase mới.

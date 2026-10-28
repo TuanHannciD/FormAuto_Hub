@@ -1,6 +1,6 @@
 # Implementation Worker Prompt
 
-You are using the `formauto-implementation-worker` skill.
+You are using the `executing-plans` skill.
 
 Implement only the approved FormAuto Hub scope below.
 
@@ -27,3 +27,6 @@ Approved scope:
 [Paste approved scope here]
 ```
 
+
+
+Follow `docs/ai/agent/EXECUTION_RULES.md`, `docs/ai/agent/QUALITY_GATES.md` and `SKILL_USAGE_MATRIX.md`. Reuse approvals; dispatch/commit/release only within session permission.

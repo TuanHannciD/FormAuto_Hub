@@ -1,6 +1,7 @@
 # NCKH Phase 3 Handoff Pack
 
-Use this pack to delegate NCKH Phase 3 work immediately to the existing Codex sub-agents already available in this repo.
+> Historical pack / Gói lịch sử: this phase is completed. Do not execute or dispatch from this pack as current work. Read `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md` and current AGENTS/skill matrix first. Old skill names and scope statements below describe the original checkpoint, not current routing or approval.
+Retained as the historical handoff record for this completed phase.
 
 ## One-Time Approval Gate
 
@@ -72,4 +73,3 @@ Every worker should read these first:
 - Stop if migration generation cannot satisfy SQL Server FK/delete/check/index rules.
 - Stop if implementation would require React Flow frontend, Google write scope, Google Sheets, data collection, normalization, export, credit/pricing, admin UI, statistical analysis, or AI provider calls.
 - Stop if runtime validation fails and the cause is not safely fixable within Phase 3 scope.
-

@@ -53,7 +53,7 @@ Follow-up NCKH đang active: **không có**.
 | API/service Phase 6 | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Đã implement |
 | Test Phase 6 | `tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs` | Test pass trong validation mới nhất |
 | Closeout Phase 6 | `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_6_CLOSEOUT.md` | Completed với local runtime validation |
-| Planning Phase 7 | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Đã chuẩn bị; implementation cần approval rõ |
+| Planning Phase 7 | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Baseline planning lịch sử cho scope Phase 7 đã hoàn tất; xem implementation/closeout bên dưới |
 | Frontend Phase 7 | `apps/web/app/dashboard/nckh/forms/[formId]/page.tsx`, `apps/web/lib/api.ts`, `apps/web/tests/nckh.spec.ts` | Đã implement và browser-smoke validated |
 | Closeout Phase 7 | `docs/ai/nckh/NCKH_PHASE_7_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_7_CLOSEOUT.md` | Completed với frontend build và Playwright validation |
 | Kickoff Phase 7.5 | `docs/ai/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md`, `docs/vi/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md` | Baseline đã approve và đã dùng cho follow-up Phase 7.5 đã completed |

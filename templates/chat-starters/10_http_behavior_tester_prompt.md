@@ -15,3 +15,6 @@ Return:
 - contract match or mismatch
 - validation label: Verified, Not run, or Blocked
 
+
+
+Follow `docs/ai/agent/EXECUTION_RULES.md`, `docs/ai/agent/QUALITY_GATES.md` and `SKILL_USAGE_MATRIX.md`. Reuse approvals; dispatch/commit/release only within session permission.

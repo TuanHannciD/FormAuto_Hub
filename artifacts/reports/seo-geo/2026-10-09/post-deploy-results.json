@@ -1,0 +1,94 @@
+{
+  "observedDate": "2026-10-09",
+  "origin": "https://formautohub.servertun.pp.ua",
+  "deployedRelease": "8a4f18ee77453857c550ff7be0279c5cc9e415f1",
+  "releaseVerifiedBy": "Read-only .deploy/current-release; healthy recreated API/web; healthy SQL; bounded Next startup logs",
+  "publicSuite": {
+    "status": "Verified",
+    "passed": 26,
+    "failed": 0,
+    "durationSeconds": 30.2,
+    "log": "post-deploy-tests.txt",
+    "limitations": [
+      "Unauthenticated route checks only",
+      "Not every console/hydration event"
+    ]
+  },
+  "gsc": {
+    "propertyType": "URL-prefix",
+    "sitemap": {
+      "path": "/sitemap.xml",
+      "submission": "Accepted",
+      "reportStatus": "Couldn't fetch",
+      "type": "Unknown",
+      "discoveredUrls": 0,
+      "processingGate": "Blocked",
+      "liveTest": {
+        "displayedTime": "2026-10-09 23:36:38",
+        "timezone": "UI timezone not independently verified",
+        "fetch": "Successful",
+        "crawlAllowed": true
+      },
+      "cause": "Unestablished; successful later live fetch does not prove sitemap processing",
+      "indexRequestSent": false,
+      "finalReportRechecked": true,
+      "statusScreenshot": "gsc-sitemap-fetch-status.jpg"
+    },
+    "sampleLive": {
+      "path": "/google-forms/sample-data",
+      "displayedTime": "2026-10-09 23:35:25",
+      "fetch": "Successful",
+      "crawlAllowed": true,
+      "indexAllowed": true,
+      "declaredCanonical": "https://formautohub.servertun.pp.ua/google-forms/sample-data",
+      "googleCanonical": "Only determined after indexing"
+    },
+    "storedIndex": "Five child URLs unknown/not indexed at inspections before requests; homepage indexed in pre-release baseline",
+    "outcomes": "Not run",
+    "indexRequests": [
+      {
+        "path": "/google-forms/sample-data",
+        "status": "Verified accepted into priority crawl queue",
+        "submittedOnce": true,
+        "screenshot": "gsc-sample-index-requested.jpg",
+        "detailedLiveTest": "Verified"
+      },
+      {
+        "path": "/google-forms/student-report",
+        "status": "Verified accepted into priority crawl queue",
+        "submittedOnce": true,
+        "screenshot": "gsc-student-index-requested.jpg",
+        "detailedLiveTest": "Not run; Google's request prerequisite check completed"
+      },
+      {
+        "path": "/google-forms/survey-demo",
+        "status": "Verified accepted into priority crawl queue",
+        "submittedOnce": true,
+        "screenshot": "gsc-survey-index-requested.jpg",
+        "detailedLiveTest": "Not run; Google's request prerequisite check completed"
+      },
+      {
+        "path": "/google-forms/sheets-report",
+        "status": "Verified accepted into priority crawl queue",
+        "submittedOnce": true,
+        "screenshot": "gsc-sheets-index-requested.jpg",
+        "detailedLiveTest": "Not run; Google's request prerequisite check completed"
+      },
+      {
+        "path": "/anti-abuse",
+        "status": "Verified accepted into priority crawl queue",
+        "submittedOnce": true,
+        "screenshot": "gsc-anti-abuse-index-requested.jpg",
+        "detailedLiveTest": "Not run; Google's request prerequisite check completed"
+      }
+    ]
+  },
+  "scope": "Read-only deploy verification; approved GSC discovery actions; paired docs/evidence only; no application or production configuration change",
+  "followupDates": [
+    "2026-10-16",
+    "2026-10-23",
+    "2026-11-06"
+  ],
+  "scheduledMonitoringCreated": false,
+  "verificationFinishedUtc": "2026-10-09T16:43:25.8849682Z"
+}

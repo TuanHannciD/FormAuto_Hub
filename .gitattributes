@@ -1,0 +1,7 @@
+# Preserve manifest-owned package bytes across Git checkouts on Windows/Linux.
+.agents/skills/** -text
+.claude/skills/** -text
+.agents/SUPERPOWERS-LICENSE -text
+.agents/UI-LICENSES -text
+.agents/UI-LICENSES/** -text
+.agents/MODERN-SCREENSHOT-LICENSE -text

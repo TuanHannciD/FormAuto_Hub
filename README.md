@@ -12,21 +12,19 @@ Current global phase: **Phase 9 closeout completed; next phase not selected**.
 
 Phase 6 AI scoped follow-up: **Completed (see docs/ai/PHASE_6_CLOSEOUT.md)**.
 
-The user-approved SEO/GEO follow-up has verified local P1/P2 implementation, local runtime checks and a pre-release Search Console baseline as of 2026-10-09. Public deployment and outcome measurement remain Not run. See [implementation record](docs/ai/SEO_GEO_IMPLEMENTATION_PLAN.md), [Vietnamese record](docs/vi/SEO_GEO_IMPLEMENTATION_PLAN.md) and [validation runbook](docs/ai/SEO_GEO_VALIDATION_RUNBOOK.md).
+The user-approved SEO/GEO follow-up has verified local implementation and public release `8a4f18e` on 2026-10-09: 26/26 deployed HTTP/browser checks passed. Google live inspection can fetch the sample page and sitemap; submitted-sitemap processing remains Blocked pending the reported fetch error. Search/AI outcome measurement remains Not run. See [implementation record](docs/ai/SEO_GEO_IMPLEMENTATION_PLAN.md), [Vietnamese record](docs/vi/SEO_GEO_IMPLEMENTATION_PLAN.md) and [validation runbook](docs/ai/SEO_GEO_VALIDATION_RUNBOOK.md).
 
 No new global phase is selected. New phase work, deferred-item activation, or additional implementation/fix follow-up requires explicit approval.
 
 Implemented API source is under `src/FormAutoHub.Api`, tests under `tests/FormAutoHub.Tests`, and the Next.js app under `apps/web`. Agents must read existing source and task docs before changing files.
 
-## How To Use These Docs
+## Documentation and Agent workflow
 
-- Human PM/dev readers should start with `docs/vi/`.
-- AI coding agents should start with `docs/ai/AI_DOC_ROUTING_MATRIX.md`.
-- The AI layer is intended for Codex, Cursor, Claude, ChatGPT, and similar coding agents.
-- AI workflow operators should start with `.agents/START_HERE.md` and `.agents/SKILL_INDEX.md` when available.
-- `AGENTS.md` is the highest-priority repository rule file for agents.
-- `docs/ai/` is concise, execution-oriented, and optimized for Codex/Cursor/Claude/ChatGPT.
-- `docs/vi/` is Vietnamese, human-readable, and semantically synced with `docs/ai/`.
+- Human readers: `docs/vi/`; agents: README → [AGENTS](AGENTS.md) → [authority](docs/ai/agent/AUTHORITY_MAP.md) → current task → [routing](docs/ai/AI_DOC_ROUTING_MATRIX.md).
+- Four paired operating documents own authority, execution/permissions/handoff, quality/browser/Done and tooling. See the authority map; old workflow paths remain short compatibility links.
+- [SKILL_USAGE_MATRIX](SKILL_USAGE_MATRIX.md) selects the packaged Superpowers/UI skills and seven FormAuto domain specialists. Source is `.agents/skills`; `.claude/skills` is generated, never edited independently.
+- Documentation changes need approval unless already authorized; update AI/VI together. Use [TASK_BRIEF](templates/TASK_BRIEF.md) and [HANDOFF](templates/HANDOFF.md), reusing existing approvals and next actions.
+- Package/mirror validation: `python scripts/agent-skills.py --check`; after authorized source changes: `python scripts/agent-skills.py --sync`. [Migration evidence](docs/vi/tasks/FAH-AGENT-001/INDEX.md) separates installed packages from verified capabilities.
 
 ## Confirmed Baseline
 
@@ -62,103 +60,8 @@ FormAuto Hub must not support:
 - microservices in MVP
 - AI auto-submit without human preview and confirmation
 
-## How To Update Docs Safely
+## Local development and checks
 
-1. Read `AGENTS.md`.
-2. Read `docs/ai/AI_DOC_ROUTING_MATRIX.md`.
-3. Read all existing `.md` files relevant to the change.
-4. Identify whether the change affects scope, API contracts, database entities, phase commitments, or safety rules.
-5. Update both `docs/ai/<file>.md` and `docs/vi/<file>.md` in the same task.
-6. Keep confirmed decisions stronger than assumptions.
-7. Keep Deferred items marked as `Deferred:` until explicitly approved.
-8. Do not add business rules, API contracts, fields, statuses, events, or lifecycle states without approval.
-9. Report validation honestly.
+Run `run-local.bat` from the repository root, or `npm run dev` from `apps/web`, for API `https://localhost:7039` and web `http://localhost:3020`. The launcher can install missing web dependencies. See [environment setup](docs/ai/ENVIRONMENT_SETUP.md) for configuration and prerequisites; keep secrets out of Git.
 
-If only one language layer is updated, the documentation is out of sync and completion must not be claimed.
-
-## Documentation Sync Checklist
-
-| AI document | Vietnamese document | Required |
-|---|---|---|
-| `docs/ai/AI_DOC_ROUTING_MATRIX.md` | `docs/vi/AI_DOC_ROUTING_MATRIX.md` | Yes |
-| `docs/ai/SEO_GEO_IMPLEMENTATION_PLAN.md` | `docs/vi/SEO_GEO_IMPLEMENTATION_PLAN.md` | Yes |
-| `docs/ai/SEO_GEO_VALIDATION_RUNBOOK.md` | `docs/vi/SEO_GEO_VALIDATION_RUNBOOK.md` | Yes |
-| `docs/ai/PROJECT_EXECUTION_RULES.md` | `docs/vi/PROJECT_EXECUTION_RULES.md` | Yes |
-| `docs/ai/TASK_EXECUTION_FLOW.md` | `docs/vi/TASK_EXECUTION_FLOW.md` | Yes |
-| `docs/ai/AI_RESPONSE_RULES.md` | `docs/vi/AI_RESPONSE_RULES.md` | Yes |
-| `docs/ai/MODULE_MAP.md` | `docs/vi/MODULE_MAP.md` | Yes |
-| `docs/ai/ARCHITECTURE_BOUNDARIES.md` | `docs/vi/ARCHITECTURE_BOUNDARIES.md` | Yes |
-| `docs/ai/SOURCE_STRUCTURE_AND_NAMING_RULES.md` | `docs/vi/SOURCE_STRUCTURE_AND_NAMING_RULES.md` | Yes |
-| `docs/ai/FRONTEND_STYLE_GUIDE.md` | `docs/vi/FRONTEND_STYLE_GUIDE.md` | Yes |
-| `docs/ai/UI_DESIGN_ARTIFACTS.md` | `docs/vi/UI_DESIGN_ARTIFACTS.md` | Yes |
-| `docs/ai/AUTH_UI_DESIGN_GUIDE.md` | `docs/vi/AUTH_UI_DESIGN_GUIDE.md` | Yes |
-| `docs/ai/API_CONTRACT_GUIDE.md` | `docs/vi/API_CONTRACT_GUIDE.md` | Yes |
-| `docs/ai/EVENT_AND_WEBHOOK_CONTRACTS.md` | `docs/vi/EVENT_AND_WEBHOOK_CONTRACTS.md` | Yes |
-| `docs/ai/DOMAIN_ENTITIES_OVERVIEW.md` | `docs/vi/DOMAIN_ENTITIES_OVERVIEW.md` | Yes |
-| `docs/ai/PROJECT_PHASE_ROADMAP.md` | `docs/vi/PROJECT_PHASE_ROADMAP.md` | Yes |
-| `docs/ai/PHASE_0_CLOSEOUT.md` | `docs/vi/PHASE_0_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_1_CLOSEOUT.md` | `docs/vi/PHASE_1_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_2_CLOSEOUT.md` | `docs/vi/PHASE_2_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_3_KICKOFF_PLAN.md` | `docs/vi/PHASE_3_KICKOFF_PLAN.md` | Yes |
-| `docs/ai/PHASE_3_CLOSEOUT.md` | `docs/vi/PHASE_3_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_4_CLOSEOUT.md` | `docs/vi/PHASE_4_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_5_CLOSEOUT.md` | `docs/vi/PHASE_5_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | `docs/vi/PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | Yes |
-| `docs/ai/PHASE_7_CLOSEOUT.md` | `docs/vi/PHASE_7_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_8_KICKOFF_PLAN.md` | `docs/vi/PHASE_8_KICKOFF_PLAN.md` | Yes |
-| `docs/ai/PHASE_8_CLOSEOUT.md` | `docs/vi/PHASE_8_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_9_KICKOFF_PLAN.md` | `docs/vi/PHASE_9_KICKOFF_PLAN.md` | Yes |
-| `docs/ai/PHASE_9_CLOSEOUT.md` | `docs/vi/PHASE_9_CLOSEOUT.md` | Yes |
-| `docs/ai/PHASE_EXECUTION_RULES.md` | `docs/vi/PHASE_EXECUTION_RULES.md` | Yes |
-| `docs/ai/TECH_STACK_DECISIONS.md` | `docs/vi/TECH_STACK_DECISIONS.md` | Yes |
-| `docs/ai/ENVIRONMENT_SETUP.md` | `docs/vi/ENVIRONMENT_SETUP.md` | Yes |
-| `docs/ai/TESTING_STRATEGY.md` | `docs/vi/TESTING_STRATEGY.md` | Yes |
-| `docs/ai/DEFINITION_OF_DONE.md` | `docs/vi/DEFINITION_OF_DONE.md` | Yes |
-| `docs/ai/DEPLOYMENT_GUIDE.md` | `docs/vi/DEPLOYMENT_GUIDE.md` | Yes |
-| `docs/ai/REPO_CODING_CONVENTIONS.md` | `docs/vi/REPO_CODING_CONVENTIONS.md` | Yes |
-| `docs/ai/SELF_REVIEW_CHECKLIST.md` | `docs/vi/SELF_REVIEW_CHECKLIST.md` | Yes |
-| `docs/ai/PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | `docs/vi/PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | Yes |
-
-## How To Submit New Requirements
-
-Use this template for new work:
-
-```md
-Requirement:
-[What needs to change]
-
-Business context:
-[Why this is needed]
-
-Affected users/actors:
-[Who uses it]
-
-Affected modules:
-[Known modules or unknown]
-
-Expected behavior:
-[Desired behavior]
-
-Out of scope:
-[What must not change]
-
-Confirmed rules:
-[Approved rules]
-
-Unknowns:
-[Open questions]
-
-Validation expected:
-[Build/test/runtime/docs review expectations]
-```
-
-## AI Workflow Overlay
-
-This repo includes a lightweight `.agents/` skill layer for future AI sessions:
-
-- `.agents/START_HERE.md`: short AI/operator entrypoint.
-- `.agents/SKILL_INDEX.md`: routes task types to FormAuto skills.
-- `.agents/skills/`: compact role-specific skills.
-- `templates/chat-starters/`: ready prompts for common work modes.
-- `SKILL_USAGE_MATRIX.md`: quick skill-combination matrix.
-# FormAuto_Hub
+Use the change-specific commands and runtime gates in [TOOLING](docs/ai/agent/TOOLING.md) and [QUALITY_GATES](docs/ai/agent/QUALITY_GATES.md). Existing test/CI/deployment configuration remains unchanged by the workflow migration. Historical NCKH Phase 2/3 packs are reference material, not active work queues.

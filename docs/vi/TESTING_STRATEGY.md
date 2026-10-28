@@ -8,9 +8,9 @@
 
 ### Build validation
 
-Chạy build validation cho implementation changes khi đã có code.
+Chạy build validation cho implementation changes bị ảnh hưởng.
 
-Baseline tương lai:
+Baseline đã triển khai:
 
 - backend build
 - test project build
@@ -47,27 +47,7 @@ Dùng integration tests cho:
 
 ### Runtime smoke tests
 
-Code chạy thật phải có runtime smoke khi hành vi được expose qua process đang chạy.
-
-Dùng runtime smoke cho:
-
-- API route changes
-- browser route hoặc dashboard changes
-- auth/session/role guard changes
-- hành vi phụ thuộc database sau migrations
-- payment link, callback hoặc webhook behavior
-- AI provider settings check và AI generation routes
-- public/tunnel URL behavior
-
-Runtime smoke phải verify:
-
-- server process bị ảnh hưởng đã restart sau khi đổi code
-- target route trả HTTP status và response marker đúng kỳ vọng
-- authenticated routes được kiểm tra bằng đúng user role/session
-- browser routes hydrate và load đủ JavaScript/CSS chunks cần thiết
-- server logs không có exception mới cho smoke path
-
-Build/test mà thiếu runtime smoke là chưa đủ để closeout khi runtime smoke áp dụng.
+Runtime/browser/Done gate bắt buộc thuộc [QUALITY_GATES](agent/QUALITY_GATES.md). Các ca bên dưới bổ sung coverage nghiệp vụ, không định nghĩa gate song song.
 
 ### Kiểm tra hồi quy hết hạn phiên
 
@@ -168,10 +148,6 @@ Mọi docs change phải verify:
 - Deferred items không bị promote ở bất kỳ layer nào
 - không còn project name hoặc tech stack conflict cũ
 
-## Format báo validation
+## Báo cáo kiểm chứng
 
-Dùng:
-
-- Verified
-- Not run
-- Blocked
+Dùng nhãn và trường evidence trong [QUALITY_GATES](agent/QUALITY_GATES.md).
