@@ -110,3 +110,5 @@
 - Xác minh trước commit2026-10-29: lint mới exit0/auth9of9pass;142 hash frontend khớp snapshot cuối đã review;9 tài liệu UTF-8/54 link tương đối/138 hash baseline bảo toàn được kiểm;git diff --check exit0. Bằng chứng build/browser giữ là lịch sử trên cùng snapshot sản phẩm; không khẳng định runtime mới pass khi khôi phục API còn Blocked.
 
 - Đã ghi đóng hồ sơ theo yêu cầu người dùng tại CLOSEOUT.md; không khẳng định mọi gate Done. Kiểm kê thấy ba bản sao app lịch sử ngoài repo; giữ chờ quyết định dọn. Giữ nhánh local/bằng chứng và web3020; không tiếp tục triển khai hoặc thao tác remote.
+
+- Đã hoàn tất dọn được duyệt: xóa ba bản sao lịch sử ngoài repo sau kiểm đường dẫn/reparse; giữ node_modules chính. Agent runtime Sol/high riêng dừng webPID2792 sở hữu; cổng3020/3001/3002/7039/5235 và process task trống. Không còn lựa chọn dọn chờ chốt; giữ bằng chứng, follow-up sản phẩm chưa giải quyết giữ nguyên. Cập nhật closeout; không đổi sản phẩm/DB.

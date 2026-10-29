@@ -2,7 +2,7 @@
 
 > For agentic workers: use `subagent-driven-development`; use `dispatching-parallel-agents` only for disjoint ownership. Coordinator does not implement product code. Checklist states describe actual execution.
 
-**Status:** Closed at user request, with unresolved acceptance and retained resources; not all-gates Done or release. See [closeout](CLOSEOUT.md).
+**Status:** Closed at user request; approved external-folder cleanup and local shutdown Verified. Unresolved acceptance/provider/API items remain recorded; no release. See [closeout](CLOSEOUT.md).
 **Date:** 2026-10-28.
 **Goal:** Make the existing UI compact, restrained and consistent, with purposeful feedback and independently verified usability.
 **Architecture:** Refine the existing shared primitives/shell first, then their page consumers. Preserve component APIs, routing, business workflows and the current stack.

@@ -110,3 +110,5 @@
 - Pre-commit verification2026-10-29: fresh lint exit0/auth9of9pass;142 frontend snapshot hashes match reviewed final manifest;9 UTF-8 docs/54 relative paths/138 preserved baseline hashes verified;git diff --check exit0. Build/browser evidence remains historical on the identical production snapshot; no new runtime success claim while API restoration is Blocked.
 
 - User-requested administrative closure recorded in CLOSEOUT.md. No all-gates Done claim. Folder inventory found three external historical app copies; preserved pending cleanup choice. Keep current local branch/evidence and web3020; no further implementation or remote action.
+
+- Approved cleanup completed: three external historical copies deleted after absolute-path/reparse checks; shared node_modules preserved. Dedicated Sol/high runtime agent stopped owned webPID2792; ports3020/3001/3002/7039/5235 and task processes empty. No pending cleanup choice; evidence retained, unresolved product follow-ups unchanged. Closeout updated; no product/DB changes.

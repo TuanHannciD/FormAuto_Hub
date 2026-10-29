@@ -2,7 +2,7 @@
 
 > Dành cho Agent thực hiện: dùng `subagent-driven-development`; chỉ dùng `dispatching-parallel-agents` khi vùng sở hữu tách biệt. Điều phối viên không viết code sản phẩm. Checkbox phản ánh thực tế thực hiện.
 
-**Trạng thái:** Đóng theo yêu cầu người dùng, còn nghiệm thu chưa đạt và tài nguyên giữ lại; không phải mọi gate Done hoặc phát hành. Xem [đóng hồ sơ](CLOSEOUT.md).
+**Trạng thái:** Đóng theo yêu cầu người dùng; xóa thư mục ngoài repo và dừng local đã Verified. Giữ các mục nghiệm thu/provider/API chưa giải quyết; chưa phát hành. Xem [đóng hồ sơ](CLOSEOUT.md).
 **Ngày:** 2026-10-28.
 **Mục tiêu:** Giao diện hiện tại gọn, tinh tế, nhất quán, có phản hồi chuyển động hữu ích và được kiểm chứng độc lập.
 **Kiến trúc:** Tinh chỉnh primitive/shell dùng chung trước, rồi các trang tiêu thụ. Giữ API component, route, luồng nghiệp vụ và stack.
