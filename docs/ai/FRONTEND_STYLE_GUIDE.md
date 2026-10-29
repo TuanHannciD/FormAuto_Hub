@@ -213,6 +213,17 @@ Any frontend UI baseline change must update both:
 - `docs/ai/FRONTEND_STYLE_GUIDE.md`
 - `docs/vi/FRONTEND_STYLE_GUIDE.md`
 
+## Approved compact refinement (FAH-UI-002)
+
+The user-approved refinement keeps the existing identity and stack. Current shared foundation passed independent code and visual review; page and whole-app acceptance remain tracked in [the task dossier](tasks/FAH-UI-002/PROGRESS.md), not implied by this style record.
+
+- Dashboard/admin topbar is 60 px; content top padding 20 px mobile and 24 px desktop; operational PageHeader h1 is 24 px mobile and 28 px desktop. Public/auth/article headings follow their CTA, form and reading criteria instead.
+- Keep readable body text and compact spacing. Primary mobile controls are at least 44×44 px; single-line desktop controls may be 40 px. Textarea default and caller-specific minimum heights must survive every breakpoint.
+- Use restrained shared elevation. Landing elevation is `shadow-floating`; `overlay` remains the backdrop color. Do not give a shadow token the same utility name as a color token.
+- Tables scroll inside named, keyboard-focusable regions. Preserve native popup scrolling after resize-first motion, focus return and reduced-motion behavior.
+- Native Google controls retain GIS callbacks. Adapt narrow containers with supported short text and proportional scaling to a 44 px mobile target, preserving logo aspect ratio and focus during resize; retain full text at wider widths. Do not replace provider behavior to solve sizing.
+- Mobile history and top-up acceptance, public CTA/auth form geometry and all route/state evidence remain the task's explicit gates. Compact appearance must preserve cost, safety information, preview, deliberate confirmation and existing request payloads.
+
 ## Current shared UI implementation (2026-10-08)
 
 - `ui-styles.ts`: panel (`rounded-2xl`, opaque surface), controls/buttons (`rounded-xl`) and semantic colors. Dashboard workflow panels must not reintroduce glass/translucent surfaces; the shell topbar keeps intentional blur. Public landing/SEO pages retain their distinct marketing layouts.

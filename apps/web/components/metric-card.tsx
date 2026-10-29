@@ -20,12 +20,12 @@ export function MetricCard({ title, value, tone = "neutral", className, icon }: 
 }) {
   return (
     <Card className={cn(tones[tone].border, className)}>
-      <CardContent className="py-6">
+      <CardContent className="py-4">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-medium text-secondary-foreground">{title}</p>
-          {icon && <span aria-hidden="true" className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl", tones[tone].icon)}>{icon}</span>}
+          {icon && <span aria-hidden="true" className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg", tones[tone].icon)}>{icon}</span>}
         </div>
-        <p className={cn("mt-2 break-words text-[27px] font-bold leading-tight tracking-tight", tones[tone].text)}>{value}</p>
+        <p className={cn("mt-1.5 break-words text-2xl font-bold leading-tight tracking-tight tabular-nums", tones[tone].text)}>{value}</p>
       </CardContent>
     </Card>
   );

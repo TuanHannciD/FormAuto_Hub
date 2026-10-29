@@ -91,7 +91,7 @@ export default function RegisterPage() {
   return (
     <AuthShell mode="register">
       <AuthHeading title="Tạo tài khoản" description="Chỉ cần ba thông tin để bắt đầu." />
-      <form className="grid gap-5" onSubmit={submit} aria-busy={isSubmitting}>
+      <form className="grid gap-4" onSubmit={submit} aria-busy={isSubmitting}>
         <label className="grid gap-2 text-[13px] font-bold">
           Họ tên
           <Input controlSize="lg" name="fullName" autoComplete="name" placeholder="Nguyễn Minh Anh" value={fullName} onChange={(event) => setFullName(event.target.value)} disabled={isSubmitting} required />

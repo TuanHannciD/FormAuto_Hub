@@ -115,7 +115,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   return <ShellLayout subtitle="Bảng điều khiển" navigation={navigation} mobileOpen={isMobileNavOpen} onMobileChange={setIsMobileNavOpen}
     heading={<p className="min-w-0 truncate text-xs text-secondary-foreground">Chào bạn, <strong className="text-foreground">{session.fullName}</strong></p>}
     actions={<>
-      <Link href="/dashboard/top-up" className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-primary transition hover:bg-primary-soft"><CreditCard aria-hidden="true" size={18} /><span className="hidden sm:inline">Nạp credit</span><span className="sr-only sm:hidden">Nạp credit</span></Link>
+      <Link href="/dashboard/top-up" className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-primary transition hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:min-h-10"><CreditCard aria-hidden="true" size={18} /><span className="hidden sm:inline">Nạp credit</span><span className="sr-only sm:hidden">Nạp credit</span></Link>
       <AccountMenu session={session} onLogout={logout} />
     </>}>
     {children}

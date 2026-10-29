@@ -51,9 +51,9 @@ export function BaseTable<T>({
           </MobileRecord>
         ))}
       </MobileRecordList>
-      <div className="hidden overflow-x-auto md:block">
+      <div role="region" aria-label="Bảng dữ liệu" tabIndex={0} className="hidden min-w-0 overflow-x-auto rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:block">
         <table className={cn("w-full text-left text-sm", minWidthClassName)}>
-          <thead className="bg-surface-subtle text-xs uppercase text-secondary-foreground">
+          <thead className="bg-surface-subtle text-xs text-secondary-foreground">
             <tr>
               {columns.map((column) => (
                 <th key={column.key} className={cn("px-3 py-2 font-semibold", column.headerClassName)}>
@@ -66,7 +66,7 @@ export function BaseTable<T>({
             {items.map((item) => (
               <tr className="border-t border-border" key={getRowKey(item)}>
                 {columns.map((column) => (
-                  <td key={column.key} className={cn("px-3 py-3 align-top", column.className)}>
+                  <td key={column.key} className={cn("px-3 py-2.5 align-top", column.className)}>
                     {column.render(item)}
                   </td>
                 ))}

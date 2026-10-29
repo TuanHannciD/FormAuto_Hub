@@ -756,7 +756,7 @@ export default function NckhFormWorkspacePage() {
   ];
 
   const modelColumns: BaseTableColumn<NckhResearchModel>[] = [
-    { key: "name", header: "Mô hình", render: (item) => <button className="font-semibold text-primary hover:underline" type="button" onClick={() => setSelectedModelId(item.id)}>{item.name}</button> },
+    { key: "name", header: "Mô hình", render: (item) => <button className="min-h-11 text-left font-semibold text-primary hover:underline sm:min-h-8" type="button" onClick={() => setSelectedModelId(item.id)}>{item.name}</button> },
     { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.status} /> },
     { key: "variables", header: "Biến", render: (item) => item.variableCount },
     { key: "updated", header: "Cập nhật", render: (item) => formatDate(item.updatedAt) },
@@ -765,11 +765,11 @@ export default function NckhFormWorkspacePage() {
       header: "Thao tác",
       render: (item) => (
         <div className="flex flex-wrap gap-2">
-          <Button className="min-h-8 px-2 py-1" variant="secondary" type="button" disabled={hasPendingAction} onClick={() => setSelectedModelId(item.id)}>Mở</Button>
-          <Button className="min-h-8 px-2 py-1" variant="secondary" type="button" disabled={hasPendingAction || item.status === "Active"} onClick={() => activateModel(item.id)}>
+          <Button className="min-h-11 px-3 py-1 sm:min-h-8 sm:px-2" variant="secondary" type="button" disabled={hasPendingAction} onClick={() => setSelectedModelId(item.id)}>Mở</Button>
+          <Button className="min-h-11 px-3 py-1 sm:min-h-8 sm:px-2" variant="secondary" type="button" disabled={hasPendingAction || item.status === "Active"} onClick={() => activateModel(item.id)}>
             {isActionPending("activateModel") ? <Loader2 className="animate-spin" size={14} /> : "Kích hoạt"}
           </Button>
-          <Button aria-label={`Xóa mô hình ${item.name}`} className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteModel(item)}>
+          <Button aria-label={`Xóa mô hình ${item.name}`} className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="danger" type="button" disabled={hasPendingAction} onClick={() => deleteModel(item)}>
             {isActionPending("deleteModel") && deletingModelId === item.id ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}
           </Button>
         </div>
@@ -783,7 +783,7 @@ export default function NckhFormWorkspacePage() {
     { key: "type", header: "Loại", render: (item) => <Badge tone="info">{displayVariableType(item.variableType)}</Badge> },
     { key: "scale", header: "Thang đo", render: (item) => `${displayScaleType(item.scaleType)}${item.scalePoint ? ` ${item.scalePoint}` : ""}` },
     { key: "order", header: "Thứ tự", render: (item) => item.sortOrder },
-    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteVariable(item)}>{isActionPending("deleteVariable") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
+    { key: "actions", header: "", render: (item) => <Button className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteVariable(item)}>{isActionPending("deleteVariable") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
   ];
 
   const mappingColumns: BaseTableColumn<NckhMapping>[] = [
@@ -791,7 +791,7 @@ export default function NckhFormWorkspacePage() {
     { key: "question", header: "Câu hỏi", render: (item) => item.questionText },
     { key: "type", header: "Loại", render: (item) => <Badge tone="info">{displayQuestionType(item.questionType)}</Badge> },
     { key: "order", header: "Thứ tự", render: (item) => item.sortOrder },
-    { key: "actions", header: "", render: (item) => <Button className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteMapping(item)}>{isActionPending("deleteMapping") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
+    { key: "actions", header: "", render: (item) => <Button className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteMapping(item)}>{isActionPending("deleteMapping") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
   ];
 
   const relationColumns: BaseTableColumn<NckhRelation>[] = [
@@ -799,7 +799,7 @@ export default function NckhFormWorkspacePage() {
     { key: "relation", header: "Quan hệ", render: (item) => `${item.fromVariableCode} -> ${item.toVariableCode}` },
     { key: "direction", header: "Hướng", render: (item) => <Badge tone={relationTone(item.direction)}>{displayRelationDirection(item.direction)}</Badge> },
     { key: "text", header: "Nội dung", render: (item) => item.hypothesisText },
-    { key: "actions", header: "", render: (item) => <Button aria-label={`Xóa quan hệ ${item.hypothesisCode}`} className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(item)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
+    { key: "actions", header: "", render: (item) => <Button aria-label={`Xóa quan hệ ${item.hypothesisCode}`} className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(item)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}</Button> }
   ];
 
   const responseColumns: BaseTableColumn<NckhRawResponse>[] = [
@@ -825,7 +825,7 @@ export default function NckhFormWorkspacePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {confirmation.dialog}
       {deletingModelId && <DeleteModelDialog key={deletingModelId} modelId={deletingModelId}
         onClosed={() => { setDeletingModelId(null); endPendingAction("deleteModel"); }}
@@ -835,15 +835,15 @@ export default function NckhFormWorkspacePage() {
           setSelectedModelId(current => current === modelId ? "" : current);
         }} />}
       <PageHeader
-        eyebrow="NCKH"
+        className="[&_p]:[overflow-wrap:anywhere]"
         title={form.title || "Form NCKH"}
         description={`Mã Google Form: ${form.googleFormId}`}
         actions={
-          <>
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="secondary" type="button" onClick={() => router.push("/dashboard/nckh")}><ArrowLeft size={16} /><span className="ml-2">Danh sách form</span></Button>
             <StatusBadge status={form.status ?? "Imported"} />
             <Badge tone="info">{form.questions.length} câu hỏi</Badge>
-          </>
+          </div>
         }
       />
 
@@ -851,7 +851,7 @@ export default function NckhFormWorkspacePage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Layers3 size={18} /> Mô hình nghiên cứu</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-4">
           <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" onSubmit={createModel}>
             <Input placeholder="Tên mô hình" value={modelName} onChange={(event) => setModelName(event.target.value)} required />
             <Input placeholder="Mô tả ngắn" value={modelDescription} onChange={(event) => setModelDescription(event.target.value)} />
@@ -865,18 +865,19 @@ export default function NckhFormWorkspacePage() {
         <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để dùng không gian làm việc Phase 7." />
       ) : (
         <>
-          <div className="flex flex-wrap gap-2 rounded-xl border border-border bg-surface p-2">
+          <nav aria-label="Các mục mô hình nghiên cứu" className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-2">
             {tabs.map((item) => (
               <button
                 key={item.id}
-                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${tab === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
+                aria-current={tab === item.id ? "page" : undefined}
+                className={`min-h-11 rounded-lg px-3 py-2 text-sm font-semibold transition sm:min-h-10 ${tab === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
                 type="button"
                 onClick={() => setTab(item.id)}
               >
                 {item.label}
               </button>
             ))}
-          </div>
+          </nav>
 
           {panelError && (
             <Alert className="border-warning-border bg-warning-surface text-warning">
@@ -1158,8 +1159,8 @@ export default function NckhFormWorkspacePage() {
                       <p className="mt-1 text-muted-foreground">{relation.fromVariableCode} -&gt; {relation.toVariableCode}</p>
                       <p className="mt-1 leading-5">{relation.hypothesisText}</p>
                       <div className="mt-2 flex gap-2">
-                        <Button aria-label={`Chọn quan hệ ${relation.hypothesisCode}`} className="min-h-8 px-2 py-1" variant="secondary" type="button" onClick={() => setSelectedRelationId(relation.id)}>Chọn</Button>
-                        <Button aria-label={`Xóa quan hệ ${relation.hypothesisCode}`} className="min-h-8 px-2 py-1" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(relation)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}<span className="ml-2">Xóa</span></Button>
+                        <Button aria-label={`Chọn quan hệ ${relation.hypothesisCode}`} className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="secondary" type="button" onClick={() => setSelectedRelationId(relation.id)}>Chọn</Button>
+                        <Button aria-label={`Xóa quan hệ ${relation.hypothesisCode}`} className="min-h-11 min-w-11 px-2 py-1 sm:min-h-8 sm:min-w-8" variant="danger" type="button" disabled={hasPendingAction || !canEditCanvas} onClick={() => deleteRelation(relation)}>{isActionPending("deleteRelation") ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}<span className="ml-2">Xóa</span></Button>
                       </div>
                     </div>
                   ))}

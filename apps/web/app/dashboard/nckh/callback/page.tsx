@@ -63,12 +63,12 @@ function NckhCallbackContent() {
   }, [code, errorParam, router]);
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-6 sm:px-5 sm:py-10">
+    <div className="flex min-h-[50dvh] items-start justify-center py-4 sm:items-center sm:py-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Liên kết Google — NCKH</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3" role="status" aria-live="polite">
           {isProcessing ? (
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <Loader2 className="animate-spin" size={18} />
@@ -88,7 +88,7 @@ function NckhCallbackContent() {
           </p>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 
@@ -96,10 +96,10 @@ export default function NckhCallbackPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+        <div role="status" className="flex min-h-[50dvh] items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="animate-spin mr-2" size={18} />
           Đang xử lý liên kết Google...
-        </main>
+        </div>
       }
     >
       <NckhCallbackContent />

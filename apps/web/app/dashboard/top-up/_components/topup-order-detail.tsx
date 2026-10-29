@@ -42,7 +42,7 @@ export function TopupOrderDetailDialog({ order, evidenceUrl, evidenceError = fal
           </section>
         </div>
         <p className="text-xs leading-5 text-muted-foreground">Credit được ghi nhận sau khi thanh toán được xác minh hoặc yêu cầu đối soát được duyệt.</p>
-        <div className="flex items-start gap-2"><p className="min-w-0 flex-1 break-all font-mono text-[11px] text-muted-foreground">Mã yêu cầu: {order.id}</p><button type="button" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-border-strong text-muted-foreground hover:text-primary" aria-label="Sao chép đầy đủ mã yêu cầu" onClick={async () => { await navigator.clipboard.writeText(order.id); toast.success("Đã sao chép đầy đủ mã yêu cầu."); }}><Copy size={13} /></button></div>
+        <div className="flex items-start gap-2"><p className="min-w-0 flex-1 break-all font-mono text-xs text-muted-foreground">Mã yêu cầu: {order.id}</p><button type="button" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-strong text-muted-foreground hover:text-primary sm:h-8 sm:w-8" aria-label="Sao chép đầy đủ mã yêu cầu" onClick={async () => { await navigator.clipboard.writeText(order.id); toast.success("Đã sao chép đầy đủ mã yêu cầu."); }}><Copy size={13} /></button></div>
       </DialogBody>
       <DialogFooter className="shrink-0"><DialogClose className="w-full sm:w-auto">Đóng</DialogClose></DialogFooter>
     </DialogContent>}

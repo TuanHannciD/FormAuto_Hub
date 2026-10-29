@@ -101,7 +101,7 @@ function LoginContent() {
   return (
     <AuthShell mode="login">
       <AuthHeading title="Đăng nhập" description="Nhập thông tin tài khoản của bạn." />
-      <form className="grid gap-5" onSubmit={submit} aria-busy={isSubmitting}>
+      <form className="grid gap-4" onSubmit={submit} aria-busy={isSubmitting}>
         <label className="grid gap-2 text-[13px] font-bold">
           Email
           <Input controlSize="lg" name="email" type="email" autoComplete="email" inputMode="email" placeholder="ban@example.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSubmitting} required />

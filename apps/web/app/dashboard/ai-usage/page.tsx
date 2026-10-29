@@ -186,7 +186,7 @@ export default function AiUsagePage() {
       />
 
       {/* ── Metric cards ── */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
         <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
         <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
@@ -230,14 +230,14 @@ export default function AiUsagePage() {
                     key={day.date}
                     className="group relative flex shrink-0 flex-col items-center"
                   >
-                    <div className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="text-xs tabular-nums text-muted-foreground">
                       {day.runs} runs
                     </div>
                     <div
                       className="w-3 rounded-t bg-accent transition-all hover:bg-accent"
                       style={{ height: `${Math.max(height, 2)}px` }}
                     />
-                    <div className="mt-1 text-[10px] text-muted-foreground">
+                    <div className="mt-1 text-xs text-muted-foreground">
                       {day.date.slice(5)}
                     </div>
                   </div>

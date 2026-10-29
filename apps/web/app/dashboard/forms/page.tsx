@@ -782,9 +782,9 @@ export default function FormsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader title="Tự động hóa biểu mẫu" description="Chuẩn bị câu trả lời cho biểu mẫu bạn có quyền vận hành, xem lại rồi xác nhận gửi." />
-      <nav aria-label="Các bước tự động hóa" className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+      <nav aria-label="Các bước tự động hóa" className="grid grid-cols-3 gap-2 sm:grid-cols-5">
         {["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"].map((label, index) => {
           const enabled = index === 0 || (index <= 2 && Boolean(analysis)) || (index === 3 && previews.length > 0) || (index === 4 && Boolean(submission));
           const currentStep = submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
@@ -793,8 +793,8 @@ export default function FormsPage() {
           return enabled ? <a key={label} aria-current={index === currentStep ? "step" : undefined} href={`#workflow-step-${index + 1}`} className={`${className} hover:border-primary hover:text-primary`}>{content}</a> : <span key={label} aria-disabled="true" className={`${className} opacity-60`}>{content}</span>;
         })}
       </nav>
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_260px]">
-      <fieldset disabled={busy || topupBusy || isPasting} className="isolate m-0 min-w-0 space-y-6 border-0 p-0">
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
+      <fieldset disabled={busy || topupBusy || isPasting} className="isolate m-0 min-w-0 space-y-5 border-0 p-0">
       <Card id="workflow-step-1" className="scroll-mt-24">
         <CardHeader>
           <CardTitle>1. Chọn và phân tích form</CardTitle>
@@ -838,7 +838,7 @@ export default function FormsPage() {
             {generationMode === "rules" && (
               <button
                 aria-pressed={allRuleEditorsOpen}
-                className={`inline-flex min-h-10 items-center justify-between gap-3 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition ${
+                className={`inline-flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition sm:min-h-10 ${
                   allRuleEditorsOpen
                     ? "border-info-border bg-accent text-inverse-foreground"
                     : "border-info-border bg-surface text-info hover:bg-info-surface"
@@ -916,7 +916,7 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-[200] flex flex-col gap-4 rounded-xl border border-info-border bg-info-surface p-4 shadow-soft ring-1 ring-info-border sm:flex-row sm:items-end sm:justify-between">
+                <div className="sticky bottom-3 z-[200] flex flex-col gap-3 rounded-xl border border-info-border bg-info-surface p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
                     <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
                       Tạo bản xem trước
@@ -1070,8 +1070,8 @@ export default function FormsPage() {
                 )}
               </div>
 
-              <div id="workflow-step-4" className="scroll-mt-24 sticky bottom-3 z-[200] rounded-xl border border-info-border bg-info-surface p-4 shadow-soft ring-1 ring-info-border">
-                <label className="flex items-start gap-3 text-sm">
+              <div id="workflow-step-4" className="scroll-mt-24 sticky bottom-3 z-[200] rounded-xl border border-info-border bg-info-surface p-4 shadow-sm">
+                <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
                   <input
                     checked={confirmed}
                     disabled={busy || previewStale || submissionLocked}

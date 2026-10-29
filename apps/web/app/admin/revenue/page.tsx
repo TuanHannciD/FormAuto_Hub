@@ -11,38 +11,44 @@ import { formatCurrency } from "@/lib/utils";
 
 export default function RevenueReportPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")
-      .then(setSummary)
-      .catch((error: Error) => showError(error, "Không tải được báo cáo doanh thu."));
-  }, []);
+  async function loadData() {
+    setLoading(true); setError(false);
+    try { setSummary(await apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")); }
+    catch (error) { setError(true); showError(error, "Không tải được báo cáo doanh thu."); }
+    finally { setLoading(false); }
+  }
+  useEffect(() => { loadData(); }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Báo cáo doanh thu"
         title="Báo cáo doanh thu"
         description="Theo dõi doanh thu PayOS, credit đã cấp và giao dịch cần đối soát."
         actions={
-        <>
-          <Select disabled className="w-full sm:w-32" defaultValue="day">
+        <div className="grid w-full grid-cols-6 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-end">
+          <Select aria-label="Kỳ báo cáo" disabled className="col-span-3 w-full sm:w-32" defaultValue="day">
             <option value="day">Ngày</option>
           </Select>
-          <Select disabled className="w-full sm:w-40" defaultValue="payos">
+          <Select aria-label="Nhà cung cấp báo cáo" disabled className="col-span-3 w-full sm:w-40" defaultValue="payos">
             <option value="payos">PayOS</option>
           </Select>
-          <Button type="button" variant="secondary">
+          <Button className="col-span-5 sm:col-span-1" disabled type="button" variant="secondary">
             <Download size={16} />
             <span className="ml-2">Xuất CSV đang cập nhật</span>
           </Button>
-          <Button type="button" variant="secondary">
+          <Button aria-label="Làm mới báo cáo" disabled={loading} type="button" variant="secondary" onClick={loadData}>
             <RefreshCw size={16} />
           </Button>
-        </>
+        </div>
         }
       />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {error && <Alert>Không tải được báo cáo doanh thu. Bấm “Làm mới báo cáo” để thử lại.</Alert>}
+      {loading && <p role="status" className="text-sm text-muted-foreground">Đang tải báo cáo doanh thu...</p>}
+      <div aria-busy={loading} className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         <Metric icon={CircleDollarSign} label="Tiền đến đã thanh toán" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={TrendingUp} label="Tổng credit đã cấp" value={summary ? `${summary.creditSold} cr` : "-"} />
         <Metric icon={BarChart3} label="Số giao dịch thành công" value={summary ? String(summary.successfulTopupOrders) : "-"} />
@@ -55,7 +61,7 @@ export default function RevenueReportPage() {
             <CardTitle>Doanh thu theo ngày</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-72 items-center justify-center rounded-xl border border-dashed border-border bg-surface-subtle p-5 text-center">
+            <div className="flex min-h-40 items-center justify-center rounded-xl border border-dashed border-border bg-surface-subtle p-5 text-center sm:min-h-56">
               <div>
                 <p className="font-medium">Biểu đồ doanh thu đang cập nhật</p>
                 <p className="mt-2 max-w-sm text-sm text-muted-foreground">Dữ liệu tổng hợp hiện được hiển thị ở các chỉ số phía trên.</p>
@@ -70,7 +76,7 @@ export default function RevenueReportPage() {
               <CardTitle>Xu hướng doanh thu</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold text-muted-foreground">Đang cập nhật</p>
+              <p className="text-lg font-semibold text-muted-foreground">Đang cập nhật</p>
               <p className="mt-2 text-sm text-muted-foreground">Xu hướng sẽ hiển thị khi có dữ liệu theo kỳ.</p>
             </CardContent>
           </Card>
@@ -101,7 +107,7 @@ function Metric({
   value: string;
   tone?: "default" | "danger";
 }) {
-  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={tone === "danger" ? "danger" : "primary"} />;
+  return <MetricCard className="min-w-0 [&_[aria-hidden]]:hidden sm:[&_[aria-hidden]]:grid" title={label} value={value} icon={<Icon size={18} />} tone={tone === "danger" ? "danger" : "primary"} />;
 }
 
 function successRate(summary: AdminRevenueSummary) {

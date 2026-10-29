@@ -48,8 +48,8 @@ export default function AdminManualCreditsPage() {
   const requestColumns: Array<BaseTableColumn<AdminTopupOrder>> = [
     { key: "createdAt", header: "Tạo lúc", render: (item) => formatDate(item.createdAt) },
     { key: "request", header: "Mã yêu cầu", render: (item) => <RequestCode id={item.id} /> },
-    { key: "email", header: "Người dùng", render: (item) => <span className="block max-w-[240px] truncate">{item.userEmail || "-"}</span> },
-    { key: "package", header: "Gói", render: (item) => item.packageName || "-" },
+    { key: "email", header: "Người dùng", render: (item) => <span className="block max-w-[240px] break-all">{item.userEmail || "-"}</span> },
+    { key: "package", header: "Gói", render: (item) => <span className="block max-w-[240px] whitespace-normal [overflow-wrap:anywhere]">{item.packageName || "-"}</span> },
     { key: "credits", header: "Số credit", render: (item) => `${item.credits} credit` },
     { key: "amount", header: "Số tiền", render: (item) => formatCurrency(item.amount) },
     { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.status} /> },
@@ -230,14 +230,14 @@ export default function AdminManualCreditsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Quản trị / Đối soát credit"
         title="Đối soát và cộng credit thủ công"
         description="Xử lý yêu cầu nạp thủ công và cộng credit trực tiếp cho người dùng khi có lý do nội bộ rõ ràng."
       />
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <Metric icon={<HandCoins size={18} />} label="Yêu cầu đối soát" value={String(requests.length)} />
         <Metric icon={<CheckCircle2 size={18} />} label="Đang chờ" value={String(pendingCount)} />
         <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={String(requests.length - pendingCount)} />
@@ -411,7 +411,7 @@ function RequestCode({ id }: { id: string }) {
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-border bg-surface-subtle text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-subtle text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-8 sm:w-8" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>
@@ -419,5 +419,5 @@ function RequestCode({ id }: { id: string }) {
 }
 
 function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
-  return <MetricCard title={label} value={value} icon={icon} tone="info" />;
+  return <MetricCard className="min-w-0 [&_[aria-hidden]]:hidden sm:[&_[aria-hidden]]:grid" title={label} value={value} icon={icon} tone="info" />;
 }

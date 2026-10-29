@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader, Button, Input, Select } from "@/components/ui";
+import { Alert, Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader, Button, Input, Select } from "@/components/ui";
 import { PaginationControls } from "@/components/pagination-controls";
 import { MetricCard } from "@/components/metric-card";
 import { StatusBadge } from "@/components/status-badge";
@@ -101,7 +101,7 @@ const modeLabels: Record<string, string> = {
 
 const perfColumns: Array<BaseTableColumn<AiProviderPerf>> = [
   { key: "provider", header: "Provider", render: (p) => p.provider },
-  { key: "model", header: "Model", render: (p) => p.model },
+  { key: "model", header: "Model", render: (p) => <span className="block max-w-[260px] [overflow-wrap:anywhere]">{p.model}</span> },
   {
     key: "successfulRuns",
     header: "Thành công",
@@ -116,7 +116,7 @@ const perfColumns: Array<BaseTableColumn<AiProviderPerf>> = [
 ];
 
 const topUserColumns: Array<BaseTableColumn<AiTopUser>> = [
-  { key: "email", header: "Email", render: (u) => u.email },
+  { key: "email", header: "Email", render: (u) => <span className="block max-w-[260px] break-all">{u.email}</span> },
   { key: "runs", header: "Lượt AI", render: (u) => u.runs },
   { key: "creditsUsed", header: "Credit dùng", render: (u) => u.creditsUsed }
 ];
@@ -129,7 +129,7 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
     render: (r) => <Badge tone={r.mode === "FullAi" ? "info" : "warning"}>{r.mode === "FullAi" ? "Option 2" : "Option 3"}</Badge>
   },
   { key: "status", header: "Kết quả", render: (r) => <StatusBadge status={r.status} /> },
-  { key: "provider", header: "Provider", render: (r) => <span className="text-xs text-muted-foreground">{r.provider} / {r.model}</span> },
+  { key: "provider", header: "Provider", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
   {
     key: "generatedCount",
     header: "Đã tạo",
@@ -145,10 +145,13 @@ export default function AdminAiUsagePage() {
   const [activeTab, setActiveTab] = useState<"overview" | "history">("overview");
   const [stats, setStats] = useState<AdminAiUsageStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [statsError, setStatsError] = useState(false);
+  const [reload, setReload] = useState(0);
 
   // Paged runs state
   const [pagedRuns, setPagedRuns] = useState<PagedRuns | null>(null);
   const [runsLoading, setRunsLoading] = useState(false);
+  const [runsError, setRunsError] = useState(false);
   const [filters, setFilters] = useState<RunFilters>({
     status: "", mode: "", provider: "", model: "", fromDate: "", toDate: ""
   });
@@ -162,15 +165,16 @@ export default function AdminAiUsagePage() {
     const controller = new AbortController();
 
     setLoading(true);
+    setStatsError(false);
     apiFetch<AdminAiUsageStats>("/api/admin/ai-usage", { signal: controller.signal })
       .then(setStats)
-      .catch(() => {})
+      .catch(() => { if (!controller.signal.aborted) setStatsError(true); })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
       });
 
     return () => controller.abort();
-  }, []);
+  }, [reload]);
 
   // Fetch paged runs
   const fetchRuns = useCallback(async (p: number, f: RunFilters) => {
@@ -179,6 +183,7 @@ export default function AdminAiUsagePage() {
     abortRef.current = controller;
 
     setRunsLoading(true);
+    setRunsError(false);
     const params = new URLSearchParams();
     params.set("page", String(p));
     params.set("pageSize", String(pageSize));
@@ -194,6 +199,7 @@ export default function AdminAiUsagePage() {
       if (!controller.signal.aborted) setPagedRuns(result);
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === "AbortError") return;
+      if (!controller.signal.aborted) setRunsError(true);
     } finally {
       if (!controller.signal.aborted) setRunsLoading(false);
     }
@@ -225,9 +231,9 @@ export default function AdminAiUsagePage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4" aria-busy="true">
         <PageHeader title="Thống kê AI" description="Đang tải..." />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <Card key={i}><CardContent className="h-24 animate-pulse rounded-2xl bg-muted/30" /></Card>
           ))}
@@ -236,9 +242,16 @@ export default function AdminAiUsagePage() {
     );
   }
 
+  if (statsError) {
+    return <div className="space-y-4">
+      <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu AI generation toàn hệ thống." />
+      <Alert className="space-y-3"><p>Không tải được thống kê AI.</p><Button type="button" variant="secondary" onClick={() => setReload(value => value + 1)}>Thử lại</Button></Alert>
+    </div>;
+  }
+
   if (!stats || stats.totalRuns === 0) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu AI generation toàn hệ thống." />
         <EmptyState title="Chưa có dữ liệu AI" detail="Chưa có người dùng nào thực hiện AI generation." />
       </div>
@@ -248,7 +261,7 @@ export default function AdminAiUsagePage() {
   const successRate = percent(stats.successfulRuns, stats.totalRuns);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Thống kê AI"
         title="Thống kê AI"
@@ -256,7 +269,7 @@ export default function AdminAiUsagePage() {
       />
 
       {/* Tabs */}
-      <div className="inline-flex flex-wrap gap-2 rounded-2xl border border-border bg-surface p-2">
+      <div className="inline-flex flex-wrap gap-1 rounded-2xl border border-border bg-surface p-1">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -265,8 +278,8 @@ export default function AdminAiUsagePage() {
             aria-pressed={activeTab === tab.id}
             className={
               activeTab === tab.id
-                ? "rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors"
-                : "rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
+                ? "min-h-11 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-h-10"
+                : "min-h-11 rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-h-10"
             }
           >
             {tab.label}
@@ -277,7 +290,7 @@ export default function AdminAiUsagePage() {
       {activeTab === "overview" && (
         <>
           {/* Metric cards */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3">
             <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
             <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
             <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
@@ -322,7 +335,7 @@ export default function AdminAiUsagePage() {
             <Card className="min-w-0">
               <CardHeader><CardTitle>Sử dụng theo ngày (30 ngày qua)</CardTitle></CardHeader>
               <CardContent>
-                <div className="flex items-end gap-1 overflow-x-auto pb-2">
+                <div role="region" aria-label="Biểu đồ sử dụng AI theo ngày" tabIndex={0} className="flex items-end gap-1 overflow-x-auto rounded-lg pb-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                   {stats.usageByDay.map((day) => {
                     const maxRuns = Math.max(...stats.usageByDay.map((d) => d.runs), 1);
                     const height = Math.round((day.runs / maxRuns) * 80);
@@ -350,13 +363,14 @@ export default function AdminAiUsagePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Filters */}
-            <div className="flex flex-wrap gap-3">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Trạng thái</label>
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-status" className="text-xs text-muted-foreground">Trạng thái</label>
                 <Select
+                  id="ai-run-status"
                   value={filters.status}
                   onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
-                  className="min-w-[140px]"
+                  className="min-w-0"
                 >
                   <option value="">Tất cả</option>
                   <option value="Succeeded">Thành công</option>
@@ -365,55 +379,60 @@ export default function AdminAiUsagePage() {
                   <option value="Running">Đang chạy</option>
                 </Select>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Chế độ</label>
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-mode" className="text-xs text-muted-foreground">Chế độ</label>
                 <Select
+                  id="ai-run-mode"
                   value={filters.mode}
                   onChange={(e) => setFilters((prev) => ({ ...prev, mode: e.target.value }))}
-                  className="min-w-[140px]"
+                  className="min-w-0"
                 >
                   <option value="">Tất cả</option>
                   <option value="Option2">Option 2</option>
                   <option value="Option3">Option 3</option>
                 </Select>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Provider</label>
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-provider" className="text-xs text-muted-foreground">Provider</label>
                 <Input
+                  id="ai-run-provider"
                   value={filters.provider}
                   onChange={(e) => setFilters((prev) => ({ ...prev, provider: e.target.value }))}
                   placeholder="VD: Deepseek"
-                  className="min-w-[160px]"
+                  className="min-w-0"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Model</label>
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-model" className="text-xs text-muted-foreground">Model</label>
                 <Input
+                  id="ai-run-model"
                   value={filters.model}
                   onChange={(e) => setFilters((prev) => ({ ...prev, model: e.target.value }))}
                   placeholder="VD: deepseek-v4"
-                  className="min-w-[160px]"
+                  className="min-w-0"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Từ ngày</label>
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-from" className="text-xs text-muted-foreground">Từ ngày</label>
                 <Input
+                  id="ai-run-from"
                   type="date"
                   value={filters.fromDate}
                   onChange={(e) => setFilters((prev) => ({ ...prev, fromDate: e.target.value }))}
-                  className="min-w-[160px]"
+                  className="min-w-0"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-muted-foreground">Đến ngày</label>
+              <div className="flex min-w-0 flex-col gap-1">
+                <label htmlFor="ai-run-to" className="text-xs text-muted-foreground">Đến ngày</label>
                 <Input
+                  id="ai-run-to"
                   type="date"
                   value={filters.toDate}
                   onChange={(e) => setFilters((prev) => ({ ...prev, toDate: e.target.value }))}
-                  className="min-w-[160px]"
+                  className="min-w-0"
                 />
               </div>
-              <div className="flex items-end gap-2">
+              <div className="col-span-2 flex items-end gap-2 lg:col-span-3 xl:col-span-2">
                 <Button type="button" onClick={applyFilters} disabled={runsLoading}>
                   {runsLoading ? "Đang tải..." : "Lọc"}
                 </Button>
@@ -424,7 +443,7 @@ export default function AdminAiUsagePage() {
             </div>
 
             {/* Runs table */}
-            {runsLoading && !pagedRuns ? (
+            {runsError ? <Alert>Không tải được lịch sử AI. Bấm “Lọc” để thử lại.</Alert> : runsLoading && !pagedRuns ? (
               <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
                 Đang tải dữ liệu...
               </div>

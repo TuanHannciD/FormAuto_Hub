@@ -18,6 +18,7 @@ export default function AiProviderSettingsPage() {
   const [defaultModel, setDefaultModel] = useState("gpt-4o-mini");
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -25,6 +26,7 @@ export default function AiProviderSettingsPage() {
 
   async function loadData() {
     setIsLoading(true);
+    setLoadError(false);
     try {
       const data = await apiFetch<AiProviderSettings>("/api/admin/ai-provider-settings");
       const nextProvider = data.provider || "OpenAI";
@@ -35,6 +37,8 @@ export default function AiProviderSettingsPage() {
       setDefaultModel(data.defaultModel || "");
       setIsEnabled(data.isEnabled);
       setApiKey("");
+    } catch (error) {
+      setLoadError(true); throw error;
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +87,7 @@ export default function AiProviderSettingsPage() {
   const hasValidBaseUrl = !baseUrl.trim() || isHttpUrl(baseUrl);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Cấu hình AI"
         title="Cấu hình Provider AI"
@@ -96,22 +100,24 @@ export default function AiProviderSettingsPage() {
         }
       />
 
-      <Alert className="border-warning-border/80 bg-warning-surface text-warning">
+      {loadError && <Alert>Không tải được cấu hình AI. Bấm “Làm mới” để thử lại.</Alert>}
+      {isLoading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình AI...</p>}
+      <div className="space-y-2">
+      <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
         API key thật không được trả về frontend. Nếu để trống API key khi lưu, backend sẽ giữ key hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface text-info">
+      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
         Provider, model và API endpoint do admin nhập, được lưu server-side và không cho normal user tự quyết khi generate. Kiểm tra cấu hình không tạo preview, không trừ credit và không gọi luồng submit.
       </Alert>
+      </div>
 
       <div className="grid items-start gap-4 xl:grid-cols-[1.25fr_0.75fr]">
         <div className="min-w-0 space-y-4">
-          <Card className="min-w-0">
-            <CardContent className="grid gap-4 md:grid-cols-3">
+          <div aria-label="Tóm tắt cấu hình AI" className="grid min-w-0 grid-cols-3 gap-2">
               <Detail icon={ShieldCheck} label="Trạng thái AI" value={settings?.isEnabled ? "Đang bật" : "Chưa bật"} tone={settings?.isEnabled ? "success" : "warning"} />
               <Detail icon={KeyRound} label="API key" value={settings?.hasApiKey ? settings.apiKeyPreview || "Đã lưu dạng ẩn" : "Chưa có"} tone={settings?.hasApiKey ? "success" : "warning"} />
               <Detail icon={Clock3} label="Kiểm tra gần nhất" value={settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"} />
-            </CardContent>
-          </Card>
+          </div>
 
           <Card className="min-w-0">
             <CardHeader>
@@ -174,7 +180,7 @@ export default function AiProviderSettingsPage() {
 
                 <label className="block text-sm font-medium">
                   Bật AI provider
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-11 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:min-h-10 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép luồng AI preview dùng provider/model đã lưu trên server.</span>
                     <input checked={isEnabled} disabled={isLoading || isSaving} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -193,11 +199,11 @@ export default function AiProviderSettingsPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button disabled={isLoading || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">
+                  <Button disabled={isLoading || loadError || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">
                     <Save size={16} />
                     <span className="ml-2">{isSaving ? "Đang lưu..." : "Lưu thay đổi"}</span>
                   </Button>
-                  <Button disabled={isLoading || isChecking} type="button" variant="secondary" onClick={check}>
+                  <Button disabled={isLoading || loadError || isChecking} type="button" variant="secondary" onClick={check}>
                     <SlidersHorizontal size={16} />
                     <span className="ml-2">{isChecking ? "Đang kiểm tra..." : "Kiểm tra cấu hình"}</span>
                   </Button>
@@ -248,13 +254,13 @@ export default function AiProviderSettingsPage() {
               {(savedModels.length > 0 ? savedModels : [defaultModel].filter(Boolean)).map((model) => (
                 <div
                   className={cn(
-                    "flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3",
+                    "flex min-w-0 items-center justify-between gap-2 rounded-xl border border-border bg-surface-subtle p-3",
                     model === defaultModel && "border-primary-border bg-primary-soft/80 text-primary"
                   )}
                   key={model}
                 >
-                  <span className="font-mono text-xs">{model}</span>
-                  {model === defaultModel && <CheckCircle2 className="text-success" size={16} />}
+                  <span className="min-w-0 font-mono text-xs [overflow-wrap:anywhere]">{model}</span>
+                  {model === defaultModel && <CheckCircle2 className="shrink-0 text-success" size={16} />}
                 </div>
               ))}
               {savedModels.length === 0 && !defaultModel && <p className="text-muted-foreground">Chưa có model được lưu.</p>}
@@ -304,12 +310,12 @@ function Detail({
   }[tone];
 
   return (
-    <div className={cn("rounded-xl border p-3", toneClass)}>
+    <div className={cn("min-w-0 rounded-xl border p-3", toneClass)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
-        {Icon && <Icon size={15} />}
+        {Icon && <Icon className="hidden shrink-0 sm:block" size={15} />}
       </div>
-      <p className="mt-1 break-words font-medium">{value}</p>
+      <p className="mt-1 font-medium [overflow-wrap:anywhere]">{value}</p>
     </div>
   );
 }

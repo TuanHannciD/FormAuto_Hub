@@ -77,7 +77,7 @@ function NckhContent() {
       header: "Tiêu đề",
       render: (item) => (
         <button
-          className="text-left font-medium text-primary hover:underline"
+          className="inline-flex min-h-11 items-center text-left font-medium text-primary hover:underline sm:min-h-8"
           onClick={() => router.push(`/dashboard/nckh/forms/${item.id}`)}
           type="button"
         >
@@ -185,7 +185,7 @@ function NckhContent() {
   // ── Render ──────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader title="NCKH — Nghiên cứu Khoa học" description="Quản lý Google Forms khảo sát cho nghiên cứu khoa học." />
 
       {/* Google Link Status */}
@@ -245,9 +245,10 @@ function NckhContent() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="flex gap-3" onSubmit={handleImport}>
+            <form className="flex min-w-0 flex-col gap-3 sm:flex-row" onSubmit={handleImport}>
               <Input
-                className="flex-1"
+                className="min-w-0 flex-1"
+                aria-label="Link Google Form khảo sát"
                 placeholder="https://docs.google.com/forms/d/..."
                 type="url"
                 value={formUrl}

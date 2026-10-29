@@ -111,18 +111,18 @@ export default function CreditTransactionsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader title="Giao dịch credit" description="Lịch sử ghi nhận credit được nạp và credit đã sử dụng." />
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <Metric label="Kết quả theo filter" value={String(totalItems)} />
         <Metric label="Credit trong trang" value={String(creditsInPage)} />
         <Metric label="Credit mới nhất" value={transactions[0] ? String(transactions[0].amount) : "-"} />
       </div>
       <Card>
-        <CardHeader className="gap-4">
+        <CardHeader className="space-y-3">
           <div>
             <CardTitle>Sổ ghi credit</CardTitle>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground">
               Dữ liệu được tải theo từng trang và theo từ khóa hiện tại.
             </p>
           </div>
@@ -206,17 +206,18 @@ function CreditTransactionFilters({
   }
 
   return (
-    <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_14rem_auto_auto]" onSubmit={applyFilters}>
-      <label className="relative block">
+    <form className="grid grid-cols-2 gap-2 lg:grid-cols-[minmax(0,1fr)_14rem_auto_auto]" onSubmit={applyFilters}>
+      <label className="relative col-span-2 block lg:col-span-1">
         <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
         <Input
           className="pl-9"
+          aria-label="Tìm giao dịch credit"
           placeholder="Tìm theo loại, mô tả, nguồn tham chiếu..."
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
         />
       </label>
-      <DropdownSelect value={type} options={typeOptions} onChange={onTypeChange} />
+      <DropdownSelect className="col-span-2 lg:col-span-1" value={type} options={typeOptions} onChange={onTypeChange} />
       <Button type="submit">{isRefreshing ? "Đang lọc..." : "Tìm"}</Button>
       <Button type="button" variant="secondary" onClick={resetFilters}>Đặt lại</Button>
     </form>
@@ -237,11 +238,10 @@ function useDebouncedValue<T>(value: T, delayMs: number) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <Card>
-      <CardContent>
-        <div className="metric-accent mb-4 h-1 w-10 rounded-full" />
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="mt-2 text-[28px] font-extrabold leading-none text-foreground">{value}</p>
+    <Card className="min-w-0">
+      <CardContent className="px-3 py-3 sm:p-4">
+        <p className="text-xs leading-5 text-muted-foreground">{label}</p>
+        <p className="mt-1 break-words text-xl font-bold leading-7 tabular-nums text-foreground sm:text-2xl">{value}</p>
       </CardContent>
     </Card>
   );

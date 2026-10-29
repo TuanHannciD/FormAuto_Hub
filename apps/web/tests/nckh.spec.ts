@@ -31,6 +31,17 @@ const MOCK_SESSION = {
 };
 
 async function loginAsUser(page: Page) {
+  // Keep this API-fixture suite isolated from the live API, including overview
+  // navigation and the impact GETs used by the current delete dialog.
+  await page.route("**/api/**", route => {
+    const request = route.request();
+    if (request.method() !== "GET") throw new Error(`Unmocked mutation: ${request.method()} ${new URL(request.url()).pathname}`);
+    const path = new URL(request.url()).pathname;
+    if (path === "/api/dashboard/summary") return route.fulfill({ json: {
+      currentCreditBalance: 20, totalCreditsDeposited: 20, totalCreditsUsed: 0, pendingTopupOrders: 0, recentUsageLogs: [], recentTopupOrders: []
+    } });
+    throw new Error(`Unmocked fixture GET: ${path}`);
+  });
   await page.goto("/login");
   await page.evaluate((session) => {
     window.localStorage.setItem("formauto.auth.session", JSON.stringify(session));
@@ -399,11 +410,13 @@ test.describe("NCKH — Google Linked", () => {
   });
 
   test("form title is clickable link", async ({ page }) => {
+    await mockWorkspace(page);
     await page.goto("/dashboard/nckh");
     const link = page.getByRole("button", { name: "Khảo sát sinh viên 2026" });
     await expect(link).toBeVisible({ timeout: 10000 });
     await link.click();
     await expect(page).toHaveURL(/\/dashboard\/nckh\/forms\/11111111-1111-1111-1111-111111111111/);
+    await expect(page.getByRole("heading", { name: "Khảo sát sinh viên 2026", exact: true })).toBeVisible();
   });
 
   test("pagination shows correct info", async ({ page }) => {
@@ -621,6 +634,12 @@ test.describe("NCKH — Phase 7 Workspace", () => {
   test("cancels model impact dialog and shared mapping confirmation without sending DELETE", async ({ page }) => {
     const deletes: string[] = [];
     page.on("request", request => { if (request.method() === "DELETE") deletes.push(request.url()); });
+    await mockApi(page, "GET", `/models/${MOCK_MODEL.id}`, MOCK_MODEL);
+    for (const endpoint of ["variables", "mappings", "relations", "responses", "dataset"]) {
+      await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/${endpoint}?page=1&pageSize=1`, {
+        items: [], totalItems: 0, page: 1, pageSize: 1, totalPages: 0
+      });
+    }
     await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/mappings?page=1&pageSize=100`, {
       items: [{ id: "confirmation-mapping", variableId: MOCK_VARIABLE.id, modelId: MOCK_MODEL.id, formQuestionId: MOCK_FORM_DETAIL.questions[0].id, observedCode: "SAT1", questionText: "Câu hỏi thử", questionType: "Radio", sortOrder: 1, createdAt: "2026-10-07T00:00:00Z" }], page: 1, pageSize: 100, totalItems: 1, totalPages: 1
     });

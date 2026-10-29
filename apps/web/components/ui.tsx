@@ -24,15 +24,15 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("border-b border-border px-5 py-4", className)} {...props} />;
+  return <div className={cn("border-b border-border px-4 py-3", className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cn("text-[17px] font-bold leading-6", className)} {...props} />;
+  return <h2 className={cn("text-base font-bold leading-6", className)} {...props} />;
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-5", className)} {...props} />;
+  return <div className={cn("p-4", className)} {...props} />;
 }
 
 export function PageHeader({
@@ -49,11 +49,11 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between", className)}>
+    <div className={cn("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between", className)}>
       <div className="min-w-0">
         {eyebrow && <p className="text-xs font-medium text-primary">{eyebrow}</p>}
-        <h1 className={cn("break-words text-[27px] font-bold leading-tight tracking-tight text-foreground sm:text-[32px]", eyebrow && "mt-2")}>{title}</h1>
-        {description && <p className="mt-2 max-w-3xl text-sm leading-6 text-secondary-foreground">{description}</p>}
+        <h1 className={cn("break-words text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-[28px]", eyebrow && "mt-1")}>{title}</h1>
+        {description && <p className="mt-1.5 max-w-3xl text-sm leading-6 text-secondary-foreground">{description}</p>}
       </div>
       {actions && <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">{actions}</div>}
     </div>
@@ -61,11 +61,11 @@ export function PageHeader({
 }
 
 export function MobileRecordList({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("space-y-3 md:hidden", className)} {...props} />;
+  return <div className={cn("min-w-0 space-y-2 md:hidden", className)} {...props} />;
 }
 
 export function MobileRecord({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <article className={cn(panelStyles, "p-4", className)} {...props} />;
+  return <article className={cn(panelStyles, "min-w-0 p-3", className)} {...props} />;
 }
 
 export function KeyValueRow({
@@ -79,7 +79,7 @@ export function KeyValueRow({
 }) {
   return (
     <div className={cn("flex items-start justify-between gap-4 border-t border-border py-2 first:border-t-0 first:pt-0 last:pb-0", className)}>
-      <span className="shrink-0 text-xs text-muted-foreground">{label}</span>
+      <span className="max-w-[45%] shrink-0 break-words text-xs text-muted-foreground">{label}</span>
       <span className="min-w-0 break-words text-right text-sm font-medium">{value}</span>
     </div>
   );
@@ -153,7 +153,7 @@ export function Alert({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 
 export function EmptyState({ title, detail }: { title: string; detail: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-border bg-surface-subtle p-6 text-center">
+    <div className="rounded-xl border border-dashed border-border bg-surface-subtle p-4 text-center">
       <p className="font-medium">{title}</p>
       <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
     </div>

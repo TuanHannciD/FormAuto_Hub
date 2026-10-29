@@ -22,6 +22,14 @@ Chỉ chọn skill tại [SKILL_USAGE_MATRIX](../../../SKILL_USAGE_MATRIX.md). S
 6. Impeccable là phương pháp UI, UI UX Pro Max bổ trợ tra cứu, Stitch là integration thiết kế tùy chọn. Frontend guide/design artifacts và UI sản phẩm được chấp nhận vẫn là nguồn chuẩn. Không tạo PRODUCT.md/DESIGN.md, đổi token/framework hoặc thay UI đã chấp nhận chỉ để thỏa initializer tổng quát; dùng tài liệu project đã duyệt làm context và ghi adapter còn thiếu. Không tự check update/hook/pin; đọc script được yêu cầu trước khi chạy.
 7. Đọc source theo [source rules](../SOURCE_STRUCTURE_AND_NAMING_RULES.md): map định hướng, symbol hiện tại và implementation/dependency/test đầy đủ mới làm rõ hành vi.
 
+## Trần model cứng cho subagent
+
+Có hiệu lực ngay theo chỉ dẫn người dùng ngày 2026-10-28: mọi subagent phải dùng model Sol, tối đa `gpt-6.1-sol`, reasoning không vượt `high`. Cấm Astra trong mọi trường hợp. Không dùng model ngoài họ Sol hoặc mức `xhigh`, `max`, `ultra`.
+
+Áp dụng cho implementer, runtime, reviewer, review cuối, retry, fallback, escalation và agent con lồng nhau. Quy tắc này ghi đè yêu cầu model mạnh nhất trong skill; không có ngoại lệ tự nâng cấp. Trước mỗi dispatch, kiểm catalog hiện hành và chỉ định rõ model cùng reasoning hợp lệ. Ghi cả hai trong ledger task. Nếu tool không xác lập được cấu hình hợp lệ thì không dispatch bằng cấu hình đó.
+
+Áp dụng ngay cho agent hiện có; dừng/thay agent vượt trần hoặc chưa xác minh được việc tuân thủ. Mang ràng buộc qua mọi prompt, resume và handoff. Chỉ chỉ dẫn rõ tiếp theo của người dùng mới thay đổi giới hạn; catalog có model hay hướng dẫn skill không thay đổi được.
+
 ## Lệnh và target có thật
 
 Chỉ chạy phần thay đổi cần, từ đúng cwd:

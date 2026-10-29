@@ -11,6 +11,8 @@ import { toast } from "sonner";
 
 export default function PayosSettingsPage() {
   const [settings, setSettings] = useState<PayosProviderSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [clientId, setClientId] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [checksumKey, setChecksumKey] = useState("");
@@ -22,12 +24,16 @@ export default function PayosSettingsPage() {
   const webhookUrl = publicOrigin ? `${publicOrigin}/api/payments/payos/webhook` : "/api/payments/payos/webhook";
 
   async function loadData() {
-    const data = await apiFetch<PayosProviderSettings>("/api/admin/payment-providers/payos");
-    setSettings(data);
-    setClientId(data.clientId);
-    setReturnUrl(data.returnUrl);
-    setCancelUrl(data.cancelUrl);
-    setIsEnabled(data.isEnabled);
+    setLoading(true); setLoadError(false);
+    try {
+      const data = await apiFetch<PayosProviderSettings>("/api/admin/payment-providers/payos");
+      setSettings(data);
+      setClientId(data.clientId);
+      setReturnUrl(data.returnUrl);
+      setCancelUrl(data.cancelUrl);
+      setIsEnabled(data.isEnabled);
+    } catch (error) { setLoadError(true); throw error; }
+    finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export default function PayosSettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Cấu hình PayOS"
         title="Cấu hình PayOS"
@@ -79,21 +85,23 @@ export default function PayosSettingsPage() {
         </Button>
         }
       />
-      <Alert className="border-warning-border/80 bg-warning-surface text-warning">
+      {loadError && <Alert>Không tải được cấu hình PayOS. Bấm “Làm mới” để thử lại.</Alert>}
+      {loading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình PayOS...</p>}
+      <div className="space-y-2">
+      <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
         Không hiển thị API key hoặc checksum key thật trên giao diện. Nếu để trống khóa bí mật khi lưu, hệ thống sẽ giữ khóa hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface text-info">
+      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
         PayOS cần 3 đường dẫn: Return URL và Cancel URL trỏ về trang frontend bên dưới; Webhook URL cấu hình trong PayOS dashboard và có thể dùng chính domain frontend nhờ proxy `/api/payments/payos/webhook`.
       </Alert>
+      </div>
       <div className="grid items-start gap-4 xl:grid-cols-[1.35fr_0.75fr]">
         <div className="min-w-0 space-y-4">
-          <Card className="min-w-0">
-            <CardContent className="grid gap-4 md:grid-cols-3">
+          <div aria-label="Tóm tắt cấu hình PayOS" className="grid min-w-0 grid-cols-3 gap-2">
               <Detail icon={ShieldCheck} label="Trạng thái tích hợp" value={settings?.isEnabled ? "Đang bật" : "Chưa bật"} tone={settings?.isEnabled ? "success" : "warning"} />
               <Detail icon={KeyRound} label="Có API key" value={settings?.hasApiKey ? "Có" : "Chưa"} tone={settings?.hasApiKey ? "success" : "warning"} />
               <Detail icon={Clock3} label="Kiểm tra gần nhất" value={settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"} />
-            </CardContent>
-          </Card>
+          </div>
 
           <Card className="min-w-0">
           <CardHeader>
@@ -104,7 +112,7 @@ export default function PayosSettingsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   Bật PayOS
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-11 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:min-h-10 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép khách thanh toán qua cổng PayOS.</span>
                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -142,7 +150,7 @@ export default function PayosSettingsPage() {
               </div>
               <div className="rounded-xl border border-info-border/80 bg-info-surface p-4 text-sm text-info">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold">Webhook URL cấu hình trong PayOS dashboard</p>
                     <p className="mt-1 text-info">
                       PayOS gửi POST vào URL này. Next.js sẽ chuyển tiếp payload sang backend API để backend xác minh chữ ký và cộng credit.
@@ -153,14 +161,14 @@ export default function PayosSettingsPage() {
                     <span className="ml-2">Sao chép</span>
                   </Button>
                 </div>
-                <Input className="mt-3 bg-surface font-mono text-xs" readOnly value={webhookUrl} />
+                <Input aria-label="Webhook URL" className="mt-3 bg-surface font-mono text-xs" readOnly value={webhookUrl} />
               </div>
               <div className="flex flex-col gap-2 sm:flex-row">
-                <Button type="submit">
+                <Button disabled={loading || loadError} type="submit">
                   <Save size={16} />
                   <span className="ml-2">Lưu thay đổi</span>
                 </Button>
-                <Button type="button" variant="secondary" onClick={check}>Kiểm tra cấu hình</Button>
+                <Button disabled={loading || loadError} type="button" variant="secondary" onClick={check}>Kiểm tra cấu hình</Button>
               </div>
             </form>
           </CardContent>
@@ -228,7 +236,7 @@ function Detail({
 }: {
   label: string;
   value: string;
-  icon?: ComponentType<{ size?: number }>;
+  icon?: ComponentType<{ size?: number; className?: string }>;
   tone?: "default" | "success" | "warning";
 }) {
   const toneClass = {
@@ -238,21 +246,21 @@ function Detail({
   }[tone];
 
   return (
-    <div className={`rounded-xl border p-3 ${toneClass}`}>
+    <div className={`min-w-0 rounded-xl border p-3 ${toneClass}`}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
-        {Icon && <Icon size={15} />}
+        {Icon && <Icon className="hidden shrink-0 sm:block" size={15} />}
       </div>
-      <p className="mt-1 font-medium">{value}</p>
+      <p className="mt-1 font-medium [overflow-wrap:anywhere]">{value}</p>
     </div>
   );
 }
 
 function CheckRow({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3">
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-subtle p-3">
       <span>{label}</span>
-      {ok ? <CheckCircle2 className="text-success" size={16} /> : <AlertCircle className="text-destructive" size={16} />}
+      {ok ? <CheckCircle2 className="shrink-0 text-success" size={16} /> : <AlertCircle className="shrink-0 text-destructive" size={16} />}
     </div>
   );
 }

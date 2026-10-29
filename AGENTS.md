@@ -10,6 +10,13 @@ Repository rules are subordinate to system/developer/runtime instructions and us
 - [Skill matrix](SKILL_USAGE_MATRIX.md): Superpowers methods, Impeccable UI, UI UX Pro Max research and seven domain specialists. Do not use retired generic FormAuto workflow skills.
 - [Source rules](docs/ai/SOURCE_STRUCTURE_AND_NAMING_RULES.md): find current symbols; read complete affected units and dependency/consumer/test paths. Maps are navigation, not implementation evidence.
 
+## Giới hạn cứng cho mọi subagent
+
+- Có hiệu lực ngay theo yêu cầu người dùng ngày 2026-10-28: mọi subagent chỉ được dùng model Sol, tối đa `gpt-6.1-sol` với reasoning `high`; mức thấp hơn trong họ Sol được phép. Cấm Astra trong mọi trường hợp.
+- Áp dụng cho implementer, runtime, reviewer, review cuối, retry, fallback, escalation và mọi agent con lồng nhau; không có ngoại lệ vì task khó hoặc skill yêu cầu model mạnh nhất.
+- Trước mỗi dispatch, kiểm catalog và chỉ định rõ model cùng reasoning không vượt `high`. Không dùng mức `xhigh`, `max`, `ultra` hoặc model ngoài họ Sol. Nếu tool không xác nhận được cấu hình hợp lệ, không dispatch bằng cấu hình đó.
+- Agent đang có phải nhận ràng buộc ngay; dừng/thay agent nếu cấu hình vượt trần hoặc không xác minh được. Root ghi model/effort thực tế trong ledger; giữ giới hạn này khi tiếp tục sau handoff/compaction. Chi tiết tại [Tooling](docs/ai/agent/TOOLING.md#hard-subagent-model-ceiling).
+
 ## Scope and documentation
 
 - Preserve existing dirty/untracked/ignored work and evidence. Never reset/clean/overwrite unrelated work.

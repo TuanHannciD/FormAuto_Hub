@@ -14,8 +14,8 @@ export function OverviewPanel({
   questionColumns: BaseTableColumn<NckhFormQuestion>[];
 }) {
   return (
-    <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
-      <Card>
+    <div className="grid min-w-0 gap-4 xl:grid-cols-[300px_minmax(0,1fr)]">
+      <Card className="min-w-0">
         <CardHeader><CardTitle>Mô hình đang mở</CardTitle></CardHeader>
         <CardContent className="space-y-3 text-sm">
           <KeyValueRow label="Tên" value={model.name} />
@@ -25,7 +25,7 @@ export function OverviewPanel({
           <KeyValueRow label="Cập nhật" value={formatDate(model.updatedAt)} />
         </CardContent>
       </Card>
-      <Card>
+      <Card className="min-w-0">
         <CardHeader><CardTitle>Câu hỏi đã nhập</CardTitle></CardHeader>
         <CardContent>
           <BaseTable columns={questionColumns} items={form.questions} getRowKey={(item) => item.id} emptyTitle="Chưa có câu hỏi" emptyDetail="Nhập lại form nếu cấu trúc câu hỏi chưa được lưu." />

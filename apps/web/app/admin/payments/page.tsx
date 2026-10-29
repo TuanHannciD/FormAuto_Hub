@@ -5,7 +5,7 @@ import type { ComponentType } from "react";
 import { CheckCircle2, Clock3, Filter, Search, XCircle } from "lucide-react";
 import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminPayment } from "@/lib/api";
 import { displayStatus } from "@/lib/labels";
@@ -18,7 +18,7 @@ const paymentColumns: Array<BaseTableColumn<AdminPayment>> = [
     key: "user",
     header: "Người dùng",
     render: (item) => (
-      <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+      <span className="block max-w-[220px] break-all">
         {displayPaymentUser(item)}
       </span>
     )
@@ -32,6 +32,8 @@ const paymentColumns: Array<BaseTableColumn<AdminPayment>> = [
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [providerFilter, setProviderFilter] = useState("");
@@ -40,7 +42,8 @@ export default function AdminPaymentsPage() {
   useEffect(() => {
     apiFetch<{ items: AdminPayment[] }>("/api/admin/payments")
       .then((data) => setPayments(data.items))
-      .catch((error: Error) => showError(error, "Không tải được danh sách thanh toán."));
+      .catch((error: Error) => { setError(true); showError(error, "Không tải được danh sách thanh toán."); })
+      .finally(() => setLoading(false));
   }, []);
 
   const statusOptions = useMemo(
@@ -76,7 +79,7 @@ export default function AdminPaymentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Top-up & thanh toán"
         title="Quản lý top-up và thanh toán"
@@ -96,19 +99,20 @@ export default function AdminPaymentsPage() {
       </div>
 
       <Card className="min-w-0">
-        <CardHeader className="space-y-4">
+        <CardHeader className="space-y-3">
           <CardTitle>Danh sách thanh toán PayOS</CardTitle>
-          <form className="grid gap-3 md:grid-cols-[1.2fr_0.8fr_0.8fr_auto]" onSubmit={applyFilters}>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-2.5 text-muted-foreground" size={15} />
+          <form className="grid grid-cols-2 gap-2 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_auto]" onSubmit={applyFilters}>
+            <div className="relative col-span-2 min-w-0 md:col-span-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={15} />
               <Input
                 className="pl-9"
+                aria-label="Tìm thanh toán"
                 placeholder="Tìm mã đơn, PayOS hoặc email..."
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
             </div>
-            <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+            <Select aria-label="Trạng thái thanh toán" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
               <option value="">Trạng thái</option>
               {statusOptions.map((status) => (
                 <option key={status} value={status}>
@@ -116,7 +120,7 @@ export default function AdminPaymentsPage() {
                 </option>
               ))}
             </Select>
-            <Select value={providerFilter} onChange={(event) => setProviderFilter(event.target.value)}>
+            <Select aria-label="Phương thức thanh toán" value={providerFilter} onChange={(event) => setProviderFilter(event.target.value)}>
               <option value="">Phương thức</option>
               {providerOptions.map((provider) => (
                 <option key={provider} value={provider}>
@@ -124,18 +128,18 @@ export default function AdminPaymentsPage() {
                 </option>
               ))}
             </Select>
-            <Button className="w-full md:w-auto" type="submit" variant="secondary">Lọc</Button>
+            <Button className="col-span-2 w-full md:col-span-1 md:w-auto" type="submit" variant="secondary">Lọc</Button>
           </form>
         </CardHeader>
         <CardContent>
-          <BaseTable
+          {error ? <Alert>Không tải được danh sách thanh toán. Tải lại trang để thử lại.</Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải thanh toán...</p> : <BaseTable
             items={filteredPayments}
             columns={paymentColumns}
             getRowKey={(item) => item.id}
             emptyTitle={payments.length === 0 ? "Chưa có thanh toán" : "Không có thanh toán phù hợp"}
             emptyDetail={payments.length === 0 ? "Thanh toán PayOS sẽ xuất hiện sau khi user tạo yêu cầu nạp credit." : "Đổi từ khóa, trạng thái hoặc phương thức để xem thêm kết quả."}
             minWidthClassName="min-w-[860px]"
-          />
+          />}
         </CardContent>
       </Card>
     </div>

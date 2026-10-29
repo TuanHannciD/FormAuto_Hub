@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown, Copy, CreditCard, Eye, FileImage, History, RefreshCw, Wallet } from "lucide-react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { PaginationControls } from "@/components/pagination-controls";
+import { DropdownSelect } from "@/components/dropdown-select";
 import { TopupOrderDetailDialog } from "./_components/topup-order-detail";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, KeyValueRow, PageHeader, Textarea } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
@@ -192,12 +193,28 @@ export default function TopUpPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader eyebrow="Tài khoản / Nạp credit" title="Nạp credit" description="Chọn gói phù hợp, thanh toán và theo dõi yêu cầu nạp của bạn."
-        actions={<div className="flex items-center gap-3 rounded-xl border border-primary-border bg-primary-soft px-4 py-3"><Wallet size={20} className="text-primary" /><div><p className="text-xs text-muted-foreground">Số dư hiện tại</p><p className="font-bold text-primary">{summary ? `${summary.currentCreditBalance} credit` : "—"}</p></div></div>} />
+    <div className="space-y-5">
+      <PageHeader title="Nạp credit" description="Chọn gói phù hợp, thanh toán và theo dõi yêu cầu nạp của bạn."
+        actions={<div className="flex items-center gap-3 rounded-xl border border-primary-border bg-primary-soft px-3 py-2"><Wallet size={20} className="text-primary" /><div><p className="text-xs text-muted-foreground">Số dư hiện tại</p><p className="font-bold tabular-nums text-primary">{summary ? `${summary.currentCreditBalance} credit` : "—"}</p></div></div>} />
       {loadError && <Alert><p>Không tải được dữ liệu nạp credit.</p><Button type="button" variant="secondary" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}>Thử lại</Button></Alert>}
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0 space-y-5">
+        <Card className="order-1 min-w-0 xl:order-2 xl:sticky xl:top-24" role="region" aria-label="Thanh toán PayOS">
+          <CardHeader><CardTitle className="flex items-center gap-2"><CreditCard size={18} className="text-primary" />Thanh toán PayOS</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Chọn gói thanh toán</p>
+              <DropdownSelect className="[&_button]:min-h-11" value={packageId} options={packages.map(item => ({ value: item.id, label: item.name }))} onChange={setPackageId} disabled={isLoading || isCreatingPayos || isSubmittingManual || packages.length === 0} placeholder="Chưa có gói credit" />
+            </div>
+            <div className="space-y-2 text-sm"><KeyValueRow label="Gói credit" value={selectedPackage?.name ?? "Chưa chọn"} /><KeyValueRow label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "—"} /></div>
+            <div className="rounded-xl border border-primary-border bg-primary-soft p-4"><p className="text-xs text-muted-foreground">Tổng thanh toán</p><p className="mt-1 text-2xl font-extrabold text-primary">{selectedPackage ? formatCurrency(selectedPackage.price) : "—"}</p></div>
+            <Button className="w-full" disabled={isLoading || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
+            <p className="text-xs leading-5 text-muted-foreground">Bạn sẽ được chuyển sang PayOS để thanh toán. Credit được cộng sau khi giao dịch được xác minh thành công.</p>
+            <ol className="space-y-3 border-t border-border pt-4 text-sm">
+              {["Chọn gói credit", "Hoàn tất thanh toán trên PayOS", "Theo dõi trạng thái trong lịch sử"].map((step, index) => <li key={step} className="flex items-center gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{index + 1}</span><span>{step}</span></li>)}
+            </ol>
+          </CardContent>
+        </Card>
+        <div className="order-2 min-w-0 space-y-5 xl:order-1">
           <Card>
             <CardHeader><CardTitle>Chọn gói credit</CardTitle><p className="mt-1 text-sm text-muted-foreground">Giá và số credit được xác định theo gói bạn chọn.</p></CardHeader>
             <CardContent>
@@ -236,18 +253,7 @@ export default function TopUpPage() {
             </details>
           </Card>
         </div>
-        <Card className="min-w-0 xl:sticky xl:top-28">
-          <CardHeader><CardTitle className="flex items-center gap-2"><CreditCard size={18} className="text-primary" />Thanh toán PayOS</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 text-sm"><KeyValueRow label="Gói credit" value={selectedPackage?.name ?? "Chưa chọn"} /><KeyValueRow label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "—"} /></div>
-            <div className="rounded-xl border border-primary-border bg-primary-soft p-4"><p className="text-xs text-muted-foreground">Tổng thanh toán</p><p className="mt-1 text-2xl font-extrabold text-primary">{selectedPackage ? formatCurrency(selectedPackage.price) : "—"}</p></div>
-            <Button className="w-full" disabled={isLoading || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
-            <p className="text-xs leading-5 text-muted-foreground">Bạn sẽ được chuyển sang PayOS để thanh toán. Credit được cộng sau khi giao dịch được xác minh thành công.</p>
-            <ol className="space-y-3 border-t border-border pt-4 text-sm">
-              {["Chọn gói credit", "Hoàn tất thanh toán trên PayOS", "Theo dõi trạng thái trong lịch sử"].map((step, index) => <li key={step} className="flex items-center gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{index + 1}</span><span>{step}</span></li>)}
-            </ol>
-          </CardContent>
-        </Card>
+
       </div>
       <Card className="min-w-0">
         <CardHeader className="flex flex-wrap items-center justify-between gap-3"><div><CardTitle className="flex items-center gap-2"><History size={18} className="text-primary" />Lịch sử yêu cầu nạp</CardTitle><p className="mt-1 text-sm text-muted-foreground">Theo dõi thanh toán và kết quả đối soát của bạn.</p></div><Button type="button" variant="secondary" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}><RefreshCw size={16} />Làm mới</Button></CardHeader>

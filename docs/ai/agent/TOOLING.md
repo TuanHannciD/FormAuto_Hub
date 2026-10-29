@@ -22,6 +22,14 @@ Selection lives only in [SKILL_USAGE_MATRIX](../../../SKILL_USAGE_MATRIX.md). Me
 6. Impeccable is the UI method, UI UX Pro Max is supporting research, Stitch is an optional design integration. The existing frontend guide/design artifacts and accepted product UI remain authoritative. Do not create PRODUCT.md/DESIGN.md, change tokens/framework or replace an accepted UI just to satisfy a generic initializer; use approved project docs as context and record any adapter need. No automatic update checks/hooks/pins; inspect a requested script before execution.
 7. Source reading follows [source rules](../SOURCE_STRUCTURE_AND_NAMING_RULES.md): maps route, current symbols and complete implementation/dependencies/tests establish behavior.
 
+## Hard subagent model ceiling
+
+Effective immediately by user instruction on 2026-10-28, every subagent must use a Sol model at or below `gpt-6.1-sol` with reasoning at most `high`. Astra is forbidden in all circumstances. Models outside the Sol family and effort levels `xhigh`, `max`, `ultra` are not permitted.
+
+This applies to implementers, runtime operators, reviewers, final reviews, retries, fallbacks, escalation and nested children. It overrides upstream skill requests for the strongest model; no automatic escalation exception exists. Before every dispatch, inspect the live catalog and explicitly set an allowed model and reasoning. Record both in the task ledger. If the tool cannot establish an allowed configuration, do not dispatch using that configuration.
+
+Apply this limit to existing children immediately; stop/replace any child above the ceiling or whose compliance cannot be verified. Carry it through every prompt, resume and handoff. Only a subsequent explicit user instruction can change the limit; catalog availability or skill guidance cannot.
+
 ## Actual commands and targets
 
 Run only what the change requires, from the correct cwd:

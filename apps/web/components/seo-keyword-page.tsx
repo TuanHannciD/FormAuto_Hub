@@ -40,25 +40,25 @@ const safetyItems = [
 const seoAccents = [
   {
     card: "border-info-border bg-gradient-to-br from-surface via-info-surface/70 to-surface hover:border-info-border",
-    icon: "border-info-border bg-accent text-inverse-foreground shadow-raised",
+    icon: "border-info-border bg-accent text-inverse-foreground",
     chip: "border-info-border bg-info-surface text-info",
     line: "from-accent to-accent"
   },
   {
     card: "border-success-border bg-gradient-to-br from-surface via-success-surface/70 to-surface hover:border-success-border",
-    icon: "border-success-border bg-success text-inverse-foreground shadow-raised",
+    icon: "border-success-border bg-success text-inverse-foreground",
     chip: "border-success-border bg-success-surface text-success",
     line: "from-success to-accent"
   },
   {
     card: "border-warning-border bg-gradient-to-br from-surface via-warning-surface/75 to-surface hover:border-warning-border",
-    icon: "border-warning-border bg-warning text-inverse-foreground shadow-raised",
+    icon: "border-warning-border bg-warning text-inverse-foreground",
     chip: "border-warning-border bg-warning-surface text-warning",
     line: "from-warning to-warning"
   },
   {
     card: "border-primary-border bg-gradient-to-br from-surface via-primary-soft/65 to-surface hover:border-primary-border",
-    icon: "border-primary-border bg-primary text-inverse-foreground shadow-raised",
+    icon: "border-primary-border bg-primary text-inverse-foreground",
     chip: "border-primary-border bg-primary-soft text-primary",
     line: "from-primary to-primary-hover"
   }
@@ -113,34 +113,34 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
       <MarketingHeader />
 
       <section className="border-b border-border bg-transparent">
-        <div className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-12 md:px-8 md:py-20 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-10 md:px-8 md:py-14 lg:grid-cols-[1.05fr_0.95fr]">
           <ScrollReveal className="min-w-0">
             <p className="inline-flex rounded border border-info-border bg-info-surface px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-info">
               {config.eyebrow}
             </p>
-            <h1 className="mt-6 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            <h1 className="mt-5 max-w-3xl text-balance text-[30px] font-bold leading-[1.15] tracking-tight text-foreground sm:text-4xl sm:leading-[1.15] md:text-[44px]">
               {config.h1}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-secondary-foreground md:text-lg">
+            <p className="mt-5 max-w-[65ch] text-base leading-7 text-secondary-foreground">
               {config.lead}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
-                className="motion-button rounded bg-primary px-6 py-2.5 text-center text-sm font-medium text-inverse-foreground shadow-sm hover:bg-primary"
+                className="motion-button inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-center text-sm font-medium text-inverse-foreground shadow-sm hover:bg-primary"
               >
                 Bắt đầu
               </Link>
               <Link
                 href="/google-forms/sample-data"
-                className="motion-button rounded border border-border bg-surface px-6 py-2.5 text-center text-sm font-medium text-secondary-foreground shadow-sm hover:bg-surface-subtle"
+                className="motion-button inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-surface px-6 py-2.5 text-center text-sm font-medium text-secondary-foreground shadow-sm hover:bg-surface-subtle"
               >
                 Xem dữ liệu mẫu
               </Link>
             </div>
           </ScrollReveal>
 
-          <ScrollReveal as="aside" delay={120} variant="scale" className="motion-card overflow-hidden rounded-lg border border-info-border bg-gradient-to-br from-surface via-info-surface/80 to-success-surface/70 p-6 shadow-sm">
+          <ScrollReveal as="aside" delay={120} variant="scale" className="motion-card overflow-hidden rounded-lg border border-info-border bg-gradient-to-br from-surface via-info-surface/80 to-success-surface/70 p-6">
             <div className="relative mb-6 overflow-hidden rounded-lg border border-inverse-foreground/70 bg-surface shadow-sm">
               <Image
                 src="/images/landing/login-screen.png"
@@ -172,7 +172,7 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
                 );
               })}
             </div>
-            <div className="mt-6 rounded border border-success-border bg-surface/78 p-4 text-sm leading-6 text-success shadow-sm">
+            <div className="mt-6 rounded border border-success-border bg-surface/78 p-4 text-sm leading-6 text-success">
               Dữ liệu mẫu chỉ dùng để kiểm thử, demo hoặc chuẩn bị báo cáo. Không dùng để làm giả
               kết quả khảo sát hoặc thay thế phản hồi thật.
             </div>
@@ -180,9 +180,9 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-12 md:px-8 md:py-20 lg:grid-cols-[0.75fr_1.25fr]">
+      <section className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-10 md:px-8 md:py-14 lg:grid-cols-[0.75fr_1.25fr]">
         <ScrollReveal>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">Phù hợp khi cần</h2>
+          <h2 className="text-balance text-[26px] font-bold leading-tight tracking-tight text-foreground md:text-3xl">Phù hợp khi cần</h2>
           <p className="mt-4 text-base leading-7 text-secondary-foreground">
             Các tình huống bên dưới bám đúng phạm vi sản phẩm: dữ liệu mẫu, preview, xác nhận và
             lịch sử thao tác rõ ràng.
@@ -194,8 +194,8 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
             const Icon = useCaseIcons[index] ?? CheckCircle2;
 
             return (
-            <ScrollReveal key={item} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-5 shadow-sm ${accent.card}`}>
-              <div className={`motion-icon mb-4 flex h-11 w-11 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
+            <ScrollReveal key={item} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-5 ${accent.card}`}>
+              <div className={`motion-icon mb-4 flex h-11 w-11 items-center justify-center rounded-lg border ${accent.icon}`}>
                 <Icon size={20} />
               </div>
               <h3 className="text-sm font-semibold leading-6 text-foreground">{item}</h3>
@@ -205,10 +205,10 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
         </div>
       </section>
 
-      <section className="border-y border-border bg-surface/45 py-12 md:py-20">
+      <section className="border-y border-border bg-surface/45 py-10 md:py-14">
         <div className="mx-auto max-w-[1120px] px-4 md:px-8">
           <ScrollReveal className="mb-10 max-w-3xl">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Cách FormAuto Hub hỗ trợ</h2>
+            <h2 className="text-balance text-[26px] font-bold leading-tight tracking-tight text-foreground md:text-3xl">Cách FormAuto Hub hỗ trợ</h2>
             <p className="mt-4 text-base leading-7 text-secondary-foreground">
               Nội dung trang tập trung vào nhu cầu học tập và báo cáo, nhưng vẫn bám product
               baseline: phân tích, cấu hình, preview, xác nhận và theo dõi.
@@ -220,13 +220,13 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
               const accent = getSeoAccent(index);
 
               return (
-                <ScrollReveal key={feature.title} delay={index * 80} as="article" className={`motion-card relative overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
+                <ScrollReveal key={feature.title} delay={index * 80} as="article" className={`motion-card relative overflow-hidden rounded-lg border p-6 ${accent.card}`}>
                   <div className={`absolute right-4 top-4 h-16 w-16 rounded-full bg-gradient-to-br ${accent.line} opacity-10`} />
-                  <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border shadow-lg ${accent.icon}`}>
+                  <div className={`motion-icon mb-4 flex h-12 w-12 items-center justify-center rounded-lg border ${accent.icon}`}>
                     <Icon size={20} />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">{feature.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-secondary-foreground">{feature.body}</p>
+                  <p className="mt-3 max-w-[65ch] text-base leading-7 text-secondary-foreground">{feature.body}</p>
                 </ScrollReveal>
               );
             })}
@@ -234,10 +234,10 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1120px] px-4 py-12 md:px-8 md:py-20">
+      <section className="mx-auto max-w-[1120px] px-4 py-10 md:px-8 md:py-14">
         <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Hướng dẫn theo use case</h2>
+            <h2 className="text-balance text-[26px] font-bold leading-tight tracking-tight text-foreground md:text-3xl">Hướng dẫn theo use case</h2>
             <p className="mt-4 text-base leading-7 text-secondary-foreground">
               Các nội dung bên dưới giúp Google và AI search hiểu rõ trang này dành cho ai, giải
               quyết vấn đề gì và giới hạn sử dụng an toàn ở đâu.
@@ -248,12 +248,12 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
               const accent = getSeoAccent(index + 1);
 
               return (
-              <ScrollReveal key={section.heading} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-6 shadow-sm ${accent.card}`}>
+              <ScrollReveal key={section.heading} delay={index * 70} as="article" className={`motion-card overflow-hidden rounded-lg border p-6 ${accent.card}`}>
                 <div className={`mb-5 h-1.5 w-16 rounded-full bg-gradient-to-r ${accent.line}`} />
                 <h2 className="text-2xl font-bold tracking-tight text-foreground">{section.heading}</h2>
                 <div className="mt-4 space-y-4">
                   {section.body.map((paragraph) => (
-                    <p key={paragraph} className="text-sm leading-7 text-secondary-foreground">
+                    <p key={paragraph} className="max-w-[65ch] text-base leading-7 text-secondary-foreground">
                       {paragraph}
                     </p>
                   ))}
@@ -265,8 +265,8 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-12 md:px-8 md:py-20 lg:grid-cols-2">
-        <ScrollReveal className="motion-card rounded-lg border border-success-border bg-gradient-to-br from-surface via-success-surface/70 to-surface p-6 shadow-sm md:p-8">
+      <section className="mx-auto grid max-w-[1120px] grid-cols-1 gap-8 px-4 py-10 md:px-8 md:py-14 lg:grid-cols-2">
+        <ScrollReveal className="motion-card rounded-lg border border-success-border bg-gradient-to-br from-surface via-success-surface/70 to-surface p-6 md:p-8">
           <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground">
             <ShieldCheck className="text-success" size={24} />
             Giới hạn an toàn
@@ -281,7 +281,7 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
           </ul>
         </ScrollReveal>
 
-        <ScrollReveal delay={100} className="rounded-lg border border-primary-border bg-gradient-to-br from-surface via-primary-soft/70 to-surface p-6 shadow-sm md:p-8">
+        <ScrollReveal delay={100} className="rounded-lg border border-primary-border bg-gradient-to-br from-surface via-primary-soft/70 to-surface p-6 md:p-8">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Trang liên quan</h2>
           <div className="mt-6 grid gap-3">
             {relatedLinks
@@ -302,17 +302,17 @@ export function SeoKeywordPage({ config }: SeoKeywordPageProps) {
 
       <section className="mx-auto max-w-3xl px-4 pb-16 md:px-8 md:pb-24">
         <ScrollReveal>
-          <h2 className="mb-8 text-center text-3xl font-bold tracking-tight text-foreground">Câu hỏi thường gặp</h2>
+          <h2 className="mb-8 text-center text-balance text-[26px] font-bold leading-tight tracking-tight text-foreground md:text-3xl">Câu hỏi thường gặp</h2>
         </ScrollReveal>
         <div className="space-y-4">
           {config.faqs.map((faq, index) => (
             <ScrollReveal key={faq.question} delay={index * 45}>
-            <details className="motion-details group rounded-lg border border-border bg-surface p-5 shadow-sm">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-foreground">
+            <details className="motion-details group rounded-lg border border-border bg-surface p-5">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-foreground">
                 {faq.question}
                 <span className="text-muted-foreground transition-transform group-open:rotate-180">⌄</span>
               </summary>
-              <p className="mt-4 text-sm leading-7 text-secondary-foreground">{faq.answer}</p>
+              <p className="mt-4 max-w-[65ch] text-base leading-7 text-secondary-foreground">{faq.answer}</p>
             </details>
             </ScrollReveal>
           ))}
@@ -353,7 +353,7 @@ function MarketingHeader() {
         </div>
         <Link
           href="/register"
-          className="motion-button inline-flex rounded-md bg-primary px-3 py-2 text-sm font-semibold text-inverse-foreground shadow-sm hover:bg-primary sm:px-4"
+          className="motion-button inline-flex min-h-11 items-center rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-inverse-foreground shadow-sm hover:bg-primary sm:px-4"
         >
           Bắt đầu
         </Link>

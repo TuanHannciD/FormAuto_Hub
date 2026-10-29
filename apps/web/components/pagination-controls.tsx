@@ -18,7 +18,7 @@ export function PaginationControls({
   onNext
 }: PaginationControlsProps) {
   return (
-    <div className="mt-4 flex flex-col gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+    <div className="mt-3 flex flex-col gap-2 border-t border-border/70 pt-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
       <span>
         Trang {totalPages === 0 ? 0 : page}/{totalPages} · {totalItems} kết quả
       </span>
