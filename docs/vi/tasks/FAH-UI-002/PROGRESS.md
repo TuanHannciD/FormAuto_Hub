@@ -108,3 +108,5 @@
 - Quyền commit: người dùng yêu cầu sync tài liệu và commit local thay đổi UI hiện có. Không push/merge/deploy. Đề xuất density giữ dạng lịch sử; follow-up mới nhất chỉ homepage, chưa triển khai. Runtime hiện tại khôi phục web3020; khôi phục API Blocked, smoke khỏe trước giữ là bằng chứng có thời điểm.
 
 - Xác minh trước commit2026-10-29: lint mới exit0/auth9of9pass;142 hash frontend khớp snapshot cuối đã review;9 tài liệu UTF-8/54 link tương đối/138 hash baseline bảo toàn được kiểm;git diff --check exit0. Bằng chứng build/browser giữ là lịch sử trên cùng snapshot sản phẩm; không khẳng định runtime mới pass khi khôi phục API còn Blocked.
+
+- Đã ghi đóng hồ sơ theo yêu cầu người dùng tại CLOSEOUT.md; không khẳng định mọi gate Done. Kiểm kê thấy ba bản sao app lịch sử ngoài repo; giữ chờ quyết định dọn. Giữ nhánh local/bằng chứng và web3020; không tiếp tục triển khai hoặc thao tác remote.

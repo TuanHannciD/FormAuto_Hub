@@ -2,7 +2,7 @@
 
 > Dành cho Agent thực hiện: dùng `subagent-driven-development`; chỉ dùng `dispatching-parallel-agents` khi vùng sở hữu tách biệt. Điều phối viên không viết code sản phẩm. Checkbox phản ánh thực tế thực hiện.
 
-**Trạng thái:** Đợt tinh chỉnh đầu đã triển khai và review độc lập local; nghiệm thu thị giác mở lại. Phạm vi mới chỉ homepage; dashboard/admin/auth đã phù hợp. Provider-success vẫn Blocked; chưa phát hành. [PROGRESS](PROGRESS.md).
+**Trạng thái:** Đóng theo yêu cầu người dùng, còn nghiệm thu chưa đạt và tài nguyên giữ lại; không phải mọi gate Done hoặc phát hành. Xem [đóng hồ sơ](CLOSEOUT.md).
 **Ngày:** 2026-10-28.
 **Mục tiêu:** Giao diện hiện tại gọn, tinh tế, nhất quán, có phản hồi chuyển động hữu ích và được kiểm chứng độc lập.
 **Kiến trúc:** Tinh chỉnh primitive/shell dùng chung trước, rồi các trang tiêu thụ. Giữ API component, route, luồng nghiệp vụ và stack.
@@ -147,3 +147,7 @@ Gate bằng chứng chưa tích: ảnh trước của bài đọc là chuyển �
 ## Phạm vi mới nhất và checkpoint commit — 2026-10-29
 
 Chỉnh phạm vi mới nhất của người dùng giới hạn vòng tinh chỉnh kế tiếp ở homepage; các page khác đã phù hợp. Đề xuất density rộng là lịch sử đánh giá, không phải lệnh triển khai. Chỉnh homepage vẫn là đề xuất, chưa triển khai. Người dùng đã cho phép sync tài liệu và commit local phần UI hiện có; chưa cho phép push/merge/deploy. Web3020 được khôi phục trên build có sẵn; khôi phục API Blocked do lệch migration DB/source. Health API trước là bằng chứng lịch sử, không phải hiện tại. Ảnh/log/baseline thô giữ local. Xem [tiến độ](PROGRESS.md) để biết xác minh và giới hạn chính xác.
+
+## Trạng thái đóng thay thế bước tiếp trước đó
+
+Task đóng theo yêu cầu người dùng. Plan và follow-up đề xuất trước giữ là lịch sử; không tự tiếp tục. Các check còn thiếu giữ Blocked/Not run như ghi tại [đóng hồ sơ](CLOSEOUT.md).

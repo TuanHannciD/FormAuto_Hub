@@ -2,7 +2,7 @@
 
 > For agentic workers: use `subagent-driven-development`; use `dispatching-parallel-agents` only for disjoint ownership. Coordinator does not implement product code. Checklist states describe actual execution.
 
-**Status:** First refinement implemented and independently reviewed locally; user visual acceptance reopened. Latest scope is homepage only; dashboard/admin/auth are acceptable. Provider-success remains Blocked; no release. [PROGRESS](PROGRESS.md).
+**Status:** Closed at user request, with unresolved acceptance and retained resources; not all-gates Done or release. See [closeout](CLOSEOUT.md).
 **Date:** 2026-10-28.
 **Goal:** Make the existing UI compact, restrained and consistent, with purposeful feedback and independently verified usability.
 **Architecture:** Refine the existing shared primitives/shell first, then their page consumers. Preserve component APIs, routing, business workflows and the current stack.
@@ -147,3 +147,7 @@ Unchecked evidence gates: historical article before frames are transition/layout
 ## Latest scope and commit checkpoint — 2026-10-29
 
 The latest user correction limits the next visual refinement to the homepage; other pages are acceptable. Broad density proposals are assessment history, not an implementation mandate. Homepage changes remain proposed, not implemented. The user authorized documentation sync and a local commit of current UI work; push/merge/deploy are not authorized. Current web3020 was restored on the existing build; API restoration is Blocked by a DB/source migration mismatch. Earlier API health is historical, not current. Raw images/logs/baseline remain local. See [progress](PROGRESS.md) for exact validation and limitations.
+
+## Closure supersedes earlier next actions
+
+Task closed at user request. Earlier plans and proposed follow-ups remain history; no automatic continuation. Outstanding checks remain Blocked/Not run as recorded in [closeout](CLOSEOUT.md).
