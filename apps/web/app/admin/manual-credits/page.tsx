@@ -17,6 +17,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 
 type AdminTopupOrder = TopupOrder & { userEmail?: string; packageName?: string };
+type ApproveTopupOrderResponse = { id: string; status: string; creditTransactionId: string; balanceAfter: number };
 
 export default function AdminManualCreditsPage() {
   const [requests, setRequests] = useState<AdminTopupOrder[]>([]);
@@ -32,6 +33,11 @@ export default function AdminManualCreditsPage() {
   const [grantReason, setGrantReason] = useState("");
   const [userOptions, setUserOptions] = useState<AdminCreditUserOption[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [usersReady, setUsersReady] = useState(false);
+  const [usersError, setUsersError] = useState("");
+  const [confirmedAction, setConfirmedAction] = useState("");
+  const [confirmedGrant, setConfirmedGrant] = useState<ManualCreditGrantResponse | null>(null);
+  const [confirmedApproval, setConfirmedApproval] = useState<ApproveTopupOrderResponse | null>(null);
   const [isWorking, setIsWorking] = useState(false);
   const workingRef = useRef(false);
   const userSearchVersion = useRef(0);
@@ -81,9 +87,24 @@ export default function AdminManualCreditsPage() {
     const version = ++userSearchVersion.current;
     const query = search.trim() ? `?search=${encodeURIComponent(search.trim())}` : "";
     setIsLoadingUsers(true);
+    setUsersReady(false);
+    setUsersError("");
     try {
       const data = await apiFetch<AdminCreditUserOptionListResponse>(`/api/admin/credit-operations/users${query}`);
-      if (version === userSearchVersion.current) setUserOptions(data.items);
+      if (version === userSearchVersion.current) {
+        setUserOptions(data.items);
+        setGrantUserId(current => data.items.some(user => user.id === current) ? current : "");
+        setUsersReady(true);
+      }
+    } catch (error) {
+      if (version === userSearchVersion.current) {
+        setUserOptions([]);
+        setGrantUserId("");
+        setUsersReady(false);
+        setUsersError("Không tải được danh sách người dùng. Thử lại trước khi chọn người nhận.");
+      }
+      // A superseded failure must not replace the current search or show a stale toast.
+      if (version === userSearchVersion.current) showError(error, "Không tải được danh sách người dùng.");
     } finally {
       if (version === userSearchVersion.current) setIsLoadingUsers(false);
     }
@@ -139,11 +160,14 @@ export default function AdminManualCreditsPage() {
     userSearchVersion.current++;
     setIsLoadingUsers(true);
     setGrantEmail(value);
-    const matchedUser = userOptions.find((user) => user.email.toLowerCase() === value.trim().toLowerCase());
-    setGrantUserId(matchedUser?.id ?? "");
+    setUsersReady(false);
+    setUsersError("");
+    setUserOptions([]);
+    setGrantUserId("");
   }
 
   function chooseGrantUser(value: string, email: string) {
+    if (!usersReady || isLoadingUsers || !userOptions.some(user => user.id === value)) return;
     setGrantUserId(value);
     setGrantEmail(email);
   }
@@ -156,13 +180,15 @@ export default function AdminManualCreditsPage() {
     workingRef.current = true;
     setIsWorking(true);
     try {
-      await apiFetch(`/api/admin/topup-orders/${selectedRequest.id}/approve`, {
+      const result = await apiFetch<ApproveTopupOrderResponse>(`/api/admin/topup-orders/${selectedRequest.id}/approve`, {
         method: "POST",
         json: { paymentNote: selectedRequest.paymentNote }
       });
+      setConfirmedApproval(result);
+      setConfirmedAction(`Đã duyệt yêu cầu đối soát và cộng credit. Mã yêu cầu: ${selectedRequest.id}.`);
       toast.success("Đã duyệt yêu cầu đối soát và cộng credit.");
       setSelectedRequestId("");
-      await loadRequests();
+      await loadRequests().catch(() => { /* The decision is confirmed; loadRequests reports a separate read error. */ });
     } catch (error) {
       showError(error, "Không duyệt được yêu cầu đối soát.");
     } finally {
@@ -185,8 +211,9 @@ export default function AdminManualCreditsPage() {
       });
       setRejectReason("");
       setSelectedRequestId("");
+      setConfirmedAction(`Đã từ chối yêu cầu đối soát. Mã yêu cầu: ${selectedRequest.id}.`);
       toast.success("Đã từ chối yêu cầu đối soát.");
-      await loadRequests();
+      await loadRequests().catch(() => { /* The decision is confirmed; loadRequests reports a separate read error. */ });
     } catch (error) {
       showError(error, "Không từ chối được yêu cầu đối soát.");
     } finally {
@@ -197,7 +224,7 @@ export default function AdminManualCreditsPage() {
 
   async function submitManualGrant(event: FormEvent) {
     event.preventDefault();
-    if (workingRef.current) return;
+    if (workingRef.current || !usersReady || isLoadingUsers || usersError) return;
     const selectedUserId = grantUserId || userOptions.find((user) => user.email.toLowerCase() === grantEmail.trim().toLowerCase())?.id || "";
     if (!selectedUserId) {
       toast.error("Vui lòng chọn người dùng theo email hợp lệ.");
@@ -215,6 +242,7 @@ export default function AdminManualCreditsPage() {
         method: "POST",
         json: { userId: selectedUserId, credits: Number(grantCredits), reason: grantReason }
       });
+      setConfirmedGrant(result);
       toast.success(`Đã cộng credit cho ${result.userEmail}. Số dư mới: ${result.balanceAfter} credit.`);
       setGrantEmail("");
       setGrantUserId("");
@@ -251,9 +279,9 @@ export default function AdminManualCreditsPage() {
           <form className="grid gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
             <SearchableDropdownSelect
               disabled={isWorking}
-              emptyText="Không tìm thấy email người dùng phù hợp"
+              emptyText={usersError ? "Chưa tải được kết quả tìm kiếm" : "Không tìm thấy email người dùng phù hợp"}
               loading={isLoadingUsers}
-              options={userOptions.map((user) => ({ value: user.id, label: user.email, description: user.fullName }))}
+              options={(usersReady ? userOptions : []).map((user) => ({ value: user.id, label: user.email, description: user.fullName }))}
               placeholder="Tìm email người dùng"
               searchValue={grantEmail}
               value={grantUserId}
@@ -262,13 +290,16 @@ export default function AdminManualCreditsPage() {
             />
             <Input aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
             <Input aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Lý do cộng credit" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
-            <Button disabled={isWorking || isLoadingUsers || !grantUserId || !Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
+            <Button disabled={isWorking || !usersReady || Boolean(usersError) || isLoadingUsers || !grantUserId || !Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
               Cộng credit
             </Button>
           </form>
+          {usersError && <Alert className="mt-3"><p>{usersError}</p><Button type="button" variant="secondary" disabled={isLoadingUsers} onClick={() => loadUsers(grantEmail)}>Thử lại tìm người dùng</Button></Alert>}
         </CardContent>
       </Card>
 
+      {confirmedAction && <Alert role="status">{confirmedAction}{confirmedApproval && <><p className="break-all">Biên nhận duyệt yêu cầu: {confirmedApproval.id}. Mã giao dịch: {confirmedApproval.creditTransactionId}.</p><p>Số dư sau giao dịch: {confirmedApproval.balanceAfter} credit.</p></>}</Alert>}
+      {confirmedGrant && <Alert role="status"><p>Đã cộng credit cho {confirmedGrant.userEmail}. Số dư sau giao dịch: {confirmedGrant.balanceAfter} credit.</p><p className="break-all">Mã giao dịch: {confirmedGrant.creditTransactionId}.</p></Alert>}
       <ManualGrantHistory refreshKey={historyRefresh} />
 
       <Card className="min-w-0">
@@ -402,15 +433,24 @@ function RequestDetailDialog({
 
 function RequestCode({ id }: { id: string }) {
   const shortId = id.slice(0, 8).toUpperCase();
+  const [copyError, setCopyError] = useState(false);
 
   async function copyId() {
-    await navigator.clipboard.writeText(id);
-    toast.success("Đã sao chép đầy đủ mã yêu cầu.");
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(id);
+      setCopyError(false);
+      toast.success("Đã sao chép đầy đủ mã yêu cầu.");
+    } catch {
+      setCopyError(true);
+      toast.error("Không sao chép được. Bạn có thể chọn mã đầy đủ bên dưới và sao chép thủ công.");
+    }
   }
 
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
+      {copyError && <Input aria-label="Mã yêu cầu đầy đủ" className="min-w-40 font-mono text-xs" readOnly value={id} onFocus={event => event.target.select()} />}
       <button className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-subtle text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-8 sm:w-8" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>

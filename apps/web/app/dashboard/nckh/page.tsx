@@ -9,7 +9,7 @@ import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { PaginationControls } from "@/components/pagination-controls";
 import { apiFetch, type NckhFormItem, type NckhFormListResponse, type NckhImportFormResponse } from "@/lib/api";
 import { toast } from "sonner";
-import { readableError } from "@/lib/toast";
+import { readableNckhError } from "./forms/[formId]/_helpers";
 import { SessionExpiredError } from "@/lib/auth";
 import { NckhGoogleAuthorizationError } from "@/lib/nckh-google-auth";
 
@@ -36,21 +36,6 @@ function buildGoogleOAuthUrl(): string {
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }
 
-function readableNckhError(error: unknown, fallback: string) {
-  const message = readableError(error, fallback);
-  const lower = message.toLowerCase();
-  if (lower.includes("scope") || lower.includes("consent") || lower.includes("permission") || lower.includes("forbidden") || lower.includes("403")) {
-    return "Tài khoản Google chưa cấp đủ quyền cần thiết cho thao tác này.";
-  }
-  if (lower.includes("unauthorized") || lower.includes("not linked") || lower.includes("401")) {
-    return "Bạn cần liên kết lại tài khoản Google trước khi tiếp tục.";
-  }
-  if (lower.includes("invalid") || lower.includes("expired")) {
-    return "Dữ liệu xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.";
-  }
-  return /[à-ỹđ]/i.test(message) ? message : fallback;
-}
-
 // ── Main Content ──────────────────────────────────────────────────
 
 function NckhContent() {
@@ -68,6 +53,7 @@ function NckhContent() {
   const [isLinking, setIsLinking] = useState(false);
   const isImportingRef = useRef(false);
   const isLinkingRef = useRef(false);
+  const formsRequestRef = useRef(0);
 
   // ── Form columns ────────────────────────────────────────────────
 
@@ -97,16 +83,20 @@ function NckhContent() {
   // ── Load forms ──────────────────────────────────────────────────
 
   const loadForms = useCallback(async (pageNum: number) => {
+    const requestId = ++formsRequestRef.current;
+    setGoogleLinked(null);
     setIsLoading(true);
     setLoadError("");
     try {
       const data = await apiFetch<NckhFormListResponse>(`/api/v1/nckh/forms?page=${pageNum}&pageSize=20`);
+      if (requestId !== formsRequestRef.current) return;
       setForms(data.items);
       setTotalItems(data.totalItems);
       setTotalPages(data.totalPages);
       setPage(data.page);
       setGoogleLinked(true);
     } catch (error) {
+      if (requestId !== formsRequestRef.current) return;
       if (error instanceof NckhGoogleAuthorizationError) {
         setGoogleLinked(false);
         setForms([]);
@@ -116,12 +106,13 @@ function NckhContent() {
         setLoadError(readableNckhError(error, "Không tải được danh sách form. Vui lòng thử lại."));
       }
     } finally {
-      setIsLoading(false);
+      if (requestId === formsRequestRef.current) setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
     loadForms(1);
+    return () => { formsRequestRef.current += 1; };
   }, [loadForms]);
 
   // ── Handle OAuth callback result ────────────────────────────────
@@ -134,7 +125,7 @@ function NckhContent() {
       loadForms(1);
       router.replace("/dashboard/nckh");
     } else if (error) {
-      toast.error(readableNckhError(decodeURIComponent(error), "Không hoàn tất được liên kết Google."));
+      toast.error(readableNckhError(error, "Không hoàn tất được liên kết Google."));
       router.replace("/dashboard/nckh");
     }
   }, [searchParams, loadForms, router]);
@@ -144,7 +135,7 @@ function NckhContent() {
   function handleLinkGoogle() {
     if (isLinkingRef.current) return;
     if (!GOOGLE_OAUTH_CLIENT_ID || !GOOGLE_OAUTH_REDIRECT_URI) {
-      toast.error("Thiếu cấu hình Google OAuth. Vui lòng kiểm tra biến môi trường.");
+      toast.error("Liên kết Google chưa sẵn sàng. Vui lòng liên hệ quản trị viên.");
       return;
     }
     isLinkingRef.current = true;
@@ -156,7 +147,7 @@ function NckhContent() {
 
   async function handleImport(event: React.FormEvent) {
     event.preventDefault();
-    if (!formUrl.trim()) return;
+    if (!formUrl.trim() || googleLinked !== true || isLoading || loadError) return;
     if (isImportingRef.current) return;
 
     isImportingRef.current = true;
@@ -236,7 +227,7 @@ function NckhContent() {
       </Card>
 
       {/* Import Form */}
-      {googleLinked && (
+      {googleLinked === true && !isLoading && !loadError && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
@@ -284,6 +275,10 @@ function NckhContent() {
               <Loader2 className="animate-spin" size={20} />
               <span className="ml-2 text-sm text-muted-foreground">Đang tải...</span>
             </div>
+          ) : loadError ? (
+            <p role="status" className="py-4 text-sm text-muted-foreground">Chưa tải được danh sách form. Chọn thử lại ở trên để tiếp tục.</p>
+          ) : googleLinked !== true ? (
+            <p className="py-4 text-sm text-muted-foreground">Liên kết Google để xem và nhập biểu mẫu khảo sát.</p>
           ) : (
             <>
               <BaseTable
@@ -291,9 +286,7 @@ function NckhContent() {
                 items={forms}
                 getRowKey={(item) => item.id}
                 emptyTitle="Chưa có form nào"
-                emptyDetail={googleLinked === false
-                  ? "Liên kết Google để nhập form đầu tiên."
-                  : "Dán URL Google Form vào ô trên để nhập."}
+                emptyDetail="Dán URL Google Form vào ô trên để nhập."
               />
               {forms.length > 0 && (
                 <PaginationControls

@@ -547,6 +547,7 @@ Response DTO đã implement:
 - `missingCredits`
 - `balanceAfter`
 - `generatedPreviewIds`
+- `errorMessage` (chuỗi tùy chọn, có thể null): hướng dẫn lỗi bằng tiếng Việt an toàn khi trạng thái `Failed`; null với trạng thái khác. Nguyên nhân được nhận diện phân biệt credit, quy tắc an toàn, hết thời gian/kết nối, xác thực/giới hạn/tạm ngừng dịch vụ AI và đầu ra không hợp lệ. Nội dung tự do không nhận diện được hoặc từ lịch sử trả thông báo chung cố định; không chuyển tiếp nguyên văn lỗi/provider đã lưu. Bổ sung ERR-011 đã duyệt này không mở raw audit hoặc thay đổi lưu trữ/retention.
 
 Behavior đã duyệt/implement:
 
@@ -592,6 +593,7 @@ Hành vi đã duyệt (người dùng):
 - Trả về tổng số lượt AI generation, số lần thành công/thất bại, credit đã dùng, số previews đã tạo
 - Trả về phân tích theo chế độ (FullAi / CustomAi) với số lần dùng và credit
 - Trả về 10 lượt AI gần nhất kèm tên project, provider, model, trạng thái, thời gian
+- Mỗi `AiRecentRunResponse` có `errorMessage` tùy chọn, có thể null, dùng cùng cách ánh xạ lỗi an toàn như generation; áp dụng cho lượt gần nhất của user/admin và item trong danh sách phân trang admin
 - Trả về thống kê theo ngày trong 30 ngày qua (ngày, số lần, credit)
 - Dữ liệu chỉ đọc từ bảng `AiGenerationRuns` hiện có; không cần entity mới
 
@@ -774,7 +776,8 @@ Các ví dụ dưới đây giữ nguyên tên field và giá trị mẫu của 
       "creditsUsed": 15,
       "durationMs": 24073,
       "createdAt": "2026-05-30T01:59:12.7650167+00:00",
-      "projectName": "test"
+      "projectName": "test",
+      "errorMessage": null
     }
   ],
   "page": 1,

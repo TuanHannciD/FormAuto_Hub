@@ -13,4 +13,5 @@ public sealed record AiGenerateResponsesResponse(
     int CreditsUsed,
     int MissingCredits,
     decimal BalanceAfter,
-    IReadOnlyList<Guid> GeneratedPreviewIds);
+    IReadOnlyList<Guid> GeneratedPreviewIds,
+    string? ErrorMessage = null);

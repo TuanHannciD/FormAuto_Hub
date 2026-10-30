@@ -86,17 +86,13 @@ import {
 } from "./_helpers";
 import type { CanvasModal, CanvasPosition, PendingAction, RelationFlowEdge, WorkspaceTab } from "./_types";
 
-// === FILE MAP (page.tsx - NCKH form workspace) ===
-// Line    Component/Function/Region          Purpose
-// 90      NckhFormWorkspacePage()            Route container, state orchestration, API actions, tab rendering
-// 180     Derived option/filter state        Dropdown options, relation validation, selected model state
-// 270     Load and mutation handlers         Workspace/model/variable/mapping/relation/data/export operations
-// 760     Table and canvas derived data      Column definitions, React Flow nodes and edges
-// 920     Page shell rendering               Header, model selector, tab navigation, active tab panel
-// 1000    renderVariablesPanel()             Research variable create/list/delete UI
-// 1030    renderMappingPanel()               Observed question mapping UI
-// 1110    renderCanvasPanel()                Relation canvas, position persistence, relation edit UI
-// 1250    renderGenerate/Data/Export panels  Google Form generation, data collection, normalization, export UI
+// === FILE MAP (NCKH form workspace) ===
+// NckhFormWorkspacePage: route state, scoped request ownership and slice validity.
+// loadWorkspace/loadModelData: reads only; old model/request responses cannot publish.
+// beginPendingAction and action handlers: no model-data action until the current snapshot is valid.
+// Table/canvas derivation and render*Panel: current model data, explicit unavailable vs empty.
+// Model, variable, mapping, relation, generation, collection, normalization and export actions
+// retain the existing API contracts; read retries never replay a mutation.
 const relationEdgeTypes = { relation: RelationEdge };
 export default function NckhFormWorkspacePage() {
   const confirmation = useConfirmDialog();
@@ -151,14 +147,37 @@ export default function NckhFormWorkspacePage() {
   const [canvasPositions, setCanvasPositions] = useState<Record<string, CanvasPosition>>({});
 
   const selectedModel = useMemo(
-    () => models.find((item) => item.id === selectedModelId) ?? null,
-    [models, selectedModelId]
+    () => models.find((item) => item.id === selectedModelId && item.formId === formId) ?? null,
+    [formId, models, selectedModelId]
   );
   const selectedRelation = useMemo(
     () => relations.find((item) => item.id === selectedRelationId) ?? null,
     [relations, selectedRelationId]
   );
-  const canEditCanvas = selectedModel?.status === "Draft";
+  const modelRequestRef = useRef(0);
+  const workspaceRequestRef = useRef(0);
+  const mountedRef = useRef(true);
+  const selectedModelIdRef = useRef(selectedModelId);
+  const currentFormIdRef = useRef(formId);
+  const modelDataOwnerRef = useRef("");
+  const [modelDataOwner, setModelDataOwner] = useState("");
+  const [modelDataValid, setModelDataValid] = useState(false);
+  const [sliceErrors, setSliceErrors] = useState<Record<string, string>>({});
+  selectedModelIdRef.current = selectedModel?.id ?? "";
+  currentFormIdRef.current = formId;
+  const modelDataReady = modelDataOwner === selectedModelId && !isPanelLoading;
+  const modelDataCurrent = modelDataReady && modelDataValid;
+  const canEditCanvas = modelDataCurrent && selectedModel?.status === "Draft";
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      modelRequestRef.current += 1;
+      workspaceRequestRef.current += 1;
+      modelDataOwnerRef.current = "";
+    };
+  }, []);
 
   useEffect(() => {
     const nextPositions: Record<string, CanvasPosition> = {};
@@ -204,10 +223,12 @@ export default function NckhFormWorkspacePage() {
 
   const beginPendingAction = useCallback((action: PendingAction) => {
     if (pendingActionRef.current) return false;
+    if (action !== "createModel" && action !== "activateModel" && action !== "deleteModel"
+      && (selectedModelId !== selectedModelIdRef.current || modelDataOwnerRef.current !== selectedModelIdRef.current || !selectedModelIdRef.current)) return false;
     pendingActionRef.current = action;
     setPendingAction(action);
     return true;
-  }, []);
+  }, [selectedModelId]);
 
   const endPendingAction = useCallback((action: PendingAction) => {
     if (pendingActionRef.current !== action) return;
@@ -292,6 +313,7 @@ export default function NckhFormWorkspacePage() {
   const showRelationDraftError = Boolean(relationDraft.fromVariableId || relationDraft.toVariableId) && relationDraftError;
 
   const loadWorkspace = useCallback(async () => {
+    const requestId = ++workspaceRequestRef.current;
     setIsLoading(true);
     setError(null);
     try {
@@ -299,48 +321,65 @@ export default function NckhFormWorkspacePage() {
         apiFetch<NckhFormDetailResponse>(`/api/v1/nckh/forms/${formId}`),
         apiFetch<NckhResearchModelListResponse>("/api/v1/nckh/models?page=1&pageSize=100")
       ]);
+      if (!mountedRef.current || requestId !== workspaceRequestRef.current || currentFormIdRef.current !== formId) return;
       const formModels = modelResult.items.filter((item) => item.formId === formId);
       setForm(formResult);
       setModels(formModels);
-      setSelectedModelId((current) => current || formModels.find((item) => item.status === "Active")?.id || formModels[0]?.id || "");
+      setSelectedModelId((current) => (formModels.some((item) => item.id === current) ? current : "") || formModels.find((item) => item.status === "Active")?.id || formModels[0]?.id || "");
     } catch (loadError) {
-      const message = loadError instanceof Error ? loadError.message : "Không tải được không gian làm việc NCKH.";
-      setError(readableNckhError(message, "Không tải được không gian làm việc NCKH."));
+      if (!mountedRef.current || requestId !== workspaceRequestRef.current || currentFormIdRef.current !== formId) return;
+      setError(readableNckhError(loadError, "Không tải được không gian làm việc NCKH."));
     } finally {
-      setIsLoading(false);
+      if (mountedRef.current && requestId === workspaceRequestRef.current && currentFormIdRef.current === formId) setIsLoading(false);
     }
   }, [formId]);
 
   const loadModelData = useCallback(async (modelId: string) => {
-    if (!modelId) return;
-    setIsPanelLoading(true);
+    // A completed mutation may request a refresh after the user has switched models.
+    if (!mountedRef.current || modelId !== selectedModelIdRef.current) return;
+    const requestId = ++modelRequestRef.current;
+    modelDataOwnerRef.current = "";
+    setModelDataOwner(modelId);
+    setModelDataValid(false);
+    setVariables([]);
+    setMappings([]);
+    setRelations([]);
+    setPositions([]);
+    setResponses(null);
+    setDataset(null);
+    setSliceErrors({});
     setPanelError(null);
-    try {
-      const [variableResult, mappingResult, relationResult, positionResult, responseResult, datasetResult] = await Promise.allSettled([
-        apiFetch<NckhVariableListResponse>(`/api/v1/nckh/models/${modelId}/variables?page=1&pageSize=100`),
-        apiFetch<NckhMappingListResponse>(`/api/v1/nckh/models/${modelId}/mappings?page=1&pageSize=100`),
-        apiFetch<NckhRelationListResponse>(`/api/v1/nckh/models/${modelId}/relations?page=1&pageSize=100`),
-        apiFetch<NckhPositionListResponse>(`/api/v1/nckh/models/${modelId}/positions`),
-        apiFetch<NckhRawResponseListResponse>(`/api/v1/nckh/models/${modelId}/responses?page=1&pageSize=20`),
-        apiFetch<NckhDatasetListResponse>(`/api/v1/nckh/models/${modelId}/dataset?page=1&pageSize=20`)
-      ]);
+    setIsPanelLoading(Boolean(modelId));
+    if (!modelId) return;
 
-      if (variableResult.status === "fulfilled") setVariables(variableResult.value.items);
-      if (mappingResult.status === "fulfilled") setMappings(mappingResult.value.items);
-      if (relationResult.status === "fulfilled") setRelations(relationResult.value.items);
-      if (positionResult.status === "fulfilled") setPositions(positionResult.value.items);
-      if (responseResult.status === "fulfilled") setResponses(responseResult.value);
-      if (datasetResult.status === "fulfilled") setDataset(datasetResult.value);
-
-      const firstFailure = [variableResult, mappingResult, relationResult, positionResult, responseResult, datasetResult]
-        .find((result) => result.status === "rejected") as PromiseRejectedResult | undefined;
-      if (firstFailure) {
-        const message = firstFailure.reason instanceof Error ? firstFailure.reason.message : "Một phần dữ liệu chưa sẵn sàng.";
-        setPanelError(readableNckhError(message, "Một phần dữ liệu chưa sẵn sàng."));
-      }
-    } finally {
-      setIsPanelLoading(false);
-    }
+    const results = await Promise.allSettled([
+      apiFetch<NckhVariableListResponse>(`/api/v1/nckh/models/${modelId}/variables?page=1&pageSize=100`),
+      apiFetch<NckhMappingListResponse>(`/api/v1/nckh/models/${modelId}/mappings?page=1&pageSize=100`),
+      apiFetch<NckhRelationListResponse>(`/api/v1/nckh/models/${modelId}/relations?page=1&pageSize=100`),
+      apiFetch<NckhPositionListResponse>(`/api/v1/nckh/models/${modelId}/positions`),
+      apiFetch<NckhRawResponseListResponse>(`/api/v1/nckh/models/${modelId}/responses?page=1&pageSize=20`),
+      apiFetch<NckhDatasetListResponse>(`/api/v1/nckh/models/${modelId}/dataset?page=1&pageSize=20`)
+    ]);
+    if (!mountedRef.current || requestId !== modelRequestRef.current || modelId !== selectedModelIdRef.current) return;
+    const [variableResult, mappingResult, relationResult, positionResult, responseResult, datasetResult] = results;
+    if (variableResult.status === "fulfilled") setVariables(variableResult.value.items);
+    if (mappingResult.status === "fulfilled") setMappings(mappingResult.value.items);
+    if (relationResult.status === "fulfilled") setRelations(relationResult.value.items);
+    if (positionResult.status === "fulfilled") setPositions(positionResult.value.items);
+    if (responseResult.status === "fulfilled") setResponses(responseResult.value);
+    if (datasetResult.status === "fulfilled") setDataset(datasetResult.value);
+    const errors: Record<string, string> = {};
+    const names = ["variables", "mappings", "relations", "positions", "responses", "dataset"];
+    const labels = ["biến nghiên cứu", "ánh xạ", "quan hệ", "vị trí sơ đồ", "phản hồi thô", "bộ dữ liệu"];
+    results.forEach((result, index) => {
+      if (result.status === "rejected") errors[names[index]] = `Chưa tải được ${labels[index]}. ${readableNckhError(result.reason, "Vui lòng thử tải lại.")}`;
+    });
+    setSliceErrors(errors);
+    const valid = Object.keys(errors).length === 0;
+    setPanelError(valid ? null : Object.values(errors).join(" "));
+    setModelDataValid(valid);
+    modelDataOwnerRef.current = valid ? modelId : "";
+    setIsPanelLoading(false);
   }, []);
 
   useEffect(() => {
@@ -349,16 +388,19 @@ export default function NckhFormWorkspacePage() {
 
   useEffect(() => {
     resetRelationDraft();
-    if (selectedModelId) {
-      loadModelData(selectedModelId);
-    } else {
-      setVariables([]);
-      setMappings([]);
-      setRelations([]);
-      setPositions([]);
-      setResponses(null);
-      setDataset(null);
-    }
+    setMappingDraft({ variableId: "", formQuestionId: "", observedCode: "", sortOrder: "1" });
+    setMappingVariableSearch("");
+    setMappingQuestionSearch("");
+    setCanvasModal(null);
+    setSelectedRelationId(null);
+    setLastGenerate(null);
+    setLastCollect(null);
+    setLastNormalize(null);
+    loadModelData(selectedModelId);
+    return () => {
+      modelRequestRef.current += 1;
+      modelDataOwnerRef.current = "";
+    };
   }, [loadModelData, resetRelationDraft, selectedModelId]);
 
   async function createModel(event: FormEvent) {
@@ -449,7 +491,7 @@ export default function NckhFormWorkspacePage() {
       toast.error("Chỉ có thể xóa biến khi mô hình còn là bản nháp.");
       return;
     }
-    if (!await confirmation.confirm(`Xóa biến "${variable.name}"? Các ánh xạ liên quan sẽ bị xóa theo contract hiện có của backend.`)) return;
+    if (!await confirmation.confirm(`Xóa biến "${variable.name}"? Các ánh xạ liên quan cũng sẽ bị xóa.`)) return;
     if (!beginPendingAction("deleteVariable")) return;
     try {
       await apiFetch<void>(`/api/v1/nckh/variables/${variable.id}`, { method: "DELETE" });
@@ -619,7 +661,7 @@ export default function NckhFormWorkspacePage() {
         method: "PUT",
         json: { positions: variablePositions }
       });
-      toast.success("Đã lưu vị trí canvas mặc định.");
+      toast.success("Đã lưu bố cục sơ đồ.");
       await loadModelData(selectedModelId);
     } catch (positionError) {
       toast.error(readableNckhError(positionError, "Không lưu được vị trí sơ đồ."));
@@ -738,11 +780,10 @@ export default function NckhFormWorkspacePage() {
       window.URL.revokeObjectURL(url);
       toast.success("Đã tải file xuất dữ liệu.");
     } catch (exportError) {
-      const message = exportError instanceof Error ? exportError.message : "";
       const detail = dataset?.hasStaleData
         ? "Bộ dữ liệu đã cũ. Hãy chuẩn hóa lại trước khi xuất dữ liệu."
         : "Không xuất được file.";
-      toast.error(readableNckhError(message, detail));
+      toast.error(readableNckhError(exportError, detail));
     } finally {
       endPendingAction(action);
     }
@@ -756,7 +797,7 @@ export default function NckhFormWorkspacePage() {
   ];
 
   const modelColumns: BaseTableColumn<NckhResearchModel>[] = [
-    { key: "name", header: "Mô hình", render: (item) => <button className="min-h-11 text-left font-semibold text-primary hover:underline sm:min-h-8" type="button" onClick={() => setSelectedModelId(item.id)}>{item.name}</button> },
+    { key: "name", header: "Mô hình", render: (item) => <button className="min-h-11 text-left font-semibold text-primary hover:underline sm:min-h-8" type="button" disabled={hasPendingAction} onClick={() => setSelectedModelId(item.id)}>{item.name}</button> },
     { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.status} /> },
     { key: "variables", header: "Biến", render: (item) => item.variableCount },
     { key: "updated", header: "Cập nhật", render: (item) => formatDate(item.updatedAt) },
@@ -808,7 +849,7 @@ export default function NckhFormWorkspacePage() {
     { key: "time", header: "Thời gian", render: (item) => formatDate(item.responseTimestamp ?? item.createdAt) }
   ];
 
-  if (isLoading) {
+  if (isLoading || (!error && form?.id !== formId)) {
     return <LoadingState label="Đang tải không gian làm việc NCKH..." />;
   }
 
@@ -862,7 +903,7 @@ export default function NckhFormWorkspacePage() {
       </Card>
 
       {!selectedModel ? (
-        <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để dùng không gian làm việc Phase 7." />
+        <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để cấu hình khảo sát." />
       ) : (
         <>
           <nav aria-label="Các mục mô hình nghiên cứu" className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-2">
@@ -880,25 +921,30 @@ export default function NckhFormWorkspacePage() {
           </nav>
 
           {panelError && (
-            <Alert className="border-warning-border bg-warning-surface text-warning">
+            <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Một phần dữ liệu chưa sẵn sàng</p>
               <p className="mt-1">{panelError}</p>
+              <Button className="mt-3" variant="secondary" type="button" disabled={isPanelLoading || hasPendingAction} onClick={() => loadModelData(selectedModelId)}>Thử tải lại dữ liệu</Button>
             </Alert>
           )}
-          {isPanelLoading && <LoadingState label="Đang đồng bộ dữ liệu mô hình..." compact />}
+          {(!modelDataReady || isPanelLoading) && <LoadingState label="Đang đồng bộ dữ liệu mô hình..." compact />}
 
           {tab === "overview" && <OverviewPanel form={form} model={selectedModel} questionColumns={questionColumns} />}
-          {tab === "variables" && renderVariablesPanel()}
-          {tab === "mapping" && renderMappingPanel()}
-          {tab === "canvas" && renderCanvasPanel()}
-          {tab === "generate" && renderGeneratePanel()}
-          {tab === "data" && renderDataPanel()}
-          {tab === "export" && renderExportPanel()}
-          {canvasModal && renderCanvasModal()}
+          {tab === "variables" && modelDataReady && (sliceErrors.variables ? renderSliceError(sliceErrors.variables) : renderVariablesPanel())}
+          {tab === "mapping" && modelDataReady && (sliceErrors.variables || sliceErrors.mappings ? renderSliceError("Chưa tải đủ biến và ánh xạ.") : renderMappingPanel())}
+          {tab === "canvas" && modelDataReady && (sliceErrors.variables || sliceErrors.relations || sliceErrors.positions ? renderSliceError("Chưa tải đủ dữ liệu sơ đồ.") : renderCanvasPanel())}
+          {tab === "generate" && modelDataReady && renderGeneratePanel()}
+          {tab === "data" && modelDataReady && renderDataPanel()}
+          {tab === "export" && modelDataReady && renderExportPanel()}
+          {canvasModal && modelDataReady && renderCanvasModal()}
         </>
       )}
     </div>
   );
+
+  function renderSliceError(message: string) {
+    return <p role="status" className="text-sm text-muted-foreground">{message} Chọn thử tải lại dữ liệu ở trên để tiếp tục.</p>;
+  }
 
   function renderVariablesPanel() {
     return (
@@ -968,7 +1014,7 @@ export default function NckhFormWorkspacePage() {
             <Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={mappingDraft.sortOrder} onChange={(event) => setMappingDraft({ ...mappingDraft, sortOrder: event.target.value })} />
             <Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createMapping") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createMapping") ? "Đang thêm..." : "Thêm"}</span></Button>
           </form>
-          <BaseTable columns={mappingColumns} items={mappings} getRowKey={(item) => item.id} emptyTitle="Chưa có ánh xạ" emptyDetail="Ánh xạ dùng endpoint hiện có, không nhúng vào payload biến." />
+          <BaseTable columns={mappingColumns} items={mappings} getRowKey={(item) => item.id} emptyTitle="Chưa có ánh xạ" emptyDetail="Chọn biến và câu hỏi tương ứng để tạo ánh xạ." />
         </CardContent>
       </Card>
     );
@@ -1171,7 +1217,7 @@ export default function NckhFormWorkspacePage() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-semibold">Danh sách quan hệ</h3>
-            <BaseTable columns={relationColumns} items={relations} getRowKey={(item) => item.id} emptyTitle="Chưa có quan hệ" emptyDetail="Thêm quan hệ để backend sinh giả thuyết theo quy tắc xác định." />
+            <BaseTable columns={relationColumns} items={relations} getRowKey={(item) => item.id} emptyTitle="Chưa có quan hệ" emptyDetail="Thêm quan hệ giữa các biến để xây dựng giả thuyết nghiên cứu." />
           </div>
         </CardContent>
       </Card>
@@ -1206,7 +1252,7 @@ export default function NckhFormWorkspacePage() {
             <p className="font-semibold">Cần quyền chỉnh sửa Google Form</p>
             <p className="mt-1">Nếu chưa cấp đủ quyền, thao tác tạo/cập nhật form sẽ bị chặn. Vui lòng liên kết lại Google.</p>
           </Alert>
-          <Button type="button" disabled={hasPendingAction} onClick={generateForm}>
+          <Button type="button" disabled={hasPendingAction || !modelDataCurrent} onClick={generateForm}>
             {isActionPending("generateForm") ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}
             <span className="ml-2">
               {isActionPending("generateForm")
@@ -1233,8 +1279,8 @@ export default function NckhFormWorkspacePage() {
         <CardHeader><CardTitle className="flex items-center gap-2"><Database size={18} /> Dữ liệu khảo sát</CardTitle></CardHeader>
         <CardContent className="space-y-5">
           <div className="flex flex-wrap gap-2">
-            <Button type="button" disabled={hasPendingAction} onClick={collectResponses}>{isActionPending("collectResponses") ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}<span className="ml-2">{isActionPending("collectResponses") ? "Đang thu thập..." : "Thu thập phản hồi"}</span></Button>
-            <Button type="button" variant="secondary" disabled={hasPendingAction} onClick={normalizeResponses}>{isActionPending("normalizeResponses") ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}<span className="ml-2">{isActionPending("normalizeResponses") ? "Đang chuẩn hóa..." : "Chuẩn hóa bộ dữ liệu"}</span></Button>
+            <Button type="button" disabled={hasPendingAction || !modelDataCurrent} onClick={collectResponses}>{isActionPending("collectResponses") ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}<span className="ml-2">{isActionPending("collectResponses") ? "Đang thu thập..." : "Thu thập phản hồi"}</span></Button>
+            <Button type="button" variant="secondary" disabled={hasPendingAction || !modelDataCurrent} onClick={normalizeResponses}>{isActionPending("normalizeResponses") ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}<span className="ml-2">{isActionPending("normalizeResponses") ? "Đang chuẩn hóa..." : "Chuẩn hóa bộ dữ liệu"}</span></Button>
           </div>
           {lastCollect && (
             <Alert className="border-success-border bg-success-surface text-success">
@@ -1255,10 +1301,10 @@ export default function NckhFormWorkspacePage() {
           <div className="grid gap-5 xl:grid-cols-2">
             <div className="space-y-3">
               <h3 className="text-sm font-semibold">Phản hồi thô</h3>
-              <BaseTable columns={responseColumns} items={responses?.items ?? []} getRowKey={(item) => item.id} emptyTitle="Chưa có phản hồi thô" emptyDetail="Chạy thu thập phản hồi hoặc kiểm tra quyền đọc phản hồi Google." />
+              {isPanelLoading ? <LoadingState label="Đang tải phản hồi thô..." compact /> : responses ? <BaseTable columns={responseColumns} items={responses.items} getRowKey={(item) => item.id} emptyTitle="Chưa có phản hồi thô" emptyDetail="Chạy thu thập phản hồi hoặc kiểm tra quyền đọc phản hồi Google." /> : renderSliceError("Chưa tải được phản hồi thô.")}
               {responses && responses.totalPages > 1 && <PaginationControls page={responses.page} totalPages={responses.totalPages} totalItems={responses.totalItems} onPrevious={() => null} onNext={() => null} />}
             </div>
-            <DatasetPreview dataset={dataset} />
+            <DatasetPreview dataset={modelDataOwner === selectedModelId ? dataset : null} isLoading={isPanelLoading} error={sliceErrors.dataset} />
           </div>
         </CardContent>
       </Card>
@@ -1273,19 +1319,19 @@ export default function NckhFormWorkspacePage() {
           {dataset?.hasStaleData && (
             <Alert className="border-warning-border bg-warning-surface text-warning">
               <p className="font-semibold">Không nên xuất bộ dữ liệu đã cũ</p>
-              <p className="mt-1">Backend có thể trả 409 Conflict. Hãy chuẩn hóa lại trước khi tải file.</p>
+              <p className="mt-1">Hãy chuẩn hóa lại bộ dữ liệu trước khi tải file.</p>
             </Alert>
           )}
           <div className="grid gap-3 md:grid-cols-3">
-            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction} onClick={() => downloadExport("csv")}>
+            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction || !modelDataCurrent || dataset?.hasStaleData} onClick={() => downloadExport("csv")}>
               <span className="flex items-center gap-2">{isActionPending("exportCsv") ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {isActionPending("exportCsv") ? "Đang tải CSV..." : "Bộ dữ liệu CSV"}</span>
               <span className="text-xs font-normal text-muted-foreground">Dữ liệu đã chuẩn hóa</span>
             </Button>
-            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction} onClick={() => downloadExport("codebook")}>
-              <span className="flex items-center gap-2">{isActionPending("exportCodebook") ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {isActionPending("exportCodebook") ? "Đang tải codebook..." : "Codebook Excel"}</span>
+            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction || !modelDataCurrent || dataset?.hasStaleData} onClick={() => downloadExport("codebook")}>
+              <span className="flex items-center gap-2">{isActionPending("exportCodebook") ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {isActionPending("exportCodebook") ? "Đang tải bảng mã biến..." : "Bảng mã biến Excel"}</span>
               <span className="text-xs font-normal text-muted-foreground">Biến, ánh xạ và ghi chú</span>
             </Button>
-            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction} onClick={() => downloadExport("spss")}>
+            <Button className="h-auto flex-col items-start gap-1 py-3 text-left" variant="secondary" type="button" disabled={hasPendingAction || !modelDataCurrent || dataset?.hasStaleData} onClick={() => downloadExport("spss")}>
               <span className="flex items-center gap-2">{isActionPending("exportSpss") ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {isActionPending("exportSpss") ? "Đang tải SPSS..." : "Cú pháp SPSS"}</span>
               <span className="text-xs font-normal text-muted-foreground">File lệnh nhập .sps</span>
             </Button>

@@ -9,6 +9,7 @@ import { Alert, Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptySt
 import { apiFetch, type CreditTransaction, type CreditTransactionPageResponse } from "@/lib/api";
 import { displayCreditTransactionType } from "@/lib/labels";
 import { formatDate } from "@/lib/utils";
+import { readableError } from "@/lib/toast";
 
 const pageSize = 20;
 const typeOptions = [
@@ -78,7 +79,7 @@ export default function CreditTransactionsPage() {
         setTransactions([]);
         setTotalItems(0);
         setTotalPages(0);
-        setError(fetchError instanceof Error ? fetchError.message : "Không tải được giao dịch credit.");
+        setError(readableError(fetchError, "Không tải được giao dịch credit."));
       })
       .finally(() => {
         if (isCurrentRequest) {

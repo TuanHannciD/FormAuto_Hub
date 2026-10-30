@@ -7,21 +7,21 @@ import { AuthShell, AuthHeading, AuthSwitch } from "@/components/auth-shell";
 import { AuthPasswordInput } from "@/components/auth-password-input";
 import { GoogleIdentityButton } from "@/components/google-identity-button";
 import { Button, Input } from "@/components/ui";
-import { apiFetch, type AuthTokenResponse } from "@/lib/api";
+import { ApiError, apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { getStoredSession, saveSession } from "@/lib/auth";
 import { readableError } from "@/lib/toast";
 import { toast } from "sonner";
 
-function registerErrorMessage(message: string) {
-  if (message.includes("409") || message.toLowerCase().includes("already") || message.toLowerCase().includes("password")) {
+function registerErrorMessage(error: unknown) {
+  if (error instanceof ApiError && ["/api/auth/register", "/api/auth/google"].includes(error.path) && error.status === 409) {
     return "Email đã tồn tại. Hãy đăng nhập bằng mật khẩu rồi liên kết Google trong hồ sơ bảo mật.";
   }
 
-  if (message.includes("400")) {
+  if (error instanceof ApiError && error.path === "/api/auth/register" && error.status === 400) {
     return "Thông tin đăng ký không hợp lệ.";
   }
 
-  return readableError(message, "Không tạo được tài khoản.");
+  return readableError(error, "Không tạo được tài khoản. Vui lòng thử lại.");
 }
 
 export default function RegisterPage() {
@@ -57,7 +57,7 @@ export default function RegisterPage() {
       saveSession(session);
       router.replace("/dashboard");
     } catch (error) {
-      const message = registerErrorMessage(error instanceof Error ? error.message : "");
+      const message = registerErrorMessage(error);
       setFormError(message);
       toast.error(message);
     } finally {
@@ -78,7 +78,7 @@ export default function RegisterPage() {
         saveSession(session);
         router.replace("/dashboard");
       } catch (error) {
-        const message = registerErrorMessage(error instanceof Error ? error.message : "");
+        const message = registerErrorMessage(error);
         setFormError(message);
         toast.error(message);
       } finally {

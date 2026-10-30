@@ -14,7 +14,7 @@ public interface IGoogleIdentityVerifier
     Task<GoogleIdentity?> VerifyAsync(string idToken, CancellationToken cancellationToken);
 }
 
-public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options) : IGoogleIdentityVerifier
+public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options, ILogger<GoogleIdentityVerifier>? logger = null) : IGoogleIdentityVerifier
 {
     public async Task<GoogleIdentity?> VerifyAsync(string idToken, CancellationToken cancellationToken)
     {
@@ -23,7 +23,13 @@ public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options) : IGoo
             ? authOptions.GoogleOAuthClientId
             : authOptions.GoogleClientId;
 
-        if (string.IsNullOrWhiteSpace(googleClientId) || string.IsNullOrWhiteSpace(idToken))
+        if (string.IsNullOrWhiteSpace(googleClientId))
+        {
+            logger?.LogWarning("Google identity verification is unavailable: missing client configuration");
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(idToken))
         {
             return null;
         }
@@ -40,6 +46,7 @@ public sealed class GoogleIdentityVerifier(IOptions<AuthOptions> options) : IGoo
         }
         catch (InvalidJwtException)
         {
+            logger?.LogInformation("Google identity verification rejected an invalid identity token");
             return null;
         }
 

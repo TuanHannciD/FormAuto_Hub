@@ -7,6 +7,7 @@ import { MetricCard } from "@/components/metric-card";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
+import { safeAiFailureMessage } from "../forms/_helpers";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -28,6 +29,7 @@ type AiRecentRun = {
   durationMs: number | null;
   createdAt: string;
   projectName: string | null;
+  errorMessage?: string | null;
 };
 
 type AiDailyUsage = {
@@ -86,7 +88,13 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
   {
     key: "status",
     header: "Kết quả",
-    render: (run) => <StatusBadge status={run.status} />
+    render: (run) => (
+      <div className="space-y-1">
+        <StatusBadge status={run.status} />
+        <p className="break-all text-xs text-muted-foreground">Mã lượt AI: {run.id}</p>
+        {run.status === "Failed" && <p className="max-w-sm text-xs leading-5 text-destructive">{safeAiFailureMessage(run.errorMessage)}</p>}
+      </div>
+    )
   },
   {
     key: "provider",

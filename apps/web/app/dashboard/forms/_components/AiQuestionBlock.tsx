@@ -49,7 +49,7 @@ export function AiQuestionBlock({
             {question.required && <Badge tone="warning">Bắt buộc</Badge>}
           </span>
           <span className="mt-1 block text-xs text-muted-foreground">
-            Khối AI thu gọn; không hiển thị danh sách lựa chọn chi tiết trong Option 2/3.
+            {open ? "Đang mở chi tiết câu hỏi dùng AI." : "Mở câu hỏi để xem chi tiết và hướng dẫn trả lời AI."}
           </span>
         </span>
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">

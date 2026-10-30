@@ -139,7 +139,7 @@ public sealed class AiPromptProfileServiceTests
                 new UpsertAiPromptProfileRequest(AiPromptProfileModes.Option3, audienceJson, "Safe prompt."),
                 CancellationToken.None));
 
-        Assert.Contains("unsafe or forbidden", exception.Message, StringComparison.Ordinal);
+        Assert.Contains("không an toàn hoặc bị cấm", exception.Message, StringComparison.Ordinal);
         Assert.Empty(context.AiPromptProfiles);
     }
 

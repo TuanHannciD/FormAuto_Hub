@@ -6,29 +6,29 @@ import { AuthShell, AuthHeading, AuthSwitch } from "@/components/auth-shell";
 import { AuthPasswordInput } from "@/components/auth-password-input";
 import { GoogleIdentityButton } from "@/components/google-identity-button";
 import { Button, Input } from "@/components/ui";
-import { apiFetch, type AuthTokenResponse } from "@/lib/api";
+import { ApiError, apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { clearStoredSession, getStoredSession, hasUsableSession, saveSession } from "@/lib/auth";
 import { readableError } from "@/lib/toast";
 import { toast } from "sonner";
 
-function authErrorMessage(message: string) {
-  if (message.includes("423")) {
-    return "Tài khoản bị khóa tạm thời. Vui lòng thử lại sau 15 phút.";
+function authErrorMessage(error: unknown) {
+  if (error instanceof ApiError && error.path === "/api/auth/login" && error.status === 423) {
+    return "Tài khoản bị khóa tạm thời. Vui lòng thử lại sau.";
   }
 
-  if (message.includes("401")) {
+  if (error instanceof ApiError && error.path === "/api/auth/login" && error.status === 401) {
     return "Email hoặc mật khẩu không đúng.";
   }
 
-  return readableError(message, "Không đăng nhập được. Vui lòng thử lại.");
+  return readableError(error, "Không đăng nhập được. Vui lòng thử lại.");
 }
 
-function googleAuthErrorMessage(message: string) {
-  if (message.includes("409") || message.toLowerCase().includes("password")) {
+function googleAuthErrorMessage(error: unknown) {
+  if (error instanceof ApiError && error.path === "/api/auth/google" && error.status === 409) {
     return "Email này đã có tài khoản mật khẩu. Hãy đăng nhập bằng mật khẩu rồi liên kết Google trong hồ sơ bảo mật.";
   }
 
-  return authErrorMessage(message);
+  return readableError(error, "Không đăng nhập được bằng Google. Vui lòng thử lại.");
 }
 
 function LoginContent() {
@@ -67,7 +67,7 @@ function LoginContent() {
       saveSession(session);
       router.replace("/dashboard");
     } catch (error) {
-      const message = authErrorMessage(error instanceof Error ? error.message : "");
+      const message = authErrorMessage(error);
       setFormError(message);
       toast.error(message);
     } finally {
@@ -88,7 +88,7 @@ function LoginContent() {
         saveSession(session);
         router.replace("/dashboard");
       } catch (error) {
-        const message = googleAuthErrorMessage(error instanceof Error ? error.message : "");
+        const message = googleAuthErrorMessage(error);
         setFormError(message);
         toast.error(message);
       } finally {

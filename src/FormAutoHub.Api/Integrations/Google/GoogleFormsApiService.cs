@@ -47,7 +47,7 @@ public interface IGoogleFormsApiService
         CancellationToken cancellationToken);
 }
 
-public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsApiService
+public sealed class GoogleFormsApiService(HttpClient httpClient, ILogger<GoogleFormsApiService>? logger = null) : IGoogleFormsApiService
 {
     private const string FormsApiBase = "https://forms.googleapis.com/v1/forms";
 
@@ -56,19 +56,14 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         string formId,
         CancellationToken cancellationToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{FormsApiBase}/{formId}");
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"{FormsApiBase}/{formId}");
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
-        using var response = await httpClient.SendAsync(request, cancellationToken);
-        if (!response.IsSuccessStatusCode)
+        using var response = await SendAsync(request, "ReadForm", cancellationToken);
+        var body = await ReadBodyAsync<GoogleFormsApiResponse>(response, "ReadForm", cancellationToken);
+        if (string.IsNullOrWhiteSpace(body.FormId))
         {
-            return null;
-        }
-
-        var body = await response.Content.ReadFromJsonAsync<GoogleFormsApiResponse>(cancellationToken: cancellationToken);
-        if (body?.FormId is null)
-        {
-            return null;
+            throw Failure("ReadForm", GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode);
         }
 
         var title = body.Info?.Title ?? "Untitled Form";
@@ -79,6 +74,10 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         {
             foreach (var item in body.Items)
             {
+                if (item is null)
+                {
+                    throw Failure("ReadForm", GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode);
+                }
                 var questionItem = item.QuestionItem;
                 if (questionItem?.Question is null)
                 {
@@ -110,7 +109,7 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         string title,
         CancellationToken cancellationToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, FormsApiBase)
+        using var request = new HttpRequestMessage(HttpMethod.Post, FormsApiBase)
         {
             Content = JsonContent.Create(new
             {
@@ -122,16 +121,11 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         };
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
-        using var response = await httpClient.SendAsync(request, cancellationToken);
-        if (!response.IsSuccessStatusCode)
+        using var response = await SendAsync(request, "CreateForm", cancellationToken);
+        var body = await ReadBodyAsync<GoogleFormsApiResponse>(response, "CreateForm", cancellationToken);
+        if (string.IsNullOrWhiteSpace(body.FormId))
         {
-            return null;
-        }
-
-        var body = await response.Content.ReadFromJsonAsync<GoogleFormsApiResponse>(cancellationToken: cancellationToken);
-        if (string.IsNullOrWhiteSpace(body?.FormId))
-        {
-            return null;
+            throw Failure("CreateForm", GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode);
         }
 
         return new GoogleFormCreateResult(
@@ -169,14 +163,14 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
             }
         }).ToList();
 
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{FormsApiBase}/{formId}:batchUpdate")
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"{FormsApiBase}/{formId}:batchUpdate")
         {
             Content = JsonContent.Create(new { requests })
         };
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
-        using var response = await httpClient.SendAsync(request, cancellationToken);
-        return response.IsSuccessStatusCode;
+        using var response = await SendAsync(request, "CreateQuestions", cancellationToken);
+        return true;
     }
 
     public async Task<IReadOnlyList<GoogleFormResponseItem>?> ListResponsesAsync(
@@ -192,20 +186,19 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
             var url = string.IsNullOrWhiteSpace(pageToken)
                 ? $"{FormsApiBase}/{formId}/responses"
                 : $"{FormsApiBase}/{formId}/responses?pageToken={Uri.EscapeDataString(pageToken)}";
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
-            using var response = await httpClient.SendAsync(request, cancellationToken);
-            if (!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            var body = await response.Content.ReadFromJsonAsync<GoogleFormsResponsesApiResponse>(cancellationToken: cancellationToken);
+            using var response = await SendAsync(request, "ListResponses", cancellationToken);
+            var body = await ReadBodyAsync<GoogleFormsResponsesApiResponse>(response, "ListResponses", cancellationToken);
             if (body?.Responses is not null)
             {
                 foreach (var item in body.Responses)
                 {
+                    if (item is null)
+                    {
+                        throw Failure("ListResponses", GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode);
+                    }
                     if (string.IsNullOrWhiteSpace(item.ResponseId))
                     {
                         continue;
@@ -214,7 +207,7 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
                     responses.Add(new GoogleFormResponseItem(
                         item.ResponseId,
                         item.LastSubmittedTime ?? item.CreateTime,
-                        ExtractAnswers(item.Answers)));
+                        ExtractAnswers(item.Answers, response.StatusCode)));
                 }
             }
 
@@ -225,8 +218,67 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
         return responses;
     }
 
-    private static IReadOnlyDictionary<string, IReadOnlyList<string>> ExtractAnswers(
-        Dictionary<string, GoogleFormsAnswer>? answers)
+    private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, string operation, CancellationToken cancellationToken)
+    {
+        HttpResponseMessage response;
+        try
+        {
+            response = await httpClient.SendAsync(request, cancellationToken);
+        }
+        catch (HttpRequestException exception)
+        {
+            throw Failure(operation, GoogleIntegrationFailureKind.Transport, exception.StatusCode, exception);
+        }
+        catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            throw Failure(operation, GoogleIntegrationFailureKind.Transport, inner: exception);
+        }
+        if (!response.IsSuccessStatusCode)
+        {
+            var failure = GoogleIntegrationException.FromStatus(operation, response.StatusCode);
+            response.Dispose();
+            LogFailure(failure);
+            throw failure;
+        }
+        return response;
+    }
+
+    private async Task<T> ReadBodyAsync<T>(HttpResponseMessage response, string operation, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var body = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+            if (body is null) throw Failure(operation, GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode);
+            return body;
+        }
+        catch (JsonException exception)
+        {
+            throw Failure(operation, GoogleIntegrationFailureKind.InvalidResponse, response.StatusCode, exception);
+        }
+        catch (HttpRequestException exception) when (exception is not GoogleIntegrationException)
+        {
+            throw Failure(operation, GoogleIntegrationFailureKind.Transport, response.StatusCode, exception);
+        }
+        catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            throw Failure(operation, GoogleIntegrationFailureKind.Transport, response.StatusCode, exception);
+        }
+    }
+
+    private GoogleIntegrationException Failure(string operation, GoogleIntegrationFailureKind kind, System.Net.HttpStatusCode? status = null, Exception? inner = null)
+    {
+        var failure = new GoogleIntegrationException(operation, kind, status, inner);
+        LogFailure(failure);
+        return failure;
+    }
+
+    private void LogFailure(GoogleIntegrationException failure) =>
+        logger?.LogWarning("Google Forms {Operation} failed with {FailureKind}, HTTP {StatusCode}, cause {CauseType}",
+            failure.Operation, failure.Kind, (int?)failure.StatusCode, failure.InnerException?.GetType().Name);
+
+    private IReadOnlyDictionary<string, IReadOnlyList<string>> ExtractAnswers(
+        Dictionary<string, GoogleFormsAnswer>? answers,
+        System.Net.HttpStatusCode statusCode)
     {
         var result = new Dictionary<string, IReadOnlyList<string>>(StringComparer.OrdinalIgnoreCase);
         if (answers is null)
@@ -236,6 +288,10 @@ public sealed class GoogleFormsApiService(HttpClient httpClient) : IGoogleFormsA
 
         foreach (var (questionId, answer) in answers)
         {
+            if (answer is null || answer.TextAnswers?.Answers?.Any(item => item is null) == true)
+            {
+                throw Failure("ListResponses", GoogleIntegrationFailureKind.InvalidResponse, statusCode);
+            }
             var values = answer.TextAnswers?.Answers?
                 .Select(item => item.Value?.Trim())
                 .Where(item => !string.IsNullOrWhiteSpace(item))

@@ -26,7 +26,7 @@ public sealed class AiPromptProfileService(
         mode = NormalizeMode(mode);
         if (!IsSupportedMode(mode))
         {
-            throw new InvalidOperationException("Unsupported AI prompt profile mode.");
+            throw new InvalidOperationException("Chế độ hướng dẫn AI chưa được hỗ trợ.");
         }
 
         var ownsProject = await OwnsProjectAsync(projectId, cancellationToken);
@@ -52,7 +52,7 @@ public sealed class AiPromptProfileService(
         var mode = NormalizeMode(request.Mode);
         if (!IsSupportedMode(mode))
         {
-            throw new InvalidOperationException("Unsupported AI prompt profile mode.");
+            throw new InvalidOperationException("Chế độ hướng dẫn AI chưa được hỗ trợ.");
         }
 
         var ownsProject = await OwnsProjectAsync(projectId, cancellationToken);
@@ -104,7 +104,7 @@ public sealed class AiPromptProfileService(
         var mode = NormalizeMode(request.Mode);
         if (!IsSupportedMode(mode))
         {
-            throw new InvalidOperationException("Unsupported AI prompt profile mode.");
+            throw new InvalidOperationException("Chế độ hướng dẫn AI chưa được hỗ trợ.");
         }
 
         var question = await dbContext.FormQuestions
@@ -156,7 +156,7 @@ public sealed class AiPromptProfileService(
         var mode = NormalizeMode(request.Mode);
         if (!IsSupportedMode(mode))
         {
-            throw new InvalidOperationException("Unsupported AI prompt profile mode.");
+            throw new InvalidOperationException("Chế độ hướng dẫn AI chưa được hỗ trợ.");
         }
 
         var ownsProject = await OwnsProjectAsync(projectId, cancellationToken);
@@ -168,7 +168,7 @@ public sealed class AiPromptProfileService(
         var context = NormalizePrompt(request.Context);
         if (context.Length > AiPromptProfileLimits.MaxAudienceFieldLength)
         {
-            throw new InvalidOperationException("Auto-fill context is too long.");
+            throw new InvalidOperationException("Bối cảnh dùng để gợi ý hướng dẫn quá dài.");
         }
 
         if (!string.IsNullOrWhiteSpace(context))
@@ -176,7 +176,7 @@ public sealed class AiPromptProfileService(
             var guardResult = promptGuard.Validate(context);
             if (!guardResult.IsAllowed)
             {
-                throw new InvalidOperationException(guardResult.RejectionReason ?? "Prompt requests unsafe or forbidden AI behavior.");
+                throw new InvalidOperationException("Hướng dẫn chứa yêu cầu không an toàn hoặc bị cấm.");
             }
         }
 
@@ -279,7 +279,7 @@ public sealed class AiPromptProfileService(
     {
         if (globalPrompt.Length > AiPromptProfileLimits.MaxGlobalPromptLength)
         {
-            throw new InvalidOperationException("Global prompt is too long.");
+            throw new InvalidOperationException("Hướng dẫn chung quá dài.");
         }
 
         ValidateSafePrompt(globalPrompt);
@@ -289,7 +289,7 @@ public sealed class AiPromptProfileService(
     {
         if (prompt.Length > AiPromptProfileLimits.MaxQuestionPromptLength)
         {
-            throw new InvalidOperationException("Question prompt is too long.");
+            throw new InvalidOperationException("Hướng dẫn cho câu hỏi quá dài.");
         }
 
         ValidateSafePrompt(prompt);
@@ -305,7 +305,7 @@ public sealed class AiPromptProfileService(
         var guardResult = promptGuard.Validate(prompt);
         if (!guardResult.IsAllowed)
         {
-            throw new InvalidOperationException(guardResult.RejectionReason ?? "Prompt requests unsafe or forbidden AI behavior.");
+            throw new InvalidOperationException("Hướng dẫn chứa yêu cầu không an toàn hoặc bị cấm.");
         }
     }
 
@@ -319,7 +319,7 @@ public sealed class AiPromptProfileService(
         }
         catch (JsonException exception)
         {
-            throw new InvalidOperationException("AudienceJson must be valid JSON.", exception);
+            throw new InvalidOperationException("Thông tin bối cảnh phải đúng định dạng JSON.", exception);
         }
 
         return normalized;
@@ -332,12 +332,12 @@ public sealed class AiPromptProfileService(
         {
             if (value.Length > AiPromptProfileLimits.MaxAudienceFieldLength)
             {
-                throw new InvalidOperationException("AudienceJson contains a short context field that is too long.");
+                throw new InvalidOperationException("Một nội dung trong thông tin bối cảnh vượt độ dài cho phép.");
             }
 
             if (!string.IsNullOrWhiteSpace(value) && !promptGuard.Validate(value).IsAllowed)
             {
-                throw new InvalidOperationException("AudienceJson contains unsafe or forbidden context.");
+                throw new InvalidOperationException("Thông tin bối cảnh chứa yêu cầu không an toàn hoặc bị cấm.");
             }
         }
 
@@ -382,7 +382,7 @@ public sealed class AiPromptProfileService(
 
         if (total > AiPromptProfileLimits.MaxTotalPromptPayloadLength)
         {
-            throw new InvalidOperationException("Total prompt payload is too large.");
+            throw new InvalidOperationException("Tổng nội dung hướng dẫn và bối cảnh vượt độ dài cho phép.");
         }
     }
 }

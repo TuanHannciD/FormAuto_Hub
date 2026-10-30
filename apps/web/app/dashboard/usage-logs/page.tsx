@@ -10,6 +10,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type UsageLog, type UsageLogPageResponse } from "@/lib/api";
 import { displayAction, displayToolName } from "@/lib/labels";
 import { formatDate } from "@/lib/utils";
+import { readableError } from "@/lib/toast";
 
 const generatedAnswersAction = "Xem lại câu trả lời được tạo";
 const pageSize = 20;
@@ -81,7 +82,7 @@ export default function UsageLogsPage() {
         setLogs([]);
         setTotalItems(0);
         setTotalPages(0);
-        setError(fetchError instanceof Error ? fetchError.message : "Không tải được lịch sử sử dụng.");
+        setError(readableError(fetchError, "Không tải được lịch sử sử dụng."));
       })
       .finally(() => {
         if (isCurrentRequest) {

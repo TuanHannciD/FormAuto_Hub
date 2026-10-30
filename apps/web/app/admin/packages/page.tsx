@@ -55,6 +55,7 @@ export default function AdminPackagesPage() {
   const [query, setQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [confirmedPackage, setConfirmedPackage] = useState<CreditPackage | null>(null);
 
   async function loadData() {
     setLoading(true); setLoadError(false);
@@ -116,21 +117,23 @@ export default function AdminPackagesPage() {
     setIsSaving(true);
     try {
       if (editingId) {
-        await apiFetch<CreditPackage>(`/api/admin/packages/${editingId}`, {
+        const result = await apiFetch<CreditPackage>(`/api/admin/packages/${editingId}`, {
           method: "PUT",
           json: form
         });
+        setConfirmedPackage(result);
         toast.success("Đã cập nhật gói credit.");
       } else {
-        await apiFetch<CreditPackage>("/api/admin/packages", {
+        const result = await apiFetch<CreditPackage>("/api/admin/packages", {
           method: "POST",
           json: form
         });
+        setConfirmedPackage(result);
         toast.success("Đã tạo gói credit.");
       }
 
       closeFormDialog();
-      await loadData();
+      await loadData().catch(() => { /* Keep the confirmed package; loadData reports a read error. */ });
     } catch (error) {
       showError(error, "Không lưu được gói credit.");
     } finally {
@@ -152,6 +155,7 @@ export default function AdminPackagesPage() {
         }
       />
 
+      {confirmedPackage && <Alert role="status">Đã lưu gói {confirmedPackage.name}. Mã gói: {confirmedPackage.id}.</Alert>}
       <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
         <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={String(packages.filter((item) => item.isActive).length)} />
@@ -176,7 +180,7 @@ export default function AdminPackagesPage() {
             </div>
           </CardHeader>
           <CardContent>
-            {loadError ? <Alert>Không tải được danh sách gói credit. Tải lại trang để thử lại.</Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải gói credit...</p> : <BaseTable
+            {loadError ? <Alert><p>Không tải được danh sách gói credit.</p><Button type="button" variant="secondary" disabled={loading} onClick={() => loadData().catch(error => showError(error, "Không tải được danh sách gói credit."))}>Thử lại</Button></Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải gói credit...</p> : <BaseTable
               items={filteredPackages}
               columns={packageColumns.map((column): BaseTableColumn<CreditPackage> =>
                 column.key === "actions"

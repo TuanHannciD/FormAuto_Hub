@@ -77,7 +77,7 @@ public sealed class AdminAiProviderSettingsTests
             new UpdateAiProviderSettingsRequest(AiProviders.OpenAI, "provider-secret", "gpt-4o-mini", true, "ftp://example.com/v1"),
             CancellationToken.None));
 
-        Assert.Contains("Base URL", exception.Message, StringComparison.Ordinal);
+        Assert.Contains("Địa chỉ nhà cung cấp phải là đường dẫn http hoặc https đầy đủ.", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public sealed class AdminAiProviderSettingsTests
         var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
         var problem = Assert.IsType<ProblemDetails>(badRequest.Value);
         Assert.Equal("AI provider settings rejected", problem.Title);
-        Assert.Contains("Provider is required", problem.Detail, StringComparison.Ordinal);
+        Assert.Contains("Vui lòng nhập nhà cung cấp AI", problem.Detail, StringComparison.Ordinal);
         Assert.DoesNotContain("provider-secret", problem.Detail, StringComparison.Ordinal);
     }
 
@@ -125,7 +125,7 @@ public sealed class AdminAiProviderSettingsTests
         var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
         var problem = Assert.IsType<ProblemDetails>(badRequest.Value);
         Assert.Equal("AI provider settings rejected", problem.Title);
-        Assert.Contains("Default model is required", problem.Detail, StringComparison.Ordinal);
+        Assert.Contains("Vui lòng nhập mô hình AI mặc định.", problem.Detail, StringComparison.Ordinal);
         Assert.DoesNotContain("google-secret", problem.Detail, StringComparison.Ordinal);
     }
 

@@ -60,9 +60,11 @@ export default function TopUpPage() {
   const [isSubmittingManual, setIsSubmittingManual] = useState(false);
   const submittingManualRef = useRef(false);
   const [isCreatingPayos, setIsCreatingPayos] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState<TopupOrder | null>(null);
+  const [confirmedPayos, setConfirmedPayos] = useState<CreatePayosTopupOrderResponse | null>(null);
 
   const selectedPackage = useMemo(() => packages.find((item) => item.id === packageId), [packageId, packages]);
-  const selectedOrder = useMemo(() => orders.find((order) => order.id === selectedOrderId) ?? null, [orders, selectedOrderId]);
+  const selectedOrder = useMemo(() => orders.find((order) => order.id === selectedOrderId) ?? (confirmedOrder?.id === selectedOrderId ? confirmedOrder : null), [orders, selectedOrderId, confirmedOrder]);
   const topupOrderColumns = useMemo(() => createTopupOrderColumns(setSelectedOrderId), []);
   const pendingManualOrder = useMemo(
     () => orders.find((order) => order.paymentMethod === "Manual" && order.status === "Pending"),
@@ -160,16 +162,18 @@ export default function TopUpPage() {
     submittingManualRef.current = true;
     setIsSubmittingManual(true);
     try {
-      await apiFetch<TopupOrder>("/api/topup-orders", {
+      const result = await apiFetch<TopupOrder>("/api/topup-orders", {
         method: "POST",
         json: { packageId, paymentMethod: "Manual", paymentNote, fileId: evidenceFileId || null }
       });
+      setConfirmedOrder(result);
+      setOrders(current => [result, ...current.filter(order => order.id !== result.id)]);
       setPaymentNote("");
       setEvidenceFileId("");
       setEvidenceName("");
       toast.success("Đã tạo yêu cầu nạp credit. Quản trị viên sẽ đối soát và xử lý.");
       setHistoryPage(1);
-      await loadData();
+      await loadData().catch(() => { /* loadData reports read failure; the confirmed order is retained. */ });
     } catch (error) {
       showError(error, "Không tạo được yêu cầu đối soát thủ công.");
     } finally { submittingManualRef.current = false; setIsSubmittingManual(false); }
@@ -182,8 +186,8 @@ export default function TopUpPage() {
         method: "POST",
         json: { packageId }
       });
+      setConfirmedPayos(result);
       toast.success("Đã tạo liên kết thanh toán PayOS. Credit chỉ cộng sau khi hệ thống xác minh thanh toán.");
-      await loadData();
       window.location.href = result.checkoutUrl;
     } catch (error) {
       showError(error, "Không tạo được liên kết PayOS.");
@@ -197,17 +201,19 @@ export default function TopUpPage() {
       <PageHeader title="Nạp credit" description="Chọn gói phù hợp, thanh toán và theo dõi yêu cầu nạp của bạn."
         actions={<div className="flex items-center gap-3 rounded-xl border border-primary-border bg-primary-soft px-3 py-2"><Wallet size={20} className="text-primary" /><div><p className="text-xs text-muted-foreground">Số dư hiện tại</p><p className="font-bold tabular-nums text-primary">{summary ? `${summary.currentCreditBalance} credit` : "—"}</p></div></div>} />
       {loadError && <Alert><p>Không tải được dữ liệu nạp credit.</p><Button type="button" variant="secondary" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}>Thử lại</Button></Alert>}
+      {confirmedOrder && <Alert role="status"><p>Đã tạo yêu cầu đối soát. Mã yêu cầu: {confirmedOrder.id}.</p><Button type="button" variant="secondary" onClick={() => setSelectedOrderId(confirmedOrder.id)}>Xem yêu cầu đã tạo</Button></Alert>}
+      {confirmedPayos && <Alert role="status"><p>Đã tạo liên kết thanh toán. Mã yêu cầu: {confirmedPayos.topupOrderId}.</p><a className="underline" href={confirmedPayos.checkoutUrl}>Mở trang thanh toán</a></Alert>}
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
         <Card className="order-1 min-w-0 xl:order-2 xl:sticky xl:top-24" role="region" aria-label="Thanh toán PayOS">
           <CardHeader><CardTitle className="flex items-center gap-2"><CreditCard size={18} className="text-primary" />Thanh toán PayOS</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="space-y-2">
               <p className="text-sm font-semibold">Chọn gói thanh toán</p>
-              <DropdownSelect className="[&_button]:min-h-11" value={packageId} options={packages.map(item => ({ value: item.id, label: item.name }))} onChange={setPackageId} disabled={isLoading || isCreatingPayos || isSubmittingManual || packages.length === 0} placeholder="Chưa có gói credit" />
+              <DropdownSelect className="[&_button]:min-h-11" value={packageId} options={packages.map(item => ({ value: item.id, label: item.name }))} onChange={setPackageId} disabled={isLoading || loadError || isCreatingPayos || isSubmittingManual || packages.length === 0} placeholder="Chưa có gói credit" />
             </div>
             <div className="space-y-2 text-sm"><KeyValueRow label="Gói credit" value={selectedPackage?.name ?? "Chưa chọn"} /><KeyValueRow label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "—"} /></div>
             <div className="rounded-xl border border-primary-border bg-primary-soft p-4"><p className="text-xs text-muted-foreground">Tổng thanh toán</p><p className="mt-1 text-2xl font-extrabold text-primary">{selectedPackage ? formatCurrency(selectedPackage.price) : "—"}</p></div>
-            <Button className="w-full" disabled={isLoading || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
+            <Button className="w-full" disabled={isLoading || loadError || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
             <p className="text-xs leading-5 text-muted-foreground">Bạn sẽ được chuyển sang PayOS để thanh toán. Credit được cộng sau khi giao dịch được xác minh thành công.</p>
             <ol className="space-y-3 border-t border-border pt-4 text-sm">
               {["Chọn gói credit", "Hoàn tất thanh toán trên PayOS", "Theo dõi trạng thái trong lịch sử"].map((step, index) => <li key={step} className="flex items-center gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{index + 1}</span><span>{step}</span></li>)}
@@ -219,7 +225,7 @@ export default function TopUpPage() {
             <CardHeader><CardTitle>Chọn gói credit</CardTitle><p className="mt-1 text-sm text-muted-foreground">Giá và số credit được xác định theo gói bạn chọn.</p></CardHeader>
             <CardContent>
               {isLoading ? <p className="py-4 text-sm text-muted-foreground">Đang tải các gói credit...</p> : packages.length === 0 ? <p className="py-4 text-sm text-muted-foreground">Hiện chưa có gói credit khả dụng.</p> : <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-                {packages.map(item => <button type="button" key={item.id} aria-pressed={packageId === item.id} disabled={isCreatingPayos || isSubmittingManual} onClick={() => setPackageId(item.id)}
+                {packages.map(item => <button type="button" key={item.id} aria-pressed={packageId === item.id} disabled={loadError || isCreatingPayos || isSubmittingManual} onClick={() => setPackageId(item.id)}
                   className={`relative flex min-w-0 flex-col rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 ${packageId === item.id ? "border-primary bg-primary-soft ring-1 ring-primary" : "border-border-strong bg-surface hover:border-primary-border hover:bg-surface-subtle"}`}>
                   <div className="flex items-start justify-between gap-2"><p className="break-words text-sm font-semibold">{item.name}</p><CheckCircle2 size={18} aria-hidden="true" className={`shrink-0 ${packageId === item.id ? "text-primary" : "text-border-strong"}`} /></div>
                   <p className="mt-4 text-2xl font-extrabold tracking-tight text-primary">{item.credits} <span className="text-sm font-semibold">credit</span></p>
@@ -247,7 +253,7 @@ export default function TopUpPage() {
                   <label className="block text-sm font-semibold">Ghi chú chuyển khoản <span className="text-destructive">*</span>
                     <Textarea className="mt-2" rows={3} maxLength={1000} disabled={isSubmittingManual || Boolean(pendingManualOrder)} placeholder="Nhập nội dung chuyển khoản, ngân hàng hoặc thông tin để quản trị viên đối soát." value={paymentNote} onChange={event => setPaymentNote(event.target.value)} />
                   </label>
-                  <Button className="w-full sm:w-auto" disabled={isLoading || isSubmittingManual || isUploadingEvidence || !selectedPackage || !paymentNote.trim() || Boolean(pendingManualOrder)} type="submit">{isSubmittingManual ? "Đang gửi..." : "Gửi yêu cầu đối soát"}</Button>
+                  <Button className="w-full sm:w-auto" disabled={isLoading || loadError || isSubmittingManual || isUploadingEvidence || !selectedPackage || !paymentNote.trim() || Boolean(pendingManualOrder)} type="submit">{isSubmittingManual ? "Đang gửi..." : "Gửi yêu cầu đối soát"}</Button>
                 </form>
               </div>
             </details>
@@ -272,15 +278,24 @@ export default function TopUpPage() {
 
 function RequestCode({ id }: { id: string }) {
   const shortId = id.slice(0, 8).toUpperCase();
+  const [copyError, setCopyError] = useState(false);
 
   async function copyId() {
-    await navigator.clipboard.writeText(id);
-    toast.success("Đã sao chép đầy đủ mã yêu cầu.");
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(id);
+      setCopyError(false);
+      toast.success("Đã sao chép đầy đủ mã yêu cầu.");
+    } catch {
+      setCopyError(true);
+      toast.error("Không sao chép được. Bạn có thể chọn mã đầy đủ bên dưới và sao chép thủ công.");
+    }
   }
 
   return (
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
+      {copyError && <Input aria-label="Mã yêu cầu đầy đủ" className="min-w-40 font-mono text-xs" readOnly value={id} onFocus={event => event.target.select()} />}
       <button className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-border-strong bg-surface-subtle text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>

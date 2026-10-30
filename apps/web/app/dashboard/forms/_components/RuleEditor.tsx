@@ -29,6 +29,7 @@ import {
   readDateRange,
   readSamples,
   readTimeRange,
+  rangeRuleError,
   questionTypeLabel
 } from "../_helpers";
 export function RuleEditor({
@@ -136,7 +137,7 @@ export function RuleEditor({
     });
   }
 
-  function updateTimeRange(next: { fromTime?: string; toTime?: string; stepMinutes?: number }) {
+  function updateTimeRange(next: { fromTime?: string; toTime?: string; stepMinutes?: number | string }) {
     onChange({
       mode: "TimeRangeSequential",
       configJson: JSON.stringify({ ...timeRange, ...next }, null, 2)
@@ -144,6 +145,8 @@ export function RuleEditor({
   }
 
   const choiceLimit = value.mode === "RandomByPercentage" ? PERCENTAGE_TOTAL : MAX_RULE_VALUES;
+  const rangeError = rangeRuleError(value.mode, value.configJson);
+  const rangeErrorId = `range-error-${question.id}`;
   const choiceTotal = Object.values(choiceNumbers).reduce((sum, amount) => sum + clampInteger(amount, 0, choiceLimit), 0);
 
   return (
@@ -233,6 +236,8 @@ export function RuleEditor({
                 <Input
                   className="mt-2"
                   type="date"
+                  aria-invalid={Boolean(rangeError)}
+                  aria-describedby={rangeError ? rangeErrorId : undefined}
                   value={dateRange.fromDate}
                   onChange={(event) => updateDateRange({ fromDate: event.target.value })}
                 />
@@ -242,11 +247,14 @@ export function RuleEditor({
                 <Input
                   className="mt-2"
                   type="date"
+                  aria-invalid={Boolean(rangeError)}
+                  aria-describedby={rangeError ? rangeErrorId : undefined}
                   value={dateRange.toDate}
                   onChange={(event) => updateDateRange({ toDate: event.target.value })}
                 />
               </label>
             </div>
+            {rangeError && <p id={rangeErrorId} role="alert" className="mt-2 text-sm text-destructive">{rangeError}</p>}
           </div>
         ) : value.mode === "TimeRangeSequential" ? (
           <div className="rounded-xl border border-border bg-surface p-3">
@@ -258,6 +266,8 @@ export function RuleEditor({
                 <Input
                   className="mt-2"
                   type="time"
+                  aria-invalid={Boolean(rangeError)}
+                  aria-describedby={rangeError ? rangeErrorId : undefined}
                   value={timeRange.fromTime}
                   onChange={(event) => updateTimeRange({ fromTime: event.target.value })}
                 />
@@ -267,6 +277,8 @@ export function RuleEditor({
                 <Input
                   className="mt-2"
                   type="time"
+                  aria-invalid={Boolean(rangeError)}
+                  aria-describedby={rangeError ? rangeErrorId : undefined}
                   value={timeRange.toTime}
                   onChange={(event) => updateTimeRange({ toTime: event.target.value })}
                 />
@@ -278,13 +290,16 @@ export function RuleEditor({
                   inputMode="numeric"
                   max={TIME_STEP_MAX}
                   min={TIME_STEP_MIN}
-                  step={5}
+                  step={1}
                   type="number"
+                  aria-invalid={Boolean(rangeError)}
+                  aria-describedby={rangeError ? rangeErrorId : undefined}
                   value={timeRange.stepMinutes}
-                  onChange={(event) => updateTimeRange({ stepMinutes: clampInteger(event.target.value, TIME_STEP_MIN, TIME_STEP_MAX) })}
+                  onChange={(event) => updateTimeRange({ stepMinutes: event.target.value === "" ? "" : Number(event.target.value) })}
                 />
               </label>
             </div>
+            {rangeError && <p id={rangeErrorId} role="alert" className="mt-2 text-sm text-destructive">{rangeError}</p>}
           </div>
         ) : isTextQuestion ? (
           <label className="block text-sm font-medium">

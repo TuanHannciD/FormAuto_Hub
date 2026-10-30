@@ -18,19 +18,19 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
         if (!Uri.TryCreate(formUrl, UriKind.Absolute, out var formUri) ||
             (formUri.Scheme != Uri.UriSchemeHttp && formUri.Scheme != Uri.UriSchemeHttps))
         {
-            throw new InvalidOperationException("Invalid form URL.");
+            throw new AnalysisException("Đường dẫn biểu mẫu không hợp lệ. Hãy nhập đường dẫn Google Forms đầy đủ.");
         }
 
         if (!string.Equals(formUri.Host, "docs.google.com", StringComparison.OrdinalIgnoreCase) ||
             !formUri.AbsolutePath.Contains("/forms/", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException("Only public Google Forms URLs are supported.");
+            throw new AnalysisException("Chỉ hỗ trợ đường dẫn biểu mẫu Google Forms công khai.");
         }
 
         var html = await httpClient.GetStringAsync(formUri, cancellationToken);
         if (!html.Contains("entry.", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException("No supported Google Form entries were detected.");
+            throw new AnalysisException("Không tìm thấy câu hỏi được hỗ trợ. Hãy kiểm tra biểu mẫu và quyền truy cập công khai.");
         }
 
         var title = WebUtility.HtmlDecode(TitleRegex().Match(html).Groups["title"].Value).Trim();
@@ -42,7 +42,7 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
         var actionMatch = FormActionRegex().Match(html);
         if (!actionMatch.Success)
         {
-            throw new InvalidOperationException("Google Form action URL was not detected.");
+            throw new AnalysisException("Không tìm thấy địa chỉ gửi câu trả lời của biểu mẫu. Hãy kiểm tra đường dẫn Google Forms.");
         }
 
         var actionUrl = WebUtility.HtmlDecode(actionMatch.Groups["action"].Value);
@@ -56,7 +56,7 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
             !string.Equals(actionUri.Host, "docs.google.com", StringComparison.OrdinalIgnoreCase) ||
             !actionUri.AbsolutePath.Contains("/formResponse", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException("Detected Google Form action URL is not supported.");
+            throw new AnalysisException("Địa chỉ gửi câu trả lời của biểu mẫu không được hỗ trợ. Hãy kiểm tra đường dẫn Google Forms.");
         }
 
         var questions = TryParsePublicLoadData(html);
@@ -77,7 +77,7 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
 
         if (questions.Count == 0)
         {
-            throw new InvalidOperationException("No supported Google Form entries were detected.");
+            throw new AnalysisException("Không tìm thấy câu hỏi được hỗ trợ. Hãy kiểm tra biểu mẫu và quyền truy cập công khai.");
         }
 
         return new GoogleFormAnalysis(title, actionUrl, questions);
@@ -288,4 +288,6 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
 
     [GeneratedRegex("FB_PUBLIC_LOAD_DATA_\\s*=\\s*(?<data>\\[.*?\\]);\\s*</script>", RegexOptions.IgnoreCase | RegexOptions.Singleline)]
     private static partial Regex PublicLoadDataRegex();
+
+    internal sealed class AnalysisException(string message) : InvalidOperationException(message);
 }

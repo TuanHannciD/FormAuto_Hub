@@ -111,88 +111,167 @@ public sealed class SubmissionService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         var logs = new List<SubmissionLog>();
-        foreach (var batch in responses.Chunk(Phase4SafetyLimits.MaxSubmissionBatchSize))
+        SubmissionLog? pendingAttempt = null;
+        UsageLog? completionUsage = null;
+        var providerInvoked = false;
+        try
         {
-            foreach (var response in batch)
+            foreach (var batch in responses.Chunk(Phase4SafetyLimits.MaxSubmissionBatchSize))
             {
-                IReadOnlyList<GeneratedAnswerResponse> answers;
-                try
+                foreach (var response in batch)
                 {
-                    answers = JsonSerializer.Deserialize<IReadOnlyList<GeneratedAnswerResponse>>(response.PayloadJson)
-                        ?? Array.Empty<GeneratedAnswerResponse>();
-                }
-                catch (JsonException)
-                {
-                    await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Generated response payload is invalid.", cancellationToken);
+                    IReadOnlyList<GeneratedAnswerResponse> answers;
+                    try
+                    {
+                        answers = JsonSerializer.Deserialize<IReadOnlyList<GeneratedAnswerResponse>>(response.PayloadJson)
+                            ?? Array.Empty<GeneratedAnswerResponse>();
+                    }
+                    catch (JsonException exception)
+                    {
+                        throw new InvalidOperationException("Generated response payload is invalid.", exception);
+                    }
+
+                    if (answers.Count == 0 || answers.Any(answer => string.IsNullOrWhiteSpace(answer.EntryId)))
+                    {
+                        throw new InvalidOperationException("Generated response payload is missing required entry IDs.");
+                    }
+
+                    var payload = answers.ToDictionary(answer => answer.EntryId, answer => answer.Values);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var log = new SubmissionLog
+                    {
+                        Id = Guid.NewGuid(),
+                        JobId = job.Id,
+                        ResponseId = response.Id,
+                        PayloadJson = response.PayloadJson,
+                        // Failed describes an unfinished local attempt, not a confirmed remote rejection.
+                        Status = SubmissionLogStatuses.Failed,
+                        ErrorMessage = "Kết quả gửi chưa xác định. Không tự động gửi lại; hãy kiểm tra kết quả trên Google Forms."
+                    };
+                    logs.Add(log);
+                    dbContext.SubmissionLogs.Add(log);
+                    pendingAttempt = log;
+                    providerInvoked = false;
                     await dbContext.SaveChangesAsync(cancellationToken);
-                    throw new InvalidOperationException("Generated response payload is invalid.");
+
+                    providerInvoked = true;
+                    var submitResult = await googleFormsClient.SubmitAsync(project.FormActionUrl, payload, cancellationToken);
+                    log.Status = submitResult.Success ? SubmissionLogStatuses.Success : SubmissionLogStatuses.Failed;
+                    log.ErrorMessage = submitResult.ErrorMessage;
+                    log.SubmittedAt = DateTimeOffset.UtcNow;
+
+                    if (submitResult.Success)
+                    {
+                        response.Status = GeneratedResponseStatuses.Submitted;
+                        job.SuccessCount++;
+                    }
+                    else
+                    {
+                        response.Status = GeneratedResponseStatuses.Failed;
+                        job.FailedCount++;
+                    }
+
+                    // Preserve a returned result before attempting another external send, even after request cancellation.
+                    await SaveOutcomeAsync();
+                    pendingAttempt = null;
                 }
 
-                if (answers.Count == 0 || answers.Any(answer => string.IsNullOrWhiteSpace(answer.EntryId)))
+                await dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.Entry(job).ReloadAsync(cancellationToken);
+                if (job.Status is SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled)
                 {
-                    await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Generated response payload is missing required entry IDs.", cancellationToken);
-                    await dbContext.SaveChangesAsync(cancellationToken);
-                    throw new InvalidOperationException("Generated response payload is missing required entry IDs.");
+                    break;
                 }
-
-                var payload = answers.ToDictionary(answer => answer.EntryId, answer => answer.Values);
-                var submitResult = await googleFormsClient.SubmitAsync(project.FormActionUrl, payload, cancellationToken);
-
-                var log = new SubmissionLog
-                {
-                    Id = Guid.NewGuid(),
-                    JobId = job.Id,
-                    ResponseId = response.Id,
-                    PayloadJson = response.PayloadJson,
-                    Status = submitResult.Success ? SubmissionLogStatuses.Success : SubmissionLogStatuses.Failed,
-                    ErrorMessage = submitResult.ErrorMessage,
-                    SubmittedAt = DateTimeOffset.UtcNow
-                };
-
-                if (submitResult.Success)
-                {
-                    response.Status = GeneratedResponseStatuses.Submitted;
-                    job.SuccessCount++;
-                }
-                else
-                {
-                    response.Status = GeneratedResponseStatuses.Failed;
-                    job.FailedCount++;
-                }
-
-                logs.Add(log);
-                dbContext.SubmissionLogs.Add(log);
             }
 
+            if (job.Status == SubmissionJobStatuses.Running)
+            {
+                job.Status = job.FailedCount == 0 ? SubmissionJobStatuses.Completed : SubmissionJobStatuses.Failed;
+                job.FinishedAt = DateTimeOffset.UtcNow;
+            }
+
+            completionUsage = await WriteUsageLogAsync(
+                projectId,
+                job.Status == SubmissionJobStatuses.Completed ? UsageLogStatuses.Success : UsageLogStatuses.Failed,
+                DescribeOutcome(job),
+                cancellationToken);
+            AuditLogWriter.Add(dbContext, currentUser.UserId, "SubmitResponses", nameof(SubmissionJob), job.Id, new
+            {
+                projectId,
+                total = job.Total,
+                successCount = job.SuccessCount,
+                failedCount = job.FailedCount
+            });
             await dbContext.SaveChangesAsync(cancellationToken);
-            await dbContext.Entry(job).ReloadAsync(cancellationToken);
-            if (job.Status is SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled)
+
+            return job.ToResponse(logs);
+        }
+        catch (Exception exception)
+        {
+            exception.Data["SubmissionJobId"] = job.Id;
+            exception.Data["ProjectId"] = projectId;
+            if (pendingAttempt is not null)
             {
-                break;
+                exception.Data["SubmissionLogId"] = pendingAttempt.Id;
+                exception.Data["ResponseId"] = pendingAttempt.ResponseId;
+                if (!providerInvoked)
+                {
+                    pendingAttempt.ErrorMessage = "Lượt gửi chưa thực hiện vì không ghi nhận được lần gửi trước khi gọi Google Forms.";
+                }
             }
+
+            // Interruption stops this job; counts retain only confirmed provider results.
+            if (job.Status is not (SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled))
+            {
+                job.Status = SubmissionJobStatuses.Failed;
+                job.FinishedAt = DateTimeOffset.UtcNow;
+            }
+
+            var description =
+                $"Gửi form bị gián đoạn: đã xác nhận {job.SuccessCount} thành công, {job.FailedCount} thất bại. " +
+                (providerInvoked && pendingAttempt is not null && pendingAttempt.SubmittedAt is null
+                    ? "Kết quả lượt gửi cuối chưa xác định; hãy kiểm tra Google Forms trước khi gửi lại."
+                    : "Hãy kiểm tra kết quả đã ghi nhận trước khi gửi lại.");
+            if (completionUsage is null)
+            {
+                await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, description, CancellationToken.None);
+            }
+            else
+            {
+                // The completion save failed; update its tracked row rather than add a contradictory second outcome.
+                completionUsage.Status = UsageLogStatuses.Failed;
+                completionUsage.Description = description;
+            }
+            try
+            {
+                await SaveOutcomeAsync();
+            }
+            catch (Exception persistenceException)
+            {
+                throw new AggregateException("Submission interrupted and its final diagnostic record could not be saved.", exception, persistenceException);
+            }
+
+            throw;
         }
+    }
 
-        if (job.Status == SubmissionJobStatuses.Running)
+    private async Task SaveOutcomeAsync()
+    {
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        await dbContext.SaveChangesAsync(timeout.Token);
+    }
+
+    private static string DescribeOutcome(SubmissionJob job)
+    {
+        var outcome = job.Status switch
         {
-            job.Status = job.FailedCount == 0 ? SubmissionJobStatuses.Completed : SubmissionJobStatuses.Failed;
-            job.FinishedAt = DateTimeOffset.UtcNow;
-        }
-
-        await WriteUsageLogAsync(
-            projectId,
-            job.Status == SubmissionJobStatuses.Completed ? UsageLogStatuses.Success : UsageLogStatuses.Failed,
-            "Gửi form thành công",
-            cancellationToken);
-        AuditLogWriter.Add(dbContext, currentUser.UserId, "SubmitResponses", nameof(SubmissionJob), job.Id, new
-        {
-            projectId,
-            total = job.Total,
-            successCount = job.SuccessCount,
-            failedCount = job.FailedCount
-        });
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return job.ToResponse(logs);
+            SubmissionJobStatuses.Completed => "Gửi form thành công",
+            SubmissionJobStatuses.Paused => "Đã tạm dừng gửi form",
+            SubmissionJobStatuses.Cancelled => "Đã hủy gửi form",
+            _ when job.SuccessCount > 0 => "Gửi form hoàn tất một phần",
+            _ => "Gửi form thất bại"
+        };
+        return $"{outcome}: {job.SuccessCount} thành công, {job.FailedCount} thất bại trên tổng {job.Total} câu trả lời.";
     }
 
     public async Task<SubmissionJobResponse?> GetJobAsync(Guid projectId, Guid jobId, CancellationToken cancellationToken)
@@ -281,9 +360,9 @@ public sealed class SubmissionService(
         return job.ToResponse(logs);
     }
 
-    private Task WriteUsageLogAsync(Guid projectId, string status, string description, CancellationToken cancellationToken)
+    private Task<UsageLog> WriteUsageLogAsync(Guid projectId, string status, string description, CancellationToken cancellationToken)
     {
-        dbContext.UsageLogs.Add(new UsageLog
+        var log = new UsageLog
         {
             Id = Guid.NewGuid(),
             UserId = currentUser.UserId,
@@ -294,8 +373,9 @@ public sealed class SubmissionService(
             Description = description,
             ProjectId = projectId,
             CreatedAt = DateTimeOffset.UtcNow
-        });
+        };
+        dbContext.UsageLogs.Add(log);
 
-        return Task.CompletedTask;
+        return Task.FromResult(log);
     }
 }

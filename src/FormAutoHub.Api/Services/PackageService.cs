@@ -90,24 +90,33 @@ public sealed class PackageService(FormAutoHubDbContext dbContext, ICurrentUserC
 
     private static void ValidatePackageInput(string name, int credits, decimal price)
     {
+        if (GetValidationError(name, credits, price) is { } error)
+        {
+            throw new ArgumentException(error);
+        }
+    }
+
+    internal static string? GetValidationError(string name, int credits, decimal price)
+    {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new ArgumentException("Tên gói credit là bắt buộc.", nameof(name));
+            return "Tên gói credit là bắt buộc.";
         }
 
         if (credits <= 0)
         {
-            throw new ArgumentException("Số credit phải lớn hơn 0.", nameof(credits));
+            return "Số credit phải lớn hơn 0.";
         }
 
         if (price <= 0)
         {
-            throw new ArgumentException("Giá gói phải lớn hơn 0.", nameof(price));
+            return "Giá gói phải lớn hơn 0.";
         }
 
         if (price != decimal.Truncate(price))
         {
-            throw new ArgumentException("Giá PayOS phải là số VND nguyên.", nameof(price));
+            return "Giá PayOS phải là số VND nguyên.";
         }
+        return null;
     }
 }

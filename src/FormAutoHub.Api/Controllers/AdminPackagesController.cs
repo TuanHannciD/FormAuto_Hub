@@ -33,6 +33,10 @@ public sealed class AdminPackagesController(IPackageService packageService, ICur
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
+        if (PackageService.GetValidationError(request.Name, request.Credits, request.Price) is { } error)
+        {
+            return BadRequest(new ProblemDetails { Title = "Gói credit không hợp lệ", Detail = error });
+        }
         var response = await packageService.CreateAdminPackageAsync(request, cancellationToken);
         return Created($"/api/admin/packages/{response!.Id}", response);
     }
@@ -48,6 +52,10 @@ public sealed class AdminPackagesController(IPackageService packageService, ICur
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
+        if (PackageService.GetValidationError(request.Name, request.Credits, request.Price) is { } error)
+        {
+            return BadRequest(new ProblemDetails { Title = "Gói credit không hợp lệ", Detail = error });
+        }
         var response = await packageService.UpdateAdminPackageAsync(id, request, cancellationToken);
         return response is null ? NotFound() : Ok(response);
     }

@@ -43,7 +43,7 @@ public sealed class AiProviderSettingsService(
             return null;
         }
 
-        var provider = NormalizeRequiredText(request.Provider, "Provider is required.");
+        var provider = NormalizeRequiredText(request.Provider, "Vui lòng nhập nhà cung cấp AI.");
         var defaultModel = request.DefaultModel.Trim();
         var baseUrl = NormalizeOptionalBaseUrl(request.BaseUrl);
         ValidateDefaultModel(defaultModel);
@@ -67,7 +67,7 @@ public sealed class AiProviderSettingsService(
 
         if (request.IsEnabled && string.IsNullOrWhiteSpace(encryptedApiKey))
         {
-            throw new ArgumentException("API key is required before enabling AI provider settings.", nameof(request));
+            throw new ArgumentException("Vui lòng nhập khóa API trước khi bật nhà cung cấp AI.");
         }
 
         setting.Provider = provider;
@@ -100,7 +100,7 @@ public sealed class AiProviderSettingsService(
             {
                 Id = Guid.NewGuid(),
                 LastCheckStatus = AiProviderCheckStatuses.MissingConfiguration,
-                LastCheckMessage = "Missing configuration: provider, API key, and default model.",
+                LastCheckMessage = "Thiếu cấu hình: nhà cung cấp AI, khóa API và mô hình mặc định.",
                 LastCheckedAt = now,
                 CreatedAt = now,
                 UpdatedAt = now,
@@ -130,27 +130,27 @@ public sealed class AiProviderSettingsService(
         var missing = new List<string>();
         if (string.IsNullOrWhiteSpace(setting.Provider))
         {
-            missing.Add("provider");
+            missing.Add("nhà cung cấp AI");
         }
 
         if (string.IsNullOrWhiteSpace(setting.EncryptedApiKey))
         {
-            missing.Add("API key");
+            missing.Add("khóa API");
         }
 
         if (string.IsNullOrWhiteSpace(setting.DefaultModel))
         {
-            missing.Add("default model");
+            missing.Add("mô hình mặc định");
         }
 
         if (missing.Count > 0)
         {
-            return (AiProviderCheckStatuses.MissingConfiguration, $"Missing configuration: {string.Join(", ", missing)}.");
+            return (AiProviderCheckStatuses.MissingConfiguration, $"Thiếu cấu hình: {string.Join(", ", missing)}.");
         }
 
         try
         {
-            NormalizeRequiredText(setting.Provider, "Provider is required.");
+            NormalizeRequiredText(setting.Provider, "Vui lòng nhập nhà cung cấp AI.");
             ValidateDefaultModel(setting.DefaultModel.Trim());
         }
         catch (ArgumentException exception)
@@ -158,7 +158,7 @@ public sealed class AiProviderSettingsService(
             return (AiProviderCheckStatuses.InvalidConfiguration, exception.Message);
         }
 
-        return (AiProviderCheckStatuses.Ready, "AI provider configuration has the required local settings.");
+        return (AiProviderCheckStatuses.Ready, "Cấu hình AI đã có các thông tin cần thiết; chưa kiểm tra kết nối tới nhà cung cấp.");
     }
 
     private AiProviderSettingsResponse ToResponse(AiProviderSetting setting) =>
@@ -190,14 +190,14 @@ public sealed class AiProviderSettingsService(
             false,
             null,
             AiProviderCheckStatuses.NotChecked,
-            "AI provider settings have not been configured.",
+            "Chưa thiết lập nhà cung cấp AI.",
             null);
 
     private static string NormalizeRequiredText(string value, string message)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException(message, nameof(value));
+            throw new ArgumentException(message);
         }
 
         return value.Trim();
@@ -214,7 +214,7 @@ public sealed class AiProviderSettingsService(
         if (!Uri.TryCreate(normalized, UriKind.Absolute, out var uri) ||
             (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
         {
-            throw new ArgumentException("Base URL must be an absolute http or https URL.", nameof(value));
+            throw new ArgumentException("Địa chỉ nhà cung cấp phải là đường dẫn http hoặc https đầy đủ.");
         }
 
         return uri.ToString().TrimEnd('/');
@@ -224,7 +224,7 @@ public sealed class AiProviderSettingsService(
     {
         if (string.IsNullOrWhiteSpace(defaultModel))
         {
-            throw new ArgumentException("Default model is required.", nameof(defaultModel));
+            throw new ArgumentException("Vui lòng nhập mô hình AI mặc định.");
         }
     }
 

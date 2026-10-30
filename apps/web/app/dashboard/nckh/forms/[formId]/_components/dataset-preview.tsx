@@ -3,8 +3,11 @@ import { EmptyState } from "@/components/ui";
 import type { NckhDatasetListResponse } from "@/lib/api";
 import type { DatasetPreviewRow } from "../_types";
 
-export function DatasetPreview({ dataset }: { dataset: NckhDatasetListResponse | null }) {
-  if (!dataset || dataset.items.length === 0) {
+export function DatasetPreview({ dataset, isLoading = false, error }: { dataset: NckhDatasetListResponse | null; isLoading?: boolean; error?: string }) {
+  if (!dataset) {
+    return <div className="space-y-3"><h3 className="text-sm font-semibold">Bộ dữ liệu</h3><p role="status" className="text-sm text-muted-foreground">{isLoading ? "Đang tải bộ dữ liệu..." : error || "Chưa tải được bộ dữ liệu. Vui lòng thử tải lại dữ liệu."}</p></div>;
+  }
+  if (dataset.items.length === 0) {
     return (
       <div className="space-y-3">
         <h3 className="text-sm font-semibold">Bộ dữ liệu</h3>

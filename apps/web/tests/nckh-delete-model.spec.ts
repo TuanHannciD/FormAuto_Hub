@@ -10,7 +10,7 @@ const model = { id: modelId, formId, name: modelName, status: "Draft", formTitle
 type Options = { generated?: boolean; generatedLater?: boolean; invalidCount?: boolean; zero?: boolean; summaryFailure?: boolean; delaySummary?: Promise<void>; delayDelete?: Promise<void>; deleteStatus?: number; rename?: boolean; selected?: boolean };
 
 async function fixture(page: Page, options: Options = {}) {
-  const state = { deletes: [] as string[], reads: 0, failed: options.summaryFailure, deleted: false };
+  const state = { deletes: [] as string[], reads: 0, changed: false, failed: options.summaryFailure, deleted: false };
   await page.addInitScript(() => localStorage.setItem("formauto.auth.session", JSON.stringify({
     userId: "44444444-4444-4444-4444-444444444444", email: "delete-test@example.invalid", fullName: "Tester", role: "User",
     accessToken: "fixture-token", refreshToken: "fixture-refresh", accessTokenExpiresAt: new Date(Date.now() + 3600_000).toISOString(),
@@ -35,7 +35,7 @@ async function fixture(page: Page, options: Options = {}) {
         await route.fulfill({ status: 204 }); return;
       }
       state.reads++;
-      body = { ...model, name: options.rename && state.reads > 1 ? "Tên mới" : modelName, hasGeneratedForm: !!options.generated || (!!options.generatedLater && state.reads > 1) };
+      body = { ...model, name: options.rename && state.changed ? "Tên mới" : modelName, hasGeneratedForm: !!options.generated || (!!options.generatedLater && state.changed) };
     } else if (path.includes("/models/")) {
       const summary = url.searchParams.get("pageSize") === "1";
       if (summary) await options.delaySummary;
@@ -99,7 +99,13 @@ test("loading and partial GET failure block deletion; reload recovers", async ({
 
 test("renamed model at final check requires refreshed information and a new confirmation", async ({ page }) => {
   const { state, dialog, input, remove } = await fixture(page, { rename: true });
-  await input.fill(modelName); await remove.click();
+  // Arm the external change after the initial impact is loaded, irrespective of dev StrictMode reads.
+  await expect(input).toBeVisible();
+  await input.fill(modelName); await expect(remove).toBeEnabled();
+  const initialReads = state.reads;
+  state.changed = true;
+  await remove.click();
+  await expect.poll(() => state.reads).toBe(initialReads + 1);
   await expect(dialog.getByRole("alert")).toContainText("Mô hình đã thay đổi"); expect(state.deletes).toEqual([]);
   await expect(remove).toBeDisabled(); await dialog.getByRole("button", { name: "Tải lại thông tin" }).click();
   await input.fill(modelName); await expect(remove).toBeDisabled(); await input.fill("Tên mới"); await expect(remove).toBeEnabled();
@@ -113,7 +119,13 @@ test("existing generated-form restriction is explained and cannot be confirmed",
 
 test("form generated in another tab before final check prevents DELETE", async ({ page }) => {
   const { state, dialog, input, remove } = await fixture(page, { generatedLater: true });
-  await input.fill(modelName); await remove.click();
+  // Arm the external change after the initial impact is loaded, irrespective of dev StrictMode reads.
+  await expect(input).toBeVisible();
+  await input.fill(modelName); await expect(remove).toBeEnabled();
+  const initialReads = state.reads;
+  state.changed = true;
+  await remove.click();
+  await expect.poll(() => state.reads).toBe(initialReads + 1);
   await expect(dialog.getByRole("alert")).toContainText("Mô hình đã thay đổi"); expect(state.deletes).toEqual([]);
   await dialog.getByRole("button", { name: "Tải lại thông tin" }).click();
   await expect(dialog.getByText(/Mô hình đã sinh form mới/)).toBeVisible(); await expect(remove).toBeDisabled();
@@ -121,7 +133,8 @@ test("form generated in another tab before final check prevents DELETE", async (
 
 test("malformed count never permits confirmation", async ({ page }) => {
   const { state, dialog, remove } = await fixture(page, { invalidCount: true });
-  await expect(dialog.getByRole("alert")).toContainText("Không xác định được đầy đủ");
+  await expect(dialog.getByRole("alert")).toContainText("Không tải được dữ liệu bị ảnh hưởng");
+  await expect(dialog.getByRole("button", { name: "Tải lại thông tin" })).toBeVisible();
   await expect(remove).toBeDisabled(); expect(state.deletes).toEqual([]);
 });
 

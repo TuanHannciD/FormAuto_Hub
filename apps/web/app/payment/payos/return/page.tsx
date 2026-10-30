@@ -76,7 +76,7 @@ function PaymentResultShell({
           </CardHeader>
           <CardContent className="space-y-4">
             <Alert>
-              Credit không được cộng từ trang này. Hệ thống chỉ cập nhật số dư sau khi backend nhận và xác minh webhook PayOS hợp lệ.
+              Số dư sẽ cập nhật sau khi hệ thống xác minh thanh toán. Bạn có thể xem kết quả trong lịch sử nạp.
             </Alert>
             <div className="grid gap-3 text-sm">
               <KeyValueRow label="Mã giao dịch PayOS" value={orderCode || "Chưa có"} />

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace FormAutoHub.Api.Services;
@@ -11,7 +12,7 @@ public interface IPayosClient
         CancellationToken cancellationToken);
 }
 
-public sealed class PayosClient(HttpClient httpClient) : IPayosClient
+public sealed class PayosClient(HttpClient httpClient, ILogger<PayosClient>? logger = null) : IPayosClient
 {
     public async Task<PayosPaymentLinkResult> CreatePaymentLinkAsync(
         PayosPaymentLinkRequest request,
@@ -31,18 +32,28 @@ public sealed class PayosClient(HttpClient httpClient) : IPayosClient
             signature = request.Signature
         });
 
-        var response = await httpClient.SendAsync(message, cancellationToken);
-        var responseText = await response.Content.ReadAsStringAsync(cancellationToken);
+        using var response = await httpClient.SendAsync(message, cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
-            return PayosPaymentLinkResult.Failed($"PayOS trả HTTP {(int)response.StatusCode}: {responseText}");
+            logger?.LogWarning("PayOS CreatePaymentLink failed with HTTP {StatusCode}", (int)response.StatusCode);
+            return PayosPaymentLinkResult.Failed("Chưa tạo được liên kết thanh toán PayOS. Vui lòng thử lại sau.");
         }
 
-        var body = await response.Content.ReadFromJsonAsync<PayosPaymentLinkApiResponse>(cancellationToken);
+        PayosPaymentLinkApiResponse? body;
+        try
+        {
+            body = await response.Content.ReadFromJsonAsync<PayosPaymentLinkApiResponse>(cancellationToken);
+        }
+        catch (JsonException)
+        {
+            logger?.LogWarning("PayOS CreatePaymentLink returned invalid JSON with HTTP {StatusCode}", (int)response.StatusCode);
+            return PayosPaymentLinkResult.Failed("PayOS trả thông tin thanh toán không hợp lệ. Vui lòng thử lại sau.");
+        }
         var data = body?.Data;
         if (data is null || string.IsNullOrWhiteSpace(data.CheckoutUrl))
         {
-            return PayosPaymentLinkResult.Failed($"PayOS không trả checkout URL. Response: {responseText}");
+            logger?.LogWarning("PayOS CreatePaymentLink returned no checkout URL with HTTP {StatusCode}", (int)response.StatusCode);
+            return PayosPaymentLinkResult.Failed("PayOS chưa trả liên kết thanh toán. Vui lòng thử lại sau.");
         }
 
         return PayosPaymentLinkResult.Succeeded(data.PaymentLinkId ?? string.Empty, data.CheckoutUrl);

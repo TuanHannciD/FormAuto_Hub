@@ -57,7 +57,7 @@ public sealed class AiAnalyticsService(
             {
                 r.Id, r.Mode, r.Status, r.Provider, r.Model,
                 r.RequestedCount, r.GeneratedCount, r.CreditsUsed,
-                r.StartedAt, r.CompletedAt, r.CreatedAt,
+                r.StartedAt, r.CompletedAt, r.CreatedAt, r.ErrorMessage,
                 ProjectName = r.Project != null ? r.Project.Name : null
             })
             .ToListAsync(cancellationToken);
@@ -70,7 +70,8 @@ public sealed class AiAnalyticsService(
                     ? (long?)(r.CompletedAt.Value - r.StartedAt.Value).TotalMilliseconds
                     : null,
                 r.CreatedAt,
-                r.ProjectName))
+                r.ProjectName,
+                AiGenerationErrorMessages.ToPublicMessage(r.Status, r.ErrorMessage)))
             .ToList();
 
         // Daily usage: materialize raw data first, group in memory
@@ -176,7 +177,7 @@ public sealed class AiAnalyticsService(
             {
                 r.Id, r.Mode, r.Status, r.Provider, r.Model,
                 r.RequestedCount, r.GeneratedCount, r.CreditsUsed,
-                r.StartedAt, r.CompletedAt, r.CreatedAt,
+                r.StartedAt, r.CompletedAt, r.CreatedAt, r.ErrorMessage,
                 ProjectName = r.Project != null ? r.Project.Name : null
             })
             .ToListAsync(cancellationToken);
@@ -189,7 +190,8 @@ public sealed class AiAnalyticsService(
                     ? (long?)(r.CompletedAt.Value - r.StartedAt.Value).TotalMilliseconds
                     : null,
                 r.CreatedAt,
-                r.ProjectName))
+                r.ProjectName,
+                AiGenerationErrorMessages.ToPublicMessage(r.Status, r.ErrorMessage)))
             .ToList();
 
         // Daily usage: materialize raw data first, group in memory
@@ -252,7 +254,7 @@ public sealed class AiAnalyticsService(
             {
                 r.Id, r.Mode, r.Status, r.Provider, r.Model,
                 r.RequestedCount, r.GeneratedCount, r.CreditsUsed,
-                r.StartedAt, r.CompletedAt, r.CreatedAt,
+                r.StartedAt, r.CompletedAt, r.CreatedAt, r.ErrorMessage,
                 ProjectName = r.Project != null ? r.Project.Name : null
             })
             .ToListAsync(cancellationToken);
@@ -265,7 +267,8 @@ public sealed class AiAnalyticsService(
                     ? (long?)(r.CompletedAt.Value - r.StartedAt.Value).TotalMilliseconds
                     : null,
                 r.CreatedAt,
-                r.ProjectName))
+                r.ProjectName,
+                AiGenerationErrorMessages.ToPublicMessage(r.Status, r.ErrorMessage)))
             .ToList();
 
         return new PagedAiRunResponse(items, page, pageSize, totalItems, totalPages);

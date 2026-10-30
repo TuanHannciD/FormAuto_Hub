@@ -106,7 +106,7 @@ test("changing form URL clears previous analysis even when the next analysis fai
   await expect(page.getByRole("button", { name: "Có", exact: true })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
-  await expect(page.locator("[data-sonner-toast]").filter({ hasText: "Không phân tích" })).toBeVisible();
+  await expect(page.locator("[data-sonner-toast]").filter({ hasText: "Thông tin chưa hợp lệ. Vui lòng kiểm tra lại." })).toBeVisible();
   await expect(page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true })).toHaveCount(0);
 });
 

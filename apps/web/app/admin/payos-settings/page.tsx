@@ -11,6 +11,7 @@ import { toast } from "sonner";
 
 export default function PayosSettingsPage() {
   const [settings, setSettings] = useState<PayosProviderSettings | null>(null);
+  const [checkResult, setCheckResult] = useState<CheckPayosProviderSettingsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [clientId, setClientId] = useState("");
@@ -20,6 +21,7 @@ export default function PayosSettingsPage() {
   const [cancelUrl, setCancelUrl] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const [publicOrigin, setPublicOrigin] = useState("");
+  const [copyError, setCopyError] = useState(false);
 
   const webhookUrl = publicOrigin ? `${publicOrigin}/api/payments/payos/webhook` : "/api/payments/payos/webhook";
 
@@ -60,16 +62,25 @@ export default function PayosSettingsPage() {
   async function check() {
     try {
       const result = await apiFetch<CheckPayosProviderSettingsResponse>("/api/admin/payment-providers/payos/check", { method: "POST" });
-      toast.info(result.message);
-      await loadData();
+      setCheckResult(result);
+      setSettings(current => current ? { ...current, lastCheckStatus: result.status, lastCheckedAt: result.checkedAt, lastCheckMessage: configurationCheckMessage(result.status) } : current);
+      toast.info(configurationCheckMessage(result.status));
+      await loadData().catch(() => { /* Preserve the confirmed check result; loadData reports its read error. */ });
     } catch (error) {
       showError(error, "Không kiểm tra được cấu hình PayOS.");
     }
   }
 
   async function copyWebhookUrl() {
-    await navigator.clipboard.writeText(webhookUrl);
-    toast.success("Đã sao chép webhook URL để cấu hình trong PayOS dashboard.");
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(webhookUrl);
+      setCopyError(false);
+      toast.success("Đã sao chép webhook URL để cấu hình trong PayOS dashboard.");
+    } catch {
+      setCopyError(true);
+      toast.error("Không sao chép được. Hãy chọn đường dẫn bên dưới và sao chép thủ công.");
+    }
   }
 
   return (
@@ -85,6 +96,7 @@ export default function PayosSettingsPage() {
         </Button>
         }
       />
+      {checkResult && <Alert role="status">{configurationCheckMessage(checkResult.status)} Thời điểm kiểm tra: {formatDate(checkResult.checkedAt)}.</Alert>}
       {loadError && <Alert>Không tải được cấu hình PayOS. Bấm “Làm mới” để thử lại.</Alert>}
       {loading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình PayOS...</p>}
       <div className="space-y-2">
@@ -161,7 +173,8 @@ export default function PayosSettingsPage() {
                     <span className="ml-2">Sao chép</span>
                   </Button>
                 </div>
-                <Input aria-label="Webhook URL" className="mt-3 bg-surface font-mono text-xs" readOnly value={webhookUrl} />
+                <Input aria-label="Webhook URL" className="mt-3 bg-surface font-mono text-xs" readOnly value={webhookUrl} onFocus={event => event.target.select()} />
+                {copyError && <p className="mt-2 text-sm">Chọn đường dẫn trong ô trên để sao chép thủ công.</p>}
               </div>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button disabled={loading || loadError} type="submit">
@@ -178,6 +191,7 @@ export default function PayosSettingsPage() {
               <CardTitle>Kiểm tra cấu hình</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
+              <p className="text-muted-foreground">Chỉ kiểm tra thông tin đã lưu, chưa kiểm tra kết nối tới PayOS.</p>
               <CheckRow label="Có Client ID" ok={Boolean(clientId)} />
               <CheckRow label="Có API key" ok={Boolean(settings?.hasApiKey || apiKey)} />
               <CheckRow label="Có Checksum key" ok={Boolean(settings?.hasChecksumKey || checksumKey)} />
@@ -199,7 +213,7 @@ export default function PayosSettingsPage() {
             <Detail label="Đã có checksum key" value={settings?.hasChecksumKey ? "Có" : "Chưa"} />
             <Detail label="Đang bật" value={settings?.isEnabled ? "Có" : "Chưa"} />
             <Detail label="Lần kiểm tra gần nhất" value={settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"} />
-            <Detail label="Kết quả kiểm tra" value={settings?.lastCheckMessage || "Chưa có"} />
+            <Detail label="Kết quả kiểm tra" value={configurationCheckMessage(settings?.lastCheckStatus)} />
           </CardContent>
         </Card>
           <Card className="min-w-0">
@@ -226,6 +240,13 @@ export default function PayosSettingsPage() {
       </div>
     </div>
   );
+}
+
+function configurationCheckMessage(status?: string) {
+  if (status === "Ready") return "Cấu hình PayOS đã đủ thông tin; chưa kiểm tra kết nối tới nhà cung cấp.";
+  if (status === "MissingConfiguration") return "Thiếu thông tin cấu hình PayOS. Hãy kiểm tra các trường bắt buộc.";
+  if (status === "InvalidConfiguration") return "Cấu hình PayOS không hợp lệ. Hãy kiểm tra thông tin đã lưu.";
+  return "Chưa có kết quả kiểm tra cấu hình PayOS.";
 }
 
 function Detail({

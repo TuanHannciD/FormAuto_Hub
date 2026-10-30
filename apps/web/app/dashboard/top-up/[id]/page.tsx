@@ -4,33 +4,49 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TopupOrderDetailDialog } from "../_components/topup-order-detail";
-import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui";
-import { apiFetch, apiFetchBlob, type TopupOrder } from "@/lib/api";
+import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui";
+import { ApiError, apiFetch, apiFetchBlob, type TopupOrder } from "@/lib/api";
 import { showError } from "@/lib/toast";
 
 export default function TopUpOrderDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const [order, setOrder] = useState<TopupOrder | null>(null);
+  const [loadedOrder, setOrder] = useState<TopupOrder | null>(null);
   const [evidenceUrl, setEvidenceUrl] = useState<string | null>(null);
   const [evidenceError, setEvidenceError] = useState(false);
   const [isMissing, setIsMissing] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [loadedId, setLoadedId] = useState(params.id);
+  const [retry, setRetry] = useState(0);
+  const currentRequest = loadedId === params.id;
+  const order = currentRequest ? loadedOrder : null;
 
   function closeDialog() {
     router.push("/dashboard/top-up");
   }
 
   useEffect(() => {
-    apiFetch<TopupOrder>(`/api/topup-orders/${params.id}`)
+    let cancelled = false;
+    const controller = new AbortController();
+    setLoadedId(params.id);
+    setOrder(null);
+    setIsMissing(false);
+    setLoadError(false);
+    apiFetch<TopupOrder>(`/api/topup-orders/${params.id}`, { signal: controller.signal })
       .then((data) => {
+        if (cancelled) return;
         setOrder(data);
         setIsMissing(false);
       })
       .catch((error) => {
-        setIsMissing(true);
-        showError(error, "Không tải được chi tiết yêu cầu nạp.");
+        if (cancelled) return;
+        const missing = error instanceof ApiError && error.status === 404;
+        setIsMissing(missing);
+        setLoadError(!missing);
+        if (!missing) showError(error, "Không tải được chi tiết yêu cầu nạp.");
       });
-  }, [params.id]);
+    return () => { cancelled = true; controller.abort(); };
+  }, [params.id, retry]);
 
   useEffect(() => {
     setEvidenceUrl(null); setEvidenceError(false);
@@ -61,7 +77,7 @@ export default function TopUpOrderDetailPage() {
     };
   }, [order?.evidenceFileId]);
 
-  if (isMissing) {
+  if (currentRequest && isMissing) {
     return (
       <Dialog open className="max-w-3xl" onOpenChange={(open) => !open && closeDialog()}>
         <DialogContent>
@@ -75,6 +91,21 @@ export default function TopUpOrderDetailPage() {
         </DialogContent>
       </Dialog>
     );
+  }
+
+  if (currentRequest && loadError) {
+    return <Dialog open className="max-w-3xl" onOpenChange={open => !open && closeDialog()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Chi tiết yêu cầu nạp</DialogTitle>
+          <DialogDescription>Không tải được chi tiết yêu cầu nạp.</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button type="button" onClick={() => setRetry(value => value + 1)}>Thử lại</Button>
+          <DialogClose>Đóng</DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>;
   }
 
   if (!order) {

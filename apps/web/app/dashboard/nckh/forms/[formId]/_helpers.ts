@@ -1,6 +1,8 @@
 import type { DropdownOption } from "@/components/dropdown-select";
 import { displayStatus } from "@/lib/labels";
 import { readableError } from "@/lib/toast";
+import { ApiError } from "@/lib/api";
+import { NckhGoogleAuthorizationError } from "@/lib/nckh-google-auth";
 import {
   nckhStatusLabels,
   questionTypeLabels,
@@ -72,45 +74,24 @@ export function filterDropdownOptions(options: DropdownOption[], searchValue: st
 }
 
 export function readableNckhError(error: unknown, fallback: string) {
-  const message = readableError(error, fallback);
-  const lower = message.toLowerCase();
-  if (lower.includes("variable code") && lower.includes("already exists")) {
-    return "Mã biến đã tồn tại trong mô hình này.";
-  }
-  if (lower.includes("scale type is invalid")) {
-    return "Loại thang đo không hợp lệ theo contract NCKH hiện tại.";
-  }
-  if (lower.includes("likert scalepoint")) {
-    return "Điểm thang Likert phải nằm trong khoảng 2 đến 10.";
-  }
-  if (lower.includes("scale scaletype requires minvalue and maxvalue")) {
-    return "Thang tuyến tính cần đủ giá trị nhỏ nhất và lớn nhất.";
-  }
-  if (lower.includes("scale scaletype must not include scalepoint")) {
-    return "Thang tuyến tính không dùng trường điểm thang đo.";
-  }
-  if (lower.includes("minvalue") && lower.includes("maxvalue")) {
-    return "Giá trị nhỏ nhất và lớn nhất của thang đo chưa hợp lệ.";
-  }
-  if (lower.includes("nominal and ordinal")) {
-    return "Thang định danh và thứ bậc không dùng điểm thang đo hoặc min/max.";
-  }
-  if (lower.includes("scope") || lower.includes("consent") || lower.includes("permission") || lower.includes("forbidden") || lower.includes("403")) {
-    return "Tài khoản Google chưa cấp đủ quyền cần thiết cho thao tác này.";
-  }
-  if (lower.includes("unauthorized") || lower.includes("not linked") || lower.includes("401")) {
+  if (error instanceof NckhGoogleAuthorizationError) {
     return "Bạn cần liên kết lại tài khoản Google trước khi tiếp tục.";
   }
-  if (lower.includes("conflict") || lower.includes("409") || lower.includes("stale")) {
-    return "Dữ liệu hiện tại không còn đồng bộ. Hãy tải lại hoặc chuẩn hóa lại trước khi tiếp tục.";
+  if (error instanceof ApiError && error.path.startsWith("/api/v1/nckh/")) {
+    if (error.status === 400 && error.method === "POST" && error.path === "/api/v1/nckh/forms/import") {
+      return "Chưa nhập được biểu mẫu. Vui lòng kiểm tra liên kết Google Form và quyền truy cập biểu mẫu.";
+    }
+    if (error.status === 409 && error.path === "/api/v1/nckh/forms/import") {
+      return "Chưa nhập được biểu mẫu. Hãy kiểm tra danh sách biểu mẫu đã nhập trước khi thử lại.";
+    }
+    if (error.status === 409 && /\/models\/[^/]+\/relations$/.test(error.path)) {
+      return "Chưa thêm được quan hệ. Hãy kiểm tra các quan hệ đã có trong mô hình.";
+    }
+    if (error.status === 409 && /\/models\/[^/]+\/export$/.test(error.path)) {
+      return "Chưa xuất được dữ liệu. Hãy kiểm tra bộ dữ liệu và chuẩn hóa lại nếu dữ liệu đã cũ.";
+    }
   }
-  if (lower.includes("not found") || lower.includes("404")) {
-    return "Không tìm thấy dữ liệu NCKH cần thao tác.";
-  }
-  if (lower.includes("invalid") || lower.includes("expired")) {
-    return "Dữ liệu gửi lên chưa hợp lệ. Vui lòng kiểm tra lại các trường trong form.";
-  }
-  return /[à-ỹđ]/i.test(message) ? message : fallback;
+  return readableError(error, fallback);
 }
 
 function toOptionalNumber(value: string) {
@@ -146,5 +127,5 @@ export function buildVariableScalePayload(scaleType: string, scalePointValue: st
     return { scalePoint: null, minValue: null, maxValue: null };
   }
 
-  return { error: "Loại thang đo không hợp lệ theo contract NCKH hiện tại." };
+  return { error: "Loại thang đo chưa hợp lệ. Vui lòng chọn lại thang đo." };
 }

@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Loader2, CircleAlert } from "lucide-react";
 import { AuthShell, AuthHeading } from "@/components/auth-shell";
-import { apiFetch, type AuthTokenResponse } from "@/lib/api";
+import { ApiError, apiFetch, type AuthTokenResponse } from "@/lib/api";
 import { saveSession } from "@/lib/auth";
 import { toast } from "sonner";
 
@@ -55,17 +55,19 @@ function AuthCallbackContent() {
         saveSession(session);
         router.replace("/dashboard");
       })
-      .catch((error: Error) => {
-        if (error.message.includes("409") || error.message.toLowerCase().includes("password")) {
+      .catch((error: unknown) => {
+        const googleLoginError = error instanceof ApiError && error.kind === "http"
+          && error.method === "POST" && error.path === "/api/auth/google";
+        if (googleLoginError && error.status === 409) {
           const text = "Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.";
           setMessage(text);
           toast.error(text);
-        } else if (error.message.includes("401")) {
+        } else if (googleLoginError && error.status === 401) {
           const text = "Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.";
           setMessage(text);
           toast.error(text);
         } else {
-          const text = "Không thể liên kết tài khoản Google với tài khoản hiện tại.";
+          const text = "Không thể hoàn tất đăng nhập bằng Google. Vui lòng thử lại.";
           setMessage(text);
           toast.error(text);
         }

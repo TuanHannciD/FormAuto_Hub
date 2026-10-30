@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import type { ComponentType, FormEvent } from "react";
 import { AlertCircle, Bot, CheckCircle2, Clock3, KeyRound, RefreshCw, Save, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
-import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AiProviderSettings, type CheckAiProviderSettingsResponse } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { cn, formatDate } from "@/lib/utils";
@@ -12,6 +11,7 @@ import { toast } from "sonner";
 
 export default function AiProviderSettingsPage() {
   const [settings, setSettings] = useState<AiProviderSettings | null>(null);
+  const [checkResult, setCheckResult] = useState<CheckAiProviderSettingsResponse | null>(null);
   const [provider, setProvider] = useState("OpenAI");
   const [baseUrl, setBaseUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
@@ -73,8 +73,10 @@ export default function AiProviderSettingsPage() {
 
     try {
       const result = await apiFetch<CheckAiProviderSettingsResponse>("/api/admin/ai-provider-settings/check", { method: "POST" });
-      toast.info(result.message);
-      await loadData();
+      setCheckResult(result);
+      setSettings(current => current ? { ...current, lastCheckStatus: result.status, lastCheckedAt: result.checkedAt, lastCheckMessage: configurationCheckMessage(result.status) } : current);
+      toast.info(configurationCheckMessage(result.status));
+      await loadData().catch(() => { /* Preserve the confirmed check result; loadData reports its read error. */ });
     } catch (error) {
       showError(error, "Không kiểm tra được cấu hình AI.");
     } finally {
@@ -90,8 +92,8 @@ export default function AiProviderSettingsPage() {
     <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Cấu hình AI"
-        title="Cấu hình Provider AI"
-        description="Quản lý provider, model mặc định và API key server-side cho các luồng AI preview."
+        title="Cấu hình nhà cung cấp AI"
+        description="Quản lý nhà cung cấp, mô hình mặc định và khóa API cho việc tạo câu trả lời xem trước."
         actions={
           <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => showError(error, "Không tải được cấu hình AI."))}>
             <RefreshCw size={16} />
@@ -100,14 +102,15 @@ export default function AiProviderSettingsPage() {
         }
       />
 
+      {checkResult && <Alert role="status">{configurationCheckMessage(checkResult.status)} Thời điểm kiểm tra: {formatDate(checkResult.checkedAt)}.</Alert>}
       {loadError && <Alert>Không tải được cấu hình AI. Bấm “Làm mới” để thử lại.</Alert>}
       {isLoading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình AI...</p>}
       <div className="space-y-2">
       <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
-        API key thật không được trả về frontend. Nếu để trống API key khi lưu, backend sẽ giữ key hiện có.
+        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có.
       </Alert>
       <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
-        Provider, model và API endpoint do admin nhập, được lưu server-side và không cho normal user tự quyết khi generate. Kiểm tra cấu hình không tạo preview, không trừ credit và không gọi luồng submit.
+        Quản trị viên thiết lập nhà cung cấp, mô hình và địa chỉ API. Kiểm tra cấu hình chỉ kiểm tra thông tin đã lưu, chưa kiểm tra kết nối tới nhà cung cấp; không tạo câu trả lời hoặc trừ credit.
       </Alert>
       </div>
 
@@ -238,10 +241,10 @@ export default function AiProviderSettingsPage() {
               <div className="rounded-xl border border-border bg-surface-subtle p-3">
                 <p className="text-xs text-muted-foreground">Kết quả kiểm tra</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <StatusBadge status={settings?.lastCheckStatus || "NotChecked"} />
+                  <span className="text-sm font-medium">{settings?.lastCheckStatus === "Ready" ? "Đủ thông tin cấu hình" : settings?.lastCheckStatus === "MissingConfiguration" ? "Thiếu cấu hình" : settings?.lastCheckStatus === "InvalidConfiguration" ? "Cấu hình không hợp lệ" : "Chưa kiểm tra"}</span>
                   <span className="text-sm text-muted-foreground">{settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"}</span>
                 </div>
-                <p className="mt-2 text-sm">{settings?.lastCheckMessage || "Chưa có dữ liệu."}</p>
+                <p className="mt-2 text-sm">{configurationCheckMessage(settings?.lastCheckStatus)}</p>
               </div>
             </CardContent>
           </Card>
@@ -274,7 +277,7 @@ export default function AiProviderSettingsPage() {
             <CardContent className="space-y-3 text-sm">
               <p className="text-muted-foreground">Cập nhật gần nhất</p>
               <p className="font-medium">{settings?.updatedAt ? formatDate(settings.updatedAt) : "Chưa có dữ liệu"}</p>
-              <p className="text-xs text-muted-foreground">Raw provider request/response thuộc AI audit và không hiển thị ở trang này.</p>
+              <p className="text-xs text-muted-foreground">Chỉ hiển thị cấu hình đã lưu và thời điểm cập nhật; khóa API được giữ ẩn.</p>
             </CardContent>
           </Card>
         </div>
@@ -290,6 +293,13 @@ function isHttpUrl(value: string) {
   } catch {
     return false;
   }
+}
+
+function configurationCheckMessage(status?: string) {
+  if (status === "Ready") return "Cấu hình AI đã đủ thông tin; chưa kiểm tra kết nối tới nhà cung cấp.";
+  if (status === "MissingConfiguration") return "Thiếu thông tin cấu hình AI. Hãy kiểm tra các trường bắt buộc.";
+  if (status === "InvalidConfiguration") return "Cấu hình AI không hợp lệ. Hãy kiểm tra thông tin đã lưu.";
+  return "Chưa có kết quả kiểm tra cấu hình AI.";
 }
 
 function Detail({
