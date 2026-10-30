@@ -1,0 +1,70 @@
+{
+  "utc": "2026-10-30T00:47:26.357530+00:00",
+  "counters": {
+    "total": "7",
+    "executed": "7",
+    "passed": "0",
+    "failed": "7",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "redVerified": true,
+  "compileErrors": 0,
+  "results": [
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.MalformedAssistantContent_ThrowsSafeFailureInsteadOfReturningZeroOutputs(content: \"\")",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: No exception was thrown\r\nExpected: typeof(System.FormatException)"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.ProviderLogs_ExcludePayloadsAndSecretsWhilePreservingBoundedContext(status: OK)",
+      "outcome": "Failed",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                                ↓ (pos 64)\r\nString: ···\".invalid/v1?private=synthetic-person@exam\"···\r\nFound:  \"synthetic-person\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.ProviderLogs_ExcludePayloadsAndSecretsWhilePreservingBoundedContext(status: ServiceUnavailable)",
+      "outcome": "Failed",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                                ↓ (pos 64)\r\nString: ···\".invalid/v1?private=synthetic-person@exam\"···\r\nFound:  \"synthetic-person\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.MalformedAssistantContent_ThrowsSafeFailureInsteadOfReturningZeroOutputs(content: \"{\\\"unrelated\\\":true}\")",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: No exception was thrown\r\nExpected: typeof(System.FormatException)"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.ParallelBatchFailure_PreservesRunBatchDiagnosticsAndSafePersistedCauseWithoutDebit",
+      "outcome": "Failed",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Kết quả đầu ra của AI không chứa bất kỳ p\"···\r\nNot found: \"định dạng\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.MalformedAssistantContent_ThrowsSafeFailureInsteadOfReturningZeroOutputs(content: \"not json synthetic-private-content\")",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: No exception was thrown\r\nExpected: typeof(System.FormatException)"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrAiDiagnosticsTests.MalformedAssistantContent_ThrowsSafeFailureInsteadOfReturningZeroOutputs(content: \"{\\\"answers\\\":[\")",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: No exception was thrown\r\nExpected: typeof(System.FormatException)"
+    }
+  ],
+  "sourceHashesAfter": [
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrAiDiagnosticsTests.cs",
+      "sha256": "275976ec600649b190f890d892da9144e3a2c18602a7282d3d45bbc0804540ae"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+      "sha256": "6c0d38848ff6993b4a96aa5c45312a1a779a03174d8cc9485a524b096abaa61b"
+    }
+  ]
+}

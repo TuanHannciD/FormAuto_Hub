@@ -1,0 +1,64 @@
+{
+  "utc": "2026-10-29T19:45:23.043080+00:00",
+  "status": "Verified",
+  "database": "FormAutoHub_FAHERR001_restore_20261029_a19f7a2",
+  "apiSha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+  "observations": [
+    {
+      "id": "EVIDENCE-01-UPLOAD",
+      "method": "POST",
+      "path": "/api/topup-orders/evidence",
+      "status": 200,
+      "verified": true,
+      "inputFilenameCodeUnits": 244,
+      "storedFilenameCodeUnits": 200,
+      "contentType": "image/png",
+      "contentBytes": 68,
+      "role": "User"
+    },
+    {
+      "id": "EVIDENCE-02-DOWNLOAD",
+      "method": "GET",
+      "status": 200,
+      "verified": true,
+      "bytesEqual": true,
+      "sha256": "a1707e8cb01f055aa359efc70289774c6faa146dd3d4e424acd576fe5202ddbf",
+      "contentType": "image/png",
+      "cacheControl": "no-store",
+      "xContentTypeOptions": "nosniff"
+    },
+    {
+      "id": "EVIDENCE-03-INVALID-TYPE",
+      "method": "POST",
+      "path": "/api/topup-orders/evidence",
+      "status": 400,
+      "verified": true,
+      "safeTitle": "Chỉ nhận ảnh PNG, JPEG hoặc WebP."
+    },
+    {
+      "id": "EVIDENCE-04-EMPTY",
+      "method": "POST",
+      "path": "/api/topup-orders/evidence",
+      "status": 400,
+      "verified": true,
+      "safeTitle": "Ảnh minh chứng tối đa 5 MB và không được rỗng."
+    }
+  ],
+  "safeSqlColumns1": [
+    "evidenceRows",
+    "filenameBytes",
+    "mimeBytes",
+    "pngType",
+    "contentBytes",
+    "unattached"
+  ],
+  "safeSqlColumns2": [
+    "topupOrders",
+    "accounts",
+    "registrationCreditTransactions"
+  ],
+  "sqlAggregate": "1|400|18|1|68|1\n0|1|1",
+  "downloadSha256": "a1707e8cb01f055aa359efc70289774c6faa146dd3d4e424acd576fe5202ddbf",
+  "mainMutated": false,
+  "fixtureRegistrationThroughCreditService": true
+}

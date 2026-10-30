@@ -1,0 +1,52 @@
+{
+  "counts": {
+    "executed": 8,
+    "passed": 2,
+    "failed": 6
+  },
+  "recordedAfterWorkerReleaseUtc": "2026-10-30T07:17:55.1547053Z",
+  "hashDrift": [],
+  "tests": [
+    {
+      "title": "ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert').filter({ hasText: 'Không tải được cấu hình AI' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert').filter({ hasText: 'Không tải được cấu hình AI' })\u001b[22m\n"
+    },
+    {
+      "title": "ERR014 known absent profile permits a new profile with defaults",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "ERR014 pending profile read locks competing mode/project changes; next mode owns its profile",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status').filter({ hasText: 'Đã tạo 1/1' })\nExpected substring: \u001b[32m\"Đã trừ 2 credit\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status').filter({ hasText: 'Đã tạo 1/1' })\u001b[22m\n"
+    },
+    {
+      "title": "ERR011 generation shows safe failure and run ID: known",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Mã lượt AI: run-fixture-15', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Mã lượt AI: run-fixture-15', { exact: true })\u001b[22m\n"
+    },
+    {
+      "title": "ERR011 generation shows safe failure and run ID: unknown",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Mã lượt AI: run-fixture-15', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Mã lượt AI: run-fixture-15', { exact: true })\u001b[22m\n"
+    },
+    {
+      "title": "ERR011 AI usage exposes safe reason and existing run ID without raw historical text",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Bảng dữ liệu' })\nExpected substring: \u001b[32m\"recent-run-0\"\u001b[39m\nReceived string:    \u001b[31m\"Thời gianChế độKết quảProviderĐã tạoCreditThời gian07:00 30/10/26Option 2Thất bạifixture / fixture0/101ms07:00 30/10/26Option 2Thất bạifixture / fixture0/101ms\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Bảng dữ liệu' })\u001b[22m\n\u001b[2m    13 × locator resolved to <div tabindex=\"0\" role=\"region\" aria-label=\"Bảng dữ liệu\" class=\"hidden min-w-0 overflow-x-auto rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:block\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"Thời gianChế độKết quảProviderĐã tạoCreditThời gian07:00 30/10/26Option 2Thất bạifixture / fixture0/101ms07:00 30/10/26Option 2Thất bạifixture / fixture0/101ms\"\u001b[22m\n"
+    },
+    {
+      "title": "ERR023 submission details retain IDs and uncertainty without inviting resend",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('job-uncertain-23')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('job-uncertain-23')\u001b[22m\n"
+    }
+  ],
+  "limit": "Mocked API only; source writers released after runner completion, any later hash drift cannot imply drift during run; no actual API/SQL/provider evidence."
+}

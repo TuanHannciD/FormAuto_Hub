@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-29T07:45:50.086Z",
+  "level": "mocked units/components; JSX object tree and manual hook state, not React DOM/browser or actual API",
+  "hashes": {
+    "apps/web/app/dashboard/nckh/page.tsx": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+    "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs": "b23818a35a6146679eefc04991f5f9f458ac1dde52cccebf1f3e96889cb8204c",
+    "apps/web/components/account-profile-panel.tsx": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+    "apps/web/components/account-security-panel.tsx": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+    "apps/web/app/dashboard/forms/page.tsx": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+    "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+    "apps/web/app/dashboard/top-up/page.tsx": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22"
+  },
+  "results": [
+    {
+      "id": "UI-P01",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "sourcePayloadDetail": "Invalid Google Form URL.",
+        "mappedMessage": "Dữ liệu xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.",
+        "endpointRuntime": "Not run"
+      }
+    },
+    {
+      "id": "UI-P02",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "afterGetFailure": {
+          "fullName": "",
+          "saveDisabled": false
+        },
+        "notifications": [
+          "Không tải được hồ sơ.",
+          "Đã lưu hồ sơ."
+        ],
+        "mockedWrite": {
+          "endpoint": "/api/profile",
+          "method": "PUT",
+          "json": {
+            "fullName": ""
+          }
+        },
+        "persistence": "Not run"
+      }
+    },
+    {
+      "id": "UI-P03",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "afterGetFailure": {
+          "visibleStatus": "Chưa liên kết",
+          "linkDisabled": true
+        },
+        "notifications": [
+          "Không tải được hồ sơ bảo mật."
+        ]
+      }
+    },
+    {
+      "id": "UI-P04",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "alert": [
+          "Không tải được danh sách form. Vui lòng thử lại.",
+          "Thử lại"
+        ],
+        "tableEmptyTitle": "Chưa có form nào",
+        "tableEmptyDetail": "Dán URL Google Form vào ô trên để nhập."
+      }
+    },
+    {
+      "id": "UI-P05",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "calls": [
+          {
+            "method": "POST",
+            "returned": {
+              "runId": "synthetic-run",
+              "status": "Succeeded",
+              "creditsUsed": 2,
+              "balanceAfter": 3,
+              "generatedPreviewIds": [
+                "synthetic-preview"
+              ]
+            }
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/projects/synthetic-project/responses?ids=synthetic-preview"
+          }
+        ],
+        "stateWrites": [
+          "setBusy",
+          "clearPreviewWorkflow",
+          "setBusy"
+        ],
+        "errors": [
+          "Không tạo được AI preview."
+        ],
+        "returnedIdsNotRetainedByHandler": true,
+        "actualDebit": "Not run"
+      }
+    },
+    {
+      "id": "UI-P06",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "notifications": [
+          [
+            "success",
+            "Đã tạo mô hình nghiên cứu."
+          ]
+        ],
+        "workspaceErrors": [
+          null,
+          "Không tải được không gian làm việc NCKH."
+        ],
+        "mutationFailureToast": false,
+        "correction": "ERR-015 NCKH reload failure is swallowed internally; do not group with throwing reloads"
+      }
+    },
+    {
+      "id": "UI-P07",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "requestedInOrder": [
+          "model-A",
+          "model-B"
+        ],
+        "settledInOrder": [
+          "model-B",
+          "model-A"
+        ],
+        "finalVariableOwner": "model-A",
+        "panelLoadingSequence": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "allRequestsSucceeded": true
+      }
+    },
+    {
+      "id": "UI-P08",
+      "status": "Verified",
+      "level": "original-source unit/component + mocked boundary",
+      "observed": {
+        "handlerRejectsToReactEventBoundary": true,
+        "userNotification": false,
+        "browserUnhandledRejection": "Not run"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "semanticGuard": true,
+  "includeComparedAsSet": true,
+  "generatedInclude": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    ".next-fah-err-browser2-20261030/types/**/*.ts"
+  ],
+  "restoredHash": "C706793C44F83261B467440674BD653490054A9F1CA653E4FB407AC8FE09DC00",
+  "baselineHash": "C706793C44F83261B467440674BD653490054A9F1CA653E4FB407AC8FE09DC00",
+  "utc": "2026-10-30T17:56:57.8116204+07:00"
+}

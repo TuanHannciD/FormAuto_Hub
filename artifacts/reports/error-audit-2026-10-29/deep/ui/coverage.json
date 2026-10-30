@@ -1,0 +1,636 @@
+{
+  "date": "2026-10-29T07:43:03.994Z",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "limitation": "Hashing a file is not manual review. JSX mocked probes are not React DOM/browser/API/SQL/provider evidence.",
+  "counts": {
+    "webDiscovered": 99,
+    "webFullRead": 43,
+    "backendFullRead": 13,
+    "focused": 10,
+    "unreviewed": 56
+  },
+  "files": [
+    {
+      "file": "apps/web/app/admin/ai-provider-settings/page.tsx",
+      "reading": "full-file",
+      "sha256": "aa213146bce708cea5ed3eda7db96f90cc6e4104cdb90e2a4900da2331359899"
+    },
+    {
+      "file": "apps/web/app/admin/ai-usage/page.tsx",
+      "reading": "full-file",
+      "sha256": "60c7c256fe85441585d329671bc23e0f7ffa27e5a23b05b3e50ab95fc490c8d9"
+    },
+    {
+      "file": "apps/web/app/admin/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84"
+    },
+    {
+      "file": "apps/web/app/admin/manual-credits/_components/manual-grant-history.tsx",
+      "reading": "full-file",
+      "sha256": "6d6cab693dfebce404bacbd02d78e9d6fdbc8fbb44fd519a9764d3bfd19c9094"
+    },
+    {
+      "file": "apps/web/app/admin/manual-credits/page.tsx",
+      "reading": "full-file",
+      "sha256": "75e9d9d6ff7d9fcede2ba01d97ed7c2e0a41c8760b3e47b18a4c672ae7088612"
+    },
+    {
+      "file": "apps/web/app/admin/packages/page.tsx",
+      "reading": "full-file",
+      "sha256": "bb6fa7f9a4ff07752fc2ddd20114dfd28eba8a07dc4f9105c3abbc2b75953ac5"
+    },
+    {
+      "file": "apps/web/app/admin/page.tsx",
+      "reading": "full-file",
+      "sha256": "43815db80b05461016d7d78c13a7c526068e51dc7e338c56c341eb6469234d3c"
+    },
+    {
+      "file": "apps/web/app/admin/payments/page.tsx",
+      "reading": "full-file",
+      "sha256": "f81ec5e84ea125e1f05382e8a70cd6714f870b3cdf1509fff10d32578ee2af7f"
+    },
+    {
+      "file": "apps/web/app/admin/payos-settings/page.tsx",
+      "reading": "full-file",
+      "sha256": "bc78ad9f64311120084709badccce2635c7a793e4792fa3f5e3d44dd79e80a9b"
+    },
+    {
+      "file": "apps/web/app/admin/revenue/page.tsx",
+      "reading": "full-file",
+      "sha256": "98cf38f6d8ae49e6773aac4b26d577edc313e9e11119e0a32d004f7c28699017"
+    },
+    {
+      "file": "apps/web/app/anti-abuse/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a"
+    },
+    {
+      "file": "apps/web/app/api/payments/payos/webhook/route.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8"
+    },
+    {
+      "file": "apps/web/app/auth/callback/page.tsx",
+      "reading": "full-file",
+      "sha256": "3929cde47fcdb1c3dc4604b4468b660585b88940ea6f1ea8ed049c4ed11b8062"
+    },
+    {
+      "file": "apps/web/app/auth/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c"
+    },
+    {
+      "file": "apps/web/app/dashboard/ai-usage/page.tsx",
+      "reading": "full-file",
+      "sha256": "3de76ebc215b687af7031bcf899afc05db1d31effe2735b7062379ea491da8cf"
+    },
+    {
+      "file": "apps/web/app/dashboard/credit-transactions/page.tsx",
+      "reading": "full-file",
+      "sha256": "4280124d7e3dcca782d277c8791206ed2aaa393d8531982a727ca088d44289a6"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiDirectionInput.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/CheckboxSelectionFields.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_constants.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_helpers.ts",
+      "reading": "full-file",
+      "sha256": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_types.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/page.tsx",
+      "reading": "full-file",
+      "sha256": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed"
+    },
+    {
+      "file": "apps/web/app/dashboard/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/callback/page.tsx",
+      "reading": "full-file",
+      "sha256": "5841bc10b5a7801f1fe5d98fdc5b9d6383d1b6a248b988a1d2fb6898264189c4"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/delete-model-dialog.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/loading-state.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/overview-panel.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/relation-edge.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_constants.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+      "reading": "full-file",
+      "sha256": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_types.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+      "reading": "full-file",
+      "sha256": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/page.tsx",
+      "reading": "full-file",
+      "sha256": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41"
+    },
+    {
+      "file": "apps/web/app/dashboard/page.tsx",
+      "reading": "full-file",
+      "sha256": "e2b4cb7777550cad86d40afca6aa6bd5f36e36fd27d278064b2110fa5b251ad0"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+      "reading": "full-file",
+      "sha256": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+      "reading": "full-file",
+      "sha256": "0725a87cca9b5d8641e704a945caa49ea482a1a97eecd751902e8716eaf576a0"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/page.tsx",
+      "reading": "full-file",
+      "sha256": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22"
+    },
+    {
+      "file": "apps/web/app/dashboard/usage-logs/page.tsx",
+      "reading": "full-file",
+      "sha256": "aa9a18be0528c9809d2ae20331e8cca7920807fcaf76d29c33472d4fc67bae3f"
+    },
+    {
+      "file": "apps/web/app/google-forms/sample-data/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1"
+    },
+    {
+      "file": "apps/web/app/google-forms/sheets-report/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066"
+    },
+    {
+      "file": "apps/web/app/google-forms/student-report/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f"
+    },
+    {
+      "file": "apps/web/app/google-forms/survey-demo/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0"
+    },
+    {
+      "file": "apps/web/app/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5"
+    },
+    {
+      "file": "apps/web/app/llms.txt/route.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e"
+    },
+    {
+      "file": "apps/web/app/login/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7"
+    },
+    {
+      "file": "apps/web/app/login/page.tsx",
+      "reading": "full-file",
+      "sha256": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad"
+    },
+    {
+      "file": "apps/web/app/page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3"
+    },
+    {
+      "file": "apps/web/app/payment/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2"
+    },
+    {
+      "file": "apps/web/app/payment/payos/cancel/page.tsx",
+      "reading": "full-file",
+      "sha256": "9b48cee16de429e26cfe00aecda8db0258020df8d523eee2f11c485a01d9f063"
+    },
+    {
+      "file": "apps/web/app/payment/payos/return/page.tsx",
+      "reading": "full-file",
+      "sha256": "6ee86380ae66865bfeba4f304f2f0f47c4478d9875549733f0b9d8f0e642952a"
+    },
+    {
+      "file": "apps/web/app/register/layout.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012"
+    },
+    {
+      "file": "apps/web/app/register/page.tsx",
+      "reading": "full-file",
+      "sha256": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914"
+    },
+    {
+      "file": "apps/web/app/robots.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c"
+    },
+    {
+      "file": "apps/web/app/sitemap.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd"
+    },
+    {
+      "file": "apps/web/components/account-dialog.tsx",
+      "reading": "full-file",
+      "sha256": "c0d5917ff894ed7c5813fb4f483682760cf66d27fcab027a8837dbfdbadcdb7b"
+    },
+    {
+      "file": "apps/web/components/account-menu.tsx",
+      "reading": "full-file",
+      "sha256": "4cc8ddb791ecb7e080afa05ef095122fa2bb46500cc24006e2e50d619b5991b4"
+    },
+    {
+      "file": "apps/web/components/account-profile-panel.tsx",
+      "reading": "full-file",
+      "sha256": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b"
+    },
+    {
+      "file": "apps/web/components/account-security-panel.tsx",
+      "reading": "full-file",
+      "sha256": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985"
+    },
+    {
+      "file": "apps/web/components/admin-shell.tsx",
+      "reading": "full-file",
+      "sha256": "15cddc9b020492140fbe42585570b4019ab0c48560660b96c9b3ffe1c13c258a"
+    },
+    {
+      "file": "apps/web/components/app-toaster.tsx",
+      "reading": "full-file",
+      "sha256": "aacf7e8b5d432cc5c03e8a4565173c6f39f57fefe72c4fffac7372097dd05091"
+    },
+    {
+      "file": "apps/web/components/auth-password-input.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152"
+    },
+    {
+      "file": "apps/web/components/auth-shell.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316"
+    },
+    {
+      "file": "apps/web/components/base-table.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b"
+    },
+    {
+      "file": "apps/web/components/confirm-dialog.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4"
+    },
+    {
+      "file": "apps/web/components/dashboard-shell.tsx",
+      "reading": "full-file",
+      "sha256": "33c2ab866c7e468e5fadefdea119097a7e61cb9f7a350f9c45be52877cabc9ab"
+    },
+    {
+      "file": "apps/web/components/dialog.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a"
+    },
+    {
+      "file": "apps/web/components/dropdown-select.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e"
+    },
+    {
+      "file": "apps/web/components/google-identity-button.tsx",
+      "reading": "full-file",
+      "sha256": "a04a5c2c3b0d5cda6ab8fe0e396c2ea99766cdd9679b1bb943c1cbc23e3219b8"
+    },
+    {
+      "file": "apps/web/components/landing-dashboard-tabs.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a"
+    },
+    {
+      "file": "apps/web/components/metric-card.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907"
+    },
+    {
+      "file": "apps/web/components/motion/motion-presets.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6"
+    },
+    {
+      "file": "apps/web/components/motion/transition-region.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da"
+    },
+    {
+      "file": "apps/web/components/motion/use-element-size.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2"
+    },
+    {
+      "file": "apps/web/components/motion/use-popup-motion.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1"
+    },
+    {
+      "file": "apps/web/components/pagination-controls.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506"
+    },
+    {
+      "file": "apps/web/components/scroll-reveal.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d"
+    },
+    {
+      "file": "apps/web/components/searchable-dropdown-select.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840"
+    },
+    {
+      "file": "apps/web/components/seo-keyword-page.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987"
+    },
+    {
+      "file": "apps/web/components/shell-layout.tsx",
+      "reading": "full-file",
+      "sha256": "f59d35cb04d94c5865ed1e0ab438942ff74b75a6df1798027a6c10d0af05795f"
+    },
+    {
+      "file": "apps/web/components/status-badge.tsx",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b"
+    },
+    {
+      "file": "apps/web/components/ui-styles.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a"
+    },
+    {
+      "file": "apps/web/components/ui.tsx",
+      "reading": "full-file",
+      "sha256": "7f5c187af42c399c908b08f00ae64208ab348910922bb2ed6f5aac2a19cf1c5c"
+    },
+    {
+      "file": "apps/web/lib/api.ts",
+      "reading": "full-file",
+      "sha256": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120"
+    },
+    {
+      "file": "apps/web/lib/auth.ts",
+      "reading": "full-file",
+      "sha256": "1cd61d9e4a9e311c758a7120a595244dfc9a5d347166e130e5d50ce18670846e"
+    },
+    {
+      "file": "apps/web/lib/labels.ts",
+      "reading": "full-file",
+      "sha256": "2ffa649c4b8c2cc57fd136ff8dc4e4425c0c92459583f1146822e3d73f72e7c9"
+    },
+    {
+      "file": "apps/web/lib/nckh-google-auth.ts",
+      "reading": "full-file",
+      "sha256": "09ea37df3b46164958df3fcc7bbb59eae66cf0fa48968f6e9f64e1a47e0c8690"
+    },
+    {
+      "file": "apps/web/lib/public-page-inventory.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd"
+    },
+    {
+      "file": "apps/web/lib/seo-pages.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823"
+    },
+    {
+      "file": "apps/web/lib/seo.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812"
+    },
+    {
+      "file": "apps/web/lib/site.ts",
+      "reading": "unreviewed-by-this-agent",
+      "sha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402"
+    },
+    {
+      "file": "apps/web/lib/toast.ts",
+      "reading": "full-file",
+      "sha256": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee"
+    },
+    {
+      "file": "apps/web/lib/utils.ts",
+      "reading": "full-file",
+      "sha256": "004bdbd0dc9b35a2713b51f421cd02e9d1073a1507c620c9163a1ba788727b17"
+    },
+    {
+      "file": "apps/web/tests/api-auth.test.cjs",
+      "reading": "focused-unit",
+      "units": "loader and authorization/session tests first 80 lines; not full spec",
+      "sha256": "ae72078d8953d02c06c29ad301bd77038108492277ac3c9b3a55202efc0123df"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/full-pass-probe.cjs",
+      "reading": "focused-unit",
+      "units": "full read, prior audit evidence only",
+      "sha256": "d6cb9bda2cb62cc018e105f600d6e405c388ff4093c8ce40779c3276cfde64bf"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/shared-error-probe.cjs",
+      "reading": "focused-unit",
+      "units": "full read, prior audit evidence only",
+      "sha256": "48585f232b41d44e01642fb82567182909089a3fa1720b4424d9836f19be904a"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Contracts/AuthDtos.cs",
+      "reading": "full-file",
+      "sha256": "24ccd537f90eb9f6ae2f887d14f1ffd7d392b6f48ed3e39a3125d227771a93b2"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs",
+      "reading": "focused-unit",
+      "units": "NCKH link/import/list/detail/generate request and response complete records",
+      "sha256": "50fe0c3695bf0c1aebd4dd8c2a378ef2187a3353d54b00c0bc051ab0204116fb"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Contracts/Phase2Dtos.cs",
+      "reading": "focused-unit",
+      "units": "ProfileResponse/UpdateProfileRequest/UpdateProfileResponse/ChangePassword records",
+      "sha256": "4d17382d58f6f6e0dd782a6386b451a1e5f23faf9828f97f95154bae1aee517b"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Contracts/Phase3Dtos.cs",
+      "reading": "focused-unit",
+      "units": "SubmissionLogResponse/SubmissionJobResponse complete records",
+      "sha256": "489bce359599da903d14cfd16d04e07e923331436cdc4167b682079d7866cca4"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/AuthController.cs",
+      "reading": "full-file",
+      "sha256": "ea706cec2b1652e1b3b3d22c9fd52da052ee0f81a21eb0da4c46356b6f46cfda"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/FormsController.cs",
+      "reading": "full-file",
+      "sha256": "b33676d23c6df1ba307f879cb0dd0bb74475e24d9d8efec3bae37816ae6936c9"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/Nckh/ResearchCanvasController.cs",
+      "reading": "full-file",
+      "sha256": "d7b97b88b9330f75cdd00972568d97904c13f411dde169637b4e7344fd28f1be"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/Nckh/ResearchFormsController.cs",
+      "reading": "full-file",
+      "sha256": "55a307c19c5981dd554b59dde32a947b31870bbc3655ff9d5d52023600b07c64"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/Nckh/ResearchModelsController.cs",
+      "reading": "full-file",
+      "sha256": "fe4d9b2357956f9dfde3ad1ea0858ada9836256491e156a1d4a85527413757e8"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/ProfileController.cs",
+      "reading": "full-file",
+      "sha256": "1f7675360f08149b3d51e2f0b1aeeb3ed8f742083722c8db70817660e16c9146"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Controllers/UsageLogsController.cs",
+      "reading": "full-file",
+      "sha256": "a2ae0c83d9f9020935e45c4abc02c11378d0ab9a34de44bada726535dd294a38"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+      "reading": "full-file",
+      "sha256": "78174754ac8cb661bf9e8b94bfc3ba2cac61247c7a92abf99f14202ee85a8a20"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/AuthService.cs",
+      "reading": "focused-unit",
+      "units": "RegisterAsync/LoginAsync/GoogleLoginAsync/RefreshAsync/LogoutAsync complete; LinkGoogleAsync partial",
+      "sha256": "72639f914fd4a16e97d4d0d57676e90405170c40e3ebfe60f3dfe0796a9c7bd7"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/FormProjectService.cs",
+      "reading": "full-file",
+      "sha256": "c73c11fa7c17fb74febfafbb4a72f4ca9aedfe733378fb766abb623f09a2d009"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/Nckh/ResearchCanvasService.cs",
+      "reading": "focused-unit",
+      "units": "ValidateRelationPayloadAsync complete; remaining methods not fully read",
+      "sha256": "867ab595db998792bf50efd793a952a1a6cf4b049ffdc8573f2542cd57887051"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+      "reading": "focused-unit",
+      "units": "LinkGoogleAsync/ImportFormAsync/ListFormsAsync/GetFormDetailAsync complete; remaining methods not fully read",
+      "sha256": "b23818a35a6146679eefc04991f5f9f458ac1dde52cccebf1f3e96889cb8204c"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/Phase3Mappings.cs",
+      "reading": "full-file",
+      "sha256": "cf63f8299014a6b127c374146a35c4bc7b80379ec444b6d4e02551678aa84e7b"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/ProfileService.cs",
+      "reading": "full-file",
+      "sha256": "d3300ee644da0e4d76ecd7c42abd53878268447c78c9144ad20625b4317a132f"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+      "reading": "focused-unit",
+      "units": "SendAsync external-send/log/completion units; other units not fully read",
+      "sha256": "1d828f134cec00ae6e4c4f0dccf7aab22df0fee3af3a55ef65720700105e0d40"
+    },
+    {
+      "file": "src/FormAutoHub.Api/Services/UsageLogService.cs",
+      "reading": "full-file",
+      "sha256": "0e6008d4f1507abe22c320f4013fe401104b370e6e3fc9c47f32232224b75cac"
+    }
+  ]
+}

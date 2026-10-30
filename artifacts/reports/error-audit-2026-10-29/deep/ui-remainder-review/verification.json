@@ -1,0 +1,755 @@
+{
+  "date": "2026-10-29T14:32:24.176Z",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "children": 0,
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "status": "Verified",
+  "assertions": [
+    "99 current TS/TSX app/components/lib match prior denominator",
+    "56 remainder exactly match previously unreviewed list",
+    "43 prior and 56 remainder are disjoint",
+    "56 disposition rows are full-file claims",
+    "99 current source hashes match prior and remainder",
+    "2 original-source mocked observations rerun with unchanged probe",
+    "8 probe source hashes match",
+    "api-auth.test.cjs remains focused support outside denominator"
+  ],
+  "counts": {
+    "denominator": 99,
+    "priorFullReadClaims": 43,
+    "remainderFullReadClaims": 56,
+    "remainingUnreviewedClaims": 0,
+    "unchangedUiSourceHashes": 99,
+    "probeObservations": 2,
+    "probeSourceHashes": 8,
+    "testSupportExcluded": 1
+  },
+  "limits": "Reviewer checks attribution, inventory/hash consistency, selected complete units and mocked source behavior. Hashes do not prove an author manually read each file. No reread claim for all 99; no React DOM/browser/API/SQL/provider verification.",
+  "originalInputs": [
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui/coverage.json",
+      "sha256": "c09b5aea2cc93d7d16da612f526e8f30d2366e7c82da2e048c7eb83b7a4d2eba"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui/report.md",
+      "sha256": "10ad509abf68869fd168dfebe80606c8c450be86bda7d8164fd09bdfb3a1d9d8"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/review/report.md",
+      "sha256": "8b126ea886fd36e2d93d188f8f442a29a7539022962354945a0de78ee6d8866e"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui-remainder/report.md",
+      "sha256": "397a32695713db76731539982488f22a0aa4e3e10afcbe83debf9e1a0f5a589d"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui-remainder/coverage.json",
+      "sha256": "b2fca09b3ce76f84b72786360d8d5d13d17b6051b01b4e46ef4a4332c1890964"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui-remainder/probe.cjs",
+      "sha256": "209d4b719f1568ffb19f364818570b5235d48f9e8e099649a271d6c571e6b982"
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/ui-remainder/probe-results.json",
+      "sha256": "3081070f2890247fc57695dc663bf09c08323e04f59009b0272a56e45151136e"
+    }
+  ],
+  "fileChecks": [
+    {
+      "file": "apps/web/app/admin/ai-provider-settings/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "aa213146bce708cea5ed3eda7db96f90cc6e4104cdb90e2a4900da2331359899",
+      "expectedSha256": "aa213146bce708cea5ed3eda7db96f90cc6e4104cdb90e2a4900da2331359899",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/ai-usage/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "60c7c256fe85441585d329671bc23e0f7ffa27e5a23b05b3e50ab95fc490c8d9",
+      "expectedSha256": "60c7c256fe85441585d329671bc23e0f7ffa27e5a23b05b3e50ab95fc490c8d9",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84",
+      "expectedSha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84",
+      "newDisposition": "AdminShell + noIndex; không data/error handler riêng; shell thuộc 43 cũ."
+    },
+    {
+      "file": "apps/web/app/admin/manual-credits/_components/manual-grant-history.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "6d6cab693dfebce404bacbd02d78e9d6fdbc8fbb44fd519a9764d3bfd19c9094",
+      "expectedSha256": "6d6cab693dfebce404bacbd02d78e9d6fdbc8fbb44fd519a9764d3bfd19c9094",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/manual-credits/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "75e9d9d6ff7d9fcede2ba01d97ed7c2e0a41c8760b3e47b18a4c672ae7088612",
+      "expectedSha256": "75e9d9d6ff7d9fcede2ba01d97ed7c2e0a41c8760b3e47b18a4c672ae7088612",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/packages/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "bb6fa7f9a4ff07752fc2ddd20114dfd28eba8a07dc4f9105c3abbc2b75953ac5",
+      "expectedSha256": "bb6fa7f9a4ff07752fc2ddd20114dfd28eba8a07dc4f9105c3abbc2b75953ac5",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "43815db80b05461016d7d78c13a7c526068e51dc7e338c56c341eb6469234d3c",
+      "expectedSha256": "43815db80b05461016d7d78c13a7c526068e51dc7e338c56c341eb6469234d3c",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/payments/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "f81ec5e84ea125e1f05382e8a70cd6714f870b3cdf1509fff10d32578ee2af7f",
+      "expectedSha256": "f81ec5e84ea125e1f05382e8a70cd6714f870b3cdf1509fff10d32578ee2af7f",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/payos-settings/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "bc78ad9f64311120084709badccce2635c7a793e4792fa3f5e3d44dd79e80a9b",
+      "expectedSha256": "bc78ad9f64311120084709badccce2635c7a793e4792fa3f5e3d44dd79e80a9b",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/admin/revenue/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "98cf38f6d8ae49e6773aac4b26d577edc313e9e11119e0a32d004f7c28699017",
+      "expectedSha256": "98cf38f6d8ae49e6773aac4b26d577edc313e9e11119e0a32d004f7c28699017",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/anti-abuse/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a",
+      "expectedSha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a",
+      "newDisposition": "Wrapper SEO dùng config static hiện hữu; UIR-002 qua template/config."
+    },
+    {
+      "file": "apps/web/app/api/payments/payos/webhook/route.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8",
+      "expectedSha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8",
+      "newDisposition": "POST forward body/status/content-type; GET405 Allow POST có hướng dẫn admin. Framework failure/log runtime Not run."
+    },
+    {
+      "file": "apps/web/app/auth/callback/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "3929cde47fcdb1c3dc4604b4468b660585b88940ea6f1ea8ed049c4ed11b8062",
+      "expectedSha256": "3929cde47fcdb1c3dc4604b4468b660585b88940ea6f1ea8ed049c4ed11b8062",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/auth/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c",
+      "expectedSha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c",
+      "newDisposition": "Metadata noIndex, trả children; không nuốt/đổi lỗi."
+    },
+    {
+      "file": "apps/web/app/dashboard/ai-usage/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "3de76ebc215b687af7031bcf899afc05db1d31effe2735b7062379ea491da8cf",
+      "expectedSha256": "3de76ebc215b687af7031bcf899afc05db1d31effe2735b7062379ea491da8cf",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/credit-transactions/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "4280124d7e3dcca782d277c8791206ed2aaa393d8531982a727ca088d44289a6",
+      "expectedSha256": "4280124d7e3dcca782d277c8791206ed2aaa393d8531982a727ca088d44289a6",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiDirectionInput.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6",
+      "expectedSha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6",
+      "newDisposition": "Input có label, maxlength 200; callback string; không I/O riêng."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786",
+      "expectedSha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786",
+      "newDisposition": "Mode/direction/scope/prompts/count/busy/canGenerate và callbacks đã đọc; bounds1–100; UIR-002 child."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "expectedSha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "newDisposition": "Prompt length/collapse/options metadata; UIR-002 Option2/3 + collapsed copy cả khi mở."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/CheckboxSelectionFields.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7",
+      "expectedSha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7",
+      "newDisposition": "Clamp count qua helper; caller maxOptionCount ít nhất1; không giả định zero-option contract mới."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c",
+      "expectedSha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c",
+      "newDisposition": "Ba mode static labels, aria-pressed/callback; không I/O, không error riêng."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270",
+      "expectedSha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270",
+      "newDisposition": "Chuỗi rỗng có label/value fallback; arrays đúng contract, no malformed-payload incident asserted."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "expectedSha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "newDisposition": "Đọc modes/options/sample/numeric/date/time/update/render đầy đủ; UIR-001 display config mismatch."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc",
+      "expectedSha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc",
+      "newDisposition": "Balance null hiện Chưa tải được số dư; stale preview warning; không default về0."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_constants.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+      "expectedSha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+      "newDisposition": "Modes/limits/defaults/resume key; defaults khởi tạo tách validity; UIR-001 dependency."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_helpers.ts",
+      "priorReading": "full-file",
+      "currentSha256": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32",
+      "expectedSha256": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_types.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01",
+      "expectedSha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01",
+      "newDisposition": "UI mode/resume context types; không tự runtime-validate localStorage; no new status invented."
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+      "expectedSha256": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e",
+      "expectedSha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e",
+      "newDisposition": "DashboardShell/noIndex wrapper; error owner ở shell/caller đã review trước."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/callback/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "5841bc10b5a7801f1fe5d98fdc5b9d6383d1b6a248b988a1d2fb6898264189c4",
+      "expectedSha256": "5841bc10b5a7801f1fe5d98fdc5b9d6383d1b6a248b988a1d2fb6898264189c4",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "expectedSha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "newDisposition": "UIR-003 null/empty cùng message; columns/values fallback/render đã đọc."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/delete-model-dialog.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b",
+      "expectedSha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b",
+      "newDisposition": "loadImpact all7 GET/identity/count guard; cancellation/final recheck/unknown DELETE outcome/reload; accepted safe fallback."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/loading-state.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf",
+      "expectedSha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf",
+      "newDisposition": "Label/spinner display-only; không nuốt lỗi/I/O."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/overview-panel.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c",
+      "expectedSha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c",
+      "newDisposition": "Model/form contract display; thiếu mô tả -; question empty chỉ caller dữ liệu; stale owner ERR017 parent."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/relation-edge.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f",
+      "expectedSha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f",
+      "newDisposition": "Optional data callbacks, label fallback id; no I/O; không thêm finding từ absent optional data."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_constants.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f",
+      "expectedSha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f",
+      "newDisposition": "Labels enums/canvas dims; legitimate domain labels; no new status error found."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+      "priorReading": "full-file",
+      "currentSha256": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218",
+      "expectedSha256": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_types.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d",
+      "expectedSha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d",
+      "newDisposition": "PendingAction/tab/edge/dataset types; không phải runtime state transition contract."
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+      "expectedSha256": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+      "expectedSha256": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "e2b4cb7777550cad86d40afca6aa6bd5f36e36fd27d278064b2110fa5b251ad0",
+      "expectedSha256": "e2b4cb7777550cad86d40afca6aa6bd5f36e36fd27d278064b2110fa5b251ad0",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2",
+      "expectedSha256": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "0725a87cca9b5d8641e704a945caa49ea482a1a97eecd751902e8716eaf576a0",
+      "expectedSha256": "0725a87cca9b5d8641e704a945caa49ea482a1a97eecd751902e8716eaf576a0",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/top-up/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22",
+      "expectedSha256": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/dashboard/usage-logs/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "aa9a18be0528c9809d2ae20331e8cca7920807fcaf76d29c33472d4fc67bae3f",
+      "expectedSha256": "aa9a18be0528c9809d2ae20331e8cca7920807fcaf76d29c33472d4fc67bae3f",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/google-forms/sample-data/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1",
+      "expectedSha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1",
+      "newDisposition": "Wrapper/config static; template UIR002; không failed GET state."
+    },
+    {
+      "file": "apps/web/app/google-forms/sheets-report/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066",
+      "expectedSha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066",
+      "newDisposition": "Wrapper/config static; template UIR002; không data API."
+    },
+    {
+      "file": "apps/web/app/google-forms/student-report/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f",
+      "expectedSha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f",
+      "newDisposition": "Wrapper/config static; template UIR002; không data API."
+    },
+    {
+      "file": "apps/web/app/google-forms/survey-demo/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0",
+      "expectedSha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0",
+      "newDisposition": "Wrapper/config static; template UIR002; không data API."
+    },
+    {
+      "file": "apps/web/app/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5",
+      "expectedSha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5",
+      "newDisposition": "Root font/metadata/site URL/toaster; URL parse config boundary chưa có malformed config evidence."
+    },
+    {
+      "file": "apps/web/app/llms.txt/route.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e",
+      "expectedSha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e",
+      "newDisposition": "Machine-facing static English text and public paths; accepted no UI translation claim."
+    },
+    {
+      "file": "apps/web/app/login/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7",
+      "expectedSha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7",
+      "newDisposition": "NoIndex + children, auth error policy ở page/helper đã đọc trước."
+    },
+    {
+      "file": "apps/web/app/login/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad",
+      "expectedSha256": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3",
+      "expectedSha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3",
+      "newDisposition": "Đọc metadata/brand/illustration/mobile nav/landing/services/pricing/FAQ/footer + helpers; server/static không request-error state."
+    },
+    {
+      "file": "apps/web/app/payment/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2",
+      "expectedSha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2",
+      "newDisposition": "NoIndex + children; payment outcome owner ở result pages cũ."
+    },
+    {
+      "file": "apps/web/app/payment/payos/cancel/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "9b48cee16de429e26cfe00aecda8db0258020df8d523eee2f11c485a01d9f063",
+      "expectedSha256": "9b48cee16de429e26cfe00aecda8db0258020df8d523eee2f11c485a01d9f063",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/payment/payos/return/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "6ee86380ae66865bfeba4f304f2f0f47c4478d9875549733f0b9d8f0e642952a",
+      "expectedSha256": "6ee86380ae66865bfeba4f304f2f0f47c4478d9875549733f0b9d8f0e642952a",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/register/layout.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012",
+      "expectedSha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012",
+      "newDisposition": "NoIndex + children; không credential cause split."
+    },
+    {
+      "file": "apps/web/app/register/page.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914",
+      "expectedSha256": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/app/robots.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c",
+      "expectedSha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c",
+      "newDisposition": "Static crawler rules/site sitemap; không user error path."
+    },
+    {
+      "file": "apps/web/app/sitemap.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd",
+      "expectedSha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd",
+      "newDisposition": "Maps static publicPagePaths; no lastModified fabrication/no data fetch."
+    },
+    {
+      "file": "apps/web/components/account-dialog.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "c0d5917ff894ed7c5813fb4f483682760cf66d27fcab027a8837dbfdbadcdb7b",
+      "expectedSha256": "c0d5917ff894ed7c5813fb4f483682760cf66d27fcab027a8837dbfdbadcdb7b",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/account-menu.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "4cc8ddb791ecb7e080afa05ef095122fa2bb46500cc24006e2e50d619b5991b4",
+      "expectedSha256": "4cc8ddb791ecb7e080afa05ef095122fa2bb46500cc24006e2e50d619b5991b4",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/account-profile-panel.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+      "expectedSha256": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/account-security-panel.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+      "expectedSha256": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/admin-shell.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "15cddc9b020492140fbe42585570b4019ab0c48560660b96c9b3ffe1c13c258a",
+      "expectedSha256": "15cddc9b020492140fbe42585570b4019ab0c48560660b96c9b3ffe1c13c258a",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/app-toaster.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "aacf7e8b5d432cc5c03e8a4565173c6f39f57fefe72c4fffac7372097dd05091",
+      "expectedSha256": "aacf7e8b5d432cc5c03e8a4565173c6f39f57fefe72c4fffac7372097dd05091",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/auth-password-input.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152",
+      "expectedSha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152",
+      "newDisposition": "State show/hide/disabled/aria pass; không password logging."
+    },
+    {
+      "file": "apps/web/components/auth-shell.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316",
+      "expectedSha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316",
+      "newDisposition": "Login/register/callback wrapper + heading/switch; no async/error swallowing."
+    },
+    {
+      "file": "apps/web/components/base-table.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b",
+      "expectedSha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b",
+      "newDisposition": "Empty presentation only; caller supplies validity; mobile/desktop render and callbacks đã đọc."
+    },
+    {
+      "file": "apps/web/components/confirm-dialog.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4",
+      "expectedSha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4",
+      "newDisposition": "Concurrent request=false/unmount=false/dismiss=false; resolve sau motion close; no unhandled promise observed."
+    },
+    {
+      "file": "apps/web/components/dashboard-shell.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "33c2ab866c7e468e5fadefdea119097a7e61cb9f7a350f9c45be52877cabc9ab",
+      "expectedSha256": "33c2ab866c7e468e5fadefdea119097a7e61cb9f7a350f9c45be52877cabc9ab",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/dialog.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a",
+      "expectedSha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a",
+      "newDisposition": "Portal/context/native modal/focus/dismiss/cleanup + close controls; invariant Error internal; browser Not run."
+    },
+    {
+      "file": "apps/web/components/dropdown-select.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e",
+      "expectedSha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e",
+      "newDisposition": "Local open/select/outside/Escape cleanup/disabled/placeholder; no API lookup/error owner."
+    },
+    {
+      "file": "apps/web/components/google-identity-button.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "a04a5c2c3b0d5cda6ab8fe0e396c2ea99766cdd9679b1bb943c1cbc23e3219b8",
+      "expectedSha256": "a04a5c2c3b0d5cda6ab8fe0e396c2ea99766cdd9679b1bb943c1cbc23e3219b8",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/landing-dashboard-tabs.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a",
+      "expectedSha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a",
+      "newDisposition": "Four local tabs + static overview/table/metric/empty helpers; no current caller found, no failed-read claim."
+    },
+    {
+      "file": "apps/web/components/metric-card.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907",
+      "expectedSha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907",
+      "newDisposition": "Typed tone map/display ReactNode; caller owns unknown/error; no default numeric state."
+    },
+    {
+      "file": "apps/web/components/motion/motion-presets.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6",
+      "expectedSha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6",
+      "newDisposition": "Reduced-motion media listener cleanup; browser API support Not run."
+    },
+    {
+      "file": "apps/web/components/motion/transition-region.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da",
+      "expectedSha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da",
+      "newDisposition": "Key/current/outgoing/size/scroll/identity/cancel; rejected finished promise accepted intentional cancellation."
+    },
+    {
+      "file": "apps/web/components/motion/use-element-size.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2",
+      "expectedSha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2",
+      "newDisposition": "ResizeObserver measure/epsilon guard/disconnect; API compatibility Not run."
+    },
+    {
+      "file": "apps/web/components/motion/use-popup-motion.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1",
+      "expectedSha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1",
+      "newDisposition": "Open/resize/close/current phase/identity/cancel/disconnect and reduced motion; cancellation catch accepted."
+    },
+    {
+      "file": "apps/web/components/pagination-controls.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506",
+      "expectedSha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506",
+      "newDisposition": "Zero pages/trước/sau disabled guards; callbacks caller responsibility; no API failure masking inside."
+    },
+    {
+      "file": "apps/web/components/scroll-reveal.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d",
+      "expectedSha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d",
+      "newDisposition": "Reduced motion/intersection/state/cleanup; SEO noscript dependency; API compatibility not certified."
+    },
+    {
+      "file": "apps/web/components/searchable-dropdown-select.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840",
+      "expectedSha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840",
+      "newDisposition": "Loading/no-results/options/local open/cleanup; UIR-004 caller lacks failure state, avoid blaming primitive alone."
+    },
+    {
+      "file": "apps/web/components/seo-keyword-page.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987",
+      "expectedSha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987",
+      "newDisposition": "All5 configs/render metadata/schema/sections/FAQ/header/footer; UIR-002 internal/English copy; noscript present."
+    },
+    {
+      "file": "apps/web/components/shell-layout.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "f59d35cb04d94c5865ed1e0ab438942ff74b75a6df1798027a6c10d0af05795f",
+      "expectedSha256": "f59d35cb04d94c5865ed1e0ab438942ff74b75a6df1798027a6c10d0af05795f",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/components/status-badge.tsx",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b",
+      "expectedSha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b",
+      "newDisposition": "Known statuses tone + displayStatus shared labels, raw fallback accepted future unknown; no invented emitted state."
+    },
+    {
+      "file": "apps/web/components/ui-styles.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a",
+      "expectedSha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a",
+      "newDisposition": "Shared control/button variants/size/disabled/focus; no I/O or error state decisions."
+    },
+    {
+      "file": "apps/web/components/ui.tsx",
+      "priorReading": "full-file",
+      "currentSha256": "7f5c187af42c399c908b08f00ae64208ab348910922bb2ed6f5aac2a19cf1c5c",
+      "expectedSha256": "7f5c187af42c399c908b08f00ae64208ab348910922bb2ed6f5aac2a19cf1c5c",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/api.ts",
+      "priorReading": "full-file",
+      "currentSha256": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+      "expectedSha256": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/auth.ts",
+      "priorReading": "full-file",
+      "currentSha256": "1cd61d9e4a9e311c758a7120a595244dfc9a5d347166e130e5d50ce18670846e",
+      "expectedSha256": "1cd61d9e4a9e311c758a7120a595244dfc9a5d347166e130e5d50ce18670846e",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/labels.ts",
+      "priorReading": "full-file",
+      "currentSha256": "2ffa649c4b8c2cc57fd136ff8dc4e4425c0c92459583f1146822e3d73f72e7c9",
+      "expectedSha256": "2ffa649c4b8c2cc57fd136ff8dc4e4425c0c92459583f1146822e3d73f72e7c9",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/nckh-google-auth.ts",
+      "priorReading": "full-file",
+      "currentSha256": "09ea37df3b46164958df3fcc7bbb59eae66cf0fa48968f6e9f64e1a47e0c8690",
+      "expectedSha256": "09ea37df3b46164958df3fcc7bbb59eae66cf0fa48968f6e9f64e1a47e0c8690",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/public-page-inventory.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd",
+      "expectedSha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd",
+      "newDisposition": "SEO slug inventory used sitemap/llms; static no missing data state."
+    },
+    {
+      "file": "apps/web/lib/seo-pages.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "expectedSha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "newDisposition": "All5 complete configs/types/metadata builder; UIR-002 FAQ public safety rules; legitimate product/provider identifiers retained."
+    },
+    {
+      "file": "apps/web/lib/seo.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812",
+      "expectedSha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812",
+      "newDisposition": "NoIndex/schema/JSON-LD serializer escapes <; metadata English machine-facing, no UI error conclusion."
+    },
+    {
+      "file": "apps/web/lib/site.ts",
+      "priorReading": "unreviewed-by-this-agent",
+      "currentSha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402",
+      "expectedSha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402",
+      "newDisposition": "Env/fallback URL trim; invalid env only hypothetical, no incident asserted."
+    },
+    {
+      "file": "apps/web/lib/toast.ts",
+      "priorReading": "full-file",
+      "currentSha256": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+      "expectedSha256": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+      "newDisposition": "Prior full-file review retained"
+    },
+    {
+      "file": "apps/web/lib/utils.ts",
+      "priorReading": "full-file",
+      "currentSha256": "004bdbd0dc9b35a2713b51f421cd02e9d1073a1507c620c9163a1ba788727b17",
+      "expectedSha256": "004bdbd0dc9b35a2713b51f421cd02e9d1073a1507c620c9163a1ba788727b17",
+      "newDisposition": "Prior full-file review retained"
+    }
+  ],
+  "trackedDiff": ""
+}

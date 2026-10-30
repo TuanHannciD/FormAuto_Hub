@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-30T07:02:18.4696969Z",
+  "owner": "/root/runtime_resume",
+  "process": {
+    "ProcessId": 748,
+    "ParentProcessId": 24236,
+    "Name": "node.exe",
+    "ExecutablePath": "C:\\nvm4w\\nodejs\\node.exe",
+    "CommandLine": "\"C:\\nvm4w\\nodejs\\node.exe\" artifacts/reports/error-remediation-2026-10-30/runtime/owned-web-red.cjs"
+  },
+  "origin": "http://127.0.0.1:3137",
+  "distDir": "D:/TinHoc/FormAuto_Hub/apps/web/.next-fah-err-red-20261030",
+  "purpose": "mock browser RED ERR014/015",
+  "ownedBrowserTab": "tab_1_b444d759-9c74-4be2-a47f-38a4dba03eb9",
+  "previewStatusBefore": "available=false",
+  "previewOpenHttp": "available=true; ownedByCaller=true; /login rendered FormAuto Hub",
+  "apiProcess": null,
+  "sqlFixture": null,
+  "cleanup": "Stop only verified owned PID after browser; preserve isolateddistDir/evidence; close only owned tab if tool supported",
+  "actualDistDir": "D:/TinHoc/FormAuto_Hub/apps/web/.next",
+  "requestedDistDirWasEffective": false,
+  "correction": "Release inspection found requested customdist absent; actual .next LastWriteTime14:01. No deletion/cleanup; cannot claim pre-existing .next untouched. Custom server from repo root warned missing Tailwind content, so not final visual acceptance."
+}

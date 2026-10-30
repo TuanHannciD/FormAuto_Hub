@@ -1,0 +1,14 @@
+{
+  "exit": 1,
+  "counts": {
+    "skipped": 0,
+    "executed": 8,
+    "passed": 0,
+    "failed": 8
+  },
+  "assertionFailures": 8,
+  "typeErrors": 0,
+  "hashDrift": [],
+  "writerSnapshotDrift": [],
+  "limit": "Node fake JSX/source handler; actual browser pending"
+}

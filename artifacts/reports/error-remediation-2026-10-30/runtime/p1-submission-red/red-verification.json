@@ -1,0 +1,88 @@
+{
+  "utc": "2026-10-30T00:43:06.594169+00:00",
+  "counters": {
+    "total": "12",
+    "executed": "12",
+    "passed": "0",
+    "failed": "12",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "results": [
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Generate_AfterRemoteCreateFailure_PreservesRemoteIdentityWithoutFakeLocalForm(failure: \"questions-false\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : Sequence contains no elements"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_UsageDescribesActualOutcome(firstSuccess: True, targetStatus: \"Failed\", text: \"Gửi form hoàn tất một phần\", successes: 1)",
+      "outcome": "Failed",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Gửi form thành công\"\r\nNot found: \"Gửi form hoàn tất một phần\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Generate_AfterRemoteCreateFailure_PreservesRemoteIdentityWithoutFakeLocalForm(failure: \"import-null\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : Sequence contains no elements"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_CancelledRequest_PersistsUnknownAttemptWithoutResending",
+      "outcome": "Failed",
+      "message": "Assert.Single() Failure: The collection was empty"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause(cancel: True)",
+      "outcome": "Failed",
+      "message": "Assert.Same() Failure: Values are not the same instance\r\nExpected: System.OperationCanceledException: The operation was canceled.\r\nActual:   Xunit.Sdk.SingleException: Assert.Single() Failure: The collection was empty\r\n   at Xunit.Assert.GetSingleResult[T](IEnumerable`1 collection, Predicate`1 predicate, String expected) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 715\r\n   at Xunit.Assert.Single[T](IEnumerable`1 collection) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 657\r\n   at FormAutoHub.Tests.FahErrSubmissionPersistenceTests.<>c__DisplayClass6_0.<<Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause>b__0>d.MoveNext() in D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrSubmissionPersistenceTests.cs:line 156\r\n--- End of stack trace from previous location ---\r\n   at FormAutoHub.Tests.FahErrSubmissionPersistenceTests.<>c__DisplayClass6_0.<<Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause>b__0>d.MoveNext() in D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrSubmissionPersistenceTests.cs:line 158\r\n--- End of stack trace from previous location ---\r\n   at FormAutoHub.Api.Services.Nckh.ResearchDataService.CollectResponsesAsync(Guid userId, Guid modelId, CancellationToken cancellationToken) in D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\Nckh\\ResearchDataService.cs:line 71\r\n   at Xunit.Record.ExceptionAsync(Func`1 testCode) in /_/src/xunit.core/Record.cs:line 76"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_UsageDescribesActualOutcome(firstSuccess: True, targetStatus: \"Cancelled\", text: \"Đã hủy gửi form\", successes: 10)",
+      "outcome": "Failed",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Gửi form thành công\"\r\nNot found: \"Đã hủy gửi form\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_UsageDescribesActualOutcome(firstSuccess: True, targetStatus: \"Paused\", text: \"Đã tạm dừng gửi form\", successes: 10)",
+      "outcome": "Failed",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Gửi form thành công\"\r\nNot found: \"Đã tạm dừng gửi form\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_InvalidPayload_PreservesInnerCauseAndTerminatesJob",
+      "outcome": "Failed",
+      "message": "Assert.IsAssignableFrom() Failure: Value is null\r\nExpected: typeof(System.Text.Json.JsonException)\r\nActual:   null"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_UsageDescribesActualOutcome(firstSuccess: False, targetStatus: \"Failed\", text: \"Gửi form thất bại\", successes: 0)",
+      "outcome": "Failed",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Gửi form thành công\"\r\nNot found: \"Gửi form thất bại\""
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Generate_AfterRemoteCreateFailure_PreservesRemoteIdentityWithoutFakeLocalForm(failure: \"questions-throw\")",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: Exception type was not an exact match\r\nExpected: typeof(System.Net.Http.HttpRequestException)\r\nActual:   typeof(System.InvalidOperationException)\r\n---- System.InvalidOperationException : Sequence contains no elements"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause(cancel: False)",
+      "outcome": "Failed",
+      "message": "Assert.Same() Failure: Values are not the same instance\r\nExpected: System.Net.Http.HttpRequestException: private synthetic response\r\nActual:   Xunit.Sdk.SingleException: Assert.Single() Failure: The collection was empty\r\n   at Xunit.Assert.GetSingleResult[T](IEnumerable`1 collection, Predicate`1 predicate, String expected) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 715\r\n   at Xunit.Assert.Single[T](IEnumerable`1 collection) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 657\r\n   at FormAutoHub.Tests.FahErrSubmissionPersistenceTests.<>c__DisplayClass6_0.<<Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause>b__0>d.MoveNext() in D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrSubmissionPersistenceTests.cs:line 156\r\n--- End of stack trace from previous location ---\r\n   at FormAutoHub.Tests.FahErrSubmissionPersistenceTests.<>c__DisplayClass6_0.<<Collect_ThrownProviderFault_PersistsFailedCollectionWithOriginalCause>b__0>d.MoveNext() in D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrSubmissionPersistenceTests.cs:line 158\r\n--- End of stack trace from previous location ---\r\n   at FormAutoHub.Api.Services.Nckh.ResearchDataService.CollectResponsesAsync(Guid userId, Guid modelId, CancellationToken cancellationToken) in D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\Nckh\\ResearchDataService.cs:line 71\r\n   at Xunit.Record.ExceptionAsync(Func`1 testCode) in /_/src/xunit.core/Record.cs:line 76"
+    },
+    {
+      "name": "FormAutoHub.Tests.FahErrSubmissionPersistenceTests.Send_TransportFaultAfterSuccess_PreservesKnownResultAndUnknownAttempt",
+      "outcome": "Failed",
+      "message": "Assert.Throws() Failure: Exception type was not an exact match\r\nExpected: typeof(System.Net.Http.HttpRequestException)\r\nActual:   typeof(Xunit.Sdk.EqualException)\r\n---- Assert.Equal() Failure: Values differ\r\nExpected: 1\r\nActual:   0"
+    }
+  ],
+  "redObserved": true,
+  "compileErrors": 0,
+  "baselineWarning": "NU1603 cached Google.Apis.Forms version retained",
+  "level": "InMemory/fake integrations, not SQL/API/provider",
+  "limits": "Some expected missing persisted rows surface SingleAsync no-elements rather than xUnit assertions; interpret by source stack and expected missing evidence."
+}

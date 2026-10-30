@@ -1,0 +1,973 @@
+{
+  "at": "2026-10-30T00:18:33.409738+00:00",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "writer": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "high",
+    "role": "documentation synthesis",
+    "children": []
+  },
+  "status": "Verified",
+  "checks": [
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-DB-SYNC-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 57,
+        "sha256": "e2168c2707127a175a749b695f82074ec1a130277d4d16316d92cb30a6bfc581"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 48,
+        "sha256": "3d441720759ab0c51e6521455643a96d571746c490bb63cf1cf099f1cc13d9d2"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/COVERAGE.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 75,
+        "sha256": "da2423fbad4fc8a2105b2f5123fa668adc85ac20fe69ffe890d424e61eb786a7"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 94,
+        "sha256": "9c2f67ea64d680956bd825b33e62dbdc309ccb8fb4846f5605a5d491dae8f766"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 98,
+        "sha256": "3e7893407bbabbf9716b60a743edc47d7f4552c9074f85071df6c9907733cb6b"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 73,
+        "sha256": "7995061bc8a9972c948bcf933e09515ed3ac68adee441fcbcab3666d732aa65c"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 166,
+        "sha256": "cf42d2231cc8721ef743f5b4267e8277939f69a7a33886596d899f2f72180cb7"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 132,
+        "sha256": "b0bbb9d0960d8e84664e1337ec66101879c623c7b46276e8e7e831a23bc71954"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 40,
+        "sha256": "bf7747e23a0281df64b5b7bb126d36cbe423e570b10642ca97faa2522a1f10eb"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 343,
+        "sha256": "7471ed3d766a09ee9ec396ba7a5fa84293d9bcb4946c7ebf82ea900f5e634d01"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/ai/tasks/FAH-ERR-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 58,
+        "sha256": "6f5d74d3a5b1053e718ff5a2d5c5c99849fc01604d585c20eb7ddf1c3cbf2359"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-DB-SYNC-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 57,
+        "sha256": "b3170eb398c1e9af41c23c6675dfb120869f766f27be2f66e922a842ad191248"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 48,
+        "sha256": "3f6935f4e7700e6023efc2ea1a3dd712aa7e9ac082d84e3792cb6a278ae3047c"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/COVERAGE.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 75,
+        "sha256": "29a1c098ab864d87da600c1ec1a36cf54d7b0f457ce25b9c6c595f758ba7f8c9"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 94,
+        "sha256": "70de264f841948e0affa76aa663dbc4c25cb8ad185ef1410c6cbb0109fb54cc5"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 98,
+        "sha256": "f4e81d069b27dd24bac5bc2e33a83bf0df2f66a18c9981d36e88f507e15c6e31"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 73,
+        "sha256": "19a4b057ee492770e404d93fc5095f580524e0c99fe67e3e52b5904c075e6953"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 166,
+        "sha256": "0c4e9e6401efdd4af9245bdc7ce3c13d1565321300021f0c19353f4e68e2f0f3"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 132,
+        "sha256": "39615682f21d17269523dd43cd92a7c21fb50f4f4ad9b98b11a517b8079b702f"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 40,
+        "sha256": "51bb4dc9fc44a7474eae8341299d109b000fcf742d041dc219d057839dd5df52"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 343,
+        "sha256": "0160f687fce8d67f358bd91a88dfee76517b7466723ba5702f7ba0988dd15191"
+      }
+    },
+    {
+      "check": "UTF8 and <400 lines: docs/vi/tasks/FAH-ERR-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "lines": 58,
+        "sha256": "00167528e8f1a1ca20f43dcee36c383d57253779a8b7e54afa7792cee88f1bdc"
+      }
+    },
+    {
+      "check": "Local Markdown links/anchors",
+      "status": "Verified",
+      "detail": {
+        "links": 530,
+        "broken": []
+      }
+    },
+    {
+      "check": "AI/VI file pairs: FAH-ERR-001",
+      "status": "Verified",
+      "detail": [
+        "COVERAGE.md",
+        "DEEP_AUDIT_FINDINGS.md",
+        "DEEP_AUDIT_REPORT.md",
+        "FINDINGS.md",
+        "FULL_PASS_FINDINGS.md",
+        "INDEX.md",
+        "RUNTIME_API_SQL.md",
+        "SOURCE_INVENTORY.md",
+        "VALIDATION.md"
+      ]
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/COVERAGE.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-004",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-012",
+          "ERR-013",
+          "ERR-015",
+          "ERR-020",
+          "ERR-021",
+          "ERR-024"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-004",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-012",
+          "ERR-013",
+          "ERR-015",
+          "ERR-020",
+          "ERR-021",
+          "ERR-024"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-012",
+          "ERR-013",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-021",
+          "ERR-022",
+          "ERR-023",
+          "ERR-024"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-012",
+          "ERR-013",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-021",
+          "ERR-022",
+          "ERR-023",
+          "ERR-024"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-004",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-010",
+          "ERR-011",
+          "ERR-012",
+          "ERR-013",
+          "ERR-014",
+          "ERR-015",
+          "ERR-016",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-020",
+          "ERR-021",
+          "ERR-022",
+          "ERR-023",
+          "ERR-024"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-004",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-010",
+          "ERR-011",
+          "ERR-012",
+          "ERR-013",
+          "ERR-014",
+          "ERR-015",
+          "ERR-016",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-020",
+          "ERR-021",
+          "ERR-022",
+          "ERR-023",
+          "ERR-024"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-004",
+          "ERR-005",
+          "ERR-021"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-003",
+          "ERR-004",
+          "ERR-005",
+          "ERR-021"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/FULL_PASS_FINDINGS.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-003",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-010",
+          "ERR-011",
+          "ERR-012",
+          "ERR-013",
+          "ERR-014",
+          "ERR-015",
+          "ERR-016",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-020"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-003",
+          "ERR-005",
+          "ERR-006",
+          "ERR-007",
+          "ERR-008",
+          "ERR-009",
+          "ERR-010",
+          "ERR-011",
+          "ERR-012",
+          "ERR-013",
+          "ERR-014",
+          "ERR-015",
+          "ERR-016",
+          "ERR-017",
+          "ERR-018",
+          "ERR-019",
+          "ERR-020"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-006",
+          "ERR-012",
+          "ERR-013",
+          "ERR-019",
+          "ERR-021",
+          "ERR-024"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-006",
+          "ERR-012",
+          "ERR-013",
+          "ERR-019",
+          "ERR-021",
+          "ERR-024"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/RUNTIME_API_SQL.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013",
+          "ERR-016",
+          "ERR-018"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013",
+          "ERR-016",
+          "ERR-018"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/SOURCE_INVENTORY.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001"
+        ],
+        "vi": [
+          "ERR-001"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-ERR-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-012",
+          "ERR-013",
+          "ERR-015",
+          "ERR-024"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-012",
+          "ERR-013",
+          "ERR-015",
+          "ERR-024"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI file pairs: FAH-DB-SYNC-001",
+      "status": "Verified",
+      "detail": [
+        "INDEX.md",
+        "VALIDATION.md"
+      ]
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-DB-SYNC-001/INDEX.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "AI/VI stable IDs: FAH-DB-SYNC-001/VALIDATION.md",
+      "status": "Verified",
+      "detail": {
+        "ai": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013"
+        ],
+        "vi": [
+          "ERR-001",
+          "ERR-002",
+          "ERR-005",
+          "ERR-013"
+        ],
+        "semanticReview": "Manual meaning comparison required; token equality is not translation proof"
+      }
+    },
+    {
+      "check": "24 groups/2P1/20P2/2P3: ai",
+      "status": "Verified",
+      "detail": {
+        "groups": {
+          "ERR-001": "P2",
+          "ERR-002": "P2",
+          "ERR-003": "P2",
+          "ERR-004": "P2",
+          "ERR-005": "P2",
+          "ERR-006": "P2",
+          "ERR-007": "P2",
+          "ERR-008": "P1",
+          "ERR-009": "P1",
+          "ERR-010": "P2",
+          "ERR-011": "P2",
+          "ERR-012": "P2",
+          "ERR-013": "P2",
+          "ERR-014": "P2",
+          "ERR-015": "P2",
+          "ERR-016": "P2",
+          "ERR-017": "P2",
+          "ERR-018": "P2",
+          "ERR-019": "P2",
+          "ERR-020": "P3",
+          "ERR-021": "P2",
+          "ERR-022": "P3",
+          "ERR-023": "P2",
+          "ERR-024": "P2"
+        },
+        "priorities": {
+          "P1": 2,
+          "P2": 20,
+          "P3": 2
+        }
+      }
+    },
+    {
+      "check": "ERR024 evidence boundaries and merged extensions: ai",
+      "status": "Verified",
+      "detail": {
+        "backend": "Static source trace; probe API mocked; no browser/API/SQL remediation claim"
+      }
+    },
+    {
+      "check": "24 groups/2P1/20P2/2P3: vi",
+      "status": "Verified",
+      "detail": {
+        "groups": {
+          "ERR-001": "P2",
+          "ERR-002": "P2",
+          "ERR-003": "P2",
+          "ERR-004": "P2",
+          "ERR-005": "P2",
+          "ERR-006": "P2",
+          "ERR-007": "P2",
+          "ERR-008": "P1",
+          "ERR-009": "P1",
+          "ERR-010": "P2",
+          "ERR-011": "P2",
+          "ERR-012": "P2",
+          "ERR-013": "P2",
+          "ERR-014": "P2",
+          "ERR-015": "P2",
+          "ERR-016": "P2",
+          "ERR-017": "P2",
+          "ERR-018": "P2",
+          "ERR-019": "P2",
+          "ERR-020": "P3",
+          "ERR-021": "P2",
+          "ERR-022": "P3",
+          "ERR-023": "P2",
+          "ERR-024": "P2"
+        },
+        "priorities": {
+          "P1": 2,
+          "P2": 20,
+          "P3": 2
+        }
+      }
+    },
+    {
+      "check": "ERR024 evidence boundaries and merged extensions: vi",
+      "status": "Verified",
+      "detail": {
+        "backend": "Static source trace; probe API mocked; no browser/API/SQL remediation claim"
+      }
+    },
+    {
+      "check": "Historical321 screening source bytes checked separately",
+      "status": "Verified",
+      "detail": {
+        "count": 321,
+        "mismatches": [],
+        "limit": "Old files only. Does not assert current source universe has321 files or new approved migration/tool/test files absent."
+      }
+    },
+    {
+      "check": "Accepted UI remainder attribution",
+      "status": "Verified",
+      "detail": {
+        "reviewCounts": {
+          "denominator": 99,
+          "priorFullReadClaims": 43,
+          "remainderFullReadClaims": 56,
+          "remainingUnreviewedClaims": 0,
+          "unchangedUiSourceHashes": 99,
+          "probeObservations": 2,
+          "probeSourceHashes": 8,
+          "testSupportExcluded": 1
+        },
+        "limit": "Reviewer checks attribution, inventory/hash consistency, selected complete units and mocked source behavior. Hashes do not prove an author manually read each file. No reread claim for all 99; no React DOM/browser/API/SQL/provider verification."
+      }
+    },
+    {
+      "check": "StageA captured safety evidence",
+      "status": "Verified",
+      "detail": {
+        "stageHistory": 13,
+        "stageCleanTables": 0,
+        "limit": "StageA only; no new SQL run, main apply or schema-compatible empty clean DB claim"
+      }
+    },
+    {
+      "check": "Preserved FAILED candidate artifact hashes",
+      "status": "Verified",
+      "detail": {
+        "files": 17,
+        "mismatches": [],
+        "patchSha256": "5b6c760e3ab8ceafa1da1b2e3a726501f90b8e967a78708c2deb432fa9765ee3",
+        "limit": "Historical failed candidate only;not compared to updated R1 worktree and never apply old SQL"
+      }
+    },
+    {
+      "check": "Actual B2 captured SQL results",
+      "status": "Verified",
+      "detail": {
+        "tests": {
+          "passed": 16,
+          "failed": 0,
+          "total": 16,
+          "skipped": 0
+        },
+        "preservationTables": 33,
+        "limit": "Runtime owner evidence;no SQL rerun by synthesizer;not main apply"
+      }
+    },
+    {
+      "check": "Independent B2 acceptance evidence",
+      "status": "Verified",
+      "detail": {
+        "reviewerAssertions": "33tables/history/16TRX/3POSTstates",
+        "limit": "Review of captured SQL proof,not reviewer SQL execution"
+      }
+    },
+    {
+      "check": "Actual main03 execution/POST captured proof",
+      "status": "Verified",
+      "detail": {
+        "current": 13,
+        "applied": 14,
+        "historyOnly": [
+          "20260601083335_Phase10ManualCreditOperations"
+        ],
+        "limit": "Actual runtime artifacts,not SQL rerun;API/final review separate"
+      }
+    },
+    {
+      "check": "Actual clone API18 observations captured proof",
+      "status": "Verified",
+      "detail": {
+        "observations": 18,
+        "denominator": "15boundedscenarios+health+2authsetup",
+        "limit": "Actual MVC/JWT/SQL clone only;500 is reproduced defect,not fix;no browser/provider/fullE2E claim"
+      }
+    },
+    {
+      "check": "Actual main API3 readonly observations",
+      "status": "Verified",
+      "detail": {
+        "target": "FormAutoHub",
+        "limit": "Readonly startup/health/auth challenge/missingroute only;no main fixture writes"
+      }
+    },
+    {
+      "check": "Actual clone evidence4 supplemental observations",
+      "status": "Verified",
+      "detail": {
+        "observations": 4,
+        "filenameUnits": "244input->200stored",
+        "sqlAggregate": "1|400|18|1|68|1\n0|1|1",
+        "limit": "Clone only;separate denominator;no external provider/submission"
+      }
+    },
+    {
+      "check": "Canonical final22 evidence hashes/sizes",
+      "status": "Verified",
+      "detail": {
+        "files": 22,
+        "mismatches": [],
+        "manifestSha256": "c3dafec77f82f907584b54171d6d78607963ccb376f3c906226d65e83c00758a",
+        "superseded": "Old manifest explicitly stale;retained unchanged and not used as current evidence"
+      }
+    },
+    {
+      "check": "Final owned resources StateListen release proof",
+      "status": "Verified",
+      "detail": {
+        "pids": [
+          {
+            "pid": 16928,
+            "exists": false
+          },
+          {
+            "pid": 24496,
+            "exists": false
+          },
+          {
+            "pid": 19496,
+            "exists": false
+          }
+        ],
+        "ports": [
+          {
+            "port": 5247,
+            "stateFilter": "Listen",
+            "listenerCount": 0
+          },
+          {
+            "port": 5248,
+            "stateFilter": "Listen",
+            "listenerCount": 0
+          },
+          {
+            "port": 5249,
+            "stateFilter": "Listen",
+            "listenerCount": 0
+          }
+        ],
+        "limit": "SQLservice/DBs/backup/evidence retained;historical PID0rawcapture not current listener proof"
+      }
+    },
+    {
+      "check": "Final independent scoped acceptance frozen",
+      "status": "Verified",
+      "detail": {
+        "reviewSha256": "64796a012c30d21adadb7f3e1845b8f81f79bfb6aa24999ae93fb6b3ae630624",
+        "verdict": "Accepted scoped local DB sync and bounded resumed audit; no code/SQL/runtime blocker",
+        "limit": "Reviewer accepts runtime/code scope;final paired translation bytes remain documentation-owner responsibility"
+      }
+    },
+    {
+      "check": "Current HEAD",
+      "status": "Verified",
+      "detail": {
+        "actual": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+        "auditedBase": "a19f7a2f3dc1bc54ff645d662d94fc614439256a"
+      }
+    },
+    {
+      "check": "Reviewed integrated R1 exact17source hashes",
+      "status": "Verified",
+      "detail": {
+        "files": 17,
+        "mismatches": [],
+        "provenance": "artifacts/reports/db-sync-2026-10-29/integration/fix-r1/approved-source-files.json",
+        "limit": "Current integrated source separately scoped from321historic screen"
+      }
+    },
+    {
+      "check": "Current changed-file whitelist",
+      "status": "Verified",
+      "detail": {
+        "tracked": [
+          "tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj"
+        ],
+        "visibleCount": 577,
+        "unexpected": [],
+        "approvedSourceFiles": [
+          "scripts/db-compatibility/BaselineModelGuard.cs",
+          "scripts/db-compatibility/CatalogReader.cs",
+          "scripts/db-compatibility/CompatibilityPolicy.cs",
+          "scripts/db-compatibility/DbCompatibilityProbe.csproj",
+          "scripts/db-compatibility/OfflineScripts.cs",
+          "scripts/db-compatibility/Program.cs",
+          "scripts/db-compatibility/README.md",
+          "scripts/db-compatibility/SchemaBaseline.cs",
+          "scripts/db-compatibility/catalog.sql",
+          "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+          "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+          "tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+          "tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+          "tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+          "tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+          "tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+          "tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs"
+        ],
+        "preservedEvidenceZones": [
+          "artifacts/reports/db-migration-analysis-2026-10-29/",
+          "artifacts/reports/db-sync-2026-10-29/",
+          "artifacts/reports/error-audit-2026-10-29/",
+          "docs/ai/tasks/FAH-ERR-001/",
+          "docs/ai/tasks/FAH-DB-SYNC-001/",
+          "docs/vi/tasks/FAH-ERR-001/",
+          "docs/vi/tasks/FAH-DB-SYNC-001/"
+        ],
+        "ignored": "Not asserted unchanged;prior .next cache writes preserved"
+      }
+    },
+    {
+      "check": "Preserved baseline content/hash",
+      "status": "Verified",
+      "detail": {
+        "files": 16,
+        "preserved": "Exact pre-update UTF8 source bytes including original CRLF;readable content normalized LF;historic checks not overwritten"
+      }
+    }
+  ],
+  "failures": [],
+  "documents": [
+    {
+      "path": "docs/ai/tasks/FAH-DB-SYNC-001/INDEX.md",
+      "sha256": "e2168c2707127a175a749b695f82074ec1a130277d4d16316d92cb30a6bfc581"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+      "sha256": "3d441720759ab0c51e6521455643a96d571746c490bb63cf1cf099f1cc13d9d2"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/COVERAGE.md",
+      "sha256": "da2423fbad4fc8a2105b2f5123fa668adc85ac20fe69ffe890d424e61eb786a7"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+      "sha256": "9c2f67ea64d680956bd825b33e62dbdc309ccb8fb4846f5605a5d491dae8f766"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+      "sha256": "3e7893407bbabbf9716b60a743edc47d7f4552c9074f85071df6c9907733cb6b"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/FINDINGS.md",
+      "sha256": "7995061bc8a9972c948bcf933e09515ed3ac68adee441fcbcab3666d732aa65c"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+      "sha256": "cf42d2231cc8721ef743f5b4267e8277939f69a7a33886596d899f2f72180cb7"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/INDEX.md",
+      "sha256": "b0bbb9d0960d8e84664e1337ec66101879c623c7b46276e8e7e831a23bc71954"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+      "sha256": "bf7747e23a0281df64b5b7bb126d36cbe423e570b10642ca97faa2522a1f10eb"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+      "sha256": "7471ed3d766a09ee9ec396ba7a5fa84293d9bcb4946c7ebf82ea900f5e634d01"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/VALIDATION.md",
+      "sha256": "6f5d74d3a5b1053e718ff5a2d5c5c99849fc01604d585c20eb7ddf1c3cbf2359"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-DB-SYNC-001/INDEX.md",
+      "sha256": "b3170eb398c1e9af41c23c6675dfb120869f766f27be2f66e922a842ad191248"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+      "sha256": "3f6935f4e7700e6023efc2ea1a3dd712aa7e9ac082d84e3792cb6a278ae3047c"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/COVERAGE.md",
+      "sha256": "29a1c098ab864d87da600c1ec1a36cf54d7b0f457ce25b9c6c595f758ba7f8c9"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+      "sha256": "70de264f841948e0affa76aa663dbc4c25cb8ad185ef1410c6cbb0109fb54cc5"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+      "sha256": "f4e81d069b27dd24bac5bc2e33a83bf0df2f66a18c9981d36e88f507e15c6e31"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/FINDINGS.md",
+      "sha256": "19a4b057ee492770e404d93fc5095f580524e0c99fe67e3e52b5904c075e6953"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+      "sha256": "0c4e9e6401efdd4af9245bdc7ce3c13d1565321300021f0c19353f4e68e2f0f3"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/INDEX.md",
+      "sha256": "39615682f21d17269523dd43cd92a7c21fb50f4f4ad9b98b11a517b8079b702f"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+      "sha256": "51bb4dc9fc44a7474eae8341299d109b000fcf742d041dc219d057839dd5df52"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+      "sha256": "0160f687fce8d67f358bd91a88dfee76517b7466723ba5702f7ba0988dd15191"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/VALIDATION.md",
+      "sha256": "00167528e8f1a1ca20f43dcee36c383d57253779a8b7e54afa7792cee88f1bdc"
+    }
+  ],
+  "limits": [
+    "Documentation integrity,approved17source hashes and captured evidence consistency only",
+    "No new SQL/API/browser/provider probe executed by synthesizer",
+    "Scoped local DBsync accepted by independent final review;full24group/provider/browser system coverage and release not claimed",
+    "AI/VI semantic meaning manually compared by document author;IDs/counts checked automatically;reviewer did not certify translation bytes"
+  ]
+}

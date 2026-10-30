@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-29T07:11:02.427186+00:00",
+  "status": "Verified",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "sourceFiles": 321,
+  "sourceHashChanges": [],
+  "trackedDiff": [],
+  "documentFiles": {
+    "docs/ai/tasks/FAH-ERR-001/COVERAGE.md": {
+      "lines": 45,
+      "links": 5,
+      "sha256": "bdc8bc6f9884aefa81bc3b1bfee8e0da456f86a5fe1f2240f5781200aa174a43"
+    },
+    "docs/ai/tasks/FAH-ERR-001/FINDINGS.md": {
+      "lines": 73,
+      "links": 22,
+      "sha256": "7bed559d407a9563b6bd74509d42f66b1f00114be1a2706a43221e86b0a8be92"
+    },
+    "docs/ai/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md": {
+      "lines": 168,
+      "links": 51,
+      "sha256": "0bc45870cbd98fd8dd0b1a57da3e28942b6b04096a1bec373408c042f902dd1a"
+    },
+    "docs/ai/tasks/FAH-ERR-001/INDEX.md": {
+      "lines": 96,
+      "links": 11,
+      "sha256": "1fa4b00362f56fcb3da840fd2958caf283f15796a24967cd9461a7b2827ea913"
+    },
+    "docs/ai/tasks/FAH-ERR-001/SOURCE_INVENTORY.md": {
+      "lines": 331,
+      "links": 3,
+      "sha256": "2527e8135b1360f351dc67a2bb262e39847c83110ec5645d9493b5b62333703b"
+    },
+    "docs/ai/tasks/FAH-ERR-001/VALIDATION.md": {
+      "lines": 23,
+      "links": 4,
+      "sha256": "22c4df9cd68aacea4e3cdf9a09976b2d70a427f1459fb71a6b6b70de879ef473"
+    },
+    "docs/vi/tasks/FAH-ERR-001/COVERAGE.md": {
+      "lines": 45,
+      "links": 5,
+      "sha256": "32e2937c79f6a26d01fd62eb2ce83eab63b24b82a8302d05a7192b2cecaa18f3"
+    },
+    "docs/vi/tasks/FAH-ERR-001/FINDINGS.md": {
+      "lines": 73,
+      "links": 22,
+      "sha256": "eb954f53f6d5b2192e95af54279b3eabceda3be565854138941807b6f66045f3"
+    },
+    "docs/vi/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md": {
+      "lines": 168,
+      "links": 51,
+      "sha256": "fadd3f82f04fc1248e36544270a7ed5863832df4f05d535598f0f25a9a34f861"
+    },
+    "docs/vi/tasks/FAH-ERR-001/INDEX.md": {
+      "lines": 96,
+      "links": 11,
+      "sha256": "cfb79e700e562d2d5f5036ea40fb656f2f70066a25e6d4210dc23df247d0404b"
+    },
+    "docs/vi/tasks/FAH-ERR-001/SOURCE_INVENTORY.md": {
+      "lines": 331,
+      "links": 3,
+      "sha256": "306707b61fa188ba794783c901c90e16471b3aef196d4ad1601964058fb57ac6"
+    },
+    "docs/vi/tasks/FAH-ERR-001/VALIDATION.md": {
+      "lines": 23,
+      "links": 4,
+      "sha256": "38a8f96b38a457447d497bb35bace73d5b6a12c44893c5544f6eca313f4c0151"
+    }
+  },
+  "backendTrx": {
+    "total": "158",
+    "executed": "158",
+    "passed": "158",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "probeArtifacts": [
+    {
+      "file": "shared-error-probe-results.json",
+      "sha256": "91cb47f70e8098878af30d4478b47e176b1c2411422b6c3f6d8bb90279123773"
+    },
+    {
+      "file": "full-pass-probe-results.json",
+      "sha256": "c40874bf2ff0723cf65e214d92994e8259c4b122cbf559a45df7e17fab9352bc"
+    }
+  ],
+  "errors": [],
+  "limits": "Document/hash checks, not semantic translation certification or runtime validation. AI/VI commitments and finding IDs self-reviewed; no independent reviewer."
+}

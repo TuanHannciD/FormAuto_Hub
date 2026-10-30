@@ -1,0 +1,21 @@
+{
+  "status": "Verified",
+  "cases": [
+    {
+      "scenario": "missing-table",
+      "errorNumber": 51001,
+      "rejected": true,
+      "ownedTransactionRolledBack": true,
+      "atUtc": "2026-10-29T19:25:01.0652232Z"
+    },
+    {
+      "scenario": "missing-column",
+      "errorNumber": 51002,
+      "rejected": true,
+      "ownedTransactionRolledBack": true,
+      "atUtc": "2026-10-29T19:25:01.1071461Z"
+    }
+  ],
+  "independentRollbackReadPassed": true,
+  "historyUnchanged13": true
+}

@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-30T00:15:17.8303321Z",
+  "status": "Verified",
+  "scope": "Owned API process IDs and TCP listeners only; no SQL queries or mutation",
+  "query": "Get-NetTCPConnection -State Listen; filtered to LocalPort 5247,5248,5249",
+  "processes": [
+    {
+      "pid": 16928,
+      "exists": false
+    },
+    {
+      "pid": 24496,
+      "exists": false
+    },
+    {
+      "pid": 19496,
+      "exists": false
+    }
+  ],
+  "ports": [
+    {
+      "port": 5247,
+      "stateFilter": "Listen",
+      "listenerCount": 0
+    },
+    {
+      "port": 5248,
+      "stateFilter": "Listen",
+      "listenerCount": 0
+    },
+    {
+      "port": 5249,
+      "stateFilter": "Listen",
+      "listenerCount": 0
+    }
+  ],
+  "listeners": [],
+  "historicalRelease": "final-resource-release.json",
+  "previousVerifiedRelease": "final-resource-release-verified.json",
+  "historicalNote": "Earlier raw capture with PID 0 is historical and is not used as final listener-release proof.",
+  "resourcesRetained": "SQL service, owned databases, backup and all evidence retained; this check performs no cleanup."
+}

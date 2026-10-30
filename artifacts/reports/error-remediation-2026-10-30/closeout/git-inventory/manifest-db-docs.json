@@ -1,0 +1,22 @@
+[
+  {
+    "path": "docs/ai/tasks/FAH-DB-SYNC-001/INDEX.md",
+    "bytes": 11573,
+    "sha256": "e2168c2707127a175a749b695f82074ec1a130277d4d16316d92cb30a6bfc581"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+    "bytes": 10593,
+    "sha256": "3d441720759ab0c51e6521455643a96d571746c490bb63cf1cf099f1cc13d9d2"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-DB-SYNC-001/INDEX.md",
+    "bytes": 11905,
+    "sha256": "b3170eb398c1e9af41c23c6675dfb120869f766f27be2f66e922a842ad191248"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-DB-SYNC-001/VALIDATION.md",
+    "bytes": 10914,
+    "sha256": "3f6935f4e7700e6023efc2ea1a3dd712aa7e9ac082d84e3792cb6a278ae3047c"
+  }
+]

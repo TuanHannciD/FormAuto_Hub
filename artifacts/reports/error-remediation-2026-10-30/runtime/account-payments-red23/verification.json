@@ -1,0 +1,15 @@
+{
+  "exit": 1,
+  "requestedLabel": "RED23",
+  "actualCounts": {
+    "failed": 18,
+    "executed": 21,
+    "skipped": 0,
+    "passed": 3
+  },
+  "assertionFailures": 18,
+  "unguardedTypeErrorCount": 0,
+  "hashDrift": [],
+  "writerSnapshotDrift": [],
+  "limit": "Node VM source handlers/static assertions; browser/API SQL payment providers not run"
+}

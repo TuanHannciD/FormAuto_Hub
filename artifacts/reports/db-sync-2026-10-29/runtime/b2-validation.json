@@ -1,0 +1,205 @@
+{
+  "atUtc": "2026-10-29T19:25:42.4271263Z",
+  "restoreApplicationTablesEqual": 33,
+  "historyBefore13After14OnlyPlannedAdded": true,
+  "legacyIndexesExactPreserved": true,
+  "cleanHistory13": true,
+  "cleanRestoreRepeatNoop": true,
+  "safetyHookNegativeAll34DataAndHistoryUnchanged": true,
+  "mainAll34StillMatchesVerifiedBackup": true,
+  "sqlTests": {
+    "passed": 16,
+    "failed": 0,
+    "total": 16,
+    "skipped": 0
+  },
+  "comparisons": [
+    {
+      "table": "AiGenerationRunItems",
+      "count": 5548,
+      "exactEqual": true
+    },
+    {
+      "table": "AiGenerationRuns",
+      "count": 123,
+      "exactEqual": true
+    },
+    {
+      "table": "AiPromptProfiles",
+      "count": 71,
+      "exactEqual": true
+    },
+    {
+      "table": "AiProviderSettings",
+      "count": 1,
+      "exactEqual": true
+    },
+    {
+      "table": "AiQuestionPrompts",
+      "count": 105,
+      "exactEqual": true
+    },
+    {
+      "table": "AnswerRules",
+      "count": 660,
+      "exactEqual": true
+    },
+    {
+      "table": "AuditLogs",
+      "count": 30,
+      "exactEqual": true
+    },
+    {
+      "table": "CreditPackages",
+      "count": 5,
+      "exactEqual": true
+    },
+    {
+      "table": "CreditTransactions",
+      "count": 142,
+      "exactEqual": true
+    },
+    {
+      "table": "DataCollectionLogs",
+      "count": 10,
+      "exactEqual": true
+    },
+    {
+      "table": "FormProjects",
+      "count": 135,
+      "exactEqual": true
+    },
+    {
+      "table": "FormQuestions",
+      "count": 1990,
+      "exactEqual": true
+    },
+    {
+      "table": "GeneratedResponses",
+      "count": 1017,
+      "exactEqual": true
+    },
+    {
+      "table": "ModelRelations",
+      "count": 2,
+      "exactEqual": true
+    },
+    {
+      "table": "NodePositions",
+      "count": 3,
+      "exactEqual": true
+    },
+    {
+      "table": "NormalizedDatasets",
+      "count": 1082,
+      "exactEqual": true
+    },
+    {
+      "table": "ObservedQuestionMappings",
+      "count": 3,
+      "exactEqual": true
+    },
+    {
+      "table": "PaymentProviderSettings",
+      "count": 1,
+      "exactEqual": true
+    },
+    {
+      "table": "PaymentRecords",
+      "count": 13,
+      "exactEqual": true
+    },
+    {
+      "table": "RefreshTokens",
+      "count": 483,
+      "exactEqual": true
+    },
+    {
+      "table": "ResearchFormQuestions",
+      "count": 34,
+      "exactEqual": true
+    },
+    {
+      "table": "ResearchForms",
+      "count": 7,
+      "exactEqual": true
+    },
+    {
+      "table": "ResearchModels",
+      "count": 2,
+      "exactEqual": true
+    },
+    {
+      "table": "ResearchVariables",
+      "count": 4,
+      "exactEqual": true
+    },
+    {
+      "table": "SubmissionJobs",
+      "count": 19,
+      "exactEqual": true
+    },
+    {
+      "table": "SubmissionLogs",
+      "count": 542,
+      "exactEqual": true
+    },
+    {
+      "table": "SurveyResponses",
+      "count": 1082,
+      "exactEqual": true
+    },
+    {
+      "table": "TopupOrderEvidenceFiles",
+      "count": 5,
+      "exactEqual": true
+    },
+    {
+      "table": "TopupOrders",
+      "count": 26,
+      "exactEqual": true
+    },
+    {
+      "table": "UsageLogs",
+      "count": 359,
+      "exactEqual": true
+    },
+    {
+      "table": "UserCreditAccounts",
+      "count": 37,
+      "exactEqual": true
+    },
+    {
+      "table": "UserExternalLogins",
+      "count": 3,
+      "exactEqual": true
+    },
+    {
+      "table": "Users",
+      "count": 35,
+      "exactEqual": true
+    }
+  ],
+  "equalPairs": [
+    [
+      "b2-clean-before-repeat.json",
+      "b2-clean-after-repeat.json"
+    ],
+    [
+      "b2-restore-after.json",
+      "b2-restore-after-repeat.json"
+    ],
+    [
+      "b2-safety-before-hook.json",
+      "b2-safety-after-hook-negative.json"
+    ],
+    [
+      "source-before-backup.json",
+      "b2-main-readonly-current.json"
+    ],
+    [
+      "restore-baseline.json",
+      "b2-restore-before.json"
+    ]
+  ]
+}

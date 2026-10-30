@@ -1,0 +1,551 @@
+{
+  "config": {
+    "configFile": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\playwright-owned.config.cjs",
+    "rootDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/auth-callback-final-browser/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/auth-callback-final-browser/playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth-session.spec.ts",
+      "file": "auth-session.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "expired stored session settles on login with one notification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4589,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:08:48.830Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9343c0faad9d5d909287-382d08689fbd5234e98d",
+          "file": "auth-session.spec.ts",
+          "line": 10,
+          "column": 5
+        },
+        {
+          "title": "parallel dashboard requests share refresh and keep the rotated session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1641,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:08:53.522Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9343c0faad9d5d909287-bc1d6bf71657357c004b",
+          "file": "auth-session.spec.ts",
+          "line": 26,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "fah-err-auth-callback.spec.ts",
+      "file": "fah-err-auth-callback.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "id_token callback caller handles Google HTTP 409 safely",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1500,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Vui lòng đăng nhập bằng mật')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Vui lòng đăng nhập bằng mật')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                      "column": 53,
+                      "line": 21
+                    },
+                    "snippet": "  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                        "column": 53,
+                        "line": 21
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Vui lòng đăng nhập bằng mật khẩu trước, sau đó liên kết Google trong hồ sơ bảo mật.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Vui lòng đăng nhập bằng mật')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n\n  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:08:55.178Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b9eb0-dles-Google-HTTP-409-safely-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b9eb0-dles-Google-HTTP-409-safely-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b9eb0-dles-Google-HTTP-409-safely-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                    "column": 53,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "87470fdf7cc621a32f4e-d6414e25b0c570b5c374",
+          "file": "fah-err-auth-callback.spec.ts",
+          "line": 8,
+          "column": 7
+        },
+        {
+          "title": "id_token callback caller handles Google HTTP 401 safely",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1041,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Email Google chưa được xác')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Email Google chưa được xác')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                      "column": 53,
+                      "line": 21
+                    },
+                    "snippet": "  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                        "column": 53,
+                        "line": 21
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Email Google chưa được xác minh hoặc mã đăng nhập không hợp lệ.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Email Google chưa được xác')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n\n  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:08:58.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-3889b-dles-Google-HTTP-401-safely-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-3889b-dles-Google-HTTP-401-safely-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-3889b-dles-Google-HTTP-401-safely-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                    "column": 53,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "87470fdf7cc621a32f4e-af9c8cdbb3ae7b415e05",
+          "file": "fah-err-auth-callback.spec.ts",
+          "line": 8,
+          "column": 7
+        },
+        {
+          "title": "id_token callback caller handles Google HTTP 503 safely",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1030,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Không thể hoàn tất đăng nhập bằng Google. Vui lòng thử lại.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Không thể hoàn tất đăng nhập')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Không thể hoàn tất đăng nhập bằng Google. Vui lòng thử lại.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Không thể hoàn tất đăng nhập')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                      "column": 53,
+                      "line": 21
+                    },
+                    "snippet": "  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                        "column": 53,
+                        "line": 21
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"alert\"]')\nExpected: \u001b[32m\"Không thể hoàn tất đăng nhập bằng Google. Vui lòng thử lại.\"\u001b[39m\nError: strict mode violation: locator('div[role=\"alert\"]') resolved to 2 elements:\n    1) <div role=\"alert\" class=\"flex items-start gap-3 rounded-xl bg-destructive-surface p-5 text-sm leading-6 text-destructive\">…</div> aka getByLabel('Đăng nhập tài khoản').getByText('Không thể hoàn tất đăng nhập')\n    2) <div role=\"alert\" aria-live=\"assertive\" id=\"__next-route-announcer__\"></div> aka locator('[id=\"__next-route-announcer__\"]')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"alert\"]')\u001b[22m\n\n\n  19 |     });\n  20 |     await page.goto(\"/auth/callback?id_token=synthetic-id-token\");\n> 21 |     await expect(page.locator('div[role=\"alert\"]')).toHaveText(scenario.expected);\n     |                                                     ^\n  22 |     await expect(page.getByRole(\"link\", { name: \"Quay lại đăng nhập\", exact: true })).toHaveAttribute(\"href\", \"/login\");\n  23 |     await expect(page.locator(\"body\")).not.toContainText(\"private-callback-marker\");\n  24 |     expect(posts).toBeGreaterThan(0);\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts:21:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:08:59.817Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b4707-dles-Google-HTTP-503-safely-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b4707-dles-Google-HTTP-503-safely-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\auth-callback-final-browser\\results\\fah-err-auth-callback-id-t-b4707-dles-Google-HTTP-503-safely-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+                    "column": 53,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "87470fdf7cc621a32f4e-598550fd6e3b50e8fa4a",
+          "file": "fah-err-auth-callback.spec.ts",
+          "line": 8,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "fah-err-auth-errors.spec.ts",
+      "file": "fah-err-auth-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "login caller maps HTTP 401 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1100,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:09:01.604Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-310c006b1c1dfb59d856",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "login caller maps HTTP 423 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 822,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:09:02.801Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-54427197fff93af966e1",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "login caller maps HTTP 500 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 823,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:09:03.632Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-0c0c44a0b3ab04a18c6f",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "registration caller treats password validation as invalid input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1308,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:09:04.466Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-38a665f5b77ed7fb98ee",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 45,
+          "column": 5
+        },
+        {
+          "title": "network failure remains on login with safe recovery guidance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 823,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T11:09:05.783Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-464241c9d1f38642ce39",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 65,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T11:08:48.260Z",
+    "duration": 19260.920000000002,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

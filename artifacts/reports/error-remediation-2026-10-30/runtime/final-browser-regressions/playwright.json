@@ -1,0 +1,3555 @@
+{
+  "config": {
+    "configFile": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\playwright-owned.config.cjs",
+    "rootDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-regressions/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-regressions/playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "account-navigation.spec.ts",
+      "file": "account-navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "popup grows before revealing content and hides content before closing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2682,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:41.367Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-33549cec82d691708f0c",
+          "file": "account-navigation.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "popup can close during opening, dismiss outside and skip motion when reduced",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2069,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\account-navigation.spec.ts:94:160",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\account-navigation.spec.ts",
+                      "column": 160,
+                      "line": 94
+                    },
+                    "snippet": "  92 |   await launch.click();\n  93 |   await expect(page.locator(\"dialog[data-popup-phase]\")).toHaveAttribute(\"data-popup-phase\", \"open\");\n> 94 |   expect(await page.getByRole(\"dialog\").evaluate(node => node.getAnimations({ subtree: true }).filter(animation => animation.playState === \"running\").length)).toBe(0);\n     |                                                                                                                                                                ^\n  95 |   await page.keyboard.press(\"Escape\");\n  96 |   await expect(page.getByRole(\"dialog\")).toHaveCount(0);\n  97 |   await expect(trigger).toBeFocused();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\account-navigation.spec.ts",
+                        "column": 160,
+                        "line": 94
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n\n  92 |   await launch.click();\n  93 |   await expect(page.locator(\"dialog[data-popup-phase]\")).toHaveAttribute(\"data-popup-phase\", \"open\");\n> 94 |   expect(await page.getByRole(\"dialog\").evaluate(node => node.getAnimations({ subtree: true }).filter(animation => animation.playState === \"running\").length)).toBe(0);\n     |                                                                                                                                                                ^\n  95 |   await page.keyboard.press(\"Escape\");\n  96 |   await expect(page.getByRole(\"dialog\")).toHaveCount(0);\n  97 |   await expect(trigger).toBeFocused();\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\account-navigation.spec.ts:94:160"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:44.155Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\account-navigation-popup-c-cb91d-nd-skip-motion-when-reduced-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\account-navigation-popup-c-cb91d-nd-skip-motion-when-reduced-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\account-navigation-popup-c-cb91d-nd-skip-motion-when-reduced-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\account-navigation.spec.ts",
+                    "column": 160,
+                    "line": 94
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-9b02ab05d81fcaa016b3",
+          "file": "account-navigation.spec.ts",
+          "line": 63,
+          "column": 5
+        },
+        {
+          "title": "account entry is in topbar, with shared profile and security navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1702,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:47.677Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-34688fb62e7fd84003d5",
+          "file": "account-navigation.spec.ts",
+          "line": 100,
+          "column": 5
+        },
+        {
+          "title": "account dropdown supports keyboard dismissal, outside click and narrow screens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 904,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:49.482Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-cb1b9223d1a8278e2398",
+          "file": "account-navigation.spec.ts",
+          "line": 117,
+          "column": 5
+        },
+        {
+          "title": "profile save updates topbar name and password keeps the existing request contract",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2692,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:50.395Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-bdac56076ab7fa87684f",
+          "file": "account-navigation.spec.ts",
+          "line": 139,
+          "column": 5
+        },
+        {
+          "title": "admin uses the same account menu and logout clears session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:53.096Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-dfb2f4ff74d40eb2a038",
+          "file": "account-navigation.spec.ts",
+          "line": 160,
+          "column": 5
+        },
+        {
+          "title": "compact modal contains focus, fits mobile and restores focus after Escape",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1363,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:55.424Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-d661eb27c285c6022de7",
+          "file": "account-navigation.spec.ts",
+          "line": 171,
+          "column": 5
+        },
+        {
+          "title": "retired profile and security pages no longer render",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1815,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:56.794Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-fdbb1253b113fd7261f8",
+          "file": "account-navigation.spec.ts",
+          "line": 194,
+          "column": 5
+        },
+        {
+          "title": "account popup interpolates height, handles interruption and remains bounded on mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2199,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:59:58.618Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-5f20eb7bebdf6727d1c2",
+          "file": "account-navigation.spec.ts",
+          "line": 204,
+          "column": 5
+        },
+        {
+          "title": "account keeps native scrolling on mobile after resizing before swapping content",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2835,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:00.825Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b13d9cf3c88e6b84aad-dec444c35992aa0bad8f",
+          "file": "account-navigation.spec.ts",
+          "line": 245,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "admin-ui.spec.ts",
+      "file": "admin-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all admin routes render without overflow or runtime errors at 1440px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13163,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts:45:87",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                      "column": 87,
+                      "line": 45
+                    },
+                    "snippet": "  43 |     for (const [path, title] of pages) {\n  44 |       expect((await page.goto(path))?.status()).toBe(200);\n> 45 |       await expect(page.getByRole(\"heading\", { name: title, exact: true, level: 1 })).toBeVisible();\n     |                                                                                       ^\n  46 |       await expect(page.getByRole(\"button\", { name: \"Menu tài khoản\", exact: true })).toBeVisible();\n  47 |       if (path.endsWith(\"packages\")) await expect(width >= 768 ? page.getByRole(\"cell\", { name: packageItem.name, exact: true }) : page.getByText(packageItem.name, { exact: true }).first()).toBeVisible();\n  48 |       if (path.endsWith(\"payos-settings\")) await expect(page.getByLabel(\"Client ID\", { exact: true })).toHaveValue(payos.clientId);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                        "column": 87,
+                        "line": 45
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n\n\n  43 |     for (const [path, title] of pages) {\n  44 |       expect((await page.goto(path))?.status()).toBe(200);\n> 45 |       await expect(page.getByRole(\"heading\", { name: title, exact: true, level: 1 })).toBeVisible();\n     |                                                                                       ^\n  46 |       await expect(page.getByRole(\"button\", { name: \"Menu tài khoản\", exact: true })).toBeVisible();\n  47 |       if (path.endsWith(\"packages\")) await expect(width >= 768 ? page.getByRole(\"cell\", { name: packageItem.name, exact: true }) : page.getByText(packageItem.name, { exact: true }).first()).toBeVisible();\n  48 |       if (path.endsWith(\"payos-settings\")) await expect(page.getByLabel(\"Client ID\", { exact: true })).toHaveValue(payos.clientId);\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts:45:87"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:03.674Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--34edc-or-runtime-errors-at-1440px-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--34edc-or-runtime-errors-at-1440px-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--34edc-or-runtime-errors-at-1440px-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                    "column": 87,
+                    "line": 45
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ae1974e46a8834939ce0-bbd21db09bbe3f1ebb7c",
+          "file": "admin-ui.spec.ts",
+          "line": 37,
+          "column": 7
+        },
+        {
+          "title": "all admin routes render without overflow or runtime errors at 320px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9921,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts:45:87",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                      "column": 87,
+                      "line": 45
+                    },
+                    "snippet": "  43 |     for (const [path, title] of pages) {\n  44 |       expect((await page.goto(path))?.status()).toBe(200);\n> 45 |       await expect(page.getByRole(\"heading\", { name: title, exact: true, level: 1 })).toBeVisible();\n     |                                                                                       ^\n  46 |       await expect(page.getByRole(\"button\", { name: \"Menu tài khoản\", exact: true })).toBeVisible();\n  47 |       if (path.endsWith(\"packages\")) await expect(width >= 768 ? page.getByRole(\"cell\", { name: packageItem.name, exact: true }) : page.getByText(packageItem.name, { exact: true }).first()).toBeVisible();\n  48 |       if (path.endsWith(\"payos-settings\")) await expect(page.getByLabel(\"Client ID\", { exact: true })).toHaveValue(payos.clientId);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                        "column": 87,
+                        "line": 45
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Cấu hình Provider AI', exact: true, level: 1 })\u001b[22m\n\n\n  43 |     for (const [path, title] of pages) {\n  44 |       expect((await page.goto(path))?.status()).toBe(200);\n> 45 |       await expect(page.getByRole(\"heading\", { name: title, exact: true, level: 1 })).toBeVisible();\n     |                                                                                       ^\n  46 |       await expect(page.getByRole(\"button\", { name: \"Menu tài khoản\", exact: true })).toBeVisible();\n  47 |       if (path.endsWith(\"packages\")) await expect(width >= 768 ? page.getByRole(\"cell\", { name: packageItem.name, exact: true }) : page.getByText(packageItem.name, { exact: true }).first()).toBeVisible();\n  48 |       if (path.endsWith(\"payos-settings\")) await expect(page.getByLabel(\"Client ID\", { exact: true })).toHaveValue(payos.clientId);\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts:45:87"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:19.135Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--f4ca7--or-runtime-errors-at-320px-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--f4ca7--or-runtime-errors-at-320px-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\admin-ui-all-admin-routes--f4ca7--or-runtime-errors-at-320px-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\admin-ui.spec.ts",
+                    "column": 87,
+                    "line": 45
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ae1974e46a8834939ce0-370dfaa8dbb772b25276",
+          "file": "admin-ui.spec.ts",
+          "line": 37,
+          "column": 7
+        },
+        {
+          "title": "admin mobile navigation changes routes, closes and keeps account popup accessible",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2475,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:30.676Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ae1974e46a8834939ce0-bff088920d75ae782476",
+          "file": "admin-ui.spec.ts",
+          "line": 67,
+          "column": 5
+        },
+        {
+          "title": "admin settings keep their save payloads after restyling",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1657,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:33.251Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ae1974e46a8834939ce0-6612e85b833322836263",
+          "file": "admin-ui.spec.ts",
+          "line": 84,
+          "column": 5
+        },
+        {
+          "title": "normal users still cannot render admin controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 711,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:34.919Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ae1974e46a8834939ce0-27a942138f759ac0c724",
+          "file": "admin-ui.spec.ts",
+          "line": 98,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "auth-session.spec.ts",
+      "file": "auth-session.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "expired stored session settles on login with one notification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1663,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:35.641Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9343c0faad9d5d909287-382d08689fbd5234e98d",
+          "file": "auth-session.spec.ts",
+          "line": 10,
+          "column": 5
+        },
+        {
+          "title": "parallel dashboard requests share refresh and keep the rotated session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1310,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:37.313Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9343c0faad9d5d909287-bc1d6bf71657357c004b",
+          "file": "auth-session.spec.ts",
+          "line": 26,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "form-automation.spec.ts",
+      "file": "form-automation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "configuration edits invalidate confirmation and block sending old previews",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1292,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:38.639Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-b2fefe7d9472f9950905",
+          "file": "form-automation.spec.ts",
+          "line": 67,
+          "column": 5
+        },
+        {
+          "title": "reload restores paid previews, then continuation sends all original and new IDs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:39.939Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-e1cd07b13864e1df52e2",
+          "file": "form-automation.spec.ts",
+          "line": 80,
+          "column": 5
+        },
+        {
+          "title": "changing form URL clears previous analysis even when the next analysis fails",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6348,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\form-automation.spec.ts:109:92",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\form-automation.spec.ts",
+                      "column": 92,
+                      "line": 109
+                    },
+                    "snippet": "  107 |   await expect(page.getByRole(\"checkbox\")).toHaveCount(0);\n  108 |   await page.getByRole(\"button\", { name: \"Phân tích biểu mẫu\", exact: true }).click();\n> 109 |   await expect(page.locator(\"[data-sonner-toast]\").filter({ hasText: \"Không phân tích\" })).toBeVisible();\n      |                                                                                            ^\n  110 |   await expect(page.getByRole(\"button\", { name: \"Lưu và tạo bản xem trước\", exact: true })).toHaveCount(0);\n  111 | });\n  112 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\form-automation.spec.ts",
+                        "column": 92,
+                        "line": 109
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-sonner-toast]').filter({ hasText: 'Không phân tích' })\u001b[22m\n\n\n  107 |   await expect(page.getByRole(\"checkbox\")).toHaveCount(0);\n  108 |   await page.getByRole(\"button\", { name: \"Phân tích biểu mẫu\", exact: true }).click();\n> 109 |   await expect(page.locator(\"[data-sonner-toast]\").filter({ hasText: \"Không phân tích\" })).toBeVisible();\n      |                                                                                            ^\n  110 |   await expect(page.getByRole(\"button\", { name: \"Lưu và tạo bản xem trước\", exact: true })).toHaveCount(0);\n  111 | });\n  112 |\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\form-automation.spec.ts:109:92"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:42.056Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\form-automation-changing-f-db182-hen-the-next-analysis-fails-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\form-automation-changing-f-db182-hen-the-next-analysis-fails-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\form-automation-changing-f-db182-hen-the-next-analysis-fails-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\form-automation.spec.ts",
+                    "column": 92,
+                    "line": 109
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-f66f02753beb51ab5ee2",
+          "file": "form-automation.spec.ts",
+          "line": 101,
+          "column": 5
+        },
+        {
+          "title": "AI partial results without credit shortage report actual previews and cost",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1497,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:50.661Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-54ce2cd52a4e6410ab58",
+          "file": "form-automation.spec.ts",
+          "line": 113,
+          "column": 5
+        },
+        {
+          "title": "desktop and mobile workflow render without overflow or drawer overlap",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5819,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:52.259Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-c51df8f40896bfcec553",
+          "file": "form-automation.spec.ts",
+          "line": 131,
+          "column": 5
+        },
+        {
+          "title": "sticky generation actions remain clickable above expanded question editors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1064,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:58.087Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9c84b88d1e0371754074-c9eea85ce7d34e462396",
+          "file": "form-automation.spec.ts",
+          "line": 160,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "manual-credit-ui.spec.ts",
+      "file": "manual-credit-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "history and compact order/grant details work at 1440px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2530,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:00:59.163Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "82e94573b14d652ad33f-66f9ce1785eff97c68a7",
+          "file": "manual-credit-ui.spec.ts",
+          "line": 6,
+          "column": 38
+        },
+        {
+          "title": "history and compact order/grant details work at 320px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2431,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:01.702Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "82e94573b14d652ad33f-27bde3bca03cfb8b69b7",
+          "file": "manual-credit-ui.spec.ts",
+          "line": 6,
+          "column": 38
+        }
+      ]
+    },
+    {
+      "title": "nckh-delete-model.spec.ts",
+      "file": "nckh-delete-model.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "uses fresh totals, exact Vietnamese name, deletes only requested model and preserves selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2938,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:04.146Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-1e2c1e74bd9a4904a639",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 59,
+          "column": 5
+        },
+        {
+          "title": "dismiss cancel sends no DELETE and reopening resets name",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1763,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:07.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-19036c1ecb78fd1cc301",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 78,
+          "column": 72
+        },
+        {
+          "title": "dismiss escape sends no DELETE and reopening resets name",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1839,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:08.864Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-86e78c9105e69966b5ec",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 78,
+          "column": 72
+        },
+        {
+          "title": "dismiss backdrop sends no DELETE and reopening resets name",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1964,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:10.715Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-900441c2d73193265672",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 78,
+          "column": 72
+        },
+        {
+          "title": "loading and partial GET failure block deletion; reload recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2145,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:12.691Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-f1c0209d510b19019c1c",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 89,
+          "column": 5
+        },
+        {
+          "title": "renamed model at final check requires refreshed information and a new confirmation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30401,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts",
+                        "column": 45,
+                        "line": 102
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('button', { name: 'Xóa vĩnh viễn', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled class=\"inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-50 min-h-11 px-4 py-2 sm:min-h-10 bg-destructive text-destructive-foreground hover:opacity-90\">Xóa vĩnh viễn</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    54 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  100 | test(\"renamed model at final check requires refreshed information and a new confirmation\", async ({ page }) => {\n  101 |   const { state, dialog, input, remove } = await fixture(page, { rename: true });\n> 102 |   await input.fill(modelName); await remove.click();\n      |                                             ^\n  103 |   await expect(dialog.getByRole(\"alert\")).toContainText(\"Mô hình đã thay đổi\"); expect(state.deletes).toEqual([]);\n  104 |   await expect(remove).toBeDisabled(); await dialog.getByRole(\"button\", { name: \"Tải lại thông tin\" }).click();\n  105 |   await input.fill(modelName); await expect(remove).toBeDisabled(); await input.fill(\"Tên mới\"); await expect(remove).toBeEnabled();\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts:102:45"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:14.848Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-renamed--81a2a-tion-and-a-new-confirmation-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-renamed--81a2a-tion-and-a-new-confirmation-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-renamed--81a2a-tion-and-a-new-confirmation-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-d6d021b1d24873872929",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 100,
+          "column": 5
+        },
+        {
+          "title": "existing generated-form restriction is explained and cannot be confirmed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1459,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:47.728Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-12eb8df9bd0a6a02254b",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 108,
+          "column": 5
+        },
+        {
+          "title": "form generated in another tab before final check prevents DELETE",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30394,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts",
+                        "column": 15,
+                        "line": 116
+                      },
+                      "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByLabel('Nhập đúng tên mô hình để xác nhận')\u001b[22m\n\n\n  114 | test(\"form generated in another tab before final check prevents DELETE\", async ({ page }) => {\n  115 |   const { state, dialog, input, remove } = await fixture(page, { generatedLater: true });\n> 116 |   await input.fill(modelName); await remove.click();\n      |               ^\n  117 |   await expect(dialog.getByRole(\"alert\")).toContainText(\"Mô hình đã thay đổi\"); expect(state.deletes).toEqual([]);\n  118 |   await dialog.getByRole(\"button\", { name: \"Tải lại thông tin\" }).click();\n  119 |   await expect(dialog.getByText(/Mô hình đã sinh form mới/)).toBeVisible(); await expect(remove).toBeDisabled();\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts:116:15"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:01:49.290Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-form-gen-25056-final-check-prevents-DELETE-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-form-gen-25056-final-check-prevents-DELETE-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-form-gen-25056-final-check-prevents-DELETE-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-e15dfb756088e4336ee9",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 114,
+          "column": 5
+        },
+        {
+          "title": "malformed count never permits confirmation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6570,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\nExpected substring: \u001b[32m\"Không \u001b[7mxác định được đầy đủ\u001b[27m\"\u001b[39m\nReceived string:    \u001b[31m\"Không \u001b[7mtải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\u001b[22m\n\u001b[2m    14 × locator resolved to <div role=\"alert\" class=\"rounded-xl border border-info-border bg-info-surface p-4 text-sm leading-6 text-info\">Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử…</div>\u001b[22m\n\u001b[2m       - unexpected value \"Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\nExpected substring: \u001b[32m\"Không \u001b[7mxác định được đầy đủ\u001b[27m\"\u001b[39m\nReceived string:    \u001b[31m\"Không \u001b[7mtải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\u001b[22m\n\u001b[2m    14 × locator resolved to <div role=\"alert\" class=\"rounded-xl border border-info-border bg-info-surface p-4 text-sm leading-6 text-info\">Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử…</div>\u001b[22m\n\u001b[2m       - unexpected value \"Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\"\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts:124:43",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts",
+                      "column": 43,
+                      "line": 124
+                    },
+                    "snippet": "  122 | test(\"malformed count never permits confirmation\", async ({ page }) => {\n  123 |   const { state, dialog, remove } = await fixture(page, { invalidCount: true });\n> 124 |   await expect(dialog.getByRole(\"alert\")).toContainText(\"Không xác định được đầy đủ\");\n      |                                           ^\n  125 |   await expect(remove).toBeDisabled(); expect(state.deletes).toEqual([]);\n  126 | });\n  127 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts",
+                        "column": 43,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\nExpected substring: \u001b[32m\"Không \u001b[7mxác định được đầy đủ\u001b[27m\"\u001b[39m\nReceived string:    \u001b[31m\"Không \u001b[7mtải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\u001b[27m\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Xóa mô hình nghiên cứu' }).getByRole('alert')\u001b[22m\n\u001b[2m    14 × locator resolved to <div role=\"alert\" class=\"rounded-xl border border-info-border bg-info-surface p-4 text-sm leading-6 text-info\">Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử…</div>\u001b[22m\n\u001b[2m       - unexpected value \"Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\"\u001b[22m\n\n\n  122 | test(\"malformed count never permits confirmation\", async ({ page }) => {\n  123 |   const { state, dialog, remove } = await fixture(page, { invalidCount: true });\n> 124 |   await expect(dialog.getByRole(\"alert\")).toContainText(\"Không xác định được đầy đủ\");\n      |                                           ^\n  125 |   await expect(remove).toBeDisabled(); expect(state.deletes).toEqual([]);\n  126 | });\n  127 |\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts:124:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:22.107Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-malformed-count-never-permits-confirmation-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-malformed-count-never-permits-confirmation-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-delete-model-malformed-count-never-permits-confirmation-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh-delete-model.spec.ts",
+                    "column": 43,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-fc6b09a0687c87ebb7f0",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 122,
+          "column": 5
+        },
+        {
+          "title": "cancel during impact loading ignores late results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1875,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:30.295Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-c0c17b59892f589c9507",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 128,
+          "column": 5
+        },
+        {
+          "title": "DELETE 404 keeps popup open and requires reload, without automatic replay",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1438,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:32.268Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-e528807746dd2bf50435",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 137,
+          "column": 43
+        },
+        {
+          "title": "DELETE 409 keeps popup open and requires reload, without automatic replay",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1589,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:33.716Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-3f6e978e7b84a46f2261",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 137,
+          "column": 43
+        },
+        {
+          "title": "DELETE 500 keeps popup open and requires reload, without automatic replay",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1391,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:35.313Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-ed88eb302fb191f4c19f",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 137,
+          "column": 43
+        },
+        {
+          "title": "while DELETE is pending, repeated click, Escape, backdrop and cancel cannot interrupt it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1894,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:36.713Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-e5103128792747c33a50",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 145,
+          "column": 5
+        },
+        {
+          "title": "empty model on 320px viewport and reduced motion can be confirmed with accessible footer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1107,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:02:38.615Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "83edd6c32242164feffc-d1ad2ab807ab3aa904cd",
+          "file": "nckh-delete-model.spec.ts",
+          "line": 158,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "nckh.spec.ts",
+      "file": "nckh.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Google authorization failure retains session without attempting JWT refresh",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1554,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:03:01.003Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "401b4c768920c8037df8-95dbea4e626260132713",
+          "file": "nckh.spec.ts",
+          "line": 343,
+          "column": 5
+        },
+        {
+          "title": "forms server failure offers retry without claiming Google is unlinked",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6450,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:363:27",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                      "column": 27,
+                      "line": 363
+                    },
+                    "snippet": "  361 |   await page.goto(\"/dashboard/nckh\");\n  362 |   const loadAlert = page.getByRole(\"alert\").filter({ hasText: \"Không tải được danh sách form\" });\n> 363 |   await expect(loadAlert).toBeVisible();\n      |                           ^\n  364 |   await expect(page.getByRole(\"button\", { name: /Liên kết Google/ })).toHaveCount(0);\n  365 |   await mockLinked(page, MOCK_EMPTY_LIST);\n  366 |   await page.getByRole(\"button\", { name: \"Thử lại\", exact: true }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 27,
+                        "line": 363
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert').filter({ hasText: 'Không tải được danh sách form' })\u001b[22m\n\n\n  361 |   await page.goto(\"/dashboard/nckh\");\n  362 |   const loadAlert = page.getByRole(\"alert\").filter({ hasText: \"Không tải được danh sách form\" });\n> 363 |   await expect(loadAlert).toBeVisible();\n      |                           ^\n  364 |   await expect(page.getByRole(\"button\", { name: /Liên kết Google/ })).toHaveCount(0);\n  365 |   await mockLinked(page, MOCK_EMPTY_LIST);\n  366 |   await page.getByRole(\"button\", { name: \"Thử lại\", exact: true }).click();\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:363:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:03:02.659Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-forms-server-failure--51e6f-claiming-Google-is-unlinked-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-forms-server-failure--51e6f-claiming-Google-is-unlinked-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-forms-server-failure--51e6f-claiming-Google-is-unlinked-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                    "column": 27,
+                    "line": 363
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "401b4c768920c8037df8-36c138ea2a20a55306df",
+          "file": "nckh.spec.ts",
+          "line": 358,
+          "column": 5
+        },
+        {
+          "title": "genuine NCKH JWT failure still clears invalid session and redirects to login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1561,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:03:10.689Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "401b4c768920c8037df8-9c01d0e864beb4adfc10",
+          "file": "nckh.spec.ts",
+          "line": 371,
+          "column": 5
+        }
+      ],
+      "suites": [
+        {
+          "title": "NCKH — Auth & Redirect",
+          "file": "nckh.spec.ts",
+          "line": 296,
+          "column": 6,
+          "specs": [
+            {
+              "title": "unauthenticated user is redirected to /login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1483,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:39.754Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-d103510f60cee0531065",
+              "file": "nckh.spec.ts",
+              "line": 297,
+              "column": 7
+            },
+            {
+              "title": "authenticated user sees NCKH dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1922,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:41.248Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-fc2a206508d876c81c37",
+              "file": "nckh.spec.ts",
+              "line": 302,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Google Not Linked",
+          "file": "nckh.spec.ts",
+          "line": 313,
+          "column": 6,
+          "specs": [
+            {
+              "title": "shows Liên kết Google button when not linked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1404,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:43.180Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-79a7bc1ff46d7907e5b0",
+              "file": "nckh.spec.ts",
+              "line": 319,
+              "column": 7
+            },
+            {
+              "title": "shows status message about linking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1399,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:44.593Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-52c89c52906941bd98d5",
+              "file": "nckh.spec.ts",
+              "line": 324,
+              "column": 7
+            },
+            {
+              "title": "import form section is hidden when not linked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1399,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:46.001Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-c3002bb463a47791e8ef",
+              "file": "nckh.spec.ts",
+              "line": 329,
+              "column": 7
+            },
+            {
+              "title": "empty state message shown in form list",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11395,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Liên kết Google để nhập form đầu tiên/)\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Liên kết Google để nhập form đầu tiên/)\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Liên kết Google để nhập form đầu tiên/)\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Liên kết Google để nhập form đầu tiên/)\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:337:75",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 75,
+                          "line": 337
+                        },
+                        "snippet": "  335 |   test(\"empty state message shown in form list\", async ({ page }) => {\n  336 |     await page.goto(\"/dashboard/nckh\");\n> 337 |     await expect(page.getByText(/Liên kết Google để nhập form đầu tiên/)).toBeVisible({ timeout: 10000 });\n      |                                                                           ^\n  338 |   });\n  339 | });\n  340 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 75,
+                            "line": 337
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Liên kết Google để nhập form đầu tiên/)\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Liên kết Google để nhập form đầu tiên/)\u001b[22m\n\n\n  335 |   test(\"empty state message shown in form list\", async ({ page }) => {\n  336 |     await page.goto(\"/dashboard/nckh\");\n> 337 |     await expect(page.getByText(/Liên kết Google để nhập form đầu tiên/)).toBeVisible({ timeout: 10000 });\n      |                                                                           ^\n  338 |   });\n  339 | });\n  340 |\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:337:75"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:02:47.410Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Google-Not-Lin-26015--message-shown-in-form-list-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Google-Not-Lin-26015--message-shown-in-form-list-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Google-Not-Lin-26015--message-shown-in-form-list-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 75,
+                        "line": 337
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-d5c90ec5a1b436b4b01c",
+              "file": "nckh.spec.ts",
+              "line": 335,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Google Linked",
+          "file": "nckh.spec.ts",
+          "line": 385,
+          "column": 6,
+          "specs": [
+            {
+              "title": "shows 'Đã liên kết Google' status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1405,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:12.345Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-7b481f0d6d4455f6c58b",
+              "file": "nckh.spec.ts",
+              "line": 391,
+              "column": 7
+            },
+            {
+              "title": "import form input is visible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1423,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:13.761Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-6c91ea11b5306167caec",
+              "file": "nckh.spec.ts",
+              "line": 396,
+              "column": 7
+            },
+            {
+              "title": "import button is visible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1407,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:15.192Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-33c1d6518fa126d5e8c8",
+              "file": "nckh.spec.ts",
+              "line": 401,
+              "column": 7
+            },
+            {
+              "title": "renders form list table with items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1424,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:16.609Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-332aa97ec79ab0e00e31",
+              "file": "nckh.spec.ts",
+              "line": 406,
+              "column": 7
+            },
+            {
+              "title": "form title is clickable link",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1943,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:18.043Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-f6bb522800316bfe25ce",
+              "file": "nckh.spec.ts",
+              "line": 412,
+              "column": 7
+            },
+            {
+              "title": "pagination shows correct info",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1421,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:19.998Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-e251e4216849a728021d",
+              "file": "nckh.spec.ts",
+              "line": 422,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Import Form",
+          "file": "nckh.spec.ts",
+          "line": 430,
+          "column": 6,
+          "specs": [
+            {
+              "title": "successful import shows toast and clears input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1521,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:21.430Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-04151460bc90f4f1911d",
+              "file": "nckh.spec.ts",
+              "line": 436,
+              "column": 7
+            },
+            {
+              "title": "import fails with 401 shows error and resets link status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1488,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:22.962Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-3ec11392c6ba4eaf6cd0",
+              "file": "nckh.spec.ts",
+              "line": 446,
+              "column": 7
+            },
+            {
+              "title": "import fails with 409 duplicate",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6607,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Không nhập được form/).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Không nhập được form/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Không nhập được form/).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Không nhập được form/).first()\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:464:66",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 66,
+                          "line": 464
+                        },
+                        "snippet": "  462 |     await page.getByRole(\"button\", { name: /Nhập form/ }).click();\n  463 |\n> 464 |     await expect(page.getByText(/Không nhập được form/).first()).toBeVisible({ timeout: 5000 });\n      |                                                                  ^\n  465 |   });\n  466 |\n  467 |   test(\"prevents duplicate import submit while request is pending\", async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 66,
+                            "line": 464
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Không nhập được form/).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Không nhập được form/).first()\u001b[22m\n\n\n  462 |     await page.getByRole(\"button\", { name: /Nhập form/ }).click();\n  463 |\n> 464 |     await expect(page.getByText(/Không nhập được form/).first()).toBeVisible({ timeout: 5000 });\n      |                                                                  ^\n  465 |   });\n  466 |\n  467 |   test(\"prevents duplicate import submit while request is pending\", async ({ page }) => {\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:464:66"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:24.460Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Import-Form-import-fails-with-409-duplicate-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Import-Form-import-fails-with-409-duplicate-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Import-Form-import-fails-with-409-duplicate-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 66,
+                        "line": 464
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-fb51031b45ef41fa3253",
+              "file": "nckh.spec.ts",
+              "line": 457,
+              "column": 7
+            },
+            {
+              "title": "prevents duplicate import submit while request is pending",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1534,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:33.366Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-1ff5c7c71ea2d85041fb",
+              "file": "nckh.spec.ts",
+              "line": 467,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Callback Page",
+          "file": "nckh.spec.ts",
+          "line": 494,
+          "column": 6,
+          "specs": [
+            {
+              "title": "callback with ?linked=true shows success toast and cleans URL",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1670,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:34.999Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-91eb5a7ad40d22755ea8",
+              "file": "nckh.spec.ts",
+              "line": 495,
+              "column": 7
+            },
+            {
+              "title": "callback with ?error=... shows error toast",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1424,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:36.677Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-f1df28fc693ebb750666",
+              "file": "nckh.spec.ts",
+              "line": 506,
+              "column": 7
+            },
+            {
+              "title": "direct callback page without code redirects to dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2390,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:38.110Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-d37f3637d63317660a33",
+              "file": "nckh.spec.ts",
+              "line": 514,
+              "column": 7
+            },
+            {
+              "title": "callback with valid code calls API and redirects with success",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1578,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:40.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-4964d1d4c7efbc124ae7",
+              "file": "nckh.spec.ts",
+              "line": 522,
+              "column": 7
+            },
+            {
+              "title": "callback with invalid code shows error then redirects",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9436,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Mã xác thực không hợp lệ/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Mã xác thực không hợp lệ/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Mã xác thực không hợp lệ/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Mã xác thực không hợp lệ/).first()\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:553:70",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 70,
+                          "line": 553
+                        },
+                        "snippet": "  551 |     await page.goto(\"/dashboard/nckh/callback?code=bad-code\");\n  552 |     // Callback page shows error message for 4s then redirects\n> 553 |     await expect(page.getByText(/Mã xác thực không hợp lệ/).first()).toBeVisible({ timeout: 8000 });\n      |                                                                      ^\n  554 |     // After redirect, URL should have error param briefly, then be cleaned\n  555 |     // Just verify we land on the NCKH page eventually\n  556 |     await expect(page).toHaveURL(/\\/dashboard\\/nckh$/, { timeout: 10000 });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 70,
+                            "line": 553
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Mã xác thực không hợp lệ/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Mã xác thực không hợp lệ/).first()\u001b[22m\n\n\n  551 |     await page.goto(\"/dashboard/nckh/callback?code=bad-code\");\n  552 |     // Callback page shows error message for 4s then redirects\n> 553 |     await expect(page.getByText(/Mã xác thực không hợp lệ/).first()).toBeVisible({ timeout: 8000 });\n      |                                                                      ^\n  554 |     // After redirect, URL should have error param briefly, then be cleaned\n  555 |     // Just verify we land on the NCKH page eventually\n  556 |     await expect(page).toHaveURL(/\\/dashboard\\/nckh$/, { timeout: 10000 });\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:553:70"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:42.095Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--86cd6--shows-error-then-redirects-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--86cd6--shows-error-then-redirects-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--86cd6--shows-error-then-redirects-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 70,
+                        "line": 553
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-ea966bf2ff3371b0cc27",
+              "file": "nckh.spec.ts",
+              "line": 545,
+              "column": 7
+            },
+            {
+              "title": "callback with already-linked account shows 409 then redirects",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9494,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/đã được liên kết/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/đã được liên kết/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/đã được liên kết/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/đã được liên kết/).first()\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:567:62",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 62,
+                          "line": 567
+                        },
+                        "snippet": "  565 |     await page.goto(\"/dashboard/nckh/callback?code=dup-code\");\n  566 |     // Should show error about already linked\n> 567 |     await expect(page.getByText(/đã được liên kết/).first()).toBeVisible({ timeout: 8000 });\n      |                                                              ^\n  568 |     // Eventually redirects to NCKH page\n  569 |     await expect(page).toHaveURL(/\\/dashboard\\/nckh$/, { timeout: 10000 });\n  570 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 62,
+                            "line": 567
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/đã được liên kết/).first()\nExpected: visible\nTimeout: 8000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/đã được liên kết/).first()\u001b[22m\n\n\n  565 |     await page.goto(\"/dashboard/nckh/callback?code=dup-code\");\n  566 |     // Should show error about already linked\n> 567 |     await expect(page.getByText(/đã được liên kết/).first()).toBeVisible({ timeout: 8000 });\n      |                                                              ^\n  568 |     // Eventually redirects to NCKH page\n  569 |     await expect(page).toHaveURL(/\\/dashboard\\/nckh$/, { timeout: 10000 });\n  570 |   });\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:567:62"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:03:53.785Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--02986-nt-shows-409-then-redirects-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--02986-nt-shows-409-then-redirects-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Callback-Page--02986-nt-shows-409-then-redirects-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 62,
+                        "line": 567
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-60a8e0196656d5a39433",
+              "file": "nckh.spec.ts",
+              "line": 559,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Navigation",
+          "file": "nckh.spec.ts",
+          "line": 575,
+          "column": 6,
+          "specs": [
+            {
+              "title": "NCKH nav item exists in sidebar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:04.934Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-751984290fb4949dc185",
+              "file": "nckh.spec.ts",
+              "line": 576,
+              "column": 7
+            },
+            {
+              "title": "clicking NCKH nav item navigates to NCKH page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1584,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:06.440Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-d1b64d734aec1fb70c30",
+              "file": "nckh.spec.ts",
+              "line": 584,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "NCKH — Phase 7 Workspace",
+          "file": "nckh.spec.ts",
+          "line": 597,
+          "column": 6,
+          "specs": [
+            {
+              "title": "renders form workspace with model tabs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1724,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:08.036Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-5251c3843fa07930a731",
+              "file": "nckh.spec.ts",
+              "line": 603,
+              "column": 7
+            },
+            {
+              "title": "opens variables and mapping popups from canvas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2741,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:09.769Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-5dfffd7cb40da8e8167e",
+              "file": "nckh.spec.ts",
+              "line": 615,
+              "column": 7
+            },
+            {
+              "title": "cancels model impact dialog and shared mapping confirmation without sending DELETE",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3539,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:12.520Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-e87d70a09f8808dd89b7",
+              "file": "nckh.spec.ts",
+              "line": 634,
+              "column": 7
+            },
+            {
+              "title": "normalizes Likert variable payload from the canvas popup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2323,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:16.068Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-3d2ee4628c2079692c89",
+              "file": "nckh.spec.ts",
+              "line": 667,
+              "column": 7
+            },
+            {
+              "title": "places unsaved new variables on a visible canvas slot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1760,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:18.400Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-5f8dba755c4d6328b29e",
+              "file": "nckh.spec.ts",
+              "line": 705,
+              "column": 7
+            },
+            {
+              "title": "renders Phase 9 visual canvas using existing relation and position APIs",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7802,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a non-null object\n\nReceived has value: \u001b[31mnull\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a non-null object\n\nReceived has value: \u001b[31mnull\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:853:52",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 52,
+                          "line": 853
+                        },
+                        "snippet": "  851 |     await page.mouse.move(targetBox!.x + targetBox!.width / 2, targetBox!.y + targetBox!.height / 2, { steps: 12 });\n  852 |     await page.mouse.up();\n> 853 |     await expect.poll(() => createRelationPayload).toMatchObject({\n      |                                                    ^\n  854 |       fromVariableId: MOCK_VARIABLE.id,\n  855 |       toVariableId: MOCK_VARIABLE_2.id,\n  856 |       direction: \"Positive\""
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 52,
+                            "line": 853
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a non-null object\n\nReceived has value: \u001b[31mnull\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  851 |     await page.mouse.move(targetBox!.x + targetBox!.width / 2, targetBox!.y + targetBox!.height / 2, { steps: 12 });\n  852 |     await page.mouse.up();\n> 853 |     await expect.poll(() => createRelationPayload).toMatchObject({\n      |                                                    ^\n  854 |       fromVariableId: MOCK_VARIABLE.id,\n  855 |       toVariableId: MOCK_VARIABLE_2.id,\n  856 |       direction: \"Positive\"\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:853:52"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:20.169Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-38ad1--relation-and-position-APIs-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-38ad1--relation-and-position-APIs-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-38ad1--relation-and-position-APIs-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 52,
+                        "line": 853
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-61a0a668a734059f3d2a",
+              "file": "nckh.spec.ts",
+              "line": 735,
+              "column": 7
+            },
+            {
+              "title": "deletes a relation from the canvas action list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2591,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:30.350Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-0ac26b4aa1921db264ce",
+              "file": "nckh.spec.ts",
+              "line": 860,
+              "column": 7
+            },
+            {
+              "title": "blocks duplicate canvas relation before sending API request",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2352,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:33.044Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-d41c04e7fea0a71124ec",
+              "file": "nckh.spec.ts",
+              "line": 900,
+              "column": 7
+            },
+            {
+              "title": "keeps canvas relation and position edits read-only for active models",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1792,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:35.406Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-a2ffc7896a616f2877ce",
+              "file": "nckh.spec.ts",
+              "line": 930,
+              "column": 7
+            },
+            {
+              "title": "deletes a variable from the canvas node action button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2445,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:37.208Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-7aa169abb069ea6c8c3b",
+              "file": "nckh.spec.ts",
+              "line": 957,
+              "column": 7
+            },
+            {
+              "title": "shows export actions without adding new backend contracts",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6736,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /Codebook Excel/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /Codebook Excel/ })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /Codebook Excel/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /Codebook Excel/ })\u001b[22m\n\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:1009:72",
+                        "location": {
+                          "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                          "column": 72,
+                          "line": 1009
+                        },
+                        "snippet": "  1007 |\n  1008 |     await expect(page.getByRole(\"button\", { name: /Bộ dữ liệu CSV/ })).toBeVisible({ timeout: 10000 });\n> 1009 |     await expect(page.getByRole(\"button\", { name: /Codebook Excel/ })).toBeVisible();\n       |                                                                        ^\n  1010 |     await expect(page.getByRole(\"button\", { name: /Cú pháp SPSS/ })).toBeVisible();\n  1011 |   });\n  1012 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                            "column": 72,
+                            "line": 1009
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /Codebook Excel/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /Codebook Excel/ })\u001b[22m\n\n\n  1007 |\n  1008 |     await expect(page.getByRole(\"button\", { name: /Bộ dữ liệu CSV/ })).toBeVisible({ timeout: 10000 });\n> 1009 |     await expect(page.getByRole(\"button\", { name: /Codebook Excel/ })).toBeVisible();\n       |                                                                        ^\n  1010 |     await expect(page.getByRole(\"button\", { name: /Cú pháp SPSS/ })).toBeVisible();\n  1011 |   });\n  1012 |\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts:1009:72"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:39.663Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-bb164-dding-new-backend-contracts-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-bb164-dding-new-backend-contracts-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-regressions\\results\\nckh-NCKH-—-Phase-7-Worksp-bb164-dding-new-backend-contracts-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\nckh.spec.ts",
+                        "column": 72,
+                        "line": 1009
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-57d7148f20157921a5df",
+              "file": "nckh.spec.ts",
+              "line": 1004,
+              "column": 7
+            },
+            {
+              "title": "uses update action when selected model already has a generated form",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1730,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:48.590Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-0596c6f1e7272e248f7a",
+              "file": "nckh.spec.ts",
+              "line": 1013,
+              "column": 7
+            },
+            {
+              "title": "disables update action while request is submitting",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1656,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-30T09:04:50.421Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "401b4c768920c8037df8-373fab641b129cc97112",
+              "file": "nckh.spec.ts",
+              "line": 1042,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "topup-ui.spec.ts",
+      "file": "topup-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "topup selection, history pagination and shared details at 1440px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5766,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:04:52.091Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ba8c30389ca413206f6b-fcb60d97624e6127b089",
+          "file": "topup-ui.spec.ts",
+          "line": 10,
+          "column": 38
+        },
+        {
+          "title": "topup selection, history pagination and shared details at 320px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:04:57.867Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ba8c30389ca413206f6b-beff4281d34c018edda7",
+          "file": "topup-ui.spec.ts",
+          "line": 10,
+          "column": 38
+        },
+        {
+          "title": "topup error retries and empty packages/history disable payment",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 927,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T09:05:02.001Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ba8c30389ca413206f6b-6c9376ef4447aeff5408",
+          "file": "topup-ui.spec.ts",
+          "line": 67,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T08:59:40.469Z",
+    "duration": 323431.578,
+    "expected": 69,
+    "skipped": 0,
+    "unexpected": 14,
+    "flaky": 0
+  }
+}

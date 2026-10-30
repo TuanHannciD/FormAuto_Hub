@@ -1,0 +1,145 @@
+TAP version 13
+# Subtest: known Google 401s preserve FormAuto session without refresh for JSON and downloads
+ok 1 - known Google 401s preserve FormAuto session without refresh for JSON and downloads
+  ---
+  duration_ms: 191.4254
+  ...
+# Subtest: unknown, empty and malformed 401s still expire an invalid FormAuto session
+ok 2 - unknown, empty and malformed 401s still expire an invalid FormAuto session
+  ---
+  duration_ms: 147.3975
+  ...
+# Subtest: Google-looking errors outside NCKH cannot bypass FormAuto session recovery
+ok 3 - Google-looking errors outside NCKH cannot bypass FormAuto session recovery
+  ---
+  duration_ms: 10.6947
+  ...
+# Subtest: real JWT 401 refreshes once then preserves rotated session on a Google 401
+ok 4 - real JWT 401 refreshes once then preserves rotated session on a Google 401
+  ---
+  duration_ms: 18.7991
+  ...
+# Subtest: parallel callers share one refresh and retain the new session
+ok 5 - parallel callers share one refresh and retain the new session
+  ---
+  duration_ms: 3.6748
+  ...
+# Subtest: 503 and network failures preserve the session
+ok 6 - 503 and network failures preserve the session
+  ---
+  duration_ms: 1.7403
+  ...
+# Subtest: invalid refresh expires the session once for all parallel callers
+ok 7 - invalid refresh expires the session once for all parallel callers
+  ---
+  duration_ms: 0.9592
+  ...
+# Subtest: a stale refresh response cannot clear or overwrite a newer login
+ok 8 - a stale refresh response cannot clear or overwrite a newer login
+  ---
+  duration_ms: 1.4111
+  ...
+# Subtest: expired stored sessions do not attempt refresh
+ok 9 - expired stored sessions do not attempt refresh
+  ---
+  duration_ms: 0.9923
+  ...
+# Subtest: actual id_token callback maps typed POST Google 409
+ok 10 - actual id_token callback maps typed POST Google 409
+  ---
+  duration_ms: 31.4792
+  ...
+# Subtest: actual id_token callback maps typed POST Google 401
+ok 11 - actual id_token callback maps typed POST Google 401
+  ---
+  duration_ms: 15.0575
+  ...
+# Subtest: callback never infers auth identity from arbitrary message or other endpoint/method
+ok 12 - callback never infers auth identity from arbitrary message or other endpoint/method
+  ---
+  duration_ms: 51.2029
+  ...
+# Subtest: HTTP errors retain status/method/private-query-free path for JSON and blob
+ok 13 - HTTP errors retain status/method/private-query-free path for JSON and blob
+  ---
+  duration_ms: 174.0881
+  ...
+# Subtest: MVC field errors keep known field identity with safe Vietnamese guidance and trace
+ok 14 - MVC field errors keep known field identity with safe Vietnamese guidance and trace
+  ---
+  duration_ms: 40.809
+  ...
+# Subtest: oversized metadata and token-like trace IDs are discarded
+ok 15 - oversized metadata and token-like trace IDs are discarded
+  ---
+  duration_ms: 27.1824
+  ...
+# Subtest: unexpected HTTP body is safe (<h1>secret-payl)
+ok 16 - unexpected HTTP body is safe (<h1>secret-payl)
+  ---
+  duration_ms: 28.1455
+  ...
+# Subtest: unexpected HTTP body is safe (private@example)
+ok 17 - unexpected HTTP body is safe (private@example)
+  ---
+  duration_ms: 25.6366
+  ...
+# Subtest: unexpected HTTP body is safe ({)
+ok 18 - unexpected HTTP body is safe ({)
+  ---
+  duration_ms: 19.9142
+  ...
+# Subtest: unexpected HTTP body is safe ({"detail":"sk-s)
+ok 19 - unexpected HTTP body is safe ({"detail":"sk-s)
+  ---
+  duration_ms: 27.0347
+  ...
+# Subtest: unexpected HTTP body is safe (xxxxxxxxxxxxxxx)
+ok 20 - unexpected HTTP body is safe (xxxxxxxxxxxxxxx)
+  ---
+  duration_ms: 18.5829
+  ...
+# Subtest: network errors become safe ApiError; aborted requests remain cancellation
+ok 21 - network errors become safe ApiError; aborted requests remain cancellation
+  ---
+  duration_ms: 31.133
+  ...
+# Subtest: invalid successful JSON is classified and does not expose body or parser text
+ok 22 - invalid successful JSON is classified and does not expose body or parser text
+  ---
+  duration_ms: 19.316
+  ...
+# Subtest: toast accepts safe ApiError and rejects raw errors/strings without raw console logging
+ok 23 - toast accepts safe ApiError and rejects raw errors/strings without raw console logging
+  ---
+  duration_ms: 15.9852
+  ...
+# Subtest: login source mapper consumes status and leaves unknown errors generic
+ok 24 - login source mapper consumes status and leaves unknown errors generic
+  ---
+  duration_ms: 47.5221
+  ...
+# Subtest: registration source mapper never infers existing email from password wording
+ok 25 - registration source mapper never infers existing email from password wording
+  ---
+  duration_ms: 22.1003
+  ...
+# Subtest: security source mappers use the authenticated endpoint and operation
+ok 26 - security source mappers use the authenticated endpoint and operation
+  ---
+  duration_ms: 19.6911
+  ...
+# Subtest: Google conflict mapper requires verified endpoint and HTTP status
+ok 27 - Google conflict mapper requires verified endpoint and HTTP status
+  ---
+  duration_ms: 16.965
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 798.0663

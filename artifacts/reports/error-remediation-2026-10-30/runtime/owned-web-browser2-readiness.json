@@ -1,0 +1,29 @@
+{
+  "cwd": "D:/TinHoc/FormAuto_Hub/apps/web",
+  "origin": "http://127.0.0.1:3137",
+  "owner": "/root/runtime_resume",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "restart": "First CLI reused stale utility CSS; stopped verified PID26612/19244. Fresh launcher loaded resolved config then applied distDir via Next config-loader environment, source config unchanged.",
+  "effectiveDistDir": "apps/web/.next-fah-err-browser2-20261030",
+  "effectiveDistDirExists": true,
+  "stylesheetHttp": 200,
+  "scriptChunksHttp": {
+    "webpack": 200,
+    "main-app": 200,
+    "app-pages-internals": 200,
+    "app/layout": 200,
+    "app/login/page": 200,
+    "hmr": 200
+  },
+  "computedStyles": {
+    "headingFontSize": "51.2px",
+    "loginButtonBorderRadius": "12px"
+  },
+  "t3StatusFirst": "available=false",
+  "t3OpenHttp": "available=true ownedByCaller=true",
+  "tab": "tab_2_b444d759-9c74-4be2-a47f-38a4dba03eb9",
+  "publicGoogleClient": "temporarily blank via launcher env; no OAuth/provider operations",
+  "apiBaseFixture": "http://127.0.0.1:3138, all test API intercepted",
+  "limit": "Mocked API browser only. No DB/API-live/provider verification; CSS/js readiness at /login does not prove every changed route."
+}

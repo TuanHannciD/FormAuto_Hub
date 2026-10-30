@@ -1,0 +1,1234 @@
+{
+  "asOfUtc": "2026-10-30T13:49:16.963308+00:00",
+  "baseline": "runtime/baseline-source.json",
+  "baselineCount": 371,
+  "runtimeManifest": "runtime/final-verification-source-manifest.json",
+  "runtimeCount": 343,
+  "inputs": [
+    {
+      "owner": "A",
+      "path": "p1-submission/snapshot.json"
+    },
+    {
+      "owner": "B",
+      "path": "p1-ai-contract/after-hashes.json"
+    },
+    {
+      "owner": "G",
+      "path": "backend-boundaries/after-hashes.json"
+    },
+    {
+      "owner": "G-fix-r1",
+      "path": "backend-boundaries/fix-r1/after-hashes.json"
+    },
+    {
+      "owner": "C",
+      "path": "shared-web/after-hashes.json"
+    },
+    {
+      "owner": "D",
+      "path": "forms-ui/after-hashes.json"
+    },
+    {
+      "owner": "E",
+      "path": "nckh-ui/after-hashes.json"
+    },
+    {
+      "owner": "F",
+      "path": "account-payments-ui/green-ready-hashes.json"
+    },
+    {
+      "owner": "H",
+      "path": "legacy-smoke/after-hashes.json"
+    },
+    {
+      "owner": "C-fixture-r1",
+      "path": "shared-web/browser-fixture-r1-hashes.json"
+    },
+    {
+      "owner": "F-fix-r1",
+      "path": "account-payments-ui/fix-r1/after-hashes.json"
+    },
+    {
+      "owner": "F-motion",
+      "path": "account-payments-ui/fix-motion/after-hashes.json"
+    },
+    {
+      "owner": "E-callback-fixture",
+      "path": "nckh-ui/fixture-r1/after-hashes.json"
+    },
+    {
+      "owner": "H-fix-r1",
+      "path": "legacy-smoke/fix-r1/after-hashes.json"
+    },
+    {
+      "owner": "E-build-fix",
+      "path": "nckh-ui/fix-build/hashes.json"
+    },
+    {
+      "owner": "C-callback-fix-r1",
+      "path": "auth-callback-fix-r1/after-hashes.json"
+    },
+    {
+      "owner": "C-callback-fixture-r1",
+      "path": "auth-callback-fix-r1/browser-fixture-r1-hashes.json"
+    }
+  ],
+  "basis": "Preserved prior ownership union plus explicit callback source/tests and fixture manifests; actual hash and runner comparison only. Outside-baseline does not prove newly created. No arbitrary Git dirty count.",
+  "counts": {
+    "ownedUnique": 80,
+    "category": {
+      "product": 52,
+      "tooling": 4,
+      "test": 22,
+      "contract-doc": 2
+    },
+    "delta": {
+      "changed": 57,
+      "outside-baseline": 23
+    },
+    "runtimeMatches": {
+      "True": 75,
+      "None": 5
+    }
+  },
+  "actualHashFailures": [],
+  "files": [
+    {
+      "path": "apps/web/app/admin/ai-provider-settings/page.tsx",
+      "owner": "F",
+      "hash": "d28876097fd12911bd9d378edd4220c789f8aed0f1eec3c66a99e81921ce091e",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "aa213146bce708cea5ed3eda7db96f90cc6e4104cdb90e2a4900da2331359899",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "d28876097fd12911bd9d378edd4220c789f8aed0f1eec3c66a99e81921ce091e",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/page.tsx",
+      "owner": "F-fix-r1",
+      "hash": "eab756de740a89cbb7a9409d7f6c9ce8525ffac9e68c8301ca7bc9f0013d3c69",
+      "manifest": "account-payments-ui/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "F",
+        "F-fix-r1"
+      ],
+      "baselineHash": "75e9d9d6ff7d9fcede2ba01d97ed7c2e0a41c8760b3e47b18a4c672ae7088612",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "eab756de740a89cbb7a9409d7f6c9ce8525ffac9e68c8301ca7bc9f0013d3c69",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/admin/packages/page.tsx",
+      "owner": "F",
+      "hash": "4cff101b51f5e42cd6baae7e6e2d119d895fbbddc7349e1e73e27318ab6cfea9",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "bb6fa7f9a4ff07752fc2ddd20114dfd28eba8a07dc4f9105c3abbc2b75953ac5",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "4cff101b51f5e42cd6baae7e6e2d119d895fbbddc7349e1e73e27318ab6cfea9",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/admin/payos-settings/page.tsx",
+      "owner": "F",
+      "hash": "28bdf0202285bc544b8a2b23e1899968b113e5ffcbbe5aaed44d74c808962d94",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "bc78ad9f64311120084709badccce2635c7a793e4792fa3f5e3d44dd79e80a9b",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "28bdf0202285bc544b8a2b23e1899968b113e5ffcbbe5aaed44d74c808962d94",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/auth/callback/page.tsx",
+      "ownershipHistory": [
+        "C-callback-fix-r1",
+        "C-callback-fixture-r1"
+      ],
+      "owner": "C-callback-fixture-r1",
+      "hash": "4f4058cc9876d6313e1960a8e6122f9e7fc5c1156db2f61a91f8e4f4d5053e07",
+      "manifest": "auth-callback-fix-r1/browser-fixture-r1-hashes.json",
+      "baselineHash": "3929cde47fcdb1c3dc4604b4468b660585b88940ea6f1ea8ed049c4ed11b8062",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "4f4058cc9876d6313e1960a8e6122f9e7fc5c1156db2f61a91f8e4f4d5053e07",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/ai-usage/page.tsx",
+      "owner": "D",
+      "hash": "15fd6ff1ac0c67f8bed6ae05e448d0c42a71d33ecab5fcf3d9976beb2e365323",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "3de76ebc215b687af7031bcf899afc05db1d31effe2735b7062379ea491da8cf",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "15fd6ff1ac0c67f8bed6ae05e448d0c42a71d33ecab5fcf3d9976beb2e365323",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/credit-transactions/page.tsx",
+      "owner": "C",
+      "hash": "afe8ce6e9f458b07b23d3cd2dfacff6f765b1269813b5fc779c0b52826029e9d",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "4280124d7e3dcca782d277c8791206ed2aaa393d8531982a727ca088d44289a6",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "afe8ce6e9f458b07b23d3cd2dfacff6f765b1269813b5fc779c0b52826029e9d",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "owner": "D",
+      "hash": "0d53d76683cc94f006c3eb58b356908776ff566b106d71016a3f9e6ada857a9b",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "0d53d76683cc94f006c3eb58b356908776ff566b106d71016a3f9e6ada857a9b",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "owner": "D",
+      "hash": "b16763a4bd4c227c5e8370fa5634248456941beddaff271216d3b037565e0678",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "b16763a4bd4c227c5e8370fa5634248456941beddaff271216d3b037565e0678",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_helpers.ts",
+      "owner": "D",
+      "hash": "e5bacfd95189ee7ad0a4366b76c5056caa36bbce3630e10ad5c12a70ee5997e0",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "e5bacfd95189ee7ad0a4366b76c5056caa36bbce3630e10ad5c12a70ee5997e0",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/page.tsx",
+      "owner": "D",
+      "hash": "0005228031e2702c4f1d3ed638668f458ff03e7098c71b2de9278f3bdb9835dc",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "0005228031e2702c4f1d3ed638668f458ff03e7098c71b2de9278f3bdb9835dc",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/callback/page.tsx",
+      "owner": "E-callback-fixture",
+      "hash": "157e8a6ce52c4b2b20f292eeeab1fe92f38583458b8176113b3882d6ff4221ff",
+      "manifest": "nckh-ui/fixture-r1/after-hashes.json",
+      "ownershipHistory": [
+        "E-callback-fixture"
+      ],
+      "baselineHash": "5841bc10b5a7801f1fe5d98fdc5b9d6383d1b6a248b988a1d2fb6898264189c4",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "157e8a6ce52c4b2b20f292eeeab1fe92f38583458b8176113b3882d6ff4221ff",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "owner": "E",
+      "hash": "c71d3819f8f64888f5c1d69b3a0f15db501eea70a4ea7fef06e7860726e17d79",
+      "manifest": "nckh-ui/after-hashes.json",
+      "ownershipHistory": [
+        "E"
+      ],
+      "baselineHash": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "c71d3819f8f64888f5c1d69b3a0f15db501eea70a4ea7fef06e7860726e17d79",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+      "owner": "E",
+      "hash": "552e118b37cf9664113d954263d6836bec5217957df6f8e93e32e3eb6d23f4e6",
+      "manifest": "nckh-ui/after-hashes.json",
+      "ownershipHistory": [
+        "E"
+      ],
+      "baselineHash": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "552e118b37cf9664113d954263d6836bec5217957df6f8e93e32e3eb6d23f4e6",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+      "owner": "E",
+      "hash": "ba43ef370c6cf9a92bdcba809f167219cb0a17122a5ab020e257b2b459874ab4",
+      "manifest": "nckh-ui/after-hashes.json",
+      "ownershipHistory": [
+        "E"
+      ],
+      "baselineHash": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "ba43ef370c6cf9a92bdcba809f167219cb0a17122a5ab020e257b2b459874ab4",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/page.tsx",
+      "owner": "E-build-fix",
+      "hash": "56f2b85c4892d147edf58e19a4f49b9e668b98fb26da15a781b6bf96932e355c",
+      "manifest": "nckh-ui/fix-build/hashes.json",
+      "ownershipHistory": [
+        "E",
+        "E-build-fix"
+      ],
+      "baselineHash": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "56f2b85c4892d147edf58e19a4f49b9e668b98fb26da15a781b6bf96932e355c",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+      "owner": "F",
+      "hash": "96bfe8d9c192e4afe619f729570e255ed4d196162cfcb8988bb6b2e2a27c84ee",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "96bfe8d9c192e4afe619f729570e255ed4d196162cfcb8988bb6b2e2a27c84ee",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+      "owner": "F",
+      "hash": "67eb090a82cfdf122f24311cc9cfefe20b052b0d36faf553be73e02171531b42",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "0725a87cca9b5d8641e704a945caa49ea482a1a97eecd751902e8716eaf576a0",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "67eb090a82cfdf122f24311cc9cfefe20b052b0d36faf553be73e02171531b42",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/page.tsx",
+      "owner": "F",
+      "hash": "e93a14335caca4e542de7342360f17e7d7c0c224daae191870a63f4b617e6879",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "e93a14335caca4e542de7342360f17e7d7c0c224daae191870a63f4b617e6879",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/dashboard/usage-logs/page.tsx",
+      "owner": "C",
+      "hash": "514831fcccc60d5a93f28012e1835caa42c814070f39d37fca5543577ae02241",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "aa9a18be0528c9809d2ae20331e8cca7920807fcaf76d29c33472d4fc67bae3f",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "514831fcccc60d5a93f28012e1835caa42c814070f39d37fca5543577ae02241",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/login/page.tsx",
+      "owner": "C",
+      "hash": "42a00230147134dc54154ecc84667f06f27b822f49387ae7bf921de6369f9583",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "42a00230147134dc54154ecc84667f06f27b822f49387ae7bf921de6369f9583",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/payment/payos/return/page.tsx",
+      "owner": "F",
+      "hash": "3688fcd13908a6dd8e51ab20fe8dd33aa44a3206cca566465e2f827a6a7b4d5c",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "F"
+      ],
+      "baselineHash": "6ee86380ae66865bfeba4f304f2f0f47c4478d9875549733f0b9d8f0e642952a",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "3688fcd13908a6dd8e51ab20fe8dd33aa44a3206cca566465e2f827a6a7b4d5c",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/app/register/page.tsx",
+      "owner": "C",
+      "hash": "a20c503d307c3de3f29c9a6a2b29a355ae23b8876151482bf1a06af13a4fbf3d",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "a20c503d307c3de3f29c9a6a2b29a355ae23b8876151482bf1a06af13a4fbf3d",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/components/account-profile-panel.tsx",
+      "owner": "F-motion",
+      "hash": "bac6f7c566cbfaa932a82d764f052b32b7e8f918b5f0bde14b67a587e2a44681",
+      "manifest": "account-payments-ui/fix-motion/after-hashes.json",
+      "ownershipHistory": [
+        "F",
+        "F-motion"
+      ],
+      "baselineHash": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "bac6f7c566cbfaa932a82d764f052b32b7e8f918b5f0bde14b67a587e2a44681",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/components/account-security-panel.tsx",
+      "owner": "F",
+      "hash": "34ee5ec1da1862d5d8811a205a5fd583ae3e4d940bc1a06ff3397f2741306069",
+      "manifest": "account-payments-ui/green-ready-hashes.json",
+      "ownershipHistory": [
+        "C",
+        "F"
+      ],
+      "baselineHash": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "34ee5ec1da1862d5d8811a205a5fd583ae3e4d940bc1a06ff3397f2741306069",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/lib/api.ts",
+      "owner": "C",
+      "hash": "f3eb4caf81633ad489d0c947ee16ac29a714367c67166f477f5a6de8bfd79ab7",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "f3eb4caf81633ad489d0c947ee16ac29a714367c67166f477f5a6de8bfd79ab7",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/lib/seo-pages.ts",
+      "owner": "D",
+      "hash": "7953917853d920c10e18a878b1fb453875d36a9a7e393cd4e1d72ae04ac8c33b",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "7953917853d920c10e18a878b1fb453875d36a9a7e393cd4e1d72ae04ac8c33b",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/lib/toast.ts",
+      "owner": "C",
+      "hash": "a5a23677fadedb9ee3cdf01b6904d1a78b51eb054ebecf830888bf35a396f20a",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "a5a23677fadedb9ee3cdf01b6904d1a78b51eb054ebecf830888bf35a396f20a",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/scripts/legacy-smoke.mjs",
+      "owner": "H-fix-r1",
+      "hash": "ed787277c99eb8f0b5c99a30e1b7ee0406c70cb8777cc8066255d1f22aa0c105",
+      "manifest": "legacy-smoke/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "H",
+        "H-fix-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "tooling",
+      "runtimeManifestHash": "ed787277c99eb8f0b5c99a30e1b7ee0406c70cb8777cc8066255d1f22aa0c105",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/smoke-debug.mjs",
+      "owner": "H",
+      "hash": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1",
+      "manifest": "legacy-smoke/after-hashes.json",
+      "ownershipHistory": [
+        "H"
+      ],
+      "baselineHash": "ec48f0efa653b6a10e6fe6177d9324919d8493c4ff8d5e4f8a9d04bc618eb370",
+      "delta": "changed",
+      "category": "tooling",
+      "runtimeManifestHash": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/smoke-test.mjs",
+      "owner": "H",
+      "hash": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1",
+      "manifest": "legacy-smoke/after-hashes.json",
+      "ownershipHistory": [
+        "H"
+      ],
+      "baselineHash": "e1e4a8873b9875f43d5f300209eb29dd204ca77f6fd09206ae1bb7e89ec5c498",
+      "delta": "changed",
+      "category": "tooling",
+      "runtimeManifestHash": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/admin-ui.spec.ts",
+      "owner": "F-fix-r1",
+      "hash": "59c6250fff24232a0d6b5fcc919da43ae2198e2af8ec51ef22397c3b334027c7",
+      "manifest": "account-payments-ui/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "F-fix-r1"
+      ],
+      "baselineHash": "8a0ecdffc5623690abfb42134570c8609717a0df77c47eb0513ff06b83ce5178",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "59c6250fff24232a0d6b5fcc919da43ae2198e2af8ec51ef22397c3b334027c7",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-account-payments-errors.spec.ts",
+      "owner": "F-fix-r1",
+      "hash": "678c9a2916f308db2343ade544c903d7007f32cbcd033d37588ec1664e83bdbe",
+      "manifest": "account-payments-ui/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "F",
+        "F-fix-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "678c9a2916f308db2343ade544c903d7007f32cbcd033d37588ec1664e83bdbe",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-account-payments-errors.test.cjs",
+      "owner": "F-fix-r1",
+      "hash": "0e6bdc0f400cf3fe13e4cfdd0d9f92a738e815f43cdcb0809a715754d44d27de",
+      "manifest": "account-payments-ui/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "F",
+        "F-fix-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "0e6bdc0f400cf3fe13e4cfdd0d9f92a738e815f43cdcb0809a715754d44d27de",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-callback.spec.ts",
+      "ownershipHistory": [
+        "C-callback-fix-r1",
+        "C-callback-fixture-r1"
+      ],
+      "owner": "C-callback-fixture-r1",
+      "hash": "dc210339282b489f82fcdd30d759db054eaa7b537610d3d4491b38b92065528c",
+      "manifest": "auth-callback-fix-r1/browser-fixture-r1-hashes.json",
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "dc210339282b489f82fcdd30d759db054eaa7b537610d3d4491b38b92065528c",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-callback.test.cjs",
+      "ownershipHistory": [
+        "C-callback-fix-r1",
+        "C-callback-fixture-r1"
+      ],
+      "owner": "C-callback-fixture-r1",
+      "hash": "60a3935e5e0abbc19de70ea2ff580554b8ba03471fbe5f7ce04960a08b20d862",
+      "manifest": "auth-callback-fix-r1/browser-fixture-r1-hashes.json",
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "60a3935e5e0abbc19de70ea2ff580554b8ba03471fbe5f7ce04960a08b20d862",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-errors.spec.ts",
+      "owner": "C-fixture-r1",
+      "hash": "977651ac52eabc57f4b47216e98cb9a38cf205ec2cb7925af9ae72ac9187ee7c",
+      "manifest": "shared-web/browser-fixture-r1-hashes.json",
+      "ownershipHistory": [
+        "C",
+        "C-fixture-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "977651ac52eabc57f4b47216e98cb9a38cf205ec2cb7925af9ae72ac9187ee7c",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-forms-errors.spec.ts",
+      "owner": "D",
+      "hash": "0864560ab7302af47232decf48133ef2beab59aa1f12769ea2475d63a86b69bd",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "0864560ab7302af47232decf48133ef2beab59aa1f12769ea2475d63a86b69bd",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-forms-errors.test.cjs",
+      "owner": "D",
+      "hash": "be0945d068ba671610967af294331478f5d87dcae220ead60b8318ac389466f4",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": null,
+      "runtimeManifestMatch": null
+    },
+    {
+      "path": "apps/web/tests/fah-err-legacy-smoke.test.cjs",
+      "owner": "H-fix-r1",
+      "hash": "999940fae9d2e8554787f64178de27eac33784e66ca59885edc8a8e6c8dedee0",
+      "manifest": "legacy-smoke/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "H",
+        "H-fix-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "999940fae9d2e8554787f64178de27eac33784e66ca59885edc8a8e6c8dedee0",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-nckh-errors.spec.ts",
+      "owner": "E",
+      "hash": "3afe685dbe4c5527fa1090a1ac127f3e944bdbd456017202438a08b08e3e1e25",
+      "manifest": "nckh-ui/after-hashes.json",
+      "ownershipHistory": [
+        "E"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "3afe685dbe4c5527fa1090a1ac127f3e944bdbd456017202438a08b08e3e1e25",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-nckh-errors.test.cjs",
+      "owner": "E",
+      "hash": "4867c9ee3d4782471e4fbc5c0c2c4661b44922c82c7f2fb72e01cf62ba8e5933",
+      "manifest": "nckh-ui/after-hashes.json",
+      "ownershipHistory": [
+        "E"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": null,
+      "runtimeManifestMatch": null
+    },
+    {
+      "path": "apps/web/tests/fah-err-shared-errors.test.cjs",
+      "owner": "C",
+      "hash": "ca14e43b5df0d64e7a41e02398e45b2fee55252586a0e99da04c87adff80c5ce",
+      "manifest": "shared-web/after-hashes.json",
+      "ownershipHistory": [
+        "C"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": null,
+      "runtimeManifestMatch": null
+    },
+    {
+      "path": "apps/web/tests/form-automation.spec.ts",
+      "owner": "D",
+      "hash": "1ebcaad0dc2b495c3f76c470195fd1d9ce19bd8a9787b33509a0e3f9273c2286",
+      "manifest": "forms-ui/after-hashes.json",
+      "ownershipHistory": [
+        "D"
+      ],
+      "baselineHash": "f17440010e31a00e3b19778c64497f322f05a5db8629c18d3990962adb1db016",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "1ebcaad0dc2b495c3f76c470195fd1d9ce19bd8a9787b33509a0e3f9273c2286",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/nckh-delete-model.spec.ts",
+      "owner": "E-callback-fixture",
+      "hash": "80c1af8559da9abc27c4757a6d5dd73aa1bb8d7fb753257b6407e06e3e01111f",
+      "manifest": "nckh-ui/fixture-r1/after-hashes.json",
+      "ownershipHistory": [
+        "E-callback-fixture"
+      ],
+      "baselineHash": "46338bc5b3000712c3e5689632e6b599114659392e0cccf0a85d624e9c35279c",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "80c1af8559da9abc27c4757a6d5dd73aa1bb8d7fb753257b6407e06e3e01111f",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "apps/web/tests/nckh.spec.ts",
+      "owner": "E-callback-fixture",
+      "hash": "1b0b8ac4b7dc23b55762a9a2115b0eb302e60221896d0ba76eb33313c92d3126",
+      "manifest": "nckh-ui/fixture-r1/after-hashes.json",
+      "ownershipHistory": [
+        "E-callback-fixture"
+      ],
+      "baselineHash": "0d439ec18a4074ae7e7d6179b439a0455a55796f36797e4e3d31ec6310177220",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "1b0b8ac4b7dc23b55762a9a2115b0eb302e60221896d0ba76eb33313c92d3126",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "docs/ai/API_CONTRACT_GUIDE.md",
+      "owner": "B",
+      "hash": "aeaf98f36157cb44cd3d7999f6d379f0da4f84c49899044f37443d89af838223",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "contract-doc",
+      "runtimeManifestHash": null,
+      "runtimeManifestMatch": null
+    },
+    {
+      "path": "docs/vi/API_CONTRACT_GUIDE.md",
+      "owner": "B",
+      "hash": "323924df4e66a14d42e6d8a3f3012f29fd22d657a52cfbc4b72a4d68aef99a43",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "contract-doc",
+      "runtimeManifestHash": null,
+      "runtimeManifestMatch": null
+    },
+    {
+      "path": "smoke-test.mjs",
+      "owner": "H",
+      "hash": "b377b2ddfdf59ed2c7e446b1148b8fc1a719462a1d03b121ed967e18093f12f2",
+      "manifest": "legacy-smoke/after-hashes.json",
+      "ownershipHistory": [
+        "H"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "tooling",
+      "runtimeManifestHash": "b377b2ddfdf59ed2c7e446b1148b8fc1a719462a1d03b121ed967e18093f12f2",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/GoogleIdentityVerifier.cs",
+      "owner": "G",
+      "hash": "fd4edf41b1e63124baddcd8bdb77631e78083b2be8bf50544f2d1e9c0f6f7f33",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "27adee84bc5499747c01a7d532941fd6e8764da9ca534fc654f2387b53bab1a7",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "fd4edf41b1e63124baddcd8bdb77631e78083b2be8bf50544f2d1e9c0f6f7f33",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/AiAnalyticsDtos.cs",
+      "owner": "B",
+      "hash": "cea9ea2ecce8fa7dbd479ddd4476a3ea84a6e1ec493fd90e991e0dc863419c26",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": "4bf3441e786f15f9f169a1e736f83d8a5d207ac5cb194257a0004950405bc213",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "cea9ea2ecce8fa7dbd479ddd4476a3ea84a6e1ec493fd90e991e0dc863419c26",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6AiGenerateDtos.cs",
+      "owner": "B",
+      "hash": "70edb389122e719982f873f505c400a1608ec63f2d4fcb6f84f3e486cccc2b78",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": "57b888c70c2b78bdc4a920145b25c1cab32ac3702e5f78c9db468cddf2ee52d2",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "70edb389122e719982f873f505c400a1608ec63f2d4fcb6f84f3e486cccc2b78",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminPackagesController.cs",
+      "owner": "G",
+      "hash": "2a07788955aebf57c118d1b3f6c9c54251332ba6a7fe8b4342cefa1873aba684",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "3333e5ecbff1c95573d332ceedf634f401a1b3714d80b22d39a4e7adb696af20",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "2a07788955aebf57c118d1b3f6c9c54251332ba6a7fe8b4342cefa1873aba684",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs",
+      "owner": "G",
+      "hash": "8451a63180f6698965aa8f0784ee7bdd982fa60258bac2711f73c18ab7563195",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "2230439d4a4f977c62b0f85bad5d09499704b5590eac620ae6456544a08ebee8",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "8451a63180f6698965aa8f0784ee7bdd982fa60258bac2711f73c18ab7563195",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs",
+      "owner": "B",
+      "hash": "8c7767e3a5093de20f025b4445c7155fa45ad24ba24534746a11eef0811fdf0d",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": "069f5c98821a5d7281897117466919445ddee3e8ead87d67090c62efbe3467a2",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "8c7767e3a5093de20f025b4445c7155fa45ad24ba24534746a11eef0811fdf0d",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleFormsApiService.cs",
+      "owner": "G-fix-r1",
+      "hash": "f915b603c88281e067ef082dc31eac0ef477e0b7540af5e4549209fdf9f43856",
+      "manifest": "backend-boundaries/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "G",
+        "G-fix-r1"
+      ],
+      "baselineHash": "4a63d0cbe9fb577a9a5b2c29c24bb7f9d23b9a56622134d100f5524eadd9c171",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "f915b603c88281e067ef082dc31eac0ef477e0b7540af5e4549209fdf9f43856",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationException.cs",
+      "owner": "G",
+      "hash": "57028e3884b86e3c449f2deae2554ddcc5485fd8f6882ce9419ae73188358b86",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "product",
+      "runtimeManifestHash": "57028e3884b86e3c449f2deae2554ddcc5485fd8f6882ce9419ae73188358b86",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationFailureKind.cs",
+      "owner": "G",
+      "hash": "bc881603054cbe5fe7ae6c76d173aaf481b4b4e563e6916b42ed0e296bde4a0d",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "product",
+      "runtimeManifestHash": "bc881603054cbe5fe7ae6c76d173aaf481b4b4e563e6916b42ed0e296bde4a0d",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleOAuthService.cs",
+      "owner": "G",
+      "hash": "44ce71f7f99ac00938f9254bc25965d3661477854eb38ec6700578cff4a1a9ff",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "596b803ba614f3217fbe417445fe900ec8ef22c8e5d906a7e4c34e1d55d1beca",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "44ce71f7f99ac00938f9254bc25965d3661477854eb38ec6700578cff4a1a9ff",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+      "owner": "G",
+      "hash": "a151340f8c21fe1c0d6237449955bde09299bbeb4cba48ed882a2af69cf647f2",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "78174754ac8cb661bf9e8b94bfc3ba2cac61247c7a92abf99f14202ee85a8a20",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "a151340f8c21fe1c0d6237449955bde09299bbeb4cba48ed882a2af69cf647f2",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiAnalyticsService.cs",
+      "owner": "B",
+      "hash": "e85339c304256ff4b32ef872f3df3b50fcbaf7d7922dd3da0b9f7b22b550276c",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": "e28d9698a7546f51b149fa18eeff7f8b0895c17da97bd1cd4991442cb25cca1d",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "e85339c304256ff4b32ef872f3df3b50fcbaf7d7922dd3da0b9f7b22b550276c",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationErrorMessages.cs",
+      "owner": "B",
+      "hash": "22a7bf8c24356f257046f49798044a5d208656f46ea9e1ce2eb68e053fb36503",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "product",
+      "runtimeManifestHash": "22a7bf8c24356f257046f49798044a5d208656f46ea9e1ce2eb68e053fb36503",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+      "owner": "B",
+      "hash": "ab1a70cf83d4c9d667d7a05f9f6d4407dc25f9db5eec4e3ee03b0b173dcb40ad",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": "6c0d38848ff6993b4a96aa5c45312a1a779a03174d8cc9485a524b096abaa61b",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "ab1a70cf83d4c9d667d7a05f9f6d4407dc25f9db5eec4e3ee03b0b173dcb40ad",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptProfileService.cs",
+      "owner": "G",
+      "hash": "e95c983ab3ff1b5447ff3227a13a73a46c52a4d8de5d305c958563a17719b94a",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "517f0f2714d62fbf0ca926905349a8ce7798009e069d28780621284d2bd7e75f",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "e95c983ab3ff1b5447ff3227a13a73a46c52a4d8de5d305c958563a17719b94a",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiProviderSettingsService.cs",
+      "owner": "G",
+      "hash": "4e97d3a447e393d6c6ee2f2f85b0f59734c81fc403e85e321eb296d9f1e7b5bc",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "31eccb1f727ca4729f02a4f7f6ec9912e78a68de4b81bcbdbf49bb965c3b9aba",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "4e97d3a447e393d6c6ee2f2f85b0f59734c81fc403e85e321eb296d9f1e7b5bc",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AnswerRuleService.cs",
+      "owner": "G",
+      "hash": "4217b44d6fbe410542179d8b548faf9bc5d6dc34a92b17b729d3aa936f93ff6a",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "bb0a45a9f16c33c796bc0c5bc4f08235df2e8ea8d446adda09390b7b577bce3f",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "4217b44d6fbe410542179d8b548faf9bc5d6dc34a92b17b729d3aa936f93ff6a",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/FormProjectService.cs",
+      "owner": "G",
+      "hash": "d165a9d574930fe4db0cd316581da9270c7825f3027e9cbb630024196834a865",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "c73c11fa7c17fb74febfafbb4a72f4ca9aedfe733378fb766abb623f09a2d009",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "d165a9d574930fe4db0cd316581da9270c7825f3027e9cbb630024196834a865",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchDataService.cs",
+      "owner": "G",
+      "hash": "e4e7b774058f85cb1e0ff7dd7f6676a5a7840c9c292abf5ed041333636ea16e2",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "A",
+        "G"
+      ],
+      "baselineHash": "a00d2e0b9ee7fa326b5d7c4cc83202a23f612622bbbe89eb87e111522ac771ac",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "e4e7b774058f85cb1e0ff7dd7f6676a5a7840c9c292abf5ed041333636ea16e2",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+      "owner": "G",
+      "hash": "8f57c8e3d6b95f23458eb6597a3574f9901332d3651813799737119f4f8a56ec",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "A",
+        "G"
+      ],
+      "baselineHash": "b23818a35a6146679eefc04991f5f9f458ac1dde52cccebf1f3e96889cb8204c",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "8f57c8e3d6b95f23458eb6597a3574f9901332d3651813799737119f4f8a56ec",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PackageService.cs",
+      "owner": "G",
+      "hash": "2fe68e6cb4caf3238d5b6f4495435a104c1d79c02b9fe5a15ac66e6b87345561",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "cfe59a69d955bab5d5750007df59e3e8c6d8bbcca6dae8a2a615c780cdb66588",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "2fe68e6cb4caf3238d5b6f4495435a104c1d79c02b9fe5a15ac66e6b87345561",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PayosClient.cs",
+      "owner": "G",
+      "hash": "759d15f9634f7fcbfd520a113280789fe63f32e4a45ac979ff2e9d76fac806eb",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "86165cbb7b459a46de8d1fbc2a2e91ddb350fd20b66e022d8f59df3d03d2fa30",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "759d15f9634f7fcbfd520a113280789fe63f32e4a45ac979ff2e9d76fac806eb",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs",
+      "owner": "G",
+      "hash": "5e5ab4244479617825b114610231e6ae5fd647e3498dcd1187ddca40bce5ee10",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "edc399b341fa38de1a74a875e0995899638119fd6cf75aa6d55cf62d210f8c46",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "5e5ab4244479617825b114610231e6ae5fd647e3498dcd1187ddca40bce5ee10",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+      "owner": "A",
+      "hash": "f35378a3d00985f9b8e941fd96b970695658cd32b51347fd92f38258f6b64488",
+      "manifest": "p1-submission/snapshot.json",
+      "ownershipHistory": [
+        "A"
+      ],
+      "baselineHash": "1d828f134cec00ae6e4c4f0dccf7aab22df0fee3af3a55ef65720700105e0d40",
+      "delta": "changed",
+      "category": "product",
+      "runtimeManifestHash": "f35378a3d00985f9b8e941fd96b970695658cd32b51347fd92f38258f6b64488",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AdminAiProviderSettingsTests.cs",
+      "owner": "G",
+      "hash": "530d2dfa303412e09af2b225ed744c012ff79f41bad29377a1f2fa7f29451628",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "b0aa4e34cc0959cbcb4c45f172f51f2ac04d83db3afe4afccf9cf759a201596b",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "530d2dfa303412e09af2b225ed744c012ff79f41bad29377a1f2fa7f29451628",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiPromptProfileServiceTests.cs",
+      "owner": "G",
+      "hash": "806b53d8db41711adbcdb7dbe39aaf45fec1a2ad8fcf765063701123f24ecffd",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": "0efcbb22f83f5f37875b3547ad8531b0a64d6057a83859d1c5c30bfdb1e9408d",
+      "delta": "changed",
+      "category": "test",
+      "runtimeManifestHash": "806b53d8db41711adbcdb7dbe39aaf45fec1a2ad8fcf765063701123f24ecffd",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrAiDiagnosticsTests.cs",
+      "owner": "B",
+      "hash": "275976ec600649b190f890d892da9144e3a2c18602a7282d3d45bbc0804540ae",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "275976ec600649b190f890d892da9144e3a2c18602a7282d3d45bbc0804540ae",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrAiErrorContractTests.cs",
+      "owner": "B",
+      "hash": "68e64cd9755dc8cb352b7e2818b1c604b6304edd930b6d16733e4a09ba53a835",
+      "manifest": "p1-ai-contract/after-hashes.json",
+      "ownershipHistory": [
+        "B"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "68e64cd9755dc8cb352b7e2818b1c604b6304edd930b6d16733e4a09ba53a835",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrBoundaryGoogleTests.cs",
+      "owner": "G-fix-r1",
+      "hash": "2de65905681642c1fb7ed872b6da7fda66687367971510e657c5c4b327d059ab",
+      "manifest": "backend-boundaries/fix-r1/after-hashes.json",
+      "ownershipHistory": [
+        "G",
+        "G-fix-r1"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "2de65905681642c1fb7ed872b6da7fda66687367971510e657c5c4b327d059ab",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrBoundaryTests.cs",
+      "owner": "G",
+      "hash": "fb7c02f922a8c4a2d0740d008c644250a48653ea370d6fc697816a5914869752",
+      "manifest": "backend-boundaries/after-hashes.json",
+      "ownershipHistory": [
+        "G"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "fb7c02f922a8c4a2d0740d008c644250a48653ea370d6fc697816a5914869752",
+      "runtimeManifestMatch": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrSubmissionPersistenceTests.cs",
+      "owner": "A",
+      "hash": "cb167f069beb508c204e9f60dde5132076b3b6e8d40fbc0c8858a4518c6a3293",
+      "manifest": "p1-submission/snapshot.json",
+      "ownershipHistory": [
+        "A"
+      ],
+      "baselineHash": null,
+      "delta": "outside-baseline",
+      "category": "test",
+      "runtimeManifestHash": "cb167f069beb508c204e9f60dde5132076b3b6e8d40fbc0c8858a4518c6a3293",
+      "runtimeManifestMatch": true
+    }
+  ]
+}

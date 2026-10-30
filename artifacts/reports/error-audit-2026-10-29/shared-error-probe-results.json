@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-29T07:06:08.655Z",
+  "level": "isolated mocked fetch + real transpiled source; no browser/API/DB/provider",
+  "hashes": {
+    "apps/web/lib/toast.ts": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+    "apps/web/lib/nckh-google-auth.ts": "09ea37df3b46164958df3fcc7bbb59eae66cf0fa48968f6e9f64e1a47e0c8690",
+    "apps/web/lib/api.ts": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+    "apps/web/app/login/page.tsx": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad"
+  },
+  "observations": [
+    {
+      "id": "PROBE-01",
+      "result": "Verified",
+      "observed": {
+        "mappedLoginMessage": "Unauthorized",
+        "retainedStatus": false
+      }
+    },
+    {
+      "id": "PROBE-02",
+      "result": "Verified",
+      "observed": {
+        "message": "One or more validation errors occurred.",
+        "fieldDetailsRetained": false,
+        "traceRetained": false
+      }
+    },
+    {
+      "id": "PROBE-03",
+      "result": "Verified",
+      "observed": {
+        "readableMessage": "<html><body>Upstream unavailable</body></html>"
+      }
+    },
+    {
+      "id": "PROBE-04",
+      "result": "Verified",
+      "observed": {
+        "json": "Synthetic data changed; reload first.",
+        "download": "Không tải được tệp. Mã lỗi HTTP 409."
+      }
+    },
+    {
+      "id": "PROBE-05",
+      "result": "Verified",
+      "observed": {
+        "toast": "Failed to fetch",
+        "diagnosticLogCalls": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+diff --git a/tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj b/tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj
+index 153fc57..6b60614 100644
+--- a/tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj
++++ b/tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj
+@@ -21,6 +21,7 @@
+ 
+   <ItemGroup>
+     <ProjectReference Include="..\..\src\FormAutoHub.Api\FormAutoHub.Api.csproj" />
++    <ProjectReference Include="..\..\scripts\db-compatibility\DbCompatibilityProbe.csproj" />
+   </ItemGroup>
+ 
+ </Project>

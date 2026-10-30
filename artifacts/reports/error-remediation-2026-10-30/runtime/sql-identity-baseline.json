@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-30T00:40:29.320146+00:00",
+  "exit": 0,
+  "result": "ServerName\n----------\nDESKTOP-TS5JR7L\nname|database_id|state_desc\n----|-----------|----------\nFormAutoHub|7|ONLINE\nFormAutoHub_FAHERR001_restore_20261029_a19f7a2|8|ONLINE\nFormAutoHub_FAHERR001_clean_20261029_a19f7a2|9|ONLINE\nFormAutoHub_FAHERR001_safety_20261029_a19f7a2|10|ONLINE\n",
+  "readOnly": true
+}

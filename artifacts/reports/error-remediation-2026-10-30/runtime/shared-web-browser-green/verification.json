@@ -1,0 +1,12 @@
+{
+  "exit": 1,
+  "counts": {
+    "skipped": 0,
+    "passed": 0,
+    "executed": 5,
+    "failed": 5
+  },
+  "classification": "All5 strict alert locator matches app correct error paragraph and empty Next route announcer; fixture needs scoping; not product regression",
+  "hashDrift": [],
+  "limit": "Actual app messages visible but downstream assertions not executed; noGREENbrowser claim"
+}

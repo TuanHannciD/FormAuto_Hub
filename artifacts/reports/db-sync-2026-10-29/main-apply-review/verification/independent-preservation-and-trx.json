@@ -1,0 +1,169 @@
+{
+  "reviewPerformedUtc": "2026-10-29",
+  "applicationTables": 33,
+  "all33Equal": true,
+  "perApplicationTable": {
+    "dbo.AiGenerationRunItems": true,
+    "dbo.AiGenerationRuns": true,
+    "dbo.AiPromptProfiles": true,
+    "dbo.AiProviderSettings": true,
+    "dbo.AiQuestionPrompts": true,
+    "dbo.AnswerRules": true,
+    "dbo.AuditLogs": true,
+    "dbo.CreditPackages": true,
+    "dbo.CreditTransactions": true,
+    "dbo.DataCollectionLogs": true,
+    "dbo.FormProjects": true,
+    "dbo.FormQuestions": true,
+    "dbo.GeneratedResponses": true,
+    "dbo.ModelRelations": true,
+    "dbo.NodePositions": true,
+    "dbo.NormalizedDatasets": true,
+    "dbo.ObservedQuestionMappings": true,
+    "dbo.PaymentProviderSettings": true,
+    "dbo.PaymentRecords": true,
+    "dbo.RefreshTokens": true,
+    "dbo.ResearchFormQuestions": true,
+    "dbo.ResearchForms": true,
+    "dbo.ResearchModels": true,
+    "dbo.ResearchVariables": true,
+    "dbo.SubmissionJobs": true,
+    "dbo.SubmissionLogs": true,
+    "dbo.SurveyResponses": true,
+    "dbo.TopupOrderEvidenceFiles": true,
+    "dbo.TopupOrders": true,
+    "dbo.UsageLogs": true,
+    "dbo.UserCreditAccounts": true,
+    "dbo.UserExternalLogins": true,
+    "dbo.Users": true
+  },
+  "historyCounts": [
+    13,
+    14
+  ],
+  "historyAppliedDelta": [
+    "20261029142938_NormalizeTopupEvidenceColumnLengths"
+  ],
+  "historyRemoved": [],
+  "repeatAndBackupPairs": [
+    {
+      "before": "b2-clean-before-repeat.json",
+      "after": "b2-clean-after-repeat.json",
+      "equalAll34": true,
+      "tableCount": 34
+    },
+    {
+      "before": "b2-restore-after.json",
+      "after": "b2-restore-after-repeat.json",
+      "equalAll34": true,
+      "tableCount": 34
+    },
+    {
+      "before": "b2-safety-before-hook.json",
+      "after": "b2-safety-after-hook-negative.json",
+      "equalAll34": true,
+      "tableCount": 34
+    },
+    {
+      "before": "source-before-backup.json",
+      "after": "b2-main-readonly-current.json",
+      "equalAll34": true,
+      "tableCount": 34
+    },
+    {
+      "before": "restore-baseline.json",
+      "after": "b2-restore-before.json",
+      "equalAll34": true,
+      "tableCount": 34
+    }
+  ],
+  "exactTwoLegacyIndexSignaturesUnchanged": true,
+  "sqlTrxActualResults": [
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.UnexpectedShape_RejectsBeforeOtherColumnAlter(shape: \"nvarchar(max) COLLATE Latin1_General_100_BIN2 NOT \"···)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"nameTrailing\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"name201\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LockTimeoutScope_RestoresCallerAfterSuccess_AndOriginalThrow(timeout: -1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"mimeEmoji\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Writer_IsBlockedUntilNormalizationTransactionCommits_ThenOversizeRejected",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.WithoutTransaction_FailsBeforeSchemaChange",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LegacyMaxColumns_PreserveUnicodeTrailingSpacesAndBinary_AndRepeatUp",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"mimeTrailing\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.UnexpectedShape_RejectsBeforeOtherColumnAlter(shape: \"varchar(max) NOT NULL\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LockTimeoutScope_RestoresCallerAfterSuccess_AndOriginalThrow(timeout: 4321)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"mime51\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline(scenario: \"nameEmoji\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.UnexpectedShape_RejectsBeforeOtherColumnAlter(shape: \"nvarchar(201) NOT NULL\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LockTimeoutScope_RestoresCallerAfterSuccess_AndOriginalThrow(timeout: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.UnexpectedShape_RejectsBeforeOtherColumnAlter(shape: \"nvarchar(max) NULL\")",
+      "outcome": "Passed"
+    }
+  ],
+  "sqlResultsCount": 16,
+  "sqlAllPassed": true,
+  "postStates": {
+    "b2-clean-post.log": {
+      "state": "compatible",
+      "pending": [],
+      "blocking": [],
+      "rawDifferenceCount": 0
+    },
+    "b2-restore-post.log": {
+      "state": "compatible",
+      "pending": [],
+      "blocking": [],
+      "rawDifferenceCount": 2
+    },
+    "b2-safety-post.log": {
+      "state": "compatible",
+      "pending": [],
+      "blocking": [],
+      "rawDifferenceCount": 0
+    }
+  }
+}

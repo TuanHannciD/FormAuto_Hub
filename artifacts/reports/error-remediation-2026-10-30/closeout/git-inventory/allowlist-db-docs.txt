@@ -1,0 +1,4 @@
+docs/ai/tasks/FAH-DB-SYNC-001/INDEX.md
+docs/ai/tasks/FAH-DB-SYNC-001/VALIDATION.md
+docs/vi/tasks/FAH-DB-SYNC-001/INDEX.md
+docs/vi/tasks/FAH-DB-SYNC-001/VALIDATION.md

@@ -1,0 +1,238 @@
+{
+  "dateUtc": "2026-10-30T16:46:13.442541+00:00",
+  "scope": "Static handoff documentation only; no runtime, SSH, external HTTP, DB, CI/deploy, git remote or process actions",
+  "checks": [
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/SELF_DEPLOY_HANDOFF.md",
+      "bytes": 22288,
+      "lines": 196,
+      "sha256": "a26ea62f4ce821b91e7b0749b0f84e87933e12a9e86af72225e4b10b0f426153",
+      "utf8": true,
+      "links": [
+        {
+          "label": "Acceptance hiện tại",
+          "target": "REMEDIATION_VALIDATION.md",
+          "exists": true
+        },
+        {
+          "label": "review độc lập cuối",
+          "target": "../../../../artifacts/reports/error-remediation-2026-10-30/final-overall-review/report.md",
+          "exists": true
+        },
+        {
+          "label": "DB-sync local",
+          "target": "../FAH-DB-SYNC-001/INDEX.md",
+          "exists": true
+        },
+        {
+          "label": "CI",
+          "target": "../../../../.github/workflows/ci.yml",
+          "exists": true
+        },
+        {
+          "label": "release workflow",
+          "target": "../../../../.github/workflows/deploy.yml",
+          "exists": true
+        },
+        {
+          "label": "deploy script",
+          "target": "../../../../scripts/deploy-production.sh",
+          "exists": true
+        },
+        {
+          "label": "Compose",
+          "target": "../../../../docker-compose.prod.yml",
+          "exists": true
+        },
+        {
+          "label": "API Dockerfile",
+          "target": "../../../../Dockerfile.api",
+          "exists": true
+        },
+        {
+          "label": "Web Dockerfile",
+          "target": "../../../../apps/web/Dockerfile",
+          "exists": true
+        },
+        {
+          "label": "Program",
+          "target": "../../../../src/FormAutoHub.Api/Program.cs",
+          "exists": true
+        },
+        {
+          "label": "deployment guide",
+          "target": "../../DEPLOYMENT_GUIDE.md",
+          "exists": true
+        },
+        {
+          "label": "environment",
+          "target": "../../ENVIRONMENT_SETUP.md",
+          "exists": true
+        },
+        {
+          "label": "remediation",
+          "target": "../../../../artifacts/reports/error-remediation-2026-10-30/dossier-checkpoint/owned-delta-from-baseline371-final.json",
+          "exists": true
+        },
+        {
+          "label": "DB-sync",
+          "target": "../../../../artifacts/reports/db-sync-2026-10-29/dossier/current-source-inventory.json",
+          "exists": true
+        },
+        {
+          "label": "Migration source",
+          "target": "../../../../src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+          "exists": true
+        },
+        {
+          "label": "db-compatibility",
+          "target": "../../../../scripts/db-compatibility/README.md",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/SELF_DEPLOY_HANDOFF.md",
+      "bytes": 22288,
+      "lines": 196,
+      "sha256": "a26ea62f4ce821b91e7b0749b0f84e87933e12a9e86af72225e4b10b0f426153",
+      "utf8": true,
+      "links": [
+        {
+          "label": "Acceptance hiện tại",
+          "target": "REMEDIATION_VALIDATION.md",
+          "exists": true
+        },
+        {
+          "label": "review độc lập cuối",
+          "target": "../../../../artifacts/reports/error-remediation-2026-10-30/final-overall-review/report.md",
+          "exists": true
+        },
+        {
+          "label": "DB-sync local",
+          "target": "../FAH-DB-SYNC-001/INDEX.md",
+          "exists": true
+        },
+        {
+          "label": "CI",
+          "target": "../../../../.github/workflows/ci.yml",
+          "exists": true
+        },
+        {
+          "label": "release workflow",
+          "target": "../../../../.github/workflows/deploy.yml",
+          "exists": true
+        },
+        {
+          "label": "deploy script",
+          "target": "../../../../scripts/deploy-production.sh",
+          "exists": true
+        },
+        {
+          "label": "Compose",
+          "target": "../../../../docker-compose.prod.yml",
+          "exists": true
+        },
+        {
+          "label": "API Dockerfile",
+          "target": "../../../../Dockerfile.api",
+          "exists": true
+        },
+        {
+          "label": "Web Dockerfile",
+          "target": "../../../../apps/web/Dockerfile",
+          "exists": true
+        },
+        {
+          "label": "Program",
+          "target": "../../../../src/FormAutoHub.Api/Program.cs",
+          "exists": true
+        },
+        {
+          "label": "deployment guide",
+          "target": "../../DEPLOYMENT_GUIDE.md",
+          "exists": true
+        },
+        {
+          "label": "environment",
+          "target": "../../ENVIRONMENT_SETUP.md",
+          "exists": true
+        },
+        {
+          "label": "remediation",
+          "target": "../../../../artifacts/reports/error-remediation-2026-10-30/dossier-checkpoint/owned-delta-from-baseline371-final.json",
+          "exists": true
+        },
+        {
+          "label": "DB-sync",
+          "target": "../../../../artifacts/reports/db-sync-2026-10-29/dossier/current-source-inventory.json",
+          "exists": true
+        },
+        {
+          "label": "Migration source",
+          "target": "../../../../src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+          "exists": true
+        },
+        {
+          "label": "db-compatibility",
+          "target": "../../../../scripts/db-compatibility/README.md",
+          "exists": true
+        }
+      ]
+    }
+  ],
+  "aiViIdenticalVietnamese": true,
+  "sourceReferences": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "e64095e941e791b819cd9c972bc30fe12de70d7cd544a8d2247bd84355e82aa8"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "sha256": "3892706a83c97174db04d246637189fae61c7e4a209c8796a9e4175ba6333630"
+    },
+    {
+      "path": "scripts/deploy-production.sh",
+      "sha256": "7327f473bba8fe591d345d859e97341a9c0a18d56c3ff926e266698eec97193e"
+    },
+    {
+      "path": "docker-compose.prod.yml",
+      "sha256": "2560068af123888af450272e82cf9e5b515aaf7d94ab27490662f2faa3818d2c"
+    },
+    {
+      "path": "Dockerfile.api",
+      "sha256": "4e7b37d03c83d307a050d6ff21b2854e28a2f49c04322c653deed33cc1fa2d90"
+    },
+    {
+      "path": "apps/web/Dockerfile",
+      "sha256": "0f8d01ac17ca85d295abcd4440a192c1e72794761c833e7ce8e4e3d7781ff536"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Program.cs",
+      "sha256": "b3b45edbdfe289941ce8c6785b05d2126ed8b8c9ada3e43ed453addbfd574b5a"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+      "sha256": "a11579f3336307c286a14e5d9d279dfbcfa7cf2553de9abaac726633caac6d48"
+    },
+    {
+      "path": "scripts/db-compatibility/README.md",
+      "sha256": "898e3ce284fade038e214ac1c24384ffc39a8b2aa72427558666528c4d81489e"
+    },
+    {
+      "path": "scripts/db-compatibility/Program.cs",
+      "sha256": "9ee9b2502e371192d180d6226965e40c1cc1fe32f6dbf0a3c4281295ccd95e44"
+    },
+    {
+      "path": "apps/web/scripts/legacy-smoke.mjs",
+      "sha256": "ed787277c99eb8f0b5c99a30e1b7ee0406c70cb8777cc8066255d1f22aa0c105"
+    }
+  ],
+  "failures": [],
+  "status": "Verified",
+  "limits": [
+    "No shell/SQL command executed from the runbook",
+    "No production state verified",
+    "No independent review implied by this self-check"
+  ]
+}

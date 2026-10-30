@@ -1,0 +1,14 @@
+[
+  {
+    "entrypoint": "smoke-test.mjs",
+    "exitCode": 0
+  },
+  {
+    "entrypoint": "apps/web/smoke-test.mjs",
+    "exitCode": 0
+  },
+  {
+    "entrypoint": "apps/web/smoke-debug.mjs",
+    "exitCode": 0
+  }
+]

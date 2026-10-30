@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-30T07:20:40.8363049Z",
+  "ownedPids": [
+    14200,
+    27764,
+    26660
+  ],
+  "stillPresent": [],
+  "freshDistExists": true,
+  "existingNextPreserved": true,
+  "ownedTabCloseSucceeded": true,
+  "noCleanup": true,
+  "tcpConnectAfterStop": 10035,
+  "originReleased": true,
+  "previewStatusAfter": "available=false; tabId=null"
+}

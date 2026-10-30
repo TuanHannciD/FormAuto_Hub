@@ -1,0 +1,45 @@
+{
+  "counts": {
+    "executed": 4,
+    "passed": 0,
+    "failed": 4
+  },
+  "recordedAfterWorkerReleaseUtc": "2026-10-30T07:17:55.2018189Z",
+  "hashDrift": [
+    {
+      "path": "apps/web/app/dashboard/top-up/page.tsx",
+      "sha256": "00A8D3C6C57196C1CD015EB12440BE041D9F968FEBF9D3E2FCDC4869AF53BA22"
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/page.tsx",
+      "sha256": "75E9D9D6FF7D9FCEDE2BA01D97ED7C2E0A41C8760B3E47B18A4C672AE7088612"
+    },
+    {
+      "path": "apps/web/app/admin/packages/page.tsx",
+      "sha256": "BB6FA7F9A4FF07752FC2DDD20114DFD28EBA8A07DC4F9105C3ABBC2B75953AC5"
+    }
+  ],
+  "tests": [
+    {
+      "title": "ERR021 failed profile load blocks PUT and retries only the read",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Tài khoản', exact: true }).getByText('Không tải được hồ sơ.', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Tài khoản', exact: true }).getByText('Không tải được hồ sơ.', { exact: true })\u001b[22m\n"
+    },
+    {
+      "title": "ERR021 failed security load does not label Google unlinked and retry restores known state",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Tài khoản', exact: true }).getByText('Không tải được hồ sơ bảo mật.', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Tài khoản', exact: true }).getByText('Không tải được hồ sơ bảo mật.', { exact: true })\u001b[22m\n"
+    },
+    {
+      "title": "ERR016 503 detail offers GET-only retry without claiming missing",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Không tải được chi tiết yêu cầu nạp.', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Không tải được chi tiết yêu cầu nạp.', { exact: true })\u001b[22m\n"
+    },
+    {
+      "title": "ERR016 transport detail offers GET-only retry without claiming missing",
+      "status": "failed",
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Không tải được chi tiết yêu cầu nạp.', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Không tải được chi tiết yêu cầu nạp.', { exact: true })\u001b[22m\n"
+    }
+  ],
+  "limit": "Mocked API only; source writers released after runner completion, any later hash drift cannot imply drift during run; no actual API/SQL/provider evidence."
+}

@@ -1,0 +1,35 @@
+CallerTimeout|RestoredTimeout|Scenario
+-------------|---------------|--------
+-1|-1|success
+
+(1 rows affected)
+CallerTimeout|RestoredTimeout|Scenario|OriginalError
+-------------|---------------|--------|-------------
+-1|-1|original-shape-throw|51002
+
+(1 rows affected)
+CallerTimeout|RestoredTimeout|Scenario
+-------------|---------------|--------
+0|0|success
+
+(1 rows affected)
+CallerTimeout|RestoredTimeout|Scenario|OriginalError
+-------------|---------------|--------|-------------
+0|0|original-shape-throw|51002
+
+(1 rows affected)
+CallerTimeout|RestoredTimeout|Scenario
+-------------|---------------|--------
+4321|4321|success
+
+(1 rows affected)
+CallerTimeout|RestoredTimeout|Scenario|OriginalError
+-------------|---------------|--------|-------------
+4321|4321|original-shape-throw|51002
+
+(1 rows affected)
+Result|BeforeTimeout|AfterTimeout
+------|-------------|------------
+harness-complete|-1|-1
+
+(1 rows affected)

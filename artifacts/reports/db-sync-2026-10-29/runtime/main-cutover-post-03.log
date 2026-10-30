@@ -1,0 +1,60 @@
+{
+  "state": "compatible",
+  "mode": "post-sync",
+  "Server": "DESKTOP-TS5JR7L",
+  "Database": "FormAutoHub",
+  "Collation": "SQL_Latin1_General_CP1_CI_AS",
+  "sourceCommit": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "chainHash": "81e3b60f5d6426303f256e254501a442889e511e912f54841c183d690ca78807",
+  "plannedHash": "dce67d64eeae54917532b6905146b7259f576fbbd1886a8d2699543db6dfb362",
+  "assemblyHash": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+  "baselineSha256": "5fc4a8014e452a4338a0f32d993a8f5d6a533f7f30e4e2aee6f0e028dda74d61",
+  "current": [
+    "20260516204501_InitialFoundation",
+    "20260518234017_Phase7Authentication",
+    "20260520071203_Phase8PayosPayments",
+    "20260528090000_Phase6AiPromptProfiles",
+    "20260528090100_Phase6AiProviderSettings",
+    "20260528090200_Phase6AiGenerationRuns",
+    "20260530051057_NckhPhase1_FormsAndOAuth",
+    "20260602193837_NckhPhase2_PersistenceFoundation",
+    "20260604131107_NckhPhase3_CanvasRelations",
+    "20260604165518_NckhPhase4_FormGenerationTracking",
+    "20260604211823_NckhPhase5_DataCollectionNormalization",
+    "20261007181332_ManualCreditFlow",
+    "20261029142938_NormalizeTopupEvidenceColumnLengths"
+  ],
+  "applied": [
+    "20260516204501_InitialFoundation",
+    "20260518234017_Phase7Authentication",
+    "20260520071203_Phase8PayosPayments",
+    "20260528090000_Phase6AiPromptProfiles",
+    "20260528090100_Phase6AiProviderSettings",
+    "20260528090200_Phase6AiGenerationRuns",
+    "20260530051057_NckhPhase1_FormsAndOAuth",
+    "20260601083335_Phase10ManualCreditOperations",
+    "20260602193837_NckhPhase2_PersistenceFoundation",
+    "20260604131107_NckhPhase3_CanvasRelations",
+    "20260604165518_NckhPhase4_FormGenerationTracking",
+    "20260604211823_NckhPhase5_DataCollectionNormalization",
+    "20261007181332_ManualCreditFlow",
+    "20261029142938_NormalizeTopupEvidenceColumnLengths"
+  ],
+  "pending": [],
+  "historyOnly": [
+    "20260601083335_Phase10ManualCreditOperations"
+  ],
+  "modelPending": false,
+  "oversizeFileNames": 0,
+  "oversizeContentTypes": 0,
+  "blocking": [],
+  "information": [
+    "Known legacy history retained: 20260601083335_Phase10ManualCreditOperations",
+    "Exact optional legacy index retained: index:dbo.TopupOrderEvidenceFiles.IX_TopupOrderEvidenceFiles_TopupOrderId",
+    "Exact optional legacy index retained: index:dbo.TopupOrderEvidenceFiles.IX_TopupOrderEvidenceFiles_UserId_TopupOrderId"
+  ],
+  "rawDifferences": [
+    "Extra index:dbo.TopupOrderEvidenceFiles.IX_TopupOrderEvidenceFiles_TopupOrderId: {\u0022type\u0022:\u0022NONCLUSTERED\u0022,\u0022unique\u0022:true,\u0022primaryKey\u0022:false,\u0022uniqueConstraint\u0022:false,\u0022disabled\u0022:false,\u0022hypothetical\u0022:false,\u0022filter\u0022:\u0022([TopupOrderId] IS NOT NULL)\u0022,\u0022columns\u0022:[{\u0022name\u0022:\u0022TopupOrderId\u0022,\u0022ordinal\u0022:1,\u0022descending\u0022:false,\u0022included\u0022:false}]}",
+    "Extra index:dbo.TopupOrderEvidenceFiles.IX_TopupOrderEvidenceFiles_UserId_TopupOrderId: {\u0022type\u0022:\u0022NONCLUSTERED\u0022,\u0022unique\u0022:false,\u0022primaryKey\u0022:false,\u0022uniqueConstraint\u0022:false,\u0022disabled\u0022:false,\u0022hypothetical\u0022:false,\u0022filter\u0022:null,\u0022columns\u0022:[{\u0022name\u0022:\u0022UserId\u0022,\u0022ordinal\u0022:1,\u0022descending\u0022:false,\u0022included\u0022:false},{\u0022name\u0022:\u0022TopupOrderId\u0022,\u0022ordinal\u0022:2,\u0022descending\u0022:false,\u0022included\u0022:false}]}"
+  ]
+}

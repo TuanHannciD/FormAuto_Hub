@@ -1,0 +1,184 @@
+{
+  "pid": 22008,
+  "exited": true,
+  "exitCode": -1,
+  "listenerRemaining": false,
+  "responses": [
+    {
+      "label": "anonymous protected",
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 401,
+      "contentType": null
+    },
+    {
+      "label": "MVC missing fields",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "wrong credentials",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 401,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "User login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "Admin login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "refresh rotation",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "refreshed JWT profile",
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "User admin forbidden",
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "status": 403,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "Admin package list",
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "invalid package no write",
+      "method": "POST",
+      "path": "/api/admin/packages",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "invalid package update no write",
+      "method": "PUT",
+      "path": "/api/admin/packages/0b86e810-2f86-48db-89d9-eebd3f066ae0",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "invalid answer mode",
+      "method": "POST",
+      "path": "/api/projects/86286ce0-8df7-4864-8bc4-c283f12a7aa0/answer-rules",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "invalid answer JSON",
+      "method": "POST",
+      "path": "/api/projects/86286ce0-8df7-4864-8bc4-c283f12a7aa0/answer-rules",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "empty analyze local",
+      "method": "POST",
+      "path": "/api/forms/analyze",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "invalid host analyze local",
+      "method": "POST",
+      "path": "/api/forms/analyze",
+      "status": 400,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "owner project",
+      "method": "GET",
+      "path": "/api/forms/86286ce0-8df7-4864-8bc4-c283f12a7aa0/questions",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "other account project privacy",
+      "method": "GET",
+      "path": "/api/forms/86286ce0-8df7-4864-8bc4-c283f12a7aa0/questions",
+      "status": 404,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "owner order",
+      "method": "GET",
+      "path": "/api/topup-orders/5613c2d5-acaf-41f5-8cb3-880f942a2bcc",
+      "status": 200,
+      "contentType": "application/json"
+    },
+    {
+      "label": "other account order privacy",
+      "method": "GET",
+      "path": "/api/topup-orders/5613c2d5-acaf-41f5-8cb3-880f942a2bcc",
+      "status": 404,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "owner evidence blob",
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 200,
+      "contentType": "image/png"
+    },
+    {
+      "label": "other account evidence privacy",
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 404,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "User admin evidence forbidden",
+      "method": "GET",
+      "path": "/api/admin/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 403,
+      "contentType": null
+    },
+    {
+      "label": "Admin attached blob",
+      "method": "GET",
+      "path": "/api/admin/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 200,
+      "contentType": "image/png"
+    },
+    {
+      "label": "missing blob",
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/6ca81488-1010-4d77-a488-55eb03979411",
+      "status": 404,
+      "contentType": "application/problem\u002Bjson"
+    },
+    {
+      "label": "old refresh rejected",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 401,
+      "contentType": "application/problem\u002Bjson"
+    }
+  ],
+  "utc": "2026-10-30T09:04:28.2958542+00:00"
+}

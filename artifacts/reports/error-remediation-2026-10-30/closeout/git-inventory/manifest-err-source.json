@@ -1,0 +1,402 @@
+[
+  {
+    "path": "apps/web/app/admin/ai-provider-settings/page.tsx",
+    "bytes": 16788,
+    "sha256": "d28876097fd12911bd9d378edd4220c789f8aed0f1eec3c66a99e81921ce091e"
+  },
+  {
+    "path": "apps/web/app/admin/manual-credits/page.tsx",
+    "bytes": 23629,
+    "sha256": "eab756de740a89cbb7a9409d7f6c9ce8525ffac9e68c8301ca7bc9f0013d3c69"
+  },
+  {
+    "path": "apps/web/app/admin/packages/page.tsx",
+    "bytes": 11941,
+    "sha256": "4cff101b51f5e42cd6baae7e6e2d119d895fbbddc7349e1e73e27318ab6cfea9"
+  },
+  {
+    "path": "apps/web/app/admin/payos-settings/page.tsx",
+    "bytes": 15561,
+    "sha256": "28bdf0202285bc544b8a2b23e1899968b113e5ffcbbe5aaed44d74c808962d94"
+  },
+  {
+    "path": "apps/web/app/auth/callback/page.tsx",
+    "bytes": 4445,
+    "sha256": "4f4058cc9876d6313e1960a8e6122f9e7fc5c1156db2f61a91f8e4f4d5053e07"
+  },
+  {
+    "path": "apps/web/app/dashboard/ai-usage/page.tsx",
+    "bytes": 9331,
+    "sha256": "15fd6ff1ac0c67f8bed6ae05e448d0c42a71d33ecab5fcf3d9976beb2e365323"
+  },
+  {
+    "path": "apps/web/app/dashboard/credit-transactions/page.tsx",
+    "bytes": 9053,
+    "sha256": "afe8ce6e9f458b07b23d3cd2dfacff6f765b1269813b5fc779c0b52826029e9d"
+  },
+  {
+    "path": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+    "bytes": 3912,
+    "sha256": "0d53d76683cc94f006c3eb58b356908776ff566b106d71016a3f9e6ada857a9b"
+  },
+  {
+    "path": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+    "bytes": 17749,
+    "sha256": "b16763a4bd4c227c5e8370fa5634248456941beddaff271216d3b037565e0678"
+  },
+  {
+    "path": "apps/web/app/dashboard/forms/_helpers.ts",
+    "bytes": 17741,
+    "sha256": "e5bacfd95189ee7ad0a4366b76c5056caa36bbce3630e10ad5c12a70ee5997e0"
+  },
+  {
+    "path": "apps/web/app/dashboard/forms/page.tsx",
+    "bytes": 66082,
+    "sha256": "0005228031e2702c4f1d3ed638668f458ff03e7098c71b2de9278f3bdb9835dc"
+  },
+  {
+    "path": "apps/web/app/dashboard/nckh/callback/page.tsx",
+    "bytes": 4356,
+    "sha256": "157e8a6ce52c4b2b20f292eeeab1fe92f38583458b8176113b3882d6ff4221ff"
+  },
+  {
+    "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+    "bytes": 2060,
+    "sha256": "c71d3819f8f64888f5c1d69b3a0f15db501eea70a4ea7fef06e7860726e17d79"
+  },
+  {
+    "path": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+    "bytes": 5214,
+    "sha256": "552e118b37cf9664113d954263d6836bec5217957df6f8e93e32e3eb6d23f4e6"
+  },
+  {
+    "path": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+    "bytes": 70894,
+    "sha256": "ba43ef370c6cf9a92bdcba809f167219cb0a17122a5ab020e257b2b459874ab4"
+  },
+  {
+    "path": "apps/web/app/dashboard/nckh/page.tsx",
+    "bytes": 13466,
+    "sha256": "56f2b85c4892d147edf58e19a4f49b9e668b98fb26da15a781b6bf96932e355c"
+  },
+  {
+    "path": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+    "bytes": 4750,
+    "sha256": "96bfe8d9c192e4afe619f729570e255ed4d196162cfcb8988bb6b2e2a27c84ee"
+  },
+  {
+    "path": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+    "bytes": 5604,
+    "sha256": "67eb090a82cfdf122f24311cc9cfefe20b052b0d36faf553be73e02171531b42"
+  },
+  {
+    "path": "apps/web/app/dashboard/top-up/page.tsx",
+    "bytes": 20543,
+    "sha256": "e93a14335caca4e542de7342360f17e7d7c0c224daae191870a63f4b617e6879"
+  },
+  {
+    "path": "apps/web/app/dashboard/usage-logs/page.tsx",
+    "bytes": 9226,
+    "sha256": "514831fcccc60d5a93f28012e1835caa42c814070f39d37fca5543577ae02241"
+  },
+  {
+    "path": "apps/web/app/login/page.tsx",
+    "bytes": 5458,
+    "sha256": "42a00230147134dc54154ecc84667f06f27b822f49387ae7bf921de6369f9583"
+  },
+  {
+    "path": "apps/web/app/payment/payos/return/page.tsx",
+    "bytes": 3844,
+    "sha256": "3688fcd13908a6dd8e51ab20fe8dd33aa44a3206cca566465e2f827a6a7b4d5c"
+  },
+  {
+    "path": "apps/web/app/register/page.tsx",
+    "bytes": 5435,
+    "sha256": "a20c503d307c3de3f29c9a6a2b29a355ae23b8876151482bf1a06af13a4fbf3d"
+  },
+  {
+    "path": "apps/web/components/account-profile-panel.tsx",
+    "bytes": 3370,
+    "sha256": "bac6f7c566cbfaa932a82d764f052b32b7e8f918b5f0bde14b67a587e2a44681"
+  },
+  {
+    "path": "apps/web/components/account-security-panel.tsx",
+    "bytes": 9529,
+    "sha256": "34ee5ec1da1862d5d8811a205a5fd583ae3e4d940bc1a06ff3397f2741306069"
+  },
+  {
+    "path": "apps/web/lib/api.ts",
+    "bytes": 19689,
+    "sha256": "f3eb4caf81633ad489d0c947ee16ac29a714367c67166f477f5a6de8bfd79ab7"
+  },
+  {
+    "path": "apps/web/lib/seo-pages.ts",
+    "bytes": 24079,
+    "sha256": "7953917853d920c10e18a878b1fb453875d36a9a7e393cd4e1d72ae04ac8c33b"
+  },
+  {
+    "path": "apps/web/lib/toast.ts",
+    "bytes": 911,
+    "sha256": "a5a23677fadedb9ee3cdf01b6904d1a78b51eb054ebecf830888bf35a396f20a"
+  },
+  {
+    "path": "apps/web/scripts/legacy-smoke.mjs",
+    "bytes": 4066,
+    "sha256": "ed787277c99eb8f0b5c99a30e1b7ee0406c70cb8777cc8066255d1f22aa0c105"
+  },
+  {
+    "path": "apps/web/smoke-debug.mjs",
+    "bytes": 87,
+    "sha256": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1"
+  },
+  {
+    "path": "apps/web/smoke-test.mjs",
+    "bytes": 87,
+    "sha256": "eca6e8a5eff4aa72f9ee5e6717fc5f3d592ccf392c02e11af67003d9a834aeb1"
+  },
+  {
+    "path": "apps/web/tests/admin-ui.spec.ts",
+    "bytes": 8774,
+    "sha256": "59c6250fff24232a0d6b5fcc919da43ae2198e2af8ec51ef22397c3b334027c7"
+  },
+  {
+    "path": "apps/web/tests/fah-err-account-payments-errors.spec.ts",
+    "bytes": 18578,
+    "sha256": "678c9a2916f308db2343ade544c903d7007f32cbcd033d37588ec1664e83bdbe"
+  },
+  {
+    "path": "apps/web/tests/fah-err-account-payments-errors.test.cjs",
+    "bytes": 10438,
+    "sha256": "0e6bdc0f400cf3fe13e4cfdd0d9f92a738e815f43cdcb0809a715754d44d27de"
+  },
+  {
+    "path": "apps/web/tests/fah-err-auth-callback.spec.ts",
+    "bytes": 2019,
+    "sha256": "dc210339282b489f82fcdd30d759db054eaa7b537610d3d4491b38b92065528c"
+  },
+  {
+    "path": "apps/web/tests/fah-err-auth-callback.test.cjs",
+    "bytes": 4075,
+    "sha256": "60a3935e5e0abbc19de70ea2ff580554b8ba03471fbe5f7ce04960a08b20d862"
+  },
+  {
+    "path": "apps/web/tests/fah-err-auth-errors.spec.ts",
+    "bytes": 3902,
+    "sha256": "977651ac52eabc57f4b47216e98cb9a38cf205ec2cb7925af9ae72ac9187ee7c"
+  },
+  {
+    "path": "apps/web/tests/fah-err-forms-errors.spec.ts",
+    "bytes": 20736,
+    "sha256": "0864560ab7302af47232decf48133ef2beab59aa1f12769ea2475d63a86b69bd"
+  },
+  {
+    "path": "apps/web/tests/fah-err-forms-errors.test.cjs",
+    "bytes": 5071,
+    "sha256": "be0945d068ba671610967af294331478f5d87dcae220ead60b8318ac389466f4"
+  },
+  {
+    "path": "apps/web/tests/fah-err-legacy-smoke.test.cjs",
+    "bytes": 7578,
+    "sha256": "999940fae9d2e8554787f64178de27eac33784e66ca59885edc8a8e6c8dedee0"
+  },
+  {
+    "path": "apps/web/tests/fah-err-nckh-errors.spec.ts",
+    "bytes": 7557,
+    "sha256": "3afe685dbe4c5527fa1090a1ac127f3e944bdbd456017202438a08b08e3e1e25"
+  },
+  {
+    "path": "apps/web/tests/fah-err-nckh-errors.test.cjs",
+    "bytes": 8677,
+    "sha256": "4867c9ee3d4782471e4fbc5c0c2c4661b44922c82c7f2fb72e01cf62ba8e5933"
+  },
+  {
+    "path": "apps/web/tests/fah-err-shared-errors.test.cjs",
+    "bytes": 10731,
+    "sha256": "ca14e43b5df0d64e7a41e02398e45b2fee55252586a0e99da04c87adff80c5ce"
+  },
+  {
+    "path": "apps/web/tests/form-automation.spec.ts",
+    "bytes": 11676,
+    "sha256": "1ebcaad0dc2b495c3f76c470195fd1d9ce19bd8a9787b33509a0e3f9273c2286"
+  },
+  {
+    "path": "apps/web/tests/nckh-delete-model.spec.ts",
+    "bytes": 12294,
+    "sha256": "80c1af8559da9abc27c4757a6d5dd73aa1bb8d7fb753257b6407e06e3e01111f"
+  },
+  {
+    "path": "apps/web/tests/nckh.spec.ts",
+    "bytes": 49273,
+    "sha256": "1b0b8ac4b7dc23b55762a9a2115b0eb302e60221896d0ba76eb33313c92d3126"
+  },
+  {
+    "path": "docs/ai/API_CONTRACT_GUIDE.md",
+    "bytes": 33183,
+    "sha256": "aeaf98f36157cb44cd3d7999f6d379f0da4f84c49899044f37443d89af838223"
+  },
+  {
+    "path": "docs/vi/API_CONTRACT_GUIDE.md",
+    "bytes": 36442,
+    "sha256": "323924df4e66a14d42e6d8a3f3012f29fd22d657a52cfbc4b72a4d68aef99a43"
+  },
+  {
+    "path": "smoke-test.mjs",
+    "bytes": 111,
+    "sha256": "b377b2ddfdf59ed2c7e446b1148b8fc1a719462a1d03b121ed967e18093f12f2"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Auth/GoogleIdentityVerifier.cs",
+    "bytes": 1856,
+    "sha256": "fd4edf41b1e63124baddcd8bdb77631e78083b2be8bf50544f2d1e9c0f6f7f33"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Contracts/AiAnalyticsDtos.cs",
+    "bytes": 2275,
+    "sha256": "cea9ea2ecce8fa7dbd479ddd4476a3ea84a6e1ec493fd90e991e0dc863419c26"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Contracts/Phase6AiGenerateDtos.cs",
+    "bytes": 441,
+    "sha256": "70edb389122e719982f873f505c400a1608ec63f2d4fcb6f84f3e486cccc2b78"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Controllers/AdminPackagesController.cs",
+    "bytes": 2282,
+    "sha256": "2a07788955aebf57c118d1b3f6c9c54251332ba6a7fe8b4342cefa1873aba684"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs",
+    "bytes": 4207,
+    "sha256": "8451a63180f6698965aa8f0784ee7bdd982fa60258bac2711f73c18ab7563195"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs",
+    "bytes": 15246,
+    "sha256": "8c7767e3a5093de20f025b4445c7155fa45ad24ba24534746a11eef0811fdf0d"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/Google/GoogleFormsApiService.cs",
+    "bytes": 18073,
+    "sha256": "f915b603c88281e067ef082dc31eac0ef477e0b7540af5e4549209fdf9f43856"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationException.cs",
+    "bytes": 2309,
+    "sha256": "57028e3884b86e3c449f2deae2554ddcc5485fd8f6882ce9419ae73188358b86"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationFailureKind.cs",
+    "bytes": 231,
+    "sha256": "bc881603054cbe5fe7ae6c76d173aaf481b4b4e563e6916b42ed0e296bde4a0d"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/Google/GoogleOAuthService.cs",
+    "bytes": 12033,
+    "sha256": "44ce71f7f99ac00938f9254bc25965d3661477854eb38ec6700578cff4a1a9ff"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+    "bytes": 12041,
+    "sha256": "a151340f8c21fe1c0d6237449955bde09299bbeb4cba48ed882a2af69cf647f2"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AiAnalyticsService.cs",
+    "bytes": 12307,
+    "sha256": "e85339c304256ff4b32ef872f3df3b50fcbaf7d7922dd3da0b9f7b22b550276c"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AiGenerationErrorMessages.cs",
+    "bytes": 3842,
+    "sha256": "22a7bf8c24356f257046f49798044a5d208656f46ea9e1ce2eb68e053fb36503"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+    "bytes": 27930,
+    "sha256": "ab1a70cf83d4c9d667d7a05f9f6d4407dc25f9db5eec4e3ee03b0b173dcb40ad"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AiPromptProfileService.cs",
+    "bytes": 14239,
+    "sha256": "e95c983ab3ff1b5447ff3227a13a73a46c52a4d8de5d305c958563a17719b94a"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AiProviderSettingsService.cs",
+    "bytes": 8619,
+    "sha256": "4e97d3a447e393d6c6ee2f2f85b0f59734c81fc403e85e321eb296d9f1e7b5bc"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/AnswerRuleService.cs",
+    "bytes": 5117,
+    "sha256": "4217b44d6fbe410542179d8b548faf9bc5d6dc34a92b17b729d3aa936f93ff6a"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/FormProjectService.cs",
+    "bytes": 6563,
+    "sha256": "d165a9d574930fe4db0cd316581da9270c7825f3027e9cbb630024196834a865"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/Nckh/ResearchDataService.cs",
+    "bytes": 20376,
+    "sha256": "e4e7b774058f85cb1e0ff7dd7f6676a5a7840c9c292abf5ed041333636ea16e2"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+    "bytes": 56988,
+    "sha256": "8f57c8e3d6b95f23458eb6597a3574f9901332d3651813799737119f4f8a56ec"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/PackageService.cs",
+    "bytes": 4162,
+    "sha256": "2fe68e6cb4caf3238d5b6f4495435a104c1d79c02b9fe5a15ac66e6b87345561"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/PayosClient.cs",
+    "bytes": 3627,
+    "sha256": "759d15f9634f7fcbfd520a113280789fe63f32e4a45ac979ff2e9d76fac806eb"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs",
+    "bytes": 16264,
+    "sha256": "5e5ab4244479617825b114610231e6ae5fd647e3498dcd1187ddca40bce5ee10"
+  },
+  {
+    "path": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+    "bytes": 16824,
+    "sha256": "f35378a3d00985f9b8e941fd96b970695658cd32b51347fd92f38258f6b64488"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/AdminAiProviderSettingsTests.cs",
+    "bytes": 8326,
+    "sha256": "530d2dfa303412e09af2b225ed744c012ff79f41bad29377a1f2fa7f29451628"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/AiPromptProfileServiceTests.cs",
+    "bytes": 10615,
+    "sha256": "806b53d8db41711adbcdb7dbe39aaf45fec1a2ad8fcf765063701123f24ecffd"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/FahErrAiDiagnosticsTests.cs",
+    "bytes": 10247,
+    "sha256": "275976ec600649b190f890d892da9144e3a2c18602a7282d3d45bbc0804540ae"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/FahErrAiErrorContractTests.cs",
+    "bytes": 13899,
+    "sha256": "68e64cd9755dc8cb352b7e2818b1c604b6304edd930b6d16733e4a09ba53a835"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/FahErrBoundaryGoogleTests.cs",
+    "bytes": 20110,
+    "sha256": "2de65905681642c1fb7ed872b6da7fda66687367971510e657c5c4b327d059ab"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/FahErrBoundaryTests.cs",
+    "bytes": 10843,
+    "sha256": "fb7c02f922a8c4a2d0740d008c644250a48653ea370d6fc697816a5914869752"
+  },
+  {
+    "path": "tests/FormAutoHub.Tests/FahErrSubmissionPersistenceTests.cs",
+    "bytes": 18193,
+    "sha256": "cb167f069beb508c204e9f60dde5132076b3b6e8d40fbc0c8858a4518c6a3293"
+  }
+]
