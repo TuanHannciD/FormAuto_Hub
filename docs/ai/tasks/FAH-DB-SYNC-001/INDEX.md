@@ -1,0 +1,57 @@
+# FAH-DB-SYNC-001 — Local database synchronization
+
+2026-10-30 (evidence retained under 2026-10-29 paths) · Base HEAD `a19f7a2f3dc1bc54ff645d662d94fc614439256a` · **R1 source integrated; owned SQL rehearsal Verified; main normalization Verified;main API smoke and final independent review Verified. **Scoped local DB sync completed.****
+
+## Closeout — scoped local DB sync Verified
+
+[Final independent review](../../../../artifacts/reports/db-sync-2026-10-29/final-review/report.md),SHA256 `64796a012c30d21adadb7f3e1845b8f81f79bfb6aa24999ae93fb6b3ae630624`,accepts source17,realSQL/main preservation,actual main startup/read smoke,clone18+4bounded API evidence and final packet/resource proof. No remaining code/SQL/runtime blocker for the approved two-column synchronization. Final document integrity/AI-VI meaning is this writer's check;reviewer does not certify final translation bytes.
+
+Timeline30October ICT:R1parent binaries ready02:25;main normalization02:42:12;main read smoke02:42:34–36;clone evidence supplement02:45:23;final StateListen release07:15:17;independent freeze07:17:27. All source/evidence stays uncommitted/local,no push/deploy/release. Backup/owned DBs/keys/evidence retained,no cleanup.
+
+**Next:** this DB checkpoint is complete. Bounded original error audit has been delivered with24unfixedgroups;provider/browser/full-system gaps remain Not run/Deferred and do not block this reviewed persistence scope. Choose a concrete remediation group before product fixes;do not expand cases or activate providers automatically.
+
+## Main normalization and resumed real audit — current
+
+**Verified actual main apply at UTC2026-10-29T19:42:12 (2026-10-30 ICT):** attempt03 used exact reviewed wrapper/NoPooling helper and unchanged R1 incremental. Main current13/applied14,pending0/modelPendingfalse,POST compatible,canonical400/100bytes;only planned migration added,33business-table count/PK/full-row hashes unchanged,two exact legacy indexes INFO preserved. [Execution result](../../../../artifacts/reports/db-sync-2026-10-29/runtime/main-cutover-result-03.json),[actual POST](../../../../artifacts/reports/db-sync-2026-10-29/runtime/main-cutover-post-03.log). History14/source13 is expected known legacy,not a blocker. Main actual Program/Migrate startup/read smoke now Verified:health200,anonymous profile401,missingroute404;owned PID24496/5247 stopped on request,all34post-migration fingerprints unchanged after startup. [HTTP proof](../../../../artifacts/reports/error-audit-2026-10-29/deep/api-sql/main-http-results.json). [Final independent review](../../../../artifacts/reports/db-sync-2026-10-29/final-review/report.md) accepts scoped DB sync and bounded audit;no release/full-system claim.
+
+Attempts01/02 stopped at unchanged guard before normalization;attempt02 proved own pooled fingerprint session. Separate NoPooling helper and attempt03 received [fresh independent GO](../../../../artifacts/reports/db-sync-2026-10-29/main-apply-review-attempt03/report.md);old helper/failed evidence retained,guard never weakened. [Attempt history](../../../../artifacts/reports/db-sync-2026-10-29/runtime/main-attempts01-02-report.md). Original SQL candidate Msg102 remains Failed/withdrawn;R1source17integration/B2SQL16pass0skip remain separate successful evidence.
+
+[Real API/JWT/SQL follow-up](../FAH-ERR-001/RUNTIME_API_SQL.md) now records **15scenarios+health+2authsetup=18HTTPobservations** on owned restored clone,actual User/Admin/refresh sessions,13/18existing-trace log correlations. Strengthens ERR-002actualMVC errors/traceId,ERR-005persisted failed AnalyzeForm UsageLog and ERR-013actualHTTP500/noPackagePersist;no new IDs or error fixes. Clone fixtures after B2 mean current clone is no longer byte-equal main. Browser/provider/full E2E coverage remains incomplete;do not promote old mocks or18observations to all24groups tested.
+
+## Scope and authorization
+
+User authorized actual local synchronization with backup/restore safeguards, then resumption of [FAH-ERR-001](../FAH-ERR-001/INDEX.md). Root coordinates only. Scope: one guarded forward migration `20261029142938_NormalizeTopupEvidenceColumnLengths`, read-only compatibility probe, SQL tests and applicable runtime audit. Canonical evidence columns: `OriginalFileName nvarchar(200) NOT NULL`, `ContentType nvarchar(50) NOT NULL`. Preserve rows/bytes/links/credit/ledger/audit/history/rowversions/FKs and the exact two optional legacy indexes. No reset/drop/restore over main, history deletion, truncation, contract/index redesign, error remediation or release.
+
+“Clean” means required canonical schema plus explicit compatible legacy allowances. Original history13/source12/pending0 was a known legacy baseline, not proof of corruption or startup failure. Current integrated source has13 migrations/model-pendingfalse; main now has14 applied history rows:all13current IDs plus one known legacy,normalization applied,pending0. Counts alone are never the gate.
+
+## Current acceptance and evidence
+
+| Step | Status and evidence |
+| --- | --- |
+| Diagnosis/design/preflight | Verified bounded analysis/review; exact pre-sync planned migration differs from strict post-sync compatibility. [Preflight review](../../../../artifacts/reports/db-sync-2026-10-29/preflight-review/report.md). |
+| Stage A backup/restore | Verified COPY_ONLY/CHECKSUM backup9,916,416 bytes, VERIFYONLY/header/filelist, actual restore+CHECKDB and34-table count/PK/full-row hash equality. [Report](../../../../artifacts/reports/db-sync-2026-10-29/runtime/stage-a-report.md). |
+| Original candidate | **Failed; original GO withdrawn.** Actual owned-clean SQL Msg102 near variable `SET LOCK_TIMEOUT`; original patch/SQL and failure state retained. [Withdrawal](../../../../artifacts/reports/db-sync-2026-10-29/code-review/report-stage-b-failure.md). Never apply old SQL. |
+| R1 source review/integration | Verified review GO for exact17 files, only3 deltas from failed candidate; copied and rehashed in parent. [Fresh review](../../../../artifacts/reports/db-sync-2026-10-29/fix-r1-review/report.md), [integration](../../../../artifacts/reports/db-sync-2026-10-29/integration/fix-r1/report.md). Release build passes;offline182 passed/0failed/**6 SQL groups skipped**. Skips are not SQL proof. |
+| Actual B2 SQL | **Verified16/16 passed,0failed,0skipped**, plus standalone timeout success/error6branches, caller settings-1/0/4321 restored and original51002 retained. [Assertions](../../../../artifacts/reports/db-sync-2026-10-29/runtime/b2-validation.json). |
+| Guard-to-ALTER X lock | Verified separate committed max/max setup, no prior Sch-M, exact raw Up with only post-byte-guard hook. DMV: OBJECT X on evidence across16partitions, writer LCK_M_IX blocked before first ALTER; writer2628 after owner COMMIT. [Hook](../../../../artifacts/reports/db-sync-2026-10-29/runtime/b2-table-x-hook-result.json), [independent provenance](../../../../artifacts/reports/db-sync-2026-10-29/main-apply-review/verification/independent-hook-provenance.json). |
+| Clean/restored/safety results | All3 owned test DBs POST compatible/pending0. Clean history13;restored history13→14 with only planned ID added.33 application tables exact counts/PK/full-row hashes unchanged, exact2legacy indexes retained. Repeat clean/restored34-table no-op;negative guards/independent rollback passed. [Independent assertions](../../../../artifacts/reports/db-sync-2026-10-29/main-apply-review/verification/independent-preservation-and-trx.json). |
+| Main wrapper/review | Original wrapper reviewed/hash checked;**attempt01 executed and stopped by guard before migration**: `dd27c4515da3476961958f3f3ec68b65275cf33aa685451aa1011ca04b9bced9`. [Static verification](../../../../artifacts/reports/db-sync-2026-10-29/main-apply-review/verification/wrapper-static-verification.json). [Independent main review](../../../../artifacts/reports/db-sync-2026-10-29/main-apply-review/report.md) gave exact-wrapper GO;attempt01 guard failure and attempt02 status above supersede the old unexecuted state. |
+| Main apply/API/browser audit | **Main schema and API read smoke Verified.** Main34table fingerprint still equals restore-tested backup in B2 sample. Fresh cutover checks remain required;actual main result above;API smoke and final review accepted;full audit remains incomplete. |
+
+## R1 immutable source and warning policy
+
+Patch `40d5b3efeec58a4ef0314e3dc61349ddcf33b24186b60c8b8433ae3b4e03b75c`;review SHA256 `4c1291d1c3f51bd67f9d4ec66a27cdac743883c1884f892ddbce4e6f6615ba5c`. Incremental SQL `dce67d64eeae54917532b6905146b7259f576fbbd1886a8d2699543db6dfb362`;full chain `81e3b60f5d6426303f256e254501a442889e511e912f54841c183d690ca78807`. Whole Up uses one constant `sys.sp_executesql` and literal timeout15000;shared caller transaction, byte/shape/X-lock guards and fail-closed Down remain. [Current17-file inventory](../../../../artifacts/reports/db-sync-2026-10-29/dossier/current-source-inventory.json) and [integration hashes](../../../../artifacts/reports/db-sync-2026-10-29/integration/fix-r1/final-validation.json) identify parent source. Old candidate inventory is historical and must not match the changed worktree.
+
+Failed attempts remain visible: original SQL grammar failure;initial parent NETSDK1004 fixed through existing local cache restore;B2 sqlcmd QUOTED_IDENTIFIER OFF1934 fixed by runner `-I` ON using the same frozen SQL (session0→1),not a source patch. NU1603 baseline Google Forms warning and historical index key-length warnings remain disclosed. No blanket “all warnings gone” or suppression claim.
+
+## Ownership and retained resources
+
+Root `gpt-6.1-sol / medium` coordinates;assigned workers `gpt-6.1-sol / high`,no children/Astra. Original isolated checkout `C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/t3-ecd39b00`;parent `D:/TinHoc/FormAuto_Hub`,branch `ui/compact-refinement-20261028`,base HEAD unchanged. Exact17source integration is local/uncommitted;the historical321 error-screen bytes are checked separately,not a claim all current source is unchanged. No commit/push/deploy.
+
+Sole SQL/runtime owner `/root/db_sync_runtime_owner`. Retain restore DB `FormAutoHub_FAHERR001_restore_20261029_a19f7a2`,clean DB `FormAutoHub_FAHERR001_clean_20261029_a19f7a2`,safety DB `FormAutoHub_FAHERR001_safety_20261029_a19f7a2`,backup/evidence and ignored outputs. Stage A identities id8/id9 describe acquisition;later safety is owned test DB. Backup outside Git at SQL default Backup directory `FormAutoHub_FAHERR001_pre_sync_20261029_a19f7a2.bak`,SHA256 `EBC3BAC4A26FF7222401D37309D47AAEF7848B55EB1F0B54D0D91B6B3D7EE856`. No raw rows/secrets in reports;no cleanup authorization. This writer edits paired task docs/dossier only and acquires no DB/process/browser.
+
+## Risks, Deferred and next step
+
+Main wrapper must freshly verify identity/quiescence/source34table equality with backup,backup hash+VERIFYONLY,parent binaries/source/PRE and exact planned SQL hash,then POST/preservation. A B2 sample is not a future reservation. Down cannot infer prior baseline;restore over main remains outside scope. [Validation](VALIDATION.md) tracks actual checks.
+
+Next:finish independent exact-wrapper/cutover review,execute main only after reviewed root GO,then restart intended owned API and verify real HTTP/roles/logs/browser as applicable;resume bounded error audit. All24 error fixes,new contracts/correlation,recovery/retention,index semantics,live provider/payment/submission and release remain Deferred. No Done until required main/runtime/review gates pass.
