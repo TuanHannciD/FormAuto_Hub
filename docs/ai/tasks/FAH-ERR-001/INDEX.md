@@ -1,5 +1,15 @@
 # FAH-ERR-001 — Current audit dossier
 
+## Git closeout đã thực hiện — 2026-10-31 00:00 ICT / 2026-10-30 17:00 UTC
+
+**Verified:** đã commit/push scoped work và mở [draft PR #2](https://github.com/TuanHannciD/FormAuto_Hub/pull/2). Bốn commit đã xác minh exact paths: DB17 `56447d0e37ea3abbd22126750e7b75007733d1de`; ERR80 `ef44f871a4124befe8deb5c05b4c98b43f7036cb`; paired docs34 `fc6a9036f4f8691a27acf6e6f139f59591f9c3ca`; curated evidence190 `50b92f850dcdc26604a91bbfdd96e0acec64acbe`.
+
+PR head `fix/fah-err-001-closeout-20261030` tại `50b92f8` → base review `review/fah-err-baseline-a19f7a2` tại `a19f7a2`. API read-only xác nhận4commits/321changedFiles, enumerate321paths khớp exact allowlists; clean-filter321 và raw runner343 không drift. Base là snapshot review; bốn prerequisite commit workflow/UI trước a19 nằm ngoài diff PR, chưa được đưa vào main bằng closeout này. Nhánh UI gốc vẫn trỏ a19; index/tracked tree sạch ở checkpoint; backup, DB/worktree/cache và unrelated untracked evidence giữ nguyên.
+
+**CI tự động Not run:** PR base review không khớp YAML target main; tại lần đọc API này check runs0/workflow runs0. Remote main vẫn `8a4f18ee77453857c550ff7be0279c5cc9e415f1`. Không merge, main push, workflow dispatch, deploy hoặc watcher; không suy trạng thái production từ Git/YAML. [Hướng dẫn người dùng tự deploy](SELF_DEPLOY_HANDOFF.md) vẫn yêu cầu quyết định prerequisite/main integration, preflight/backup/migration review và runtime checks trước release.
+
+Root đã cho phép scoped feature commits/push/draft PR theo yêu cầu mới; các câu “no commit/push” và plan/pending phía dưới là lịch sử trước checkpoint này. Local24/24 acceptance giữ giới hạn trong [validation](REMEDIATION_VALIDATION.md): sáu SQL skips, hai lint warnings, NU1603 và failed/cold-smoke history không thành green. Checkpoint này chỉ thêm Git facts và handoff; không sửa source/tests/evidence hoặc claim release. Bản ghi docs-only này tách khỏi bốn commit nêu trên; SHA và trạng thái commit/push của bản ghi được lưu ở artifact hậu kiểm, tránh tự tham chiếu.
+
 ## Final local acceptance — 2026-10-30 13:50 UTC
 
 **24 fixed /24 Verified /0 open findings within approved local remediation scope.** [Fresh independent whole-remediation review](../../../../artifacts/reports/error-remediation-2026-10-30/final-overall-review/report.md) accepts source, applicable required checks and paired docs; report SHA256 `15b99709168ff1b61951642a5be1128fc20dee5a0a5f807067e3d5130db6181c`. This does not claim all system bugs resolved, integration or release. [Current24-ID acceptance/evidence map](REMEDIATION_VALIDATION.md) owns the current status and supersedes older progress statements below, which remain dated history.
