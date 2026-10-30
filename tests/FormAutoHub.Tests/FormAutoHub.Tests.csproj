@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FormAutoHub.Api\FormAutoHub.Api.csproj" />
+    <ProjectReference Include="..\..\scripts\db-compatibility\DbCompatibilityProbe.csproj" />
   </ItemGroup>
 
 </Project>
