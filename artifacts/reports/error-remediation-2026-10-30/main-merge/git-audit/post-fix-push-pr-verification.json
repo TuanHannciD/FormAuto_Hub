@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-01T00:57:24.950708+00:00",
+  "headSha": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+  "baseSha": "8a4f18ee77453857c550ff7be0279c5cc9e415f1",
+  "url": "https://github.com/TuanHannciD/FormAuto_Hub/pull/3",
+  "draft": true,
+  "commits": 11,
+  "changedFiles": 1026,
+  "bodyExactMatch": true,
+  "oneSnapshotNoPolling": true,
+  "runs": [
+    {
+      "id": 41258967091,
+      "name": "CI",
+      "event": "pull_request",
+      "head_sha": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+      "head_branch": "fix/fah-err-001-closeout-20261030",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/TuanHannciD/FormAuto_Hub/actions/runs/41258967091"
+    }
+  ],
+  "checks": [
+    {
+      "name": "API build and tests",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+      "html_url": "https://github.com/TuanHannciD/FormAuto_Hub/actions/runs/41258967091/job/124708052487"
+    },
+    {
+      "name": "Web lint and build",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+      "html_url": "https://github.com/TuanHannciD/FormAuto_Hub/actions/runs/41258967091/job/124708052286"
+    }
+  ],
+  "mainUnchanged": true,
+  "deployWorkflowState": "active",
+  "priorPR2Base": "review/fah-err-baseline-a19f7a2",
+  "committedPaths": [
+    ".claude/skills/formauto-server-debugger/agents/openai.yaml",
+    "docs/ai/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md",
+    "docs/vi/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md"
+  ],
+  "indexPaths": [],
+  "noMainPushMergeDisableDispatchDeploy": true
+}

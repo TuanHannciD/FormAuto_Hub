@@ -1,0 +1,25 @@
+{
+  "head": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "exact3Paths": true,
+  "files": [
+    {
+      "path": ".claude/skills/formauto-server-debugger/agents/openai.yaml",
+      "indexSha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "gitBlob": "10cdfc20add765ccbde942fe5cda7d29696921cd"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md",
+      "indexSha256": "5443f6a89f75a083f3bd88983021d4e1b89e34e1cc0f6da8a2274a77de4e1468",
+      "gitBlob": "05c76df43cc06118569a02d3848518d128803b93"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md",
+      "indexSha256": "5443f6a89f75a083f3bd88983021d4e1b89e34e1cc0f6da8a2274a77de4e1468",
+      "gitBlob": "05c76df43cc06118569a02d3848518d128803b93"
+    }
+  ],
+  "pairedDocsEqual": true,
+  "source343RawDrift": [],
+  "sourceMirrorIndexEqual": true,
+  "accepted": true
+}

@@ -1,0 +1,9 @@
+{
+  "owner": "/root/main_merge_runtime",
+  "pid": 31436,
+  "executable": "dotnet",
+  "dll": "D:/TinHoc/FormAuto_Hub\\src/FormAutoHub.Api/bin/Release/net9.0/FormAutoHub.Api.dll",
+  "binarySha256": "2AD759A58B5E2C6DD504E51D13C7542E4FF3C1429A81AD4CA3C29875B8F295D8",
+  "utc": "2026-11-01T00:50:06.1006828+00:00",
+  "roleSession": "in-memory JWT from actual TokenService \u002B preserved synthetic User/Admin; login/refresh mutations not repeated"
+}

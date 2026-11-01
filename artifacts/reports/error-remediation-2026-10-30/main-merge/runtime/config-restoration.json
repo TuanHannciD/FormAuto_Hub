@@ -1,0 +1,37 @@
+{
+  "semanticGuardsPassed": true,
+  "guardAllows": "include order change + exactly one owned dist include; no other JSON delta; next-env only own route reference",
+  "exactBaselineBytesRestored": true,
+  "checks": [
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "5BB0AC200C1934A273D74E52785F4C36FA62C082D766CAB15CDC8484FF39BF15",
+      "baseline": "5BB0AC200C1934A273D74E52785F4C36FA62C082D766CAB15CDC8484FF39BF15",
+      "match": true
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "sha256": "F4E8976C19FC926644D72610BF1058BD6BF52ADD97E46A02BC0B912A751625C0",
+      "baseline": "F4E8976C19FC926644D72610BF1058BD6BF52ADD97E46A02BC0B912A751625C0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/appsettings.json",
+      "sha256": "D380FE344708676ADC80C7B36EC43F187B7D7879D17E2F69F37E9DBE0FB801CB",
+      "baseline": "D380FE344708676ADC80C7B36EC43F187B7D7879D17E2F69F37E9DBE0FB801CB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/appsettings.Development.json",
+      "sha256": "3C533BD6DA6C0F647B367A4338A6D030DF6911F324D4B8A0C602AC55359A8B75",
+      "baseline": "3C533BD6DA6C0F647B367A4338A6D030DF6911F324D4B8A0C602AC55359A8B75",
+      "match": true
+    },
+    {
+      "path": "apps/web/.env.local",
+      "sha256": "82C427CB5ECE4F4DC53CFF02BA6904D7BDDFC8D3FC541FD7E40A9EDF7CA8190A",
+      "baseline": "82C427CB5ECE4F4DC53CFF02BA6904D7BDDFC8D3FC541FD7E40A9EDF7CA8190A",
+      "match": true
+    }
+  ]
+}

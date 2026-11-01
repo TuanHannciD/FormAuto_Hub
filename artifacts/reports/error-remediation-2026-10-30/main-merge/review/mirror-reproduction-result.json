@@ -1,0 +1,5 @@
+{
+  "status": "expected_failure",
+  "error": "Mirror drift in 1 files; inspect, then run --sync if authorized",
+  "limit": "Exact committed two-file mirror logic, source inventory replaced by known file mapping; independent280pins0mismatch"
+}

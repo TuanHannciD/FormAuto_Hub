@@ -1,0 +1,253 @@
+{
+  "initialStatus": {
+    "available": false
+  },
+  "initialOpenFailure": "Preview automation open failed: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3137/",
+  "subsequentOpen": "Verified after owned production web started",
+  "tabId": "tab_8_b444d759-9c74-4be2-a47f-38a4dba03eb9",
+  "before": {
+    "toolIcon": {
+      "_tag": "website",
+      "pageUrl": "http://127.0.0.1:3137/login"
+    },
+    "value": {
+      "url": "http://127.0.0.1:3137/login",
+      "title": "FormAuto Hub",
+      "email": true,
+      "passwordType": "password",
+      "js": [
+        "http://127.0.0.1:3137/_next/static/chunks/4bd1b696-f785427dddbba9fb.js",
+        "http://127.0.0.1:3137/_next/static/chunks/1255-b28ea36bf0cdbd65.js",
+        "http://127.0.0.1:3137/_next/static/chunks/main-app-e9cb5379c7ef031e.js",
+        "http://127.0.0.1:3137/_next/static/chunks/8720-d7f67a5726cf715d.js",
+        "http://127.0.0.1:3137/_next/static/chunks/app/layout-94b42cacb722a3d1.js",
+        "http://127.0.0.1:3137/_next/static/chunks/4909-ac14371ea2ab36a9.js",
+        "http://127.0.0.1:3137/_next/static/chunks/2619-3c9e02e22d10480a.js",
+        "http://127.0.0.1:3137/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "http://127.0.0.1:3137/_next/static/chunks/webpack-d5c92101d01d4447.js"
+      ],
+      "hydrationMarkers": 0,
+      "overflow": false
+    }
+  },
+  "after": {
+    "toolIcon": {
+      "_tag": "website",
+      "pageUrl": "http://127.0.0.1:3137/login"
+    },
+    "value": {
+      "url": "http://127.0.0.1:3137/login",
+      "passwordType": "text",
+      "toggleLabel": "Ẩn mật khẩu",
+      "overflow": false
+    }
+  },
+  "console": [],
+  "network": [
+    {
+      "url": "http://127.0.0.1:3137/",
+      "method": "GET",
+      "status": null,
+      "failed": true,
+      "errorText": "net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2026-11-01T00:47:02.402Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/login",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.566Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/css/63f5e1c0e3312bc7.css",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.605Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/main-app-e9cb5379c7ef031e.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.605Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/webpack-d5c92101d01d4447.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.605Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/8720-d7f67a5726cf715d.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.605Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/app/layout-94b42cacb722a3d1.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.610Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/4909-ac14371ea2ab36a9.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.612Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/2619-3c9e02e22d10480a.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.612Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/1255-b28ea36bf0cdbd65.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.612Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/4bd1b696-f785427dddbba9fb.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.613Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/89362aa296165c6d-s.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.640Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/2558-968106919ee1ab62.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.641Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/app/login/page-9a49e9b9e466d84d.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.641Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/5976-d129e941dae59de9.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.641Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/2832-5015be6cfeeb6347.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.641Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/e11f95d95ac59fa4-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.660Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/cd79e1ff94fa521b-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.660Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/e270c9fc4fe96f5a-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.733Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/bed26dc8a57eea87-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.733Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/c6f81e539d11fc99-s.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.733Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/25ab8995c98996d7-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.734Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/8247d8d2a376ae43-s.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.740Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/9ddf1512dbee9c99-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.740Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/media/2173e4bb28c315da-s.p.woff2",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.740Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/?_rsc=j7s84HGI7papZ6oY",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.748Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/register?_rsc=j7s84HGI7papZ6oY",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.749Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/app/page-f1123f2d4bdc55cc.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.753Z"
+    },
+    {
+      "url": "http://127.0.0.1:3137/_next/static/chunks/app/register/page-89d48e078d6e219e.js",
+      "method": "GET",
+      "status": 200,
+      "failed": false,
+      "timestamp": "2026-11-01T00:52:50.755Z"
+    }
+  ],
+  "level": "Actual production web; login route public; no API credentials or provider requests"
+}

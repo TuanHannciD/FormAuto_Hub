@@ -2,6 +2,8 @@
 
 Ngày kiểm: 2026-11-01 UTC/ICT. Owner `/root/main_merge_audit`, actual `gpt-6.1-sol/high`, không agent con; root điều phối `gpt-6.1-sol/medium`. Quyền mới của người dùng: đánh giá lại, nếu ổn thì merge vào main để người dùng tự deploy. Tài liệu này ghi Git facts và đường tích hợp; không tự kết luận source/runtime gates đã pass hoặc production đã được triển khai.
 
+**Checkpoint sau fix:** canonical mirror và plan đã commit/push tại `7cb943a05162577df456479fcdb5485cab9dbeaa`; PR3 lúc read-back có11commits/1026paths. [Fresh runtime validation](MAIN_MERGE_VALIDATION.md) và [bộ bằng chứng portable](../../../../artifacts/reports/error-remediation-2026-10-30/main-merge/CURATED_EVIDENCE.md) bổ sung kết quả mới, source343 không đổi. Commit tiếp theo chỉ mang paired validation/ghi chú tài liệu và exact curated evidence; actual final head/CI/merge facts được root ghi artifact/PR body sau đó, không tạo vòng commit tự tham chiếu. Mọi câu pending/stage và snapshot3893 bên dưới là lịch sử checkpoint; main merge, workflow pause và production release vẫn cần gate riêng.
+
 ## Finding mới trong review prerequisite — canonical LF fix
 
 [Independent P2](../../../../artifacts/reports/error-remediation-2026-10-30/main-merge/review/package-p2.md) xác nhận `formauto-server-debugger/agents/openai.yaml` source Git blob232bytes LF (`10cdfc20…`) khác mirror236bytes CRLF (`48529b56…`). `.gitattributes -text` giữ mismatch khi checkout sạch; valid RED dùng đúng checker báo mirror drift1. Local raw trước fix đều CRLF nên chỉ nhìn worktree có thể bỏ sót. Ba ignored Python bytecode gây checker fail tại workspace là giới hạn local riêng, không phải tracked candidate defect; giữ nguyên cache.

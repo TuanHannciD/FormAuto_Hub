@@ -1,0 +1,21 @@
+{
+  "status": "Failed original-tree package check",
+  "extra": [
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/__pycache__/core.cpython-314.pyc",
+      "tracked": false,
+      "ignoreRule": ".agents/skills/ui-ux-pro-max/scripts/.gitignore:1:__pycache__/\t.agents/skills/ui-ux-pro-max/scripts/__pycache__/core.cpython-314.pyc"
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/__pycache__/design_system.cpython-314.pyc",
+      "tracked": false,
+      "ignoreRule": ".agents/skills/ui-ux-pro-max/scripts/.gitignore:1:__pycache__/\t.agents/skills/ui-ux-pro-max/scripts/__pycache__/design_system.cpython-314.pyc"
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/__pycache__/reasoning_contract.cpython-314.pyc",
+      "tracked": false,
+      "ignoreRule": ".agents/skills/ui-ux-pro-max/scripts/.gitignore:1:__pycache__/\t.agents/skills/ui-ux-pro-max/scripts/__pycache__/reasoning_contract.cpython-314.pyc"
+    }
+  ],
+  "missing": []
+}

@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-01T00:51:06.120699+00:00",
+  "canonicalSha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+  "bytes": 232,
+  "actualDelta": [
+    ".claude/skills/formauto-server-debugger/agents/openai.yaml"
+  ],
+  "files": [
+    {
+      "path": ".agents/skills/formauto-server-debugger/agents/openai.yaml",
+      "sha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "crlf": 0
+    },
+    {
+      "path": ".claude/skills/formauto-server-debugger/agents/openai.yaml",
+      "sha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "crlf": 0
+    }
+  ],
+  "contentNormalizedUnchanged": true,
+  "staged": false
+}

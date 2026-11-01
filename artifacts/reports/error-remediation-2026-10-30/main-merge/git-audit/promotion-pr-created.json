@@ -1,0 +1,21 @@
+{
+  "utc": "2026-11-01T00:48:07.390437+00:00",
+  "rootGO": "2026-11-01 root coordination: create NEW DRAFT promotion PR only",
+  "created": true,
+  "number": 3,
+  "url": "https://github.com/TuanHannciD/FormAuto_Hub/pull/3",
+  "state": "open",
+  "draft": true,
+  "base": "main",
+  "baseSha": "8a4f18ee77453857c550ff7be0279c5cc9e415f1",
+  "head": "fix/fah-err-001-closeout-20261030",
+  "headSha": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "commits": 10,
+  "changedFiles": 1024,
+  "priorDeployRunCount": 15,
+  "priorNonCompletedDeployRuns": 0,
+  "mainUnchanged": true,
+  "deployWorkflowStateUnchanged": "active",
+  "priorPR2Unchanged": true,
+  "noMainPushMergeWorkflowStateChangeDispatchDeploy": true
+}
