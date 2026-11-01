@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-10",
+  "timezone": "Asia/Saigon",
+  "sitemap": "https://formautohub.servertun.pp.ua/sitemap.xml",
+  "verified": {
+    "google_live_test": {
+      "time": "2026-10-10T10:01:00+07:00",
+      "fetch": "Successful",
+      "crawl_allowed": true,
+      "fetcher": "Google Inspection Tool smartphone",
+      "limitation": "Not the automatic Sitemaps processor or proof of indexing"
+    },
+    "cloudflare_security_events": {
+      "window": "Last 24 hours at inspection",
+      "host": "formautohub.servertun.pp.ua",
+      "paths": ["/sitemap.xml", "/robots.txt"],
+      "result": "No firewall events found matching host and each exact path",
+      "limitation": "Sampled logs; absence does not prove all requests succeeded"
+    },
+    "google_inspection_request": {
+      "time": "2026-10-10T10:01:00+07:00",
+      "path": "/sitemap.xml",
+      "edge_action": "Not mitigated",
+      "ip": "66.249.65.129",
+      "reverse_dns": "crawl-66-249-65-129.googlebot.com",
+      "forward_dns_matches": true,
+      "limitation": "Inspection fetcher; no response status exposed in expanded traffic detail"
+    },
+    "resubmission": {
+      "date": "2026-10-10",
+      "count_this_pass": 1,
+      "accepted": true,
+      "same_url_retained": true,
+      "old_submission_deleted": false,
+      "immediate_processing_status": "Couldn't fetch",
+      "immediate_type": "Unknown",
+      "immediate_discovered_pages": 0,
+      "last_read_on_list": null,
+      "proof": "gsc-resubmission-accepted.jpg"
+    }
+  },
+  "root_cause": "Unestablished",
+  "blocked": ["Tunnel system journal access requires privileges unavailable to the SSH session"],
+  "not_run": ["New automatic sitemap processor fetch correlation", "Post-resubmission processing success", "New per-page indexing results"],
+  "changes": {"production_code": false, "cloudflare_rules": false, "ui": false},
+  "next_check": "After 24 hours from resubmission; if unchanged, after 48-72 hours. Operator cadence, not a Google SLA.",
+  "references": ["https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests", "https://support.google.com/webmasters/answer/7451001"]
+}

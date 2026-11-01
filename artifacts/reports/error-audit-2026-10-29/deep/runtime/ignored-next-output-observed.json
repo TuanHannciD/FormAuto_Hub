@@ -1,0 +1,46 @@
+[
+  {
+    "Name": "cache",
+    "LastWriteTimeUtc": "2026-10-07T06:12:26.4380798Z"
+  },
+  {
+    "Name": "server",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.7795615Z"
+  },
+  {
+    "Name": "static",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.7795615Z"
+  },
+  {
+    "Name": "types",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.7953012Z"
+  },
+  {
+    "Name": "app-build-manifest.json",
+    "LastWriteTimeUtc": "2026-10-29T07:39:17.132324Z"
+  },
+  {
+    "Name": "build-manifest.json",
+    "LastWriteTimeUtc": "2026-10-29T07:39:17.132324Z"
+  },
+  {
+    "Name": "package.json",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.3323972Z"
+  },
+  {
+    "Name": "prerender-manifest.json",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.8110472Z"
+  },
+  {
+    "Name": "react-loadable-manifest.json",
+    "LastWriteTimeUtc": "2026-10-29T07:39:17.132324Z"
+  },
+  {
+    "Name": "routes-manifest.json",
+    "LastWriteTimeUtc": "2026-10-29T07:37:46.8110472Z"
+  },
+  {
+    "Name": "trace",
+    "LastWriteTimeUtc": "2026-10-29T07:39:17.1465869Z"
+  }
+]

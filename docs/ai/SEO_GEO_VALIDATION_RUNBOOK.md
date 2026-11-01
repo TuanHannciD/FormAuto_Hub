@@ -3,8 +3,8 @@
 ## Scope and status
 
 - Date: 2026-10-09. Companion: [SEO_GEO_IMPLEMENTATION_PLAN.md](SEO_GEO_IMPLEMENTATION_PLAN.md).
-- This is an execution checklist with the observed baseline and local test coverage. It is not a post-release outcome report.
-- Verified: authorized URL-prefix property access, six stored URL inspections, empty submitted-sitemaps list and displayed 28-day Web Performance totals. Live tests, detailed Page indexing report, Performance exports and preceding-period comparison are Not run.
+- This checklist retains the pre-release baseline and adds the dated post-deployment technical/GSC record below. It is not a measured traffic/ranking/AI outcome report.
+- Verified: pre-release property/URL/Performance baseline, public release smoke and subsequent GSC actions recorded below. Sitemap processing is Blocked; Performance exports and preceding-period comparison are Not run.
 - Use Verified, Not run and Blocked for evidence; never substitute assumptions for observed values.
 - Do not store cookies, credentials, owner account identifiers, tokens or unrelated private URLs in committed evidence.
 
@@ -138,9 +138,17 @@ $env:SEO_EXPECTED_ORIGIN='https://formautohub.servertun.pp.ua'
 npx.cmd playwright test --config playwright.seo.config.ts
 ```
 
-The expected origin must match the build configuration; the test server URL may differ. Check port ownership before starting/stopping and restart after rebuilding. On 2026-10-09 an initial run hit a stale pre-change process and the wrong expected origin; that run failed and is not acceptance evidence. After replacing only the owned process, 26/26 passed for the local-origin build and 26/26 for the public-origin build. No public deployment was performed. D+7/14/28 begins at verified public release, not local build date.
+The expected origin must match the build configuration; the test server URL may differ. Check port ownership before starting/stopping and restart after rebuilding. On 2026-10-09 an initial run hit a stale pre-change process and the wrong expected origin; that run failed and is not acceptance evidence. After replacing only the owned process, 26/26 passed for the local-origin build and 26/26 for the public-origin build. No public deployment was performed during those local checks; the user subsequently deployed the release recorded below. D+7/14/28 begins at verified public release, not local build date.
 
 Sanitized baseline: [gsc-baseline.json](../../artifacts/reports/seo-geo/2026-10-09/gsc-baseline.json). Visual evidence: [visual-comparison.json](../../artifacts/reports/seo-geo/2026-10-09/visual-comparison.json), paired screenshots in the same folder. The existing standalone HTML report remains historical and is not a post-release measurement. The default dev Playwright configuration excludes this dedicated production suite to avoid mixing origins or silently testing a stale dev server.
+
+## Post-deployment checkpoint — 2026-10-09
+
+Detailed next-step diagnostic plan prepared on 2026-10-10: [SEO_SITEMAP_RECOVERY_PLAN.md](SEO_SITEMAP_RECOVERY_PLAN.md). This plan does not update the historical GSC result or authorize an unidentified production fix.
+
+Read the dated post-deployment section in [the implementation record](SEO_GEO_IMPLEMENTATION_PLAN.md): the user deployed `8a4f18e`, 26/26 public checks passed, and Google live fetch succeeded for sample-data and sitemap. Submitted-sitemap processing remains Blocked with “Couldn't fetch” / 0 discovered URLs. Index-request acceptance is separate from actual index inclusion. Sanitized detailed evidence: [post-deploy-results.json](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-results.json); public test output: [post-deploy-tests.txt](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-tests.txt).
+
+Next: recheck sitemap processing; if failure persists, inspect bounded edge/proxy evidence for the relevant fetch time before proposing a change. Observe stored URL statuses and comparable search/AI outcomes on D+7/14/28; do not repeat index requests for priority. No application/server mutation or monitoring schedule is part of this checkpoint.
 
 ## Primary references
 

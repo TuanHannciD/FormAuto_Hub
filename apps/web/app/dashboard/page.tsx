@@ -64,18 +64,18 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      <Card className="grid overflow-hidden sm:grid-cols-2 xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
+      <Card className="grid overflow-hidden sm:grid-cols-2 2xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
         {metrics.map(({ key, title, icon: Icon }, index) => (
-          <div key={key} className={`flex min-h-[120px] items-center gap-4 border-border px-6 py-6 ${index < 3 ? "border-b" : ""} ${index % 2 === 0 ? "sm:border-r" : ""} ${index < 2 ? "sm:border-b" : "sm:border-b-0"} ${index < 3 ? "xl:border-b-0 xl:border-r" : ""}`}>
+          <div key={key} className={`flex min-w-0 items-center gap-3 border-border px-4 py-4 ${index < 3 ? "border-b" : ""} ${index % 2 === 0 ? "sm:border-r" : ""} ${index < 2 ? "sm:border-b" : "sm:border-b-0"} ${index < 3 ? "2xl:border-b-0 2xl:border-r" : ""}`}>
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary"><Icon aria-hidden="true" size={22} /></span>
-            <div className="min-w-0"><p className="text-xs font-medium text-secondary-foreground">{title}</p><p className="mt-2 break-all text-[27px] font-bold leading-none tracking-tight">{summary ? summary[key].toLocaleString("vi-VN") : "–"}</p></div>
+            <div className="min-w-0"><p className="text-xs font-medium text-secondary-foreground">{title}</p><p className="mt-1 whitespace-nowrap text-2xl font-bold leading-8 tabular-nums tracking-tight">{summary ? summary[key].toLocaleString("vi-VN") : "–"}</p></div>
           </div>
         ))}
       </Card>
 
       <div className="grid items-start gap-[22px] xl:grid-cols-2">
         <Card className="min-w-0 overflow-hidden">
-          <CardHeader className="flex min-h-[86px] items-start justify-between gap-3 px-6 py-5">
+          <CardHeader className="flex items-start justify-between gap-3">
             <div><CardTitle className="text-[17px]">Sử dụng gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Các lượt tạo và gửi phản hồi mới nhất.</p></div>
             <Link href="/dashboard/usage-logs" className="shrink-0 text-xs font-semibold text-primary hover:underline">Xem tất cả</Link>
           </CardHeader>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
         </Card>
 
         <Card className="min-w-0 overflow-hidden">
-          <CardHeader className="flex min-h-[86px] items-start justify-between gap-3 px-6 py-5">
+          <CardHeader className="flex items-start justify-between gap-3">
             <div><CardTitle className="text-[17px]">Yêu cầu nạp gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Theo dõi số tiền, credit và trạng thái yêu cầu.</p></div>
             <Link href="/dashboard/top-up" className="shrink-0 text-xs font-semibold text-primary hover:underline">Nạp credit</Link>
           </CardHeader>

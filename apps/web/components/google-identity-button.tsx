@@ -14,7 +14,7 @@ type GoogleAccountsId = {
     options: {
       theme?: "outline" | "filled_blue" | "filled_black";
       size?: "large" | "medium" | "small";
-      text?: "signin_with" | "signup_with" | "continue_with";
+      text?: "signin_with" | "signup_with" | "continue_with" | "signin";
       shape?: "rectangular" | "pill" | "circle" | "square";
       width?: number;
     }
@@ -46,48 +46,76 @@ export function GoogleIdentityButton({
   onUnavailable?: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const credentialCallback = useRef(onCredential);
+  credentialCallback.current = onCredential;
+  const initialized = useRef<GoogleAccountsId | null>(null);
+  const lastRender = useRef<{ width: number; scale: number; text: string; provider: GoogleAccountsId } | null>(null);
+  const focusFrame = useRef<number | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
   const [scriptFailed, setScriptFailed] = useState(false);
-  const [renderNonce, setRenderNonce] = useState(0);
 
   const renderGoogleButton = useCallback(() => {
     const container = containerRef.current;
+    const viewport = viewportRef.current;
     const googleId = window.google?.accounts?.id;
 
-    if (!container || !googleId || !GOOGLE_CLIENT_ID || disabled) {
+    if (!container || !viewport || !googleId || !GOOGLE_CLIENT_ID || disabled || viewport.clientWidth === 0) {
       return;
     }
 
-    container.replaceChildren();
-    googleId.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: (response) => {
-        if (response.credential) {
-          onCredential(response.credential);
+    // GIS large is 40px tall. Scale uniformly to the mobile 44px target.
+    // Its supported short label avoids a translated min-content width exceeding the popup.
+    const scale = window.matchMedia("(max-width: 639px)").matches ? 1.1 : 1;
+    const width = Math.min(Math.floor(viewport.clientWidth / scale), 400);
+    const buttonText = width < 320 ? "signin" : text;
+    const previous = lastRender.current;
+    if (previous?.width === width && previous.scale === scale && previous.text === buttonText && previous.provider === googleId) return;
+
+    if (initialized.current !== googleId) {
+      googleId.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: response => {
+          if (response.credential) credentialCallback.current(response.credential);
         }
-      }
-    });
+      });
+      initialized.current = googleId;
+    }
+    const hadFocus = container.contains(document.activeElement);
+    container.replaceChildren();
+    container.style.width = `${width}px`;
+    container.style.transform = `scale(${scale})`;
+    lastRender.current = { width, scale, text: buttonText, provider: googleId };
     googleId.renderButton(container, {
       theme: "outline",
       size: "large",
-      text,
+      text: buttonText,
       shape: "rectangular",
-      width: Math.min(container.clientWidth || 360, 400)
+      width
     });
-  }, [disabled, onCredential, text]);
+    if (hadFocus) {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+      focusFrame.current = requestAnimationFrame(() => {
+        if (document.activeElement === document.body) container.querySelector<HTMLElement>("[role='button'], button, iframe")?.focus();
+        focusFrame.current = null;
+      });
+    }
+  }, [disabled, text]);
 
   useEffect(() => {
     renderGoogleButton();
-  }, [renderGoogleButton, renderNonce, scriptReady]);
+  }, [renderGoogleButton, scriptReady]);
 
   useEffect(() => {
-    function handleResize() {
-      setRenderNonce((value) => value + 1);
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const observer = new ResizeObserver(renderGoogleButton);
+    if (viewportRef.current) observer.observe(viewportRef.current);
+    window.addEventListener("resize", renderGoogleButton);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", renderGoogleButton);
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    };
+  }, [renderGoogleButton]);
 
   if (!GOOGLE_CLIENT_ID) {
     return (
@@ -117,7 +145,9 @@ export function GoogleIdentityButton({
           {scriptFailed ? "Đăng nhập với Google hiện chưa khả dụng" : "Đang tải đăng nhập với Google..."}
         </p>
       )}
-      <div ref={containerRef} className={scriptReady && !scriptFailed ? "flex min-h-10 w-full items-center justify-center" : "flex w-full items-center justify-center"} />
+      <div ref={viewportRef} className={scriptReady && !scriptFailed ? "flex min-h-11 min-w-0 w-full items-center justify-center sm:min-h-10" : "flex min-w-0 w-full items-center justify-center"}>
+        <div ref={containerRef} className="shrink-0 origin-center" />
+      </div>
     </div>
   );
 }

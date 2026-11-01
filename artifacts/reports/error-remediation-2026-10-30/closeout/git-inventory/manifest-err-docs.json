@@ -1,0 +1,152 @@
+[
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/COVERAGE.md",
+    "bytes": 18465,
+    "sha256": "97bdae74a17245e52495cc06a68c69dd5b3108cdc64064d896421808dcc29bf6"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+    "bytes": 14263,
+    "sha256": "9c2f67ea64d680956bd825b33e62dbdc309ccb8fb4846f5605a5d491dae8f766"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+    "bytes": 18314,
+    "sha256": "3e7893407bbabbf9716b60a743edc47d7f4552c9074f85071df6c9907733cb6b"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/FINDINGS.md",
+    "bytes": 11701,
+    "sha256": "7995061bc8a9972c948bcf933e09515ed3ac68adee441fcbcab3666d732aa65c"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+    "bytes": 20375,
+    "sha256": "cf42d2231cc8721ef743f5b4267e8277939f69a7a33886596d899f2f72180cb7"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/INDEX.md",
+    "bytes": 24465,
+    "sha256": "6b42c624133727183d2f2c126e97e7bfcb31163132a539501a31e572b98c799a"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/INTEGRATION_PLAN.md",
+    "bytes": 8981,
+    "sha256": "d9ee8520274d3cf9e7cef1116437f4ba126ac2c46b675d944cdbfdc68560b54f"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/REMEDIATION_LEDGER.md",
+    "bytes": 18441,
+    "sha256": "250fc77132ce5e3e44c47511df4566ce22d049cb62482a542ef7c960228e16b7"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/REMEDIATION_PLAN.md",
+    "bytes": 25827,
+    "sha256": "f9b57568dff27ac27f27c140436f58f4c3fc3c5e7793dbfe42187f10806e472c"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/REMEDIATION_RUNTIME.md",
+    "bytes": 37069,
+    "sha256": "e53abed1659eb3479072659c721b8579483bab5fd326768a044160682b191c87"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/REMEDIATION_VALIDATION.md",
+    "bytes": 18140,
+    "sha256": "5317c1d27fc712eda6fe5e5bba5da6671ded632abb934b2700338b6a96324e76"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+    "bytes": 6351,
+    "sha256": "bf7747e23a0281df64b5b7bb126d36cbe423e570b10642ca97faa2522a1f10eb"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/SELF_DEPLOY_HANDOFF.md",
+    "bytes": 22288,
+    "sha256": "a26ea62f4ce821b91e7b0749b0f84e87933e12a9e86af72225e4b10b0f426153"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+    "bytes": 28884,
+    "sha256": "7471ed3d766a09ee9ec396ba7a5fa84293d9bcb4946c7ebf82ea900f5e634d01"
+  },
+  {
+    "path": "docs/ai/tasks/FAH-ERR-001/VALIDATION.md",
+    "bytes": 16772,
+    "sha256": "f15bcaaea271acf5c731679a8a0d1955e86f58fa5c3ccea77fa9d57e4c1c8741"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/COVERAGE.md",
+    "bytes": 19684,
+    "sha256": "57e9eb80f17a00e29d8da6ffdbf9a85873b7b63fa8be8775322077ec0dfd746c"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_FINDINGS.md",
+    "bytes": 15078,
+    "sha256": "70de264f841948e0affa76aa663dbc4c25cb8ad185ef1410c6cbb0109fb54cc5"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/DEEP_AUDIT_REPORT.md",
+    "bytes": 19278,
+    "sha256": "f4e81d069b27dd24bac5bc2e33a83bf0df2f66a18c9981d36e88f507e15c6e31"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/FINDINGS.md",
+    "bytes": 13228,
+    "sha256": "19a4b057ee492770e404d93fc5095f580524e0c99fe67e3e52b5904c075e6953"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/FULL_PASS_FINDINGS.md",
+    "bytes": 21516,
+    "sha256": "0c4e9e6401efdd4af9245bdc7ce3c13d1565321300021f0c19353f4e68e2f0f3"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/INDEX.md",
+    "bytes": 27441,
+    "sha256": "3873c296fb090a348880ffe48bafc771128895f868a857a89a3fda31dc001be5"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/INTEGRATION_PLAN.md",
+    "bytes": 8981,
+    "sha256": "d9ee8520274d3cf9e7cef1116437f4ba126ac2c46b675d944cdbfdc68560b54f"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/REMEDIATION_LEDGER.md",
+    "bytes": 19467,
+    "sha256": "c4c8685f9571bf089d8c6cddbac5d0240423aa0ad65b990aa36a44ef7dc166fc"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/REMEDIATION_PLAN.md",
+    "bytes": 27602,
+    "sha256": "4076ebcdfc596a67b514e6c371761a89c95e4575b9ec57c539c09574781832ab"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/REMEDIATION_RUNTIME.md",
+    "bytes": 37069,
+    "sha256": "e53abed1659eb3479072659c721b8579483bab5fd326768a044160682b191c87"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/REMEDIATION_VALIDATION.md",
+    "bytes": 17637,
+    "sha256": "b9f21840afb6bd78d2d9e7b8708bc1b28fde767aede5ae41406bdee524d09859"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/RUNTIME_API_SQL.md",
+    "bytes": 6493,
+    "sha256": "51bb4dc9fc44a7474eae8341299d109b000fcf742d041dc219d057839dd5df52"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/SELF_DEPLOY_HANDOFF.md",
+    "bytes": 22288,
+    "sha256": "a26ea62f4ce821b91e7b0749b0f84e87933e12a9e86af72225e4b10b0f426153"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/SOURCE_INVENTORY.md",
+    "bytes": 29058,
+    "sha256": "0160f687fce8d67f358bd91a88dfee76517b7466723ba5702f7ba0988dd15191"
+  },
+  {
+    "path": "docs/vi/tasks/FAH-ERR-001/VALIDATION.md",
+    "bytes": 17395,
+    "sha256": "82bfcf83515b43451a30a0b18f1057b9359ec3aabfced49c9e34ba3bc565710a"
+  }
+]

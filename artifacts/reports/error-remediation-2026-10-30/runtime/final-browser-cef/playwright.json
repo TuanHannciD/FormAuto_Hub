@@ -1,0 +1,1259 @@
+{
+  "config": {
+    "configFile": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\playwright-owned.config.cjs",
+    "rootDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-cef/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-cef/playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "fah-err-account-payments-errors.spec.ts",
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ERR021 failed profile load blocks PUT and retries only the read",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2475,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts:50:16",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                      "column": 16,
+                      "line": 50
+                    },
+                    "snippet": "  48 |   await expect(dialog.getByLabel(\"Họ tên\", { exact: true })).toHaveValue(profile.fullName);\n  49 |   await expect(dialog.getByRole(\"button\", { name: \"Lưu hồ sơ\", exact: true })).toBeEnabled();\n> 50 |   expect(gets).toBe(2); expect(puts).toBe(0); expect(observed.errors).toEqual([]); expect(observed.chunks).toEqual([]);\n     |                ^\n  51 | });\n  52 |\n  53 | test(\"ERR021 failed security load does not label Google unlinked and retry restores known state\", async ({ page }) => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                        "column": 16,
+                        "line": 50
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m\n\n  48 |   await expect(dialog.getByLabel(\"Họ tên\", { exact: true })).toHaveValue(profile.fullName);\n  49 |   await expect(dialog.getByRole(\"button\", { name: \"Lưu hồ sơ\", exact: true })).toBeEnabled();\n> 50 |   expect(gets).toBe(2); expect(puts).toBe(0); expect(observed.errors).toEqual([]); expect(observed.chunks).toEqual([]);\n     |                ^\n  51 | });\n  52 |\n  53 | test(\"ERR021 failed security load does not label Google unlinked and retry restores known state\", async ({ page }) => {\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts:50:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:45.706Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-430c1-T-and-retries-only-the-read-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-430c1-T-and-retries-only-the-read-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-430c1-T-and-retries-only-the-read-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                    "column": 16,
+                    "line": 50
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-5a76278397dad5777c80",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 36,
+          "column": 5
+        },
+        {
+          "title": "ERR021 failed security load does not label Google unlinked and retry restores known state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1927,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:49.763Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-f5c0be4fc33f6d39e850",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 53,
+          "column": 5
+        },
+        {
+          "title": "ERR016 503 detail offers GET-only retry without claiming missing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2943,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:51.789Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-c1732eee64fe5d59e443",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 71,
+          "column": 49
+        },
+        {
+          "title": "ERR016 transport detail offers GET-only retry without claiming missing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1516,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:54.741Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-80bb13ecb65af54e777b",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 71,
+          "column": 49
+        },
+        {
+          "title": "ERR016 404 retains privacy-safe wording",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1085,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:56.265Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-f27d06b1cf56854e38cb",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 87,
+          "column": 5
+        },
+        {
+          "title": "ERR015 manual request keeps confirmed ID while history refresh fails; retry never repeats POST",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1795,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m4\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m4\u001b[39m\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts:114:44",
+                    "location": {
+                      "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                      "column": 44,
+                      "line": 114
+                    },
+                    "snippet": "  112 |   fail = false; await page.getByRole(\"button\", { name: \"Thử lại\", exact: true }).click();\n  113 |   await expect(page.getByText(/Bạn đang có một yêu cầu đối soát thủ công/)).toBeVisible();\n> 114 |   expect(posts).toBe(1); expect(listReads).toBe(3); expect(observed.errors).toEqual([]);\n      |                                            ^\n  115 | });\n  116 |\n  117 | test(\"ERR015 checkout redirects even when subsequent list reads would fail\", async ({ page }) => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                        "column": 44,
+                        "line": 114
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m4\u001b[39m\n\n  112 |   fail = false; await page.getByRole(\"button\", { name: \"Thử lại\", exact: true }).click();\n  113 |   await expect(page.getByText(/Bạn đang có một yêu cầu đối soát thủ công/)).toBeVisible();\n> 114 |   expect(posts).toBe(1); expect(listReads).toBe(3); expect(observed.errors).toEqual([]);\n      |                                            ^\n  115 | });\n  116 |\n  117 | test(\"ERR015 checkout redirects even when subsequent list reads would fail\", async ({ page }) => {\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts:114:44"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:53:57.359Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-02941-ls-retry-never-repeats-POST-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-02941-ls-retry-never-repeats-POST-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-cef\\results\\fah-err-account-payments-e-02941-ls-retry-never-repeats-POST-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-account-payments-errors.spec.ts",
+                    "column": 44,
+                    "line": 114
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-e5be696ec0795ba8159e",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 97,
+          "column": 5
+        },
+        {
+          "title": "ERR015 checkout redirects even when subsequent list reads would fail",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1620,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:00.647Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-ab7113e5f03f7186c146",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 117,
+          "column": 5
+        },
+        {
+          "title": "ERR015 admin approve keeps confirmed decision on refresh failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2415,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:02.368Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-e12f7b7522a1074d7b10",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 130,
+          "column": 49
+        },
+        {
+          "title": "ERR015 admin reject keeps confirmed decision on refresh failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1599,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:04.792Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-20c6f5c27fa191063496",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 130,
+          "column": 49
+        },
+        {
+          "title": "ERR021 failed admin user search clears old options and blocks grant until retry",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1684,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:06.401Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-473141b6f4463c840026",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 148,
+          "column": 5
+        },
+        {
+          "title": "ERR015 manual grant keeps confirmed transaction and balance when history fails",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1357,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:08.095Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-e1dbf1b01fbb7b94a602",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 169,
+          "column": 5
+        },
+        {
+          "title": "ERR022 detail clipboard absent supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1219,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:09.460Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-f6c4ea52d12b656eccc5",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 detail clipboard reject supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1161,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:10.687Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-1fe982b6a08991acef5e",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 detail clipboard success supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1123,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:11.855Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-0228b175f47adbf9be4f",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 manual clipboard absent supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 918,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:12.987Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-c07d06a26a043c5e5d58",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 manual clipboard reject supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:13.915Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-0069dc209081e66557c9",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 manual clipboard success supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 860,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:14.958Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-b2c308616573c3de852e",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 payos clipboard absent supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1445,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:15.826Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-c8e69e856e1e0cd7252d",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 payos clipboard reject supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 908,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:17.279Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-a749e05e6512f1901c36",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR022 payos clipboard success supports keyboard and repeat feedback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 858,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:18.195Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-6a52a208a059a5670d68",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 191,
+          "column": 110
+        },
+        {
+          "title": "ERR015 ERR019 ai retains local configuration check after failed refresh",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1424,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:19.062Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-791060e44bc59f2339c7",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 203,
+          "column": 45
+        },
+        {
+          "title": "ERR015 ERR019 payos retains local configuration check after failed refresh",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1026,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:20.493Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-46f810d425974fb94409",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 203,
+          "column": 45
+        },
+        {
+          "title": "ERR019 payment return explains waiting for confirmation in user language",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 694,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:21.527Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7c9cac2620e68ae256b6-f6ef8c1fcfb2b74e0db4",
+          "file": "fah-err-account-payments-errors.spec.ts",
+          "line": 219,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "fah-err-auth-errors.spec.ts",
+      "file": "fah-err-auth-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "login caller maps HTTP 401 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 879,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:22.234Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-310c006b1c1dfb59d856",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "login caller maps HTTP 423 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 874,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:23.121Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-54427197fff93af966e1",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "login caller maps HTTP 500 without raw details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 842,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:24.003Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-0c0c44a0b3ab04a18c6f",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 23,
+          "column": 7
+        },
+        {
+          "title": "registration caller treats password validation as invalid input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1277,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:24.852Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-38a665f5b77ed7fb98ee",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 45,
+          "column": 5
+        },
+        {
+          "title": "network failure remains on login with safe recovery guidance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 808,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:26.137Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019d3c362ee4308c1a8d-464241c9d1f38642ce39",
+          "file": "fah-err-auth-errors.spec.ts",
+          "line": 65,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "fah-err-nckh-errors.spec.ts",
+      "file": "fah-err-nckh-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ERR021 initial list failure stays unknown until read-only retry confirms empty",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1388,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:26.956Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "defafc7314f27a612fa7-7bfa3c0b9621c822c651",
+          "file": "fah-err-nckh-errors.spec.ts",
+          "line": 27,
+          "column": 5
+        },
+        {
+          "title": "ERR017 current partial failure disables mutation and export until GET retry recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5178,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:28.353Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "defafc7314f27a612fa7-6912699229fabcfe1fd3",
+          "file": "fah-err-nckh-errors.spec.ts",
+          "line": 41,
+          "column": 5
+        },
+        {
+          "title": "ERR017 selection B displays B while A finishes later",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:33.540Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "defafc7314f27a612fa7-40b712f0e10515f7cd5c",
+          "file": "fah-err-nckh-errors.spec.ts",
+          "line": 55,
+          "column": 5
+        },
+        {
+          "title": "ERR021 confirmed import followed by list failure hides stale rows and retry only reads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 990,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:54:34.889Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "defafc7314f27a612fa7-fd8be4378dbedbc56603",
+          "file": "fah-err-nckh-errors.spec.ts",
+          "line": 70,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T08:53:44.939Z",
+    "duration": 52583.071,
+    "expected": 30,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

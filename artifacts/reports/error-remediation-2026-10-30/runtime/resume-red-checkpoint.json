@@ -1,0 +1,88 @@
+{
+  "utc": "2026-10-30T06:15:24.1567940Z",
+  "owner": "/root/runtime_resume",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "branch": "ui/compact-refinement-20261028",
+  "status": [
+    " M src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs",
+    " M src/FormAutoHub.Api/Services/AiGenerationService.cs",
+    " M src/FormAutoHub.Api/Services/Nckh/ResearchDataService.cs",
+    " M src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+    " M src/FormAutoHub.Api/Services/SubmissionService.cs",
+    " M tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+    "?? apps/web/tests/fah-err-shared-errors.test.cjs",
+    "?? artifacts/reports/db-migration-analysis-2026-10-29/",
+    "?? artifacts/reports/db-sync-2026-10-29/",
+    "?? artifacts/reports/error-audit-2026-10-29/",
+    "?? artifacts/reports/error-remediation-2026-10-30/",
+    "?? docs/ai/tasks/FAH-DB-SYNC-001/",
+    "?? docs/ai/tasks/FAH-ERR-001/",
+    "?? docs/vi/tasks/FAH-DB-SYNC-001/",
+    "?? docs/vi/tasks/FAH-ERR-001/",
+    "?? scripts/db-compatibility/",
+    "?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+    "?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+    "?? tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+    "?? tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+    "?? tests/FormAutoHub.Tests/FahErrAiDiagnosticsTests.cs",
+    "?? tests/FormAutoHub.Tests/FahErrAiErrorContractTests.cs",
+    "?? tests/FormAutoHub.Tests/FahErrBoundaryGoogleTests.cs",
+    "?? tests/FormAutoHub.Tests/FahErrBoundaryTests.cs",
+    "?? tests/FormAutoHub.Tests/FahErrSubmissionPersistenceTests.cs",
+    "?? tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+    "?? tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+    "?? tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs"
+  ],
+  "ownedProcesses": [],
+  "ownedBrowserTabs": [],
+  "ownedSqlFixtures": [],
+  "listeners": [],
+  "preservedProcessIdentities": [
+    {
+      "ProcessId": 7160,
+      "ParentProcessId": 3328,
+      "Name": "node.exe",
+      "ExecutablePath": "C:\\nvm4w\\nodejs\\node.exe"
+    },
+    {
+      "ProcessId": 10792,
+      "ParentProcessId": 7160,
+      "Name": "node.exe",
+      "ExecutablePath": "C:\\nvm4w\\nodejs\\node.exe"
+    },
+    {
+      "ProcessId": 18556,
+      "ParentProcessId": 1796,
+      "Name": "sqlservr.exe",
+      "ExecutablePath": null
+    },
+    {
+      "ProcessId": 28568,
+      "ParentProcessId": 24752,
+      "Name": "node.exe",
+      "ExecutablePath": "C:\\nvm4w\\nodejs\\node.exe"
+    },
+    {
+      "ProcessId": 20776,
+      "ParentProcessId": 17316,
+      "Name": "node.exe",
+      "ExecutablePath": "C:\\Users\\Tuan\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\78fb63cda1a9e2b2\\bin\\node.exe"
+    },
+    {
+      "ProcessId": 11740,
+      "ParentProcessId": 26476,
+      "Name": "node.exe",
+      "ExecutablePath": "C:\\nvm4w\\nodejs\\node.exe"
+    },
+    {
+      "ProcessId": 12048,
+      "ParentProcessId": 28620,
+      "Name": "dotnet.exe",
+      "ExecutablePath": "C:\\Program Files\\dotnet\\dotnet.exe"
+    }
+  ],
+  "sqlProbeRepeated": false,
+  "limit": "No SQL/business DML/schema/API/browser runtime. SQL identity compatibility evidence remains historic; no ownership of preserved tooling/SQL service acquired."
+}

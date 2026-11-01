@@ -1,35 +1,3 @@
-# FormAuto Hub Skill Index
+# Skill index — compatibility entrypoint
 
-Use this file to choose the smallest sufficient skill combination.
-
-| Task type | Primary skill | Add when needed |
-|---|---|---|
-| Ambiguous requirement | `formauto-requirement-analyst` | `formauto-module-router`, `formauto-phase-gate` |
-| Small clear task | `formauto-ba-pm-planner-lite` | `formauto-contract-guard`, `formauto-reviewer` |
-| Multi-step delivery | `formauto-delivery-planner` | `formauto-implementation-worker`, `formauto-reviewer` |
-| Unknown workflow/data lifecycle | `formauto-system-requirement-interviewer` | `formauto-db-architecture-planner` |
-| Database strategy | `formauto-db-architecture-planner` | `formauto-db-risk-reviewer` |
-| API/DTO/status/entity contract | `formauto-contract-guard` | `formauto-module-router` |
-| Module/layer ownership | `formauto-module-router` | `formauto-phase-gate` |
-| Phase fit | `formauto-phase-gate` | `formauto-requirement-analyst` |
-| Runtime bug/log symptom | `formauto-bug-triage` | `formauto-http-behavior-tester` |
-| Production VPS health/log/incident check | `formauto-server-debugger` | `formauto-bug-triage`, `formauto-http-behavior-tester` |
-| Explicit recovery of server application configuration to local | `formauto-server-debugger` recovery reference | `formauto-http-behavior-tester`; ignored local files or protected storage outside the repository |
-| Endpoint behavior check | `formauto-http-behavior-tester` | `formauto-contract-guard` |
-| Documentation edit | `formauto-controlled-doc-editor` | matching `docs/ai` and `docs/vi` files |
-| Stitch UI design generation | `formauto-stitch-ui-iterative-designer` | `formauto-phase-gate`, `formauto-reviewer` |
-| Scoped implementation | `formauto-implementation-worker` | `formauto-reviewer` |
-| Review | `formauto-reviewer` | `formauto-contract-guard`, `formauto-phase-gate` |
-
-## Default Pairings
-
-- Requirement -> module/phase/contract -> delivery -> worker -> reviewer.
-- Database recommendation -> risk review -> controlled doc editor after approval.
-- Bug symptom -> triage -> HTTP behavior tester when a live route check is useful -> worker -> reviewer.
-- Production symptom -> read-only server debugger -> bug triage or HTTP behavior tester when deeper analysis is needed.
-- Stitch UI screen -> iterative Stitch designer -> save design artifact -> reviewer when implementation risk exists.
-
-## Ready Packs
-
-- NCKH Phase 2 immediate handoff pack: `templates/chat-starters/nckh-phase2/README.md`
-- NCKH Phase 3 immediate handoff pack: `templates/chat-starters/nckh-phase3/README.md`
+Use [SKILL_USAGE_MATRIX](../SKILL_USAGE_MATRIX.md), the single maintained selection source. Package source, mirror, overrides and verification limits are in [TOOLING](../docs/ai/agent/TOOLING.md).

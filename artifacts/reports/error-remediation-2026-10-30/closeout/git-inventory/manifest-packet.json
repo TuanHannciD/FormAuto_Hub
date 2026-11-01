@@ -1,0 +1,114 @@
+{
+  "selfHashExcluded": true,
+  "localOnlyExcluded": [
+    "db-source.patch",
+    "err-source.patch"
+  ],
+  "files": [
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-closeout-metadata.txt",
+      "bytes": 506,
+      "sha256": "aa67b27f68e5cdcca9385ceb234f604f953c5db3d09f98baa0d39ad80682305d"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-db-docs.txt",
+      "bytes": 170,
+      "sha256": "6ff3e3ad400f74c9fe4878b76380f79ff4a67e57f85f1a114f63ee752d4f6694"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-db-source.txt",
+      "bytes": 913,
+      "sha256": "e31f4a7ab924e136578e7f21d8adbb51164655a7229d7d7d7b63073efb494567"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-err-docs.txt",
+      "bytes": 1382,
+      "sha256": "e7a8cb2ba0585c5637c6620d5d879fe5feb56efa27e618d3ce55a1c59ce800f0"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-err-source.txt",
+      "bytes": 3845,
+      "sha256": "ce113b55b70406dbd5217b5712eeeeb6b51641258d333368dc59522c44d04fdd"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-packet.txt",
+      "bytes": 2080,
+      "sha256": "6a9e066b72a69e2cd4ba883998777de7f4558389c80f96eb30841ca7c357ad1b"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/allowlist-portable-evidence.txt",
+      "bytes": 13672,
+      "sha256": "8c4ed7635a5510d0109c80c458294fdefd9302b4bf9de993387ff8be2006e7b0"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/build_packet.py",
+      "bytes": 12912,
+      "sha256": "475c23894129fa357af38bc6ba80306643df976ae28b25611981abece6e6f14e"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/inventory.json",
+      "bytes": 4482,
+      "sha256": "37f6437c5e06b647664a28c9ff50bd7b7212e6cee7bf3f6315743d88194a89bc"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-closeout-metadata.json",
+      "bytes": 1280,
+      "sha256": "34c65481fb937d3f5598482d973c5d102886f1ddf3794129042ebdf6c1df5ff1"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-db-docs.json",
+      "bytes": 691,
+      "sha256": "cec7ab7eb32ceb244676155ca4918784f38964e640c03eede9e5e96d15b59022"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-db-source.json",
+      "bytes": 3094,
+      "sha256": "428e4a4a0ba9d7000869feac1818e73b3736640b1499243d3365a3e18a2a823b"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-err-docs.json",
+      "bytes": 5253,
+      "sha256": "08d9eeef25cebd644e11098ecf4d6dd8e3416f60bd0b91afeb39409382f75c4b"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-err-source.json",
+      "bytes": 14120,
+      "sha256": "ec744e0f53c9c4866be7e262def128966435fafb795bb3817e5f1395911112bd"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/manifest-portable-evidence.json",
+      "bytes": 34407,
+      "sha256": "7441407770db526a53c2f528facdc80555a38fb93698a795736f20fad0928c74"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/report.md",
+      "bytes": 9624,
+      "sha256": "d71cbeafa23ff8005d783b52e239a4166d02c92e414d829f6c67b3eee852a0e5"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/secret-pattern-scan.json",
+      "bytes": 830,
+      "sha256": "8f34e157e21d9085f7ca0e25ee2edd8a4fb87331a62c3d235b1d45eaa5e6c366"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/secret-screen-disposition.json",
+      "bytes": 1680,
+      "sha256": "609c666396e8e33672d12093ffcb0ef019a0a1ef4a4f734e8db634aa8e61e6ca"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/status-inventory.json",
+      "bytes": 256995,
+      "sha256": "24dff8028fcdf799a25f104e083862d8a811de1948b9ea7f73db7c87a836f95a"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/verification.json",
+      "bytes": 885,
+      "sha256": "8e675469cce01a359c416a36eaae6f82984d98d6534489f416fa34d6f4ced197"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/closeout/git-inventory/workflow-manifest.json",
+      "bytes": 1118,
+      "sha256": "92be06a2d0fda91da31be55299c18f34e1dc8eebd085b04108242426c40ea5f1"
+    }
+  ]
+}

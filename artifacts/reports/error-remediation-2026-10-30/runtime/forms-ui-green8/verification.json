@@ -1,0 +1,14 @@
+{
+  "run": "forms-ui-green8",
+  "exit": 0,
+  "counts": {
+    "passed": 8,
+    "failed": 0,
+    "executed": 8,
+    "skipped": 0
+  },
+  "assertionFailures": 0,
+  "unguardedFailures": 0,
+  "hashDrift": [],
+  "limit": "VM source/entrypoint fixtures only; no live network/API/SQL/browser evidence"
+}

@@ -28,6 +28,7 @@ export function GenerationModeSelector({
                 : "border-border bg-surface text-secondary-foreground hover:border-primary-border hover:bg-primary-soft "
             }`)}
             key={option.value}
+            aria-pressed={active}
             type="button"
             onClick={() => onChange(option.value)}
           >
@@ -38,7 +39,7 @@ export function GenerationModeSelector({
                 }`}
               />
             )}
-            <span className="flex w-full items-center justify-between gap-2">
+            <span className="flex w-full flex-wrap items-center justify-between gap-2">
               <span className="flex items-center gap-2 text-sm font-semibold">
                 <Icon className={`h-4 w-4 ${
                   active && !isRules

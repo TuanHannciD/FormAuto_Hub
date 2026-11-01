@@ -1,0 +1,123 @@
+{
+  "status": "Verified",
+  "httpChecks": 15,
+  "results": [
+    {
+      "label": "health",
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "markerVerified": true
+    },
+    {
+      "label": "anonymous profile",
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 401,
+      "markerVerified": false
+    },
+    {
+      "label": "User profile",
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 200,
+      "markerVerified": true
+    },
+    {
+      "label": "Admin profile",
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 200,
+      "markerVerified": true
+    },
+    {
+      "label": "User cannot read admin",
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "status": 403,
+      "markerVerified": false
+    },
+    {
+      "label": "Admin package read",
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "status": 200,
+      "markerVerified": false
+    },
+    {
+      "label": "User own project",
+      "method": "GET",
+      "path": "/api/forms/86286ce0-8df7-4864-8bc4-c283f12a7aa0/questions",
+      "status": 200,
+      "markerVerified": true
+    },
+    {
+      "label": "Other account project privacy",
+      "method": "GET",
+      "path": "/api/forms/86286ce0-8df7-4864-8bc4-c283f12a7aa0/questions",
+      "status": 404,
+      "markerVerified": false
+    },
+    {
+      "label": "User own order",
+      "method": "GET",
+      "path": "/api/topup-orders/5613c2d5-acaf-41f5-8cb3-880f942a2bcc",
+      "status": 200,
+      "markerVerified": true
+    },
+    {
+      "label": "Other account order privacy",
+      "method": "GET",
+      "path": "/api/topup-orders/5613c2d5-acaf-41f5-8cb3-880f942a2bcc",
+      "status": 404,
+      "markerVerified": false
+    },
+    {
+      "label": "Owner blob",
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 200,
+      "markerVerified": false
+    },
+    {
+      "label": "Other account blob privacy",
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 404,
+      "markerVerified": false
+    },
+    {
+      "label": "User admin blob forbidden",
+      "method": "GET",
+      "path": "/api/admin/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 403,
+      "markerVerified": false
+    },
+    {
+      "label": "Admin attached blob",
+      "method": "GET",
+      "path": "/api/admin/topup-orders/evidence/d0423643-7247-4445-9e10-d363fa2ef4c2",
+      "status": 200,
+      "markerVerified": false
+    },
+    {
+      "label": "User usage read",
+      "method": "GET",
+      "path": "/api/usage-logs",
+      "status": 200,
+      "markerVerified": true
+    }
+  ],
+  "coldStartReady": true,
+  "databaseReadOnly": true,
+  "countSnapshot": {
+    "users": 53,
+    "refresh": 490,
+    "usage": 372,
+    "credits": 152,
+    "submissions": 548
+  },
+  "countsUnchanged": true,
+  "outbound": "none",
+  "utc": "2026-11-01T00:50:10.3461832+00:00"
+}

@@ -41,9 +41,9 @@ const config: Config = {
         overlay: "rgb(var(--overlay) / <alpha-value>)"
       },
       boxShadow: {
-        soft: "0 10px 30px rgb(var(--shadow-color) / 0.08)",
-        raised: "0 18px 48px rgb(var(--shadow-color) / 0.1)",
-        overlay: "0 24px 60px rgb(var(--shadow-color) / 0.18)"
+        soft: "0 4px 16px rgb(var(--shadow-color) / 0.06)",
+        raised: "0 12px 32px rgb(var(--shadow-color) / 0.08)",
+        floating: "0 24px 60px rgb(var(--shadow-color) / 0.18)"
       }
     }
   },

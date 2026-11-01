@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-29T07:48:18.314Z",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "checks": [
+    {
+      "name": "Snapshot and tracked boundary",
+      "status": "Verified",
+      "data": {
+        "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+        "trackedDiff": "",
+        "status": "?? artifacts/reports/error-audit-2026-10-29/\n?? docs/ai/tasks/FAH-ERR-001/\n?? docs/vi/tasks/FAH-ERR-001/",
+        "ignoredCacheUnchanged": "Not asserted; runtime wrote apps/web/.next"
+      }
+    },
+    {
+      "name": "321 inventory hashes match current bytes",
+      "status": "Verified",
+      "data": {
+        "files": 321,
+        "manualReading": "Not established by hashes"
+      }
+    },
+    {
+      "name": "Deep UI and runtime recorded source hashes match",
+      "status": "Verified",
+      "data": {
+        "uiHashes": 7,
+        "runtimeHashes": 13
+      }
+    },
+    {
+      "name": "Independent backend rerun observes expected boundaries",
+      "status": "Verified",
+      "data": {
+        "observations": 16,
+        "level": "Actual rebuilt services/controller/adapter + InMemory/fakes; no MVC HTTP or SQL"
+      }
+    },
+    {
+      "name": "Independent UI rerun",
+      "status": "Verified",
+      "data": {
+        "observations": 8,
+        "level": "mocked units/components; JSX object tree and manual hook state, not React DOM/browser or actual API"
+      }
+    },
+    {
+      "name": "Five captured browser observations independently asserted",
+      "status": "Verified",
+      "data": {
+        "observations": 5,
+        "requests": 27,
+        "profilePut": false,
+        "browserRerunByReviewer": false,
+        "chunkJs": 27,
+        "chunkJs200": 26,
+        "chunkFailures": [
+          {
+            "url": "http://localhost:3137/_next/static/webpack/webpack.5d5362948a00c380.hot-update.js",
+            "method": "GET",
+            "status": null,
+            "failed": true,
+            "errorText": "net::ERR_ABORTED",
+            "timestamp": "2026-10-29T07:39:17.345Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Migration evidence and released runtime resources",
+      "status": "Verified",
+      "data": {
+        "source": 12,
+        "history": 13,
+        "historyOnly": [
+          "20260601083335_Phase10ManualCreditOperations"
+        ],
+        "release": {
+          "process21404Exists": false,
+          "priorReleasedPid": 27304,
+          "at": "2026-10-29T07:39:47.2720706Z",
+          "closedOwnedTab": "tab_c_35b294ea-298a-4db5-a451-c7ba012d4846",
+          "remainingTargetListeners": [],
+          "releasedPid": 21404,
+          "process27304Exists": false
+        },
+        "meaning": "Captured release verified; no reviewer process/browser/SQL acquired"
+      }
+    }
+  ],
+  "reviewerScripts": [
+    {
+      "path": "verify-evidence.cjs",
+      "sha256": "095fc58b4d16008d8106aa1fe1f8912d74532b805953b5890631d9c9fbf81c6e"
+    },
+    {
+      "path": "rerun.ps1",
+      "sha256": "c5daeac5a6402698144c2cd36b54aa5cdacb9d1f4084471ea559170d2ab70109"
+    },
+    {
+      "path": "ui-probe.cjs",
+      "sha256": "10051ed0da0e69e8893a4bc032d2eb289531fa316cee5cf1cc5ac2a3d10200ef"
+    }
+  ],
+  "limitations": [
+    "Checks confirm current defects, not fixes",
+    "Captured browser evidence rechecked, browser not rerun",
+    "No actual API/MVC/auth/SQL/provider execution by reviewer"
+  ]
+}

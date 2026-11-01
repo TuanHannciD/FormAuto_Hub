@@ -1,0 +1,16 @@
+{
+  "status": "Verified main forward normalization and preservation only; runtime/API follow-up required",
+  "utc": "2026-10-29T19:42:12.6403487Z",
+  "server": "DESKTOP-TS5JR7L",
+  "database": "FormAutoHub",
+  "incrementalSha256": "dce67d64eeae54917532b6905146b7259f576fbbd1886a8d2699543db6dfb362",
+  "baselineSha256": "5fc4a8014e452a4338a0f32d993a8f5d6a533f7f30e4e2aee6f0e028dda74d61",
+  "historyBefore": 13,
+  "historyAfter": 14,
+  "applicationTablesExactEqual": 33,
+  "pending": 0,
+  "modelPending": false,
+  "legacyIndexesExactPreserved": true,
+  "backupMatchedFreshCutoverAll34Tables": true,
+  "apiStarted": false
+}

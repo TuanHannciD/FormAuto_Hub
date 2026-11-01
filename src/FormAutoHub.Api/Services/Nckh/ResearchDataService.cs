@@ -34,98 +34,127 @@ public sealed class ResearchDataService(
             Id = Guid.NewGuid(),
             ModelId = model.Id,
             Status = StatusFailed,
+            ErrorMessage = "Thu thập câu trả lời chưa hoàn tất.",
             StartedAt = DateTimeOffset.UtcNow,
             CreatedAt = DateTimeOffset.UtcNow
         };
         dbContext.DataCollectionLogs.Add(log);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-        var login = await dbContext.UserExternalLogins
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.UserId == userId && item.Provider == GoogleProvider, cancellationToken);
-
-        if (login is null)
+        try
         {
-            return await CompleteFailedCollectAsync(log, "Google account not linked. Please link your Google account.", ResearchFormServiceStatus.Unauthorized, cancellationToken);
-        }
+            var login = await dbContext.UserExternalLogins
+                .AsNoTracking()
+                .SingleOrDefaultAsync(item => item.UserId == userId && item.Provider == GoogleProvider, cancellationToken);
 
-        var scopes = login.Scopes?.Split(' ', StringSplitOptions.RemoveEmptyEntries) ?? [];
-        if (!HasScope(scopes, FormsResponsesReadScope))
-        {
-            return await CompleteFailedCollectAsync(
-                log,
-                "Google Forms response read scope is required. Please re-consent with Forms responses permission.",
-                ResearchFormServiceStatus.Forbidden,
-                cancellationToken);
-        }
-
-        var accessToken = await googleOAuthService.GetValidAccessTokenAsync(userId, cancellationToken);
-        if (accessToken is null)
-        {
-            return await CompleteFailedCollectAsync(
-                log,
-                "Google account not linked or token expired. Please re-link your Google account.",
-                ResearchFormServiceStatus.Unauthorized,
-                cancellationToken);
-        }
-
-        var googleResponses = await googleFormsApiService.ListResponsesAsync(accessToken, model.Form.GoogleFormId, cancellationToken);
-        if (googleResponses is null)
-        {
-            return await CompleteFailedCollectAsync(
-                log,
-                "Unable to read Google Form responses.",
-                ResearchFormServiceStatus.ExternalError,
-                cancellationToken);
-        }
-
-        var existing = await dbContext.SurveyResponses
-            .Where(item => item.ModelId == model.Id)
-            .ToDictionaryAsync(item => item.GoogleResponseId, StringComparer.OrdinalIgnoreCase, cancellationToken);
-
-        var collected = 0;
-        var skipped = 0;
-        var now = DateTimeOffset.UtcNow;
-
-        foreach (var googleResponse in googleResponses)
-        {
-            var rawJson = SerializeRawResponse(googleResponse);
-            if (existing.TryGetValue(googleResponse.ResponseId, out var surveyResponse))
+            if (login is null)
             {
-                if (surveyResponse.RawDataJson == rawJson && surveyResponse.ResponseTimestamp == googleResponse.ResponseTimestamp)
+                return await CompleteFailedCollectAsync(log, "Google account not linked. Please link your Google account.", ResearchFormServiceStatus.Unauthorized, cancellationToken);
+            }
+
+            var scopes = login.Scopes?.Split(' ', StringSplitOptions.RemoveEmptyEntries) ?? [];
+            if (!HasScope(scopes, FormsResponsesReadScope))
+            {
+                return await CompleteFailedCollectAsync(
+                    log,
+                    "Google Forms response read scope is required. Please re-consent with Forms responses permission.",
+                    ResearchFormServiceStatus.Forbidden,
+                    cancellationToken);
+            }
+
+            var accessToken = await googleOAuthService.GetValidAccessTokenAsync(userId, cancellationToken);
+            if (accessToken is null)
+            {
+                return await CompleteFailedCollectAsync(
+                    log,
+                    "Google account not linked or token expired. Please re-link your Google account.",
+                    ResearchFormServiceStatus.Unauthorized,
+                    cancellationToken);
+            }
+
+            var googleResponses = await googleFormsApiService.ListResponsesAsync(accessToken, model.Form.GoogleFormId, cancellationToken);
+            if (googleResponses is null)
+            {
+                return await CompleteFailedCollectAsync(
+                    log,
+                    "Unable to read Google Form responses.",
+                    ResearchFormServiceStatus.ExternalError,
+                    cancellationToken);
+            }
+
+            var existing = await dbContext.SurveyResponses
+                .Where(item => item.ModelId == model.Id)
+                .ToDictionaryAsync(item => item.GoogleResponseId, StringComparer.OrdinalIgnoreCase, cancellationToken);
+
+            var collected = 0;
+            var skipped = 0;
+            var now = DateTimeOffset.UtcNow;
+
+            foreach (var googleResponse in googleResponses)
+            {
+                var rawJson = SerializeRawResponse(googleResponse);
+                if (existing.TryGetValue(googleResponse.ResponseId, out var surveyResponse))
                 {
-                    skipped++;
+                    if (surveyResponse.RawDataJson == rawJson && surveyResponse.ResponseTimestamp == googleResponse.ResponseTimestamp)
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    surveyResponse.RawDataJson = rawJson;
+                    surveyResponse.ResponseTimestamp = googleResponse.ResponseTimestamp;
+                    surveyResponse.UpdatedAt = now;
+                    collected++;
                     continue;
                 }
 
-                surveyResponse.RawDataJson = rawJson;
-                surveyResponse.ResponseTimestamp = googleResponse.ResponseTimestamp;
-                surveyResponse.UpdatedAt = now;
+                dbContext.SurveyResponses.Add(new SurveyResponse
+                {
+                    Id = Guid.NewGuid(),
+                    ModelId = model.Id,
+                    GoogleResponseId = googleResponse.ResponseId,
+                    RespondentId = null,
+                    RawDataJson = rawJson,
+                    ResponseTimestamp = googleResponse.ResponseTimestamp,
+                    CreatedAt = now,
+                    UpdatedAt = now
+                });
                 collected++;
-                continue;
             }
 
-            dbContext.SurveyResponses.Add(new SurveyResponse
-            {
-                Id = Guid.NewGuid(),
-                ModelId = model.Id,
-                GoogleResponseId = googleResponse.ResponseId,
-                RespondentId = null,
-                RawDataJson = rawJson,
-                ResponseTimestamp = googleResponse.ResponseTimestamp,
-                CreatedAt = now,
-                UpdatedAt = now
-            });
-            collected++;
+            log.Status = StatusSuccess;
+            log.ErrorMessage = null;
+            log.ResponsesCollected = collected;
+            log.ResponsesSkipped = skipped;
+            log.CompletedAt = DateTimeOffset.UtcNow;
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return Success(new NckhCollectResponsesResponse(log.Id, collected, skipped, StatusSuccess, null));
         }
+        catch (Exception exception)
+        {
+            exception.Data["DataCollectionLogId"] = log.Id;
+            exception.Data["ModelId"] = model.Id;
+            log.Status = StatusFailed;
+            log.ErrorMessage = exception is OperationCanceledException
+                ? "Thu thập câu trả lời bị gián đoạn. Hãy kiểm tra dữ liệu đã ghi nhận trước khi thực hiện lại."
+                : exception is GoogleIntegrationException googleFailure
+                    ? googleFailure.Message
+                    : "Không hoàn tất thu thập câu trả lời. Hãy kiểm tra dữ liệu đã ghi nhận và thử tải lại kết quả.";
+            log.CompletedAt = DateTimeOffset.UtcNow;
+            try
+            {
+                using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                await dbContext.SaveChangesAsync(timeout.Token);
+            }
+            catch (Exception persistenceException)
+            {
+                throw new AggregateException("Response collection interrupted and its diagnostic record could not be saved.", exception, persistenceException);
+            }
 
-        log.Status = StatusSuccess;
-        log.ResponsesCollected = collected;
-        log.ResponsesSkipped = skipped;
-        log.CompletedAt = DateTimeOffset.UtcNow;
-
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return Success(new NckhCollectResponsesResponse(log.Id, collected, skipped, StatusSuccess, null));
+            throw;
+        }
     }
 
     public async Task<ResearchFormServiceResult<NckhRawResponseListResponse>> ListResponsesAsync(

@@ -12,6 +12,98 @@ type RequestOptions = RequestInit & {
   skipAuth?: boolean;
 };
 
+export type ApiErrorKind = "http" | "network" | "invalid-response";
+
+export class ApiError extends Error {
+  readonly status: number | null;
+  readonly method: string;
+  readonly path: string;
+  readonly fieldErrors: Readonly<Record<string, readonly string[]>>;
+  readonly traceId?: string;
+  readonly kind: ApiErrorKind;
+
+  constructor(kind: ApiErrorKind, method: string, path: string, status: number | null = null,
+    metadata: { fieldErrors?: Record<string, string[]>; traceId?: string } = {}) {
+    super(kind === "network"
+      ? "Không kết nối được máy chủ. Vui lòng kiểm tra kết nối và thử lại."
+      : kind === "invalid-response"
+        ? "Phản hồi từ máy chủ chưa hợp lệ. Vui lòng tải lại dữ liệu."
+        : status === 400
+          ? "Thông tin chưa hợp lệ. Vui lòng kiểm tra lại."
+          : status === 403
+            ? "Bạn không có quyền thực hiện thao tác này."
+            : status === 404
+              ? "Không tìm thấy dữ liệu được yêu cầu."
+              : status === 409
+                ? "Chưa thực hiện được thao tác. Vui lòng kiểm tra dữ liệu hiện tại."
+                : status === 429
+                  ? "Có quá nhiều yêu cầu. Vui lòng thử lại sau."
+                  : "Yêu cầu chưa thành công. Vui lòng thử lại sau.");
+    this.name = "ApiError";
+    this.kind = kind;
+    this.status = status;
+    this.method = method.toUpperCase();
+    this.path = path.split(/[?#]/, 1)[0].slice(0, 256);
+    this.fieldErrors = metadata.fieldErrors ?? {};
+    this.traceId = metadata.traceId;
+  }
+}
+
+// Retain field identity, never the server's validation text or submitted values.
+const validationGuidance: Record<string, string> = {
+  Email: "Vui lòng kiểm tra email.",
+  Password: "Vui lòng kiểm tra mật khẩu.",
+  FullName: "Vui lòng kiểm tra họ tên.",
+  CurrentPassword: "Vui lòng kiểm tra mật khẩu hiện tại.",
+  NewPassword: "Vui lòng kiểm tra mật khẩu mới.",
+  ConfirmPassword: "Vui lòng kiểm tra xác nhận mật khẩu.",
+  Name: "Vui lòng kiểm tra tên.",
+  Credits: "Vui lòng kiểm tra số credit.",
+  Price: "Vui lòng kiểm tra giá."
+};
+
+function isAbort(error: unknown) {
+  return error instanceof Error && error.name === "AbortError";
+}
+
+async function request(path: string, options: RequestInit): Promise<Response> {
+  try {
+    return await fetch(`${API_BASE_URL}${path}`, options);
+  } catch (error) {
+    if (isAbort(error)) throw error;
+    throw new ApiError("network", options.method ?? "GET", path);
+  }
+}
+
+async function httpError(response: Response, method: string, path: string): Promise<ApiError> {
+  const fieldErrors: Record<string, string[]> = {};
+  let traceId: string | undefined;
+  try {
+    const text = await response.text();
+    // Oversized/unstructured bodies are never kept as diagnostics or UI copy.
+    const problem: unknown = text.length <= 32_768 ? JSON.parse(text) : null;
+    if (problem && typeof problem === "object" && !Array.isArray(problem)) {
+      const { errors, traceId: trace } = problem as { errors?: unknown; traceId?: unknown };
+      if (errors && typeof errors === "object" && !Array.isArray(errors)) {
+        for (const [field, guidance] of Object.entries(validationGuidance)) {
+          const messages = (errors as Record<string, unknown>)[field];
+          if (Array.isArray(messages) && messages.some(message => typeof message === "string")) {
+            fieldErrors[field] = [guidance];
+          }
+        }
+      }
+      // Existing ASP.NET trace formats only; arbitrary token-like identifiers are dropped.
+      if (typeof trace === "string" && /^(?:00-[a-f0-9]{32}-[a-f0-9]{16}-[a-f0-9]{2}|[A-Z0-9]{10,32}:[A-F0-9]{8})$/.test(trace)) {
+        traceId = trace;
+      }
+    }
+  } catch (error) {
+    if (isAbort(error)) throw error;
+    // Empty, malformed and unreadable error bodies retain HTTP classification.
+  }
+  return new ApiError("http", method, path, response.status, { fieldErrors, traceId });
+}
+
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   return apiFetchInternal<T>(path, options, false);
 }
@@ -26,7 +118,7 @@ export async function apiFetchBlob(path: string, retried = false): Promise<Blob>
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await request(path, {
     headers,
     cache: "no-store"
   });
@@ -43,10 +135,15 @@ export async function apiFetchBlob(path: string, retried = false): Promise<Blob>
   }
 
   if (!response.ok) {
-    throw new Error(`Không tải được tệp. Mã lỗi HTTP ${response.status}.`);
+    throw await httpError(response, "GET", path);
   }
 
-  return response.blob();
+  try {
+    return await response.blob();
+  } catch (error) {
+    if (isAbort(error)) throw error;
+    throw new ApiError("network", "GET", path, response.status);
+  }
 }
 
 async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean): Promise<T> {
@@ -70,7 +167,7 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
   }
 
   const { json, skipAuth, ...fetchOptions } = options;
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await request(path, {
     ...fetchOptions,
     headers,
     body,
@@ -90,29 +187,19 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
   }
 
   if (!response.ok) {
-    let message = `Yêu cầu không thành công. Mã lỗi HTTP ${response.status}.`;
-    try {
-      const text = await response.text();
-      if (text) {
-        try {
-          const problem = JSON.parse(text) as { detail?: string; title?: string };
-          message = problem.detail || problem.title || text;
-        } catch {
-          message = text;
-        }
-      }
-    } catch {
-      // Keep fallback message.
-    }
-
-    throw new Error(message);
+    throw await httpError(response, options.method ?? "GET", path);
   }
 
   if (response.status === 204) {
     return undefined as T;
   }
 
-  return (await response.json()) as T;
+  try {
+    return (await response.json()) as T;
+  } catch (error) {
+    if (isAbort(error)) throw error;
+    throw new ApiError("invalid-response", options.method ?? "GET", path, response.status);
+  }
 }
 
 export type AuthTokenResponse = {
@@ -433,6 +520,7 @@ export type AiGenerateResponsesResult = {
   missingCredits: number;
   balanceAfter: number;
   generatedPreviewIds: string[];
+  errorMessage?: string | null;
 };
 
 export type SubmissionJob = {

@@ -1,0 +1,113 @@
+﻿{
+  "status": "Verified",
+  "observationCount": 16,
+  "observations": [
+    {
+      "id": "BE-P01",
+      "externalSuccesses": 1,
+      "attemptedCalls": 2,
+      "durableJobStatus": "Running",
+      "durableSuccessCount": 0,
+      "durableSubmissionLogs": 0,
+      "durableUsageLogs": 0,
+      "durableResponseStatuses": [
+        "Previewed",
+        "Previewed"
+      ]
+    },
+    {
+      "id": "BE-P02",
+      "exceptionType": "InvalidOperationException",
+      "Message": "Generated response payload is invalid.",
+      "innerException": null,
+      "durableJobStatus": "Running",
+      "usageDescriptions": [
+        "Generated response payload is invalid."
+      ]
+    },
+    {
+      "id": "BE-P03",
+      "jobStatus": "Failed",
+      "usageStatus": "Failed",
+      "usageDescription": "G\u1EEDi form th\u00E0nh c\u00F4ng"
+    },
+    {
+      "id": "BE-P04",
+      "durableCollectionLogs": 0,
+      "durableResponses": 0
+    },
+    {
+      "id": "BE-P05",
+      "logCount": 2,
+      "levels": [
+        "Information",
+        "Information"
+      ],
+      "requestMarkerLogged": true,
+      "responseMarkerLogged": true,
+      "apiKeyLogged": false,
+      "exceptionType": "InvalidOperationException",
+      "Message": "AI provider returned HTTP 503."
+    },
+    {
+      "id": "BE-P06",
+      "envelope": "malformed JSON envelope",
+      "outcome": "JsonReaderException"
+    },
+    {
+      "id": "BE-P06",
+      "envelope": "valid envelope, malformed assistant JSON",
+      "outcome": "outputs=0"
+    },
+    {
+      "id": "BE-P07",
+      "boundary": "controller action, no HTTP middleware",
+      "exceptionType": "ArgumentException",
+      "Message": "Gi\u00E1 g\u00F3i ph\u1EA3i l\u1EDBn h\u01A1n 0. (Parameter \u0027price\u0027)",
+      "packageRows": 0
+    },
+    {
+      "id": "BE-P08",
+      "scenario": "malformed JSON",
+      "Message": "ConfigJson must be valid JSON.",
+      "innerException": "JsonReaderException"
+    },
+    {
+      "id": "BE-P08",
+      "scenario": "negative weight",
+      "Message": "Answer rule config does not match the selected mode and question.",
+      "innerException": null
+    },
+    {
+      "id": "BE-P08",
+      "scenario": "weight total over 100",
+      "Message": "Answer rule config does not match the selected mode and question.",
+      "innerException": null
+    },
+    {
+      "id": "BE-P09",
+      "Success": false,
+      "ErrorMessage": "PayOS tr\u1EA3 HTTP 503: SYNTHETIC_PROVIDER_DETAIL"
+    },
+    {
+      "id": "BE-P10",
+      "httpStatus": 403,
+      "resultIsNull": true
+    },
+    {
+      "id": "BE-P10",
+      "httpStatus": 404,
+      "resultIsNull": true
+    },
+    {
+      "id": "BE-P10",
+      "httpStatus": 429,
+      "resultIsNull": true
+    },
+    {
+      "id": "BE-P10",
+      "httpStatus": 503,
+      "resultIsNull": true
+    }
+  ]
+}

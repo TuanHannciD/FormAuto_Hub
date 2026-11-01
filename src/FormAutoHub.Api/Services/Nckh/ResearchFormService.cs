@@ -22,8 +22,30 @@ namespace FormAutoHub.Api.Services.Nckh;
 public sealed class ResearchFormService(
     FormAutoHubDbContext dbContext,
     IGoogleOAuthService googleOAuthService,
-    IGoogleFormsApiService googleFormsApiService) : IResearchFormService
+    IGoogleFormsApiService googleFormsApiService,
+    ILogger<ResearchFormService>? logger = null) : IResearchFormService
 {
+    internal static ResearchFormServiceResult<T> ToGoogleFailureResult<T>(GoogleIntegrationException exception, bool authorizationCode = false)
+    {
+        var status = exception.Kind switch
+        {
+            GoogleIntegrationFailureKind.Authorization => authorizationCode ? ResearchFormServiceStatus.InvalidRequest : ResearchFormServiceStatus.Unauthorized,
+            GoogleIntegrationFailureKind.Forbidden => ResearchFormServiceStatus.Forbidden,
+            GoogleIntegrationFailureKind.NotFound => ResearchFormServiceStatus.NotFound,
+            _ => ResearchFormServiceStatus.ExternalError
+        };
+        // This exact existing detail is the browser's Google-vs-JWT discriminator. Do not translate it independently.
+        var message = status == ResearchFormServiceStatus.Unauthorized
+            ? "Google account not linked or token expired. Please re-link your Google account."
+            : exception.Message;
+        return new ResearchFormServiceResult<T>(status, Message: message);
+    }
+
+    private void LogGoogleFailure(GoogleIntegrationException exception) =>
+        logger?.LogWarning("NCKH Google {Operation} failed with {FailureKind}, HTTP {StatusCode}, cause {CauseType}, model {ModelId}, remote form {RemoteFormId}, stage {Stage}",
+            exception.Operation, exception.Kind, (int?)exception.StatusCode, exception.InnerException?.GetType().Name,
+            exception.Data["ModelId"], exception.Data["RemoteFormId"], exception.Data["Stage"]);
+
     private const string GoogleProvider = "Google";
     private const string FormsReadScope = "https://www.googleapis.com/auth/forms.body.readonly";
     private const string FormsWriteScope = "https://www.googleapis.com/auth/forms.body";
@@ -32,6 +54,22 @@ public sealed class ResearchFormService(
     private static readonly Regex CodePattern = new("^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
 
     public async Task<ResearchFormServiceResult<NckhGoogleLinkResponse>> LinkGoogleAsync(
+        Guid userId,
+        NckhGoogleLinkRequest request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await LinkGoogleCoreAsync(userId, request, cancellationToken);
+        }
+        catch (GoogleIntegrationException exception)
+        {
+            LogGoogleFailure(exception);
+            return ToGoogleFailureResult<NckhGoogleLinkResponse>(exception, authorizationCode: true);
+        }
+    }
+
+    private async Task<ResearchFormServiceResult<NckhGoogleLinkResponse>> LinkGoogleCoreAsync(
         Guid userId,
         NckhGoogleLinkRequest request,
         CancellationToken cancellationToken)
@@ -139,6 +177,22 @@ public sealed class ResearchFormService(
     }
 
     public async Task<ResearchFormServiceResult<NckhImportFormResponse>> ImportFormAsync(
+        Guid userId,
+        NckhImportFormRequest request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await ImportFormCoreAsync(userId, request, cancellationToken);
+        }
+        catch (GoogleIntegrationException exception)
+        {
+            LogGoogleFailure(exception);
+            return ToGoogleFailureResult<NckhImportFormResponse>(exception);
+        }
+    }
+
+    private async Task<ResearchFormServiceResult<NckhImportFormResponse>> ImportFormCoreAsync(
         Guid userId,
         NckhImportFormRequest request,
         CancellationToken cancellationToken)
@@ -308,6 +362,26 @@ public sealed class ResearchFormService(
     }
 
     public async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> GenerateFormAsync(
+        Guid userId,
+        Guid modelId,
+        NckhGenerateFormRequest request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await GenerateFormCoreAsync(userId, modelId, request, cancellationToken);
+        }
+        catch (GoogleIntegrationException exception)
+        {
+            LogGoogleFailure(exception);
+            return exception.Operation is "CreateForm" or "CreateQuestions" or "ReadForm"
+                ? new ResearchFormServiceResult<NckhGenerateFormResponse>(ResearchFormServiceStatus.ExternalError,
+                    Message: "Chưa hoàn tất thao tác tạo hoặc cập nhật biểu mẫu trên Google. Hãy kiểm tra kết quả trên Google Forms trước khi thực hiện lại.")
+                : ToGoogleFailureResult<NckhGenerateFormResponse>(exception);
+        }
+    }
+
+    private async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> GenerateFormCoreAsync(
         Guid userId,
         Guid modelId,
         NckhGenerateFormRequest request,
@@ -787,54 +861,80 @@ public sealed class ResearchFormService(
                 Message: "Google Forms API failed to create the form.");
         }
 
-        var questionsCreated = questions.Count;
-        if (!await googleFormsApiService.CreateQuestionsAsync(accessToken, created.FormId, questions, cancellationToken))
+        // Diagnostic only: a remote form exists even if later steps fail. Do not invent a local form lifecycle.
+        AuditLogWriter.Add(dbContext, userId, "GenerateForm", nameof(ResearchModel), model.Id,
+            new { modelId = model.Id, remoteFormId = created.FormId, stage = "RemoteFormCreated" });
+        try
         {
-            return new ResearchFormServiceResult<NckhGenerateFormResponse>(
-                ResearchFormServiceStatus.ExternalError,
-                Message: "Google Forms API failed to create form questions.");
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            await dbContext.SaveChangesAsync(timeout.Token);
+        }
+        catch (Exception exception)
+        {
+            exception.Data["ModelId"] = model.Id;
+            exception.Data["RemoteFormId"] = created.FormId;
+            exception.Data["Stage"] = "PersistRemoteFormCreated";
+            throw;
         }
 
-        var structure = await googleFormsApiService.GetFormStructureAsync(accessToken, created.FormId, cancellationToken);
-        if (structure is null)
+        try
         {
+            var questionsCreated = questions.Count;
+            if (!await googleFormsApiService.CreateQuestionsAsync(accessToken, created.FormId, questions, cancellationToken))
+            {
+                return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                    ResearchFormServiceStatus.ExternalError,
+                    Message: "Biểu mẫu đã được tạo trên Google Forms nhưng chưa hoàn tất bước thêm câu hỏi. Hãy kiểm tra biểu mẫu trước khi tạo lại.");
+            }
+
+            var structure = await googleFormsApiService.GetFormStructureAsync(accessToken, created.FormId, cancellationToken);
+            if (structure is null)
+            {
+                return new ResearchFormServiceResult<NckhGenerateFormResponse>(
+                    ResearchFormServiceStatus.ExternalError,
+                    Message: "Biểu mẫu đã được tạo trên Google Forms nhưng chưa đồng bộ được cấu trúc về ứng dụng. Hãy kiểm tra biểu mẫu trước khi tạo lại.");
+            }
+
+            var now = DateTimeOffset.UtcNow;
+            var form = new ResearchForm
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                GoogleFormId = created.FormId,
+                FormUrl = created.FormUrl,
+                Title = structure.Title,
+                Status = "Draft",
+                GeneratedFromModelId = model.Id,
+                GenerationSource = "Generated",
+                ImportedAt = now,
+                LastGeneratedAt = now,
+                LastSyncedAt = now,
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+
+            dbContext.ResearchForms.Add(form);
+            AddQuestions(form.Id, structure.Questions, now);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
             return new ResearchFormServiceResult<NckhGenerateFormResponse>(
-                ResearchFormServiceStatus.ExternalError,
-                Message: "Google Forms API failed to re-import generated form structure.");
+                ResearchFormServiceStatus.Success,
+                new NckhGenerateFormResponse(
+                    form.Id,
+                    form.GoogleFormId,
+                    form.FormUrl,
+                    questionsCreated,
+                    0,
+                    0,
+                    true));
         }
-
-        var now = DateTimeOffset.UtcNow;
-        var form = new ResearchForm
+        catch (Exception exception)
         {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            GoogleFormId = created.FormId,
-            FormUrl = created.FormUrl,
-            Title = structure.Title,
-            Status = "Draft",
-            GeneratedFromModelId = model.Id,
-            GenerationSource = "Generated",
-            ImportedAt = now,
-            LastGeneratedAt = now,
-            LastSyncedAt = now,
-            CreatedAt = now,
-            UpdatedAt = now
-        };
-
-        dbContext.ResearchForms.Add(form);
-        AddQuestions(form.Id, structure.Questions, now);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return new ResearchFormServiceResult<NckhGenerateFormResponse>(
-            ResearchFormServiceStatus.Success,
-            new NckhGenerateFormResponse(
-                form.Id,
-                form.GoogleFormId,
-                form.FormUrl,
-                questionsCreated,
-                0,
-                0,
-                true));
+            exception.Data["ModelId"] = model.Id;
+            exception.Data["RemoteFormId"] = created.FormId;
+            exception.Data["Stage"] = "CompleteGeneratedForm";
+            throw;
+        }
     }
 
     private async Task<ResearchFormServiceResult<NckhGenerateFormResponse>> UpdateExistingFormAsync(

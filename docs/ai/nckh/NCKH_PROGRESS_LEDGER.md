@@ -53,7 +53,7 @@ Active NCKH follow-up: **none**.
 | Phase 6 API/service | `src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs`, `src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs`, `src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs` | Implemented |
 | Phase 6 tests | `tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs` | Tests pass in latest validation |
 | Phase 6 closeout | `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_6_CLOSEOUT.md` | Completed with local runtime validation |
-| Phase 7 planning | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Prepared; implementation requires explicit approval |
+| Phase 7 planning | `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md` | Historical planning baseline for the completed Phase 7 scope; see its implementation/closeout below |
 | Phase 7 frontend | `apps/web/app/dashboard/nckh/forms/[formId]/page.tsx`, `apps/web/lib/api.ts`, `apps/web/tests/nckh.spec.ts` | Implemented and browser-smoke validated |
 | Phase 7 closeout | `docs/ai/nckh/NCKH_PHASE_7_CLOSEOUT.md`, `docs/vi/nckh/NCKH_PHASE_7_CLOSEOUT.md` | Completed with frontend build and Playwright validation |
 | Phase 7.5 kickoff | `docs/ai/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md`, `docs/vi/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md` | Approved baseline used for the completed Phase 7.5 follow-up |

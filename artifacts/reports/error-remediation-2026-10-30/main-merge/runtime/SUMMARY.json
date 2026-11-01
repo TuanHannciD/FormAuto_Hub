@@ -1,0 +1,53 @@
+{
+  "status": "Verified scoped local runtime with explicit six SQL skips and historical/tooling failures retained",
+  "initialHead": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "finalCheckedHead": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+  "owner": "/root/main_merge_runtime",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "utc": "2026-11-01T00:58:04.013746+00:00",
+  "sourceFiles": 343,
+  "sourceDrift": 0,
+  "backend": {
+    "buildExit": 0,
+    "passed": 291,
+    "failed": 0,
+    "skipped": 6,
+    "total": 297,
+    "buildWarningOccurrences": 6
+  },
+  "web": {
+    "lintExit": 0,
+    "lintWarnings": 2,
+    "buildFinalExit": 0,
+    "nodePassed": 108,
+    "browserPassed": 105,
+    "browserSkipped": 0,
+    "browserFlaky": 0,
+    "browserRunnerErrors": 0
+  },
+  "api": {
+    "actualProgram": true,
+    "httpGets": 15,
+    "coldStartReady": true,
+    "existingSyntheticUserAdmin": true,
+    "noDbDml": true,
+    "rowCountsUnchanged": true
+  },
+  "package": {
+    "originalLocalTreeExit": 1,
+    "reason": "three preserved ignored pycache extras",
+    "oldTrackedExportExit": 1,
+    "oldReason": "one tracked mirror byte drift",
+    "canonicalTrackedExportExit": 0,
+    "skills": 24,
+    "pinnedHashes": 280,
+    "mirroredFiles": 293
+  },
+  "processesReleased": true,
+  "ownedBrowserClosed": true,
+  "configHashesRestored": 5,
+  "deployment": "Not run",
+  "externalProviders": "Not run",
+  "codeChanges": 0
+}

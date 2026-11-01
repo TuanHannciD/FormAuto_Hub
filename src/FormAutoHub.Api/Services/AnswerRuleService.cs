@@ -101,27 +101,27 @@ public sealed class AnswerRuleService(FormAutoHubDbContext dbContext, ICurrentUs
     {
         if (string.IsNullOrWhiteSpace(request.Mode))
         {
-            throw new InvalidOperationException("Answer rule mode is required.");
+            throw new InvalidOperationException("Vui lòng chọn chế độ tạo câu trả lời.");
         }
 
         if (string.IsNullOrWhiteSpace(request.ConfigJson))
         {
-            throw new InvalidOperationException("ConfigJson is required.");
+            throw new InvalidOperationException("Vui lòng nhập cấu hình quy tắc trả lời.");
         }
 
         if (request.ConfigJson.Length > Phase4SafetyLimits.MaxAnswerRuleConfigLength)
         {
-            throw new InvalidOperationException("ConfigJson is too large.");
+            throw new InvalidOperationException("Cấu hình quy tắc trả lời vượt độ dài cho phép.");
         }
 
         if (!Phase3RuleHelpers.IsSupportedMode(request.Mode))
         {
-            throw new InvalidOperationException("Unsupported answer rule mode.");
+            throw new InvalidOperationException("Chế độ tạo câu trả lời chưa được hỗ trợ.");
         }
 
         if (!Phase3RuleHelpers.IsSupportedQuestionType(question.QuestionType))
         {
-            throw new InvalidOperationException("Unsupported question type.");
+            throw new InvalidOperationException("Loại câu hỏi này chưa được hỗ trợ.");
         }
 
         try
@@ -130,7 +130,7 @@ public sealed class AnswerRuleService(FormAutoHubDbContext dbContext, ICurrentUs
         }
         catch (JsonException exception)
         {
-            throw new InvalidOperationException("ConfigJson must be valid JSON.", exception);
+            throw new InvalidOperationException("Cấu hình quy tắc trả lời phải đúng định dạng JSON.", exception);
         }
 
         var candidate = new AnswerRule
@@ -143,9 +143,6 @@ public sealed class AnswerRuleService(FormAutoHubDbContext dbContext, ICurrentUs
             CreatedAt = DateTimeOffset.UtcNow
         };
 
-        if (!Phase3RuleHelpers.HasValidConfig(candidate, question))
-        {
-            throw new InvalidOperationException("Answer rule config does not match the selected mode and question.");
-        }
+        _ = Phase3RuleHelpers.GetValues(candidate, question, 0);
     }
 }

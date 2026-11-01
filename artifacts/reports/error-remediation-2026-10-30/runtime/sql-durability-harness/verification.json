@@ -1,0 +1,115 @@
+{
+  "status": "Verified",
+  "cases": [
+    {
+      "caseName": "submission-transport",
+      "user": "399d3fc3-6b59-4f01-bca9-e661a921a67b",
+      "projectId": "f0a34b0e-0780-4f79-85b8-5f79002c25e4",
+      "jobId": "96419f7c-392b-420f-909c-03dc6cb2329d",
+      "calls": 2,
+      "attempts": [
+        {
+          "Id": "48aa3344-c395-4626-a65b-06a9f82bfe03",
+          "ResponseId": "66488b18-c998-4287-9db8-c2ff336605a0",
+          "Status": "Failed"
+        },
+        {
+          "Id": "a97cfa0c-57c4-4fef-9c86-670759776b07",
+          "ResponseId": "28ad4f01-9493-4993-a1c1-0142169260af",
+          "Status": "Success"
+        }
+      ],
+      "usageId": "3d4f83cc-f6c3-4f20-bd39-b7a28337615a"
+    },
+    {
+      "caseName": "submission-cancel",
+      "user": "bbe95d0f-dafa-4183-bdb5-66515c83d573",
+      "projectId": "ac860319-24bb-472c-9a19-1ab8820952d3",
+      "jobId": "7fa4bd96-3cdd-47bd-bef2-f5abd2313534",
+      "calls": 1,
+      "attempts": [
+        {
+          "Id": "b122fc05-4746-4176-8fab-946cbe07e970",
+          "ResponseId": "ceef287c-9522-4df6-beb8-b950744b05ec",
+          "Status": "Failed"
+        }
+      ],
+      "usageId": "d97b5787-08a2-4f19-8972-146c1317ffc5"
+    },
+    {
+      "caseName": "submission-initial-save",
+      "user": "69e1af06-83c2-4f82-91c0-ce90ff199f5f",
+      "projectId": "237fc48d-119c-4443-97df-d0c91770ca5a",
+      "jobId": "fd1542e4-88b5-4000-b3cf-2bc7f4cc3478",
+      "calls": 0,
+      "attempts": [
+        {
+          "Id": "b777fa32-e027-47e0-8deb-1b3cd2d0b6b8",
+          "ResponseId": "cdafab31-d115-44da-be43-065c09f4b929",
+          "Status": "Failed"
+        }
+      ],
+      "usageId": "036d023f-f104-4fc1-8c15-d2e7a72bc548"
+    },
+    {
+      "caseName": "submission-final-save",
+      "user": "ebf2f84f-9422-4b12-bea6-1ef13fa97942",
+      "projectId": "b3b756b1-6e44-4511-8da1-1d76a5229df8",
+      "jobId": "541c1920-e506-4130-8d6e-688016b09f8e",
+      "calls": 2,
+      "attempts": [
+        {
+          "Id": "7a76822c-0fcd-4f5a-829d-0d3edb5d916a",
+          "ResponseId": "3206af0e-490a-446b-b459-6103a06ef82d",
+          "Status": "Success"
+        },
+        {
+          "Id": "487fc089-e2c4-490c-b9a5-fa7f9c2abb82",
+          "ResponseId": "7a65e277-468c-4b56-931e-5978de39d613",
+          "Status": "Success"
+        }
+      ],
+      "usageId": "3a54c380-13fa-429e-87fc-e723b68b030f"
+    },
+    {
+      "caseName": "collect-throw",
+      "User": "bec7dec8-065b-437e-9c90-1af0ac2583f9",
+      "Model": "5861d8f9-10f4-45cb-a115-7c2aee3453d7",
+      "logId": "9a0a68f8-d188-4022-b449-8f3c0e07764b",
+      "calls": 1
+    },
+    {
+      "caseName": "collect-cancel",
+      "User": "e1d8f582-d782-4e77-aaaf-ae83b573c3eb",
+      "Model": "cd8f145e-a31d-4219-803c-18a784a96828",
+      "logId": "73f112e6-d0a9-4f99-8b3f-2ec5401b6689",
+      "calls": 1
+    },
+    {
+      "caseName": "generate-questions-false",
+      "User": "6657b8ed-d9b5-4095-8dd7-6bdc6a5c4804",
+      "Model": "6d788789-d58e-4dad-8111-ee062313885c",
+      "auditId": "b5e81cdc-72dd-4494-a25c-ec030b33a1bb",
+      "calls": 1
+    },
+    {
+      "caseName": "generate-questions-throw",
+      "User": "de628431-03c0-48fa-94ea-34f2ff8e6a0c",
+      "Model": "83677994-4850-4b36-814f-1c9e75079876",
+      "auditId": "7add5296-0117-4a79-8112-3cee55c9558b",
+      "calls": 1
+    },
+    {
+      "caseName": "generate-import-null",
+      "User": "9cb0ed88-a975-487a-816b-da6757e5e225",
+      "Model": "9e0e2cf1-d868-4506-9453-dc57fea8197a",
+      "auditId": "3a75f79e-3680-4610-8687-146e8e6087fc",
+      "calls": 1
+    }
+  ],
+  "count": 9,
+  "fakeOutboundOnly": true,
+  "noSchema": true,
+  "mainExcluded": true,
+  "preservedFixtures": true
+}

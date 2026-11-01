@@ -1,0 +1,199 @@
+{
+  "verifiedAtUtc": "2026-10-29T19:25:51.413223+00:00",
+  "status": "Verified exact local source copy, build and offline validation only",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "children": 0,
+  "sourceCopiedReadyAtUtc": "2026-10-29T19:21:41.921857+00:00",
+  "binaryReadyAtUtc": "2026-10-29T19:25:51.413244+00:00",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "branch": "ui/compact-refinement-20261028",
+  "sourceFiles": [
+    {
+      "path": "scripts/db-compatibility/BaselineModelGuard.cs",
+      "expectedSha256": "42799f87b1be032daf5c4da2ace960f86d6d7c0696af480cb50b06b372287947",
+      "actualSha256": "42799f87b1be032daf5c4da2ace960f86d6d7c0696af480cb50b06b372287947",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/CatalogReader.cs",
+      "expectedSha256": "30d9cedc8e9efc1d4f6bd62cf281e2125d392529fbea62b2d66b9f182d060062",
+      "actualSha256": "30d9cedc8e9efc1d4f6bd62cf281e2125d392529fbea62b2d66b9f182d060062",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/CompatibilityPolicy.cs",
+      "expectedSha256": "909fc3e97168931e5e0ede00150b72002cbd17931bb0eb329e1a212d4582677d",
+      "actualSha256": "909fc3e97168931e5e0ede00150b72002cbd17931bb0eb329e1a212d4582677d",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/DbCompatibilityProbe.csproj",
+      "expectedSha256": "2cd7a713a0d5e3f4bb70b3194ef604fbdee864df3a2f4aaa4dfaecd7f5e417ec",
+      "actualSha256": "2cd7a713a0d5e3f4bb70b3194ef604fbdee864df3a2f4aaa4dfaecd7f5e417ec",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/OfflineScripts.cs",
+      "expectedSha256": "ec4b6804fb1b4b958e3fc6454382de3ee64de778f25423519173a47ad7f8566d",
+      "actualSha256": "ec4b6804fb1b4b958e3fc6454382de3ee64de778f25423519173a47ad7f8566d",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/Program.cs",
+      "expectedSha256": "9ee9b2502e371192d180d6226965e40c1cc1fe32f6dbf0a3c4281295ccd95e44",
+      "actualSha256": "9ee9b2502e371192d180d6226965e40c1cc1fe32f6dbf0a3c4281295ccd95e44",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/README.md",
+      "expectedSha256": "898e3ce284fade038e214ac1c24384ffc39a8b2aa72427558666528c4d81489e",
+      "actualSha256": "898e3ce284fade038e214ac1c24384ffc39a8b2aa72427558666528c4d81489e",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/SchemaBaseline.cs",
+      "expectedSha256": "1183cef37926b27eba53a17b7b343d4456f9a68d2f39a3e8b5fcba2534fba3fb",
+      "actualSha256": "1183cef37926b27eba53a17b7b343d4456f9a68d2f39a3e8b5fcba2534fba3fb",
+      "matches": true
+    },
+    {
+      "path": "scripts/db-compatibility/catalog.sql",
+      "expectedSha256": "54f7e719b2695850752acbd097df1336522aff1ba28b366df1f5f3276f1d1c2d",
+      "actualSha256": "54f7e719b2695850752acbd097df1336522aff1ba28b366df1f5f3276f1d1c2d",
+      "matches": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+      "expectedSha256": "9a1a1555053aae1869dd6eddb833780201392fa466249cff49a49c2a632c02c4",
+      "actualSha256": "9a1a1555053aae1869dd6eddb833780201392fa466249cff49a49c2a632c02c4",
+      "matches": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+      "expectedSha256": "a11579f3336307c286a14e5d9d279dfbcfa7cf2553de9abaac726633caac6d48",
+      "actualSha256": "a11579f3336307c286a14e5d9d279dfbcfa7cf2553de9abaac726633caac6d48",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+      "expectedSha256": "353981f38a99f5785becfbd08a5016c268b862f78842fa192366a999cc5f0638",
+      "actualSha256": "353981f38a99f5785becfbd08a5016c268b862f78842fa192366a999cc5f0638",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+      "expectedSha256": "dba32633f8acc59488cacad83f0a3999e6b515c4c874b6a2ec01b8b31868a2f1",
+      "actualSha256": "dba32633f8acc59488cacad83f0a3999e6b515c4c874b6a2ec01b8b31868a2f1",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+      "expectedSha256": "742688a87a35bf5cfb9600a68daf3797a238eebba302da48a67f4d02593c7c97",
+      "actualSha256": "742688a87a35bf5cfb9600a68daf3797a238eebba302da48a67f4d02593c7c97",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+      "expectedSha256": "fe296033fe781fe9d86e6deaad23f0669783ccaeb50ebdfb8dbedf14151ea27e",
+      "actualSha256": "fe296033fe781fe9d86e6deaad23f0669783ccaeb50ebdfb8dbedf14151ea27e",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+      "expectedSha256": "ef8b71c809c5a153e0dfa44d3707f78ee6fda97c26c72a93ee6fcb6f9a39a57f",
+      "actualSha256": "ef8b71c809c5a153e0dfa44d3707f78ee6fda97c26c72a93ee6fcb6f9a39a57f",
+      "matches": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs",
+      "expectedSha256": "df2a40c1ffd4028fbb33d3639c62ef089f07acbe1e893970e8131dfdf3a913c3",
+      "actualSha256": "df2a40c1ffd4028fbb33d3639c62ef089f07acbe1e893970e8131dfdf3a913c3",
+      "matches": true
+    }
+  ],
+  "sourceStatus": " M tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj\n?? scripts/db-compatibility/BaselineModelGuard.cs\n?? scripts/db-compatibility/CatalogReader.cs\n?? scripts/db-compatibility/CompatibilityPolicy.cs\n?? scripts/db-compatibility/DbCompatibilityProbe.csproj\n?? scripts/db-compatibility/OfflineScripts.cs\n?? scripts/db-compatibility/Program.cs\n?? scripts/db-compatibility/README.md\n?? scripts/db-compatibility/SchemaBaseline.cs\n?? scripts/db-compatibility/catalog.sql\n?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs\n?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs\n?? tests/FormAutoHub.Tests/BaselineModelGuardTests.cs\n?? tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs\n?? tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs\n?? tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs\n?? tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs",
+  "sourceAllowlistExact": true,
+  "originalTrackedBaselineCount": 1337,
+  "unexpectedOriginalTrackedChanges": [],
+  "gitDiffCheckExitCode": 0,
+  "testCounters": {
+    "total": "188",
+    "executed": "182",
+    "passed": "182",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "skippedOutcomes": 6,
+  "testTrx": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\db-sync-2026-10-29\\integration\\fix-r1\\test-results\\Tuan_DESKTOP-TS5JR7L_2026-10-30_02_22_38.trx",
+  "getMigrations": {
+    "sourceCommit": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+    "migration": "20261029142938_NormalizeTopupEvidenceColumnLengths",
+    "previous": "20261007181332_ManualCreditFlow",
+    "modelPending": false,
+    "current": [
+      "20260516204501_InitialFoundation",
+      "20260518234017_Phase7Authentication",
+      "20260520071203_Phase8PayosPayments",
+      "20260528090000_Phase6AiPromptProfiles",
+      "20260528090100_Phase6AiProviderSettings",
+      "20260528090200_Phase6AiGenerationRuns",
+      "20260530051057_NckhPhase1_FormsAndOAuth",
+      "20260602193837_NckhPhase2_PersistenceFoundation",
+      "20260604131107_NckhPhase3_CanvasRelations",
+      "20260604165518_NckhPhase4_FormGenerationTracking",
+      "20260604211823_NckhPhase5_DataCollectionNormalization",
+      "20261007181332_ManualCreditFlow",
+      "20261029142938_NormalizeTopupEvidenceColumnLengths"
+    ],
+    "scripts": [
+      {
+        "file": "normalization-only.sql",
+        "sha256": "dce67d64eeae54917532b6905146b7259f576fbbd1886a8d2699543db6dfb362"
+      },
+      {
+        "file": "current-chain-idempotent.sql",
+        "sha256": "81e3b60f5d6426303f256e254501a442889e511e912f54841c183d690ca78807"
+      }
+    ]
+  },
+  "binaries": [
+    {
+      "path": "src/FormAutoHub.Api/bin/Release/net9.0/FormAutoHub.Api.dll",
+      "sha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+      "gitIgnored": true
+    },
+    {
+      "path": "scripts/db-compatibility/bin/Release/net9.0/DbCompatibilityProbe.dll",
+      "sha256": "de5022e8ac451b2b8b926b2e88712111cf7d8dd8e7c08f493eed0109406a1698",
+      "gitIgnored": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/bin/Release/net9.0/FormAutoHub.Tests.dll",
+      "sha256": "cae9bb82650d3166e481bad316ba983f2f523ca6b8be88dabaa941aecc23b090",
+      "gitIgnored": true
+    }
+  ],
+  "sqlExecuted": false,
+  "processStarted": false,
+  "mainAppliedByThisWriter": false,
+  "commitPushMergeDeploy": false,
+  "reviewSha256AtCopy": "4c1291d1c3f51bd67f9d4ec66a27cdac743883c1884f892ddbce4e6f6615ba5c",
+  "manifestSha256": "d1a04e10f045010e3dedf4a5a0764bfc94d71286e18076a0cf06c8775de6b20c",
+  "patchSha256": "40d5b3efeec58a4ef0314e3dc61349ddcf33b24186b60c8b8433ae3b4e03b75c",
+  "validationHarnessCorrections": [
+    "Preserve leading git porcelain status whitespace.",
+    "Count NotExecuted outcomes; TRX summary notExecuted attribute is zero despite six skipped outcomes."
+  ]
+}

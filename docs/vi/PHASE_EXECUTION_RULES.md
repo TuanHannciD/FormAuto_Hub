@@ -39,23 +39,21 @@ PayOS vẫn là payment provider duy nhất được duyệt. Captcha bypass, pr
 
 ## Deferred items
 
-Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
+Các mục sau giữ `Deferred:` ngoài contract/scope đã duyệt. Auth Phase 7 và track NCKH riêng đã triển khai; danh sách này không hủy approval đó. Đọc API contract hiện hành và progress ledger NCKH để xác định boundary chính xác:
 
-- authentication implementation details
-- JWT claim structure
-- Google OAuth
-- official Google Forms API
+- thay đổi authentication hoặc JWT claim ngoài contract Phase 7 đã duyệt
+- Google OAuth ngoài identity login đã duyệt và scope NCKH riêng đã duyệt
+- official Google Forms API ngoài scope NCKH riêng đã duyệt
 - payment provider khác PayOS
 - background job framework
 - AI answer generation ngoài Phase 6 AI scoped follow-up slice đã duyệt
 - AI mapping ngoài Phase 6 AI scoped follow-up slice đã duyệt
 - refund behavior sau failed submission
-- exact credit pricing
-- exact credit cost per action
+- hành vi pricing/cost credit mới ngoài contract package, Phase 3 và scoped AI đã duyệt
 - admin user management UI
 - package management behavior ngoài follow-up tạo/cập nhật/active-state gói credit đã duyệt
 - email notifications
-- webhooks
+- webhook ngoài contract PayOS Phase 8 đã duyệt
 - deployment platform ngoài nền tảng single-host GitHub Actions + GHCR + SSH/Docker Compose có xác minh fingerprint đã được duyệt rõ
 - automated refund behavior
 - subscription billing
@@ -63,7 +61,7 @@ Các mục sau phải giữ `Deferred:` cho đến khi được duyệt:
 
 Hướng dẫn candidate tương lai:
 
-- Google OAuth, official Google Forms API, Google Forms watches/Cloud Pub/Sub notification handling, background jobs, payment provider khác PayOS, refund và subscription billing vẫn giữ `Deferred:` cho đến khi một task duyệt rõ production scope.
+- Google OAuth/Forms integration rộng hơn scope identity/NCKH đã duyệt, Google Forms watches/Cloud Pub/Sub notification handling, background jobs, payment provider khác PayOS, refund và subscription billing vẫn giữ `Deferred:` cho đến khi một task duyệt rõ production scope.
 - AI mapping/generation có Phase 6 scoped follow-up slice đã duyệt. Implementation vẫn phải nằm trong boundary API, database, provider, audit, safety, và validation đã duyệt.
 - Approval phải bao gồm integration target, API contracts, database fields, statuses, lifecycle states, token storage model, notification ingestion model, lựa chọn background job framework và validation plan khi áp dụng.
 - Nếu scope tương lai đã duyệt cần UI nhưng UI docs hiện có bị thiếu hoặc chưa đủ, phải hỏi lại hướng UI hoặc sync UI docs trước khi implement UI.

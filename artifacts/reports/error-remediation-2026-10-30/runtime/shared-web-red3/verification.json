@@ -1,0 +1,23 @@
+{
+  "exit": 1,
+  "counts": {
+    "cancelled": 0,
+    "failed": 13,
+    "passed": 0,
+    "executed": 13,
+    "skipped": 0
+  },
+  "hashDrift": [],
+  "productionVsWriterBaselineDrift": [],
+  "assertionFailureCount": 13,
+  "otherFailureCount": 0,
+  "embeddedTypeErrorCount": 2,
+  "embeddedTypeErrorLimit": "Two mapper TypeErrors are actual values inside assert.doesNotThrow failures; all13 top-level failures have ERR_ASSERTION.",
+  "summary": [
+    "# tests 13",
+    "# pass 0",
+    "# fail 13",
+    "# cancelled 0",
+    "# skipped 0"
+  ]
+}

@@ -3,8 +3,8 @@
 ## Phạm vi và trạng thái
 
 - Ngày: 09/10/2026. Tài liệu đi kèm: [SEO_GEO_IMPLEMENTATION_PLAN.md](SEO_GEO_IMPLEMENTATION_PLAN.md).
-- Đây là checklist thực thi kèm mốc quan sát và phạm vi kiểm thử local. Không phải báo cáo hiệu quả sau phát hành.
-- Verified: truy cập URL-prefix property có quyền, sáu kiểm tra URL đã lưu, danh sách sitemap đã gửi trống và tổng Hiệu suất Web 28 ngày trên UI. Live test, báo cáo Page indexing chi tiết, xuất Performance và so sánh kỳ trước là Not run.
+- Checklist giữ mốc trước phát hành và bổ sung bản ghi kỹ thuật/GSC sau deploy theo ngày bên dưới. Chưa phải báo cáo đo traffic/thứ hạng/trích dẫn AI.
+- Verified: mốc property/URL/Performance trước phát hành, smoke public và các thao tác GSC tiếp theo ghi bên dưới. Xử lý sitemap là Blocked; xuất Performance và so sánh kỳ trước là Not run.
 - Dùng Verified, Not run, Blocked cho bằng chứng; không thay giá trị quan sát bằng giả định.
 - Không lưu cookie, tài khoản/mật khẩu, định danh chủ property, token hoặc URL riêng tư không liên quan trong bằng chứng commit.
 
@@ -138,9 +138,17 @@ $env:SEO_EXPECTED_ORIGIN='https://formautohub.servertun.pp.ua'
 npx.cmd playwright test --config playwright.seo.config.ts
 ```
 
-Origin kỳ vọng phải khớp cấu hình lúc build; URL server kiểm thử có thể khác. Kiểm tra chủ sở hữu cổng trước khi bật/tắt và khởi động lại sau build. Ngày 09/10/2026, lần chạy đầu gặp process cũ trước sửa và origin kỳ vọng sai; lần đó thất bại, không dùng làm bằng chứng đạt. Sau khi thay đúng process sở hữu, 26/26 đạt với build origin local và 26/26 đạt với build origin public. Chưa deploy public. D+7/14/28 tính từ phát hành public đã xác minh, không tính từ ngày build local.
+Origin kỳ vọng phải khớp cấu hình lúc build; URL server kiểm thử có thể khác. Kiểm tra chủ sở hữu cổng trước khi bật/tắt và khởi động lại sau build. Ngày 09/10/2026, lần chạy đầu gặp process cũ trước sửa và origin kỳ vọng sai; lần đó thất bại, không dùng làm bằng chứng đạt. Sau khi thay đúng process sở hữu, 26/26 đạt với build origin local và 26/26 đạt với build origin public. Các lượt local đó chưa deploy; người dùng sau đó deploy release ghi bên dưới. D+7/14/28 tính từ phát hành public đã xác minh, không tính từ ngày build local.
 
 Mốc đã bỏ thông tin tài khoản: [gsc-baseline.json](../../artifacts/reports/seo-geo/2026-10-09/gsc-baseline.json). Bằng chứng UI: [visual-comparison.json](../../artifacts/reports/seo-geo/2026-10-09/visual-comparison.json), ảnh trước/sau cùng thư mục. Báo cáo HTML độc lập hiện có là lịch sử, không phải phép đo sau phát hành. Cấu hình Playwright dev mặc định loại bộ production riêng này để tránh lẫn origin hoặc kiểm thử nhầm server dev cũ.
+
+## Mốc sau deploy — 09/10/2026
+
+Kế hoạch chẩn đoán bước tiếp theo lập ngày 10/10/2026: [SEO_SITEMAP_RECOVERY_PLAN.md](SEO_SITEMAP_RECOVERY_PLAN.md). Kế hoạch không cập nhật thay kết quả GSC lịch sử hoặc phê duyệt sẵn bản sửa production chưa xác định.
+
+Xem phần sau deploy theo ngày trong [bản ghi triển khai](SEO_GEO_IMPLEMENTATION_PLAN.md): người dùng deploy `8a4f18e`, 26/26 kiểm tra public đạt, Google live fetch thành công cho sample-data và sitemap. Xử lý sitemap đã gửi còn Blocked với “Không thể tìm nạp” / 0 URL phát hiện. Nhận yêu cầu index tách riêng với đã index thật. Bằng chứng chi tiết đã lọc thông tin tài khoản: [post-deploy-results.json](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-results.json); log public: [post-deploy-tests.txt](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-tests.txt).
+
+Bước tiếp: kiểm tra lại xử lý sitemap; nếu lỗi kéo dài, xem bằng chứng edge/proxy giới hạn quanh thời điểm tìm nạp trước khi đề xuất sửa. Theo dõi trạng thái URL đã lưu và hiệu quả tìm kiếm/AI cùng điều kiện ở D+7/14/28; không gửi index lặp để tăng ưu tiên. Mốc này không sửa ứng dụng/server hoặc tạo lịch theo dõi.
 
 ## Nguồn chính thức
 

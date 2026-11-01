@@ -1,0 +1,6 @@
+artifacts/reports/error-remediation-2026-10-30/closeout/deploy-handoff/report.md
+artifacts/reports/error-remediation-2026-10-30/closeout/deploy-handoff/static-validation.json
+artifacts/reports/error-remediation-2026-10-30/closeout/review/report.md
+artifacts/reports/error-remediation-2026-10-30/closeout/review/snapshot-verification.json
+artifacts/reports/error-remediation-2026-10-30/closeout/review/verify_snapshot.py
+artifacts/reports/error-remediation-2026-10-30/closeout/review/verify_staged.py

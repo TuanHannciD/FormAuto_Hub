@@ -1,0 +1,133 @@
+{
+  "utc": "2026-11-01T00:59:23.352801+00:00",
+  "owner": "/root/main_merge_runtime",
+  "frozen": true,
+  "files": [
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/REPORT.md",
+      "bytes": 2399,
+      "sha256": "328d4a15e6af3db67a33765577c9edd5ae392735d796f86f2f8711434a6d7860"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/SUMMARY.json",
+      "bytes": 1470,
+      "sha256": "4c7617cab4c1162e17cdee24aed7cc5c0b7a03fc1c4521734c826257f5abd2d4"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/baseline.json",
+      "bytes": 189,
+      "sha256": "e5167cc27d9fb33e76045a66e73774d88a59c0b59f58f3e820c8267130013b18"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/backend-result.json",
+      "bytes": 186,
+      "sha256": "dee7e0a44a9f4491cde42b2fd9f7d3b7ce587a76138e4119c24567e3d3fa2c8b"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/web-result.json",
+      "bytes": 176,
+      "sha256": "e0f6834f26ff97a58d76e908ab9b6f7fce5380aefc8ecf82fbc608b0442717a4"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/web-build-r4-result.json",
+      "bytes": 196,
+      "sha256": "36d3ea30e2d132db7e581147bf912a914058b2e8b76d323f8655b10424dd26ee"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/build-r4-config-proof.jsonl",
+      "bytes": 1045,
+      "sha256": "51600a06850340d2dc03a5209534f750fe2aa87d980c04f7e9f830acaad487b6"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/browser-result.json",
+      "bytes": 206,
+      "sha256": "411707117dd7f0260a89cdfb6866afcc4816d66f39617f5ec63b926e9d8fd7c0"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/browser-summary.json",
+      "bytes": 23269,
+      "sha256": "df174149398beb7ce11104755cf25b96f2fad76917943880af22bd5af913dcf8"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/api-smoke/result.json",
+      "bytes": 70,
+      "sha256": "ac436b33ddf539137edb3173122144b9c684427dfcc127600876e8db0ca7ee77"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/api-smoke/guard.json",
+      "bytes": 261,
+      "sha256": "3f342b01e58f603f53e87afb0b75bb6e1dd348534e9fc1f207dfbfd043c33b1c"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/api-smoke/identity.json",
+      "bytes": 453,
+      "sha256": "7966f864caa664669fd9f039251a631c257b66ce14878262e763cb93c1626e38"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/api-smoke/verification.json",
+      "bytes": 3165,
+      "sha256": "755aef3cd312b4adcce7ab6e02fd10142f65f4d5f859add86a56e0c536fd7fe3"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/api-smoke/release.json",
+      "bytes": 117,
+      "sha256": "6c98635a1ad9f7fb6e441f0abdfa335774f8f78747d3bf862f2d162c0a7e91d8"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/skills-local-classification.json",
+      "bytes": 992,
+      "sha256": "91bb6c6cd71b6e56442abdce67a90db7a6fb67f32b7aa5a35e88e98d1e4e6824"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/skills-clean-before-result.json",
+      "bytes": 192,
+      "sha256": "6a5f88331cc1980c1e9d296afd01e7839f9463b2a3608d9f17ccb0ce377ea3dc"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/skills-clean-after-result.json",
+      "bytes": 840,
+      "sha256": "e1c4c6b08016d669e804f036d396dc31d85f60fc0bfa176ad921766994868113"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/skills-clean-finalhead-result.json",
+      "bytes": 976,
+      "sha256": "d3b0a14e50dc3612fd2140272dff1ea0a05471ac682d1e3d41f7991e300f9aaa"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/config-restoration.json",
+      "bytes": 1508,
+      "sha256": "69cfbfd6f8a009f016cf8c47fcf9ff74ef80847a8b4a945eb7215ed473d9791b"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/release.json",
+      "bytes": 324,
+      "sha256": "5292e3a837d0b026c621d65677b1407c57dd8a2f46abb92acfca2f59e4c92590"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/web-release-identities.json",
+      "bytes": 619,
+      "sha256": "1d613100366ee5c99317cb087519b99d2d871fab1e07ef77179846f712f99d48"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/source-final.json",
+      "bytes": 65380,
+      "sha256": "e58105e647671482079114121ff674b5727a02e40f3863bb7fcf0804c8817600"
+    },
+    {
+      "path": "artifacts/reports/error-remediation-2026-10-30/main-merge/runtime/t3-browser-evidence.json",
+      "bytes": 7808,
+      "sha256": "90f0b1c858f081a1c10662202ed27a2c0914b7b00395ccbb1d46b620ffe924bd"
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/MAIN_MERGE_VALIDATION.md",
+      "bytes": 8589,
+      "sha256": "8e1a5a808ef829a1b583187c537d2f34581352594fd3895d1baa2c63bf161435"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/MAIN_MERGE_VALIDATION.md",
+      "bytes": 9082,
+      "sha256": "797b2641d189358c00d4fa7b6a0d05cf03e52da6fc3802fb5ca7923739f398ec"
+    }
+  ],
+  "rawLogsAndHelpers": "preserved locally; curated publication set need not include generated caches/bin/obj/export/raw logs"
+}

@@ -1,0 +1,17 @@
+scripts/db-compatibility/BaselineModelGuard.cs
+scripts/db-compatibility/CatalogReader.cs
+scripts/db-compatibility/CompatibilityPolicy.cs
+scripts/db-compatibility/DbCompatibilityProbe.csproj
+scripts/db-compatibility/OfflineScripts.cs
+scripts/db-compatibility/Program.cs
+scripts/db-compatibility/README.md
+scripts/db-compatibility/SchemaBaseline.cs
+scripts/db-compatibility/catalog.sql
+src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs
+src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs
+tests/FormAutoHub.Tests/BaselineModelGuardTests.cs
+tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs
+tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj
+tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs
+tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs
+tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs

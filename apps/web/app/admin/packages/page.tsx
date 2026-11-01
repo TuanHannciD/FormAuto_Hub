@@ -37,7 +37,7 @@ const emptyForm: CreditPackageRequest = {
 };
 
 const packageColumns: Array<BaseTableColumn<CreditPackage>> = [
-  { key: "name", header: "Tên gói", render: (item) => item.name, className: "font-medium" },
+  { key: "name", header: "Tên gói", render: (item) => <span className="block max-w-[260px] whitespace-normal [overflow-wrap:anywhere]">{item.name}</span>, className: "font-medium" },
   { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
   { key: "price", header: "Giá", render: (item) => formatCurrency(item.price) },
   { key: "isActive", header: "Trạng thái", render: (item) => <PackageStatus isActive={item.isActive} /> },
@@ -47,16 +47,23 @@ const packageColumns: Array<BaseTableColumn<CreditPackage>> = [
 
 export default function AdminPackagesPage() {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<CreditPackageRequest>(emptyForm);
   const [statusFilter, setStatusFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [confirmedPackage, setConfirmedPackage] = useState<CreditPackage | null>(null);
 
   async function loadData() {
-    const data = await apiFetch<CreditPackageListResponse>("/api/admin/packages");
-    setPackages(data.items);
+    setLoading(true); setLoadError(false);
+    try {
+      const data = await apiFetch<CreditPackageListResponse>("/api/admin/packages");
+      setPackages(data.items);
+    } catch (error) { setLoadError(true); throw error; }
+    finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -110,21 +117,23 @@ export default function AdminPackagesPage() {
     setIsSaving(true);
     try {
       if (editingId) {
-        await apiFetch<CreditPackage>(`/api/admin/packages/${editingId}`, {
+        const result = await apiFetch<CreditPackage>(`/api/admin/packages/${editingId}`, {
           method: "PUT",
           json: form
         });
+        setConfirmedPackage(result);
         toast.success("Đã cập nhật gói credit.");
       } else {
-        await apiFetch<CreditPackage>("/api/admin/packages", {
+        const result = await apiFetch<CreditPackage>("/api/admin/packages", {
           method: "POST",
           json: form
         });
+        setConfirmedPackage(result);
         toast.success("Đã tạo gói credit.");
       }
 
       closeFormDialog();
-      await loadData();
+      await loadData().catch(() => { /* Keep the confirmed package; loadData reports a read error. */ });
     } catch (error) {
       showError(error, "Không lưu được gói credit.");
     } finally {
@@ -133,7 +142,7 @@ export default function AdminPackagesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Gói credit"
         title="Quản lý gói credit"
@@ -146,7 +155,8 @@ export default function AdminPackagesPage() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {confirmedPackage && <Alert role="status">Đã lưu gói {confirmedPackage.name}. Mã gói: {confirmedPackage.id}.</Alert>}
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
         <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={String(packages.filter((item) => item.isActive).length)} />
         <Stat icon={XCircle} label="Đang tắt" tone="warning" value={String(packages.filter((item) => !item.isActive).length)} />
@@ -155,14 +165,14 @@ export default function AdminPackagesPage() {
 
       <div className="grid gap-4">
         <Card className="min-w-0">
-          <CardHeader className="space-y-4">
+          <CardHeader className="space-y-3">
             <CardTitle>Danh sách gói credit</CardTitle>
             <div className="grid gap-3 md:grid-cols-[1fr_220px]">
               <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-2.5 text-muted-foreground" size={15} />
-                <Input className="pl-9" placeholder="Tìm tên gói..." value={query} onChange={(event) => setQuery(event.target.value)} />
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={15} />
+                <Input aria-label="Tìm tên gói" className="pl-9" placeholder="Tìm tên gói..." value={query} onChange={(event) => setQuery(event.target.value)} />
               </div>
-              <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+              <Select aria-label="Trạng thái gói credit" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
                 <option value="all">Tất cả trạng thái</option>
                 <option value="active">Đang bật</option>
                 <option value="inactive">Đang tắt</option>
@@ -170,7 +180,7 @@ export default function AdminPackagesPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <BaseTable
+            {loadError ? <Alert><p>Không tải được danh sách gói credit.</p><Button type="button" variant="secondary" disabled={loading} onClick={() => loadData().catch(error => showError(error, "Không tải được danh sách gói credit."))}>Thử lại</Button></Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải gói credit...</p> : <BaseTable
               items={filteredPackages}
               columns={packageColumns.map((column): BaseTableColumn<CreditPackage> =>
                 column.key === "actions"
@@ -196,7 +206,7 @@ export default function AdminPackagesPage() {
                   </Button>
                 </div>
               )}
-            />
+            />}
           </CardContent>
         </Card>
       </div>
@@ -259,5 +269,5 @@ function Stat({
   value: string;
   tone?: "default" | "success" | "warning";
 }) {
-  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={({ default: "primary", success: "success", warning: "warning" } as const)[tone]} />;
+  return <MetricCard className="min-w-0 [&_[aria-hidden]]:hidden sm:[&_[aria-hidden]]:grid" title={label} value={value} icon={<Icon size={18} />} tone={({ default: "primary", success: "success", warning: "warning" } as const)[tone]} />;
 }

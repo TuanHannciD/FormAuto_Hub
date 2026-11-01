@@ -1,0 +1,175 @@
+{
+  "status": "Verified",
+  "rawUpSha256": "69d79032c5d95ce1bc99cf574fccae738e27b5e72d33b5540dc50030e8b27356",
+  "instrumentedSha256": "6778DE61C0882B363CF04A830C882DBE369CD6971840D8CADA840F01863864FE",
+  "transformation": "Only WAITFOR8s+comment inserted after oversize guard, before first IF COL_LENGTH; original bytes recovered exactly when hook removed",
+  "ownerSession": 72,
+  "writerSession": 73,
+  "objectId": 690101499,
+  "startUtc": "2026-10-29T19:24:07.6344307Z",
+  "finishUtc": "2026-10-29T19:24:15.6678401Z",
+  "setupCommittedBeforeMeasuredTransaction": {
+    "filenameBytes": -1,
+    "mimeBytes": -1,
+    "transactionCount": 0,
+    "observedUtc": "2026-10-29T19:24:07.6"
+  },
+  "beforeLocks": [
+    {
+      "resource_type": "DATABASE",
+      "request_mode": "S",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 0
+    }
+  ],
+  "ownerAtPostByteGuardHook": [
+    {
+      "session_id": 72,
+      "status": "suspended",
+      "command": "WAITFOR",
+      "wait_type": "WAITFOR",
+      "blocking_session_id": 0,
+      "observedUtc": "2026-10-29T19:24:07.64"
+    }
+  ],
+  "heldOwnerLocksBeforeFirstAlter": [
+    {
+      "resource_type": "DATABASE",
+      "request_mode": "S",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 0,
+      "resource_lock_partition": 3
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 0
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 1
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 2
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 3
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 4
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 5
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 6
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 7
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 8
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 9
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 10
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 11
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 12
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 13
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 14
+    },
+    {
+      "resource_type": "OBJECT",
+      "request_mode": "X",
+      "request_status": "GRANT",
+      "resource_associated_entity_id": 690101499,
+      "resource_lock_partition": 15
+    }
+  ],
+  "writerBlockedBeforeFirstAlter": [
+    {
+      "session_id": 73,
+      "status": "suspended",
+      "command": "INSERT",
+      "wait_type": "LCK_M_IX",
+      "wait_resource": "OBJECT: 10:690101499:3 ",
+      "blocking_session_id": 72,
+      "observedUtc": "2026-10-29T19:24:07.67"
+    }
+  ],
+  "writerErrorAfterOwnerCommit": 2628,
+  "after": {
+    "filenameBytes": 400,
+    "mimeBytes": 100,
+    "evidenceRows": 0,
+    "historyRows": 13,
+    "observedUtc": "2026-10-29T19:24:15.66"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-29T07:06:09.019Z",
+  "level": "original extracted UI functions with synthetic boundaries; backend checks structural only",
+  "hashes": {
+    "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218",
+    "apps/web/app/register/page.tsx": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914",
+    "apps/web/app/dashboard/forms/page.tsx": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+    "apps/web/app/dashboard/top-up/page.tsx": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22",
+    "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+    "src/FormAutoHub.Api/Services/SubmissionService.cs": "1d828f134cec00ae6e4c4f0dccf7aab22df0fee3af3a55ef65720700105e0d40",
+    "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs": "edc399b341fa38de1a74a875e0995899638119fd6cf75aa6d55cf62d210f8c46",
+    "src/FormAutoHub.Api/Services/PayosClient.cs": "86165cbb7b459a46de8d1fbc2a2e91ddb350fd20b66e022d8f59df3d03d2fa30",
+    "src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs": "069f5c98821a5d7281897117466919445ddee3e8ead87d67090c62efbe3467a2"
+  },
+  "results": [
+    {
+      "id": "FULL-01",
+      "status": "Verified",
+      "observed": {
+        "duplicateRelation": "Không thêm được quan hệ."
+      }
+    },
+    {
+      "id": "FULL-02",
+      "status": "Verified",
+      "observed": {
+        "conflict": "Dữ liệu hiện tại không còn đồng bộ. Hãy tải lại hoặc chuẩn hóa lại trước khi tiếp tục."
+      }
+    },
+    {
+      "id": "FULL-03",
+      "status": "Verified",
+      "observed": {
+        "passwordValidationMappedTo": "Email đã tồn tại. Hãy đăng nhập bằng mật khẩu rồi liên kết Google trong hồ sơ bảo mật."
+      }
+    },
+    {
+      "id": "FULL-04",
+      "status": "Verified",
+      "observed": {
+        "serverFailureResolvesWithoutError": true,
+        "defaultsWritten": [
+          "direction",
+          "prompt",
+          "scope",
+          "questions"
+        ]
+      }
+    },
+    {
+      "id": "FULL-05",
+      "status": "Verified",
+      "observed": {
+        "createSucceeded": true,
+        "refreshFailed": true,
+        "error": "Không tạo được liên kết PayOS.",
+        "checkoutNavigationSkipped": true
+      }
+    },
+    {
+      "id": "FULL-06",
+      "status": "Verified",
+      "observed": {
+        "previousVariablesRetained": true,
+        "onlyFirstFailureReported": "Synthetic variables failure"
+      }
+    }
+  ],
+  "structuralAssertions": 4
+}

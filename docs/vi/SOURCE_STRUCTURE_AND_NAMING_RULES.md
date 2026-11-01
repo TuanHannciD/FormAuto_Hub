@@ -35,7 +35,7 @@ Mở rộng cấu trúc hiện tại trong phạm vi được duyệt; không t�
 - DTOs: `<Action>Request`, `<Action>Response`, hoặc `<Entity>Dto`.
 - Entities: tên domain số ít như `User`, `TopupOrder`, `UsageLog`.
 - Integration services: tên theo provider như `GoogleFormsAnalyzer`.
-- AI provider adapters nên đặt theo provider dưới `Integrations/AI` hoặc folder AI integration tương đương đã review khi Phase 6 implementation được duyệt.
+- AI provider adapters nên đặt theo provider dưới `Integrations/AI` hoặc folder AI integration tương đương đã review cho scope Phase 6 đã duyệt và hoàn thành.
 
 ## Quy tắc đặt tên file
 
@@ -51,7 +51,7 @@ Mở rộng cấu trúc hiện tại trong phạm vi được duyệt; không t�
 - Mapping helpers phải scope theo feature và đặt tên theo feature, ví dụ `Phase2Mappings.cs`; không tạo file chung kiểu `Mapper.cs`, `Helpers.cs`, hoặc `Utils.cs` nếu chưa có reuse thật.
 - Test files dùng `<Subject>Tests.cs`, ví dụ `FoundationTests.cs` hoặc `Phase2TopupApprovalTests.cs`.
 - Project và solution files giữ tên product/project: `FormAutoHub.Api.csproj`, `FormAutoHub.Tests.csproj`, và `FormAutoHub.sln`.
-- Frontend Next.js files trong tương lai phải theo convention chuẩn của Next.js như `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, và component colocated dùng PascalCase filename. Không tạo frontend files trước khi có task frontend implementation được duyệt.
+- Frontend Next.js files phải theo convention chuẩn của Next.js như `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, và component colocated dùng PascalCase filename. Không tạo frontend files trước khi có task frontend implementation được duyệt.
 
 ## Quy tắc placement
 
@@ -75,76 +75,11 @@ Mở rộng cấu trúc hiện tại trong phạm vi được duyệt; không t�
 - Không đặt AI credit multiplier logic ngoài credit/generation service boundary đã được contract review duyệt.
 - Không tạo microservice boundary trong MVP.
 
-## Quy tắc file map cho code file lớn
+## File map và cách đọc source
 
-- Không áp giới hạn dòng cứng cho code. Chỉ tách file khi có lý do kiến trúc rõ ràng.
-- Khi file C# vượt **500 dòng** và không tách, bắt buộc có **file map** dạng comment block ở đầu file, ngay sau namespace/using declarations.
-- Map liệt kê từng method public/internal, nhóm property, và region kèm số dòng bắt đầu và mô tả mục đích một dòng.
-
-### Định dạng map
-
-```csharp
-// === FILE MAP (CreditService.cs - 620 dòng) ===
-// Dòng    Method/Region                  Mục đích
-// 25-48   DeductCreditsAsync()           Trừ credit + ghi ledger, rollback nếu thất bại
-// 50-72   AddCreditsAsync()              Nạp credit thủ công (admin), ghi ledger
-// 74-110  ProcessTopupCallbackAsync()    Xử lý callback PayOS, đối soát chữ ký
-// 112-145 ValidateTopupRequest()         Validate đơn nạp trước khi gửi PayOS
-// 147-200 GetBalanceAndLedgerAsync()     Truy vấn số dư + lịch sử giao dịch
-// 202-280 CalculateUsageCost()           Tính phí credit theo batch size + loại form
-// 282-350 ReserveCreditsAsync()          Giữ credit trước khi generate, hoàn nếu hủy
-// 352-420 RefundCreditsAsync()           Hoàn credit khi generate thất bại
-// 422-490 GetUsageReportAsync()          Báo cáo sử dụng credit theo khoảng thời gian
-// 492-560 ReconcileLedgerAsync()         Đối soát ledger định kỳ với PayOS
-// 562-620 Private helpers + constants    Các helper nội bộ, hằng số credit
-```
-
-### Quy tắc
-
-- Map phải được cập nhật khi thêm, xóa, hoặc di chuyển method.
-- Với file có region, nhóm các mục map theo region.
-- Private helper dùng chung cho nhiều method có thể gom thành một mục.
-- Map dành cho người và AI đọc; không sinh tự động lúc build.
-## Quy tắc File Map và Tách File cho Frontend (apps/web/)
-
-- Không giới hạn dòng cứng. Chỉ tách khi có lý do kiến trúc rõ ràng (component có thể tái sử dụng độc lập, tách biệt về mặt khái niệm, hoặc file trở nên khó điều hướng).
-- Khi file `.tsx`/`.ts` vượt **500 dòng** và không tách, bắt buộc có **file map** dạng comment block ở đầu file, ngay sau phần imports.
-- Map liệt kê từng exported function, component, hook, và nhóm constant/type chính kèm số dòng bắt đầu và mô tả mục đích một dòng.
-
-### Định dạng File Map TSX
-
-```tsx
-// === FILE MAP (FormsPage.tsx - 620 dòng) ===
-// Dòng    Component/Function                  Mục đích
-// 30-85   FormsPage()                        Trang chính: phân tích form, cấu hình rule, preview, submit
-// 87-120  PreviewAccordion()                 Accordion hiển thị từng bản preview
-// 122-155 GenerationModeSelector()           Chọn chế độ tạo: rules / AI default / AI custom
-// 157-210 AiModePreparationPanel()           Panel chuẩn bị AI direction + prompt
-// 212-250 RuleEditor()                       Editor rule cho từng câu hỏi trong form
-// 252-280 Helper functions                   toBackendAiMode, buildAiAudienceJson, readAiDirection, ...
-```
-
-### Các Pattern Có Thể Tách (chỉ khi hợp lý)
-
-| Tách ra | Khi nào |
-|---|---|
-| `_components/<Tên>.tsx` | Component con >=30 dòng và độc lập về mặt khái niệm |
-| `_constants.ts` | 10+ hằng số liên quan tạo thành một khối cấu hình |
-| `_types.ts` | 5+ interfaces/types được dùng chung bởi nhiều component trong feature |
-| `_helpers.ts` | 5+ hàm utility thuần túy không phụ thuộc React |
-| `_hooks.ts` | 3+ custom hooks hoặc một hook >=30 dòng |
-
-### Quy tắc Colocation
-
-- File tách ra nằm cùng thư mục với page (colocation).
-- Dùng prefix `_` cho module local của page: `_components/`, `_constants.ts`, `_types.ts`, `_helpers.ts`, `_hooks.ts`.
-- Không tạo file tách rỗng "để dành".
-- Tách file là tùy chọn: nếu file vẫn dễ đọc và các component liên kết chặt, chỉ cần file map là đủ.
-- Giữ `page.tsx` chính làm routing entry; không di chuyển default export.
-
-### Quy tắc
-
-- Map phải được cập nhật khi thêm, xóa, hoặc di chuyển component/function.
-- Nhóm constant và type có thể gom thành một mục.
-- Private helper dùng chung cho nhiều component có thể gom thành một mục.
-- Map dành cho người và AI đọc; không sinh tự động lúc build.
+- Không áp trần dòng cứng. Chỉ tách khi có trách nhiệm/reuse độc lập hoặc vấn đề điều hướng rõ; không chia transaction/lifecycle chỉ để giảm dòng. Shared UI giữ tại `apps/web/components/`; code local feature colocate với page (`_components/`, `_hooks.ts`, `_helpers.ts`, `_types.ts`, `_constants.ts`) khi có lý do, không tạo scaffolding rỗng.
+- Giữ ngưỡng map hiện tại: file C# và TS/TSX viết tay trên 500 dòng vật lý được giữ chung cần map ngắn sau directive/import bắt buộc. Liệt kê symbol/trách nhiệm lớn và invariant; tìm symbol trong source hiện tại. Số dòng viết tay là gợi ý tùy chọn, không là địa chỉ chuẩn. Không sửa migration/snapshot sinh tự động, lockfile hoặc gói vendor để thỏa map.
+- Module README hữu ích khi cây thư mục chưa đủ: điểm vào, ownership, dependency/data flow và test liên quan. Không tạo README cho mọi folder nhỏ hoặc chép contract nghiệp vụ vào đó.
+- Bắt đầu từ hành vi đã duyệt và module/contract, tìm path/symbol bằng `rg`, đọc map/outline nếu có. Đọc đầy đủ function/component ảnh hưởng, gồm type/state, nhánh lỗi và cleanup. Theo DI registration, import/caller/consumer và test; mở rộng khi đổi shared, state, contract hoặc boundary. Không dùng chunk cố định làm mất invariant.
+- Map thiếu/cũ không chặn khảo sát: tìm symbol hiện tại, ghi nợ điều hướng, cập nhật map trong scope khi đổi cấu trúc. Không refactor source ngoài task tài liệu. Review toàn diff/tác động liên quan, không chỉ map hoặc vài dòng chọn lọc.
+- Quy tắc này không chứng nhận AST/LSP/map checker đã cài. Package checker chỉ kiểm đóng gói/mirror, không chứng minh map source hoặc cách Agent đọc.

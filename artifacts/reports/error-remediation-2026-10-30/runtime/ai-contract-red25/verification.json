@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "passedButRunAborted": 0,
+    "pending": 0,
+    "total": 25,
+    "failed": 25,
+    "aborted": 0,
+    "inconclusive": 0,
+    "timeout": 0,
+    "notExecuted": 0,
+    "passed": 0,
+    "error": 0,
+    "warning": 0,
+    "disconnected": 0,
+    "completed": 0,
+    "executed": 25,
+    "notRunnable": 0,
+    "inProgress": 0
+  },
+  "compilerErrorCount": 0,
+  "hashDrift": [],
+  "failures": [
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_SuccessAndPartialKeepPreviewCreditContractWithNoFailureReason(count: 2, status: \"Partial\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http401\", expectedFragment: \"quản trị viên\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"envelope\", expectedFragment: \"phản hồi\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"credit\", expectedFragment: \"credit\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"user\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"network\", expectedFragment: \"kết nối\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"admin\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"[[]]\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Array'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"nooutput\", expectedFragment: \"hợp lệ\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"[42]\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Number'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"{\\\"responses\\\":[[]]}\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Array'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"{\\\"responses\\\":[42]}\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Number'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http403\", expectedFragment: \"quyền\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"unknown\", expectedFragment: \"Không tạo được\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http429\", expectedFragment: \"giới hạn\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"timeout\", expectedFragment: \"hết thời gian\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"{\\\"responses\\\":[null]}\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Null'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"{\\\"responses\\\":[{}]}\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Kết quả đầu ra của AI không chứa bất kỳ p\"···\r\nNot found: \"định dạng\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"[null]\")",
+      "message": "System.InvalidOperationException : The requested operation requires an element of type 'Object', but the target element has type 'Null'."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"content\", expectedFragment: \"nội dung\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"paged\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.InvalidProviderPreviewShape_PersistsSafeFailureWithoutDebitOrUnhandledException(content: \"{\\\"responses\\\":[{\\\"answers\\\":[]},null]}\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Kết quả đầu ra của AI không chứa bất kỳ p\"···\r\nNot found: \"định dạng\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_SuccessAndPartialKeepPreviewCreditContractWithNoFailureReason(count: 1, status: \"Succeeded\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"guard\", expectedFragment: \"an toàn\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http503\", expectedFragment: \"tạm thời\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    }
+  ]
+}

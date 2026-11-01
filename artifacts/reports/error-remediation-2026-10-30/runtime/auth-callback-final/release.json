@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-30T20:48:33.0893555+07:00",
+  "processes": [
+    {
+      "ProcessId": 19436,
+      "ParentProcessId": 28432,
+      "CommandLine": "\"C:\\nvm4w\\nodejs\\node.exe\" ../../artifacts/reports/error-remediation-2026-10-30/runtime/owned-web-fresh.cjs"
+    },
+    {
+      "ProcessId": 11384,
+      "ParentProcessId": 19436,
+      "CommandLine": "C:\\nvm4w\\nodejs\\node.exe D:\\TinHoc\\FormAuto_Hub\\apps\\web\\node_modules\\next\\dist\\bin\\next dev -H 127.0.0.1 -p 3137"
+    },
+    {
+      "ProcessId": 5520,
+      "ParentProcessId": 11384,
+      "CommandLine": "C:\\nvm4w\\nodejs\\node.exe D:\\TinHoc\\FormAuto_Hub\\apps\\web\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+    }
+  ],
+  "listeners": [],
+  "released": true
+}

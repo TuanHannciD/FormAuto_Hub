@@ -1,0 +1,32 @@
+[
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/deploy-handoff/report.md",
+    "bytes": 3328,
+    "sha256": "379215ffd3cf08ed3c2fa9e47888f26620209952b8995fd661f09a546ee7a6ce"
+  },
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/deploy-handoff/static-validation.json",
+    "bytes": 7796,
+    "sha256": "630e166016100e3e3a8ae05cbc2307e9cba5ed7dc6712e306ada5ef964c4f3b1"
+  },
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/review/report.md",
+    "bytes": 9842,
+    "sha256": "cce39c6ad97bd88fcc8d5a906bc6f8fd75d8a4603aba8b8a523cb0ab4f217656"
+  },
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/review/snapshot-verification.json",
+    "bytes": 29145,
+    "sha256": "4f9792a9d68920ed8c8b0e489f236611b4ff1b390cf1fb6d68d75d462eda9a3d"
+  },
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/review/verify_snapshot.py",
+    "bytes": 3992,
+    "sha256": "8e6412073136204179be56a8304e786a4c0223ebe2b9b36049aee85f2c903004"
+  },
+  {
+    "path": "artifacts/reports/error-remediation-2026-10-30/closeout/review/verify_staged.py",
+    "bytes": 3011,
+    "sha256": "d998ce8c6a2decf3b2c9c37f18c9063b9009843e8c7983ae9e66297abc564a6a"
+  }
+]

@@ -1,0 +1,1722 @@
+{
+  "head": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+  "count": 343,
+  "drift": [],
+  "files": [
+    {
+      "path": "apps/web/app/admin/ai-provider-settings/page.tsx",
+      "sha256": "D28876097FD12911BD9D378EDD4220C789F8AED0F1EEC3C66A99E81921CE091E",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/ai-usage/page.tsx",
+      "sha256": "60C7C256FE85441585D329671BC23E0F7FFA27E5A23B05B3E50AB95FC490C8D9",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/layout.tsx",
+      "sha256": "FE8C4537D56C89CB8C4DE531E77DEFFB630CF26780E4F06CC2623AE5CC659F84",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/_components/manual-grant-history.tsx",
+      "sha256": "6D6CAB693DFEBCE404BACBD02D78E9D6FDBC8FBB44FD519A9764D3BFD19C9094",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/page.tsx",
+      "sha256": "EAB756DE740A89CBB7A9409D7F6C9CE8525FFAC9E68C8301CA7BC9F0013D3C69",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/packages/page.tsx",
+      "sha256": "4CFF101B51F5E42CD6BAAE7E6E2D119D895FBBDDC7349E1E73E27318AB6CFEA9",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/page.tsx",
+      "sha256": "43815DB80B05461016D7D78C13A7C526068E51DC7E338C56C341EB6469234D3C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/payments/page.tsx",
+      "sha256": "F81EC5E84EA125E1F05382E8A70CD6714F870B3CDF1509FFF10D32578EE2AF7F",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/payos-settings/page.tsx",
+      "sha256": "28BDF0202285BC544B8A2B23E1899968B113E5FFCBBE5AAED44D74C808962D94",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/admin/revenue/page.tsx",
+      "sha256": "98CF38F6D8AE49E6773AAC4B26D577EDC313E9E11119E0A32D004F7C28699017",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/anti-abuse/page.tsx",
+      "sha256": "F707EB8AE8FE8BD0C3D94EC87E84902E6EE101A2C81967D08808468D22858B3A",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/api/payments/payos/webhook/route.ts",
+      "sha256": "D6AC7E8817C84A5452B05C06948C8162A68A1F79049F8AEFAEA7A7A9B21AAEC8",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/auth/callback/page.tsx",
+      "sha256": "4F4058CC9876D6313E1960A8E6122F9E7FC5C1156DB2F61A91F8E4F4D5053E07",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/auth/layout.tsx",
+      "sha256": "6F0B186B341F82404A5797A47A2F5D1ECBBA9A08C65C34E13E7A067A6D00F69C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/ai-usage/page.tsx",
+      "sha256": "15FD6FF1AC0C67F8BED6AE05E448D0C42A71D33ECAB5FCF3D9976BEB2E365323",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/credit-transactions/page.tsx",
+      "sha256": "AFE8CE6E9F458B07B23D3CD2DFACFF6F765B1269813B5FC779C0B52826029E9D",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiDirectionInput.tsx",
+      "sha256": "A3440720E8DCF595EAC0161877114D89F1B109040496D3A24C4A9A311D821BA6",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "sha256": "589807369D0608B9B91E0141D0E47E4DCDF1427A997A6537441BDBC2ABA8C786",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "sha256": "0D53D76683CC94F006C3EB58B356908776FF566B106D71016A3F9E6ADA857A9B",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/CheckboxSelectionFields.tsx",
+      "sha256": "A0AA8394BB2ACAE306CDB94736753EE032380FC0D57AB23A63EE8936D7C855C7",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+      "sha256": "7F351925BBC805ADE2E01EDB44311A85A31B223CDD16869EF0C0B03879AC8E5C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+      "sha256": "6AFEB4A097B44B68A87CF6749825D51FE85BDE9001B6E673F607F817FB391270",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "sha256": "B16763A4BD4C227C5E8370FA5634248456941BEDDAFF271216D3B037565E0678",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "sha256": "338C74EEAD9CD653370DB1A416FE17FD8FD99C54DAE331B4E9E482CAD27F2CCC",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_constants.ts",
+      "sha256": "8D7F48EF8F7A26E0834EFDCBE28568933F287127CB06B57EA365404D61DEB38E",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_helpers.ts",
+      "sha256": "E5BACFD95189EE7AD0A4366B76C5056CAA36BBCE3630E10AD5C12A70EE5997E0",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_types.ts",
+      "sha256": "652B65DAEAD609D513571E12BAF90676F460E9B5497BA72B3AAF79DE08EDEC01",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/page.tsx",
+      "sha256": "0005228031E2702C4F1D3ED638668F458FF03E7098C71B2DE9278F3BDB9835DC",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/layout.tsx",
+      "sha256": "B5B70E09B3992AFC0AE0D998B506C8AECD6FEB09F8EDCA8BE644D2E77221489E",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/callback/page.tsx",
+      "sha256": "157E8A6CE52C4B2B20F292EEEAB1FE92F38583458B8176113B3882D6FF4221FF",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "sha256": "C71D3819F8F64888F5C1D69B3A0F15DB501EEA70A4EA7FEF06E7860726E17D79",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/delete-model-dialog.tsx",
+      "sha256": "B95C8182CE790F62BA7B58B9B394F8D02F6FC5C67F45988F1171917AF147AB2B",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/loading-state.tsx",
+      "sha256": "0540C311696BB766EF83E580FE58DFC391913991A4E26FB11DDD364EC4EB64BF",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/overview-panel.tsx",
+      "sha256": "53C5D3BEE3F99B3EB5AB0E51CD82D584F2EAE7BDC44A2A3F61B7C4B5F92A0B9C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/relation-edge.tsx",
+      "sha256": "39F90729C110EC32E37412944ADD77974237B533030E44C6E44926CCEFF54C4F",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_constants.ts",
+      "sha256": "4BA6D6FDD61361A08E81DA0C9BE3026073C82117F6C4F8CBB8561B5F60EAC92F",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+      "sha256": "552E118B37CF9664113D954263D6836BEC5217957DF6F8E93E32E3EB6D23F4E6",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_types.ts",
+      "sha256": "49A149592692EFB3B725077A9A70834DD4D743911BE07A2A5880B38D68BF2A1D",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+      "sha256": "BA43EF370C6CF9A92BDCBA809F167219CB0A17122A5AB020E257B2B459874AB4",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/page.tsx",
+      "sha256": "56F2B85C4892D147EDF58E19A4F49B9E668B98FB26DA15A781B6BF96932E355C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/page.tsx",
+      "sha256": "E2B4CB7777550CAD86D40AFCA6AA6BD5F36E36FD27D278064B2110FA5B251AD0",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+      "sha256": "67EB090A82CFDF122F24311CC9CFEFE20B052B0D36FAF553BE73E02171531B42",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+      "sha256": "96BFE8D9C192E4AFE619F729570E255ED4D196162CFCB8988BB6B2E2A27C84EE",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/page.tsx",
+      "sha256": "E93A14335CACA4E542DE7342360F17E7D7C0C224DAAE191870A63F4B617E6879",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/dashboard/usage-logs/page.tsx",
+      "sha256": "514831FCCCC60D5A93F28012E1835CAA42C814070F39D37FCA5543577AE02241",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/globals.css",
+      "sha256": "E1C598E5C0A9A7B8BCFA9DB1D357E3F85B0C7D9A40606966DC96FD1A0782B8A5",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/google-forms/sample-data/page.tsx",
+      "sha256": "DF1AAF155FD1483F9B7F01891217463CCFAC549CEE597C494F38C6A521D13CA1",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/google-forms/sheets-report/page.tsx",
+      "sha256": "FABCEC0A3A07E8639BE90DFB229A1F54FE7A2020F847872965D46670C9885066",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/google-forms/student-report/page.tsx",
+      "sha256": "F1F247029B221F957DA989A5FA1B7DB152EF5E434C3D285827EBBB9E23CAE24F",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/google-forms/survey-demo/page.tsx",
+      "sha256": "DAAF698981DF10FDB541F8E700798F1B394B93F0A23593628EE8C9A8AFF9C0C0",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
+      "sha256": "B46926A0BC4CBB27A0B964B72539F18337249AC9BED09EBBC794743B69C71BE5",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/llms.txt/route.ts",
+      "sha256": "2B52F76AB3C86EBE1A9BE43954A4D1B30CC8BDD1ABDDAE5C4A24BF3E6293DC8E",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/login/layout.tsx",
+      "sha256": "12B35AA9B9871B486EF88DEED6184D31F718FC687E8647FA372D84068C50D4A7",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/login/page.tsx",
+      "sha256": "42A00230147134DC54154ECC84667F06F27B822F49387AE7BF921DE6369F9583",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/page.tsx",
+      "sha256": "27CAB696EBF8F862E1A7448D12D00369423BE84019713DF76397A5FAB06402D3",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/payment/layout.tsx",
+      "sha256": "AA605CC12774602517620C4DA4CA71ADC70857213B2636A213ECA8A1EFCB7CE2",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/payment/payos/cancel/page.tsx",
+      "sha256": "9B48CEE16DE429E26CFE00AECDA8DB0258020DF8D523EEE2F11C485A01D9F063",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/payment/payos/return/page.tsx",
+      "sha256": "3688FCD13908A6DD8E51AB20FE8DD33AA44A3206CCA566465E2F827A6A7B4D5C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/register/layout.tsx",
+      "sha256": "89FAD3ECA625B0317E4F12CAF9A6A001F465BCBE724015025339A2D6CE145012",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/register/page.tsx",
+      "sha256": "A20C503D307C3DE3F29C9A6A2B29A355AE23B8876151482BF1A06AF13A4FBF3D",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/robots.ts",
+      "sha256": "E2B310874F957FD27631B5782A7EBF75C254B13390906F41F389D1FD3D19830C",
+      "match": true
+    },
+    {
+      "path": "apps/web/app/sitemap.ts",
+      "sha256": "D7AD43B88B2F8535BE36A0450CA432073FD43A85E1378172CD75AA2CB86ADDBD",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/account-dialog.tsx",
+      "sha256": "C0D5917FF894ED7C5813FB4F483682760CF66D27FCAB027A8837DBFDBADCDB7B",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/account-menu.tsx",
+      "sha256": "4CC8DDB791ECB7E080AFA05EF095122FA2BB46500CC24006E2E50D619B5991B4",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/account-profile-panel.tsx",
+      "sha256": "BAC6F7C566CBFAA932A82D764F052B32B7E8F918B5F0BDE14B67A587E2A44681",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/account-security-panel.tsx",
+      "sha256": "34EE5EC1DA1862D5D8811A205A5FD583AE3E4D940BC1A06FF3397F2741306069",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/admin-shell.tsx",
+      "sha256": "15CDDC9B020492140FBE42585570B4019AB0C48560660B96C9B3FFE1C13C258A",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/app-toaster.tsx",
+      "sha256": "AACF7E8B5D432CC5C03E8A4565173C6F39F57FEFE72C4FFFAC7372097DD05091",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/auth-password-input.tsx",
+      "sha256": "7F221403F5F21D9B3A0B0BEDFAF5D823573F5B7F8573EAF6EDDFDC6B5F508152",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/auth-shell.tsx",
+      "sha256": "78CB83287CD725EE3DC6A0FBDFBF0A3097FEC137DDBB1D681C051F0D00153316",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/base-table.tsx",
+      "sha256": "47724776FA4C840C08B7F2A3008A2FC5950F6DC90A2297CC72DE6138D7E6985B",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/confirm-dialog.tsx",
+      "sha256": "3BD41D67A6257BBCF7FB8994336E5DDC0BD9656376CCC33D8F0095173F0BF9D4",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/dashboard-shell.tsx",
+      "sha256": "33C2AB866C7E468E5FADEFDEA119097A7E61CB9F7A350F9C45BE52877CABC9AB",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/dialog.tsx",
+      "sha256": "DDF732AA8772A5FCD79EDB497E1F7CC916D7F99A45F815D6D8E98649C7A6AE4A",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/dropdown-select.tsx",
+      "sha256": "EA0344F466C8EB1C51B4CE7C1641F82AD651BD8715CB2CDB23642E486CAFCA5E",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/google-identity-button.tsx",
+      "sha256": "A04A5C2C3B0D5CDA6AB8FE0E396C2EA99766CDD9679B1BB943C1CBC23E3219B8",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/landing-dashboard-tabs.tsx",
+      "sha256": "92732185DDD67A3683C2AB2060072F0C1CBC4A066CB00277A2BFB98338BC262A",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/metric-card.tsx",
+      "sha256": "D84DAED127154F595B3FACF9B0B8CB68DAEC5EB737A58B10AD2C0446C8BA2907",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/motion/motion-presets.ts",
+      "sha256": "67327776A9477F69E2C2FB8B4DE48E25A2E477D7FB1B312DE0CDBCB4BD6E54C6",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/motion/transition-region.tsx",
+      "sha256": "3D82CFBE95EBC2333DBA4CB12C81E37BFCAD31C3F9F186C3BB4D0F49169831DA",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/motion/use-element-size.ts",
+      "sha256": "747BC4BEB090A76C006FEC59FF5BB627252D2B93B3EB7D95C9E6DF976A84FEC2",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/motion/use-popup-motion.ts",
+      "sha256": "847492057A28C39DE1AEA9C8EB7ED01FE53278F611F633A1C6168300D0A94DB1",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/pagination-controls.tsx",
+      "sha256": "E83AE42FF2C1DA73C0EFC9F286EBE6DDF8D580E6B09033FCF420CEB9A73C2506",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/scroll-reveal.tsx",
+      "sha256": "41C9BEF4F26D1B4337E0FD97B764790DBE5E3964746A756FDA1530F05DF0559D",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/searchable-dropdown-select.tsx",
+      "sha256": "66A3802C0B91B5ED4903C266FF165B9A7B2B048EBCCDE8D944C96C0995371840",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/seo-keyword-page.tsx",
+      "sha256": "444FA011088AD33DA568041B373A0F64E0DAEEF610B29595022E41827C2CE987",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/shell-layout.tsx",
+      "sha256": "F59D35CB04D94C5865ED1E0AB438942FF74B75A6DF1798027A6C10D0AF05795F",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/status-badge.tsx",
+      "sha256": "A79241A88EA56E874AB53B29989B34DDECB4238351D3262987B7C0DE02677F1B",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/ui-styles.ts",
+      "sha256": "CAE91B83D24E4BEEEC6B5057B9F6AA29B12BF3E3F9D2F4BBEF49FB71E13D453A",
+      "match": true
+    },
+    {
+      "path": "apps/web/components/ui.tsx",
+      "sha256": "7F5C187AF42C399C908B08F00AE64208AB348910922BB2ED6F5AAC2A19CF1C5C",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/api.ts",
+      "sha256": "F3EB4CAF81633AD489D0C947EE16AC29A714367C67166F477F5A6DE8BFD79AB7",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/auth.ts",
+      "sha256": "1CD61D9E4A9E311C758A7120A595244DFC9A5D347166E130E5D50CE18670846E",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/labels.ts",
+      "sha256": "2FFA649C4B8C2CC57FD136FF8DC4E4425C0C92459583F1146822E3D73F72E7C9",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/nckh-google-auth.ts",
+      "sha256": "09EA37DF3B46164958DF3FCC7BBB59EAE66CF0FA48968F6E9F64E1A47E0C8690",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/public-page-inventory.ts",
+      "sha256": "44518434D0F76CBD0632DE020F70F377F876028EBB5927B0150D0221B5333BCD",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/seo-pages.ts",
+      "sha256": "7953917853D920C10E18A878B1FB453875D36A9A7E393CD4E1D72AE04AC8C33B",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/seo.ts",
+      "sha256": "F8BD7764867A76F7E02AA1F146EDDD0F12A17E4A38F6DFA070FF364FF9656812",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/site.ts",
+      "sha256": "E2196E1244CD26F090FC433A31AE3EF59D4656AD2AD459FB77636C7B05509402",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/toast.ts",
+      "sha256": "A5A23677FADEDB9EE3CDF01B6904D1A78B51EB054EBECF830888BF35A396F20A",
+      "match": true
+    },
+    {
+      "path": "apps/web/lib/utils.ts",
+      "sha256": "004BDBD0DC9B35A2713B51F421CD02E9D1073A1507C620C9163A1BA788727B17",
+      "match": true
+    },
+    {
+      "path": "apps/web/scripts/legacy-smoke.mjs",
+      "sha256": "ED787277C99EB8F0B5C99A30E1B7EE0406C70CB8777CC8066255D1F22AA0C105",
+      "match": true
+    },
+    {
+      "path": "apps/web/smoke-debug.mjs",
+      "sha256": "ECA6E8A5EFF4AA72F9EE5E6717FC5F3D592CCF392C02E11AF67003D9A834AEB1",
+      "match": true
+    },
+    {
+      "path": "apps/web/smoke-test.mjs",
+      "sha256": "ECA6E8A5EFF4AA72F9EE5E6717FC5F3D592CCF392C02E11AF67003D9A834AEB1",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/account-navigation.spec.ts",
+      "sha256": "DCAFE6013250C245DB07F9DABAFA9DB1E72587680BAE0F98C80EA8725548E38B",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/admin-ui.spec.ts",
+      "sha256": "59C6250FFF24232A0D6B5FCC919DA43AE2198E2AF8EC51EF22397C3B334027C7",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/auth-session.spec.ts",
+      "sha256": "B7D571E012C93327182DED202C950A32602C06E044E65A9219286B87C0F31109",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-account-payments-errors.spec.ts",
+      "sha256": "678C9A2916F308DB2343ADE544C903D7007F32CBCD033D37588EC1664E83BDBE",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-account-payments-errors.test.cjs",
+      "sha256": "0E6BDC0F400CF3FE13E4CFDD0D9F92A738E815F43CDCB0809A715754D44D27DE",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-callback.spec.ts",
+      "sha256": "DC210339282B489F82FCDD30D759DB054EAA7B537610D3D4491B38B92065528C",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-callback.test.cjs",
+      "sha256": "60A3935E5E0ABBC19DE70EA2FF580554B8BA03471FBE5F7CE04960A08B20D862",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-auth-errors.spec.ts",
+      "sha256": "977651AC52EABC57F4B47216E98CB9A38CF205EC2CB7925AF9AE72AC9187EE7C",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-forms-errors.spec.ts",
+      "sha256": "0864560AB7302AF47232DECF48133EF2BEAB59AA1F12769EA2475D63A86B69BD",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-legacy-smoke.test.cjs",
+      "sha256": "999940FAE9D2E8554787F64178DE27EAC33784E66CA59885EDC8A8E6C8DEDEE0",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/fah-err-nckh-errors.spec.ts",
+      "sha256": "3AFE685DBE4C5527FA1090A1AC127F3E944BDBD456017202438A08B08E3E1E25",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/form-automation.spec.ts",
+      "sha256": "1EBCAAD0DC2B495C3F76C470195FD1D9CE19BD8A9787B33509A0E3F9273C2286",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/manual-credit-ui.spec.ts",
+      "sha256": "BAD5EDB37F45F66BBFFD23DB9BCAD0A84D5E291A7D3A99DAF597E4921AF075BE",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/nckh-delete-model.spec.ts",
+      "sha256": "80C1AF8559DA9ABC27C4757A6D5DD73AA1BB8D7FB753257B6407E06E3E01111F",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/nckh.spec.ts",
+      "sha256": "1B0B8AC4B7DC23B55762A9A2115B0EB302E60221896D0BA76EB33313C92D3126",
+      "match": true
+    },
+    {
+      "path": "apps/web/tests/topup-ui.spec.ts",
+      "sha256": "51DBAA31F474ED195FE5BC91AA378B8EA954F37B04B21A377D7C477E38CC19B3",
+      "match": true
+    },
+    {
+      "path": "smoke-test.mjs",
+      "sha256": "B377B2DDFDF59ED2C7E446B1148B8FC1A719462A1D03B121ED967E18093F12F2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/appsettings.json",
+      "sha256": "D380FE344708676ADC80C7B36EC43F187B7D7879D17E2F69F37E9DBE0FB801CB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/AuthOptions.cs",
+      "sha256": "94DC18DCE18BE8D35A328454F4F948D5A7C1B2D37D99DACD221059CA86986B42",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/CurrentUserContext.cs",
+      "sha256": "C3F3B2218F57DF52BAFBD2B464CDCB0B1666E8004922C347DAD43DC5FFC89CB3",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/GoogleIdentityVerifier.cs",
+      "sha256": "FD4EDF41B1E63124BADDCD8BDB77631E78083B2BE8BF50544F2D1E9C0F6F7F33",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/PasswordHasher.cs",
+      "sha256": "B72CC02F50DA5ADBBC8E5693AFF9EEAC336336CE5236FF094DC4E69A92870BE8",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/TokenService.cs",
+      "sha256": "0BEBA4045BBCF0CA2D01A7838D6D12F776B0742DDFCDC3F1FDC1A1CCC3B753A1",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Configuration/DataProtectionServiceCollectionExtensions.cs",
+      "sha256": "9D06EA723C9354CAEE4988AB8200477CAED642B8D26F72913589F337F8DFE261",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/AiAnalyticsDtos.cs",
+      "sha256": "CEA9EA2ECCE8FA7DBD479DDD4476A3EA84A6E1EC493FD90E991E0DC863419C26",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/AuthDtos.cs",
+      "sha256": "24CCD537F90EB9F6AE2F887D14F1FFD7D392B6F48ED3E39A3125D227771A93B2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/ManualCreditDtos.cs",
+      "sha256": "B14FCF85F6E4DDFA3D820C7183CBBB94FB7A231566287C265E8466D2837D22F0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs",
+      "sha256": "50FE0C3695BF0C1AEBD4DD8C2A378EF2187A3353D54B00C0BC051AB0204116FB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhCanvasDtos.cs",
+      "sha256": "70A79473D3380CB635FC4D6C1A41F6CC46FAA98E023D8BE386DAAC254727B295",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhDataExportDtos.cs",
+      "sha256": "82A59A829540E7445E69F5FAEFD98DB1C55DCF814360ADBEEA2141568FB54EB4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhMappingDtos.cs",
+      "sha256": "748E5A945E95B69258953F7BDC5EC7267C2F536381EC9F18181F22CC76A857C4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhResearchModelDtos.cs",
+      "sha256": "68E009DAF72844A92A8CDBF46963F38EF0F57B7C4B40637896DBCB4E0C9687D8",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhVariableDtos.cs",
+      "sha256": "16324CB5C731FE6E9027A8D759ECAA44024E4A5C54F453CBBD2D3F8BF8F8B7C5",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase2Dtos.cs",
+      "sha256": "4D17382D58F6F6E0DD782A6386B451A1E5F23FAF9828F97F95154BAE1AEE517B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase3Dtos.cs",
+      "sha256": "489BCE359599DA903D14CFD16D04E07E923331436CDC4167B682079D7866CCA4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6AiGenerateDtos.cs",
+      "sha256": "70EDB389122E719982F873F505C400A1608EC63F2D4FCB6F84F3E486CCCC2B78",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6AiPromptDtos.cs",
+      "sha256": "0074F426EEA9EF26018068279968D856F9671C7A50CA540E578FEE4A36DDCDBF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6Dtos.cs",
+      "sha256": "9B8703A364B10425B7277BD70B1C9376DBFD261BB3655D330776C9F18BC92A2F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase8Dtos.cs",
+      "sha256": "EE4D7333CC5B26BEBE4887EB564CF3DF96413383FC54154658B85F6A1B789E81",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminAiProviderSettingsController.cs",
+      "sha256": "7712BC6E32551EB5BEC34189B5CCE52A4C90C737B8C0849FF167904BB7876F07",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminCreditOperationsController.cs",
+      "sha256": "E756814CFC6C494634B9E2D23B33F531A54C1F22354CA8BE1D9656C8AAE8549B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminPackagesController.cs",
+      "sha256": "2A07788955AEBF57C118D1B3F6C9C54251332BA6A7FE8B4342CEFA1873ABA684",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminPaymentsController.cs",
+      "sha256": "2A656DF7C25E8B3DD8DA9BF32C45D7DE82202F526D6B823A0EAAB5C7ECEB0855",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminTopupOrdersController.cs",
+      "sha256": "320B0C4149A8FE2C6FA85A4D3EE4FFD9047466571740C6AD72EA41D925BAF27B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiAnalyticsController.cs",
+      "sha256": "742E3856E0951BD8C6DF849F4BC402AFC14001EF9BD3457953316DF1AD86C08C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiPromptProfilesController.cs",
+      "sha256": "78F46AA29B6BDEEA935496F6F2B4743942EA7ABD661B7E5220D38DAF6CB3A7CD",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiResponsesController.cs",
+      "sha256": "5E49916AE6A7869438142A05D3FACB718E96C716C2B85D3C78DB649A084021E0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AnswerRulesController.cs",
+      "sha256": "3C18D0920395BD59ACBE52FE0FCB8990A9ED9C00BF932BD90F4B0EE9C49CBD17",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AuthController.cs",
+      "sha256": "EA706CEC2B1652E1B3B3D22C9FD52DA052EE0F81A21EB0DA4C46356B6F46CFDA",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/CreditTransactionsController.cs",
+      "sha256": "866207D398CAE58742C41AB5F705563E035941CFACE7F21C8B2282391C96FD1A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/DashboardController.cs",
+      "sha256": "41162D82F132AB91418F0B4E137FB8E5B770610850036C4CB38C66A5081C7BAC",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/FormsController.cs",
+      "sha256": "B33676D23C6DF1BA307F879CB0DD0BB74475E24D9D8EFEC3BAE37816AE6936C9",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/GeneratedResponsesController.cs",
+      "sha256": "AE734B35AF5A0622FCAF617289E0E6EAD4BA7ECCBC1E824F617EF3D94866080C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchCanvasController.cs",
+      "sha256": "D7B97B88B9330F75CDD00972568D97904C13F411DDE169637B4E7344FD28F1BE",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs",
+      "sha256": "8451A63180F6698965AA8F0784EE7BDD982FA60258BAC2711F73C18AB7563195",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchFormsController.cs",
+      "sha256": "55A307C19C5981DD554B59DDE32A947B31870BBC3655FF9D5D52023600B07C64",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchModelsController.cs",
+      "sha256": "FE4D9B2357956F9DFDE3AD1EA0858ADA9836256491E156A1D4A85527413757E8",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchVariablesController.cs",
+      "sha256": "AB9185677B542CE2051CA11913502C05B44731EC8116165BC57E3CC459229900",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/PackagesController.cs",
+      "sha256": "8E6E85189F5FCF2918B14347D216AF42D574016644602035D941C8D1E4D00180",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/PaymentsController.cs",
+      "sha256": "081292DB47C61981E23F1717A92D678B872B319C4A372D5F539CC167297057D7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/ProfileController.cs",
+      "sha256": "1F7675360F08149B3D51E2F0B1AEEB3ED8F742083722C8DB70817660E16C9146",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/SubmissionsController.cs",
+      "sha256": "558185386A6FC76FC88E3CB064A64CEE6E76F9AFAB329C783B08799A40E6450F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/TopupOrdersController.cs",
+      "sha256": "DED7D0527A68F51A72FCB8C0469EE76C822CD9FF366B0D8F5BE7377BAF25B2C0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/UsageLogsController.cs",
+      "sha256": "A2AE0C83D9F9020935E45C4ABC02C11378D0AB9A34DE44BADA726535DD294A38",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/FormAutoHubDbContext.cs",
+      "sha256": "C524DB90AE5C8E302F497FC239258BD4588C25DAC918E169725DB1E16CEBEAFB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260516204501_InitialFoundation.cs",
+      "sha256": "F6BEA7D51ACEA852E2C703EAF813059114256C103A0939DD7BFDCE9E1FB4CA38",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260516204501_InitialFoundation.Designer.cs",
+      "sha256": "557000A34F474C8BE181A88D84341743A56BA2D21DB57D4F9DB94390EEE0D19F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260518234017_Phase7Authentication.cs",
+      "sha256": "789D0517B4256159F23E19794B75FC7E768F36FAA6F2417E817E2FF72E11A4DF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260518234017_Phase7Authentication.Designer.cs",
+      "sha256": "1031E7EA7B9EDBA3E290C1D24676E62C0B4AC114813AD0B982757A0A6CE52D8D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260520071203_Phase8PayosPayments.cs",
+      "sha256": "2FEDB46D55D118C76EDAC2D9D03EB98F7232C4F4AC6C5CDFC5D647BACF639205",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260520071203_Phase8PayosPayments.Designer.cs",
+      "sha256": "884E4170449CBF52FCA99748C892DC12E14CA20D7258576A0330961F84A3AEB0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260528090000_Phase6AiPromptProfiles.cs",
+      "sha256": "96E93699322E3FE9D5FEF4FF3BE47FD4EB99CFF0C842AAF1D79188565990CAD1",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260528090100_Phase6AiProviderSettings.cs",
+      "sha256": "109578E20304F255924FA92B2B201E3C459F5EADE6FE8440F95622082C4F737C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260528090200_Phase6AiGenerationRuns.cs",
+      "sha256": "62BE89EFA7B65CA83CD7929F247A4836E90DB4D3E29A6109714500A28E4F1C14",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260528090200_Phase6AiGenerationRuns.Designer.cs",
+      "sha256": "5F8B41BC7DD0058E4FA4C669E39D3446903E574ACE4839613716AAE6159BF00D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260530051057_NckhPhase1_FormsAndOAuth.cs",
+      "sha256": "1A7AA1CE81F3A68C2C337B3C623589CFE90C5C7C02071645B4FDB9290A079183",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260530051057_NckhPhase1_FormsAndOAuth.Designer.cs",
+      "sha256": "D7974EA4388CBAF5BF09D867A2CF173D8F0C8862341F6FB21343F9492DCF2763",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260602193837_NckhPhase2_PersistenceFoundation.cs",
+      "sha256": "CAAD2EEAE17B180600BA0C7F3E49D3AACCBA33BD011958C9E68A3E876EFAFA05",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260602193837_NckhPhase2_PersistenceFoundation.Designer.cs",
+      "sha256": "7F9D4981A768C21DD9A3A85B29BE9A0D4F5B3CA213E6560D67E45729956876D6",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604131107_NckhPhase3_CanvasRelations.cs",
+      "sha256": "882A7BB896CE3394578D43103E90CD1A65BFBD915C33779989BF824C39790BB0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604131107_NckhPhase3_CanvasRelations.Designer.cs",
+      "sha256": "DDA1CC0F007B23857CA392056FBFEBFF525A790536999A16FC1073F64D8A6BBE",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604165518_NckhPhase4_FormGenerationTracking.cs",
+      "sha256": "ED9A1EFFA1FAACC84AEF5FEAD91FD624F4B4A4902E9E10D7D9DAC04632ABD004",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604165518_NckhPhase4_FormGenerationTracking.Designer.cs",
+      "sha256": "6E7786C6828F8DE8062A837952242CD3CB3C05819F8586F73CD7ED66CDFE8FBC",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604211823_NckhPhase5_DataCollectionNormalization.cs",
+      "sha256": "D606EF615303D4A3400C000761208BD207CCCC9901FF915C936800B61268A58A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20260604211823_NckhPhase5_DataCollectionNormalization.Designer.cs",
+      "sha256": "7EF76BF746E6BED617F6C5BD2380F69898AB3A4059E90AE6FF701E2A1E442304",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261007181332_ManualCreditFlow.cs",
+      "sha256": "79501AB87476B01B7F0650DABAF66CF8A3D51A7735631921D25407B79D1D70D8",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261007181332_ManualCreditFlow.Designer.cs",
+      "sha256": "219852224E4AAA695E42967591D466625F5D4CBBFBCCC4ECDF8EB9A693ED305D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+      "sha256": "A11579F3336307C286A14E5D9D279DFBCFA7CF2553DE9ABAAC726633CAAC6D48",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+      "sha256": "9A1A1555053AAE1869DD6EDDB833780201392FA466249CFF49A49C2A632C02C4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/FormAutoHubDbContextModelSnapshot.cs",
+      "sha256": "297AD734C74259971113FADDEAF3A7AF14D4A145C107212FBED6A26B99887297",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiGenerationRunStatuses.cs",
+      "sha256": "44453185542C3E75F4DD974A6229B8744D42FAF0AB0AE01C9877C4D3D71CDC54",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiPromptProfileModes.cs",
+      "sha256": "71C6FE0A83816B3862CD947EA8856BFDA84403D73EA150D6FC128E25CDD8DE22",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiProviderCheckStatuses.cs",
+      "sha256": "29EAF4C6268CA9336B63E93BDA1965EA2FB5D6AA30768ED959DDD44EC64C256B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiProviders.cs",
+      "sha256": "6168AEC9A92599E82EA73B52632CD9F8DD374B54378A6AE7E21E6CC1345373B1",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/CreditTransactionTypes.cs",
+      "sha256": "F49DB16A1ACADC52CDD9B0E6A5AC25C8851284525B2816B4EAA1A3B9C0CA606C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/GeneratedResponseSources.cs",
+      "sha256": "622495AB00CB1C01B1B2FB04A84AED820AB34E094788767AC2D70C8C290B85BE",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentProviderCheckStatuses.cs",
+      "sha256": "D0235D9B55B639D14573DD7629CF233DE6B4A43050A76507FCFEC4485FF1A4CD",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentProviders.cs",
+      "sha256": "E6C23DF49E461D5694A2DA17948D833EB47DA8414C61AACCD3B4D5CB40764FB7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentRecordStatuses.cs",
+      "sha256": "A7266F6865F084366B55814DB04F68D3F63188135311DF3880417DAF70BCB6D1",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/Phase3Statuses.cs",
+      "sha256": "9DE0E6E292C0A6C0D455DE419D875135F21280493164B2EAA340087AE769D95F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/TopupOrderStatuses.cs",
+      "sha256": "27EFE8A164D733DACCA374FB73C861D474B37C06D9E8D04E365B86C9B9D010B5",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/UsageLogStatuses.cs",
+      "sha256": "846EFC49754EE0A95C51A960B3CB8CDCC3B5AD14DC286C796395A7EC013C1976",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/UserRoles.cs",
+      "sha256": "009B27319DD4A4CBF60A7B26B111CD1450B1E2AD952A2FCD93CFAE3D833623F9",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiGenerationRun.cs",
+      "sha256": "22925049B29C2D6E29DEE7E353A7E4263E819FFDAC5EA9BE226C7A496EC47C91",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiGenerationRunItem.cs",
+      "sha256": "9536F71B7011BAB76FEDB8ADF42608C7254EA0CF052AF85861B4414F92790ED2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiPromptProfile.cs",
+      "sha256": "9FC5A262D0F886A5CFCDCF377310E4452D437FEF24D2D53563DC41D28244F8C5",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiProviderSetting.cs",
+      "sha256": "43CB940E0095728ADCA1AEE3F7F1E6A9BF2E3E3CB66DDE680EA4E95D34207249",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiQuestionPrompt.cs",
+      "sha256": "ADFF78CC4E483276CE29C1AD4522F4E28BBA138971701A59838CBE8FE6255D7E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AnswerRule.cs",
+      "sha256": "0ADEF011D910851C1546E624078D4AB55A3296D546EFE638182FE473E2A68882",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AuditLog.cs",
+      "sha256": "256A1E2D42C3E76B42F52BC984970CE5F7930E1BD40F4EC78B17019217347FEA",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/CreditPackage.cs",
+      "sha256": "D33D5B1F85E057B5125AE2F447B38A52F682C5107D07531C401E231374215A8C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/CreditTransaction.cs",
+      "sha256": "9ED62E1A8AF4F17C1F98513B71EA9EBC92BCC4BE7E5726E81EC79F8E815E7CEE",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/FormProject.cs",
+      "sha256": "8AB7B5FC0DB5063077B37B6429E9CF7F67B6E4811716952D93686811D6EF3D3D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/FormQuestion.cs",
+      "sha256": "60930C4748B68206491A5B1B7AE1B4C724E54D33CCDAA0BE06AA60B4AF7D4551",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/GeneratedResponse.cs",
+      "sha256": "0B893CEE14F947F121FF82FA95CD31BCCF861D9FF4423DCE6701E5DCC2122BA4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/DataCollectionLog.cs",
+      "sha256": "E273EB2066C68E86E5DC70E62C32D58344C55AB779EE30393CC38FFFE21EE704",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ModelRelation.cs",
+      "sha256": "D62D67E03FE8D1D3A7BF3387DCCEAB806A527CB6CF86300B63CC820FFC16A82D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/NodePosition.cs",
+      "sha256": "BB5B5EAAF0FB489741ED6CE0F5ED047464A8BEE05972317D28E74B8762EC815D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/NormalizedDataset.cs",
+      "sha256": "2B7D9BEDFFD8CB359A7D622ECF95DD7A1448BBDE11FE18C4AE58D6A89675B4EE",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ObservedQuestionMapping.cs",
+      "sha256": "35B044652F4373A75FDD84AC400D1287995319CC4385C6CEDCE45554AC86D3EC",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchForm.cs",
+      "sha256": "014FEB3D86F1AFC5E9DE80F491E7B6C241B1D0EDD9DD3165AEE12563B6496EAD",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchFormQuestion.cs",
+      "sha256": "AD44E05EA143F7E0672A9FFBC3661EC46451B44E7099CF79DCC06A76352CF48A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchModel.cs",
+      "sha256": "F32C31507565E63817065AF9DAAFE0E49206AB990DC8E9572AA0AEA176505A23",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchVariable.cs",
+      "sha256": "46253A5D821A1271D7E8CF7D3E259DE3F7CF9C86242D433339E31D141C662A62",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/SurveyResponse.cs",
+      "sha256": "8B663D127DC41794A71905EF0671139DA38D23ABFB441D6A471800942F5290D7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/PaymentProviderSetting.cs",
+      "sha256": "F9AE4554FB8A340659CF11511F9D2B5DF35F1D9312A31E46B7C22B1B41D4A062",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/PaymentRecord.cs",
+      "sha256": "1F8A1ECA25ED84A0F6EECE26D080A4667AC77A07FA79AB78A5E0BEF21F6B081F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/RefreshToken.cs",
+      "sha256": "D2B18BB12467ABE96EB32F93EDCFEA524A34CFABFDAEA9A1C63057C88B208766",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/SubmissionJob.cs",
+      "sha256": "376D7802AD24E7701FD84A58C063FA45EBE961ADF9730F51949696829736BB25",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/SubmissionLog.cs",
+      "sha256": "61834DE8A347AA011D5F6DF20FB9AA8C98459F2941DA5CC228E4B234884859AF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/TopupEvidence.cs",
+      "sha256": "F0CD248060E867CDE43512BA9EEB8BAF34933721B636DB7FA7C186CBEBBFFEB8",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/TopupOrder.cs",
+      "sha256": "3B3C6841BA61EE22D872BD34D8E12324C537C31EF4CBE000ECD8DE1BFCD01378",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UsageLog.cs",
+      "sha256": "39ABE014E0F446DFBCA9045AB0D97C310FD52237936AF0CF659A9191C446FEC7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/User.cs",
+      "sha256": "C6A6BDE599037D6B2A26826618E434C2BED3D9C8E9B05D7F02C8B2D51528701E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UserCreditAccount.cs",
+      "sha256": "E60D2A038594D7B30F47A9F7A4396992D0447ED2396BAD843FEB7F8B9B879A75",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UserExternalLogin.cs",
+      "sha256": "5F97A3AA46AEDBC6404A35B15F852E978BAD3398EBB0C79DD36BB2A39AC69A99",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/FormAutoHub.Api.csproj",
+      "sha256": "51AD3308066152CA3B19A816B3B0E91B2481E955C47D402E378A71D0B21C94EB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/FormAutoHub.Api.http",
+      "sha256": "DBF21CD2582A3446DAAB38FC2AEAB8020108F7267086CB255DD8F4BCC9A77393",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/AiProviderModels.cs",
+      "sha256": "9E4EB8D5567E13669FF8DF246D2B86399C9A4624A1155C4BDDA4C87BE72DA27A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/DeterministicAiProviderAdapter.cs",
+      "sha256": "F68A322D6D6540733D2DF1024A8BAD2E02CB80FE3441D0B452F623ABA0D8392E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/DisabledAiProviderAdapter.cs",
+      "sha256": "7C8C5CC5BD5EE07FEA438116DEB1A1ED3B12A5E6CEDCC5D6FC4AB949CE7CEB41",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/IAiProviderAdapter.cs",
+      "sha256": "9E1536D4BB50DAC0CDADBA52E944E889702C253A3E51858A96CCC7521667D4F9",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs",
+      "sha256": "8C7767E3A5093DE20F025B4445C7155FA45AD24BA24534746A11EEF0811FDF0D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleFormsApiService.cs",
+      "sha256": "F915B603C88281E067EF082DC31EAC0EF477E0B7540AF5E4549209FDF9F43856",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationException.cs",
+      "sha256": "57028E3884B86E3C449F2DEAE2554DDCC5485FD8F6882CE9419AE73188358B86",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleIntegrationFailureKind.cs",
+      "sha256": "BC881603054CBE5FE7AE6C76D173AAF481B4B4E563E6916B42ED0E296BDE4A0D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleOAuthService.cs",
+      "sha256": "44CE71F7F99AC00938F9254BC25965D3661477854EB38EC6700578CFF4A1A9FF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormModels.cs",
+      "sha256": "886C291B692F1FB68622E0EFBBA83212EB9CD6DF41F879C7A109E08E9933DBF0",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+      "sha256": "A151340F8C21FE1C0D6237449955BDE09299BBEB4CBA48ED882A2AF69CF647F2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Program.cs",
+      "sha256": "B3B45EDBDFE289941CE8C6785B05D2126ED8B8C9ADA3E43ED453ADDBFD574B5A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Properties/launchSettings.json",
+      "sha256": "6FAB57A13D2E51908A8863FA5880B155B71B68D9125C88F3BF3075F5079835E7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminCreditOperationsService.cs",
+      "sha256": "3436B239D2CB829177E7F067227171EAC304EBB6F6593CD7417CD5232C8660BF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminPaymentReportService.cs",
+      "sha256": "F3AF98DC5A1B0DBB81C5EAA6FC9DD998B0D900A8AA531EB24B0351C6ADCF7833",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminTopupOrderService.cs",
+      "sha256": "B885F9562ACE69384ADBB28C8165D687627A6BFDFDB6798F722E5C7D4E4921F2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiAnalyticsService.cs",
+      "sha256": "E85339C304256FF4B32EF872F3DF3B50FCBAF7D7922DD3DA0B9F7B22B550276C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationErrorMessages.cs",
+      "sha256": "22A7BF8C24356F257046F49798044A5D208656F46EA9E1CE2EB68E053FB36503",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+      "sha256": "AB1A70CF83D4C9D667D7A05F9F6D4407DC25F9DB5EEC4E3EE03B0B173DCB40AD",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidationError.cs",
+      "sha256": "7290C8CBD9A9535148261CA6F73B2D3C97419ED8F4CE5F39D2FEBFAFC90E9C6E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidationResult.cs",
+      "sha256": "00BAC45222C0837CB98F47C8BB60421F5D6EF80AE8CB2F862C41E62C517E65B6",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidator.cs",
+      "sha256": "D99470383A14803B048F54D0523CFCEE836ED93F1B3BF724AAD85EBCFE984898",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptGuardResult.cs",
+      "sha256": "5E99F6A33F3B0703355DC6B8BE9916899C77232D1E9A87773452689E1DDD286E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptGuardService.cs",
+      "sha256": "AE3C42685D04063C0AB5AA8FDBCE20E4962D3B70C3C814DC1877F8EEA7F8F15E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptProfileLimits.cs",
+      "sha256": "BEC65C2FE92F01726F483C7F9CFE87900AE3FF00ACC39AFFFBB3010D86444238",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptProfileService.cs",
+      "sha256": "E95C983AB3FF1B5447FF3227A13A73A46C52A4D8DE5D305C958563A17719B94A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiProviderSecretProtector.cs",
+      "sha256": "1D35622ACE0E2933C67FE935649F052C7E47D5A11D43B0998D0746EF0114C6F7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiProviderSettingsService.cs",
+      "sha256": "4E97D3A447E393D6C6EE2F2F85B0F59734C81FC403E85E321EB296D9F1E7B5BC",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiSafetyTextRules.cs",
+      "sha256": "6E89C68BF8A8EB0BA30B70455332D22070C7AB08AB725D4A41A4CD9AEA79E004",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AnswerRuleService.cs",
+      "sha256": "4217B44D6FBE410542179D8B548FAF9BC5D6DC34A92B17B729D3AA936F93FF6A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AuditLogWriter.cs",
+      "sha256": "EDF06B8A9599C98D41F01C28B2B2A8E408B95B97F1D96DA4ADAA213C2D9B824B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AuthService.cs",
+      "sha256": "72639F914FD4A16E97D4D0D57676E90405170C40E3EBFE60F3DFE0796A9C7BD7",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditService.cs",
+      "sha256": "285ED6D043C92FAF5B9EC982EA1C2C858BC674290BDA1A68B1B4DEC9E1824A66",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditTransactionService.cs",
+      "sha256": "C4F9110992FB1C479717DD8E07826E037EE8A95BB21E647D2BC056E59B4404CF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditWriteTransaction.cs",
+      "sha256": "DA08D61EB977C350849FD186E5639354F82A55380D32446D3FEFBCF593B8BED5",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/DashboardService.cs",
+      "sha256": "9E0CD01AA1486B9C4F1F7F29578E1D152C5713925B5ECB46E8AA48A5D85742EA",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/FormProjectService.cs",
+      "sha256": "D165A9D574930FE4DB0CD316581DA9270C7825F3027E9CBB630024196834A865",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/GoogleTokenProtector.cs",
+      "sha256": "8D003674FFE8405510D2AB15B9C07BCED0384CB60A2C30A0ABE3DA1295CAC2AA",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/IAiOutputValidator.cs",
+      "sha256": "D578A2B490FB05EA31DAB389422905E778638E7FE8CD8B961DD5B3A5C8636D57",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/IAiPromptGuardService.cs",
+      "sha256": "32A3380EA06B2378EBB91255C53E4189C7455C254500205B970330208A017157",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchCanvasService.cs",
+      "sha256": "568C294968BAAFC0BFCBE00ADD41CBC1E375B3921ADBFFF545BE406F252AEFD4",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchDataService.cs",
+      "sha256": "66D78E8144CD25267A77A2F0210A5E8B1ADDAC6B62F2985FD0CEF1F33001BFF2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchExportService.cs",
+      "sha256": "BDDC1E1400F19CE9276EE4305A48E86097A3AA7ED060376E861A313AD869F48D",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchFormService.cs",
+      "sha256": "9C14B6E726394729D08EB1B64BECC7A6C0FF2761E4D3AA3BB57964D16C51154C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchModelService.cs",
+      "sha256": "5F97AA2FD5F3EAB7B984D42D598EC76FC777BC71BF455FE8F8130A04CD0D6A10",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchCanvasService.cs",
+      "sha256": "867AB595DB998792BF50EFD793A952A1A6CF4B049FFDC8573F2542CD57887051",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchDataService.cs",
+      "sha256": "E4E7B774058F85CB1E0FF7DD7F6676A5A7840C9C292ABF5ED041333636EA16E2",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs",
+      "sha256": "E029E3A6A2DDB2BE37BABB0ED59AAF510127C3EE55C03E352BA32E42831C0DAB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+      "sha256": "8F57C8E3D6B95F23458EB6597A3574F9901332D3651813799737119F4F8A56EC",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormServiceResult.cs",
+      "sha256": "403FD9C8997D2F8CD88395713036257B06B7593787334C3B30453BBF31FACFF1",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchModelService.cs",
+      "sha256": "53B6999607FFB4018837BF1719204A255EE870B20FFE18D788AD778F4FDF9100",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PackageService.cs",
+      "sha256": "2FE68E6CB4CAF3238D5B6F4495435A104C1D79C02B9FE5A15AC66E6B87345561",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentProviderSettingsService.cs",
+      "sha256": "ABAA695A2E8D9DDB8E4E09038F7AC86E898C29C66DF745318D2C3183F41D41D6",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentSecretProtector.cs",
+      "sha256": "95D0BB359FA7DE4D60E551B2B0557AA3D6BECE422E999927313BF3991A09E61E",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentService.cs",
+      "sha256": "1BE656F648B38E788EAFE13F363FE43AC718AB17705E1085B6EF2B7B70B3BB3C",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PayosClient.cs",
+      "sha256": "759D15F9634F7FCBFD520A113280789FE63F32E4A45AC979FF2E9D76FAC806EB",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PayosSignatureService.cs",
+      "sha256": "5865298C9254AB8EC7D97DFD3074501B5C67EC9F32F5F1BB1C958BF1A87215D5",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase2Mappings.cs",
+      "sha256": "77FB6F63B127F650CE07A391E19A42DA615B195931DEE9753ADD1524B596E3EA",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase3Mappings.cs",
+      "sha256": "CF63F8299014A6B127C374146A35C4BC7B80379EC444B6D4E02551678AA84E7B",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs",
+      "sha256": "5E5AB4244479617825B114610231E6AE5FD647E3498DCD1187DDCA40BCE5EE10",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase4SafetyLimits.cs",
+      "sha256": "804D0A56DA090A9114FE4C9FE7008A274B1EA1AE62F977B0B35473122C1B7B60",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/ProfileService.cs",
+      "sha256": "D3300EE644DA0E4D76ECD7C42ABD53878268447C78C9144AD20625B4317A132F",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/ResponseGenerationService.cs",
+      "sha256": "8DB587427C0C311A14E88C1E7D0B7C3BBB966DB9A1A806480A27BFA66D4417CF",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+      "sha256": "F35378A3D00985F9B8E941FD96B970695658CD32B51347FD92F38258F6B64488",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/TopupEvidenceService.cs",
+      "sha256": "EC3B90E747657C4B523DBFDB8D8A081734395FAF6D3A302D6F7AEAAC6D5F3C9A",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/TopupOrderService.cs",
+      "sha256": "EBFAACB4B1C5B2342D8160C420F2F2B49CFDBED195BBADC643EFE1C56F507259",
+      "match": true
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/UsageLogService.cs",
+      "sha256": "0E6008D4F1507ABE22C320F4013FE401104B370E6E3FC9C47F32232224B75CAC",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AdminAiProviderSettingsTests.cs",
+      "sha256": "530D2DFA303412E09AF2B225ED744C012FF79F41BAD29377A1F2FA7F29451628",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AdminPackageManagementTests.cs",
+      "sha256": "3F16944F24B5D91D34744BCB70306D7BE10021248345C409B006A4DCCA6B871B",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiGenerationServiceTests.cs",
+      "sha256": "E314BD2E463292988BC33CB09F0C4F89711771B00046E126228F4554AE83475E",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiPromptProfileServiceTests.cs",
+      "sha256": "806B53D8DB41711ADBCDB7DBE39AAF45FEC1A2AD8FCF765063701123F24ECFFD",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiSafetyCoreTests.cs",
+      "sha256": "3FAC2CE44F9A9A644642442F80EA711BDA1C6704D43796E24B915F27FC2E0946",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+      "sha256": "353981F38A99F5785BECFBD08A5016C268B862F78842FA192366A999CC5F0638",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/CreditTransactionServiceTests.cs",
+      "sha256": "FC8DCD4EA48F7CC50BF881390922C1807F595B1D4FD0AFB3E7BE0D305E8445CD",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DataProtectionPersistenceTests.cs",
+      "sha256": "F245F6BFEC4C23159E066316C4FD2A609352A2CEF641893A45226E4686DC1CE5",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+      "sha256": "DBA32633F8ACC59488CACAD83F0A3999E6B515C4C874B6A2EC01B8B31868A2F1",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrAiDiagnosticsTests.cs",
+      "sha256": "275976EC600649B190F890D892DA9144E3A2C18602A7282D3D45BBC0804540AE",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrAiErrorContractTests.cs",
+      "sha256": "68E64CD9755DC8CB352B7E2818B1C604B6304EDD930B6D16733E4A09BA53A835",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrBoundaryGoogleTests.cs",
+      "sha256": "2DE65905681642C1FB7ED872B6DA7FDA66687367971510E657C5C4B327D059AB",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrBoundaryTests.cs",
+      "sha256": "FB7C02F922A8C4A2D0740D008C644250A48653EA370D6FC697816A5914869752",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrSubmissionPersistenceTests.cs",
+      "sha256": "CB167F069BEB508C204E9F60DDE5132076B3B6E8D40FBC0C8858A4518C6A3293",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+      "sha256": "742688A87A35BF5CFB9600A68DAF3797A238EEBBA302DA48A67F4D02593C7C97",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FoundationTests.cs",
+      "sha256": "294DB19551C7FFB05ADB8953E868B663CF356F8E99AD8D1965138779AA068B22",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/ManualCreditFlowTests.cs",
+      "sha256": "F644010760A7C47AE0C1B859DA368853B1FE66DB1E2708D543295EAFDC9C33BA",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase1OAuthAndFormsTests.cs",
+      "sha256": "EEE4C2F81B09CB12A6D62C27829BCBE9C4C2F49B9B176AF14D86F38DD65B8F3F",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2ModelApiTests.cs",
+      "sha256": "C26B9BC90AF7351082B6914DAFE9CA3AA11EB1DB6A85C097E8CA3BE291D1D730",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2PersistenceTests.cs",
+      "sha256": "8A0CB6542D5A3EBB786DCEB63CC23A0B7D4491C1A5ED8F2D59B0F157F67D80A5",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2VariableMappingApiTests.cs",
+      "sha256": "90670417E948ED6D1B5EE63307D34550DE62C10DAB628770BB376444394B5063",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase3CanvasServiceTests.cs",
+      "sha256": "DA6AC58C285F93511EADBEBAE319D1B323A447843ACA029B86E8D897CF819B71",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase3PersistenceTests.cs",
+      "sha256": "222EF79BB3B249A70ADD8098760803CD04F278C5AFCA55F5675F19384B645FC5",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase4FormGenerationServiceTests.cs",
+      "sha256": "57EAE77000B52138FBD87E925AFD46F0562F6F6C4CC73BC68DA4508F7F843C82",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase5DataServiceTests.cs",
+      "sha256": "F39108624D03E1B2DF3FBE0B31E3F0B35D1D3E40B3374790E8939346EEFC7AA8",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs",
+      "sha256": "F9710660A213D506F4C5A58357E00B1820A779472F81581BF637F305B72C294A",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/OpenAiCompatibleProviderAdapterTests.cs",
+      "sha256": "B48EDA986D469FB41D6EC49EFC43DE97AC533D6F583B312DEF18146F37189C10",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase2TopupApprovalTests.cs",
+      "sha256": "B8B78888193CE90EFD153E9DDC8054DC0BB97090C4AD41969B9B33EC47F8454D",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase3FormAutomationTests.cs",
+      "sha256": "643A6A69E63A1E9CEEEC5773066BEB3EF6FABEC7FCB472E9717F8FD1721691FC",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase7AuthTests.cs",
+      "sha256": "362D3528E86C7374592B7691384716A98C3D74036425CF8EE1A99F82FA2FA11D",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase8PayosPaymentTests.cs",
+      "sha256": "9E106390E931D3DF5B85B6450820A0E1924EA9195A930D5C61DFBF7774AD631B",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+      "sha256": "FE296033FE781FE9D86E6DEAAD23F0669783CCAEB50EBDFB8DBEDF14151EA27E",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+      "sha256": "EF8B71C809C5A153E0DFA44D3707F78EE6FDA97C26C72A93EE6FCB6F9A39A57F",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs",
+      "sha256": "DF2A40C1FFD4028FBB33D3639C62EF089F07ACBE1E893970E8131DFDF3A913C3",
+      "match": true
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/UsageLogServiceTests.cs",
+      "sha256": "0C2C8D0497AD89F21B40B41CAD9FA5F2CA0D9FA281B0C4EFA09F642CA9B6555F",
+      "match": true
+    }
+  ]
+}

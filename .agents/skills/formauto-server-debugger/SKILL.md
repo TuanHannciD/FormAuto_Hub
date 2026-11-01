@@ -168,7 +168,7 @@ Follow the smallest matching path:
 | Recent deploy regression | Recorded release -> Compose state -> local API/Web smoke -> bounded API/Web logs |
 | Unknown symptom | Run the full health report, then drill into only WARN/FAIL items |
 
-Use `formauto-bug-triage` after collecting runtime evidence when source-level root-cause analysis is needed. Use `formauto-http-behavior-tester` for deeper endpoint-contract analysis. Do not implement fixes under this skill.
+Use `systematic-debugging` after collecting runtime evidence when source-level root-cause analysis is needed. Use `formauto-http-behavior-tester` for deeper endpoint-contract analysis. Do not implement fixes under this skill.
 
 # Monitor and compare
 

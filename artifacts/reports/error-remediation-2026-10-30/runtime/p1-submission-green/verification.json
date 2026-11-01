@@ -1,0 +1,45 @@
+{
+  "utc": "2026-10-30T00:49:11.343723+00:00",
+  "counters": {
+    "total": "14",
+    "executed": "14",
+    "passed": "14",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "sourceAfter": [
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrSubmissionPersistenceTests.cs",
+      "sha256": "cb167f069beb508c204e9f60dde5132076b3b6e8d40fbc0c8858a4518c6a3293",
+      "matchesBefore": true
+    },
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\SubmissionService.cs",
+      "sha256": "f35378a3d00985f9b8e941fd96b970695658cd32b51347fd92f38258f6b64488",
+      "matchesBefore": true
+    },
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\Nckh\\ResearchDataService.cs",
+      "sha256": "dfb972f9976dacd3c5981dd80300368194a622d7078c83ee4328d2d1209159b3",
+      "matchesBefore": true
+    },
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\Nckh\\ResearchFormService.cs",
+      "sha256": "8fd2e1bf043871573cbef3a8e644f6c1062a23b4ba20295f2b41caeb7835b35d",
+      "matchesBefore": true
+    }
+  ],
+  "verified": true,
+  "level": "InMemory/fake integrations; no SQL/API/browser/provider proof"
+}

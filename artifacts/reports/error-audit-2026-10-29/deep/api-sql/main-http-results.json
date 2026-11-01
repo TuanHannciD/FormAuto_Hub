@@ -1,0 +1,46 @@
+{
+  "utc": "2026-10-29T19:42:36.031422+00:00",
+  "apiBinarySha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+  "database": "FormAutoHub",
+  "level": "real ASP.NET MVC/JWT/EF SQL Server, no external provider",
+  "observations": [
+    {
+      "id": "API-HEALTH",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/health",
+      "atUtc": "2026-10-29T19:42:34.385430+00:00",
+      "status": 200,
+      "contentType": "text/plain",
+      "requestTraceId": "e0755fdafa4dbd981f26e6a29dd31c38",
+      "responseBytes": 7,
+      "healthy": true
+    },
+    {
+      "id": "MAIN-ANON-PROFILE",
+      "expectedStatus": 401,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/profile",
+      "atUtc": "2026-10-29T19:42:36.000395+00:00",
+      "status": 401,
+      "contentType": "",
+      "requestTraceId": "db7e15982a1159a26620204b8d74bd58",
+      "responseBytes": 0
+    },
+    {
+      "id": "MAIN-MISSING-ROUTE",
+      "expectedStatus": 404,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/faherr001-owned-missing-route",
+      "atUtc": "2026-10-29T19:42:36.019598+00:00",
+      "status": 404,
+      "contentType": "",
+      "requestTraceId": "fdcbe49a3381a2b60e8411a14e6a8266",
+      "responseBytes": 0
+    }
+  ],
+  "allExpectedStatuses": true
+}

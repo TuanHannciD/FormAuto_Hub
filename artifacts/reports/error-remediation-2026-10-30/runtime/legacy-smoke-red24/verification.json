@@ -1,0 +1,14 @@
+{
+  "run": "legacy-smoke-red24",
+  "exit": 1,
+  "counts": {
+    "passed": 3,
+    "failed": 21,
+    "executed": 24,
+    "skipped": 0
+  },
+  "assertionFailures": 21,
+  "unguardedFailures": 0,
+  "hashDrift": [],
+  "limit": "VM source/entrypoint fixtures only; no live network/API/SQL/browser evidence"
+}

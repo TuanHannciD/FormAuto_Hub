@@ -1,0 +1,200 @@
+{
+  "counts": {
+    "passedButRunAborted": 0,
+    "pending": 0,
+    "passed": 3,
+    "executed": 47,
+    "disconnected": 0,
+    "inconclusive": 0,
+    "aborted": 0,
+    "timeout": 0,
+    "failed": 44,
+    "inProgress": 0,
+    "notExecuted": 0,
+    "completed": 0,
+    "warning": 0,
+    "notRunnable": 0,
+    "error": 0,
+    "total": 47
+  },
+  "compilerErrorCount": 0,
+  "hashDrift": [],
+  "failures": [
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.PromptAudienceValidationNamesUserContextAndKeepsSyntaxCause",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"AudienceJson must be valid JSON.\"\r\nNot found: \"bối cảnh\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Package_CreateAndUpdateMapKnownValidationTo400WithoutWrites(name: \"test\", credits: 1, price: -1, guidance: \"Giá\")",
+      "message": "System.ArgumentException : Giá gói phải lớn hơn 0. (Parameter 'price')"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_InvalidEnvelopeIsProviderFailureRatherThanMissingForm(body: \"not-json\")",
+      "message": "Assert.ThrowsAny() Failure: Exception type was not compatible\r\nExpected: typeof(System.Net.Http.HttpRequestException)\r\nActual:   typeof(System.Text.Json.JsonException)\r\n---- System.Text.Json.JsonException : 'not-json' is an invalid JSON literal. Expected the literal 'null'. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\r\n-------- System.Text.Json.JsonReaderException : 'not-json' is an invalid JSON literal. Expected the literal 'null'. LineNumber: 0 | BytePositionInLine: 1."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"SampleTextLines\", type: \"ShortText\", config: \"[]\", guidance: \"đối tượng\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"đối tượng\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Payos_InvalidProviderResponseReturnsSafeFailure(status: 200, body: \"secret-provider-body token=private\")",
+      "message": "System.Text.Json.JsonException : 's' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.\r\n---- System.Text.Json.JsonReaderException : 's' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_FailuresRetainStatusAndDoNotReturnUnlinked(status: 400, body: \"{\\\"error\\\":\\\"invalid_grant\\\",\\\"error_description\\\"\"···)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"RandomByPercentage\", type: \"MultipleChoice\", config: \"{\\\"weights\\\":{\\\"A\\\":101}}\", guidance: \"100\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"100\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Payos_InvalidProviderResponseReturnsSafeFailure(status: 200, body: \"{\\\"data\\\":null,\\\"desc\\\":\\\"secret-provider-body tok\"···)",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                                ↓ (pos 61)\r\nString: ···\"\"data\":null,\"desc\":\"secret-provider-body \"···\r\nFound:  \"secret-provider-body\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Analyze_ExplainsKnownFailuresAndPersistsSafeFailedUsage(url: \"https://docs.google.com/forms/d/test/viewform\", html: \"no entries\", guidance: \"câu hỏi\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"No supported Google Form entries were det\"···\r\nNot found: \"câu hỏi\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_NonSuccessRetainsStatusWithoutProviderPayload(status: 403)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_NonSuccessRetainsStatusWithoutProviderPayload(status: 401)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Payos_InvalidProviderResponseReturnsSafeFailure(status: 503, body: \"secret-provider-body token=private\")",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                             ↓ (pos 20)\r\nString: \"PayOS trả HTTP 503: secret-provider-body \"···\r\nFound:  \"secret-provider-body\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Analyze_TransportCauseDoesNotBecomePublicHistoryText",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                                    ↓ (pos 27)\r\nString: \"secret-provider-body token=private\"\r\nFound:  \"private\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Analyze_ExplainsKnownFailuresAndPersistsSafeFailedUsage(url: \"not-a-url\", html: \"\", guidance: \"đường dẫn\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Invalid form URL.\"\r\nNot found: \"đường dẫn\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.ProviderCheck_ExplainsLocalCheckAndDoesNotPromiseConnectivity",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Missing configuration: provider, API key,\"···\r\nNot found: \"cấu hình\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"TimeRangeSequential\", type: \"Time\", config: \"{\\\"fromTime\\\":\\\"09:00\\\",\\\"toTime\\\":\\\"10:00\\\",\\\"ste\"···, guidance: \"5 đến 120\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"5 đến 120\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_InvalidEnvelopeIsProviderFailureRatherThanMissingForm(body: \"{}\")",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_MissingOrMalformedTokenIsNotAnUnlinkedAccount(body: \"not-json\")",
+      "message": "Assert.ThrowsAny() Failure: Exception type was not compatible\r\nExpected: typeof(System.Net.Http.HttpRequestException)\r\nActual:   typeof(System.Text.Json.JsonException)\r\n---- System.Text.Json.JsonException : 'not-json' is an invalid JSON literal. Expected the literal 'null'. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\r\n-------- System.Text.Json.JsonReaderException : 'not-json' is an invalid JSON literal. Expected the literal 'null'. LineNumber: 0 | BytePositionInLine: 1."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_NonSuccessRetainsStatusWithoutProviderPayload(status: 429)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_MissingOrMalformedTokenIsNotAnUnlinkedAccount(body: \"{}\")",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Payos_InvalidProviderResponseReturnsSafeFailure(status: 200, body: \"{\\\"data\\\":{\\\"checkoutUrl\\\":\\\"\\\"},\\\"desc\\\":\\\"secret\"···)",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n                                ↓ (pos 75)\r\nString: ···\"outUrl\":\"\"},\"desc\":\"secret-provider-body \"···\r\nFound:  \"secret-provider-body\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Import_MapsProviderStatusToExistingOperationResult(status: 429, expected: ExternalError)",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: ExternalError\r\nActual:   NotFound"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_FailuresRetainStatusAndDoNotReturnUnlinked(status: 429, body: \"private\")",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Package_CreateAndUpdateMapKnownValidationTo400WithoutWrites(name: \"\", credits: 1, price: 1000, guidance: \"Tên\")",
+      "message": "System.ArgumentException : Tên gói credit là bắt buộc. (Parameter 'name')"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_MissingConfigurationIsNotAnUnlinkedAccount",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"RandomByPercentage\", type: \"MultipleChoice\", config: \"{\\\"weights\\\":{\\\"A\\\":\\\"bad\\\"}}\", guidance: \"số nguyên\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"số nguyên\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Analyze_ExplainsKnownFailuresAndPersistsSafeFailedUsage(url: \"https://docs.google.com/forms/d/test/viewform\", html: \"<input name='entry.1'>\", guidance: \"địa chỉ gửi\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Google Form action URL was not detected.\"\r\nNot found: \"địa chỉ gửi\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"DateRangeSequential\", type: \"Date\", config: \"{\\\"fromDate\\\":\\\"2026-02-02\\\",\\\"toDate\\\":\\\"2026-01-\"···, guidance: \"bắt đầu\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"bắt đầu\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"TimeRangeSequential\", type: \"Time\", config: \"{\\\"fromTime\\\":\\\"\\\",\\\"toTime\\\":\\\"10:00\\\",\\\"stepMinu\"···, guidance: \"HH:mm\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"HH:mm\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Link_MissingServerConfigurationMapsExternalErrorRatherThanBadAuthorizationCode",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: ExternalError\r\nActual:   InvalidRequest"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Import_MapsProviderStatusToExistingOperationResult(status: 503, expected: ExternalError)",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: ExternalError\r\nActual:   NotFound"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"RandomByPercentage\", type: \"MultipleChoice\", config: \"{\\\"weights\\\":{\\\"A\\\":-1}}\", guidance: \"âm\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"âm\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Package_CreateAndUpdateMapKnownValidationTo400WithoutWrites(name: \"test\", credits: 1, price: 1.5, guidance: \"nguyên\")",
+      "message": "System.ArgumentException : Giá PayOS phải là số VND nguyên. (Parameter 'price')"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_NonSuccessRetainsStatusWithoutProviderPayload(status: 404)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Forms_NonSuccessRetainsStatusWithoutProviderPayload(status: 503)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_FailuresRetainStatusAndDoNotReturnUnlinked(status: 503, body: \"private\")",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"SampleTextLines\", type: \"ShortText\", config: \"{}\", guidance: \"mẫu\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"mẫu\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Package_CreateAndUpdateMapKnownValidationTo400WithoutWrites(name: \"test\", credits: 0, price: 1000, guidance: \"credit\")",
+      "message": "System.ArgumentException : Số credit phải lớn hơn 0. (Parameter 'credits')"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.OAuth_FailuresRetainStatusAndDoNotReturnUnlinked(status: 401, body: \"{\\\"error\\\":\\\"invalid_client\\\",\\\"error_description\\\"···)",
+      "message": "Assert.ThrowsAny() Failure: No exception was thrown\r\nExpected: typeof(System.Net.Http.HttpRequestException)"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_ReturnExistingConstraintGuidanceWithoutSaving(mode: \"RandomByQuantity\", type: \"MultipleChoice\", config: \"{\\\"quantities\\\":{\\\"A\\\":-1}}\", guidance: \"âm\")",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"Answer rule config does not match the sel\"···\r\nNot found: \"âm\""
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Package_CreateAndUpdateMapKnownValidationTo400WithoutWrites(name: \"test\", credits: 1, price: 0, guidance: \"Giá\")",
+      "message": "System.ArgumentException : Giá gói phải lớn hơn 0. (Parameter 'price')"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Import_MapsProviderStatusToExistingOperationResult(status: 401, expected: Unauthorized)",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: Unauthorized\r\nActual:   NotFound"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.Import_MapsProviderStatusToExistingOperationResult(status: 403, expected: Forbidden)",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: Forbidden\r\nActual:   NotFound"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryTests.Rules_MalformedJsonRetainsOriginalCause",
+      "message": "Assert.DoesNotContain() Failure: Sub-string found\r\n         ↓ (pos 0)\r\nString: \"ConfigJson must be valid JSON.\"\r\nFound:  \"ConfigJson\""
+    }
+  ]
+}

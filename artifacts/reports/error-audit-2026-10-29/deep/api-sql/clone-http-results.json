@@ -1,0 +1,383 @@
+{
+  "utc": "2026-10-29T19:36:44.681924+00:00",
+  "apiBinarySha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+  "database": "FormAutoHub_FAHERR001_restore_20261029_a19f7a2",
+  "level": "real ASP.NET MVC/JWT/EF SQL Server, no external provider",
+  "observations": [
+    {
+      "id": "API-HEALTH",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/health",
+      "atUtc": "2026-10-29T19:36:41.990175+00:00",
+      "status": 200,
+      "contentType": "text/plain",
+      "requestTraceId": "5b63877ee39271e868c7d32e61e1b07b",
+      "responseBytes": 7,
+      "healthy": true
+    },
+    {
+      "id": "HTTP-01-INVALID-JSON",
+      "expectedStatus": 400,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/login",
+      "atUtc": "2026-10-29T19:36:43.246492+00:00",
+      "status": 400,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "f40f754f8af9d4327954f83c90165dc2",
+      "responseBytes": 424,
+      "responseKeys": [
+        "errors",
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "One or more validation errors occurred.",
+      "problemStatus": 400,
+      "traceId": "00-f40f754f8af9d4327954f83c90165dc2-f7db796b9d406912-01",
+      "validationFields": [
+        "$",
+        "request"
+      ],
+      "validationMessages": {
+        "$": [
+          "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+        ],
+        "request": [
+          "The request field is required."
+        ]
+      }
+    },
+    {
+      "id": "HTTP-02-MISSING-FIELDS",
+      "expectedStatus": 400,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/login",
+      "atUtc": "2026-10-29T19:36:43.295186+00:00",
+      "status": 400,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "274484048c37dbd266c2ef38294fe301",
+      "responseBytes": 291,
+      "responseKeys": [
+        "errors",
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "One or more validation errors occurred.",
+      "problemStatus": 400,
+      "traceId": "00-274484048c37dbd266c2ef38294fe301-7107a556f4fbf338-01",
+      "validationFields": [
+        "Email",
+        "Password"
+      ],
+      "validationMessages": {
+        "Email": [
+          "The Email field is required."
+        ],
+        "Password": [
+          "The Password field is required."
+        ]
+      }
+    },
+    {
+      "id": "HTTP-03-SHORT-PASSWORD",
+      "expectedStatus": 400,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/register",
+      "atUtc": "2026-10-29T19:36:43.306916+00:00",
+      "status": 400,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "e4b68ed4fc23c0cfdb2b0bfb37b559f4",
+      "responseBytes": 164,
+      "responseKeys": [
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "Bad Request",
+      "problemStatus": 400,
+      "traceId": "00-e4b68ed4fc23c0cfdb2b0bfb37b559f4-495ed7dd29cf0c19-01"
+    },
+    {
+      "id": "SETUP-REGISTER-USER",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/register",
+      "atUtc": "2026-10-29T19:36:43.320693+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "a748eb66a6ea3b6274b332874d805916",
+      "responseBytes": 1154,
+      "responseKeys": [
+        "accessToken",
+        "accessTokenExpiresAt",
+        "email",
+        "fullName",
+        "refreshToken",
+        "refreshTokenExpiresAt",
+        "role",
+        "userId"
+      ]
+    },
+    {
+      "id": "HTTP-04-WRONG-PASSWORD",
+      "expectedStatus": 401,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/login",
+      "atUtc": "2026-10-29T19:36:43.935529+00:00",
+      "status": 401,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "725b5095b7569e774175267e00a6ceff",
+      "responseBytes": 165,
+      "responseKeys": [
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "Unauthorized",
+      "problemStatus": 401,
+      "traceId": "00-725b5095b7569e774175267e00a6ceff-1f548195197803e9-01"
+    },
+    {
+      "id": "HTTP-05-ANON-PROFILE",
+      "expectedStatus": 401,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/profile",
+      "atUtc": "2026-10-29T19:36:44.015451+00:00",
+      "status": 401,
+      "contentType": "",
+      "requestTraceId": "5ddb54623ce2d2cceedbc547893e1f7e",
+      "responseBytes": 0
+    },
+    {
+      "id": "HTTP-06-USER-FORBIDDEN",
+      "expectedStatus": 403,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "atUtc": "2026-10-29T19:36:44.032380+00:00",
+      "status": 403,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "90795292dda111785577c187ab1f1993",
+      "responseBytes": 162,
+      "responseKeys": [
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "Forbidden",
+      "problemStatus": 403,
+      "traceId": "00-90795292dda111785577c187ab1f1993-3c687e89e54f492f-01"
+    },
+    {
+      "id": "HTTP-07-OWNED-PROFILE",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/profile",
+      "atUtc": "2026-10-29T19:36:44.075047+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "3f379db0ab0ddf76f31144fc0cdeda00",
+      "responseBytes": 232,
+      "responseKeys": [
+        "createdAt",
+        "email",
+        "fullName",
+        "googleEmail",
+        "googleLinked",
+        "id",
+        "role"
+      ],
+      "ownedProfileMatchesSession": true
+    },
+    {
+      "id": "HTTP-08-MISSING-TOPUP",
+      "expectedStatus": 404,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/topup-orders/00ad17a5-38f4-4113-90f3-531dec97c1bc",
+      "atUtc": "2026-10-29T19:36:44.140935+00:00",
+      "status": 404,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "5e804c1c22df8bdb50764a6eabf029b4",
+      "responseBytes": 162,
+      "responseKeys": [
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "Not Found",
+      "problemStatus": 404,
+      "traceId": "00-5e804c1c22df8bdb50764a6eabf029b4-1b2a2e8ee3fc4bc4-01"
+    },
+    {
+      "id": "HTTP-09-MISSING-EVIDENCE",
+      "expectedStatus": 404,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/topup-orders/evidence/20050fbd-d785-4130-b018-952ff30103dc",
+      "atUtc": "2026-10-29T19:36:44.163022+00:00",
+      "status": 404,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "db132000ff886823b7a844f5cc31d39e",
+      "responseBytes": 162,
+      "responseKeys": [
+        "status",
+        "title",
+        "traceId",
+        "type"
+      ],
+      "title": "Not Found",
+      "problemStatus": 404,
+      "traceId": "00-db132000ff886823b7a844f5cc31d39e-616aba1add600e4e-01"
+    },
+    {
+      "id": "HTTP-10-INVALID-FORM-URL",
+      "expectedStatus": 400,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/forms/analyze",
+      "atUtc": "2026-10-29T19:36:44.203789+00:00",
+      "status": 400,
+      "contentType": "application/problem+json; charset=utf-8",
+      "requestTraceId": "0d26294d34dcb7f6849bf97bd0af5715",
+      "responseBytes": 74,
+      "responseKeys": [
+        "detail",
+        "status",
+        "title"
+      ],
+      "title": "Form analysis failed",
+      "problemStatus": 400,
+      "safeDetail": "Invalid form URL."
+    },
+    {
+      "id": "HTTP-11-USAGE-LIST",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/usage-logs?action=AnalyzeForm&page=1&pageSize=20",
+      "atUtc": "2026-10-29T19:36:44.234013+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "3896095ae59887c81a3bab6379549d2a",
+      "responseBytes": 294,
+      "responseKeys": [
+        "items",
+        "page",
+        "pageSize",
+        "totalItems",
+        "totalPages"
+      ],
+      "failedAnalyzeLogVisible": true
+    },
+    {
+      "id": "SETUP-LOGIN-ADMIN",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/login",
+      "atUtc": "2026-10-29T19:36:44.375118+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "7a080bf352e248fef28265543061805e",
+      "responseBytes": 1155,
+      "responseKeys": [
+        "accessToken",
+        "accessTokenExpiresAt",
+        "email",
+        "fullName",
+        "refreshToken",
+        "refreshTokenExpiresAt",
+        "role",
+        "userId"
+      ]
+    },
+    {
+      "id": "HTTP-12-ADMIN-ACCESS",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/admin/packages",
+      "atUtc": "2026-10-29T19:36:44.397228+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "7e31f6a5ef9374da44bb1e91425459c4",
+      "responseBytes": 855,
+      "responseKeys": [
+        "items"
+      ]
+    },
+    {
+      "id": "HTTP-13-INVALID-ADMIN-PRICE",
+      "expectedStatus": 500,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/admin/packages",
+      "atUtc": "2026-10-29T19:36:44.480739+00:00",
+      "status": 500,
+      "contentType": "text/plain; charset=utf-8",
+      "requestTraceId": "d10fc6ef88015f008751edce80acf4ce",
+      "responseBytes": 3672
+    },
+    {
+      "id": "HTTP-14-REFRESH-SESSION",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "atUtc": "2026-10-29T19:36:44.572422+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "4946b4348edd50ae7756d10fe104546d",
+      "responseBytes": 1155,
+      "responseKeys": [
+        "accessToken",
+        "accessTokenExpiresAt",
+        "email",
+        "fullName",
+        "refreshToken",
+        "refreshTokenExpiresAt",
+        "role",
+        "userId"
+      ]
+    },
+    {
+      "id": "HTTP-15-REFRESHED-PROFILE",
+      "expectedStatus": 200,
+      "verified": true,
+      "method": "GET",
+      "path": "/api/profile",
+      "atUtc": "2026-10-29T19:36:44.605914+00:00",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "requestTraceId": "76a75da010bf76f79f7577569e3b1f62",
+      "responseBytes": 233,
+      "responseKeys": [
+        "createdAt",
+        "email",
+        "fullName",
+        "googleEmail",
+        "googleLinked",
+        "id",
+        "role"
+      ]
+    }
+  ],
+  "allExpectedStatuses": true
+}

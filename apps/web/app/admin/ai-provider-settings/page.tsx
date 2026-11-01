@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import type { ComponentType, FormEvent } from "react";
 import { AlertCircle, Bot, CheckCircle2, Clock3, KeyRound, RefreshCw, Save, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
-import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AiProviderSettings, type CheckAiProviderSettingsResponse } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { cn, formatDate } from "@/lib/utils";
@@ -12,12 +11,14 @@ import { toast } from "sonner";
 
 export default function AiProviderSettingsPage() {
   const [settings, setSettings] = useState<AiProviderSettings | null>(null);
+  const [checkResult, setCheckResult] = useState<CheckAiProviderSettingsResponse | null>(null);
   const [provider, setProvider] = useState("OpenAI");
   const [baseUrl, setBaseUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [defaultModel, setDefaultModel] = useState("gpt-4o-mini");
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -25,6 +26,7 @@ export default function AiProviderSettingsPage() {
 
   async function loadData() {
     setIsLoading(true);
+    setLoadError(false);
     try {
       const data = await apiFetch<AiProviderSettings>("/api/admin/ai-provider-settings");
       const nextProvider = data.provider || "OpenAI";
@@ -35,6 +37,8 @@ export default function AiProviderSettingsPage() {
       setDefaultModel(data.defaultModel || "");
       setIsEnabled(data.isEnabled);
       setApiKey("");
+    } catch (error) {
+      setLoadError(true); throw error;
     } finally {
       setIsLoading(false);
     }
@@ -69,8 +73,10 @@ export default function AiProviderSettingsPage() {
 
     try {
       const result = await apiFetch<CheckAiProviderSettingsResponse>("/api/admin/ai-provider-settings/check", { method: "POST" });
-      toast.info(result.message);
-      await loadData();
+      setCheckResult(result);
+      setSettings(current => current ? { ...current, lastCheckStatus: result.status, lastCheckedAt: result.checkedAt, lastCheckMessage: configurationCheckMessage(result.status) } : current);
+      toast.info(configurationCheckMessage(result.status));
+      await loadData().catch(() => { /* Preserve the confirmed check result; loadData reports its read error. */ });
     } catch (error) {
       showError(error, "Không kiểm tra được cấu hình AI.");
     } finally {
@@ -83,11 +89,11 @@ export default function AiProviderSettingsPage() {
   const hasValidBaseUrl = !baseUrl.trim() || isHttpUrl(baseUrl);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Cấu hình AI"
-        title="Cấu hình Provider AI"
-        description="Quản lý provider, model mặc định và API key server-side cho các luồng AI preview."
+        title="Cấu hình nhà cung cấp AI"
+        description="Quản lý nhà cung cấp, mô hình mặc định và khóa API cho việc tạo câu trả lời xem trước."
         actions={
           <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => showError(error, "Không tải được cấu hình AI."))}>
             <RefreshCw size={16} />
@@ -96,22 +102,25 @@ export default function AiProviderSettingsPage() {
         }
       />
 
-      <Alert className="border-warning-border/80 bg-warning-surface text-warning">
-        API key thật không được trả về frontend. Nếu để trống API key khi lưu, backend sẽ giữ key hiện có.
+      {checkResult && <Alert role="status">{configurationCheckMessage(checkResult.status)} Thời điểm kiểm tra: {formatDate(checkResult.checkedAt)}.</Alert>}
+      {loadError && <Alert>Không tải được cấu hình AI. Bấm “Làm mới” để thử lại.</Alert>}
+      {isLoading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình AI...</p>}
+      <div className="space-y-2">
+      <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
+        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface text-info">
-        Provider, model và API endpoint do admin nhập, được lưu server-side và không cho normal user tự quyết khi generate. Kiểm tra cấu hình không tạo preview, không trừ credit và không gọi luồng submit.
+      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
+        Quản trị viên thiết lập nhà cung cấp, mô hình và địa chỉ API. Kiểm tra cấu hình chỉ kiểm tra thông tin đã lưu, chưa kiểm tra kết nối tới nhà cung cấp; không tạo câu trả lời hoặc trừ credit.
       </Alert>
+      </div>
 
       <div className="grid items-start gap-4 xl:grid-cols-[1.25fr_0.75fr]">
         <div className="min-w-0 space-y-4">
-          <Card className="min-w-0">
-            <CardContent className="grid gap-4 md:grid-cols-3">
+          <div aria-label="Tóm tắt cấu hình AI" className="grid min-w-0 grid-cols-3 gap-2">
               <Detail icon={ShieldCheck} label="Trạng thái AI" value={settings?.isEnabled ? "Đang bật" : "Chưa bật"} tone={settings?.isEnabled ? "success" : "warning"} />
               <Detail icon={KeyRound} label="API key" value={settings?.hasApiKey ? settings.apiKeyPreview || "Đã lưu dạng ẩn" : "Chưa có"} tone={settings?.hasApiKey ? "success" : "warning"} />
               <Detail icon={Clock3} label="Kiểm tra gần nhất" value={settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"} />
-            </CardContent>
-          </Card>
+          </div>
 
           <Card className="min-w-0">
             <CardHeader>
@@ -174,7 +183,7 @@ export default function AiProviderSettingsPage() {
 
                 <label className="block text-sm font-medium">
                   Bật AI provider
-                  <span className="mt-2 flex min-h-10 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:items-center">
+                  <span className="mt-2 flex min-h-11 items-start justify-between gap-3 rounded-xl border border-border bg-surface-subtle px-3 py-2 sm:min-h-10 sm:items-center">
                     <span className="text-sm text-muted-foreground">Cho phép luồng AI preview dùng provider/model đã lưu trên server.</span>
                     <input checked={isEnabled} disabled={isLoading || isSaving} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
@@ -193,11 +202,11 @@ export default function AiProviderSettingsPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button disabled={isLoading || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">
+                  <Button disabled={isLoading || loadError || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">
                     <Save size={16} />
                     <span className="ml-2">{isSaving ? "Đang lưu..." : "Lưu thay đổi"}</span>
                   </Button>
-                  <Button disabled={isLoading || isChecking} type="button" variant="secondary" onClick={check}>
+                  <Button disabled={isLoading || loadError || isChecking} type="button" variant="secondary" onClick={check}>
                     <SlidersHorizontal size={16} />
                     <span className="ml-2">{isChecking ? "Đang kiểm tra..." : "Kiểm tra cấu hình"}</span>
                   </Button>
@@ -232,10 +241,10 @@ export default function AiProviderSettingsPage() {
               <div className="rounded-xl border border-border bg-surface-subtle p-3">
                 <p className="text-xs text-muted-foreground">Kết quả kiểm tra</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <StatusBadge status={settings?.lastCheckStatus || "NotChecked"} />
+                  <span className="text-sm font-medium">{settings?.lastCheckStatus === "Ready" ? "Đủ thông tin cấu hình" : settings?.lastCheckStatus === "MissingConfiguration" ? "Thiếu cấu hình" : settings?.lastCheckStatus === "InvalidConfiguration" ? "Cấu hình không hợp lệ" : "Chưa kiểm tra"}</span>
                   <span className="text-sm text-muted-foreground">{settings?.lastCheckedAt ? formatDate(settings.lastCheckedAt) : "Chưa kiểm tra"}</span>
                 </div>
-                <p className="mt-2 text-sm">{settings?.lastCheckMessage || "Chưa có dữ liệu."}</p>
+                <p className="mt-2 text-sm">{configurationCheckMessage(settings?.lastCheckStatus)}</p>
               </div>
             </CardContent>
           </Card>
@@ -248,13 +257,13 @@ export default function AiProviderSettingsPage() {
               {(savedModels.length > 0 ? savedModels : [defaultModel].filter(Boolean)).map((model) => (
                 <div
                   className={cn(
-                    "flex items-center justify-between rounded-xl border border-border bg-surface-subtle p-3",
+                    "flex min-w-0 items-center justify-between gap-2 rounded-xl border border-border bg-surface-subtle p-3",
                     model === defaultModel && "border-primary-border bg-primary-soft/80 text-primary"
                   )}
                   key={model}
                 >
-                  <span className="font-mono text-xs">{model}</span>
-                  {model === defaultModel && <CheckCircle2 className="text-success" size={16} />}
+                  <span className="min-w-0 font-mono text-xs [overflow-wrap:anywhere]">{model}</span>
+                  {model === defaultModel && <CheckCircle2 className="shrink-0 text-success" size={16} />}
                 </div>
               ))}
               {savedModels.length === 0 && !defaultModel && <p className="text-muted-foreground">Chưa có model được lưu.</p>}
@@ -268,7 +277,7 @@ export default function AiProviderSettingsPage() {
             <CardContent className="space-y-3 text-sm">
               <p className="text-muted-foreground">Cập nhật gần nhất</p>
               <p className="font-medium">{settings?.updatedAt ? formatDate(settings.updatedAt) : "Chưa có dữ liệu"}</p>
-              <p className="text-xs text-muted-foreground">Raw provider request/response thuộc AI audit và không hiển thị ở trang này.</p>
+              <p className="text-xs text-muted-foreground">Chỉ hiển thị cấu hình đã lưu và thời điểm cập nhật; khóa API được giữ ẩn.</p>
             </CardContent>
           </Card>
         </div>
@@ -284,6 +293,13 @@ function isHttpUrl(value: string) {
   } catch {
     return false;
   }
+}
+
+function configurationCheckMessage(status?: string) {
+  if (status === "Ready") return "Cấu hình AI đã đủ thông tin; chưa kiểm tra kết nối tới nhà cung cấp.";
+  if (status === "MissingConfiguration") return "Thiếu thông tin cấu hình AI. Hãy kiểm tra các trường bắt buộc.";
+  if (status === "InvalidConfiguration") return "Cấu hình AI không hợp lệ. Hãy kiểm tra thông tin đã lưu.";
+  return "Chưa có kết quả kiểm tra cấu hình AI.";
 }
 
 function Detail({
@@ -304,12 +320,12 @@ function Detail({
   }[tone];
 
   return (
-    <div className={cn("rounded-xl border p-3", toneClass)}>
+    <div className={cn("min-w-0 rounded-xl border p-3", toneClass)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{label}</p>
-        {Icon && <Icon size={15} />}
+        {Icon && <Icon className="hidden shrink-0 sm:block" size={15} />}
       </div>
-      <p className="mt-1 break-words font-medium">{value}</p>
+      <p className="mt-1 font-medium [overflow-wrap:anywhere]">{value}</p>
     </div>
   );
 }

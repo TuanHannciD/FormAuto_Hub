@@ -227,11 +227,11 @@ export function readDateRange(configJson: string) {
   try {
     const parsed = JSON.parse(configJson) as { fromDate?: string; toDate?: string };
     return {
-      fromDate: parsed.fromDate || "2026-05-18",
-      toDate: parsed.toDate || "2026-05-25"
+      fromDate: typeof parsed.fromDate === "string" ? parsed.fromDate : "",
+      toDate: typeof parsed.toDate === "string" ? parsed.toDate : ""
     };
   } catch {
-    return { fromDate: "2026-05-18", toDate: "2026-05-25" };
+    return { fromDate: "", toDate: "" };
   }
 }
 
@@ -239,13 +239,69 @@ export function readTimeRange(configJson: string) {
   try {
     const parsed = JSON.parse(configJson) as { fromTime?: string; toTime?: string; stepMinutes?: number };
     return {
-      fromTime: parsed.fromTime || "09:00",
-      toTime: parsed.toTime || "17:00",
-      stepMinutes: clampInteger(parsed.stepMinutes ?? 60, TIME_STEP_MIN, TIME_STEP_MAX)
+      fromTime: typeof parsed.fromTime === "string" ? parsed.fromTime : "",
+      toTime: typeof parsed.toTime === "string" ? parsed.toTime : "",
+      stepMinutes: typeof parsed.stepMinutes === "number" && Number.isFinite(parsed.stepMinutes) ? parsed.stepMinutes : ""
     };
   } catch {
-    return { fromTime: "09:00", toTime: "17:00", stepMinutes: 60 };
+    return { fromTime: "", toTime: "", stepMinutes: "" };
   }
+}
+
+// Mirror existing range constraints only; defaults are written by defaultConfigForMode.
+export function rangeRuleError(mode: string, configJson: string): string | null {
+  if (mode !== "DateRangeSequential" && mode !== "TimeRangeSequential") return null;
+  try {
+    const parsed = JSON.parse(configJson);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return "Hãy nhập đầy đủ khoảng ngày hoặc giờ.";
+    if (mode === "DateRangeSequential") {
+      const validDate = (value: unknown): value is string => {
+        if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value) || value.startsWith("0000")) return false;
+        const date = new Date(`${value}T00:00:00Z`);
+        return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+      };
+      if (!validDate(parsed.fromDate) || !validDate(parsed.toDate)) return "Nhập đầy đủ ngày bắt đầu và ngày kết thúc hợp lệ.";
+      return parsed.fromDate > parsed.toDate ? "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc." : null;
+    }
+    const validTime = (value: unknown): value is string => typeof value === "string" && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+    if (!validTime(parsed.fromTime) || !validTime(parsed.toTime)) return "Nhập đầy đủ giờ bắt đầu và giờ kết thúc hợp lệ.";
+    if (parsed.fromTime > parsed.toTime) return "Giờ bắt đầu phải trước hoặc bằng giờ kết thúc.";
+    return !Number.isInteger(parsed.stepMinutes) || parsed.stepMinutes < TIME_STEP_MIN || parsed.stepMinutes > TIME_STEP_MAX
+      ? `Bước thời gian phải là số nguyên từ ${TIME_STEP_MIN} đến ${TIME_STEP_MAX} phút.` : null;
+  } catch {
+    return "Hãy nhập đầy đủ khoảng ngày hoặc giờ hợp lệ.";
+  }
+}
+
+const safeAiFailureMessages = new Set([
+  "Dịch vụ AI đã hết thời gian chờ. Vui lòng thử lại sau. Không trừ credit.",
+  "Không kết nối được với dịch vụ AI. Vui lòng thử lại sau. Không trừ credit.",
+  "Nội dung trả lời của AI không đúng định dạng. Kiểm tra hướng dẫn tạo câu trả lời. Không trừ credit.",
+  "Phản hồi từ dịch vụ AI không đọc được. Vui lòng thử lại sau. Không trừ credit.",
+  "Nhập hướng dẫn tạo câu trả lời AI trước khi tiếp tục. Không trừ credit.",
+  "Hướng dẫn tạo câu trả lời không đáp ứng quy tắc an toàn. Vui lòng chỉnh sửa hướng dẫn. Không trừ credit.",
+  "Không đủ credit để tạo hoặc lưu bản xem trước AI. Vui lòng kiểm tra số dư. Không trừ credit.",
+  "AI chưa tạo được phản hồi xem trước hợp lệ. Kiểm tra hướng dẫn và cấu hình câu hỏi. Không trừ credit.",
+  "Dịch vụ AI không chấp nhận cấu hình xác thực. Liên hệ quản trị viên kiểm tra cấu hình. Không trừ credit.",
+  "Dịch vụ AI từ chối quyền truy cập. Liên hệ quản trị viên kiểm tra quyền. Không trừ credit.",
+  "Dịch vụ AI đang giới hạn yêu cầu. Vui lòng chờ rồi thử lại. Không trừ credit.",
+  "Dịch vụ AI tạm thời không khả dụng. Vui lòng thử lại sau. Không trừ credit.",
+  "Dịch vụ AI từ chối yêu cầu. Liên hệ quản trị viên kiểm tra cấu hình. Không trừ credit."
+]);
+
+export function safeAiFailureMessage(message: string | null | undefined) {
+  return message && safeAiFailureMessages.has(message) ? message : "Không tạo được bản xem trước AI. Nếu lỗi tiếp diễn, vui lòng liên hệ quản trị viên.";
+}
+
+export const uncertainSubmissionMessage = "Kết quả gửi chưa xác định. Không tự động gửi lại; hãy kiểm tra kết quả trên Google Forms.";
+
+export function submissionFailureMessage(message: string | null | undefined) {
+  if (message === uncertainSubmissionMessage) return uncertainSubmissionMessage;
+  if (message === "Lượt gửi chưa thực hiện vì không ghi nhận được lần gửi trước khi gọi Google Forms.") return message;
+  if (message === "Invalid form action URL.") return "Địa chỉ gửi của biểu mẫu không hợp lệ. Hãy kiểm tra lại biểu mẫu.";
+  const status = /^Google Form returned HTTP ([45]\d{2})\.$/.exec(message ?? "")?.[1];
+  if (status) return `Google Forms trả về lỗi ${status}. Hãy kiểm tra quyền truy cập và kết quả trên biểu mẫu trước khi gửi thêm.`;
+  return "Không xác định được nguyên nhân lỗi từ nhật ký này. Hãy kiểm tra kết quả trên Google Forms trước khi gửi thêm.";
 }
 
 export function readChoiceValues(question: FormQuestion, configJson: string) {

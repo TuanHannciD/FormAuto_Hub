@@ -14,6 +14,29 @@ public sealed class OpenAiCompatibleProviderAdapter(
         AiProviderGenerateRequest request,
         CancellationToken cancellationToken)
     {
+        using var scope = logger.BeginScope(new Dictionary<string, object>
+        {
+            ["Operation"] = "AiProviderGenerate",
+            ["ProjectId"] = request.ProjectId,
+            ["Count"] = request.Count
+        });
+        try
+        {
+            return await GenerateCoreAsync(request, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            // Exception messages and objects can contain provider bodies, prompts or credentials.
+            logger.LogWarning("AI provider generation failed. Cause: {Cause}; HTTP: {HttpStatusCode}.",
+                exception.GetType().Name, (exception as HttpRequestException)?.StatusCode is { } status ? (int?)status : null);
+            throw;
+        }
+    }
+
+    private async Task<AiProviderGenerateResult> GenerateCoreAsync(
+        AiProviderGenerateRequest request,
+        CancellationToken cancellationToken)
+    {
         if (string.IsNullOrWhiteSpace(request.BaseUrl))
         {
             throw new InvalidOperationException("AI provider base URL is required for OpenAI-compatible runtime generation.");
@@ -35,8 +58,7 @@ public sealed class OpenAiCompatibleProviderAdapter(
             count = request.Count,
             payload
         }, JsonOptions);
-        //log lỗi
-        logger.LogInformation("AI raw request: {RawRequestJson}", rawRequestJson);
+        logger.LogInformation("AI provider request started.");
 
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, endpoint)
         {
@@ -46,14 +68,14 @@ public sealed class OpenAiCompatibleProviderAdapter(
 
         using var response = await httpClient.SendAsync(httpRequest, cancellationToken);
         var rawResponseJson = await response.Content.ReadAsStringAsync(cancellationToken);
-        // log lỗi 
-        logger.LogInformation("AI raw response: {RawResponseJson}", rawResponseJson);
+        logger.LogInformation("AI provider response received. HTTP: {HttpStatusCode}.", (int)response.StatusCode);
         if (!response.IsSuccessStatusCode)
         {
-            throw new InvalidOperationException($"AI provider returned HTTP {(int)response.StatusCode}.");
+            throw new HttpRequestException($"AI provider returned HTTP {(int)response.StatusCode}.", null, response.StatusCode);
         }
 
         var outputJsons = ExtractOutputJsons(rawResponseJson);
+        logger.LogInformation("AI provider generation completed. Outputs: {OutputCount}.", outputJsons.Count);
         return new AiProviderGenerateResult(rawRequestJson, rawResponseJson, outputJsons);
     }
 
@@ -139,13 +161,13 @@ public sealed class OpenAiCompatibleProviderAdapter(
         var content = ReadAssistantContent(rawResponseJson);
         if (string.IsNullOrWhiteSpace(content))
         {
-            return [];
+            throw new FormatException("AI provider assistant content is empty.");
         }
 
         content = ExtractJsonContent(StripJsonFence(content));
         if (!LooksLikeJson(content))
         {
-            return [];
+            throw new FormatException("AI provider assistant content is not JSON.");
         }
 
         JsonDocument contentDocument;
@@ -153,9 +175,9 @@ public sealed class OpenAiCompatibleProviderAdapter(
         {
             contentDocument = JsonDocument.Parse(content);
         }
-        catch (JsonException)
+        catch (JsonException exception)
         {
-            return [];
+            throw new FormatException("AI provider assistant content contains invalid JSON.", exception);
         }
 
         using (contentDocument)
@@ -166,12 +188,12 @@ public sealed class OpenAiCompatibleProviderAdapter(
                 root.TryGetProperty("responses", out var responses) &&
                 responses.ValueKind == JsonValueKind.Array)
             {
-                return responses.EnumerateArray().Select(item => item.GetRawText()).ToList();
+                return ReadPreviewObjects(responses);
             }
 
             if (root.ValueKind == JsonValueKind.Array)
             {
-                return root.EnumerateArray().Select(item => item.GetRawText()).ToList();
+                return ReadPreviewObjects(root);
             }
 
             if (root.ValueKind == JsonValueKind.Object &&
@@ -181,8 +203,25 @@ public sealed class OpenAiCompatibleProviderAdapter(
                 return [root.GetRawText()];
             }
 
-            return [];
+            throw new FormatException("AI provider assistant content has an unsupported JSON structure.");
         }
+    }
+
+    private static IReadOnlyList<string> ReadPreviewObjects(JsonElement previews)
+    {
+        var outputs = new List<string>();
+        foreach (var preview in previews.EnumerateArray())
+        {
+            if (preview.ValueKind != JsonValueKind.Object ||
+                !preview.TryGetProperty("answers", out var answers) || answers.ValueKind != JsonValueKind.Array)
+            {
+                throw new FormatException("AI provider preview must be an object containing an answers array.");
+            }
+
+            outputs.Add(preview.GetRawText());
+        }
+
+        return outputs;
     }
 
     private static string ReadAssistantContent(string rawResponseJson)

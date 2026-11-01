@@ -213,6 +213,17 @@ Mọi thay đổi frontend UI baseline phải cập nhật cả:
 - `docs/ai/FRONTEND_STYLE_GUIDE.md`
 - `docs/vi/FRONTEND_STYLE_GUIDE.md`
 
+## Tinh chỉnh gọn đã duyệt (FAH-UI-002)
+
+Đợt tinh chỉnh được người dùng duyệt giữ nhận diện và stack hiện có. Nền dùng chung đã qua review code và thị giác độc lập; nghiệm thu page/toàn app vẫn theo [hồ sơ task](tasks/FAH-UI-002/PROGRESS.md), không được suy ra từ bản ghi style này.
+
+- Topbar dashboard/admin cao 60 px; padding đầu nội dung 20 px mobile và 24 px desktop; h1 PageHeader vận hành 24 px mobile và 28 px desktop. Tiêu đề public/auth/bài đọc theo tiêu chí CTA, form và khả năng đọc riêng.
+- Giữ body dễ đọc và spacing gọn. Control mobile chính ít nhất 44×44 px; control desktop một dòng có thể 40 px. Minimum Textarea mặc định và tùy chỉnh của caller phải giữ qua mọi breakpoint.
+- Dùng elevation chung vừa phải. Elevation landing là `shadow-floating`; `overlay` vẫn là màu backdrop. Không đặt token shadow trùng tên utility token màu.
+- Bảng cuộn trong vùng có tên, focus được bằng bàn phím. Giữ cuộn popup native sau chuyển động resize-first, trả focus và hỗ trợ reduced-motion.
+- Control Google native giữ callback GIS. Thích ứng vùng hẹp bằng nhãn ngắn được hỗ trợ và scale đồng đều thành target mobile 44 px, giữ tỷ lệ logo và focus khi resize; giữ nhãn đầy đủ ở vùng rộng. Không thay hành vi provider để giải quyết kích thước.
+- Nghiệm thu lịch sử/top-up mobile, hình học CTA/form public/auth và bằng chứng mọi route/state vẫn là gate rõ của task. Giao diện gọn phải giữ chi phí, thông tin an toàn, preview, xác nhận chủ động và payload request hiện có.
+
 ## UI dùng chung hiện tại (2026-10-08)
 
 - `ui-styles.ts`: panel (`rounded-2xl`, nền đặc), control/nút (`rounded-xl`) và màu ngữ nghĩa. Panel nghiệp vụ dashboard không dùng lại nền kính/trong suốt; topbar giữ hiệu ứng mờ có chủ đích. Landing/SEO giữ bố cục marketing riêng.

@@ -18,7 +18,8 @@ public interface IFormProjectService
 public sealed class FormProjectService(
     FormAutoHubDbContext dbContext,
     ICurrentUserContext currentUser,
-    IGoogleFormsClient googleFormsClient) : IFormProjectService
+    IGoogleFormsClient googleFormsClient,
+    ILogger<FormProjectService>? logger = null) : IFormProjectService
 {
     public async Task<AnalyzeFormResponse> AnalyzeAsync(AnalyzeFormRequest request, CancellationToken cancellationToken)
     {
@@ -27,23 +28,23 @@ public sealed class FormProjectService(
 
         if (string.IsNullOrWhiteSpace(formUrl))
         {
-            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Form URL is required.", cancellationToken);
+            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Vui lòng nhập đường dẫn biểu mẫu Google Forms.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Form URL is required.");
+            throw new InvalidOperationException("Vui lòng nhập đường dẫn biểu mẫu Google Forms.");
         }
 
         if (formUrl.Length > Phase4SafetyLimits.MaxFormUrlLength)
         {
-            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Form URL is too long.", cancellationToken);
+            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Đường dẫn biểu mẫu quá dài. Hãy kiểm tra lại đường dẫn.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Form URL is too long.");
+            throw new InvalidOperationException("Đường dẫn biểu mẫu quá dài. Hãy kiểm tra lại đường dẫn.");
         }
 
         if (name.Length > Phase4SafetyLimits.MaxProjectNameLength)
         {
-            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Project name is too long.", cancellationToken);
+            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, "Tên dự án quá dài. Hãy rút ngắn tên dự án.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Project name is too long.");
+            throw new InvalidOperationException("Tên dự án quá dài. Hãy rút ngắn tên dự án.");
         }
 
         try
@@ -98,9 +99,14 @@ public sealed class FormProjectService(
         }
         catch (Exception exception) when (exception is InvalidOperationException or HttpRequestException)
         {
-            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, exception.Message, cancellationToken);
+            var message = exception is GoogleFormsClient.AnalysisException
+                ? exception.Message
+                : "Chưa phân tích được biểu mẫu. Hãy kiểm tra quyền truy cập và thử lại sau.";
+            logger?.LogWarning("AnalyzeForm failed with {FailureType} and HTTP {StatusCode}",
+                exception.GetType().Name, (exception as HttpRequestException)?.StatusCode);
+            await WriteUsageLogAsync(null, UsageLogStatuses.Failed, message, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException(exception.Message, exception);
+            throw new InvalidOperationException(message, exception);
         }
     }
 

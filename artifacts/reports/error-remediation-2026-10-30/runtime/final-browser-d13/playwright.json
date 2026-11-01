@@ -1,0 +1,613 @@
+{
+  "config": {
+    "configFile": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\playwright-owned.config.cjs",
+    "rootDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-d13/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/TinHoc/FormAuto_Hub/apps/web/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:/TinHoc/FormAuto_Hub/artifacts/reports/error-remediation-2026-10-30/runtime/final-browser-d13/playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "fah-err-forms-errors.spec.ts",
+      "file": "fah-err-forms-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2548,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:22.685Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-1aaa33a9ad00d7253c62",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 36,
+          "column": 5
+        },
+        {
+          "title": "ERR014 known absent profile permits a new profile with defaults",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1054,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:25.340Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-8a63b3869642b190af0b",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 56,
+          "column": 5
+        },
+        {
+          "title": "ERR014 pending profile read locks competing mode/project changes; next mode owns its profile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:26.402Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-34cdb6565beb56807f84",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 64,
+          "column": 5
+        },
+        {
+          "title": "ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1292,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:27.617Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-0e9fc60c7dfb7838db0c",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 89,
+          "column": 5
+        },
+        {
+          "title": "ERR015 AI continuation retains the second confirmed run and cost when only its preview GET fails",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1526,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:28.916Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-da6bce42aa0703c11113",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 109,
+          "column": 5
+        },
+        {
+          "title": "ERR011 generation shows safe failure and run ID: known",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1142,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:30.450Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-aa3e7682896dcf14517f",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 150,
+          "column": 7
+        },
+        {
+          "title": "ERR011 generation shows safe failure and run ID: unknown",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1293,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:31.600Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-01d42d0aef06b2d7ae19",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 150,
+          "column": 7
+        },
+        {
+          "title": "ERR011 AI usage exposes safe reason and existing run ID without raw historical text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:32.900Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-71d1d1a2df8a1785a67f",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 161,
+          "column": 5
+        },
+        {
+          "title": "ERR023 submission details retain IDs and uncertainty without inviting resend",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:35.041Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-bbbc6c38c99a7036f9e4",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 173,
+          "column": 5
+        },
+        {
+          "title": "ERR023 ordinary and missing historical causes keep IDs and safe mixed counts without inventing uncertainty",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1492,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:36.433Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-372ec0fc985f233680f0",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 194,
+          "column": 5
+        },
+        {
+          "title": "ERR024 Date clear/retype both endpoints blocks invalid POST and sends displayed state",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30211,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts",
+                        "column": 71,
+                        "line": 231
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Dòng mẫu', exact: true })\u001b[22m\n\n\n  229 |   test(`ERR024 ${type} clear/retype both endpoints blocks invalid POST and sends displayed state`, async ({ page }) => {\n  230 |     const calls = await setup(page, [{ ...question, questionType: type, options: [] }]);\n> 231 |     await page.getByRole(\"button\", { name: \"Dòng mẫu\", exact: true }).click();\n      |                                                                       ^\n  232 |     await page.getByRole(\"option\", { name: type === \"Date\" ? \"Khoảng ngày tuần tự\" : \"Khoảng giờ tuần tự\", exact: true }).click();\n  233 |     const from = page.getByLabel(type === \"Date\" ? \"Từ ngày\" : \"Từ giờ\", { exact: true });\n  234 |     const to = page.getByLabel(type === \"Date\" ? \"Đến ngày\" : \"Đến giờ\", { exact: true });\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts:231:71"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:57:37.933Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-a48b6-T-and-sends-displayed-state-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-a48b6-T-and-sends-displayed-state-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-a48b6-T-and-sends-displayed-state-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-acf9f2a46665f1babd4f",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 229,
+          "column": 7
+        },
+        {
+          "title": "ERR024 Time clear/retype both endpoints blocks invalid POST and sends displayed state",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30198,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts",
+                        "column": 71,
+                        "line": 231
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Dòng mẫu', exact: true })\u001b[22m\n\n\n  229 |   test(`ERR024 ${type} clear/retype both endpoints blocks invalid POST and sends displayed state`, async ({ page }) => {\n  230 |     const calls = await setup(page, [{ ...question, questionType: type, options: [] }]);\n> 231 |     await page.getByRole(\"button\", { name: \"Dòng mẫu\", exact: true }).click();\n      |                                                                       ^\n  232 |     await page.getByRole(\"option\", { name: type === \"Date\" ? \"Khoảng ngày tuần tự\" : \"Khoảng giờ tuần tự\", exact: true }).click();\n  233 |     const from = page.getByLabel(type === \"Date\" ? \"Từ ngày\" : \"Từ giờ\", { exact: true });\n  234 |     const to = page.getByLabel(type === \"Date\" ? \"Đến ngày\" : \"Đến giờ\", { exact: true });\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts:231:71"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:58:10.334Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-eb4b8-T-and-sends-displayed-state-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-eb4b8-T-and-sends-displayed-state-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-eb4b8-T-and-sends-displayed-state-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-4ac419d7c0e686c810a2",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 229,
+          "column": 7
+        },
+        {
+          "title": "ERR024 time step follows existing integer 5–120 bounds and mode defaults match payload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30187,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts",
+                        "column": 69,
+                        "line": 256
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Dòng mẫu', exact: true })\u001b[22m\n\n\n  254 | test(\"ERR024 time step follows existing integer 5–120 bounds and mode defaults match payload\", async ({ page }) => {\n  255 |   const calls = await setup(page, [{ ...question, questionType: \"Time\", options: [] }]);\n> 256 |   await page.getByRole(\"button\", { name: \"Dòng mẫu\", exact: true }).click();\n      |                                                                     ^\n  257 |   await page.getByRole(\"option\", { name: \"Khoảng giờ tuần tự\", exact: true }).click();\n  258 |   const step = page.getByLabel(\"Bước phút\", { exact: true });\n  259 |   const create = page.getByRole(\"button\", { name: \"Lưu và tạo bản xem trước\", exact: true });\n    at D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-forms-errors.spec.ts:256:69"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T08:58:43.210Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-cd44e-mode-defaults-match-payload-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-cd44e-mode-defaults-match-payload-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\TinHoc\\FormAuto_Hub\\artifacts\\reports\\error-remediation-2026-10-30\\runtime\\final-browser-d13\\results\\fah-err-forms-errors-ERR02-cd44e-mode-defaults-match-payload-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c51d6249be8d2eab2d1c-798920aa22bf95135f19",
+          "file": "fah-err-forms-errors.spec.ts",
+          "line": 254,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T08:57:21.983Z",
+    "duration": 113257.314,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

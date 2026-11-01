@@ -1,0 +1,20 @@
+{
+  "head": "7cb943a05162577df456479fcdb5485cab9dbeaa",
+  "previousHead": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "files": [
+    {
+      "path": ".claude/skills/formauto-server-debugger/agents/openai.yaml",
+      "matchesAcceptedIndex": true
+    },
+    {
+      "path": "docs/ai/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md",
+      "matchesAcceptedIndex": true
+    },
+    {
+      "path": "docs/vi/tasks/FAH-ERR-001/MAIN_MERGE_PLAN.md",
+      "matchesAcceptedIndex": true
+    }
+  ],
+  "mainCandidatePaths": 1026,
+  "allAcceptedBytesMatch": true
+}

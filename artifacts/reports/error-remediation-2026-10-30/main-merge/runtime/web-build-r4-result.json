@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-01T00:52:21.4860309+00:00",
+  "exitCode": 0,
+  "cwd": "D:\\TinHoc\\FormAuto_Hub\\apps\\web",
+  "command": "npm run build",
+  "distDir": ".next-fah-mainmerge-20261101"
+}

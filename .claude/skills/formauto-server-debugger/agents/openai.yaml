@@ -1,0 +1,4 @@
+interface:
+  display_name: "FormAuto Server Debugger"
+  short_description: "Read-only production VPS diagnostics"
+  default_prompt: "Use $formauto-server-debugger to run a read-only health check of the FormAuto Hub production VPS."

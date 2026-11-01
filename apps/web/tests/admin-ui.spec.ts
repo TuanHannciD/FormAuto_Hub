@@ -9,7 +9,7 @@ const pages = [
   ["/admin", "Tổng quan quản trị"], ["/admin/payments", "Quản lý top-up và thanh toán"],
   ["/admin/manual-credits", "Đối soát và cộng credit thủ công"], ["/admin/packages", "Quản lý gói credit"],
   ["/admin/revenue", "Báo cáo doanh thu"], ["/admin/payos-settings", "Cấu hình PayOS"],
-  ["/admin/ai-provider-settings", "Cấu hình Provider AI"], ["/admin/ai-usage", "Thống kê AI"]
+  ["/admin/ai-provider-settings", "Cấu hình nhà cung cấp AI"], ["/admin/ai-usage", "Thống kê AI"]
 ] as const;
 
 async function setup(page: Page, role = "Admin") {

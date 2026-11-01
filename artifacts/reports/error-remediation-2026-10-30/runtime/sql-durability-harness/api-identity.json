@@ -1,0 +1,17 @@
+{
+  "pid": 22008,
+  "executable": "dotnet",
+  "apiDll": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\bin\\Release\\net9.0\\FormAutoHub.Api.dll",
+  "binarySha256": "E818572A450A652857513C684E3ED9B3DBFE3789F0BE6CDD5675EE8C81AA097B",
+  "database": "FormAutoHub_FAHERR001_restore_20261029_a19f7a2",
+  "guard": "fresh pending0/modelPendingfalse",
+  "actualProgram": true,
+  "user": "63e068f4-ffe7-4f99-9ee2-d987d88a2834",
+  "admin": "946c1a12-01c2-4cad-926b-3f813301bb9f",
+  "project": "86286ce0-8df7-4864-8bc4-c283f12a7aa0",
+  "question": "82568151-7a9f-404c-8f8c-3ded31013f00",
+  "package": "0b86e810-2f86-48db-89d9-eebd3f066ae0",
+  "evidence": "d0423643-7247-4445-9e10-d363fa2ef4c2",
+  "order": "5613c2d5-acaf-41f5-8cb3-880f942a2bcc",
+  "startedAt": "2026-10-30T09:04:23.4902069+00:00"
+}

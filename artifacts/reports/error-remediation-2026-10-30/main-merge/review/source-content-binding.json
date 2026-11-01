@@ -1,0 +1,20 @@
+{
+  "err": {
+    "count": 80,
+    "failures": []
+  },
+  "db": {
+    "count": 17,
+    "failures": []
+  },
+  "uiMixedEolBindings": {
+    "topupBeforeRawMatches": true,
+    "topupBeforeContentMatchesA19": true,
+    "apps/web/lib/auth.ts": {
+      "unchangedMainToA19": true
+    },
+    "apps/web/lib/toast.ts": {
+      "unchangedMainToA19": true
+    }
+  }
+}

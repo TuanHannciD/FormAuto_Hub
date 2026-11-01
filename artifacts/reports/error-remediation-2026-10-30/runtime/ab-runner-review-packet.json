@@ -1,0 +1,77 @@
+{
+  "utc": "2026-10-30T00:50:07.978182+00:00",
+  "owner": "/root/runtime_owner",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "runnerSequential": true,
+  "providerSqlBrowserRuntimeNotRun": true,
+  "processesAcquired": [],
+  "warnings": [
+    "NU1603 pre-existing Google.Apis.Forms cached resolution; not suppressed"
+  ],
+  "groups": [
+    {
+      "group": "A",
+      "findings": [
+        "ERR-007",
+        "ERR-008"
+      ],
+      "red": "runtime/p1-submission-red/red-verification.json",
+      "red2": "runtime/p1-submission-red2/red-verification.json",
+      "green": "runtime/p1-submission-green/verification.json",
+      "regressions": "runtime/p1-submission-regressions/verification.json",
+      "counts": {
+        "redFailed": 12,
+        "red2Failed": 2,
+        "greenPassed": 14,
+        "regressionPassed": 36
+      }
+    },
+    {
+      "group": "B",
+      "findings": [
+        "ERR-009",
+        "ERR-011"
+      ],
+      "red": "p1-ai/red/red-verification.json",
+      "green": "p1-ai/green/verification.json",
+      "counts": {
+        "redFailed": 7,
+        "greenWithRegressionsPassed": 23
+      }
+    }
+  ],
+  "limit": "Focused tests use InMemory/fake HTTP/logger; no SQL durability/provider/browser acceptance. Independent review pending. No full24 completion.",
+  "evidence": [
+    {
+      "path": "runtime/p1-submission-red/red-verification.json",
+      "sha256": "983b13ebcf9c7db557572c1e14737d57506c71ae1d9caee4edaf609bcd868181",
+      "bytes": 7932
+    },
+    {
+      "path": "runtime/p1-submission-red2/red-verification.json",
+      "sha256": "eec087597dcf53fbe8199cbfb93bab17f415306d4aef05378f28be4e5a60a68a",
+      "bytes": 1293
+    },
+    {
+      "path": "runtime/p1-submission-green/verification.json",
+      "sha256": "77694b73103fb12966b99ed4fa2c3e4415b6938e2427fa528324a066692169ec",
+      "bytes": 1492
+    },
+    {
+      "path": "runtime/p1-submission-regressions/verification.json",
+      "sha256": "ab1e51afd560c66592f8e2d55870729240694e9b3412afcaa732bd2bdc4a4381",
+      "bytes": 560
+    },
+    {
+      "path": "p1-ai/red/red-verification.json",
+      "sha256": "3c7fce6ab0a1bc7f85f048b4322375910cb0e2cb053f86fb7b987abd0e343f99",
+      "bytes": 3362
+    },
+    {
+      "path": "p1-ai/green/verification.json",
+      "sha256": "81421eed8ab8bbef69aa99012bd0200760a330dcc0dd2338cc5a147faee2d8d8",
+      "bytes": 1266
+    }
+  ]
+}

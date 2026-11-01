@@ -1,0 +1,610 @@
+{
+  "date": "2026-10-29T14:25:30.285Z",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "children": 0,
+  "scope": "Remaining 56 from deep/ui/coverage.json; audit only",
+  "counts": {
+    "remainingAssigned": 56,
+    "remainingFullRead": 56,
+    "remainingUnreviewed": 0,
+    "priorWebFullRead": 43,
+    "combinedUniqueWebFullRead": 99,
+    "priorWebIntegrityChecked": 99,
+    "priorWebUnchanged": 99,
+    "additionalPriorTestSupportHashChecked": 1
+  },
+  "limitations": [
+    "Hashes do not establish manual reading. Each disposition is based on complete file reading.",
+    "99 app/components/lib TS/TSX denominator excludes tests/config/CSS/other first-party files.",
+    "Two original-source JSX/handler probes with synthetic API, not React DOM/browser/API/SQL/provider verification."
+  ],
+  "files": [
+    {
+      "file": "apps/web/app/admin/layout.tsx",
+      "reading": "full-file",
+      "sha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84",
+      "priorSha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84",
+      "unchangedFromPrior": true,
+      "lines": 8,
+      "disposition": "AdminShell + noIndex; không data/error handler riêng; shell thuộc 43 cũ.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/anti-abuse/page.tsx",
+      "reading": "full-file",
+      "sha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a",
+      "priorSha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a",
+      "unchangedFromPrior": true,
+      "lines": 11,
+      "disposition": "Wrapper SEO dùng config static hiện hữu; UIR-002 qua template/config.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/api/payments/payos/webhook/route.ts",
+      "reading": "full-file",
+      "sha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8",
+      "priorSha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8",
+      "unchangedFromPrior": true,
+      "lines": 35,
+      "disposition": "POST forward body/status/content-type; GET405 Allow POST có hướng dẫn admin. Framework failure/log runtime Not run.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/auth/layout.tsx",
+      "reading": "full-file",
+      "sha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c",
+      "priorSha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c",
+      "unchangedFromPrior": true,
+      "lines": 7,
+      "disposition": "Metadata noIndex, trả children; không nuốt/đổi lỗi.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiDirectionInput.tsx",
+      "reading": "full-file",
+      "sha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6",
+      "priorSha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6",
+      "unchangedFromPrior": true,
+      "lines": 24,
+      "disposition": "Input có label, maxlength 200; callback string; không I/O riêng.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "reading": "full-file",
+      "sha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786",
+      "priorSha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786",
+      "unchangedFromPrior": true,
+      "lines": 182,
+      "disposition": "Mode/direction/scope/prompts/count/busy/canGenerate và callbacks đã đọc; bounds1–100; UIR-002 child.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "reading": "full-file",
+      "sha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "priorSha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "unchangedFromPrior": true,
+      "lines": 93,
+      "disposition": "Prompt length/collapse/options metadata; UIR-002 Option2/3 + collapsed copy cả khi mở.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/CheckboxSelectionFields.tsx",
+      "reading": "full-file",
+      "sha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7",
+      "priorSha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7",
+      "unchangedFromPrior": true,
+      "lines": 46,
+      "disposition": "Clamp count qua helper; caller maxOptionCount ít nhất1; không giả định zero-option contract mới.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+      "reading": "full-file",
+      "sha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c",
+      "priorSha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c",
+      "unchangedFromPrior": true,
+      "lines": 73,
+      "disposition": "Ba mode static labels, aria-pressed/callback; không I/O, không error riêng.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+      "reading": "full-file",
+      "sha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270",
+      "priorSha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270",
+      "unchangedFromPrior": true,
+      "lines": 68,
+      "disposition": "Chuỗi rỗng có label/value fallback; arrays đúng contract, no malformed-payload incident asserted.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "reading": "full-file",
+      "sha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "priorSha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "unchangedFromPrior": true,
+      "lines": 372,
+      "disposition": "Đọc modes/options/sample/numeric/date/time/update/render đầy đủ; UIR-001 display config mismatch.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "reading": "full-file",
+      "sha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc",
+      "priorSha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc",
+      "unchangedFromPrior": true,
+      "lines": 43,
+      "disposition": "Balance null hiện Chưa tải được số dư; stale preview warning; không default về0.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_constants.ts",
+      "reading": "full-file",
+      "sha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+      "priorSha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+      "unchangedFromPrior": true,
+      "lines": 64,
+      "disposition": "Modes/limits/defaults/resume key; defaults khởi tạo tách validity; UIR-001 dependency.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/forms/_types.ts",
+      "reading": "full-file",
+      "sha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01",
+      "priorSha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01",
+      "unchangedFromPrior": true,
+      "lines": 33,
+      "disposition": "UI mode/resume context types; không tự runtime-validate localStorage; no new status invented.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/layout.tsx",
+      "reading": "full-file",
+      "sha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e",
+      "priorSha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e",
+      "unchangedFromPrior": true,
+      "lines": 8,
+      "disposition": "DashboardShell/noIndex wrapper; error owner ở shell/caller đã review trước.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "reading": "full-file",
+      "sha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "priorSha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "unchangedFromPrior": true,
+      "lines": 37,
+      "disposition": "UIR-003 null/empty cùng message; columns/values fallback/render đã đọc.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/delete-model-dialog.tsx",
+      "reading": "full-file",
+      "sha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b",
+      "priorSha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b",
+      "unchangedFromPrior": true,
+      "lines": 108,
+      "disposition": "loadImpact all7 GET/identity/count guard; cancellation/final recheck/unknown DELETE outcome/reload; accepted safe fallback.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/loading-state.tsx",
+      "reading": "full-file",
+      "sha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf",
+      "priorSha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf",
+      "unchangedFromPrior": true,
+      "lines": 10,
+      "disposition": "Label/spinner display-only; không nuốt lỗi/I/O.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/overview-panel.tsx",
+      "reading": "full-file",
+      "sha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c",
+      "priorSha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c",
+      "unchangedFromPrior": true,
+      "lines": 36,
+      "disposition": "Model/form contract display; thiếu mô tả -; question empty chỉ caller dữ liệu; stale owner ERR017 parent.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_components/relation-edge.tsx",
+      "reading": "full-file",
+      "sha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f",
+      "priorSha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f",
+      "unchangedFromPrior": true,
+      "lines": 55,
+      "disposition": "Optional data callbacks, label fallback id; no I/O; không thêm finding từ absent optional data.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_constants.ts",
+      "reading": "full-file",
+      "sha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f",
+      "priorSha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f",
+      "unchangedFromPrior": true,
+      "lines": 64,
+      "disposition": "Labels enums/canvas dims; legitimate domain labels; no new status error found.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/dashboard/nckh/forms/[formId]/_types.ts",
+      "reading": "full-file",
+      "sha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d",
+      "priorSha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d",
+      "unchangedFromPrior": true,
+      "lines": 38,
+      "disposition": "PendingAction/tab/edge/dataset types; không phải runtime state transition contract.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/google-forms/sample-data/page.tsx",
+      "reading": "full-file",
+      "sha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1",
+      "priorSha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1",
+      "unchangedFromPrior": true,
+      "lines": 11,
+      "disposition": "Wrapper/config static; template UIR002; không failed GET state.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/google-forms/sheets-report/page.tsx",
+      "reading": "full-file",
+      "sha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066",
+      "priorSha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066",
+      "unchangedFromPrior": true,
+      "lines": 11,
+      "disposition": "Wrapper/config static; template UIR002; không data API.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/google-forms/student-report/page.tsx",
+      "reading": "full-file",
+      "sha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f",
+      "priorSha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f",
+      "unchangedFromPrior": true,
+      "lines": 11,
+      "disposition": "Wrapper/config static; template UIR002; không data API.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/google-forms/survey-demo/page.tsx",
+      "reading": "full-file",
+      "sha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0",
+      "priorSha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0",
+      "unchangedFromPrior": true,
+      "lines": 11,
+      "disposition": "Wrapper/config static; template UIR002; không data API.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/layout.tsx",
+      "reading": "full-file",
+      "sha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5",
+      "priorSha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5",
+      "unchangedFromPrior": true,
+      "lines": 39,
+      "disposition": "Root font/metadata/site URL/toaster; URL parse config boundary chưa có malformed config evidence.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/llms.txt/route.ts",
+      "reading": "full-file",
+      "sha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e",
+      "priorSha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e",
+      "unchangedFromPrior": true,
+      "lines": 47,
+      "disposition": "Machine-facing static English text and public paths; accepted no UI translation claim.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/login/layout.tsx",
+      "reading": "full-file",
+      "sha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7",
+      "priorSha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7",
+      "unchangedFromPrior": true,
+      "lines": 7,
+      "disposition": "NoIndex + children, auth error policy ở page/helper đã đọc trước.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/page.tsx",
+      "reading": "full-file",
+      "sha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3",
+      "priorSha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3",
+      "unchangedFromPrior": true,
+      "lines": 235,
+      "disposition": "Đọc metadata/brand/illustration/mobile nav/landing/services/pricing/FAQ/footer + helpers; server/static không request-error state.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/payment/layout.tsx",
+      "reading": "full-file",
+      "sha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2",
+      "priorSha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2",
+      "unchangedFromPrior": true,
+      "lines": 7,
+      "disposition": "NoIndex + children; payment outcome owner ở result pages cũ.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/register/layout.tsx",
+      "reading": "full-file",
+      "sha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012",
+      "priorSha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012",
+      "unchangedFromPrior": true,
+      "lines": 7,
+      "disposition": "NoIndex + children; không credential cause split.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/robots.ts",
+      "reading": "full-file",
+      "sha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c",
+      "priorSha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c",
+      "unchangedFromPrior": true,
+      "lines": 31,
+      "disposition": "Static crawler rules/site sitemap; không user error path.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/app/sitemap.ts",
+      "reading": "full-file",
+      "sha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd",
+      "priorSha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd",
+      "unchangedFromPrior": true,
+      "lines": 7,
+      "disposition": "Maps static publicPagePaths; no lastModified fabrication/no data fetch.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/auth-password-input.tsx",
+      "reading": "full-file",
+      "sha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152",
+      "priorSha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152",
+      "unchangedFromPrior": true,
+      "lines": 10,
+      "disposition": "State show/hide/disabled/aria pass; không password logging.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/auth-shell.tsx",
+      "reading": "full-file",
+      "sha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316",
+      "priorSha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316",
+      "unchangedFromPrior": true,
+      "lines": 51,
+      "disposition": "Login/register/callback wrapper + heading/switch; no async/error swallowing.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/base-table.tsx",
+      "reading": "full-file",
+      "sha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b",
+      "priorSha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b",
+      "unchangedFromPrior": true,
+      "lines": 80,
+      "disposition": "Empty presentation only; caller supplies validity; mobile/desktop render and callbacks đã đọc.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/confirm-dialog.tsx",
+      "reading": "full-file",
+      "sha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4",
+      "priorSha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4",
+      "unchangedFromPrior": true,
+      "lines": 42,
+      "disposition": "Concurrent request=false/unmount=false/dismiss=false; resolve sau motion close; no unhandled promise observed.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/dialog.tsx",
+      "reading": "full-file",
+      "sha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a",
+      "priorSha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a",
+      "unchangedFromPrior": true,
+      "lines": 106,
+      "disposition": "Portal/context/native modal/focus/dismiss/cleanup + close controls; invariant Error internal; browser Not run.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/dropdown-select.tsx",
+      "reading": "full-file",
+      "sha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e",
+      "priorSha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e",
+      "unchangedFromPrior": true,
+      "lines": 105,
+      "disposition": "Local open/select/outside/Escape cleanup/disabled/placeholder; no API lookup/error owner.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/landing-dashboard-tabs.tsx",
+      "reading": "full-file",
+      "sha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a",
+      "priorSha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a",
+      "unchangedFromPrior": true,
+      "lines": 197,
+      "disposition": "Four local tabs + static overview/table/metric/empty helpers; no current caller found, no failed-read claim.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/metric-card.tsx",
+      "reading": "full-file",
+      "sha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907",
+      "priorSha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907",
+      "unchangedFromPrior": true,
+      "lines": 32,
+      "disposition": "Typed tone map/display ReactNode; caller owns unknown/error; no default numeric state.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/motion/motion-presets.ts",
+      "reading": "full-file",
+      "sha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6",
+      "priorSha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6",
+      "unchangedFromPrior": true,
+      "lines": 17,
+      "disposition": "Reduced-motion media listener cleanup; browser API support Not run.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/motion/transition-region.tsx",
+      "reading": "full-file",
+      "sha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da",
+      "priorSha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da",
+      "unchangedFromPrior": true,
+      "lines": 72,
+      "disposition": "Key/current/outgoing/size/scroll/identity/cancel; rejected finished promise accepted intentional cancellation.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/motion/use-element-size.ts",
+      "reading": "full-file",
+      "sha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2",
+      "priorSha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2",
+      "unchangedFromPrior": true,
+      "lines": 23,
+      "disposition": "ResizeObserver measure/epsilon guard/disconnect; API compatibility Not run.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/motion/use-popup-motion.ts",
+      "reading": "full-file",
+      "sha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1",
+      "priorSha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1",
+      "unchangedFromPrior": true,
+      "lines": 74,
+      "disposition": "Open/resize/close/current phase/identity/cancel/disconnect and reduced motion; cancellation catch accepted.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/pagination-controls.tsx",
+      "reading": "full-file",
+      "sha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506",
+      "priorSha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506",
+      "unchangedFromPrior": true,
+      "lines": 35,
+      "disposition": "Zero pages/trước/sau disabled guards; callbacks caller responsibility; no API failure masking inside.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/scroll-reveal.tsx",
+      "reading": "full-file",
+      "sha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d",
+      "priorSha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d",
+      "unchangedFromPrior": true,
+      "lines": 69,
+      "disposition": "Reduced motion/intersection/state/cleanup; SEO noscript dependency; API compatibility not certified.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/searchable-dropdown-select.tsx",
+      "reading": "full-file",
+      "sha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840",
+      "priorSha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840",
+      "unchangedFromPrior": true,
+      "lines": 140,
+      "disposition": "Loading/no-results/options/local open/cleanup; UIR-004 caller lacks failure state, avoid blaming primitive alone.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/seo-keyword-page.tsx",
+      "reading": "full-file",
+      "sha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987",
+      "priorSha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987",
+      "unchangedFromPrior": true,
+      "lines": 392,
+      "disposition": "All5 configs/render metadata/schema/sections/FAQ/header/footer; UIR-002 internal/English copy; noscript present.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/status-badge.tsx",
+      "reading": "full-file",
+      "sha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b",
+      "priorSha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b",
+      "unchangedFromPrior": true,
+      "lines": 15,
+      "disposition": "Known statuses tone + displayStatus shared labels, raw fallback accepted future unknown; no invented emitted state.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/components/ui-styles.ts",
+      "reading": "full-file",
+      "sha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a",
+      "priorSha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a",
+      "unchangedFromPrior": true,
+      "lines": 27,
+      "disposition": "Shared control/button variants/size/disabled/focus; no I/O or error state decisions.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/lib/public-page-inventory.ts",
+      "reading": "full-file",
+      "sha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd",
+      "priorSha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd",
+      "unchangedFromPrior": true,
+      "lines": 4,
+      "disposition": "SEO slug inventory used sitemap/llms; static no missing data state.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/lib/seo-pages.ts",
+      "reading": "full-file",
+      "sha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "priorSha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "unchangedFromPrior": true,
+      "lines": 422,
+      "disposition": "All5 complete configs/types/metadata builder; UIR-002 FAQ public safety rules; legitimate product/provider identifiers retained.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/lib/seo.ts",
+      "reading": "full-file",
+      "sha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812",
+      "priorSha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812",
+      "unchangedFromPrior": true,
+      "lines": 44,
+      "disposition": "NoIndex/schema/JSON-LD serializer escapes <; metadata English machine-facing, no UI error conclusion.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    },
+    {
+      "file": "apps/web/lib/site.ts",
+      "reading": "full-file",
+      "sha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402",
+      "priorSha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402",
+      "unchangedFromPrior": true,
+      "lines": 4,
+      "disposition": "Env/fallback URL trim; invalid env only hypothetical, no incident asserted.",
+      "evidence": "manual full-file reading + source/consumer trace; runtime Not run unless probe explicit"
+    }
+  ],
+  "validation": {
+    "date": "2026-10-29T14:26:37.368Z",
+    "status": "Verified",
+    "command": "node probe.cjs; node stdin integrity/coverage/link/UTF8 checker",
+    "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+    "assignedUnique": 56,
+    "readFull": 56,
+    "remainingUnreviewed": 0,
+    "priorFullRead": 43,
+    "combinedUnique": 99,
+    "sourceHashesUnchanged": 99,
+    "probeObservations": 2,
+    "probeSourceHashChecks": 8,
+    "perFileMarkdownRows": 56,
+    "localLinksExist": true,
+    "utf8": true,
+    "trackedDiffEmpty": true,
+    "artifactFiles": [
+      "coverage.json",
+      "probe-results.json",
+      "probe.cjs",
+      "report.md"
+    ],
+    "limits": "Static/manual coverage + mocked TSX units only; no real browser/API/SQL/provider; no independent review by author."
+  }
+}

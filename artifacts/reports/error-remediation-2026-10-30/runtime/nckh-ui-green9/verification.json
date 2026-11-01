@@ -1,0 +1,12 @@
+{
+  "exit": 0,
+  "counts": {
+    "skipped": 0,
+    "passed": 9,
+    "executed": 9,
+    "failed": 0
+  },
+  "hashDrift": [],
+  "writerSnapshotDrift": [],
+  "limit": "NodeVM mocks; browser/API SQL not run"
+}

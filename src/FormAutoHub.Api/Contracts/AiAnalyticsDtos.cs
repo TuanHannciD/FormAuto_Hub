@@ -28,7 +28,8 @@ public sealed record AiRecentRunResponse(
     int CreditsUsed,
     long? DurationMs,
     DateTimeOffset CreatedAt,
-    string? ProjectName);
+    string? ProjectName,
+    string? ErrorMessage = null);
 
 public sealed record AiDailyUsageResponse(
     string Date,

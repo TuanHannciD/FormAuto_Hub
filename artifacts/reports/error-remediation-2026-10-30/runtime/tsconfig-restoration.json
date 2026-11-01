@@ -1,0 +1,8 @@
+{
+  "restoredOnlyOwnedAutoDelta": true,
+  "semanticEquivalenceExceptGeneratedInclude": true,
+  "originalSha256": "c706793c44f83261b467440674bd653490054a9f1ca653e4fb407ac8fe09dc00",
+  "generatedSha256": "10e58474221ad6231e4d7c90ef9f5c383a33d81d8a654ca5a643e5b25beb747b",
+  "restoredSha256": "c706793c44f83261b467440674bd653490054a9f1ca653e4fb407ac8fe09dc00",
+  "baselineEvidence": "tsconfig clean before runner; git status baseline omitted it; semantic guard compared every other key before restoring exact HEAD bytes"
+}

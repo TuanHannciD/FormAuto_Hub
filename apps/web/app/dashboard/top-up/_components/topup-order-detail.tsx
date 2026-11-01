@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { Copy, FileImage, X } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, KeyValueRow } from "@/components/ui";
+import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, KeyValueRow } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import type { TopupOrder } from "@/lib/api";
 import { displayPaymentMethod } from "@/lib/labels";
@@ -12,6 +13,21 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 export function TopupOrderDetailDialog({ order, evidenceUrl, evidenceError = false, onClose }: {
   order: TopupOrder | null; evidenceUrl: string | null; evidenceError?: boolean; onClose: () => void;
 }) {
+  const [copyErrorId, setCopyErrorId] = useState("");
+
+  async function copyId() {
+    if (!order) return;
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(order.id);
+      setCopyErrorId("");
+      toast.success("Đã sao chép đầy đủ mã yêu cầu.");
+    } catch {
+      setCopyErrorId(order.id);
+      toast.error("Không sao chép được. Bạn có thể chọn mã đầy đủ bên dưới và sao chép thủ công.");
+    }
+  }
+
   return <Dialog open={order !== null} className="max-w-3xl" onOpenChange={open => { if (!open) onClose(); }}>
     {order && <DialogContent contentClassName="flex max-h-[calc(100dvh-2rem-2px)] flex-col">
       <DialogHeader className="flex shrink-0 items-start justify-between gap-3">
@@ -42,7 +58,8 @@ export function TopupOrderDetailDialog({ order, evidenceUrl, evidenceError = fal
           </section>
         </div>
         <p className="text-xs leading-5 text-muted-foreground">Credit được ghi nhận sau khi thanh toán được xác minh hoặc yêu cầu đối soát được duyệt.</p>
-        <div className="flex items-start gap-2"><p className="min-w-0 flex-1 break-all font-mono text-[11px] text-muted-foreground">Mã yêu cầu: {order.id}</p><button type="button" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-border-strong text-muted-foreground hover:text-primary" aria-label="Sao chép đầy đủ mã yêu cầu" onClick={async () => { await navigator.clipboard.writeText(order.id); toast.success("Đã sao chép đầy đủ mã yêu cầu."); }}><Copy size={13} /></button></div>
+        <div className="flex items-start gap-2"><p className="min-w-0 flex-1 break-all font-mono text-xs text-muted-foreground">Mã yêu cầu: {order.id}</p><button type="button" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-strong text-muted-foreground hover:text-primary sm:h-8 sm:w-8" aria-label="Sao chép đầy đủ mã yêu cầu" onClick={copyId}><Copy size={13} /></button></div>
+        {copyErrorId === order.id && <Input aria-label="Mã yêu cầu đầy đủ" className="font-mono text-xs" readOnly value={order.id} onFocus={event => event.target.select()} />}
       </DialogBody>
       <DialogFooter className="shrink-0"><DialogClose className="w-full sm:w-auto">Đóng</DialogClose></DialogFooter>
     </DialogContent>}

@@ -1,0 +1,92 @@
+{
+  "counts": {
+    "passedButRunAborted": 0,
+    "pending": 0,
+    "passed": 0,
+    "executed": 17,
+    "disconnected": 0,
+    "inconclusive": 0,
+    "aborted": 0,
+    "timeout": 0,
+    "failed": 17,
+    "inProgress": 0,
+    "notExecuted": 0,
+    "completed": 0,
+    "warning": 0,
+    "notRunnable": 0,
+    "error": 0,
+    "total": 17
+  },
+  "compilerErrorCount": 0,
+  "hashDrift": [],
+  "failures": [
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http401\", expectedFragment: \"quản trị viên\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"timeout\", expectedFragment: \"hết thời gian\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"envelope\", expectedFragment: \"phản hồi\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"network\", expectedFragment: \"kết nối\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"paged\")",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: 10\r\nActual:   0"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http503\", expectedFragment: \"tạm thời\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_SuccessAndPartialKeepPreviewCreditContractWithNoFailureReason(count: 2, status: \"Partial\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"content\", expectedFragment: \"nội dung\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"user\")",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: 9\r\nActual:   0"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Analytics_MapsKnownCausesAndRedactsUntrustedHistoryAcrossEveryProjection(projection: \"admin\")",
+      "message": "Assert.Equal() Failure: Values differ\r\nExpected: 10\r\nActual:   0"
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"guard\", expectedFragment: \"an toàn\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"unknown\", expectedFragment: \"Không tạo được\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_SuccessAndPartialKeepPreviewCreditContractWithNoFailureReason(count: 1, status: \"Succeeded\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http429\", expectedFragment: \"giới hạn\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"credit\", expectedFragment: \"credit\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"http403\", expectedFragment: \"quyền\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrAiErrorContractTests.Generation_ReturnsSafeActionableCauseAndRunIdWithoutCharging(cause: \"nooutput\", expectedFragment: \"hợp lệ\")",
+      "message": "Expected optional safe errorMessage in the serialized response contract."
+    }
+  ]
+}

@@ -8,9 +8,9 @@ Define validation expectations by change type.
 
 ### Build Validation
 
-Run build validation for implementation changes once code exists.
+Run build validation for affected implementation changes.
 
-Expected future baseline:
+Implemented baseline:
 
 - backend build
 - test project build
@@ -47,27 +47,7 @@ Use integration tests for:
 
 ### Runtime Smoke Tests
 
-Runnable code changes require runtime smoke when behavior is exposed through a running process.
-
-Use runtime smoke for:
-
-- API route changes
-- browser route or dashboard changes
-- auth/session/role guard changes
-- database-backed behavior after migrations
-- payment link, callback, or webhook behavior
-- AI provider settings check and AI generation routes
-- public/tunnel URL behavior
-
-Runtime smoke must verify:
-
-- the affected server process was restarted after code changes
-- the target route returns the expected HTTP status and response markers
-- authenticated routes are checked with the correct user role/session
-- browser routes hydrate and load required JavaScript/CSS chunks
-- server logs do not show new exceptions for the smoke path
-
-Build/test without runtime smoke is insufficient for closeout when runtime smoke is applicable.
+See [QUALITY_GATES](agent/QUALITY_GATES.md) for the required runtime, browser and Done gates. The cases below add domain coverage without redefining those gates.
 
 ### Session-expiry Regression Checks
 
@@ -170,8 +150,4 @@ Every docs change must verify:
 
 ## Validation Report Format
 
-Use:
-
-- Verified
-- Not run
-- Blocked
+Use the evidence labels and fields in [QUALITY_GATES](agent/QUALITY_GATES.md).

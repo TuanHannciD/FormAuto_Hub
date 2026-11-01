@@ -1,0 +1,20 @@
+{
+  "exitCode": 0,
+  "baseHead": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "canonicalWorkingTreeOverrides": [
+    {
+      "path": ".agents/skills/formauto-server-debugger/agents/openai.yaml",
+      "beforeSha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "afterSha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "changed": false
+    },
+    {
+      "path": ".claude/skills/formauto-server-debugger/agents/openai.yaml",
+      "beforeSha256": "0b6a53013fd19b0b41ca7521961162dfdc1d050e0fba006e2bd1adad89a42fb4",
+      "afterSha256": "0f10c2f4f2c5b3ac18b5c5065abc0a15d014f512704d4ad59e89ab94654981af",
+      "changed": true
+    }
+  ],
+  "stdout": "{\"skills\": 24, \"pinnedHashEntries\": 280, \"mirroredFiles\": 293, \"syncedFiles\": 0}\n",
+  "stderr": ""
+}

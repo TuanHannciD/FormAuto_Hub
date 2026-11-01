@@ -1,0 +1,5491 @@
+{
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "method": "Every selected file read by the screening script; explicit error/null/log/UI signals catalogued. Human inspection follows candidates; no claim every full file manually read or all dynamic/implicit errors enumerated.",
+  "exclusions": [
+    "generated migrations/designer/snapshots",
+    "vendor/build/ignored output",
+    "private ignored configuration",
+    "skill packages",
+    "docs/templates/prototypes",
+    "static media/CSS/lockfiles"
+  ],
+  "records": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "e64095e941e791b819cd9c972bc30fe12de70d7cd544a8d2247bd84355e82aa8",
+      "lines": 108,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "sha256": "3892706a83c97174db04d246637189fae61c7e4a209c8796a9e4175ba6333630",
+      "lines": 198,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "Dockerfile.api",
+      "sha256": "4e7b37d03c83d307a050d6ff21b2854e28a2f49c04322c653deed33cc1fa2d90",
+      "lines": 22,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/Dockerfile",
+      "sha256": "0f8d01ac17ca85d295abcd4440a192c1e72794761c833e7ce8e4e3d7781ff536",
+      "lines": 42,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/admin/ai-provider-settings/page.tsx",
+      "sha256": "aa213146bce708cea5ed3eda7db96f90cc6e4104cdb90e2a4900da2331359899",
+      "lines": 330,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 9,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 40,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 41,
+          "text": "setLoadError(true); throw error;"
+        },
+        {
+          "line": 48,
+          "text": "loadData().catch((error: Error) => showError(error, \"Không tải được cấu hình AI.\"));"
+        },
+        {
+          "line": 63,
+          "text": "toast.success(\"Đã lưu cấu hình AI. API key chỉ hiển thị dạng ẩn.\");"
+        },
+        {
+          "line": 64,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 65,
+          "text": "showError(error, \"Không lưu được cấu hình AI.\");"
+        },
+        {
+          "line": 78,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 79,
+          "text": "showError(error, \"Không kiểm tra được cấu hình AI.\");"
+        },
+        {
+          "line": 96,
+          "text": "<Button type=\"button\" variant=\"secondary\" onClick={() => loadData().catch((error: Error) => showError(error, \"Không tải được cấu hình AI.\"))}>"
+        },
+        {
+          "line": 290,
+          "text": "} catch {"
+        },
+        {
+          "line": 291,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/ai-usage/page.tsx",
+      "sha256": "60c7c256fe85441585d329671bc23e0f7ffa27e5a23b05b3e50ab95fc490c8d9",
+      "lines": 475,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 171,
+          "text": ".catch(() => { if (!controller.signal.aborted) setStatsError(true); })"
+        },
+        {
+          "line": 200,
+          "text": "} catch (err: unknown) {"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/layout.tsx",
+      "sha256": "fe8c4537d56c89cb8c4de531e77deffb630cf26780e4f06cc2623ae5cc659f84",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/_components/manual-grant-history.tsx",
+      "sha256": "6d6cab693dfebce404bacbd02d78e9d6fdbc8fbb44fd519a9764d3bfd19c9094",
+      "lines": 83,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 18,
+          "text": "const [error, setError] = useState(false);"
+        },
+        {
+          "line": 24,
+          "text": "setLoading(true); setError(false);"
+        },
+        {
+          "line": 28,
+          "text": ".catch(() => { if (active) setError(true); })"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/manual-credits/page.tsx",
+      "sha256": "75e9d9d6ff7d9fcede2ba01d97ed7c2e0a41c8760b3e47b18a4c672ae7088612",
+      "lines": 423,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 15,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 74,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 76,
+          "text": "throw error;"
+        },
+        {
+          "line": 93,
+          "text": "loadRequests().catch((error: Error) => showError(error, \"Không tải được danh sách yêu cầu đối soát.\"));"
+        },
+        {
+          "line": 98,
+          "text": "loadUsers(grantEmail).catch((error: Error) => {"
+        },
+        {
+          "line": 99,
+          "text": "showError(error, \"Không tìm được người dùng theo email.\");"
+        },
+        {
+          "line": 123,
+          "text": ".catch((error) => {"
+        },
+        {
+          "line": 127,
+          "text": "showError(error, \"Không tải được ảnh minh chứng.\");"
+        },
+        {
+          "line": 163,
+          "text": "toast.success(\"Đã duyệt yêu cầu đối soát và cộng credit.\");"
+        },
+        {
+          "line": 166,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 167,
+          "text": "showError(error, \"Không duyệt được yêu cầu đối soát.\");"
+        },
+        {
+          "line": 188,
+          "text": "toast.success(\"Đã từ chối yêu cầu đối soát.\");"
+        },
+        {
+          "line": 190,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 191,
+          "text": "showError(error, \"Không từ chối được yêu cầu đối soát.\");"
+        },
+        {
+          "line": 203,
+          "text": "toast.error(\"Vui lòng chọn người dùng theo email hợp lệ.\");"
+        },
+        {
+          "line": 207,
+          "text": "toast.error(\"Nhập số credit nguyên dương và lý do cộng credit.\");"
+        },
+        {
+          "line": 218,
+          "text": "toast.success(`Đã cộng credit cho ${result.userEmail}. Số dư mới: ${result.balanceAfter} credit.`);"
+        },
+        {
+          "line": 224,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 225,
+          "text": "showError(error, \"Không cộng được credit thủ công.\");"
+        },
+        {
+          "line": 279,
+          "text": "{requestsError ? <Alert><p>{requestsError}</p><Button type=\"button\" variant=\"secondary\" disabled={isLoadingRequests} onClick={() => loadRequests().catch(error => showError(error))}>Thử lại</Button></Alert> : isLoadingRequests ? <p className=\"text-sm text-muted-foreground\">Đang tải yêu cầu đối soát...</p> :"
+        },
+        {
+          "line": 408,
+          "text": "toast.success(\"Đã sao chép đầy đủ mã yêu cầu.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/packages/page.tsx",
+      "sha256": "bb6fa7f9a4ff07752fc2ddd20114dfd28eba8a07dc4f9105c3abbc2b75953ac5",
+      "lines": 269,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 28,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 64,
+          "text": "} catch (error) { setLoadError(true); throw error; }"
+        },
+        {
+          "line": 69,
+          "text": "loadData().catch((error: Error) => showError(error, \"Không tải được danh sách gói credit.\"));"
+        },
+        {
+          "line": 112,
+          "text": "toast.error(\"Tên gói credit là bắt buộc.\");"
+        },
+        {
+          "line": 123,
+          "text": "toast.success(\"Đã cập nhật gói credit.\");"
+        },
+        {
+          "line": 129,
+          "text": "toast.success(\"Đã tạo gói credit.\");"
+        },
+        {
+          "line": 134,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 135,
+          "text": "showError(error, \"Không lưu được gói credit.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/page.tsx",
+      "sha256": "43815db80b05461016d7d78c13a7c526068e51dc7e338c56c341eb6469234d3c",
+      "lines": 154,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 12,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 35,
+          "text": "const [error, setError] = useState(false);"
+        },
+        {
+          "line": 38,
+          "text": "setLoading(true); setError(false);"
+        },
+        {
+          "line": 40,
+          "text": "catch (error) { setError(true); showError(error, \"Không tải được tổng quan quản trị.\"); }"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/payments/page.tsx",
+      "sha256": "f81ec5e84ea125e1f05382e8a70cd6714f870b3cdf1509fff10d32578ee2af7f",
+      "lines": 169,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 12,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 36,
+          "text": "const [error, setError] = useState(false);"
+        },
+        {
+          "line": 45,
+          "text": ".catch((error: Error) => { setError(true); showError(error, \"Không tải được danh sách thanh toán.\"); })"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/payos-settings/page.tsx",
+      "sha256": "bc78ad9f64311120084709badccce2635c7a793e4792fa3f5e3d44dd79e80a9b",
+      "lines": 275,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 8,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 35,
+          "text": "} catch (error) { setLoadError(true); throw error; }"
+        },
+        {
+          "line": 41,
+          "text": "loadData().catch((error: Error) => showError(error, \"Không tải được cấu hình PayOS.\"));"
+        },
+        {
+          "line": 54,
+          "text": "toast.success(\"Đã lưu cấu hình PayOS. Secret chỉ hiển thị dạng ẩn.\");"
+        },
+        {
+          "line": 55,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 56,
+          "text": "showError(error, \"Không lưu được cấu hình PayOS.\");"
+        },
+        {
+          "line": 65,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 66,
+          "text": "showError(error, \"Không kiểm tra được cấu hình PayOS.\");"
+        },
+        {
+          "line": 72,
+          "text": "toast.success(\"Đã sao chép webhook URL để cấu hình trong PayOS dashboard.\");"
+        },
+        {
+          "line": 82,
+          "text": "<Button type=\"button\" variant=\"secondary\" onClick={() => loadData().catch((error: Error) => showError(error, \"Không tải được cấu hình PayOS.\"))}>"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/admin/revenue/page.tsx",
+      "sha256": "98cf38f6d8ae49e6773aac4b26d577edc313e9e11119e0a32d004f7c28699017",
+      "lines": 120,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 9,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 15,
+          "text": "const [error, setError] = useState(false);"
+        },
+        {
+          "line": 18,
+          "text": "setLoading(true); setError(false);"
+        },
+        {
+          "line": 20,
+          "text": "catch (error) { setError(true); showError(error, \"Không tải được báo cáo doanh thu.\"); }"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/anti-abuse/page.tsx",
+      "sha256": "f707eb8ae8fe8bd0c3d94ec87e84902e6ee101a2c81967d08808468d22858b3a",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/api/payments/payos/webhook/route.ts",
+      "sha256": "d6ac7e8817c84a5452b05c06948c8162a68a1f79049f8aefaea7a7a9b21aaec8",
+      "lines": 35,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/auth/callback/page.tsx",
+      "sha256": "3929cde47fcdb1c3dc4604b4468b660585b88940ea6f1ea8ed049c4ed11b8062",
+      "lines": 109,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 39,
+          "text": "toast.error(callbackMessage);"
+        },
+        {
+          "line": 58,
+          "text": ".catch((error: Error) => {"
+        },
+        {
+          "line": 62,
+          "text": "toast.error(text);"
+        },
+        {
+          "line": 66,
+          "text": "toast.error(text);"
+        },
+        {
+          "line": 70,
+          "text": "toast.error(text);"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/auth/layout.tsx",
+      "sha256": "6f0b186b341f82404a5797a47a2f5d1ecbba9a08c65c34e13e7a067a6d00f69c",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/ai-usage/page.tsx",
+      "sha256": "3de76ebc215b687af7031bcf899afc05db1d31effe2735b7062379ea491da8cf",
+      "lines": 268,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 120,
+          "text": "const [error, setError] = useState(\"\");"
+        },
+        {
+          "line": 126,
+          "text": "setError(\"\");"
+        },
+        {
+          "line": 129,
+          "text": ".catch((fetchError) => {"
+        },
+        {
+          "line": 131,
+          "text": "setError(\"Không tải được thống kê AI.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/credit-transactions/page.tsx",
+      "sha256": "4280124d7e3dcca782d277c8791206ed2aaa393d8531982a727ca088d44289a6",
+      "lines": 248,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 38,
+          "text": "const [error, setError] = useState(\"\");"
+        },
+        {
+          "line": 62,
+          "text": "setError(\"\");"
+        },
+        {
+          "line": 73,
+          "text": ".catch((fetchError) => {"
+        },
+        {
+          "line": 81,
+          "text": "setError(fetchError instanceof Error ? fetchError.message : \"Không tải được giao dịch credit.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiDirectionInput.tsx",
+      "sha256": "a3440720e8dcf595eac0161877114d89f1b109040496d3a24c4a9a311d821ba6",
+      "lines": 24,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "sha256": "589807369d0608b9b91e0141d0e47e4dcdf1427a997a6537441bdbc2aba8c786",
+      "lines": 182,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+      "sha256": "b65f4a8e50c9e3a879f2aaa5d7814d923ffdd9fbc59bc9655a392e513d66e624",
+      "lines": 93,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/CheckboxSelectionFields.tsx",
+      "sha256": "a0aa8394bb2acae306cdb94736753ee032380fc0d57ab23a63ee8936d7c855c7",
+      "lines": 46,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+      "sha256": "7f351925bbc805ade2e01edb44311a85a31b223cdd16869ef0c0b03879ac8e5c",
+      "lines": 73,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+      "sha256": "6afeb4a097b44b68a87cf6749825d51fe85bde9001b6e673f607f817fb391270",
+      "lines": 68,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+      "sha256": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+      "lines": 372,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "sha256": "338c74eead9cd653370db1a416fe17fd8fd99c54dae331b4e9e482cad27f2ccc",
+      "lines": 43,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_constants.ts",
+      "sha256": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+      "lines": 64,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_helpers.ts",
+      "sha256": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32",
+      "lines": 415,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 47,
+          "text": "} catch {"
+        },
+        {
+          "line": 212,
+          "text": "} catch {"
+        },
+        {
+          "line": 221,
+          "text": "} catch {"
+        },
+        {
+          "line": 233,
+          "text": "} catch {"
+        },
+        {
+          "line": 246,
+          "text": "} catch {"
+        },
+        {
+          "line": 267,
+          "text": "} catch {"
+        },
+        {
+          "line": 287,
+          "text": "} catch {"
+        },
+        {
+          "line": 306,
+          "text": "} catch {"
+        },
+        {
+          "line": 347,
+          "text": "return null;"
+        },
+        {
+          "line": 352,
+          "text": "return null;"
+        },
+        {
+          "line": 357,
+          "text": "} catch {"
+        },
+        {
+          "line": 359,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_types.ts",
+      "sha256": "652b65daead609d513571e12baf90676f460e9b5497ba72b3aaf79de08edec01",
+      "lines": 33,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/page.tsx",
+      "sha256": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed",
+      "lines": 1189,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 80,
+          "text": "if (ids.some((id) => !byId.has(id))) throw new Error(\"Không tải đủ các bản xem trước đã lưu. Vui lòng thử lại.\");"
+        },
+        {
+          "line": 122,
+          "text": "apiFetch<DashboardSummary>(\"/api/dashboard/summary\").then((value) => setCreditBalance(value.currentCreditBalance)).catch(() => {});"
+        },
+        {
+          "line": 129,
+          "text": "return false;"
+        },
+        {
+          "line": 171,
+          "text": "}).catch((error) => { restoredContextRef.current = null; showError(error, \"Không khôi phục được bản xem trước đã lưu.\"); }).finally(() => setBusy(false));"
+        },
+        {
+          "line": 185,
+          "text": "} catch {"
+        },
+        {
+          "line": 245,
+          "text": ".catch(() => {"
+        },
+        {
+          "line": 316,
+          "text": "} catch {"
+        },
+        {
+          "line": 317,
+          "text": "toast.error(\"Không đọc được clipboard. Bạn có thể dán link bằng Ctrl+V vào ô Link Google Form.\");"
+        },
+        {
+          "line": 337,
+          "text": "toast.success(\"Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.\");"
+        },
+        {
+          "line": 338,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 339,
+          "text": "showError(error, \"Không phân tích được biểu mẫu.\");"
+        },
+        {
+          "line": 408,
+          "text": "toast.success(`Đã tạo ${result.items.length} câu trả lời xem trước và trừ ${result.creditsUsed} credit.`);"
+        },
+        {
+          "line": 409,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 410,
+          "text": "showError(error, \"Không tạo được bản xem trước.\");"
+        },
+        {
+          "line": 419,
+          "text": "toast.error(\"Không tìm thấy tiến trình cần tiếp tục.\");"
+        },
+        {
+          "line": 424,
+          "text": "toast.error(\"Hãy khôi phục bản xem trước và giữ cấu hình đã dùng trước khi tạo tiếp.\");"
+        },
+        {
+          "line": 484,
+          "text": "toast.success(`Đã tạo tiếp ${resultItems.length} bản xem trước và trừ ${result.creditsUsed} credit.`);"
+        },
+        {
+          "line": 485,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 486,
+          "text": "showError(error, \"Không tạo tiếp được phần còn thiếu.\");"
+        },
+        {
+          "line": 494,
+          "text": "toast.error(\"Chưa có gói credit phù hợp để nạp thêm.\");"
+        },
+        {
+          "line": 528,
+          "text": "toast.success(\"Đã tạo liên kết thanh toán PayOS. Sau khi thanh toán, quay lại để tiếp tục tạo phần còn thiếu.\");"
+        },
+        {
+          "line": 534,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 536,
+          "text": "showError(error, \"Không tạo được liên kết PayOS.\");"
+        },
+        {
+          "line": 544,
+          "text": "toast.error(\"Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.\");"
+        },
+        {
+          "line": 564,
+          "text": "if (result.status === \"Completed\") toast.success(`Đã gửi thành công ${result.successCount} lượt.`);"
+        },
+        {
+          "line": 566,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 567,
+          "text": "showError(error, \"Không gửi được bản xem trước.\");"
+        },
+        {
+          "line": 585,
+          "text": "toast.success(\"Đã tạm dừng sau nhóm gửi hiện tại.\");"
+        },
+        {
+          "line": 586,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 587,
+          "text": "showError(error, \"Không tạm dừng được lượt gửi.\");"
+        },
+        {
+          "line": 604,
+          "text": "toast.success(\"Đã hủy lượt gửi.\");"
+        },
+        {
+          "line": 605,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 606,
+          "text": "showError(error, \"Không hủy được lượt gửi.\");"
+        },
+        {
+          "line": 638,
+          "text": "} catch {"
+        },
+        {
+          "line": 669,
+          "text": "toast.success(\"Đã điền gợi ý prompt miễn phí. Prompt sẽ được lưu khi tạo AI preview.\");"
+        },
+        {
+          "line": 670,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 671,
+          "text": "showError(error, \"Không điền được prompt AI.\");"
+        },
+        {
+          "line": 773,
+          "text": "toast.error(\"AI chưa tạo được bản xem trước hợp lệ. Không trừ credit.\");"
+        },
+        {
+          "line": 775,
+          "text": "toast.success(`Đã tạo ${resultItems.length} AI preview và trừ ${result.creditsUsed} credit.`);"
+        },
+        {
+          "line": 777,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 778,
+          "text": "showError(error, \"Không tạo được AI preview.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/layout.tsx",
+      "sha256": "b5b70e09b3992afc0ae0d998b506c8aecd6feb09f8edca8be644d2e77221489e",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/callback/page.tsx",
+      "sha256": "5841bc10b5a7801f1fe5d98fdc5b9d6383d1b6a248b988a1d2fb6898264189c4",
+      "lines": 109,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "toast.error(msg);"
+        },
+        {
+          "line": 47,
+          "text": "toast.success(`Đã liên kết Google: ${result.email}`);"
+        },
+        {
+          "line": 50,
+          "text": ".catch((error: Error) => {"
+        },
+        {
+          "line": 58,
+          "text": "toast.error(msg);"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
+      "sha256": "ac677cdb0be38154497163b86fc96ff7299c525ee08aafbd2ba19a14c100f209",
+      "lines": 37,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/delete-model-dialog.tsx",
+      "sha256": "b95c8182ce790f62ba7b58b9b394f8d02f6fc5c67f45988f1171917af147ab2b",
+      "lines": 108,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 6,
+          "text": "import { readableNckhError } from \"../_helpers\";"
+        },
+        {
+          "line": 28,
+          "text": "throw new Error(\"Không xác định được đầy đủ dữ liệu bị ảnh hưởng.\");"
+        },
+        {
+          "line": 39,
+          "text": "const [error, setError] = useState<string | null>(null);"
+        },
+        {
+          "line": 48,
+          "text": "setLoading(true); setImpact(null); setName(\"\"); setError(null);"
+        },
+        {
+          "line": 50,
+          "text": ".catch(cause => { if (!cancelled) setError(readableNckhError(cause, \"Không tải được dữ liệu bị ảnh hưởng. Vui lòng thử lại.\")); })"
+        },
+        {
+          "line": 57,
+          "text": "busy.current = true; setDeleting(true); setError(null);"
+        },
+        {
+          "line": 63,
+          "text": "setError(\"Mô hình đã thay đổi. Hãy tải lại thông tin và xác nhận lại.\");"
+        },
+        {
+          "line": 69,
+          "text": "} catch (cause) {"
+        },
+        {
+          "line": 72,
+          "text": "setError(readableNckhError(cause, \"Không xác nhận được kết quả xóa. Hãy tải lại thông tin trước khi thử lại.\"));"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/loading-state.tsx",
+      "sha256": "0540c311696bb766ef83e580fe58dfc391913991a4e26fb11ddd364ec4eb64bf",
+      "lines": 10,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/overview-panel.tsx",
+      "sha256": "53c5d3bee3f99b3eb5ab0e51cd82d584f2eae7bdc44a2a3f61b7c4b5f92a0b9c",
+      "lines": 36,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_components/relation-edge.tsx",
+      "sha256": "39f90729c110ec32e37412944add77974237b533030e44c6e44926cceff54c4f",
+      "lines": 55,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_constants.ts",
+      "sha256": "4ba6d6fdd61361a08e81da0c9be3026073c82117f6c4f8cbb8561b5f60eac92f",
+      "lines": 64,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_helpers.ts",
+      "sha256": "e32ae079fa44b407b16bd8f424ec45e257d75e74432827fa60c3f009d1516218",
+      "lines": 150,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 3,
+          "text": "import { readableError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 74,
+          "text": "export function readableNckhError(error: unknown, fallback: string) {"
+        },
+        {
+          "line": 75,
+          "text": "const message = readableError(error, fallback);"
+        },
+        {
+          "line": 117,
+          "text": "if (!value.trim()) return null;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/_types.ts",
+      "sha256": "49a149592692efb3b725077a9a70834dd4d743911be07a2a5880b38d68bf2a1d",
+      "lines": 38,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+      "sha256": "6da6f4ae352f17ccf0639a586d8ff500214b1c9270d78f4acd88cd9d3abddb95",
+      "lines": 1303,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 84,
+          "text": "readableNckhError,"
+        },
+        {
+          "line": 117,
+          "text": "const [error, setError] = useState<string | null>(null);"
+        },
+        {
+          "line": 129,
+          "text": "const [panelError, setPanelError] = useState<string | null>(null);"
+        },
+        {
+          "line": 206,
+          "text": "if (pendingActionRef.current) return false;"
+        },
+        {
+          "line": 296,
+          "text": "setError(null);"
+        },
+        {
+          "line": 306,
+          "text": "} catch (loadError) {"
+        },
+        {
+          "line": 308,
+          "text": "setError(readableNckhError(message, \"Không tải được không gian làm việc NCKH.\"));"
+        },
+        {
+          "line": 317,
+          "text": "setPanelError(null);"
+        },
+        {
+          "line": 339,
+          "text": "setPanelError(readableNckhError(message, \"Một phần dữ liệu chưa sẵn sàng.\"));"
+        },
+        {
+          "line": 374,
+          "text": "toast.success(\"Đã tạo mô hình nghiên cứu.\");"
+        },
+        {
+          "line": 379,
+          "text": "} catch (createError) {"
+        },
+        {
+          "line": 380,
+          "text": "toast.error(readableNckhError(createError, \"Không tạo được mô hình.\"));"
+        },
+        {
+          "line": 391,
+          "text": "toast.success(\"Đã kích hoạt mô hình.\");"
+        },
+        {
+          "line": 393,
+          "text": "} catch (activationError) {"
+        },
+        {
+          "line": 394,
+          "text": "toast.error(readableNckhError(activationError, \"Không kích hoạt được mô hình.\"));"
+        },
+        {
+          "line": 409,
+          "text": "toast.error(\"Chỉ có thể thêm biến khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 419,
+          "text": "toast.error(scalePayload.error);"
+        },
+        {
+          "line": 437,
+          "text": "toast.success(\"Đã thêm biến.\");"
+        },
+        {
+          "line": 440,
+          "text": "} catch (variableError) {"
+        },
+        {
+          "line": 441,
+          "text": "toast.error(readableNckhError(variableError, \"Không thêm được biến.\"));"
+        },
+        {
+          "line": 449,
+          "text": "toast.error(\"Chỉ có thể xóa biến khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 456,
+          "text": "toast.success(\"Đã xóa biến.\");"
+        },
+        {
+          "line": 461,
+          "text": "} catch (deleteError) {"
+        },
+        {
+          "line": 462,
+          "text": "toast.error(readableNckhError(deleteError, \"Không xóa được biến.\"));"
+        },
+        {
+          "line": 472,
+          "text": "toast.error(\"Chỉ có thể thêm ánh xạ khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 485,
+          "text": "toast.success(\"Đã thêm ánh xạ.\");"
+        },
+        {
+          "line": 489,
+          "text": "} catch (mappingError) {"
+        },
+        {
+          "line": 490,
+          "text": "toast.error(readableNckhError(mappingError, \"Không thêm được ánh xạ.\"));"
+        },
+        {
+          "line": 498,
+          "text": "toast.error(\"Chỉ có thể xóa ánh xạ khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 505,
+          "text": "toast.success(\"Đã xóa ánh xạ.\");"
+        },
+        {
+          "line": 507,
+          "text": "} catch (deleteError) {"
+        },
+        {
+          "line": 508,
+          "text": "toast.error(readableNckhError(deleteError, \"Không xóa được ánh xạ.\"));"
+        },
+        {
+          "line": 518,
+          "text": "toast.error(relationDraftError);"
+        },
+        {
+          "line": 522,
+          "text": "toast.error(\"Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 541,
+          "text": "toast.success(\"Đã thêm quan hệ.\");"
+        },
+        {
+          "line": 544,
+          "text": "} catch (relationError) {"
+        },
+        {
+          "line": 545,
+          "text": "toast.error(readableNckhError(relationError, \"Không thêm được quan hệ.\"));"
+        },
+        {
+          "line": 554,
+          "text": "toast.error(\"Chỉ có thể nối quan hệ khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 561,
+          "text": "toast.error(\"Biến nguồn và biến đích phải khác nhau.\");"
+        },
+        {
+          "line": 566,
+          "text": "toast.error(\"Quan hệ có hướng này đã tồn tại trong mô hình.\");"
+        },
+        {
+          "line": 579,
+          "text": "toast.error(\"Chỉ có thể chỉnh sửa quan hệ khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 594,
+          "text": "toast.success(\"Đã cập nhật hướng quan hệ.\");"
+        },
+        {
+          "line": 596,
+          "text": "} catch (updateError) {"
+        },
+        {
+          "line": 597,
+          "text": "toast.error(readableNckhError(updateError, \"Không cập nhật được quan hệ.\"));"
+        },
+        {
+          "line": 606,
+          "text": "toast.error(\"Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 622,
+          "text": "toast.success(\"Đã lưu vị trí canvas mặc định.\");"
+        },
+        {
+          "line": 624,
+          "text": "} catch (positionError) {"
+        },
+        {
+          "line": 625,
+          "text": "toast.error(readableNckhError(positionError, \"Không lưu được vị trí sơ đồ.\"));"
+        },
+        {
+          "line": 659,
+          "text": "toast.error(\"Chỉ có thể chỉnh sửa quan hệ và vị trí khi mô hình còn là bản nháp.\");"
+        },
+        {
+          "line": 666,
+          "text": "toast.success(\"Đã xóa quan hệ.\");"
+        },
+        {
+          "line": 669,
+          "text": "} catch (deleteError) {"
+        },
+        {
+          "line": 670,
+          "text": "toast.error(readableNckhError(deleteError, \"Không xóa được quan hệ.\"));"
+        },
+        {
+          "line": 687,
+          "text": "toast.success(action === \"Update\" ? \"Đã gửi yêu cầu cập nhật Google Form.\" : \"Đã gửi yêu cầu tạo Google Form.\");"
+        },
+        {
+          "line": 688,
+          "text": "} catch (generateError) {"
+        },
+        {
+          "line": 689,
+          "text": "toast.error(readableNckhError(generateError, selectedModel?.hasGeneratedForm ? \"Không cập nhật được Google Form.\" : \"Không tạo được Google Form.\"));"
+        },
+        {
+          "line": 701,
+          "text": "toast.success(\"Đã chạy thu thập phản hồi.\");"
+        },
+        {
+          "line": 703,
+          "text": "} catch (collectError) {"
+        },
+        {
+          "line": 704,
+          "text": "toast.error(readableNckhError(collectError, \"Không thu thập được phản hồi.\"));"
+        },
+        {
+          "line": 716,
+          "text": "toast.success(\"Đã chuẩn hóa dữ liệu.\");"
+        },
+        {
+          "line": 718,
+          "text": "} catch (normalizeError) {"
+        },
+        {
+          "line": 719,
+          "text": "toast.error(readableNckhError(normalizeError, \"Không chuẩn hóa được dữ liệu.\"));"
+        },
+        {
+          "line": 739,
+          "text": "toast.success(\"Đã tải file xuất dữ liệu.\");"
+        },
+        {
+          "line": 740,
+          "text": "} catch (exportError) {"
+        },
+        {
+          "line": 745,
+          "text": "toast.error(readableNckhError(message, detail));"
+        },
+        {
+          "line": 833,
+          "text": "toast.success(\"Đã xóa mô hình.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/nckh/page.tsx",
+      "sha256": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+      "lines": 332,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 12,
+          "text": "import { readableError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 39,
+          "text": "function readableNckhError(error: unknown, fallback: string) {"
+        },
+        {
+          "line": 40,
+          "text": "const message = readableError(error, fallback);"
+        },
+        {
+          "line": 109,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 116,
+          "text": "setLoadError(readableNckhError(error, \"Không tải được danh sách form. Vui lòng thử lại.\"));"
+        },
+        {
+          "line": 133,
+          "text": "toast.success(\"Đã liên kết Google thành công!\");"
+        },
+        {
+          "line": 137,
+          "text": "toast.error(readableNckhError(decodeURIComponent(error), \"Không hoàn tất được liên kết Google.\"));"
+        },
+        {
+          "line": 147,
+          "text": "toast.error(\"Thiếu cấu hình Google OAuth. Vui lòng kiểm tra biến môi trường.\");"
+        },
+        {
+          "line": 169,
+          "text": "toast.success(`Đã nhập form: ${result.title}`);"
+        },
+        {
+          "line": 172,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 174,
+          "text": "toast.error(\"Bạn cần liên kết Google trước khi nhập form.\");"
+        },
+        {
+          "line": 177,
+          "text": "toast.error(readableNckhError(error, \"Không nhập được form.\"));"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/page.tsx",
+      "sha256": "e2b4cb7777550cad86d40afca6aa6bd5f36e36fd27d278064b2110fa5b251ad0",
+      "lines": 119,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 13,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 41,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 43,
+          "text": "showError(error, \"Không tải được tổng quan tài khoản.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/[id]/page.tsx",
+      "sha256": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2",
+      "lines": 97,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 9,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 29,
+          "text": ".catch((error) => {"
+        },
+        {
+          "line": 31,
+          "text": "showError(error, \"Không tải được chi tiết yêu cầu nạp.\");"
+        },
+        {
+          "line": 49,
+          "text": ".catch((error) => {"
+        },
+        {
+          "line": 53,
+          "text": "showError(error, \"Không tải được ảnh minh chứng.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+      "sha256": "0725a87cca9b5d8641e704a945caa49ea482a1a97eecd751902e8716eaf576a0",
+      "lines": 50,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 45,
+          "text": "<div className=\"flex items-start gap-2\"><p className=\"min-w-0 flex-1 break-all font-mono text-xs text-muted-foreground\">Mã yêu cầu: {order.id}</p><button type=\"button\" className=\"flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-strong text-muted-foreground hover:text-primary sm:h-8 sm:w-8\" aria-label=\"Sao chép đầy đủ mã yêu cầu\" onClick={async () => { await navigator.clipboard.writeText(order.id); toast.success(\"Đã sao chép đầy đủ mã yêu cầu.\"); }}><Copy size={13} /></button></div>"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/top-up/page.tsx",
+      "sha256": "00a8d3c6c57196c1cd015eb12440be041d9f968febf9d3e2fcdc4869af53ba22",
+      "lines": 289,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 13,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 89,
+          "text": "} catch (error) { setLoadError(true); throw error; }"
+        },
+        {
+          "line": 94,
+          "text": "loadData().catch((error: Error) => showError(error, \"Không tải được dữ liệu nạp credit.\"));"
+        },
+        {
+          "line": 113,
+          "text": ".catch((error) => {"
+        },
+        {
+          "line": 117,
+          "text": "showError(error, \"Không tải được ảnh minh chứng.\");"
+        },
+        {
+          "line": 133,
+          "text": "toast.error(\"Chọn ảnh PNG, JPEG hoặc WebP, tối đa 5 MB.\");"
+        },
+        {
+          "line": 147,
+          "text": "toast.success(\"Đã tải ảnh minh chứng.\");"
+        },
+        {
+          "line": 148,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 151,
+          "text": "showError(error, \"Không tải được ảnh minh chứng.\");"
+        },
+        {
+          "line": 170,
+          "text": "toast.success(\"Đã tạo yêu cầu nạp credit. Quản trị viên sẽ đối soát và xử lý.\");"
+        },
+        {
+          "line": 173,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 174,
+          "text": "showError(error, \"Không tạo được yêu cầu đối soát thủ công.\");"
+        },
+        {
+          "line": 185,
+          "text": "toast.success(\"Đã tạo liên kết thanh toán PayOS. Credit chỉ cộng sau khi hệ thống xác minh thanh toán.\");"
+        },
+        {
+          "line": 188,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 189,
+          "text": "showError(error, \"Không tạo được liên kết PayOS.\");"
+        },
+        {
+          "line": 199,
+          "text": "{loadError && <Alert><p>Không tải được dữ liệu nạp credit.</p><Button type=\"button\" variant=\"secondary\" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}>Thử lại</Button></Alert>}"
+        },
+        {
+          "line": 259,
+          "text": "<CardHeader className=\"flex flex-wrap items-center justify-between gap-3\"><div><CardTitle className=\"flex items-center gap-2\"><History size={18} className=\"text-primary\" />Lịch sử yêu cầu nạp</CardTitle><p className=\"mt-1 text-sm text-muted-foreground\">Theo dõi thanh toán và kết quả đối soát của bạn.</p></div><Button type=\"button\" variant=\"secondary\" disabled={isLoading} onClick={() => loadData().catch(error => showError(error))}><RefreshCw size={16} />Làm mới</Button></CardHeader>"
+        },
+        {
+          "line": 278,
+          "text": "toast.success(\"Đã sao chép đầy đủ mã yêu cầu.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/dashboard/usage-logs/page.tsx",
+      "sha256": "aa9a18be0528c9809d2ae20331e8cca7920807fcaf76d29c33472d4fc67bae3f",
+      "lines": 252,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 41,
+          "text": "const [error, setError] = useState(\"\");"
+        },
+        {
+          "line": 65,
+          "text": "setError(\"\");"
+        },
+        {
+          "line": 76,
+          "text": ".catch((fetchError) => {"
+        },
+        {
+          "line": 84,
+          "text": "setError(fetchError instanceof Error ? fetchError.message : \"Không tải được lịch sử sử dụng.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/google-forms/sample-data/page.tsx",
+      "sha256": "df1aaf155fd1483f9b7f01891217463ccfac549cee597c494f38c6a521d13ca1",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/google-forms/sheets-report/page.tsx",
+      "sha256": "fabcec0a3a07e8639be90dfb229a1f54fe7a2020f847872965d46670c9885066",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/google-forms/student-report/page.tsx",
+      "sha256": "f1f247029b221f957da989a5fa1b7db152ef5e434c3d285827ebbb9e23cae24f",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/google-forms/survey-demo/page.tsx",
+      "sha256": "daaf698981df10fdb541f8e700798f1b394b93f0a23593628ee8c9a8aff9c0c0",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
+      "sha256": "b46926a0bc4cbb27a0b964b72539f18337249ac9bed09ebbc794743b69c71be5",
+      "lines": 39,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/llms.txt/route.ts",
+      "sha256": "2b52f76ab3c86ebe1a9be43954a4d1b30cc8bdd1abddae5c4a24bf3e6293dc8e",
+      "lines": 47,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/login/layout.tsx",
+      "sha256": "12b35aa9b9871b486ef88deed6184d31f718fc687e8647fa372d84068c50d4a7",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/login/page.tsx",
+      "sha256": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad",
+      "lines": 139,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 11,
+          "text": "import { readableError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 23,
+          "text": "return readableError(message, \"Không đăng nhập được. Vui lòng thử lại.\");"
+        },
+        {
+          "line": 40,
+          "text": "const [formError, setFormError] = useState(\"\");"
+        },
+        {
+          "line": 51,
+          "text": "toast.error(\"Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.\", { id: \"session-expired\" });"
+        },
+        {
+          "line": 58,
+          "text": "setFormError(\"\");"
+        },
+        {
+          "line": 69,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 71,
+          "text": "setFormError(message);"
+        },
+        {
+          "line": 72,
+          "text": "toast.error(message);"
+        },
+        {
+          "line": 80,
+          "text": "setFormError(\"\");"
+        },
+        {
+          "line": 90,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 92,
+          "text": "setFormError(message);"
+        },
+        {
+          "line": 93,
+          "text": "toast.error(message);"
+        },
+        {
+          "line": 120,
+          "text": "<GoogleIdentityButton disabled={isSubmitting} text=\"signin_with\" onCredential={loginWithGoogle} onUnavailable={() => setFormError(\"Đăng nhập với Google hiện chưa khả dụng. Vui lòng thử lại sau.\")} />"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/page.tsx",
+      "sha256": "27cab696ebf8f862e1a7448d12d00369423be84019713df76397a5fab06402d3",
+      "lines": 235,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/payment/layout.tsx",
+      "sha256": "aa605cc12774602517620c4da4ca71adc70857213b2636a213eca8a1efcb7ce2",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/payment/payos/cancel/page.tsx",
+      "sha256": "9b48cee16de429e26cfe00aecda8db0258020df8d523eee2f11c485a01d9f063",
+      "lines": 1,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/payment/payos/return/page.tsx",
+      "sha256": "6ee86380ae66865bfeba4f304f2f0f47c4478d9875549733f0b9d8f0e642952a",
+      "lines": 104,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/register/layout.tsx",
+      "sha256": "89fad3eca625b0317e4f12caf9a6a001f465bcbe724015025339a2d6ce145012",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/register/page.tsx",
+      "sha256": "266b53bd73b89ceca33fdd9d469898b89651925836a1c39e837512012c2cd914",
+      "lines": 120,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 12,
+          "text": "import { readableError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 24,
+          "text": "return readableError(message, \"Không tạo được tài khoản.\");"
+        },
+        {
+          "line": 33,
+          "text": "const [formError, setFormError] = useState(\"\");"
+        },
+        {
+          "line": 45,
+          "text": "toast.error(\"Mật khẩu tối thiểu 8 ký tự.\");"
+        },
+        {
+          "line": 49,
+          "text": "setFormError(\"\");"
+        },
+        {
+          "line": 59,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 61,
+          "text": "setFormError(message);"
+        },
+        {
+          "line": 62,
+          "text": "toast.error(message);"
+        },
+        {
+          "line": 70,
+          "text": "setFormError(\"\");"
+        },
+        {
+          "line": 80,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 82,
+          "text": "setFormError(message);"
+        },
+        {
+          "line": 83,
+          "text": "toast.error(message);"
+        },
+        {
+          "line": 115,
+          "text": "<GoogleIdentityButton disabled={isSubmitting} text=\"signup_with\" onCredential={registerWithGoogle} onUnavailable={() => setFormError(\"Đăng nhập với Google hiện chưa khả dụng. Vui lòng thử lại sau.\")} />"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/app/robots.ts",
+      "sha256": "e2b310874f957fd27631b5782a7ebf75c254b13390906f41f389d1fd3d19830c",
+      "lines": 31,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/app/sitemap.ts",
+      "sha256": "d7ad43b88b2f8535be36a0450ca432073fd43a85e1378172cd75aa2cb86addbd",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/account-dialog.tsx",
+      "sha256": "c0d5917ff894ed7c5813fb4f483682760cf66d27fcab027a8837dbfdbadcdb7b",
+      "lines": 49,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/account-menu.tsx",
+      "sha256": "4cc8ddb791ecb7e080afa05ef095122fa2bb46500cc24006e2e50d619b5991b4",
+      "lines": 72,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/account-profile-panel.tsx",
+      "sha256": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+      "lines": 57,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 6,
+          "text": "import { showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 21,
+          "text": ".catch((error: Error) => showError(error, \"Không tải được hồ sơ.\"));"
+        },
+        {
+          "line": 35,
+          "text": "toast.success(\"Đã lưu hồ sơ.\");"
+        },
+        {
+          "line": 36,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 37,
+          "text": "showError(error, \"Không lưu được hồ sơ.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/components/account-security-panel.tsx",
+      "sha256": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+      "lines": 192,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 9,
+          "text": "import { readableError, showError } from \"@/lib/toast\";"
+        },
+        {
+          "line": 29,
+          "text": "return readableError(message, \"Không đổi được mật khẩu.\");"
+        },
+        {
+          "line": 41,
+          "text": "return readableError(message, \"Không liên kết được tài khoản Google.\");"
+        },
+        {
+          "line": 49,
+          "text": "return readableError(message, \"Không hủy liên kết được tài khoản Google.\");"
+        },
+        {
+          "line": 65,
+          "text": ".catch((error: Error) => showError(error, \"Không tải được hồ sơ bảo mật.\"));"
+        },
+        {
+          "line": 76,
+          "text": "toast.error(\"Mật khẩu tối thiểu 8 ký tự.\");"
+        },
+        {
+          "line": 81,
+          "text": "toast.error(\"Xác nhận mật khẩu không khớp.\");"
+        },
+        {
+          "line": 96,
+          "text": "toast.success(\"Đã đổi mật khẩu.\");"
+        },
+        {
+          "line": 98,
+          "text": "toast.error(changePasswordError(\"400\"));"
+        },
+        {
+          "line": 100,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 101,
+          "text": "toast.error(changePasswordError(error instanceof Error ? error.message : \"\"));"
+        },
+        {
+          "line": 117,
+          "text": "toast.success(\"Đã liên kết tài khoản Google.\");"
+        },
+        {
+          "line": 120,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 121,
+          "text": "toast.error(googleLinkError(error instanceof Error ? error.message : \"\"));"
+        },
+        {
+          "line": 137,
+          "text": "toast.success(\"Đã hủy liên kết tài khoản Google.\");"
+        },
+        {
+          "line": 143,
+          "text": "} catch (error) {"
+        },
+        {
+          "line": 144,
+          "text": "toast.error(googleUnlinkError(error instanceof Error ? error.message : \"\"));"
+        },
+        {
+          "line": 187,
+          "text": "<GoogleIdentityButton disabled={isLinkingGoogle || !profile} text=\"continue_with\" onCredential={linkGoogle} onUnavailable={() => toast.error(\"Không tải được Google sign-in.\")} />"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/components/admin-shell.tsx",
+      "sha256": "15cddc9b020492140fbe42585570b4019ab0c48560660b96c9b3ffe1c13c258a",
+      "lines": 116,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/app-toaster.tsx",
+      "sha256": "aacf7e8b5d432cc5c03e8a4565173c6f39f57fefe72c4fffac7372097dd05091",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/auth-password-input.tsx",
+      "sha256": "7f221403f5f21d9b3a0b0bedfaf5d823573f5b7f8573eaf6eddfdc6b5f508152",
+      "lines": 10,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/auth-shell.tsx",
+      "sha256": "78cb83287cd725ee3dc6a0fbdfbf0a3097fec137ddbb1d681c051f0d00153316",
+      "lines": 51,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/base-table.tsx",
+      "sha256": "47724776fa4c840c08b7f2a3008a2fc5950f6dc90a2297cc72de6138d7e6985b",
+      "lines": 80,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/confirm-dialog.tsx",
+      "sha256": "3bd41d67a6257bbcf7fb8994336e5ddc0bd9656376ccc33d8f0095173f0bf9d4",
+      "lines": 42,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/dashboard-shell.tsx",
+      "sha256": "33c2ab866c7e468e5fadefdea119097a7e61cb9f7a350f9c45be52877cabc9ab",
+      "lines": 123,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/dialog.tsx",
+      "sha256": "ddf732aa8772a5fcd79edb497e1f7cc916d7f99a45f815d6d8e98649c7a6ae4a",
+      "lines": 106,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 27,
+          "text": "if (!mounted || !present) return null;"
+        },
+        {
+          "line": 88,
+          "text": "if (!state) throw new Error(\"DialogContent must be used inside Dialog.\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/components/dropdown-select.tsx",
+      "sha256": "ea0344f466c8eb1c51b4ce7c1641f82ad651bd8715cb2cdb23642e486cafca5e",
+      "lines": 105,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/google-identity-button.tsx",
+      "sha256": "a04a5c2c3b0d5cda6ab8fe0e396c2ea99766cdd9679b1bb943c1cbc23e3219b8",
+      "lines": 153,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/landing-dashboard-tabs.tsx",
+      "sha256": "92732185ddd67a3683c2ab2060072f0c1cbc4a066cb00277a2bfb98338bc262a",
+      "lines": 197,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/metric-card.tsx",
+      "sha256": "d84daed127154f595b3facf9b0b8cb68daec5eb737a58b10ad2c0446c8ba2907",
+      "lines": 32,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/motion/motion-presets.ts",
+      "sha256": "67327776a9477f69e2c2fb8b4de48e25a2e477d7fb1b312de0cdbcb4bd6e54c6",
+      "lines": 17,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/motion/transition-region.tsx",
+      "sha256": "3d82cfbe95ebc2333dba4cb12c81e37bfcad31c3f9f186c3bb4d0f49169831da",
+      "lines": 72,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 56,
+          "text": "}).catch(() => {});"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/components/motion/use-element-size.ts",
+      "sha256": "747bc4beb090a76c006fec59ff5bb627252d2b93b3eb7d95c9e6df976a84fec2",
+      "lines": 23,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/motion/use-popup-motion.ts",
+      "sha256": "847492057a28c39de1aea9c8eb7ed01fe53278f611f633a1c6168300d0a94db1",
+      "lines": 74,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 48,
+          "text": "running.finished.then(() => { if (animation.current === running) finish(); }).catch(() => {});"
+        },
+        {
+          "line": 69,
+          "text": "running.finished.then(() => { if (animation.current === running) closed.current(); }).catch(() => {});"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/components/pagination-controls.tsx",
+      "sha256": "e83ae42ff2c1da73c0efc9f286ebe6ddf8d580e6b09033fcf420ceb9a73c2506",
+      "lines": 35,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/scroll-reveal.tsx",
+      "sha256": "41c9bef4f26d1b4337e0fd97b764790dbe5e3964746a756fda1530f05df0559d",
+      "lines": 69,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/searchable-dropdown-select.tsx",
+      "sha256": "66a3802c0b91b5ed4903c266ff165b9a7b2b048ebccde8d944c96c0995371840",
+      "lines": 140,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/seo-keyword-page.tsx",
+      "sha256": "444fa011088ad33da568041b373a0f64e0daeef610b29595022e41827c2ce987",
+      "lines": 392,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/shell-layout.tsx",
+      "sha256": "f59d35cb04d94c5865ed1e0ab438942ff74b75a6df1798027a6c10d0af05795f",
+      "lines": 51,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/status-badge.tsx",
+      "sha256": "a79241a88ea56e874ab53b29989b34ddecb4238351d3262987b7c0de02677f1b",
+      "lines": 15,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/ui-styles.ts",
+      "sha256": "cae91b83d24e4beeec6b5057b9f6aa29b12bf3e3f9d2f4bbef49fb71e13d453a",
+      "lines": 27,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/components/ui.tsx",
+      "sha256": "7f5c187af42c399c908b08f00ae64208ab348910922bb2ed6f5aac2a19cf1c5c",
+      "lines": 161,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/api.ts",
+      "sha256": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+      "lines": 679,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 23,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 36,
+          "text": "if (googleError) throw googleError;"
+        },
+        {
+          "line": 42,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 46,
+          "text": "throw new Error(`Không tải được tệp. Mã lỗi HTTP ${response.status}.`);"
+        },
+        {
+          "line": 59,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 82,
+          "text": "if (googleError) throw googleError;"
+        },
+        {
+          "line": 89,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 100,
+          "text": "} catch {"
+        },
+        {
+          "line": 104,
+          "text": "} catch {"
+        },
+        {
+          "line": 108,
+          "text": "throw new Error(message);"
+        },
+        {
+          "line": 252,
+          "text": "lastCheckMessage: string;"
+        },
+        {
+          "line": 273,
+          "text": "lastCheckMessage: string;"
+        },
+        {
+          "line": 452,
+          "text": "errorMessage: string;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/lib/auth.ts",
+      "sha256": "1cd61d9e4a9e311c758a7120a595244dfc9a5d347166e130e5d50ce18670846e",
+      "lines": 178,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 33,
+          "text": "return null;"
+        },
+        {
+          "line": 38,
+          "text": "return null;"
+        },
+        {
+          "line": 43,
+          "text": "} catch {"
+        },
+        {
+          "line": 45,
+          "text": "return null;"
+        },
+        {
+          "line": 66,
+          "text": "return false;"
+        },
+        {
+          "line": 75,
+          "text": "return null;"
+        },
+        {
+          "line": 79,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 94,
+          "text": "return null;"
+        },
+        {
+          "line": 101,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 143,
+          "text": "throw new SessionExpiredError();"
+        },
+        {
+          "line": 146,
+          "text": "throw new Error(\"Không thể làm mới phiên lúc này. Vui lòng thử lại.\");"
+        },
+        {
+          "line": 160,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/lib/labels.ts",
+      "sha256": "2ffa649c4b8c2cc57fd136ff8dc4e4425c0c92459583f1146822e3d73f72e7c9",
+      "lines": 82,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/nckh-google-auth.ts",
+      "sha256": "09ea37df3b46164958df3fcc7bbb59eae66cf0fa48968f6e9f64e1a47e0c8690",
+      "lines": 29,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 17,
+          "text": "if (response.status !== 401 || !path.startsWith(\"/api/v1/nckh/\")) return null;"
+        },
+        {
+          "line": 20,
+          "text": "if (!problem || typeof problem !== \"object\") return null;"
+        },
+        {
+          "line": 25,
+          "text": "} catch {"
+        },
+        {
+          "line": 28,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/lib/public-page-inventory.ts",
+      "sha256": "44518434d0f76cbd0632de020f70f377f876028ebb5927b0150d0221b5333bcd",
+      "lines": 4,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/seo-pages.ts",
+      "sha256": "5575f14db277b7a4212d6f1fa4c547cc7dc06b47f6547c28d507610e96412823",
+      "lines": 422,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/seo.ts",
+      "sha256": "f8bd7764867a76f7e02aa1f146eddd0f12a17e4a38f6dfa070ff364ff9656812",
+      "lines": 44,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/site.ts",
+      "sha256": "e2196e1244cd26f090fc433a31ae3ef59d4656ad2ad459fb77636c7b05509402",
+      "lines": 4,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/lib/toast.ts",
+      "sha256": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+      "lines": 34,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 4,
+          "text": "export function readableError(error: unknown, fallback = \"Yêu cầu không thành công.\") {"
+        },
+        {
+          "line": 22,
+          "text": "export function showError(error: unknown, fallback = \"Yêu cầu không thành công.\") {"
+        },
+        {
+          "line": 27,
+          "text": "const message = readableError(error, fallback);"
+        },
+        {
+          "line": 30,
+          "text": "console.error(fallback, error);"
+        },
+        {
+          "line": 33,
+          "text": "toast.error(message);"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/lib/utils.ts",
+      "sha256": "004bdbd0dc9b35a2713b51f421cd02e9d1073a1507c620c9163a1ba788727b17",
+      "lines": 25,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/next.config.mjs",
+      "sha256": "eadab2495c2d4c664fbc5a475a541461173c6db5c5acfe328d05bb6483c6208e",
+      "lines": 6,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "d490da2ce8c90522dbfec5beecb6b2476104993d9f3985188f67e1e82bda2a8a",
+      "lines": 45,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "sha256": "5504cfd502ae463a7b7d8ff925a3046f5e0e2436447024b94c6091feb35f8991",
+      "lines": 29,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/playwright.seo.config.ts",
+      "sha256": "9ae1bccecf51d0d3874f2453d0911d60c8cd617f0bb915114b9adbf59be62433",
+      "lines": 15,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/postcss.config.js",
+      "sha256": "4caeae48f8df238cc9047c7fa1f6ada7fa2b0b2918101b7e32a6c6a7d7128908",
+      "lines": 6,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/scripts/check-color-tokens.mjs",
+      "sha256": "ebb60765911ea91f3b102afab7584ffbd41639b3082d379d171db8225a9fe523",
+      "lines": 96,
+      "role": "script",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 88,
+          "text": "console.error(\"Color token compliance failed:\\n\");"
+        },
+        {
+          "line": 90,
+          "text": "console.error(`${violation.file}:${violation.line} [${violation.rule}] ${violation.value}`);"
+        },
+        {
+          "line": 91,
+          "text": "console.error(`  ${violation.message}`);"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/smoke-debug.mjs",
+      "sha256": "ec48f0efa653b6a10e6fe6177d9324919d8493c4ff8d5e4f8a9d04bc618eb370",
+      "lines": 41,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/smoke-test.mjs",
+      "sha256": "e1e4a8873b9875f43d5f300209eb29dd204ca77f6fd09206ae1bb7e89ec5c498",
+      "lines": 74,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tailwind.config.ts",
+      "sha256": "00a97332e491248972f9a20d79af0a5dd74ec6de3df74723c128aea6ace581de",
+      "lines": 53,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/account-navigation.spec.ts",
+      "sha256": "dcafe6013250c245db07f9dabafa9db1e72587680bae0f98c80ea8725548e38b",
+      "lines": 282,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/admin-ui-refinement.spec.ts",
+      "sha256": "fc9d14a69f9582322420b2d1a6c057e82a5555f520f6394901769bb0bc623749",
+      "lines": 177,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/admin-ui.spec.ts",
+      "sha256": "8a0ecdffc5623690abfb42134570c8609717a0df77c47eb0513ff06b83ce5178",
+      "lines": 104,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 5,
+          "text": "const ai = { provider: \"OpenAI\", displayName: \"AI thử\", hasApiKey: true, apiKeyPreview: \"fixture-hidden\", baseUrl: \"\", defaultModel: \"fixture-model\", allowedModels: [\"fixture-model\"], isEnabled: true, lastCheckStatus: \"NotChecked\", lastCheckMessage: \"Chưa kiểm tra\" };"
+        },
+        {
+          "line": 6,
+          "text": "const payos = { provider: \"PayOS\", clientId: \"fixture-client\", hasApiKey: true, hasChecksumKey: true, apiKeyPreview: \"fixture-hidden\", checksumKeyPreview: \"fixture-hidden\", returnUrl: \"https://example.invalid/return\", cancelUrl: \"https://example.invalid/cancel\", isEnabled: true, lastCheckStatus: \"NotChecked\", lastCheckMessage: \"Chưa kiểm tra\" };"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/tests/api-auth.test.cjs",
+      "sha256": "ae72078d8953d02c06c29ad301bd77038108492277ac3c9b3a55202efc0123df",
+      "lines": 84,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/auth-session.spec.ts",
+      "sha256": "b7d571e012c93327182ded202c950a32602c06e044e65a9219286b87c0f31109",
+      "lines": 47,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/auth-session.test.cjs",
+      "sha256": "fc25d0e2057d8840b983f7a4585c7f0caf2989806a9d045e6aec86c7f709a305",
+      "lines": 70,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 36,
+          "text": "for (const fetch of [async () => ({ ok: false, status: 503 }), async () => { throw new TypeError('network'); }]) {"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/tests/dashboard-ui-refinement.spec.ts",
+      "sha256": "ba0d6bc6990008a601f70aa287b076afb85127df8ede44b575c0fd77ddb5045c",
+      "lines": 60,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 16,
+          "text": "if (route.request().method() !== \"GET\") throw new Error(\"Unexpected API mutation in UI fixture\");"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/tests/dialog-fixture.tsx",
+      "sha256": "6fd0a7efa8937f43c65c1baf3372d3464c4e6014bb429d36a228e290ad3e5809",
+      "lines": 29,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/dialog.spec.ts",
+      "sha256": "515023c2baa04b36da2069487c989480dfd30303002ab0738a7882975334ee10",
+      "lines": 111,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/form-automation.spec.ts",
+      "sha256": "f17440010e31a00e3b19778c64497f322f05a5db8629c18d3990962adb1db016",
+      "lines": 189,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/manual-credit-live.spec.ts",
+      "sha256": "e3d38f1a65021ef196c94cdbc478c5f119da3200a0b875b7d8211a4666200446",
+      "lines": 72,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/manual-credit-ui.spec.ts",
+      "sha256": "bad5edb37f45f66bbffd23db9bcad0a84d5e291a7d3a99daf597e4921af075be",
+      "lines": 45,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/motion-fixture.tsx",
+      "sha256": "8ac95c6aee71fad8bcf277b737223bc0f2a9f3deda420a1faceead43603fd00f",
+      "lines": 26,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/motion.spec.ts",
+      "sha256": "26f4419475ec17d1fd2c1e59901b88ad435f04431c4703aaa4f9a7156687b877",
+      "lines": 79,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/nckh-delete-live.spec.ts",
+      "sha256": "970c7799e0ee2e11c397bb27f073f09f68d8ed53596a6d085cbda625ad661476",
+      "lines": 39,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/nckh-delete-model.spec.ts",
+      "sha256": "46338bc5b3000712c3e5689632e6b599114659392e0cccf0a85d624e9c35279c",
+      "lines": 167,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/nckh.spec.ts",
+      "sha256": "0d439ec18a4074ae7e7d6179b439a0455a55796f36797e4e3d31ec6310177220",
+      "lines": 1074,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 38,
+          "text": "if (request.method() !== \"GET\") throw new Error(`Unmocked mutation: ${request.method()} ${new URL(request.url()).pathname}`);"
+        },
+        {
+          "line": 43,
+          "text": "throw new Error(`Unmocked fixture GET: ${path}`);"
+        },
+        {
+          "line": 827,
+          "text": "if (!payload?.positions) return false;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/tests/public-ui-refinement.spec.ts",
+      "sha256": "14b588f0b2b90bcdac28259584c39b92a29afcfc300c2b3ac8a1bed387b382b5",
+      "lines": 196,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/seo.spec.ts",
+      "sha256": "5787f3dc8c4bfd35624bc9ec5d40b9abab78dbc156103ff308ad96d56450e2a1",
+      "lines": 116,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 71,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/tests/shared-ui.spec.ts",
+      "sha256": "a975008e08ee20a3d69b202159d6e85b8c9d0bf332f91c16e05eb77d78bda098",
+      "lines": 143,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/topup-ui.spec.ts",
+      "sha256": "51dbaa31f474ed195fe5bc91aa378b8ea954f37b04b21a377d7c477e38cc19b3",
+      "lines": 78,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "apps/web/tests/ui-refinement.spec.ts",
+      "sha256": "93b28d6396d3cb565af7fcf4a29bd149bebaf34b41baaea093ba0907bcf0d9e7",
+      "lines": 183,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 10,
+          "text": "if (route.request().method() !== \"GET\") throw new Error(\"The geometry fixture must never write to an API\");"
+        }
+      ]
+    },
+    {
+      "path": "docker-compose.prod.yml",
+      "sha256": "2560068af123888af450272e82cf9e5b515aaf7d94ab27490662f2faa3818d2c",
+      "lines": 91,
+      "role": "runtime-config",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 79,
+          "text": "\"fetch('http://localhost:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))\","
+        }
+      ]
+    },
+    {
+      "path": "run-local.bat",
+      "sha256": "30b4d1f6a3342e42b697ef551eb5aeca8c7e004da9b7496b0926de4f2d569350",
+      "lines": 72,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "scripts/agent-skills.py",
+      "sha256": "4e9105d92ac3766b6ea72cb2ab5ba5c60a4bd85ea68ff53c7e032106fdf40c56",
+      "lines": 124,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "scripts/deploy-production.sh",
+      "sha256": "7327f473bba8fe591d345d859e97341a9c0a18d56c3ff926e266698eec97193e",
+      "lines": 74,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "smoke-test.mjs",
+      "sha256": "ea0c8e7c6b257ad09f3383e650b88107d16e131f63ab0437cd1461a297c30393",
+      "lines": 52,
+      "role": "script",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/AuthOptions.cs",
+      "sha256": "94dc18dce18be8d35a328454f4f948d5a7c1b2d37d99dacd221059ca86986b42",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/CurrentUserContext.cs",
+      "sha256": "c3f3b2218f57df52bafbd2b464cdcb0b1666e8004922c347dad43dc5ffc89cb3",
+      "lines": 47,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/GoogleIdentityVerifier.cs",
+      "sha256": "27adee84bc5499747c01a7d532941fd6e8764da9ca534fc654f2387b53bab1a7",
+      "lines": 52,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 28,
+          "text": "return null;"
+        },
+        {
+          "line": 41,
+          "text": "catch (InvalidJwtException)"
+        },
+        {
+          "line": 43,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/PasswordHasher.cs",
+      "sha256": "b72cc02f50da5adbbc8e5693aff9eeac336336ce5236ff094dc4e69a92870be8",
+      "lines": 49,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 35,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Auth/TokenService.cs",
+      "sha256": "0beba4045bbcf0ca2d01a7838d6d12f776b0742ddfcdc3f1fdc1a1ccc3b753a1",
+      "lines": 61,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Configuration/DataProtectionServiceCollectionExtensions.cs",
+      "sha256": "9d06ea723c9354caee4988ab8200477caed642b8d26f72913589f337f8dfe261",
+      "lines": 22,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/AiAnalyticsDtos.cs",
+      "sha256": "4bf3441e786f15f9f169a1e736f83d8a5d207ac5cb194257a0004950405bc213",
+      "lines": 73,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/AuthDtos.cs",
+      "sha256": "24ccd537f90eb9f6ae2f887d14f1ffd7d392b6f48ed3e39a3125d227771a93b2",
+      "lines": 38,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/ManualCreditDtos.cs",
+      "sha256": "b14fcf85f6e4ddfa3d820c7183cbbb94fb7a231566287c265e8466d2837d22f0",
+      "lines": 18,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhAuthAndFormDtos.cs",
+      "sha256": "50fe0c3695bf0c1aebd4dd8c2a378ef2187a3353d54b00c0bc051ab0204116fb",
+      "lines": 56,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhCanvasDtos.cs",
+      "sha256": "70a79473d3380cb635fc4d6c1a41f6cc46faa98e023d8be386daac254727b295",
+      "lines": 56,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhDataExportDtos.cs",
+      "sha256": "82a59a829540e7445e69f5faefd98db1c55dcf814360adbeea2141568fb54eb4",
+      "lines": 49,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 8,
+          "text": "string? ErrorMessage);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhMappingDtos.cs",
+      "sha256": "748e5a945e95b69258953f7bdc5ec7267c2f536381ec9f18181f22cc76a857c4",
+      "lines": 29,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhResearchModelDtos.cs",
+      "sha256": "68e009daf72844a92a8cdbf46963f38ef0f57b7c4b40637896dbcb4e0c9687d8",
+      "lines": 29,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/NckhVariableDtos.cs",
+      "sha256": "16324cb5c731fe6e9027a8d759ecaa44024e4a5c54f453cbbd2d3f8bf8f8b7c5",
+      "lines": 42,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase2Dtos.cs",
+      "sha256": "4d17382d58f6f6e0dd782a6386b451a1e5f23faf9828f97f95154bae1aee517b",
+      "lines": 154,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase3Dtos.cs",
+      "sha256": "489bce359599da903d14cfd16d04e07e923331436cdc4167b682079d7866cca4",
+      "lines": 89,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 76,
+          "text": "string ErrorMessage,"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6AiGenerateDtos.cs",
+      "sha256": "57b888c70c2b78bdc4a920145b25c1cab32ac3702e5f78c9db468cddf2ee52d2",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6AiPromptDtos.cs",
+      "sha256": "0074f426eea9ef26018068279968d856f9671c7a50ca540e578fee4a36ddcdbf",
+      "lines": 46,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase6Dtos.cs",
+      "sha256": "9b8703a364b10425b7277bd70b1c9376dbfd261bb3655d330776c9f18bc92a2f",
+      "lines": 27,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 14,
+          "text": "string LastCheckMessage,"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase8Dtos.cs",
+      "sha256": "ee4d7333cc5b26bebe4887eb564cf3df96413383fc54154658b85f6a1b789e81",
+      "lines": 86,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 21,
+          "text": "string ErrorMessage);"
+        },
+        {
+          "line": 35,
+          "text": "string LastCheckMessage,"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminAiProviderSettingsController.cs",
+      "sha256": "7712bc6e32551eb5bec34189b5cce52a4c90c737b8c0849ff167904bb7876f07",
+      "lines": 58,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 42,
+          "text": "catch (ArgumentException exception)"
+        },
+        {
+          "line": 44,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI provider settings rejected\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminCreditOperationsController.cs",
+      "sha256": "e756814cfc6c494634b9e2d23b33f531a54c1f22354ca8be1d9656c8aae8549b",
+      "lines": 34,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 31,
+          "text": "catch (ArgumentException ex) { return BadRequest(new ProblemDetails { Title = ex.Message }); }"
+        },
+        {
+          "line": 32,
+          "text": "catch (DbUpdateConcurrencyException) { return Conflict(new ProblemDetails { Title = \"Số dư vừa thay đổi. Hãy tải lại trước khi cộng credit.\" }); }"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminPackagesController.cs",
+      "sha256": "3333e5ecbff1c95573d332ceedf634f401a1b3714d80b22d39a4e7adb696af20",
+      "lines": 54,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminPaymentsController.cs",
+      "sha256": "2a656df7c25e8b3dd8da9bf32c45d7de82202f526d6b823a0eaab5c7eceb0855",
+      "lines": 86,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AdminTopupOrdersController.cs",
+      "sha256": "320b0c4149a8fe2c6fa85a4d3ee4ffd9047466571740c6ad72ea41d925baf27b",
+      "lines": 82,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 58,
+          "text": "return response is null ? Conflict(new ProblemDetails { Title = \"Đơn không còn chờ duyệt hoặc không phải đơn thủ công.\" }) : Ok(response);"
+        },
+        {
+          "line": 60,
+          "text": "catch (DbUpdateConcurrencyException) { return Conflict(new ProblemDetails { Title = \"Đơn hoặc số dư vừa thay đổi. Hãy tải lại trước khi xử lý.\" }); }"
+        },
+        {
+          "line": 77,
+          "text": "return response is null ? Conflict(new ProblemDetails { Title = \"Đơn không còn chờ xử lý hoặc không phải đơn thủ công.\" }) : Ok(response);"
+        },
+        {
+          "line": 79,
+          "text": "catch (ArgumentException ex) { return BadRequest(new ProblemDetails { Title = ex.Message }); }"
+        },
+        {
+          "line": 80,
+          "text": "catch (DbUpdateConcurrencyException) { return Conflict(new ProblemDetails { Title = \"Đơn vừa thay đổi. Hãy tải lại trước khi xử lý.\" }); }"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiAnalyticsController.cs",
+      "sha256": "742e3856e0951bd8c6df849f4bc402afc14001ef9bd3457953316df1ad86c08c",
+      "lines": 41,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiPromptProfilesController.cs",
+      "sha256": "78f46aa29b6bdeea935496f6f2b4743942ea7abd661b7e5220d38daf6cb3a7cd",
+      "lines": 82,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 25,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 27,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI prompt profile rejected\", Detail = exception.Message });"
+        },
+        {
+          "line": 42,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 44,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI prompt profile rejected\", Detail = exception.Message });"
+        },
+        {
+          "line": 60,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 62,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI question prompt rejected\", Detail = exception.Message });"
+        },
+        {
+          "line": 77,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 79,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI prompt auto-fill rejected\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiResponsesController.cs",
+      "sha256": "5e49916ae6a7869438142a05d3facb718e96c716c2b85d3c78db649a084021e0",
+      "lines": 29,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 26,
+          "text": "return BadRequest(new ProblemDetails { Title = \"AI preview generation failed\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AnswerRulesController.cs",
+      "sha256": "3c18d0920395bd59acbe52fe0fcb8990a9ed9c00bf932bd90f4b0ee9c49cbd17",
+      "lines": 47,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 26,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Answer rule rejected\", Detail = exception.Message });"
+        },
+        {
+          "line": 42,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 44,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Answer rule rejected\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AuthController.cs",
+      "sha256": "ea706cec2b1652e1b3b3d22c9fd52da052ee0f81a21eb0da4c46356b6f46cfda",
+      "lines": 98,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/CreditTransactionsController.cs",
+      "sha256": "866207d398cae58742c41ab5f705563e035941cface7f21c8b2282391c96fd1a",
+      "lines": 23,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/DashboardController.cs",
+      "sha256": "41162d82f132ab91418f0b4e137fb8e5b770610850036c4cb38c66a5081c7bac",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/FormsController.cs",
+      "sha256": "b33676d23c6df1ba307f879cb0dd0bb74475e24d9d8efec3bae37816ae6936c9",
+      "lines": 36,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 22,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 24,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Form analysis failed\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/GeneratedResponsesController.cs",
+      "sha256": "ae734b35af5a0622fcaf617289e0e6ead4ba7eccbc1e824f617ef3d94866080c",
+      "lines": 39,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 26,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Preview generation failed\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchCanvasController.cs",
+      "sha256": "d7b97b88b9330f75cdd00972568d97904c13f411dde169637b4e7344fd28f1be",
+      "lines": 115,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchDataController.cs",
+      "sha256": "2230439d4a4f977c62b0f85bad5d09499704b5590eac620ae6456544a08ebee8",
+      "lines": 90,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchFormsController.cs",
+      "sha256": "55a307c19c5981dd554b59dde32a947b31870bbc3655ff9d5d52023600b07c64",
+      "lines": 96,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchModelsController.cs",
+      "sha256": "fe4d9b2357956f9dfde3ad1ea0858ada9836256491e156a1d4a85527413757e8",
+      "lines": 117,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/Nckh/ResearchVariablesController.cs",
+      "sha256": "ab9185677b542ce2051ca11913502c05b44731ec8116165bc57e3cc459229900",
+      "lines": 140,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/PackagesController.cs",
+      "sha256": "8e6e85189f5fcf2918b14347d216af42d574016644602035d941c8d1e4d00180",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/PaymentsController.cs",
+      "sha256": "081292db47c61981e23f1717a92d678b872b319c4a372d5f539cc167297057d7",
+      "lines": 29,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 18,
+          "text": "return result.Success && result.Value is not null ? Ok(result.Value) : Conflict(result.ErrorMessage);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/ProfileController.cs",
+      "sha256": "1f7675360f08149b3d51e2f0b1aeeb3ed8f742083722c8db70817660e16c9146",
+      "lines": 37,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/SubmissionsController.cs",
+      "sha256": "558185386a6fc76fc88e3cb064a64cee6e76f9afab329c783b08799a40e6450f",
+      "lines": 59,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "catch (InvalidOperationException exception)"
+        },
+        {
+          "line": 26,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Submission rejected\", Detail = exception.Message });"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/TopupOrdersController.cs",
+      "sha256": "ded7d0527a68f51a72fcb8c0469ee76c822cd9ff366b0d8f5be7377baf25b2c0",
+      "lines": 74,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 24,
+          "text": "catch (ArgumentException ex) { return BadRequest(new ProblemDetails { Title = ex.Message }); }"
+        },
+        {
+          "line": 32,
+          "text": "return BadRequest(new ProblemDetails { Title = \"Ảnh minh chứng tối đa 5 MB và không được rỗng.\" });"
+        },
+        {
+          "line": 36,
+          "text": "catch (ArgumentException ex) { return BadRequest(new ProblemDetails { Title = ex.Message }); }"
+        },
+        {
+          "line": 72,
+          "text": "catch (DbUpdateConcurrencyException) { return Conflict(new ProblemDetails { Title = \"Đơn vừa được xử lý. Hãy tải lại trước khi hủy.\" }); }"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/UsageLogsController.cs",
+      "sha256": "a2ae0c83d9f9020935e45c4abc02c11378d0ab9a34de44bada726535dd294a38",
+      "lines": 25,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/FormAutoHubDbContext.cs",
+      "sha256": "c524db90ae5c8e302f497fc239258bd4588c25dac918e169725db1e16cebeafb",
+      "lines": 325,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiGenerationRunStatuses.cs",
+      "sha256": "44453185542c3e75f4dd974a6229b8744d42faf0ab0ae01c9877c4d3d71cdc54",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiPromptProfileModes.cs",
+      "sha256": "71c6fe0a83816b3862cd947ea8856bfda84403d73ea150d6fc128e25cdd8de22",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiProviderCheckStatuses.cs",
+      "sha256": "29eaf4c6268ca9336b63e93bda1965ea2fb5d6aa30768ed959ddd44ec64c256b",
+      "lines": 9,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/AiProviders.cs",
+      "sha256": "6168aec9a92599e82ea73b52632cd9f8dd374b54378a6ae7e21e6cc1345373b1",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/CreditTransactionTypes.cs",
+      "sha256": "f49db16a1acadc52cdd9b0e6a5ac25c8851284525b2816b4eaa1a3b9c0ca606c",
+      "lines": 9,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/GeneratedResponseSources.cs",
+      "sha256": "622495ab00cb1c01b1b2fb04a84aed820ab34e094788767ac2d70c8c290b85be",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentProviderCheckStatuses.cs",
+      "sha256": "d0235d9b55b639d14573dd7629cf233de6b4a43050a76507fcfec4485ff1a4cd",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentProviders.cs",
+      "sha256": "e6c23df49e461d5694a2da17948d833eb47da8414c61aaccd3b4d5cb40764fb7",
+      "lines": 6,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/PaymentRecordStatuses.cs",
+      "sha256": "a7266f6865f084366b55814db04f68d3f63188135311df3880417daf70bcb6d1",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/Phase3Statuses.cs",
+      "sha256": "9de0e6e292c0a6c0d455de419d875135f21280493164b2eaa340087ae769d95f",
+      "lines": 56,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/TopupOrderStatuses.cs",
+      "sha256": "27efe8a164d733dacca374fb73c861d474b37c06d9e8d04e365b86c9b9d010b5",
+      "lines": 9,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/UsageLogStatuses.cs",
+      "sha256": "846efc49754ee0a95c51a960b3cb8cdcc3b5ad14dc286c796395a7ec013c1976",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Domain/UserRoles.cs",
+      "sha256": "009b27319dd4a4cbf60a7b26b111cd1450b1e2ad952a2fcd93cfae3d833623f9",
+      "lines": 7,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiGenerationRun.cs",
+      "sha256": "22925049b29c2d6e29dee7e353a7e4263e819ffdac5ea9be226c7a496ec47c91",
+      "lines": 29,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 22,
+          "text": "public string ErrorMessage { get; set; } = string.Empty;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiGenerationRunItem.cs",
+      "sha256": "9536f71b7011bab76fedb8adf42608c7254ea0cf052af85861b4414f92790ed2",
+      "lines": 17,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 11,
+          "text": "public string ValidationMessage { get; set; } = string.Empty;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiPromptProfile.cs",
+      "sha256": "9fc5a262d0f886a5cfcdcf377310e4452d437fef24d2d53563dc41d28244f8c5",
+      "lines": 15,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiProviderSetting.cs",
+      "sha256": "43cb940e0095728adca1aee3f7f1e6a9bf2e3e3cb66dde680ea4e95d34207249",
+      "lines": 19,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 15,
+          "text": "public string LastCheckMessage { get; set; } = string.Empty;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AiQuestionPrompt.cs",
+      "sha256": "adff78cc4e483276ce29c1ad4522f4e28bba138971701a59838cbe8fe6255d7e",
+      "lines": 15,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AnswerRule.cs",
+      "sha256": "0adef011d910851c1546e624078d4ab55a3296d546efe638182fe473e2a68882",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/AuditLog.cs",
+      "sha256": "256a1e2d42c3e76b42f52bc984970ce5f7930e1bd40f4ec78b17019217347fea",
+      "lines": 12,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/CreditPackage.cs",
+      "sha256": "d33d5b1f85e057b5125ae2f447b38a52f682c5107d07531c401e231374215a8c",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/CreditTransaction.cs",
+      "sha256": "9ed62e1a8af4f17c1f98513b71ea9ebc92bcc4be7e5726e81ec79f8e815e7cee",
+      "lines": 14,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/FormProject.cs",
+      "sha256": "8ab7b5fc0db5063077b37b6429e9cf7f67b6e4811716952d93686811d6ef3d3d",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/FormQuestion.cs",
+      "sha256": "60930c4748b68206491a5b1b7ae1b4c724e54d33ccdaa0be06aa60b4af7d4551",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/GeneratedResponse.cs",
+      "sha256": "0b893cee14f947f121ff82fa95cd31bccf861d9ff4423dce6701e5dcc2122ba4",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/DataCollectionLog.cs",
+      "sha256": "e273eb2066c68e86e5dc70e62c32d58344c55ab779ee30393cc38fffe21ee704",
+      "lines": 16,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 10,
+          "text": "public string? ErrorMessage { get; set; }"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ModelRelation.cs",
+      "sha256": "d62d67e03fe8d1d3a7bf3387dcceab806a527cb6cf86300b63cc820ffc16a82d",
+      "lines": 20,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/NodePosition.cs",
+      "sha256": "bb5b5eaaf0fb489741ed6ce0f5ed047464a8bee05972317d28e74b8762ec815d",
+      "lines": 18,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/NormalizedDataset.cs",
+      "sha256": "2b7d9bedffd8cb359a7d622ecf95dd7a1448bbde11fe18c4ae58d6a89675b4ee",
+      "lines": 17,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ObservedQuestionMapping.cs",
+      "sha256": "35b044652f4373a75fdd84ac400d1287995319cc4385c6cedce45554ac86d3ec",
+      "lines": 14,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchForm.cs",
+      "sha256": "014feb3d86f1afc5e9de80f491e7b6c241b1d0edd9dd3165aee12563b6496ead",
+      "lines": 22,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchFormQuestion.cs",
+      "sha256": "ad44e05ea143f7e0672a9ffbc3661ec46451b44e7099cf79dcc06a76352cf48a",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchModel.cs",
+      "sha256": "f32c31507565e63817065af9daafe0e49206ab990dc8e9572aa0aea176505a23",
+      "lines": 21,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/ResearchVariable.cs",
+      "sha256": "46253a5d821a1271d7e8cf7d3e259de3f7cf9c86242d433339e31d141c662a62",
+      "lines": 23,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/Nckh/SurveyResponse.cs",
+      "sha256": "8b663d127dc41794a71905ef0671139da38d23abfb441d6a471800942f5290d7",
+      "lines": 16,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/PaymentProviderSetting.cs",
+      "sha256": "f9ae4554fb8a340659cf11511f9d2b5df35f1d9312a31e46b7c22b1b41d4a062",
+      "lines": 19,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 15,
+          "text": "public string LastCheckMessage { get; set; } = string.Empty;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/PaymentRecord.cs",
+      "sha256": "1f8a1eca25ed84a0f6eece26d080a4667ac77a07fa79ab78a5e0bef21f6b081f",
+      "lines": 22,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/RefreshToken.cs",
+      "sha256": "d2b18bb12467abe96eb32f93edcfea524a34cfabfdaea9a1c63057c88b208766",
+      "lines": 11,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/SubmissionJob.cs",
+      "sha256": "376d7802ad24e7701fd84a58c063fa45ebe961adf9730f51949696829736bb25",
+      "lines": 15,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/SubmissionLog.cs",
+      "sha256": "61834de8a347aa011d5f6df20fb9aa8c98459f2941da5cc228e4b234884859af",
+      "lines": 12,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 10,
+          "text": "public string ErrorMessage { get; set; } = string.Empty;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/TopupEvidence.cs",
+      "sha256": "f0cd248060e867cde43512ba9eeb8baf34933721b636db7fa7c186cbebbffeb8",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/TopupOrder.cs",
+      "sha256": "3b3c6841ba61ee22d872bd34d8e12324c537c31ef4cbe000ecd8de1bfcd01378",
+      "lines": 18,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UsageLog.cs",
+      "sha256": "39abe014e0f446dfbca9045ab0d97c310fd52237936af0cf659a9191c446fec7",
+      "lines": 14,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/User.cs",
+      "sha256": "c6a6bde599037d6b2a26826618e434c2bed3d9c8e9b05d7f02c8b2d51528701e",
+      "lines": 13,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UserCreditAccount.cs",
+      "sha256": "e60d2a038594d7b30f47a9f7a4396992d0447ed2396bad843feb7f8b9b879a75",
+      "lines": 12,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Entities/UserExternalLogin.cs",
+      "sha256": "5f97a3aa46aedbc6404a35b15f852e978bad3398ebb0c79dd36bb2a39ac69a99",
+      "lines": 17,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/AiProviderModels.cs",
+      "sha256": "9e4eb8d5567e13669ff8df246d2b86399c9a4624a1155c4bdda4c87be72da27a",
+      "lines": 19,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/DeterministicAiProviderAdapter.cs",
+      "sha256": "f68a322d6d6540733d2df1024a8bad2e02cb80fe3441d0b452f623aba0d8392e",
+      "lines": 94,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/DisabledAiProviderAdapter.cs",
+      "sha256": "7c8c5cc5bd5ee07fea438116deb1a1ed3b12a5e6cedcc5d6fc4ab949ce7ceb41",
+      "lines": 11,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 9,
+          "text": "throw new InvalidOperationException(\"AI provider adapter is not configured for runtime generation.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/IAiProviderAdapter.cs",
+      "sha256": "9e1536d4bb50dac0cdadba52e944e889702c253a3e51858a96ccc7521667d4f9",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/AI/OpenAiCompatibleProviderAdapter.cs",
+      "sha256": "069f5c98821a5d7281897117466919445ddee3e8ead87d67090c62efbe3467a2",
+      "lines": 361,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 19,
+          "text": "throw new InvalidOperationException(\"AI provider base URL is required for OpenAI-compatible runtime generation.\");"
+        },
+        {
+          "line": 24,
+          "text": "throw new InvalidOperationException(\"AI provider API key is required for runtime generation.\");"
+        },
+        {
+          "line": 39,
+          "text": "logger.LogInformation(\"AI raw request: {RawRequestJson}\", rawRequestJson);"
+        },
+        {
+          "line": 50,
+          "text": "logger.LogInformation(\"AI raw response: {RawResponseJson}\", rawResponseJson);"
+        },
+        {
+          "line": 53,
+          "text": "throw new InvalidOperationException($\"AI provider returned HTTP {(int)response.StatusCode}.\");"
+        },
+        {
+          "line": 66,
+          "text": "throw new InvalidOperationException(\"AI provider base URL must be an absolute http or https URL.\");"
+        },
+        {
+          "line": 156,
+          "text": "catch (JsonException)"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleFormsApiService.cs",
+      "sha256": "4a63d0cbe9fb577a9a5b2c29c24bb7f9d23b9a56622134d100f5524eadd9c171",
+      "lines": 463,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 65,
+          "text": "return null;"
+        },
+        {
+          "line": 71,
+          "text": "return null;"
+        },
+        {
+          "line": 128,
+          "text": "return null;"
+        },
+        {
+          "line": 134,
+          "text": "return null;"
+        },
+        {
+          "line": 201,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/Google/GoogleOAuthService.cs",
+      "sha256": "596b803ba614f3217fbe417445fe900ec8ef22c8e5d906a7e4c34e1d55d1beca",
+      "lines": 232,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 43,
+          "text": "return null;"
+        },
+        {
+          "line": 58,
+          "text": "return null;"
+        },
+        {
+          "line": 64,
+          "text": "return null;"
+        },
+        {
+          "line": 88,
+          "text": "return null;"
+        },
+        {
+          "line": 102,
+          "text": "return null;"
+        },
+        {
+          "line": 108,
+          "text": "return null;"
+        },
+        {
+          "line": 164,
+          "text": "return null;"
+        },
+        {
+          "line": 174,
+          "text": "return null;"
+        },
+        {
+          "line": 181,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormModels.cs",
+      "sha256": "886c291b692f1fb68622e0efbba83212eb9cd6df41f879c7a109e08e9933dbf0",
+      "lines": 18,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 18,
+          "text": "string ErrorMessage);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+      "sha256": "78174754ac8cb661bf9e8b94bfc3ba2cac61247c7a92abf99f14202ee85a8a20",
+      "lines": 291,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 21,
+          "text": "throw new InvalidOperationException(\"Invalid form URL.\");"
+        },
+        {
+          "line": 27,
+          "text": "throw new InvalidOperationException(\"Only public Google Forms URLs are supported.\");"
+        },
+        {
+          "line": 33,
+          "text": "throw new InvalidOperationException(\"No supported Google Form entries were detected.\");"
+        },
+        {
+          "line": 45,
+          "text": "throw new InvalidOperationException(\"Google Form action URL was not detected.\");"
+        },
+        {
+          "line": 59,
+          "text": "throw new InvalidOperationException(\"Detected Google Form action URL is not supported.\");"
+        },
+        {
+          "line": 80,
+          "text": "throw new InvalidOperationException(\"No supported Google Form entries were detected.\");"
+        },
+        {
+          "line": 187,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 259,
+          "text": "return false;"
+        },
+        {
+          "line": 270,
+          "text": "return false;"
+        },
+        {
+          "line": 282,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Program.cs",
+      "sha256": "b3b45edbdfe289941ce8c6785b05d2126ed8b8c9ada3e43ed453addbfd574b5a",
+      "lines": 160,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 18,
+          "text": "?? throw new InvalidOperationException(\"Connection string ''DefaultConnection'' is not configured.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Properties/launchSettings.json",
+      "sha256": "6fab57a13d2e51908a8863fa5880b155b71b68d9125c88f3bf3075f5079835e7",
+      "lines": 23,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminCreditOperationsService.cs",
+      "sha256": "3436b239d2cb829177e7f067227171eac304ebb6f6593cd7417cd5232c8660bf",
+      "lines": 70,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 12,
+          "text": "if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();"
+        },
+        {
+          "line": 45,
+          "text": "if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();"
+        },
+        {
+          "line": 53,
+          "text": "if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();"
+        },
+        {
+          "line": 55,
+          "text": "throw new ArgumentException(\"Người dùng, số credit nguyên dương và lý do (tối đa 1000 ký tự) là bắt buộc.\");"
+        },
+        {
+          "line": 60,
+          "text": "if (user is null) return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminPaymentReportService.cs",
+      "sha256": "f3af98dc5a1b0dbb81c5eaa6fc9dd998b0d900a8aa531eb24b0351c6adcf7833",
+      "lines": 92,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AdminTopupOrderService.cs",
+      "sha256": "b885f9562ace69384adbb28c8165d687627a6bfdfdb6798f722e5c7d4e4921f2",
+      "lines": 94,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 43,
+          "text": "if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();"
+        },
+        {
+          "line": 52,
+          "text": "return null;"
+        },
+        {
+          "line": 77,
+          "text": "if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();"
+        },
+        {
+          "line": 79,
+          "text": "throw new ArgumentException(\"Lý do từ chối là bắt buộc, tối đa 1000 ký tự.\");"
+        },
+        {
+          "line": 83,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiAnalyticsService.cs",
+      "sha256": "e28d9698a7546f51b149fa18eeff7f8b0895c17da97bd1cd4991442cb25cca1d",
+      "lines": 273,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+      "sha256": "6c0d38848ff6993b4a96aa5c45312a1a779a03174d8cc9485a524b096abaa61b",
+      "lines": 586,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 63,
+          "text": "throw new InvalidOperationException(\"Unsupported AI generation mode.\");"
+        },
+        {
+          "line": 70,
+          "text": "throw new InvalidOperationException(\"AI preview response count must be between 1 and 100.\");"
+        },
+        {
+          "line": 77,
+          "text": "return null;"
+        },
+        {
+          "line": 88,
+          "text": "throw new InvalidOperationException(\"Project has no detected questions for AI generation.\");"
+        },
+        {
+          "line": 97,
+          "text": "throw new InvalidOperationException(\"AI prompt profile is required before generation.\");"
+        },
+        {
+          "line": 113,
+          "text": "throw new InvalidOperationException(\"Enabled AI provider settings are required before generation.\");"
+        },
+        {
+          "line": 146,
+          "text": "await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);"
+        },
+        {
+          "line": 160,
+          "text": "await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);"
+        },
+        {
+          "line": 192,
+          "text": "catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)"
+        },
+        {
+          "line": 195,
+          "text": "run.ErrorMessage = $\"{run.ErrorMessage} {exception.Message}\".Trim();"
+        },
+        {
+          "line": 200,
+          "text": "catch (Exception exception) when (exception is not OperationCanceledException)"
+        },
+        {
+          "line": 203,
+          "text": "run.ErrorMessage = $\"{run.ErrorMessage} {exception.Message}\".Trim();"
+        },
+        {
+          "line": 272,
+          "text": "ValidationMessage = string.Empty,"
+        },
+        {
+          "line": 286,
+          "text": "ValidationMessage = responseErrors.FirstOrDefault()?.Message ?? \"AI output did not contain parseable answer items.\","
+        },
+        {
+          "line": 299,
+          "text": "ValidationMessage = responseErrors.FirstOrDefault(error => error.QuestionId == item.QuestionId)?.Message"
+        },
+        {
+          "line": 313,
+          "text": "ValidationMessage = \"AI provider returned no outputs.\","
+        },
+        {
+          "line": 325,
+          "text": "await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);"
+        },
+        {
+          "line": 351,
+          "text": "item.ValidationMessage = \"Credit deduction failed; preview was not stored.\";"
+        },
+        {
+          "line": 356,
+          "text": "await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);"
+        },
+        {
+          "line": 457,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 489,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 504,
+          "text": "throw new InvalidOperationException(\"AI generation run can only start from Pending.\");"
+        },
+        {
+          "line": 515,
+          "text": "throw new InvalidOperationException(\"AI generation run can only complete from Running.\");"
+        },
+        {
+          "line": 526,
+          "text": "run.ErrorMessage = errorMessage;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidationError.cs",
+      "sha256": "7290c8cbd9a9535148261ca6f73b2d3c97419ed8f4ce5f39d2febfafc90e9c6e",
+      "lines": 3,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidationResult.cs",
+      "sha256": "00bac45222c0837cb98f47c8bb60421f5d6ef80ae8cb2f862c41e62c517e65b6",
+      "lines": 17,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiOutputValidator.cs",
+      "sha256": "d99470383a14803b048f54d0523cfcee836ed93f1b3bf724aad85ebcfe984898",
+      "lines": 268,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 43,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 58,
+          "text": "return false;"
+        },
+        {
+          "line": 131,
+          "text": "return false;"
+        },
+        {
+          "line": 139,
+          "text": "return false;"
+        },
+        {
+          "line": 145,
+          "text": "return false;"
+        },
+        {
+          "line": 204,
+          "text": "return null;"
+        },
+        {
+          "line": 225,
+          "text": "return null;"
+        },
+        {
+          "line": 263,
+          "text": "catch (JsonException)"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptGuardResult.cs",
+      "sha256": "5e99f6a33f3b0703355dc6b8be9916899c77232d1e9a87773452689e1ddd286e",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptGuardService.cs",
+      "sha256": "ae3c42685d04063c0ab5aa8fdbce20e4962d3b70c3c814dc1877f8eea7f8f15e",
+      "lines": 19,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptProfileLimits.cs",
+      "sha256": "bec65c2fe92f01726f483c7f9cfe87900ae3ff00acc39afffbb3010d86444238",
+      "lines": 9,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiPromptProfileService.cs",
+      "sha256": "517f0f2714d62fbf0ca926905349a8ce7798009e069d28780621284d2bd7e75f",
+      "lines": 388,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 29,
+          "text": "throw new InvalidOperationException(\"Unsupported AI prompt profile mode.\");"
+        },
+        {
+          "line": 35,
+          "text": "return null;"
+        },
+        {
+          "line": 55,
+          "text": "throw new InvalidOperationException(\"Unsupported AI prompt profile mode.\");"
+        },
+        {
+          "line": 61,
+          "text": "return null;"
+        },
+        {
+          "line": 107,
+          "text": "throw new InvalidOperationException(\"Unsupported AI prompt profile mode.\");"
+        },
+        {
+          "line": 116,
+          "text": "return null;"
+        },
+        {
+          "line": 159,
+          "text": "throw new InvalidOperationException(\"Unsupported AI prompt profile mode.\");"
+        },
+        {
+          "line": 165,
+          "text": "return null;"
+        },
+        {
+          "line": 171,
+          "text": "throw new InvalidOperationException(\"Auto-fill context is too long.\");"
+        },
+        {
+          "line": 179,
+          "text": "throw new InvalidOperationException(guardResult.RejectionReason ?? \"Prompt requests unsafe or forbidden AI behavior.\");"
+        },
+        {
+          "line": 282,
+          "text": "throw new InvalidOperationException(\"Global prompt is too long.\");"
+        },
+        {
+          "line": 292,
+          "text": "throw new InvalidOperationException(\"Question prompt is too long.\");"
+        },
+        {
+          "line": 308,
+          "text": "throw new InvalidOperationException(guardResult.RejectionReason ?? \"Prompt requests unsafe or forbidden AI behavior.\");"
+        },
+        {
+          "line": 320,
+          "text": "catch (JsonException exception)"
+        },
+        {
+          "line": 322,
+          "text": "throw new InvalidOperationException(\"AudienceJson must be valid JSON.\", exception);"
+        },
+        {
+          "line": 335,
+          "text": "throw new InvalidOperationException(\"AudienceJson contains a short context field that is too long.\");"
+        },
+        {
+          "line": 340,
+          "text": "throw new InvalidOperationException(\"AudienceJson contains unsafe or forbidden context.\");"
+        },
+        {
+          "line": 385,
+          "text": "throw new InvalidOperationException(\"Total prompt payload is too large.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiProviderSecretProtector.cs",
+      "sha256": "1d35622ace0e2933c67fe935649f052c7e47d5a11d43b0998d0746ef0114c6f7",
+      "lines": 30,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiProviderSettingsService.cs",
+      "sha256": "31eccb1f727ca4729f02a4f7f6ec9912e78a68de4b81bcbdbf49bb965c3b9aba",
+      "lines": 247,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 30,
+          "text": "return null;"
+        },
+        {
+          "line": 43,
+          "text": "return null;"
+        },
+        {
+          "line": 70,
+          "text": "throw new ArgumentException(\"API key is required before enabling AI provider settings.\", nameof(request));"
+        },
+        {
+          "line": 91,
+          "text": "return null;"
+        },
+        {
+          "line": 103,
+          "text": "LastCheckMessage = \"Missing configuration: provider, API key, and default model.\","
+        },
+        {
+          "line": 111,
+          "text": "return new CheckAiProviderSettingsResponse(setting.LastCheckStatus, setting.LastCheckMessage, now);"
+        },
+        {
+          "line": 117,
+          "text": "setting.LastCheckMessage = result.Message;"
+        },
+        {
+          "line": 122,
+          "text": "return new CheckAiProviderSettingsResponse(setting.LastCheckStatus, setting.LastCheckMessage, now);"
+        },
+        {
+          "line": 156,
+          "text": "catch (ArgumentException exception)"
+        },
+        {
+          "line": 178,
+          "text": "setting.LastCheckMessage,"
+        },
+        {
+          "line": 200,
+          "text": "throw new ArgumentException(message, nameof(value));"
+        },
+        {
+          "line": 217,
+          "text": "throw new ArgumentException(\"Base URL must be an absolute http or https URL.\", nameof(value));"
+        },
+        {
+          "line": 227,
+          "text": "throw new ArgumentException(\"Default model is required.\", nameof(defaultModel));"
+        },
+        {
+          "line": 242,
+          "text": "catch (JsonException)"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiSafetyTextRules.cs",
+      "sha256": "6e89c68bf8a8eb0ba30b70455332d22070c7ab08ab725d4a41a4cd9aea79e004",
+      "lines": 76,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 54,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AnswerRuleService.cs",
+      "sha256": "bb0a45a9f16c33c796bc0c5bc4f08235df2e8ea8d446adda09390b7b577bce3f",
+      "lines": 151,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 27,
+          "text": "return null;"
+        },
+        {
+          "line": 66,
+          "text": "return null;"
+        },
+        {
+          "line": 74,
+          "text": "return null;"
+        },
+        {
+          "line": 93,
+          "text": "return null;"
+        },
+        {
+          "line": 104,
+          "text": "throw new InvalidOperationException(\"Answer rule mode is required.\");"
+        },
+        {
+          "line": 109,
+          "text": "throw new InvalidOperationException(\"ConfigJson is required.\");"
+        },
+        {
+          "line": 114,
+          "text": "throw new InvalidOperationException(\"ConfigJson is too large.\");"
+        },
+        {
+          "line": 119,
+          "text": "throw new InvalidOperationException(\"Unsupported answer rule mode.\");"
+        },
+        {
+          "line": 124,
+          "text": "throw new InvalidOperationException(\"Unsupported question type.\");"
+        },
+        {
+          "line": 131,
+          "text": "catch (JsonException exception)"
+        },
+        {
+          "line": 133,
+          "text": "throw new InvalidOperationException(\"ConfigJson must be valid JSON.\", exception);"
+        },
+        {
+          "line": 148,
+          "text": "throw new InvalidOperationException(\"Answer rule config does not match the selected mode and question.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AuditLogWriter.cs",
+      "sha256": "edf06b8a9599c98d41f01c28b2b2a8e408b95b97f1d96da4adaa213c2d9b824b",
+      "lines": 28,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AuthService.cs",
+      "sha256": "72639f914fd4a16e97d4d0d57676e90405170c40e3ebfe60f3dfe0796a9c7bd7",
+      "lines": 330,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 61,
+          "text": "return new AuthServiceResult<AuthTokenResponse>(AuthResultStatus.Conflict, Message: \"Email already exists.\");"
+        },
+        {
+          "line": 151,
+          "text": "Message: \"Login with password first, then link Google.\");"
+        },
+        {
+          "line": 235,
+          "text": "return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Conflict, Message: \"Google email must match the current account email.\");"
+        },
+        {
+          "line": 243,
+          "text": "return new AuthServiceResult<LinkGoogleResponse>(AuthResultStatus.Conflict, Message: \"This account already has a linked Google account.\");"
+        },
+        {
+          "line": 277,
+          "text": "Message: \"Set a password before unlinking Google to avoid losing account access.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditService.cs",
+      "sha256": "285ed6d043c92faf5b9ec982ea1c2c858bc674290bda1a68b1b4dec9e1824a66",
+      "lines": 193,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 39,
+          "text": "throw new ArgumentException(\"Số credit phải lớn hơn 0 và phải có lý do cộng credit.\");"
+        },
+        {
+          "line": 67,
+          "text": "throw new ArgumentOutOfRangeException(nameof(credits), \"Credits must be greater than zero.\");"
+        },
+        {
+          "line": 162,
+          "text": "throw new ArgumentOutOfRangeException(nameof(credits), \"Credits must be greater than zero.\");"
+        },
+        {
+          "line": 170,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditTransactionService.cs",
+      "sha256": "c4f9110992fb1c479717dd8e07826e037ee8a95bb21e647d2bc056e59b4404cf",
+      "lines": 61,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditWriteTransaction.cs",
+      "sha256": "da08d61eb977c350849fd186e5639354f82a55380d32446d3fefbcf593b8bed5",
+      "lines": 23,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/DashboardService.cs",
+      "sha256": "9e0cd01aa1486b9c4f1f7f29578e1d152c5713925b5ecb46e8aa48a5d85742ea",
+      "lines": 52,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/FormProjectService.cs",
+      "sha256": "c73c11fa7c17fb74febfafbb4a72f4ca9aedfe733378fb766abb623f09a2d009",
+      "lines": 143,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 32,
+          "text": "throw new InvalidOperationException(\"Form URL is required.\");"
+        },
+        {
+          "line": 39,
+          "text": "throw new InvalidOperationException(\"Form URL is too long.\");"
+        },
+        {
+          "line": 46,
+          "text": "throw new InvalidOperationException(\"Project name is too long.\");"
+        },
+        {
+          "line": 99,
+          "text": "catch (Exception exception) when (exception is InvalidOperationException or HttpRequestException)"
+        },
+        {
+          "line": 103,
+          "text": "throw new InvalidOperationException(exception.Message, exception);"
+        },
+        {
+          "line": 114,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/GoogleTokenProtector.cs",
+      "sha256": "8d003674ffe8405510d2ab15b9c07bced0384cb60a2c30a0abe3da1295cac2aa",
+      "lines": 18,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/IAiOutputValidator.cs",
+      "sha256": "d578a2b490fb05ea31dab389422905e778638e7fe8cd8b961dd5b3a5c8636d57",
+      "lines": 8,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/IAiPromptGuardService.cs",
+      "sha256": "32a3380ea06b2378ebb91255c53e4189c7455c254500205b970330208a017157",
+      "lines": 6,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchCanvasService.cs",
+      "sha256": "568c294968baafc0bfcbe00add41cbc1e375b3921adbfff545be406f252aefd4",
+      "lines": 21,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchDataService.cs",
+      "sha256": "66d78e8144cd25267a77a2f0210a5e8b1addac6b62f2985fd0cef1f33001bff2",
+      "lines": 15,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchExportService.cs",
+      "sha256": "bddc1e1400f19ce9276ee4305a48e86097a3aa7ed060376e861a313ad869f48d",
+      "lines": 12,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchFormService.cs",
+      "sha256": "9c14b6e726394729d08eb1b64becc7a6c0ff2761e4d3aa3bb57964d16c51154c",
+      "lines": 35,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/IResearchModelService.cs",
+      "sha256": "5f97aa2fd5f3eab7b984d42d598ec76fc777bc71bf455fe8f8130a04cd0d6a10",
+      "lines": 19,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchCanvasService.cs",
+      "sha256": "867ab595db998792bf50efd793a952a1a6cf4b049ffdc8573f2542cd57887051",
+      "lines": 507,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 328,
+          "text": "return null;"
+        },
+        {
+          "line": 479,
+          "text": "return null;"
+        },
+        {
+          "line": 494,
+          "text": "return new ResearchFormServiceResult<T>(ResearchFormServiceStatus.InvalidRequest, Message: message);"
+        },
+        {
+          "line": 504,
+          "text": "return new ResearchFormServiceResult<T>(ResearchFormServiceStatus.Conflict, Message: message);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchDataService.cs",
+      "sha256": "a00d2e0b9ee7fa326b5d7c4cc83202a23f612622bbbe89eb87e111522ac771ac",
+      "lines": 467,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 350,
+          "text": "log.ErrorMessage = message;"
+        },
+        {
+          "line": 353,
+          "text": "return new ResearchFormServiceResult<NckhCollectResponsesResponse>(status, Message: message);"
+        },
+        {
+          "line": 459,
+          "text": "new(ResearchFormServiceStatus.InvalidRequest, Message: message);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchExportService.cs",
+      "sha256": "e029e3a6a2ddb2be37babb0ed59aaf510127c3ee55c03e352ba32e42831c0dab",
+      "lines": 438,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 427,
+          "text": "new(ResearchFormServiceStatus.InvalidRequest, Message: message);"
+        },
+        {
+          "line": 430,
+          "text": "new(ResearchFormServiceStatus.Conflict, Message: message);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormService.cs",
+      "sha256": "b23818a35a6146679eefc04991f5f9f458ac1dde52cccebf1f3e96889cb8204c",
+      "lines": 1272,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 42,
+          "text": "ResearchFormServiceStatus.InvalidRequest, Message: \"Authorization code is required.\");"
+        },
+        {
+          "line": 49,
+          "text": "ResearchFormServiceStatus.InvalidRequest, Message: \"Failed to exchange authorization code.\");"
+        },
+        {
+          "line": 59,
+          "text": "Message: \"Google account must grant Forms read or write permission.\");"
+        },
+        {
+          "line": 65,
+          "text": "ResearchFormServiceStatus.InvalidRequest, Message: \"Unable to verify Google account email.\");"
+        },
+        {
+          "line": 88,
+          "text": "ResearchFormServiceStatus.Conflict, Message: \"This Google account is already linked to another user.\");"
+        },
+        {
+          "line": 109,
+          "text": "catch (DbUpdateException ex)"
+        },
+        {
+          "line": 130,
+          "text": "Message: \"This Google account is already linked to another user.\");"
+        },
+        {
+          "line": 150,
+          "text": "ResearchFormServiceStatus.InvalidRequest, Message: \"Invalid Google Form URL.\");"
+        },
+        {
+          "line": 157,
+          "text": "ResearchFormServiceStatus.InvalidRequest, Message: \"Could not extract Form ID from URL.\");"
+        },
+        {
+          "line": 166,
+          "text": "ResearchFormServiceStatus.Conflict, Message: \"This form has already been imported.\");"
+        },
+        {
+          "line": 173,
+          "text": "ResearchFormServiceStatus.Unauthorized, Message: \"Google account not linked or token expired. Please re-link your Google account.\");"
+        },
+        {
+          "line": 180,
+          "text": "ResearchFormServiceStatus.NotFound, Message: \"Form not found or access denied.\");"
+        },
+        {
+          "line": 246,
+          "text": "ResearchFormServiceStatus.Unauthorized, Message: \"Google account not linked.\");"
+        },
+        {
+          "line": 321,
+          "text": "Message: \"Action must be 'create' or 'update'.\");"
+        },
+        {
+          "line": 341,
+          "text": "Message: \"Model status is not allowed for form generation.\");"
+        },
+        {
+          "line": 351,
+          "text": "Message: \"Google account not linked.\");"
+        },
+        {
+          "line": 359,
+          "text": "Message: \"Google Forms write scope is required. Please re-consent with Forms body permission.\");"
+        },
+        {
+          "line": 367,
+          "text": "Message: \"Google account not linked or token expired. Please re-link your Google account.\");"
+        },
+        {
+          "line": 375,
+          "text": "Message: questionBuild.Error);"
+        },
+        {
+          "line": 389,
+          "text": "Message: \"A generated form already exists for this model.\");"
+        },
+        {
+          "line": 414,
+          "text": "return new ResearchFormServiceResult<NckhVariableResponse>(ResearchFormServiceStatus.InvalidRequest, Message: validation);"
+        },
+        {
+          "line": 431,
+          "text": "Message: $\"Variable code '{code}' already exists in this model.\");"
+        },
+        {
+          "line": 517,
+          "text": "return new ResearchFormServiceResult<NckhVariableResponse>(ResearchFormServiceStatus.InvalidRequest, Message: validation);"
+        },
+        {
+          "line": 527,
+          "text": "Message: $\"Variable code '{code}' already exists in this model.\");"
+        },
+        {
+          "line": 603,
+          "text": "return new ResearchFormServiceResult<NckhMappingResponse>(ResearchFormServiceStatus.InvalidRequest, Message: validation);"
+        },
+        {
+          "line": 618,
+          "text": "Message: \"Form question must belong to the same imported form as the variable model.\");"
+        },
+        {
+          "line": 624,
+          "text": "return new ResearchFormServiceResult<NckhMappingResponse>(ResearchFormServiceStatus.Conflict, Message: duplicate);"
+        },
+        {
+          "line": 705,
+          "text": "return new ResearchFormServiceResult<NckhMappingResponse>(ResearchFormServiceStatus.InvalidRequest, Message: validation);"
+        },
+        {
+          "line": 720,
+          "text": "Message: \"Form question must belong to the same imported form as the variable model.\");"
+        },
+        {
+          "line": 726,
+          "text": "return new ResearchFormServiceResult<NckhMappingResponse>(ResearchFormServiceStatus.Conflict, Message: duplicate);"
+        },
+        {
+          "line": 787,
+          "text": "Message: \"Google Forms API failed to create the form.\");"
+        },
+        {
+          "line": 795,
+          "text": "Message: \"Google Forms API failed to create form questions.\");"
+        },
+        {
+          "line": 803,
+          "text": "Message: \"Google Forms API failed to re-import generated form structure.\");"
+        },
+        {
+          "line": 852,
+          "text": "Message: \"Google Form is not accessible with the current Google write authorization.\");"
+        },
+        {
+          "line": 860,
+          "text": "Message: \"Google Forms API failed to update form questions.\");"
+        },
+        {
+          "line": 868,
+          "text": "Message: \"Google Forms API failed to re-import updated form structure.\");"
+        },
+        {
+          "line": 951,
+          "text": "return null;"
+        },
+        {
+          "line": 1201,
+          "text": "return null;"
+        },
+        {
+          "line": 1222,
+          "text": "return null;"
+        },
+        {
+          "line": 1237,
+          "text": "return null;"
+        },
+        {
+          "line": 1269,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchFormServiceResult.cs",
+      "sha256": "403fd9c8997d2f8cd88395713036257b06b7593787334c3b30453bbf31facff1",
+      "lines": 14,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Nckh/ResearchModelService.cs",
+      "sha256": "53b6999607ffb4018837bf1719204a255ee870b20ffe18d788ad778f4fdf9100",
+      "lines": 291,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 31,
+          "text": "Message: \"Imported form not found.\");"
+        },
+        {
+          "line": 175,
+          "text": "Message: \"Another active model already exists for this imported form.\");"
+        },
+        {
+          "line": 207,
+          "text": "Message: \"Model has a generated form. Deletion is not allowed.\");"
+        },
+        {
+          "line": 282,
+          "text": "return new ResearchFormServiceResult<T>(ResearchFormServiceStatus.InvalidRequest, Message: message);"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PackageService.cs",
+      "sha256": "cfe59a69d955bab5d5750007df59e3e8c6d8bbcca6dae8a2a615c780cdb66588",
+      "lines": 113,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 31,
+          "text": "return null;"
+        },
+        {
+          "line": 47,
+          "text": "return null;"
+        },
+        {
+          "line": 71,
+          "text": "return null;"
+        },
+        {
+          "line": 79,
+          "text": "return null;"
+        },
+        {
+          "line": 95,
+          "text": "throw new ArgumentException(\"Tên gói credit là bắt buộc.\", nameof(name));"
+        },
+        {
+          "line": 100,
+          "text": "throw new ArgumentException(\"Số credit phải lớn hơn 0.\", nameof(credits));"
+        },
+        {
+          "line": 105,
+          "text": "throw new ArgumentException(\"Giá gói phải lớn hơn 0.\", nameof(price));"
+        },
+        {
+          "line": 110,
+          "text": "throw new ArgumentException(\"Giá PayOS phải là số VND nguyên.\", nameof(price));"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentProviderSettingsService.cs",
+      "sha256": "abaa695a2e8d9ddb8e4e09038f7ac86e898c29c66df745318d2c3183f41d41d6",
+      "lines": 183,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 117,
+          "text": "setting.LastCheckMessage = missing.Count == 0"
+        },
+        {
+          "line": 124,
+          "text": "return new CheckPayosProviderSettingsResponse(setting.LastCheckStatus, setting.LastCheckMessage, now);"
+        },
+        {
+          "line": 140,
+          "text": "return null;"
+        },
+        {
+          "line": 165,
+          "text": "setting.LastCheckMessage,"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentSecretProtector.cs",
+      "sha256": "95d0bb359fa7de4d60e551b2b0557aa3d6bece422e999927313bf3991a09e61e",
+      "lines": 30,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PaymentService.cs",
+      "sha256": "1be656f648b38e788eafe13f363fe43ac718ab17705e1085b6ef2b7b70b3bb3c",
+      "lines": 248,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 68,
+          "text": "return new PayosTopupOrderResult(false, null, link.ErrorMessage);"
+        },
+        {
+          "line": 198,
+          "text": "return null;"
+        },
+        {
+          "line": 204,
+          "text": "return null;"
+        },
+        {
+          "line": 210,
+          "text": "return null;"
+        },
+        {
+          "line": 229,
+          "text": "return false;"
+        },
+        {
+          "line": 245,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PayosClient.cs",
+      "sha256": "86165cbb7b459a46de8d1fbc2a2e91ddb350fd20b66e022d8f59df3d03d2fa30",
+      "lines": 70,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 54,
+          "text": "public sealed record PayosPaymentLinkResult(bool Success, string PaymentLinkId, string CheckoutUrl, string ErrorMessage)"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/PayosSignatureService.cs",
+      "sha256": "5865298c9254ab8ec7d97dfd3074501b5c67ec9f32f5f1bb1c958bf1a87215d5",
+      "lines": 71,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 32,
+          "text": "return false;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase2Mappings.cs",
+      "sha256": "77fb6f63b127f650ce07a391e19a42da615b195931dee9753add1524b596e3ea",
+      "lines": 32,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase3Mappings.cs",
+      "sha256": "cf63f8299014a6b127c374146a35c4bc7b80379ec444b6d4e02551678aa84e7b",
+      "lines": 73,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 50,
+          "text": "log.ErrorMessage,"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs",
+      "sha256": "edc399b341fa38de1a74a875e0995899638119fd6cf75aa6d55cf62d210f8c46",
+      "lines": 405,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 56,
+          "text": "_ => throw new InvalidOperationException(\"Unsupported answer rule mode.\")"
+        },
+        {
+          "line": 61,
+          "text": "throw new InvalidOperationException(\"Generated answer value count is outside the safe range.\");"
+        },
+        {
+          "line": 66,
+          "text": "throw new InvalidOperationException(\"Generated answer value is too long.\");"
+        },
+        {
+          "line": 79,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 81,
+          "text": "return false;"
+        },
+        {
+          "line": 83,
+          "text": "catch (InvalidOperationException)"
+        },
+        {
+          "line": 85,
+          "text": "return false;"
+        },
+        {
+          "line": 99,
+          "text": "throw new InvalidOperationException(\"RandomEqually requires values or question options.\");"
+        },
+        {
+          "line": 110,
+          "text": "throw new InvalidOperationException(\"RandomByPercentage requires weights.\");"
+        },
+        {
+          "line": 119,
+          "text": "throw new InvalidOperationException(\"Weights must be integers.\");"
+        },
+        {
+          "line": 124,
+          "text": "throw new InvalidOperationException(\"Weights must not be negative.\");"
+        },
+        {
+          "line": 136,
+          "text": "throw new InvalidOperationException(\"RandomByPercentage requires at least one positive weight.\");"
+        },
+        {
+          "line": 141,
+          "text": "throw new InvalidOperationException(\"RandomByPercentage total weight must not exceed 100.\");"
+        },
+        {
+          "line": 153,
+          "text": "throw new InvalidOperationException(\"RandomByQuantity requires quantities.\");"
+        },
+        {
+          "line": 161,
+          "text": "throw new InvalidOperationException(\"Quantities must be integers.\");"
+        },
+        {
+          "line": 166,
+          "text": "throw new InvalidOperationException(\"Quantities must not be negative.\");"
+        },
+        {
+          "line": 174,
+          "text": "throw new InvalidOperationException(\"RandomByQuantity requires at least one positive quantity.\");"
+        },
+        {
+          "line": 186,
+          "text": "throw new InvalidOperationException(\"SampleTextLines requires samples.\");"
+        },
+        {
+          "line": 191,
+          "text": "throw new InvalidOperationException(\"SampleTextLines exceeds the safe sample limit.\");"
+        },
+        {
+          "line": 201,
+          "text": "throw new InvalidOperationException(\"DateRangeSequential requires a date question.\");"
+        },
+        {
+          "line": 208,
+          "text": "throw new InvalidOperationException(\"Date range start must be before or equal to the end date.\");"
+        },
+        {
+          "line": 214,
+          "text": "throw new InvalidOperationException(\"Date range requires at least one date.\");"
+        },
+        {
+          "line": 224,
+          "text": "throw new InvalidOperationException(\"TimeRangeSequential requires a time question.\");"
+        },
+        {
+          "line": 231,
+          "text": "throw new InvalidOperationException(\"Time range start must be before or equal to the end time.\");"
+        },
+        {
+          "line": 238,
+          "text": "throw new InvalidOperationException(\"Time range step must be between 5 and 120 minutes.\");"
+        },
+        {
+          "line": 245,
+          "text": "throw new InvalidOperationException(\"Time range requires at least one time slot.\");"
+        },
+        {
+          "line": 272,
+          "text": "throw new InvalidOperationException(\"Date range values must use yyyy-MM-dd format.\");"
+        },
+        {
+          "line": 284,
+          "text": "throw new InvalidOperationException(\"Time range values must use HH:mm format.\");"
+        },
+        {
+          "line": 294,
+          "text": "throw new InvalidOperationException(\"Configured answer value count is outside the safe range.\");"
+        },
+        {
+          "line": 310,
+          "text": "throw new InvalidOperationException(\"RandomByPercentage requires at least one positive weight.\");"
+        },
+        {
+          "line": 330,
+          "text": "throw new InvalidOperationException(\"Checkbox requires at least one configured value.\");"
+        },
+        {
+          "line": 337,
+          "text": "throw new InvalidOperationException(\"Checkbox minSelections must be at least 1.\");"
+        },
+        {
+          "line": 342,
+          "text": "throw new InvalidOperationException(\"Checkbox maxSelections must be greater than or equal to minSelections.\");"
+        },
+        {
+          "line": 347,
+          "text": "throw new InvalidOperationException(\"Checkbox maxSelections must not exceed the configured option count.\");"
+        },
+        {
+          "line": 352,
+          "text": "throw new InvalidOperationException(\"Checkbox maxSelections exceeds the generated answer value limit.\");"
+        },
+        {
+          "line": 386,
+          "text": "throw new InvalidOperationException(\"Checkbox selection counts must be integers.\");"
+        },
+        {
+          "line": 402,
+          "text": "throw new InvalidOperationException(\"Configured values must match question options.\");"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/Phase4SafetyLimits.cs",
+      "sha256": "804d0a56da090a9114fe4c9fe7008a274b1ea1ae62f977b0b35473122c1b7b60",
+      "lines": 14,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/ProfileService.cs",
+      "sha256": "d3300ee644da0e4d76ecd7c42abd53878268447c78c9144ad20625b4317a132f",
+      "lines": 78,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 47,
+          "text": "return null;"
+        },
+        {
+          "line": 62,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/ResponseGenerationService.cs",
+      "sha256": "8db587427c0c311a14e88c1e7d0b7c3bbb966db9a1a806480a27bfa66d4417cf",
+      "lines": 184,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 34,
+          "text": "throw new InvalidOperationException(\"Preview response count must be between 1 and 100.\");"
+        },
+        {
+          "line": 42,
+          "text": "return null;"
+        },
+        {
+          "line": 58,
+          "text": "throw new InvalidOperationException(\"Every detected question requires an answer rule before preview generation.\");"
+        },
+        {
+          "line": 72,
+          "text": "throw new InvalidOperationException(\"Không đủ credit để tạo bản xem trước.\");"
+        },
+        {
+          "line": 117,
+          "text": "throw new InvalidOperationException(\"Không đủ credit để tạo bản xem trước.\");"
+        },
+        {
+          "line": 143,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+      "sha256": "1d828f134cec00ae6e4c4f0dccf7aab22df0fee3af3a55ef65720700105e0d40",
+      "lines": 301,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 34,
+          "text": "throw new InvalidOperationException(\"Submission requires explicit confirmation.\");"
+        },
+        {
+          "line": 41,
+          "text": "throw new InvalidOperationException(\"Submission requires at least one preview response.\");"
+        },
+        {
+          "line": 48,
+          "text": "throw new InvalidOperationException(\"Submission response count must not exceed 100.\");"
+        },
+        {
+          "line": 55,
+          "text": "throw new InvalidOperationException(\"Duplicate response IDs are not allowed.\");"
+        },
+        {
+          "line": 63,
+          "text": "return null;"
+        },
+        {
+          "line": 77,
+          "text": "throw new InvalidOperationException(\"Project already has an active submission job.\");"
+        },
+        {
+          "line": 88,
+          "text": "throw new InvalidOperationException(\"All submitted responses must belong to the project.\");"
+        },
+        {
+          "line": 95,
+          "text": "throw new InvalidOperationException(\"Only previewed responses can be submitted.\");"
+        },
+        {
+          "line": 124,
+          "text": "catch (JsonException)"
+        },
+        {
+          "line": 128,
+          "text": "throw new InvalidOperationException(\"Generated response payload is invalid.\");"
+        },
+        {
+          "line": 135,
+          "text": "throw new InvalidOperationException(\"Generated response payload is missing required entry IDs.\");"
+        },
+        {
+          "line": 148,
+          "text": "ErrorMessage = submitResult.ErrorMessage,"
+        },
+        {
+          "line": 205,
+          "text": "return null;"
+        },
+        {
+          "line": 214,
+          "text": "return null;"
+        },
+        {
+          "line": 232,
+          "text": "return null;"
+        },
+        {
+          "line": 240,
+          "text": "return null;"
+        },
+        {
+          "line": 261,
+          "text": "return null;"
+        },
+        {
+          "line": 269,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/TopupEvidenceService.cs",
+      "sha256": "ec3b90e747657c4b523dbfdb8d8a081734395faf6d3a302d6f7aeaac6d5f3c9a",
+      "lines": 45,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 16,
+          "text": "throw new ArgumentException(\"Ảnh minh chứng phải có dung lượng từ 1 byte đến 5 MB.\");"
+        },
+        {
+          "line": 18,
+          "text": "if (type is null) throw new ArgumentException(\"Chỉ nhận ảnh PNG, JPEG hoặc WebP.\");"
+        },
+        {
+          "line": 43,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/TopupOrderService.cs",
+      "sha256": "ebfaacb4b1c5b2342d8160c420f2f2b49cfdbed195bbadc643efe1c56f507259",
+      "lines": 103,
+      "role": "product",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 25,
+          "text": "throw new ArgumentException(\"Đơn đối soát phải dùng phương thức Manual. Tạo đơn PayOS qua API thanh toán.\");"
+        },
+        {
+          "line": 27,
+          "text": "throw new ArgumentException(\"Ghi chú chuyển khoản là bắt buộc, tối đa 1000 ký tự.\");"
+        },
+        {
+          "line": 29,
+          "text": "throw new ArgumentException(\"Ảnh minh chứng không tồn tại hoặc không thuộc tài khoản của bạn.\");"
+        },
+        {
+          "line": 36,
+          "text": "return null;"
+        },
+        {
+          "line": 58,
+          "text": "throw new ArgumentException(\"Ảnh minh chứng đã được gắn với một đơn khác. Hãy tải ảnh cho đơn mới.\");"
+        },
+        {
+          "line": 91,
+          "text": "return null;"
+        }
+      ]
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/UsageLogService.cs",
+      "sha256": "0e6008d4f1507abe22c320f4013fe401104b370e6e3fc9c47f32232224b75cac",
+      "lines": 68,
+      "role": "product",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "src/FormAutoHub.Api/appsettings.json",
+      "sha256": "d380fe344708676adc80c7b36ec43f187b7d7879d17e2f69f37e9dbe0fb801cb",
+      "lines": 30,
+      "role": "runtime-config",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AdminAiProviderSettingsTests.cs",
+      "sha256": "b0aa4e34cc0959cbcb4c45f172f51f2ac04d83db3afe4afccf9cf759a201596b",
+      "lines": 193,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 107,
+          "text": "var problem = Assert.IsType<ProblemDetails>(badRequest.Value);"
+        },
+        {
+          "line": 126,
+          "text": "var problem = Assert.IsType<ProblemDetails>(badRequest.Value);"
+        }
+      ]
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AdminPackageManagementTests.cs",
+      "sha256": "3f16944f24b5d91d34744bcb70306d7be10021248345c409b006a4dcca6b871b",
+      "lines": 108,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiGenerationServiceTests.cs",
+      "sha256": "e314bd2e463292988bc33cb09f0c4f89711771b00046e126228f4554ae83475e",
+      "lines": 572,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 172,
+          "text": "var adapter = new TestAiProviderAdapter(_ => throw new InvalidOperationException(\"provider unavailable\"));"
+        },
+        {
+          "line": 202,
+          "text": "var adapter = new TestAiProviderAdapter(_ => throw new TaskCanceledException(\"provider timeout\"));"
+        },
+        {
+          "line": 219,
+          "text": "Assert.Contains(\"timed out\", run.ErrorMessage, StringComparison.OrdinalIgnoreCase);"
+        },
+        {
+          "line": 256,
+          "text": "Assert.Contains(\"match stored options\", item.ValidationMessage, StringComparison.Ordinal);"
+        }
+      ]
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiPromptProfileServiceTests.cs",
+      "sha256": "0efcbb22f83f5f37875b3547ad8531b0a64d6057a83859d1c5c30bfdb1e9408d",
+      "lines": 277,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/AiSafetyCoreTests.cs",
+      "sha256": "3fac2ce44f9a9a644642442f80ea711bda1c6704d43796e24b915f27fc2e0946",
+      "lines": 222,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/CreditTransactionServiceTests.cs",
+      "sha256": "fc8dcd4ea48f7cc50bf881390922c1807f595b1d4fd0afb3e7be0d305e8445cd",
+      "lines": 112,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DataProtectionPersistenceTests.cs",
+      "sha256": "f245f6bfec4c23159e066316c4fd2a609352a2cef641893a45226e4686dc1ce5",
+      "lines": 65,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FoundationTests.cs",
+      "sha256": "294db19551c7ffb05adb8953e868b663cf356f8e99ad8d1965138779aa068b22",
+      "lines": 91,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/ManualCreditFlowTests.cs",
+      "sha256": "f644010760a7c47ae0c1b859da368853b1fe66db1e2708d543295eafdc9c33ba",
+      "lines": 112,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase1OAuthAndFormsTests.cs",
+      "sha256": "eee4c2f81b09cb12a6d62c27829bcbe9c4c2f49b9b176af14d86f38dd65b8f3f",
+      "lines": 410,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2ModelApiTests.cs",
+      "sha256": "c26b9bc90af7351082b6914dafe9ca3aa11eb1db6a85c097e8ca3be291d1d730",
+      "lines": 345,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2PersistenceTests.cs",
+      "sha256": "8a0cb6542d5a3ebb786dceb63cc23a0b7d4491c1a5ed8f2d59b0f157f67d80a5",
+      "lines": 83,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase2VariableMappingApiTests.cs",
+      "sha256": "90670417e948ed6d1b5ee63307d34550de62c10dab628770bb376444394b5063",
+      "lines": 310,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase3CanvasServiceTests.cs",
+      "sha256": "da6ac58c285f93511eadbebae319d1b323a447843aca029b86e8d897cf819b71",
+      "lines": 310,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase3PersistenceTests.cs",
+      "sha256": "222ef79bb3b249a70add8098760803cd04f278c5afca55f5675f19384b645fc5",
+      "lines": 96,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase4FormGenerationServiceTests.cs",
+      "sha256": "57eae77000b52138fbd87e925afd46f0562f6f6c4cc73bc68da4508f7f843c82",
+      "lines": 355,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase5DataServiceTests.cs",
+      "sha256": "f39108624d03e1b2df3fbe0b31e3f0b35d1d3e40b3374790e8939346eefc7aa8",
+      "lines": 335,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/NckhPhase6ExportServiceTests.cs",
+      "sha256": "f9710660a213d506f4c5a58357e00b1820a779472f81581bf637f305b72c294a",
+      "lines": 256,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 240,
+          "text": "var entry = archive.GetEntry(name) ?? throw new InvalidOperationException($\"Missing {name}\");"
+        }
+      ]
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/OpenAiCompatibleProviderAdapterTests.cs",
+      "sha256": "b48eda986d469fb41d6ec49efc43de97ac533d6f583b312def18146f37189c10",
+      "lines": 188,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase2TopupApprovalTests.cs",
+      "sha256": "b8b78888193ce90efd153e9ddc8054dc0bb97090c4ad41969b9b33ec47f8454d",
+      "lines": 88,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase3FormAutomationTests.cs",
+      "sha256": "643a6a69e63a1e9ceeec5773066beb3ef6fabec7fcb472e9717f8fd1721691fc",
+      "lines": 1007,
+      "role": "test-support",
+      "screening": "error-surface-screened",
+      "signals": [
+        {
+          "line": 973,
+          "text": "throw new NotSupportedException();"
+        },
+        {
+          "line": 987,
+          "text": "throw new NotSupportedException();"
+        }
+      ]
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase7AuthTests.cs",
+      "sha256": "362d3528e86c7374592b7691384716a98c3d74036425cf8ee1a99f82fa2fa11d",
+      "lines": 284,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase8PayosPaymentTests.cs",
+      "sha256": "9e106390e931d3df5b85b6450820a0e1924ea9195a930d5c61dfbf7774ad631b",
+      "lines": 218,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/UsageLogServiceTests.cs",
+      "sha256": "0c2c8d0497ad89f21b40b41cad9fa5f2ca0d9fa281b0c4efa09f642ca9b6555f",
+      "lines": 94,
+      "role": "test-support",
+      "screening": "no-explicit-error-signal",
+      "signals": []
+    }
+  ]
+}

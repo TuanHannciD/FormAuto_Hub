@@ -1,0 +1,7 @@
+{
+  "head": "3893d0c660890c94f32ebb432c79373f6fe091f7",
+  "exitCode": 1,
+  "files": 595,
+  "stdout": "",
+  "stderr": "Mirror drift in 1 files; inspect, then run --sync if authorized\n"
+}

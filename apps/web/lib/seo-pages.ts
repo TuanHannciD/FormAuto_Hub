@@ -376,7 +376,7 @@ export const seoPages: Record<SeoPageSlug, SeoPageConfig> = {
       },
       {
         question: "FormAuto Hub có bypass captcha hoặc tạo tài khoản giả không?",
-        answer: "Không. Những hành vi này bị cấm theo product safety rules."
+        answer: "Không. Những hành vi này bị cấm theo quy tắc sử dụng an toàn của FormAuto Hub."
       }
     ]
   }

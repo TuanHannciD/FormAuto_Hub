@@ -4,7 +4,7 @@
 
 - Ngày: 09/10/2026.
 - Người dùng đồng ý ba ưu tiên, sau đó phê duyệt triển khai, rồi đồng bộ tài liệu hai ngôn ngữ và commit local có chọn lọc. Yêu cầu commit không cho phép push/deploy.
-- Trạng thái: người dùng đã phê duyệt triển khai tiếp. Mốc GSC P0, code P1/P2 và kiểm tra local P3 là Verified; phát hành public P4 và đo hiệu quả P5 là Not run.
+- Trạng thái: mốc GSC P0, code P1/P2, kiểm tra local P3 và smoke public P4 là Verified. Người dùng đã deploy release `8a4f18e`; xử lý sitemap là Blocked và hiệu quả tìm kiếm/AI P5 là Not run. Xem bản ghi sau deploy bên dưới.
 - Đây là follow-up sau closeout có phạm vi riêng, không mở global phase mới. Các closeout Phase 9 vẫn là căn cứ lịch sử.
 - Giữ UI đã chấp nhận, URL, đích CTA và luồng nghiệp vụ. Bản sửa dropdown và báo cáo hiện có thuộc công việc riêng, phải bảo toàn.
 - Hướng dẫn thực thi/ghi bằng chứng: [SEO_GEO_VALIDATION_RUNBOOK.md](SEO_GEO_VALIDATION_RUNBOOK.md).
@@ -154,6 +154,22 @@ Hiệu suất Web chọn 28 ngày, hiển thị 09/09–06/10/2026: 0 lượt nh
 
 Review: giữ phạm vi P1/P2; không sửa nội dung hiển thị/CTA/điều hướng, backend/API/database hoặc chính sách crawler. Giữ diff dropdown riêng và báo cáo HTML độc lập hiện có.
 
-Not run: push/deploy, smoke public sau phát hành, GSC live test/yêu cầu crawl/gửi sitemap, báo cáo Page indexing chi tiết, xuất Performance/so sánh 28 ngày trước, luồng riêng tư có đăng nhập, kiểm tra trình duyệt với giảm chuyển động, xác minh log/trích dẫn AI và kết quả D+7/14/28. P0 gồm kiểm tra URL đã lưu, danh sách sitemap đã gửi và tổng Performance trên UI; chưa hoàn thành mọi bước điều tra/xuất dữ liệu trong runbook. Bước tiếp: phê duyệt deploy riêng, kiểm tra output public, gửi sitemap đã xác minh và kiểm tra/yêu cầu năm trang công khai. Google index và AI trích dẫn là kết quả bên ngoài, không được bảo đảm chỉ vì kỹ thuật local đạt.
+Tại mốc trước phát hành, smoke public, GSC live test/yêu cầu index/gửi sitemap và đo hiệu quả là Not run. Bản ghi sau deploy bên dưới cập nhật các điều kiện phát hành đó; xuất Performance chi tiết, luồng có đăng nhập, giảm chuyển động và xác minh traffic/trích dẫn AI vẫn Not run. Google index và AI trích dẫn là kết quả bên ngoài, không được bảo đảm chỉ vì kỹ thuật đạt.
 
 Review tài liệu/commit: đồng bộ trạng thái GSC hiện tại, danh sách triển khai, phạm vi kiểm tra thực tế và các bước còn lại ở hai ngôn ngữ. Người dùng cho phép commit local chọn lọc code SEO, kiểm thử, tài liệu song ngữ và bằng chứng theo ngày đã lọc thông tin tài khoản, ghi tại `2a6363b`. Commit đó không gồm diff UI dropdown và báo cáo HTML độc lập; sau đó người dùng cho phép commit riêng các phần này, ghi trong `UI_CREDIT_FOLLOWUP_SYNC.md`. JSON validation ghi mốc trước commit.
+
+## Kiểm tra sau deploy — 09/10/2026
+
+Người dùng thông báo đã deploy. Kiểm tra VPS chỉ đọc xác nhận release `8a4f18ee77453857c550ff7be0279c5cc9e415f1`; container API/web được tạo lại và healthy, SQL healthy. Log web giới hạn có Next.js 15.5.18 ready sau 765ms, không có lỗi trong khoảng đã xem. Lượt kiểm tra này không deploy hoặc sửa server.
+
+Verified: bộ SEO hiện có chạy trên `https://formautohub.servertun.pp.ua` đạt **26/26 (30,2 giây)**. Bao phủ sáu trang public/metadata/JSON-LD/response static chunk, sáu kiểm tra không JS, mười hai route noindex chưa đăng nhập, nhất quán file phát hiện trang và robots/404. Không xác minh luồng nghiệp vụ có đăng nhập hoặc mọi sự kiện console/hydrate.
+
+Live Test Google cho `/google-forms/sample-data` lúc hiển thị 23:35:25 ngày 09/10/2026 báo tìm nạp thành công, cho phép crawl/index và canonical tự trỏ; “Google có thể lập chỉ mục URL này” là khả năng, chưa phải đã nằm trong chỉ mục. Live Test sitemap lúc hiển thị 23:36:38 cũng tìm nạp thành công và cho phép crawl. File XML sitemap không cần xuất hiện trong kết quả tìm kiếm; không gửi yêu cầu index XML.
+
+Blocked: Google nhận yêu cầu gửi sitemap nhưng hàng sitemap đã gửi báo “Không thể tìm nạp”, loại không xác định và 0 URL phát hiện. Kết quả này khác với live fetch thành công sau đó; chưa xác định nguyên nhân. Không ghi xử lý sitemap thành công hoặc suy đoán lỗi Cloudflare/code. Giữ bản đã gửi; kiểm tra lại xử lý và bằng chứng proxy/crawler giới hạn nếu lỗi kéo dài. [Hướng dẫn Google](https://support.google.com/webmasters/answer/7451001) phân biệt gửi, tìm nạp và xử lý.
+
+Lượt kiểm tra giữ UI đã chấp nhận và toàn bộ cấu hình ứng dụng/nghiệp vụ/server. Bằng chứng trong `artifacts/reports/seo-geo/2026-10-09/`, gồm `post-deploy-tests.txt`, `gsc-sitemap-submitted.jpg` và `gsc-sitemap-live.jpg`. Giữ mốc trước sửa và báo cáo HTML lịch sử.
+
+Not run: xác minh chỉ mục mới, tăng traffic/thứ hạng, trích dẫn AI/log crawler AI đã xác minh, xuất Performance chi tiết/so sánh kỳ trước, luồng có đăng nhập và giảm chuyển động. D = phát hành public đã xác minh **09/10/2026**; mốc theo dõi 16/10 / 23/10 / 06/11/2026 (D+7/14/28), không phải hạn được index. Chưa tạo tác vụ theo dõi tự động.
+
+Verified Google nhận yêu cầu index (mỗi URL gửi một lần): `/google-forms/sample-data`, `/google-forms/student-report`, `/google-forms/survey-demo`, `/google-forms/sheets-report` và `/anti-abuse`. Mỗi trang hiện “Đã yêu cầu lập chỉ mục” và được thêm vào hàng đợi ưu tiên crawl; đã lưu ảnh. Bốn yêu cầu sau chạy kiểm tra điều kiện tự động của Google, chưa chạy báo cáo Live Test chi tiết riêng. Trạng thái đã lưu trước yêu cầu vẫn chưa biết/chưa index; không khẳng định đã có chỉ mục mới. Bản ghi chi tiết đã lọc thông tin tài khoản: [post-deploy-results.json](../../artifacts/reports/seo-geo/2026-10-09/post-deploy-results.json).

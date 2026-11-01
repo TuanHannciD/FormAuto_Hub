@@ -1,0 +1,110 @@
+{
+  "utc": "2026-10-30T16:50:49.277216+00:00",
+  "owner": "/root/closeout_git_inventory",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "children": 0,
+  "dispatch": "Root checked live catalog and explicitly selected gpt-6.1-sol/high; no nested dispatch.",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "branch": "ui/compact-refinement-20261028",
+  "gitDir": ".git",
+  "gitCommonDir": ".git",
+  "cachedNameOnly": [],
+  "localRefs": [
+    "docs/pre-ui-refinement-20261028 be3c65baa79e55799e2b17a3a0b0edd7bc5cfa94 origin/docs/pre-ui-refinement-20261028",
+    "main 8a4f18ee77453857c550ff7be0279c5cc9e415f1 origin/main",
+    "t3/normalize-topup-evidence-columns a19f7a2f3dc1bc54ff645d662d94fc614439256a ",
+    "ui/compact-refinement-20261028 a19f7a2f3dc1bc54ff645d662d94fc614439256a ",
+    "ui/form-automation-v10 debb000a8fbc57492bbd4a15b3e21bd8e3f5d9d3 ",
+    "ui/shared-ui-foundation fed7ea3b4ae3cb19c11aa26e1f4404f2f11b9d27 ",
+    "origin 8a4f18ee77453857c550ff7be0279c5cc9e415f1 ",
+    "origin/docs/pre-ui-refinement-20261028 be3c65baa79e55799e2b17a3a0b0edd7bc5cfa94 ",
+    "origin/main 8a4f18ee77453857c550ff7be0279c5cc9e415f1 "
+  ],
+  "mainMergeBase": "8a4f18ee77453857c550ff7be0279c5cc9e415f1",
+  "priorCommits": [
+    "a19f7a2f3dc1bc54ff645d662d94fc614439256a docs(ui): record approved folder cleanup and local shutdown",
+    "606de1eccd9ac21fc91c5d8933d7b9bde8821623 docs(ui): close refinement task with outstanding checks and retained resource inventory",
+    "0698eccfa448103329f9790954d057b1f3083dc6 refactor(ui): compact existing surfaces and sync refinement review docs",
+    "be3c65baa79e55799e2b17a3a0b0edd7bc5cfa94 docs: sync agent workflow and approved UI refinement plan"
+  ],
+  "worktrees": [
+    "worktree D:/TinHoc/FormAuto_Hub",
+    "HEAD a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+    "branch refs/heads/ui/compact-refinement-20261028",
+    "",
+    "worktree C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/t3-ecd39b00",
+    "HEAD a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+    "branch refs/heads/t3/normalize-topup-evidence-columns",
+    ""
+  ],
+  "remotesSanitized": [
+    {
+      "name": "origin",
+      "host": "github.com",
+      "path": "/TuanHannciD/FormAuto_Hub.git",
+      "credentialsPresent": false
+    }
+  ],
+  "remoteRead": {
+    "command": "git ls-remote --heads origin main docs/pre-ui-refinement-20261028 ui/compact-refinement-20261028",
+    "exit": 0,
+    "refs": [
+      {
+        "sha": "be3c65baa79e55799e2b17a3a0b0edd7bc5cfa94",
+        "ref": "refs/heads/docs/pre-ui-refinement-20261028"
+      },
+      {
+        "sha": "8a4f18ee77453857c550ff7be0279c5cc9e415f1",
+        "ref": "refs/heads/main"
+      }
+    ],
+    "stderrPresent": false
+  },
+  "ownership": {
+    "product": 52,
+    "tooling": 4,
+    "test": 22,
+    "contract-doc": 2
+  },
+  "statusCounts": {
+    "ERR80": 80,
+    "DB17": 17,
+    "preserved-next-cache": 143,
+    "preserved-other-evidence": 1012,
+    "portable-evidence": 154,
+    "closeout-packet": 20,
+    "DB-task-docs": 4,
+    "ERR-task-docs": 30
+  },
+  "allowlistCounts": {
+    "db-source": 17,
+    "err-source": 80,
+    "db-docs": 4,
+    "err-docs": 30,
+    "portable-evidence": 162
+  },
+  "dbErrOverlap": [],
+  "portableEvidenceBytes": 3143033,
+  "baselineStatus": [
+    " M tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+    "?? artifacts/reports/db-migration-analysis-2026-10-29/",
+    "?? artifacts/reports/db-sync-2026-10-29/",
+    "?? artifacts/reports/error-audit-2026-10-29/",
+    "?? artifacts/reports/error-remediation-2026-10-30/",
+    "?? docs/ai/tasks/FAH-DB-SYNC-001/",
+    "?? docs/ai/tasks/FAH-ERR-001/",
+    "?? docs/vi/tasks/FAH-DB-SYNC-001/",
+    "?? docs/vi/tasks/FAH-ERR-001/",
+    "?? scripts/db-compatibility/",
+    "?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+    "?? src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+    "?? tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+    "?? tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+    "?? tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+    "?? tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+    "?? tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs"
+  ],
+  "testsRerun": false,
+  "mutation": "Only owned docs/packet writes; no Git/index/ref mutation, no runtime/DB/deploy."
+}

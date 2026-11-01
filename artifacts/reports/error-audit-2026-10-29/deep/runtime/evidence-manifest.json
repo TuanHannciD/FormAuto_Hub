@@ -1,0 +1,336 @@
+{
+  "at": "2026-10-29T07:42:47.653Z",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "head": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "trackedDiff": "",
+  "reproductionAssertions": [
+    {
+      "name": "RUNTIME-01 login 401 rendered Unauthorized",
+      "status": "Verified",
+      "uxExpectation": "Failed: observed current defect"
+    },
+    {
+      "name": "RUNTIME-02 detail 503 rendered not-found",
+      "status": "Verified",
+      "uxExpectation": "Failed: observed current defect"
+    },
+    {
+      "name": "RUNTIME-03 profile 503 blank editable name and enabled save",
+      "status": "Verified",
+      "uxExpectation": "Failed: observed current defect"
+    },
+    {
+      "name": "RUNTIME-04 security 503 claims unlinked",
+      "status": "Verified",
+      "uxExpectation": "Failed: observed current defect"
+    },
+    {
+      "name": "RUNTIME-05 NCKH 503 shows load error and empty guidance",
+      "status": "Verified",
+      "uxExpectation": "Failed: observed current defect"
+    }
+  ],
+  "networkCapturedUniqueEntries": 94,
+  "chunkJsCapturedUniqueRequests": 27,
+  "chunkJsStatus200": 26,
+  "chunkJsFailures": [
+    {
+      "url": "http://localhost:3137/_next/static/webpack/webpack.5d5362948a00c380.hot-update.js",
+      "method": "GET",
+      "status": null,
+      "failed": true,
+      "errorText": "net::ERR_ABORTED",
+      "timestamp": "2026-10-29T07:39:17.345Z"
+    }
+  ],
+  "capturedExternalRequests": [],
+  "consoleEntries": [
+    {
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "timestamp": "2026-10-29T07:36:43.622Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "timestamp": "2026-10-29T07:36:59.057Z"
+    },
+    {
+      "level": "log",
+      "text": "[Fast Refresh] rebuilding",
+      "timestamp": "2026-10-29T07:37:15.301Z"
+    },
+    {
+      "level": "log",
+      "text": "[Fast Refresh] done in 571ms",
+      "timestamp": "2026-10-29T07:37:15.872Z"
+    },
+    {
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "timestamp": "2026-10-29T07:37:16.671Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:37:16.800Z"
+    },
+    {
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "timestamp": "2026-10-29T07:38:06.314Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:38:17.550Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:38:17.555Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:39:01.981Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:39:15.863Z"
+    },
+    {
+      "level": "log",
+      "text": "[Fast Refresh] rebuilding",
+      "timestamp": "2026-10-29T07:39:16.725Z"
+    },
+    {
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "timestamp": "2026-10-29T07:39:17.651Z"
+    },
+    {
+      "level": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "timestamp": "2026-10-29T07:39:17.762Z"
+    }
+  ],
+  "fixtureRequests": 27,
+  "sourceHashes": {
+    "apps/web/lib/api.ts": "80e39b78be7ffd5c5d6ff719f756e2b58c25b2f48be71c6015204367b4056120",
+    "apps/web/lib/auth.ts": "1cd61d9e4a9e311c758a7120a595244dfc9a5d347166e130e5d50ce18670846e",
+    "apps/web/lib/toast.ts": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+    "apps/web/app/login/page.tsx": "b42e88b3dffa26e1066ce85ad6c130342edc4f4761f8c98dd3f5924a1e784aad",
+    "apps/web/app/dashboard/top-up/[id]/page.tsx": "05442ccebbeebeff716728cd361aa9c551c3f818ef4d9aeafece39fcd04d6ee2",
+    "apps/web/app/dashboard/nckh/page.tsx": "a79a2e6935d40cd8de252938de18b10de97bd378913ff3b540c6056584d9ca41",
+    "apps/web/components/account-profile-panel.tsx": "950afbbb3f64b7872e99113c01ffcf358444f566005940c7c33b65a01570925b",
+    "apps/web/components/account-security-panel.tsx": "d7c38ded9aee176316ae2ba0115b18af1576e42cad6f577fb2c492623201d985",
+    "apps/web/components/account-dialog.tsx": "c0d5917ff894ed7c5813fb4f483682760cf66d27fcab027a8837dbfdbadcdb7b",
+    "apps/web/components/account-menu.tsx": "4cc8ddb791ecb7e080afa05ef095122fa2bb46500cc24006e2e50d619b5991b4",
+    "apps/web/components/dashboard-shell.tsx": "33c2ab866c7e468e5fadefdea119097a7e61cb9f7a350f9c45be52877cabc9ab",
+    "apps/web/next.config.mjs": "eadab2495c2d4c664fbc5a475a541461173c6db5c5acfe328d05bb6483c6208e",
+    "src/FormAutoHub.Api/Program.cs": "b3b45edbdfe289941ce8c6785b05d2126ed8b8c9ada3e43ed453addbfd574b5a"
+  },
+  "images": [
+    {
+      "file": "browser-login.png",
+      "width": 1280,
+      "height": 800,
+      "sha256": "a49823acb590846cc587b91e40bf348db60d7465b745f17cd8b9ebe557d0dce4"
+    },
+    {
+      "file": "browser-topup.png",
+      "width": 1280,
+      "height": 800,
+      "sha256": "6c6156448dd06a656a3878c7480752de76d76ad89a42a279150130109bdaeb01"
+    },
+    {
+      "file": "browser-profile.png",
+      "width": 1280,
+      "height": 800,
+      "sha256": "90c749626ffbd2a9a3931c1681ef604c6bf7d4f5d21829183b4af5605c1aac76"
+    },
+    {
+      "file": "browser-security.png",
+      "width": 1280,
+      "height": 800,
+      "sha256": "ed6ef9917bca7d535877059fe6487204ed88731676a02d6a2bc90523e574a8c8"
+    },
+    {
+      "file": "browser-nckh-list.png",
+      "width": 1280,
+      "height": 800,
+      "sha256": "6e369e5869e3fc00b084a883173e3771b243df70111f84e27ed3df425f57e517"
+    }
+  ],
+  "release": {
+    "process21404Exists": false,
+    "priorReleasedPid": 27304,
+    "at": "2026-10-29T07:39:47.2720706Z",
+    "closedOwnedTab": "tab_c_35b294ea-298a-4db5-a451-c7ba012d4846",
+    "remainingTargetListeners": [],
+    "releasedPid": 21404,
+    "process27304Exists": false
+  },
+  "files": [
+    {
+      "file": "browser-login.json",
+      "bytes": 7027,
+      "sha256": "da98086dfb43f27c3576188d103323354f4d3309456514fe542df5980dac9f5a"
+    },
+    {
+      "file": "browser-login.png",
+      "bytes": 88436,
+      "sha256": "a49823acb590846cc587b91e40bf348db60d7465b745f17cd8b9ebe557d0dce4"
+    },
+    {
+      "file": "browser-nckh-list.json",
+      "bytes": 19779,
+      "sha256": "e110bcf192748d0679d9d8eb9e60d8718bf4fcad211d3d66670fc4061050f527"
+    },
+    {
+      "file": "browser-nckh-list.png",
+      "bytes": 68752,
+      "sha256": "6e369e5869e3fc00b084a883173e3771b243df70111f84e27ed3df425f57e517"
+    },
+    {
+      "file": "browser-profile-confirmed.json",
+      "bytes": 440,
+      "sha256": "751ee9068fed0b0d4e0cd001ab61f21e24bb3b496c3efd1180150a58fc289e0e"
+    },
+    {
+      "file": "browser-profile-form.json",
+      "bytes": 250,
+      "sha256": "9ae40b97c557962c6024fb6d8774f5b7092098eaef114d256954518c98449e16"
+    },
+    {
+      "file": "browser-profile.json",
+      "bytes": 22232,
+      "sha256": "1723634dcb58011e509c5b9141437be046124c946f2db08cbf1cd98215b717eb"
+    },
+    {
+      "file": "browser-profile.png",
+      "bytes": 82989,
+      "sha256": "90c749626ffbd2a9a3931c1681ef604c6bf7d4f5d21829183b4af5605c1aac76"
+    },
+    {
+      "file": "browser-security-confirmed.json",
+      "bytes": 20246,
+      "sha256": "22b85afe94c13bb1c9de116ed6c0504c7b0d2b673b8cb6027e59e36d0696df45"
+    },
+    {
+      "file": "browser-security.json",
+      "bytes": 22232,
+      "sha256": "c31a9a2dc18a4c2d8c1c11c192296da0258dcf57deb3cd6bcd72a010d4036392"
+    },
+    {
+      "file": "browser-security.png",
+      "bytes": 107046,
+      "sha256": "ed6ef9917bca7d535877059fe6487204ed88731676a02d6a2bc90523e574a8c8"
+    },
+    {
+      "file": "browser-topup.json",
+      "bytes": 15995,
+      "sha256": "ce73d482f6e028006cee0ce8de827efa24169a0e182502ba4dd1c3bdc750305d"
+    },
+    {
+      "file": "browser-topup.png",
+      "bytes": 45987,
+      "sha256": "6c6156448dd06a656a3878c7480752de76d76ad89a42a279150130109bdaeb01"
+    },
+    {
+      "file": "check-evidence.cjs",
+      "bytes": 5338,
+      "sha256": "13d1adc026cce5387244052b718847117fb0c3bdf5ca47a1d84553fe1b4f338c"
+    },
+    {
+      "file": "fixture-http.jsonl",
+      "bytes": 3371,
+      "sha256": "4d454c1b6727c00147ec76921ab8146871867dd13f52bab27345625d742c0e71"
+    },
+    {
+      "file": "git-status-final.log",
+      "bytes": 108,
+      "sha256": "acdb12c83cc8d86ca4910f3e3c8bd3bb1f7bb4304d7e9a1f957149d6be72adf6"
+    },
+    {
+      "file": "ignored-next-output-observed.json",
+      "bytes": 1078,
+      "sha256": "f5c7e8ee1b154ea2225313546ed6361ca251ac25fa35b75be9c3f0e5d68f1bfe"
+    },
+    {
+      "file": "prerequisites.json",
+      "bytes": 531,
+      "sha256": "2e9fc2b425b63cdc794341a4718d55adbcc0e9b15cd3f013d89040b49e6d7056"
+    },
+    {
+      "file": "report.md",
+      "bytes": 13010,
+      "sha256": "a5334b91a6f884132709dbfe6927433d0b3b0157d8e483ac34eeddbcf3441b61"
+    },
+    {
+      "file": "resource-before-release.json",
+      "bytes": 100,
+      "sha256": "4da7cdc81df3dfbdb3de106ed049eb42b1e0f6936287563eafa351c7341cf9d1"
+    },
+    {
+      "file": "resource-before-restart.json",
+      "bytes": 100,
+      "sha256": "02fdd37164938803da3fc5b3504588b3818724084c0c8e626227558c452f9bc0"
+    },
+    {
+      "file": "resource-release.json",
+      "bytes": 267,
+      "sha256": "7bc0b6ece985dd1fa1741af48bbb58aee9f3e3754ccf3ad647079397b9be439f"
+    },
+    {
+      "file": "resource-restart.json",
+      "bytes": 143,
+      "sha256": "744240ea2af7b483b4e1c88edfa9508dfd708395a11285f07af610a9efe14b7e"
+    },
+    {
+      "file": "resource-start.json",
+      "bytes": 356,
+      "sha256": "35b3e85f522a81e0b5745bd0be9845fa33e378653c47584b96c34861b85a48ca"
+    },
+    {
+      "file": "server.cjs",
+      "bytes": 3294,
+      "sha256": "d8865ddd07445f1189d5e78a1aab46b5c8a9fc4d2997539fef33e205acd2f447"
+    },
+    {
+      "file": "server.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "server.stdout.log",
+      "bytes": 275,
+      "sha256": "ccbf65f2c9885d1b13d212ba9498c5ff0d3372538739fc044a770004883ce536"
+    },
+    {
+      "file": "source-migrations.json",
+      "bytes": 562,
+      "sha256": "5db8a27965ba1c34ccd80df57b988397ba685456b17da6db80c8d4445e128507"
+    },
+    {
+      "file": "sql-readonly.log",
+      "bytes": 1511,
+      "sha256": "fda7c4509df8e3bce35383b6e45114851265e31c39b8cf4df1e7de8eb5edac62"
+    },
+    {
+      "file": "sql-readonly.sql",
+      "bytes": 361,
+      "sha256": "5dd59504253effe76dc36bfdc0e1061861bc096e8ebce6f6c53def03e5c55445"
+    }
+  ],
+  "limitations": [
+    "Five UI observations with HTTP fixture, no real API/auth/SQL workflow/provider",
+    "Bounded T3 snapshots omit older network entries; counts reflect captured entries only",
+    "Initial browser-profile-form.json records failed selector instrumentation, superseded by browser-profile-confirmed.json",
+    "browser-security.json pre-switch snapshot, superseded by browser-security-confirmed.json",
+    "Attempted custom Next conf.distDir did not isolate dev cache; ignored apps/web/.next received runtime writes; not reverted or deleted"
+  ]
+}

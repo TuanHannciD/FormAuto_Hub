@@ -24,10 +24,10 @@ for (const width of [1440, 320]) test(`topup selection, history pagination and s
       : { currentCreditBalance: 30, totalCreditsDeposited: 30, totalCreditsUsed: 0, pendingTopupOrders: 1, recentTopupOrders: [], recentUsageLogs: [] } });
   });
   await page.goto("/dashboard/top-up");
-  const small = page.getByRole("button", { name: /Gói cơ bản/ });
+  const small = page.getByRole("button", { name: /Gói cơ bản/ }).and(page.locator("[aria-pressed]"));
   await expect(small).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: /Gói ngừng bán/ })).toHaveCount(0);
-  await page.getByRole("button", { name: /Gói mở rộng/ }).click();
+  await page.getByRole("button", { name: /Gói mở rộng/ }).and(page.locator("[aria-pressed]")).click();
   await expect(small).toHaveAttribute("aria-pressed", "false");
   await page.getByRole("button", { name: "Tạo liên kết thanh toán", exact: true }).click();
   await expect.poll(() => writes.length).toBe(1); expect(writes[0]).toEqual({ packageId: "large" });

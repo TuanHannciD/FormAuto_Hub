@@ -1,0 +1,393 @@
+{
+  "status": "Verified",
+  "cases": 6,
+  "scenarios": 5,
+  "actualServices": true,
+  "actualControllerDtoSerialization": true,
+  "httpHost": false,
+  "fakeAdapterOnly": true,
+  "creditWrites": "CreditService grant and usage methods only",
+  "database": "FormAutoHub_FAHERR001_restore_20261029_a19f7a2",
+  "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+  "evidence": [
+    {
+      "kind": "success-continuation",
+      "user": "13b1c678-6404-4b1e-85f5-eddfda2d4d04",
+      "project": "a6b00bf4-ad70-40f5-8cc6-7cf8a82402d0",
+      "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+      "calls": 2,
+      "starting": 10,
+      "expectedGenerated": 3,
+      "expectedCost": 6,
+      "balance": 4.00,
+      "responseList": [
+        {
+          "RunId": "270d2e7c-5a11-4e03-b379-b5fb44cdcdc4",
+          "Status": "Succeeded",
+          "RequestedCount": 2,
+          "GeneratedCount": 2,
+          "Multiplier": 2,
+          "CreditsUsed": 4,
+          "MissingCredits": 0,
+          "BalanceAfter": 6.00,
+          "GeneratedPreviewIds": [
+            "616d29e7-97c2-4046-a282-239638827658",
+            "805f3f1b-9bfe-4ed6-8f98-98474ffecd3a"
+          ],
+          "ErrorMessage": null
+        },
+        {
+          "RunId": "4d755f7e-0b22-4f7a-a122-433f185e7703",
+          "Status": "Succeeded",
+          "RequestedCount": 1,
+          "GeneratedCount": 1,
+          "Multiplier": 2,
+          "CreditsUsed": 2,
+          "MissingCredits": 0,
+          "BalanceAfter": 4.00,
+          "GeneratedPreviewIds": [
+            "afe6653a-b4ac-4c33-954d-0bc6df5693d0"
+          ],
+          "ErrorMessage": null
+        }
+      ],
+      "usageIds": [
+        "f4322cff-c03f-4960-bc4c-e41fc8483ce4",
+        "2d61b652-67ef-4725-ba1b-f4dad8e3d3db"
+      ],
+      "creditTransactionIds": [
+        "57d7b5bc-e08f-4a41-bf84-0dcbde27adc4",
+        "941f44cd-0a03-4dde-b2ab-6843f2effa9c",
+        "3863e926-aecb-47fe-ae8c-e14247630838"
+      ],
+      "analytics": {
+        "TotalRuns": 2,
+        "SuccessfulRuns": 2,
+        "FailedRuns": 0,
+        "TotalCreditsUsed": 6,
+        "TotalPreviewsGenerated": 3,
+        "ModeBreakdown": [
+          {
+            "Mode": "Option2",
+            "Runs": 2,
+            "CreditsUsed": 6
+          }
+        ],
+        "RecentRuns": [
+          {
+            "Id": "4d755f7e-0b22-4f7a-a122-433f185e7703",
+            "Mode": "Option2",
+            "Status": "Succeeded",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 1,
+            "GeneratedCount": 1,
+            "CreditsUsed": 2,
+            "DurationMs": 1,
+            "CreatedAt": "2026-10-30T10:56:26.9495491+00:00",
+            "ProjectName": "Runtime AI success-continuation",
+            "ErrorMessage": null
+          },
+          {
+            "Id": "270d2e7c-5a11-4e03-b379-b5fb44cdcdc4",
+            "Mode": "Option2",
+            "Status": "Succeeded",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 2,
+            "GeneratedCount": 2,
+            "CreditsUsed": 4,
+            "DurationMs": 60,
+            "CreatedAt": "2026-10-30T10:56:26.7889152+00:00",
+            "ProjectName": "Runtime AI success-continuation",
+            "ErrorMessage": null
+          }
+        ],
+        "UsageByDay": [
+          {
+            "Date": "2026-10-30",
+            "Runs": 2,
+            "CreditsUsed": 6
+          }
+        ]
+      }
+    },
+    {
+      "kind": "limited-partial",
+      "user": "e28665ab-c275-4290-85a8-9032b2a405bc",
+      "project": "f2f5b63a-b804-47c6-bf8c-252ed48b5ebd",
+      "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+      "calls": 1,
+      "starting": 5,
+      "expectedGenerated": 2,
+      "expectedCost": 4,
+      "balance": 1.00,
+      "responseList": [
+        {
+          "RunId": "a60e7b87-1ca6-446d-8fa9-7c1fe3d25846",
+          "Status": "Partial",
+          "RequestedCount": 4,
+          "GeneratedCount": 2,
+          "Multiplier": 2,
+          "CreditsUsed": 4,
+          "MissingCredits": 4,
+          "BalanceAfter": 1.00,
+          "GeneratedPreviewIds": [
+            "07d8128a-d96e-4e5d-acb0-efe1fc34f332",
+            "aaec8e8a-0e4f-45ca-8daf-3fc0e41ba83b"
+          ],
+          "ErrorMessage": null
+        }
+      ],
+      "usageIds": [
+        "6d35e45a-c9a3-4c8c-aad6-19d7192c411e"
+      ],
+      "creditTransactionIds": [
+        "714dfe23-0f0d-42ad-8650-0d9e1b9241af",
+        "1b6ae217-8864-4bfd-931c-c216d2631508"
+      ],
+      "analytics": {
+        "TotalRuns": 1,
+        "SuccessfulRuns": 0,
+        "FailedRuns": 0,
+        "TotalCreditsUsed": 4,
+        "TotalPreviewsGenerated": 2,
+        "ModeBreakdown": [
+          {
+            "Mode": "Option2",
+            "Runs": 1,
+            "CreditsUsed": 4
+          }
+        ],
+        "RecentRuns": [
+          {
+            "Id": "a60e7b87-1ca6-446d-8fa9-7c1fe3d25846",
+            "Mode": "Option2",
+            "Status": "Partial",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 4,
+            "GeneratedCount": 2,
+            "CreditsUsed": 4,
+            "DurationMs": 0,
+            "CreatedAt": "2026-10-30T10:56:27.157509+00:00",
+            "ProjectName": "Runtime AI limited-partial",
+            "ErrorMessage": null
+          }
+        ],
+        "UsageByDay": [
+          {
+            "Date": "2026-10-30",
+            "Runs": 1,
+            "CreditsUsed": 4
+          }
+        ]
+      }
+    },
+    {
+      "kind": "malformed",
+      "user": "a495ef52-ceb5-40ae-83ab-53e0d497a55b",
+      "project": "ddcfee83-384f-4be2-b19b-51078353ef24",
+      "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+      "calls": 1,
+      "starting": 10,
+      "expectedGenerated": 0,
+      "expectedCost": 0,
+      "balance": 10.00,
+      "responseList": [
+        {
+          "RunId": "8d081969-3cd2-4e84-89fd-d8aa4e322869",
+          "Status": "Failed",
+          "RequestedCount": 2,
+          "GeneratedCount": 0,
+          "Multiplier": 2,
+          "CreditsUsed": 0,
+          "MissingCredits": 0,
+          "BalanceAfter": 10.00,
+          "GeneratedPreviewIds": [],
+          "ErrorMessage": "Ph\u1EA3n h\u1ED3i t\u1EEB d\u1ECBch v\u1EE5 AI kh\u00F4ng \u0111\u1ECDc \u0111\u01B0\u1EE3c. Vui l\u00F2ng th\u1EED l\u1EA1i sau. Kh\u00F4ng tr\u1EEB credit."
+        }
+      ],
+      "usageIds": [
+        "d86bb400-f723-4df7-8330-7d9f63917353"
+      ],
+      "creditTransactionIds": [
+        "cfad411a-60c7-4769-b1ff-34d2da43639d"
+      ],
+      "analytics": {
+        "TotalRuns": 1,
+        "SuccessfulRuns": 0,
+        "FailedRuns": 1,
+        "TotalCreditsUsed": 0,
+        "TotalPreviewsGenerated": 0,
+        "ModeBreakdown": [
+          {
+            "Mode": "Option2",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ],
+        "RecentRuns": [
+          {
+            "Id": "8d081969-3cd2-4e84-89fd-d8aa4e322869",
+            "Mode": "Option2",
+            "Status": "Failed",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 2,
+            "GeneratedCount": 0,
+            "CreditsUsed": 0,
+            "DurationMs": 1,
+            "CreatedAt": "2026-10-30T10:56:27.1761098+00:00",
+            "ProjectName": "Runtime AI malformed",
+            "ErrorMessage": "Ph\u1EA3n h\u1ED3i t\u1EEB d\u1ECBch v\u1EE5 AI kh\u00F4ng \u0111\u1ECDc \u0111\u01B0\u1EE3c. Vui l\u00F2ng th\u1EED l\u1EA1i sau. Kh\u00F4ng tr\u1EEB credit."
+          }
+        ],
+        "UsageByDay": [
+          {
+            "Date": "2026-10-30",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ]
+      }
+    },
+    {
+      "kind": "timeout",
+      "user": "c16a279f-0153-4e54-9cdf-30107252928a",
+      "project": "0132b84c-c8f6-443e-97aa-7561632da8b1",
+      "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+      "calls": 1,
+      "starting": 10,
+      "expectedGenerated": 0,
+      "expectedCost": 0,
+      "balance": 10.00,
+      "responseList": [
+        {
+          "RunId": "bf6769c1-51ee-4e96-b2a0-cb7596469187",
+          "Status": "Failed",
+          "RequestedCount": 2,
+          "GeneratedCount": 0,
+          "Multiplier": 2,
+          "CreditsUsed": 0,
+          "MissingCredits": 0,
+          "BalanceAfter": 10.00,
+          "GeneratedPreviewIds": [],
+          "ErrorMessage": "D\u1ECBch v\u1EE5 AI \u0111\u00E3 h\u1EBFt th\u1EDDi gian ch\u1EDD. Vui l\u00F2ng th\u1EED l\u1EA1i sau. Kh\u00F4ng tr\u1EEB credit."
+        }
+      ],
+      "usageIds": [
+        "bda28918-4689-4210-9003-6728bc844a79"
+      ],
+      "creditTransactionIds": [
+        "993ec879-d099-4fe7-abe1-27c12ec73764"
+      ],
+      "analytics": {
+        "TotalRuns": 1,
+        "SuccessfulRuns": 0,
+        "FailedRuns": 1,
+        "TotalCreditsUsed": 0,
+        "TotalPreviewsGenerated": 0,
+        "ModeBreakdown": [
+          {
+            "Mode": "Option2",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ],
+        "RecentRuns": [
+          {
+            "Id": "bf6769c1-51ee-4e96-b2a0-cb7596469187",
+            "Mode": "Option2",
+            "Status": "Failed",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 2,
+            "GeneratedCount": 0,
+            "CreditsUsed": 0,
+            "DurationMs": 0,
+            "CreatedAt": "2026-10-30T10:56:27.1957089+00:00",
+            "ProjectName": "Runtime AI timeout",
+            "ErrorMessage": "D\u1ECBch v\u1EE5 AI \u0111\u00E3 h\u1EBFt th\u1EDDi gian ch\u1EDD. Vui l\u00F2ng th\u1EED l\u1EA1i sau. Kh\u00F4ng tr\u1EEB credit."
+          }
+        ],
+        "UsageByDay": [
+          {
+            "Date": "2026-10-30",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ]
+      }
+    },
+    {
+      "kind": "invalid-output",
+      "user": "c2275d2a-1063-48b2-8d69-9c0cda222e60",
+      "project": "a6cedcae-25b7-41bf-b3a4-0fb2c55a22e8",
+      "settingId": "ac6b357b-179c-4496-9959-0884ffdb38f0",
+      "calls": 1,
+      "starting": 10,
+      "expectedGenerated": 0,
+      "expectedCost": 0,
+      "balance": 10.00,
+      "responseList": [
+        {
+          "RunId": "bd65fb48-9502-4415-ad9e-77183f4375a4",
+          "Status": "Failed",
+          "RequestedCount": 2,
+          "GeneratedCount": 0,
+          "Multiplier": 2,
+          "CreditsUsed": 0,
+          "MissingCredits": 0,
+          "BalanceAfter": 10.00,
+          "GeneratedPreviewIds": [],
+          "ErrorMessage": "AI ch\u01B0a t\u1EA1o \u0111\u01B0\u1EE3c ph\u1EA3n h\u1ED3i xem tr\u01B0\u1EDBc h\u1EE3p l\u1EC7. Ki\u1EC3m tra h\u01B0\u1EDBng d\u1EABn v\u00E0 c\u1EA5u h\u00ECnh c\u00E2u h\u1ECFi. Kh\u00F4ng tr\u1EEB credit."
+        }
+      ],
+      "usageIds": [
+        "be630c86-70e9-4493-8c98-ddefe7eb52e2"
+      ],
+      "creditTransactionIds": [
+        "690a061e-8a44-4908-9e21-3b5e111c4579"
+      ],
+      "analytics": {
+        "TotalRuns": 1,
+        "SuccessfulRuns": 0,
+        "FailedRuns": 1,
+        "TotalCreditsUsed": 0,
+        "TotalPreviewsGenerated": 0,
+        "ModeBreakdown": [
+          {
+            "Mode": "Option2",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ],
+        "RecentRuns": [
+          {
+            "Id": "bd65fb48-9502-4415-ad9e-77183f4375a4",
+            "Mode": "Option2",
+            "Status": "Failed",
+            "Provider": "RuntimeFake-ac6b357b179c449699590884ffdb38f0",
+            "Model": "runtime-model",
+            "RequestedCount": 2,
+            "GeneratedCount": 0,
+            "CreditsUsed": 0,
+            "DurationMs": 2,
+            "CreatedAt": "2026-10-30T10:56:27.2117821+00:00",
+            "ProjectName": "Runtime AI invalid-output",
+            "ErrorMessage": "AI ch\u01B0a t\u1EA1o \u0111\u01B0\u1EE3c ph\u1EA3n h\u1ED3i xem tr\u01B0\u1EDBc h\u1EE3p l\u1EC7. Ki\u1EC3m tra h\u01B0\u1EDBng d\u1EABn v\u00E0 c\u1EA5u h\u00ECnh c\u00E2u h\u1ECFi. Kh\u00F4ng tr\u1EEB credit."
+          }
+        ],
+        "UsageByDay": [
+          {
+            "Date": "2026-10-30",
+            "Runs": 1,
+            "CreditsUsed": 0
+          }
+        ]
+      }
+    }
+  ],
+  "preservedFixtures": true
+}

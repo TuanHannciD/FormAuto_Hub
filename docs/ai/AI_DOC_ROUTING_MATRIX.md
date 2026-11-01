@@ -1,86 +1,32 @@
-# AI_DOC_ROUTING_MATRIX
+# Documentation routing
 
-## Purpose
+Start README → AGENTS → [authority](agent/AUTHORITY_MAP.md) → existing task/handoff. Select the smallest sufficient set below; [skill matrix](../../SKILL_USAGE_MATRIX.md) selects methods, not this file.
 
-Route AI agents to the smallest sufficient documentation set before planning, coding, reviewing, or editing docs.
+## By task
 
-Always read `README.md` and `AGENTS.md` first.
+| Task | Read |
+| --- | --- |
+| Plan, execute, docs, handoff/resume or permission | [execution](agent/EXECUTION_RULES.md); approved task and affected owner docs |
+| Test, review, browser or Done | [quality](agent/QUALITY_GATES.md), [domain tests](TESTING_STRATEGY.md) |
+| Skill/tool selection, install or capability claim | [tooling](agent/TOOLING.md), [skill matrix](../../SKILL_USAGE_MATRIX.md) |
+| Phase or new requirement | [phase rules](PHASE_EXECUTION_RULES.md), [roadmap](PROJECT_PHASE_ROADMAP.md), relevant approval/closeout; [task brief](../../templates/TASK_BRIEF.md) |
+| Backend or source navigation | [stack](TECH_STACK_DECISIONS.md), [boundaries](ARCHITECTURE_BOUNDARIES.md), [source rules](SOURCE_STRUCTURE_AND_NAMING_RULES.md), [modules](MODULE_MAP.md) |
+| Frontend/shared UI | [frontend guide](FRONTEND_STYLE_GUIDE.md), source rules, modules, affected shared components and consumers |
+| Auth UI | [auth UI](AUTH_UI_DESIGN_GUIDE.md), frontend guide, [API](API_CONTRACT_GUIDE.md) |
+| Generated UI/Stitch | frontend guide, [artifacts](UI_DESIGN_ARTIFACTS.md), relevant `docs/design/stitch/` folder |
+| API/auth/credit/top-up/payment | API, modules, [entities](DOMAIN_ENTITIES_OVERVIEW.md), approved scope and relevant domain tests; payment also [Phase 8](PHASE_8_KICKOFF_PLAN.md) |
+| Database/migration | entities, stack, boundaries, affected migration/test and contract |
+| Form automation/Google | modules, boundaries, API, [events](EVENT_AND_WEBHOOK_CONTRACTS.md); preserve the core/NCKH distinction |
+| AI | phase rules, [Phase 6 scope](PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md), [closeout](PHASE_6_CLOSEOUT.md), API and actual integration |
+| NCKH | [ledger](nckh/NCKH_PROGRESS_LEDGER.md) → [transition](nckh/NCKH_PHASE_TRANSITION_GUIDE.md) → NCKH module/architecture/contract and only relevant phase/follow-up |
+| Local/server/deploy | [environment](ENVIRONMENT_SETUP.md), [deployment](DEPLOYMENT_GUIDE.md), actual config; server specialist for read-only production diagnosis |
+| UI/credit follow-up | [UI_CREDIT_FOLLOWUP_SYNC](UI_CREDIT_FOLLOWUP_SYNC.md), frontend guide, API; NCKH contracts when affected |
+| SEO/GEO follow-up | [implementation record](SEO_GEO_IMPLEMENTATION_PLAN.md), [validation runbook](SEO_GEO_VALIDATION_RUNBOOK.md), frontend guide and relevant tests; preserve accepted UI |
 
-## Routing Matrix
+## Reading and sync
 
-| Task type | Read first | Then read |
-|---|---|---|
-| Any task | `AGENTS.md` | this file |
-| New requirement | `PROMPT_TEMPLATE_FOR_FUTURE_TASKS.md` | `PROJECT_EXECUTION_RULES.md`, `TASK_EXECUTION_FLOW.md` |
-| Phase/scope question | `PROJECT_PHASE_ROADMAP.md` | `PHASE_EXECUTION_RULES.md`, `PHASE_0_CLOSEOUT.md`, `PHASE_1_CLOSEOUT.md`, `PHASE_2_CLOSEOUT.md`, `PHASE_7_CLOSEOUT.md`, `PHASE_8_KICKOFF_PLAN.md`, `PHASE_8_CLOSEOUT.md`, `PHASE_9_KICKOFF_PLAN.md`, `PHASE_9_CLOSEOUT.md` |
-| Phase 3 kickoff | `PHASE_3_KICKOFF_PLAN.md` | `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
-| Phase 8 kickoff | `PHASE_8_KICKOFF_PLAN.md` | `PROJECT_PHASE_ROADMAP.md`, `PHASE_EXECUTION_RULES.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md`, `TESTING_STRATEGY.md` |
-| Phase 9 kickoff, execution, or closeout | `PHASE_9_KICKOFF_PLAN.md` | `PHASE_9_CLOSEOUT.md`, `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md`, `PROJECT_PHASE_ROADMAP.md`, `PHASE_EXECUTION_RULES.md` |
-| Backend implementation | `TECH_STACK_DECISIONS.md` | `ARCHITECTURE_BOUNDARIES.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
-| Frontend implementation | `TECH_STACK_DECISIONS.md` | `FRONTEND_STYLE_GUIDE.md`, `SOURCE_STRUCTURE_AND_NAMING_RULES.md`, `MODULE_MAP.md` |
-| Frontend UI from generated design | `FRONTEND_STYLE_GUIDE.md` | `UI_DESIGN_ARTIFACTS.md`, target `docs/design/stitch/<page>/` folder |
-| Auth UI design or implementation | `AUTH_UI_DESIGN_GUIDE.md` | `FRONTEND_STYLE_GUIDE.md`, `UI_DESIGN_ARTIFACTS.md`, `API_CONTRACT_GUIDE.md` |
-| Authentication/JWT backend | `API_CONTRACT_GUIDE.md` | `DOMAIN_ENTITIES_OVERVIEW.md`, `PROJECT_PHASE_ROADMAP.md`, `TESTING_STRATEGY.md` |
-| API contract design | `API_CONTRACT_GUIDE.md` | `MODULE_MAP.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
-| Database/entity work | `DOMAIN_ENTITIES_OVERVIEW.md` | `TECH_STACK_DECISIONS.md`, `TESTING_STRATEGY.md` |
-| Credit or top-up work | `MODULE_MAP.md` | `DOMAIN_ENTITIES_OVERVIEW.md`, `API_CONTRACT_GUIDE.md`, `TESTING_STRATEGY.md` |
-| Form automation work | `MODULE_MAP.md` | `ARCHITECTURE_BOUNDARIES.md`, `API_CONTRACT_GUIDE.md`, `TESTING_STRATEGY.md` |
-| Google Forms integration | `ARCHITECTURE_BOUNDARIES.md` | `EVENT_AND_WEBHOOK_CONTRACTS.md`, `TECH_STACK_DECISIONS.md` |
-| AI feature request | `PHASE_EXECUTION_RULES.md` | `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md`, `TECH_STACK_DECISIONS.md`, `ARCHITECTURE_BOUNDARIES.md` |
-| Payment request | `PHASE_EXECUTION_RULES.md` | `PHASE_8_KICKOFF_PLAN.md`, `API_CONTRACT_GUIDE.md`, `DOMAIN_ENTITIES_OVERVIEW.md` |
-| Testing/validation | `PHASE_9_KICKOFF_PLAN.md` | `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md`, `SELF_REVIEW_CHECKLIST.md` |
-| Documentation edit | `PROJECT_EXECUTION_RULES.md` | matching `docs/ai` and `docs/vi` files |
-| Review | `SELF_REVIEW_CHECKLIST.md` | `DEFINITION_OF_DONE.md`, task-specific docs |
+For docs over 200 lines, scan headings before selecting relevant sections. Do not reread unchanged content already loaded; expand when correctness requires it. Rules/contracts precede architecture and implementation. A TOC does not replace reading complete affected source/dependencies/tests.
 
+Every `docs/ai/` Markdown file has a same-relative-path `docs/vi/` counterpart; update both with equal commitments. Historical phase kickoff/reports are context, not current permission. New contract/schema/safety/phase decisions follow execution rules; never infer approval from an old pack.
 
-| NCKH task | `docs/ai/nckh/NCKH_PROGRESS_LEDGER.md`, `docs/ai/nckh/NCKH_PHASE_TRANSITION_GUIDE.md` | `docs/ai/nckh/NCKH_PHASE_ROADMAP.md`, `docs/ai/nckh/NCKH_PHASE_1_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_2_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_3_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_3_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_3_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_3_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_4_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_4_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_4_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_4_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_5_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_5_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_5_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_5_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_6_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_6_CONTRACT_DB_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_6_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_6_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_7_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_7_CONTRACT_UI_FREEZE.md`, `docs/ai/nckh/NCKH_PHASE_7_SINGLE_APPROVAL_PACKET.md`, `docs/ai/nckh/NCKH_PHASE_7_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_7_5_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_7_5_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_8_CLOSEOUT.md`, `docs/ai/nckh/NCKH_PHASE_9_KICKOFF_PLAN.md`, `docs/ai/nckh/NCKH_PHASE_9_CLOSEOUT.md`, `docs/ai/nckh/NCKH_REQUIREMENT_PACKAGE.md`, `docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md`, `docs/ai/nckh/NCKH_MODULE_MAP.md`, `docs/ai/nckh/NCKH_ARCHITECTURE_BOUNDARIES.md`, `docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md` |
-
-
-
-## Sync Rules
-
-Every file in `docs/ai/` must have a same-name counterpart in `docs/vi/`.
-
-If a task changes one side, update the other side in the same task.
-
-## Hard Stop Conditions
-
-Stop and ask for approval when:
-
-- the task would approve a Deferred item
-- the task creates final API contracts from proposed API areas
-- the task finalizes proposed database fields or statuses
-- the task weakens abuse-prevention rules
-- the task commits to a frontend framework
-- the task invents Google OAuth, payment gateway, AI, refund, or background job behavior
-
-## Files Over 400 Lines
-
-Some docs files exceed the 400-line threshold. Before reading them in full, scan section headers to confirm the task needs the content (see `PROJECT_EXECUTION_RULES.md#file-organization--reading-strategy` for reading strategy).
-
-| File | Approx. Lines |
-|---|---|
-| `PHASE_6_AI_MAPPING_GENERATION_REQUIREMENT_PACKAGE.md` | ~720 |
-| docs/ai/nckh/NCKH_API_CONTRACT_GUIDE.md | ~676 |
-| docs/ai/nckh/NCKH_DOMAIN_ENTITIES_OVERVIEW.md | ~323 |
-| `API_CONTRACT_GUIDE.md` | ~772 |
-
-Line counts are approximate and may drift over time. When opening a file not listed here but appearing large, apply the same TOC-first approach.
-
-## Reading Strategy
-
-Before loading any docs file, apply these rules to avoid unnecessary token usage (full rules in `PROJECT_EXECUTION_RULES.md#file-organization--reading-strategy`):
-
-1. This file is the starting point — identify the minimal file set for the task before reading anything else.
-2. For files > 200 lines: scan headers/TOC first, load full content only for relevant sections.
-3. Do not re-read a file already loaded in the same session.
-4. Priority: rules/contracts → architecture overviews → implementation details.
-5. Use TOC line ranges to jump to sections instead of loading entire large files.
-
-## Current UI/credit follow-up routing
-
-For shared UI, account popup/motion, NCKH frontend auth handling or manual-credit follow-up: read `UI_CREDIT_FOLLOWUP_SYNC.md`, then `FRONTEND_STYLE_GUIDE.md`, `API_CONTRACT_GUIDE.md`, and the NCKH contract/architecture files when affected.
-
-## SEO/GEO follow-up routing
-
-For the user-approved indexing/discovery/brand-identity priorities, read `SEO_GEO_IMPLEMENTATION_PLAN.md`, then `SEO_GEO_VALIDATION_RUNBOOK.md`, `FRONTEND_STYLE_GUIDE.md` and `TESTING_STRATEGY.md`. On 2026-10-09, approved P1/P2 implementation and local validation passed; GSC baseline is captured. This is not a new global phase. Preserve the accepted UI; deployment and search-outcome verification remain separate gates.
+SEO/GEO evidence remains dated: local/public release checks on 2026-10-09 were Verified, GSC sitemap processing was Blocked, search/AI outcomes were Not run. The recovery plan is a separate proposal; read it when relevant. This routing change neither re-runs those checks nor authorizes release or new global phase work.

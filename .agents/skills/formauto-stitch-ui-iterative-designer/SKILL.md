@@ -44,8 +44,8 @@ Reject or revise the screen when any item fails:
 - Layout feels like a marketing hero when the page is an app dashboard.
 - Tables/forms/cards are too sparse for an operations product.
 - Page uses heavy gradients, decorative blobs, card-inside-card layouts, or dark theme unless explicitly requested.
-- UI invents deferred production features such as payment gateway, Google OAuth, official Google Forms API, AI auto-generation, auto-submit, package management, admin user management, or manual credit adjustment.
-- Safety copy weakens the MVP constraints: preview before submission and 1-5 generated responses per action.
+- UI invents behavior outside the approved task/current contracts. PayOS, scoped AI, package/manual-credit follow-ups and NCKH Google behavior have distinct approved scopes; do not label them all Deferred or extend them implicitly. Auto-submit without preview/confirmation remains forbidden.
+- Safety copy weakens authorized preview and confirmation, 1–100 generated previews per action, or controlled sequential submission batches of 10.
 - Vietnamese copy is unnatural, missing diacritics, or mixes English labels without reason.
 - Statuses, fields, or workflow states look like API/database contracts that were not approved.
 - Screenshot does not match the requested page or actor.

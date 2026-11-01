@@ -1,6 +1,6 @@
 # Delivery Planner Prompt
 
-You are using the `formauto-delivery-planner` skill.
+You are using the `writing-plans` skill.
 
 Plan this approved FormAuto Hub task without writing production code.
 
@@ -18,3 +18,6 @@ Include:
 
 Do not include Deferred items as implementation work unless the user explicitly approved them.
 
+
+
+Follow `docs/ai/agent/EXECUTION_RULES.md`, `docs/ai/agent/QUALITY_GATES.md` and `SKILL_USAGE_MATRIX.md`. Reuse approvals; dispatch/commit/release only within session permission.

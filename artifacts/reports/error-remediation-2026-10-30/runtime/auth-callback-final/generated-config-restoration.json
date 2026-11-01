@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-30T20:48:33.1436763+07:00",
+  "initialBaseline": "runtime/baseline-source.json sourceFiles371",
+  "semanticTsconfigGuard": true,
+  "onlyOwnedIncludeAndNewline": true,
+  "nextEnvOnlyOwnedDistAndNewline": true,
+  "tsconfigSha256": "5BB0AC200C1934A273D74E52785F4C36FA62C082D766CAB15CDC8484FF39BF15",
+  "nextEnvSha256": "F4E8976C19FC926644D72610BF1058BD6BF52ADD97E46A02BC0B912A751625C0",
+  "restoredExactInitialBytes": true
+}

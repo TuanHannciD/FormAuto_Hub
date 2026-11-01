@@ -1,0 +1,149 @@
+{
+  "migration": "20261029142938_NormalizeTopupEvidenceColumnLengths",
+  "sourceBase": "a19f7a2f3dc1bc54ff645d662d94fc614439256a",
+  "checkout": "C:\\Users\\Tuan\\.t3\\worktrees\\FormAuto_Hub\\t3-ecd39b00",
+  "patchSha256": "5b6c760e3ab8ceafa1da1b2e3a726501f90b8e967a78708c2deb432fa9765ee3",
+  "files": [
+    {
+      "path": "scripts/db-compatibility/BaselineModelGuard.cs",
+      "sha256": "42799f87b1be032daf5c4da2ace960f86d6d7c0696af480cb50b06b372287947",
+      "bytes": 3458,
+      "change": "added",
+      "checkedWorktreeSha256": "42799f87b1be032daf5c4da2ace960f86d6d7c0696af480cb50b06b372287947",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/CatalogReader.cs",
+      "sha256": "30d9cedc8e9efc1d4f6bd62cf281e2125d392529fbea62b2d66b9f182d060062",
+      "bytes": 2390,
+      "change": "added",
+      "checkedWorktreeSha256": "30d9cedc8e9efc1d4f6bd62cf281e2125d392529fbea62b2d66b9f182d060062",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/CompatibilityPolicy.cs",
+      "sha256": "909fc3e97168931e5e0ede00150b72002cbd17931bb0eb329e1a212d4582677d",
+      "bytes": 6003,
+      "change": "added",
+      "checkedWorktreeSha256": "909fc3e97168931e5e0ede00150b72002cbd17931bb0eb329e1a212d4582677d",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/DbCompatibilityProbe.csproj",
+      "sha256": "2cd7a713a0d5e3f4bb70b3194ef604fbdee864df3a2f4aaa4dfaecd7f5e417ec",
+      "bytes": 397,
+      "change": "added",
+      "checkedWorktreeSha256": "2cd7a713a0d5e3f4bb70b3194ef604fbdee864df3a2f4aaa4dfaecd7f5e417ec",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/OfflineScripts.cs",
+      "sha256": "ec4b6804fb1b4b958e3fc6454382de3ee64de778f25423519173a47ad7f8566d",
+      "bytes": 2139,
+      "change": "added",
+      "checkedWorktreeSha256": "ec4b6804fb1b4b958e3fc6454382de3ee64de778f25423519173a47ad7f8566d",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/Program.cs",
+      "sha256": "9ee9b2502e371192d180d6226965e40c1cc1fe32f6dbf0a3c4281295ccd95e44",
+      "bytes": 10639,
+      "change": "added",
+      "checkedWorktreeSha256": "9ee9b2502e371192d180d6226965e40c1cc1fe32f6dbf0a3c4281295ccd95e44",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/README.md",
+      "sha256": "898e3ce284fade038e214ac1c24384ffc39a8b2aa72427558666528c4d81489e",
+      "bytes": 6987,
+      "change": "added",
+      "checkedWorktreeSha256": "898e3ce284fade038e214ac1c24384ffc39a8b2aa72427558666528c4d81489e",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/SchemaBaseline.cs",
+      "sha256": "1183cef37926b27eba53a17b7b343d4456f9a68d2f39a3e8b5fcba2534fba3fb",
+      "bytes": 252,
+      "change": "added",
+      "checkedWorktreeSha256": "1183cef37926b27eba53a17b7b343d4456f9a68d2f39a3e8b5fcba2534fba3fb",
+      "mainIntegrated": false
+    },
+    {
+      "path": "scripts/db-compatibility/catalog.sql",
+      "sha256": "54f7e719b2695850752acbd097df1336522aff1ba28b366df1f5f3276f1d1c2d",
+      "bytes": 5251,
+      "change": "added",
+      "checkedWorktreeSha256": "54f7e719b2695850752acbd097df1336522aff1ba28b366df1f5f3276f1d1c2d",
+      "mainIntegrated": false
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.Designer.cs",
+      "sha256": "9a1a1555053aae1869dd6eddb833780201392fa466249cff49a49c2a632c02c4",
+      "bytes": 67838,
+      "change": "added",
+      "checkedWorktreeSha256": "9a1a1555053aae1869dd6eddb833780201392fa466249cff49a49c2a632c02c4",
+      "mainIntegrated": false
+    },
+    {
+      "path": "src/FormAutoHub.Api/Data/Migrations/20261029142938_NormalizeTopupEvidenceColumnLengths.cs",
+      "sha256": "b7ad38e8fd575708e3a35251cf657e0697c4933cf89e002145c39f8bed8af8cb",
+      "bytes": 4005,
+      "change": "added",
+      "checkedWorktreeSha256": "b7ad38e8fd575708e3a35251cf657e0697c4933cf89e002145c39f8bed8af8cb",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/BaselineModelGuardTests.cs",
+      "sha256": "353981f38a99f5785becfbd08a5016c268b862f78842fa192366a999cc5f0638",
+      "bytes": 1535,
+      "change": "added",
+      "checkedWorktreeSha256": "353981f38a99f5785becfbd08a5016c268b862f78842fa192366a999cc5f0638",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DbCompatibilityPolicyTests.cs",
+      "sha256": "dba32633f8acc59488cacad83f0a3999e6b515c4c874b6a2ec01b8b31868a2f1",
+      "bytes": 6834,
+      "change": "added",
+      "checkedWorktreeSha256": "dba32633f8acc59488cacad83f0a3999e6b515c4c874b6a2ec01b8b31868a2f1",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FormAutoHub.Tests.csproj",
+      "sha256": "742688a87a35bf5cfb9600a68daf3797a238eebba302da48a67f4d02593c7c97",
+      "bytes": 940,
+      "change": "modified",
+      "checkedWorktreeSha256": "742688a87a35bf5cfb9600a68daf3797a238eebba302da48a67f4d02593c7c97",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/SqlServerMigrationFixture.cs",
+      "sha256": "fe296033fe781fe9d86e6deaad23f0669783ccaeb50ebdfb8dbedf14151ea27e",
+      "bytes": 4137,
+      "change": "added",
+      "checkedWorktreeSha256": "fe296033fe781fe9d86e6deaad23f0669783ccaeb50ebdfb8dbedf14151ea27e",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSchemaMigrationTests.cs",
+      "sha256": "528a73d2017817a43b51d31f213deb36671feb5dc1fc1bb860b4d86cb2757eff",
+      "bytes": 1465,
+      "change": "added",
+      "checkedWorktreeSha256": "528a73d2017817a43b51d31f213deb36671feb5dc1fc1bb860b4d86cb2757eff",
+      "mainIntegrated": false
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/TopupEvidenceSqlServerTests.cs",
+      "sha256": "58657ad0bf35fe2bad8f246f7c5ffc3adc1f1238a1f43572e44caaba419ff75b",
+      "bytes": 9971,
+      "change": "added",
+      "checkedWorktreeSha256": "58657ad0bf35fe2bad8f246f7c5ffc3adc1f1238a1f43572e44caaba419ff75b",
+      "mainIntegrated": false
+    }
+  ],
+  "state": "17 immutable candidate files verified against manifest;awaiting independent review;not integrated in main checkout",
+  "sourceCount": 13,
+  "sqlGroupsSkipped": 5,
+  "offlinePassed": 181,
+  "mandatoryRealSqlGate": "Not run;13expandedcases;zeroSkippedRequired"
+}

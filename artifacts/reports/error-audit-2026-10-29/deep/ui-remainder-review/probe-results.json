@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-29T14:29:45.551Z",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "limitation": "JSX object tree, not React DOM/browser. API failure is synthetic; backend rule validation source-traced, not executed here.",
+  "hashes": {
+    "apps/web/app/dashboard/forms/_components/RuleEditor.tsx": "c2c56da977667f5b112e4c28d53fee29eaf0e8990a40949eddc3f47cff4f57d9",
+    "apps/web/app/dashboard/forms/_constants.ts": "8d7f48ef8f7a26e0834efdcbe28568933f287127cb06b57ea365404d61deb38e",
+    "apps/web/app/dashboard/forms/_helpers.ts": "762d18399140674ef11aa1076e17b012605de55d510a005391b36544fb49aa32",
+    "src/FormAutoHub.Api/Services/AnswerRuleService.cs": "bb0a45a9f16c33c796bc0c5bc4f08235df2e8ea8d446adda09390b7b577bce3f",
+    "src/FormAutoHub.Api/Services/Phase3RuleHelpers.cs": "edc399b341fa38de1a74a875e0995899638119fd6cf75aa6d55cf62d210f8c46",
+    "src/FormAutoHub.Api/Controllers/AnswerRulesController.cs": "3c18d0920395bd59acbe52fe0fcb8990a9ed9c00bf932bd90f4b0ee9c49cbd17",
+    "apps/web/lib/toast.ts": "3b31a1ef0bf3b4e0c703417ed0931095a986e27f2d472ccb66a453cbcd0dbdee",
+    "apps/web/app/dashboard/forms/page.tsx": "9df49f852fedb11f8bcc044d2c8433d8806647d1878b84fb343fb25e242149ed"
+  },
+  "results": [
+    {
+      "id": "UIR-P01",
+      "status": "Verified",
+      "level": "original TSX/hook-free component + actual save handler with mocked API boundary",
+      "questionType": "Date",
+      "inputAction": "clear start field",
+      "displayedAfterRender": "2026-05-18",
+      "submittedConfig": {
+        "fromDate": "",
+        "toDate": "2026-10-31"
+      },
+      "consumerMessage": "Answer rule config does not match the selected mode and question.",
+      "backendRejection": "static source trace only; fixture uses current service literal, not actual HTTP/SQL"
+    },
+    {
+      "id": "UIR-P02",
+      "status": "Verified",
+      "level": "original TSX/hook-free component + actual save handler with mocked API boundary",
+      "questionType": "Time",
+      "inputAction": "clear start field",
+      "displayedAfterRender": "09:00",
+      "submittedConfig": {
+        "fromTime": "",
+        "toTime": "12:00",
+        "stepMinutes": 60
+      },
+      "consumerMessage": "Answer rule config does not match the selected mode and question.",
+      "backendRejection": "static source trace only; fixture uses current service literal, not actual HTTP/SQL"
+    }
+  ]
+}

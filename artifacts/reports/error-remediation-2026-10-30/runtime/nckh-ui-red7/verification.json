@@ -1,0 +1,13 @@
+{
+  "exit": 1,
+  "counts": {
+    "skipped": 0,
+    "failed": 7,
+    "executed": 7,
+    "passed": 0
+  },
+  "assertionFailures": 7,
+  "typeErrors": 0,
+  "hashDrift": [],
+  "limit": "Node VM source callbacks/fake JSX; browser/API SQL not run"
+}

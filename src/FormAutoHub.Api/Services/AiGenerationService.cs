@@ -48,7 +48,8 @@ public sealed class AiGenerationService(
     IAiProviderAdapter providerAdapter,
     IAiProviderSecretProtector secretProtector,
     IConfiguration configuration,
-    ICreditService creditService) : IAiGenerationService
+    ICreditService creditService,
+    ILogger<AiGenerationService>? logger = null) : IAiGenerationService
 {
     public async Task<AiGenerateResponsesResponse?> GenerateAsync(
         Guid projectId,
@@ -138,6 +139,12 @@ public sealed class AiGenerationService(
         };
         dbContext.AiGenerationRuns.Add(run);
         StartRun(run);
+        using var runScope = logger?.BeginScope(new Dictionary<string, object>
+        {
+            ["Operation"] = "AiGenerateResponses",
+            ["RunId"] = run.Id,
+            ["ProjectId"] = project.Id
+        });
 
         var guardResult = promptGuard.Validate(BuildGuardPayload(profile, questionPrompts));
         if (!guardResult.IsAllowed)
@@ -181,7 +188,7 @@ public sealed class AiGenerationService(
                 questionSnapshotJson,
                 setting.BaseUrl,
                 secretProtector.Unprotect(setting.EncryptedApiKey));
-            batchTasks.Add(GenerateBatchAsync(batchRequest, semaphore, cancellationToken));
+            batchTasks.Add(GenerateBatchAsync(batchRequest, batchIndex + 1, numBatches, semaphore, cancellationToken));
         }
 
         AiProviderGenerateResult[] batchResults;
@@ -192,16 +199,16 @@ public sealed class AiGenerationService(
         catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
         {
             FailRun(run, "AI provider generation timed out.");
-            run.ErrorMessage = $"{run.ErrorMessage} {exception.Message}".Trim();
+            logger?.LogWarning("AI generation run failed. Cause: {Cause}.", exception.GetType().Name);
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "AI provider generation timed out.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
         }
         catch (Exception exception) when (exception is not OperationCanceledException)
         {
-            FailRun(run, "AI provider generation failed.");
-            run.ErrorMessage = $"{run.ErrorMessage} {exception.Message}".Trim();
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "AI provider generation failed.", cancellationToken);
+            FailRun(run, SafeProviderFailureMessage(exception));
+            logger?.LogWarning("AI generation run failed. Cause: {Cause}.", exception.GetType().Name);
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
         }
@@ -564,23 +571,50 @@ public sealed class AiGenerationService(
             run.CreditsUsed,
             missingCredits,
             balanceAfter,
-            generatedPreviewIds);
+            generatedPreviewIds,
+            AiGenerationErrorMessages.ToPublicMessage(run.Status, run.ErrorMessage));
 
 
     private async Task<AiProviderGenerateResult> GenerateBatchAsync(
         AiProviderGenerateRequest request,
+        int batchIndex,
+        int batchCount,
         SemaphoreSlim semaphore,
         CancellationToken cancellationToken)
     {
         await semaphore.WaitAsync(cancellationToken);
         try
         {
-            return await providerAdapter.GenerateAsync(request, cancellationToken);
+            using var batchScope = logger?.BeginScope(new Dictionary<string, object>
+            {
+                ["BatchIndex"] = batchIndex,
+                ["BatchCount"] = batchCount
+            });
+            try
+            {
+                var result = await providerAdapter.GenerateAsync(request, cancellationToken);
+                logger?.LogInformation("AI generation batch completed. Outputs: {OutputCount}.", result.OutputJsons.Count);
+                return result;
+            }
+            catch (Exception exception)
+            {
+                logger?.LogWarning("AI generation batch failed. Cause: {Cause}.", exception.GetType().Name);
+                throw;
+            }
         }
         finally
         {
             semaphore.Release();
         }
     }
+
+    private static string SafeProviderFailureMessage(Exception exception) => exception switch
+    {
+        FormatException => "Nội dung trả lời của AI không đúng định dạng. Không trừ credit.",
+        JsonException => "Phản hồi từ dịch vụ AI không phải JSON hợp lệ. Không trừ credit.",
+        HttpRequestException { StatusCode: { } status } => $"Dịch vụ AI trả về lỗi HTTP {(int)status}. Không trừ credit.",
+        HttpRequestException => "Không kết nối được với dịch vụ AI. Không trừ credit.",
+        _ => "Không tạo được bản xem trước từ dịch vụ AI. Không trừ credit."
+    };
     private sealed record RawAnswerItem(Guid? QuestionId, string RawJson);
 }

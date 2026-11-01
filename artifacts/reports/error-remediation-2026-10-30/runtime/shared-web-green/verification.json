@@ -1,0 +1,21 @@
+{
+  "exit": 0,
+  "counts": {
+    "failed": 0,
+    "skipped": 0,
+    "executed": 15,
+    "passed": 15,
+    "cancelled": 0
+  },
+  "hashDrift": [],
+  "writerSnapshotDrift": [],
+  "authRegression": {
+    "path": "runtime/shared-web-auth-regressions/test.log",
+    "failed": 0,
+    "passed": 9,
+    "exit": 0,
+    "executed": 9,
+    "skipped": 0
+  },
+  "limit": "Boundary fake tests only; browser API SQL runtime not run"
+}

@@ -1,0 +1,24 @@
+{
+  "exit": 1,
+  "counts": {
+    "failed": 4,
+    "executed": 4,
+    "skipped": 0,
+    "passed": 0
+  },
+  "hashDrift": [],
+  "classification": {
+    "missingPostSuccessStatusAssertion": 1,
+    "blockedRacePrecondition": 1,
+    "fixtureLocatorFailures": 2
+  },
+  "limits": [
+    "Prompt locator exact name mismatches actual Prompt chung 16/2000 ký tự; not product RED for2cases",
+    "Race test mode switch blocked by existing disabled button; no stale-response proof",
+    "ERR015 missing status after POST→GET failure is candidate product RED; later assertions not executed",
+    "Mock API; no actual DB; customserver Tailwind warning and requested distDir ineffective"
+  ],
+  "ownedProcessReleased": true,
+  "ownedBrowserReleased": true,
+  "report": "../forms-ui-browser-red.json"
+}

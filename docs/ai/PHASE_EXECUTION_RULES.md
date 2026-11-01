@@ -39,23 +39,21 @@ PayOS remains the only approved payment provider. Captcha bypass, proxy rotation
 
 ## Deferred Items
 
-The following must remain Deferred until approved:
+The following remain Deferred outside already approved contracts/scopes. Phase 7 auth and the separate NCKH track are implemented; this list does not undo their approvals. Use current API contracts and the NCKH progress ledger for their exact boundaries:
 
-- authentication implementation details
-- JWT claim structure
-- Google OAuth
-- official Google Forms API
+- authentication or JWT claim changes beyond the approved Phase 7 contracts
+- Google OAuth beyond approved identity login and the separate approved NCKH scope
+- official Google Forms API outside the separate approved NCKH scope
 - payment providers other than PayOS
 - background job framework
 - AI answer generation outside the approved Phase 6 AI scoped follow-up slice
 - AI mapping outside the approved Phase 6 AI scoped follow-up slice
 - refund behavior after failed submission
-- exact credit pricing
-- exact credit cost per action
+- new credit pricing/cost behavior beyond approved package, Phase 3 and scoped AI contracts
 - admin user management UI
 - package management behavior beyond the approved credit package create/update/active-state follow-up
 - email notifications
-- webhooks
+- webhooks beyond the approved Phase 8 PayOS contract
 - deployment platform beyond the explicitly approved GitHub Actions + GHCR + fingerprint-verified SSH/Docker Compose single-host foundation
 - automated refund behavior
 - subscription billing
@@ -63,7 +61,7 @@ The following must remain Deferred until approved:
 
 Future candidate guidance:
 
-- Google OAuth, official Google Forms API, Google Forms watches/Cloud Pub/Sub notification handling, background jobs, non-PayOS payment providers, refunds, and subscription billing remain Deferred until a task explicitly approves the production scope.
+- Broader Google OAuth/Forms integration beyond the approved identity/NCKH scopes, Google Forms watches/Cloud Pub/Sub notification handling, background jobs, non-PayOS payment providers, refunds, and subscription billing remain Deferred until a task explicitly approves the production scope.
 - AI mapping/generation has an approved Phase 6 scoped follow-up slice. Implementation still requires staying inside the approved API, database, provider, audit, safety, and validation boundaries.
 - Approval must cover the integration target, API contracts, database fields, statuses, lifecycle states, token storage model, notification ingestion model, background job framework choice, and validation plan when applicable.
 - If the approved future scope needs UI and existing UI docs are missing or incomplete, ask for UI direction or sync UI docs before implementing UI.

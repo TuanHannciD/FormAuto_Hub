@@ -1,0 +1,32 @@
+{
+  "ownedProcesses": [],
+  "listeners": [],
+  "processes": [
+    {
+      "pid": 8584,
+      "name": "sqlservr.exe",
+      "runtimeOwned": false,
+      "classification": "preserved SQL service"
+    },
+    {
+      "pid": 13512,
+      "name": "node.exe",
+      "runtimeOwned": false,
+      "classification": "preserved tooling"
+    },
+    {
+      "pid": 25164,
+      "name": "node.exe",
+      "runtimeOwned": false,
+      "classification": "preserved tooling"
+    },
+    {
+      "pid": 13364,
+      "name": "node.exe",
+      "runtimeOwned": false,
+      "classification": "preserved tooling"
+    }
+  ],
+  "utc": "2026-10-30T00:40:43.7182983Z",
+  "ownedBrowserTabs": []
+}

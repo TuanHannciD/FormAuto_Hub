@@ -545,6 +545,7 @@ Implemented response DTO:
 - `missingCredits`
 - `balanceAfter`
 - `generatedPreviewIds`
+- `errorMessage` (optional nullable string): safe Vietnamese failure guidance for `Failed`; null for other statuses. Recognized causes distinguish credit, safety guard, timeout/connection, provider authorization/rate limit/unavailability and invalid output. Unknown or historical free text returns a fixed generic message; persisted provider/error text is never forwarded. This approved ERR-011 addition does not expose raw audit or change storage/retention.
 
 Approved/implemented behavior:
 
@@ -590,6 +591,7 @@ Approved user behavior:
 - returns total AI generation runs, successful/failed counts, credits used, previews generated
 - returns mode breakdown (FullAi / CustomAi) with run count and credits used
 - returns 10 most recent runs with project name, provider, model, status, duration
+- each `AiRecentRunResponse` includes optional nullable `errorMessage` with the same safe failure mapping as generation; this applies to user/admin recent runs and admin paged run items
 - returns daily usage summary for the last 30 days (date, runs, credits used)
 - returns data scoped to the authenticated user only
 - all data is query-only from existing `AiGenerationRuns` table; no new DB entities
@@ -630,7 +632,8 @@ Approved admin behavior:
       "creditsUsed": 15,
       "durationMs": 24073,
       "createdAt": "2026-05-30T01:59:12.7650167+00:00",
-      "projectName": "test"
+      "projectName": "test",
+      "errorMessage": null
     }
   ],
   "page": 1,

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
-import { apiFetch, type NckhGoogleLinkResponse } from "@/lib/api";
+import { ApiError, apiFetch, type NckhGoogleLinkResponse } from "@/lib/api";
 import { toast } from "sonner";
 
 function NckhCallbackContent() {
@@ -47,13 +47,14 @@ function NckhCallbackContent() {
         toast.success(`Đã liên kết Google: ${result.email}`);
         router.replace("/dashboard/nckh?linked=true");
       })
-      .catch((error: Error) => {
-        const errMsg = error.message.toLowerCase();
-        const msg = errMsg.includes("409") || errMsg.includes("already linked") || errMsg.includes("đã được liên kết")
-          ? "Tài khoản Google này đã được liên kết trước đó."
-          : errMsg.includes("400") || errMsg.includes("invalid") || errMsg.includes("failed to exchange") || errMsg.includes("expired")
-            ? "Mã xác thực không hợp lệ hoặc đã hết hạn. Vui lòng thử lại."
-          : "Không liên kết được tài khoản Google. Vui lòng thử lại.";
+      .catch((error: unknown) => {
+        const linkError = error instanceof ApiError && error.method === "POST"
+          && error.path === "/api/v1/nckh/auth/google-link";
+        const msg = linkError && error.status === 409
+          ? "Không liên kết được tài khoản Google này. Vui lòng kiểm tra tài khoản đang liên kết hoặc dùng tài khoản khác."
+          : linkError && error.status === 400
+            ? "Không hoàn tất được xác thực Google. Vui lòng bắt đầu liên kết lại từ trang NCKH."
+            : "Không liên kết được tài khoản Google. Vui lòng thử lại.";
         setMessage(msg);
         toast.error(msg);
         const timer = setTimeout(() => router.replace("/dashboard/nckh?error=" + encodeURIComponent(msg)), 4000);
@@ -63,12 +64,12 @@ function NckhCallbackContent() {
   }, [code, errorParam, router]);
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-6 sm:px-5 sm:py-10">
+    <div className="flex min-h-[50dvh] items-start justify-center py-4 sm:items-center sm:py-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Liên kết Google — NCKH</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3" role="status" aria-live="polite">
           {isProcessing ? (
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <Loader2 className="animate-spin" size={18} />
@@ -88,7 +89,7 @@ function NckhCallbackContent() {
           </p>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 
@@ -96,10 +97,10 @@ export default function NckhCallbackPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+        <div role="status" className="flex min-h-[50dvh] items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="animate-spin mr-2" size={18} />
           Đang xử lý liên kết Google...
-        </main>
+        </div>
       }
     >
       <NckhCallbackContent />

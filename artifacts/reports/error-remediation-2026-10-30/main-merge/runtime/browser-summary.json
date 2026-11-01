@@ -1,0 +1,864 @@
+{
+  "stats": {
+    "startTime": "2026-11-01T00:53:05.965Z",
+    "duration": 84722.182,
+    "expected": 105,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "fileCounts": {
+    "account-navigation.spec.ts": 10,
+    "admin-ui.spec.ts": 5,
+    "auth-session.spec.ts": 2,
+    "fah-err-account-payments-errors.spec.ts": 23,
+    "fah-err-auth-callback.spec.ts": 3,
+    "fah-err-auth-errors.spec.ts": 5,
+    "fah-err-forms-errors.spec.ts": 13,
+    "fah-err-nckh-errors.spec.ts": 4,
+    "nckh.spec.ts": 40
+  },
+  "runnerErrors": [],
+  "cases": [
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "popup grows before revealing content and hides content before closing",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "popup can close during opening, dismiss outside and skip motion when reduced",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "account entry is in topbar, with shared profile and security navigation",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "account dropdown supports keyboard dismissal, outside click and narrow screens",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "profile save updates topbar name and password keeps the existing request contract",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "admin uses the same account menu and logout clears session",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "compact modal contains focus, fits mobile and restores focus after Escape",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "retired profile and security pages no longer render",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "account popup interpolates height, handles interruption and remains bounded on mobile",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "account-navigation.spec.ts",
+      "title": "account keeps native scrolling on mobile after resizing before swapping content",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "admin-ui.spec.ts",
+      "title": "all admin routes render without overflow or runtime errors at 1440px",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "admin-ui.spec.ts",
+      "title": "all admin routes render without overflow or runtime errors at 320px",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "admin-ui.spec.ts",
+      "title": "admin mobile navigation changes routes, closes and keeps account popup accessible",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "admin-ui.spec.ts",
+      "title": "admin settings keep their save payloads after restyling",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "admin-ui.spec.ts",
+      "title": "normal users still cannot render admin controls",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "auth-session.spec.ts",
+      "title": "expired stored session settles on login with one notification",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "auth-session.spec.ts",
+      "title": "parallel dashboard requests share refresh and keep the rotated session",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR021 failed profile load blocks PUT and retries only the read",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR021 failed security load does not label Google unlinked and retry restores known state",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR016 503 detail offers GET-only retry without claiming missing",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR016 transport detail offers GET-only retry without claiming missing",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR016 404 retains privacy-safe wording",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 manual request keeps confirmed ID while history refresh fails; retry never repeats POST",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 checkout redirects even when subsequent list reads would fail",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 admin approve keeps confirmed decision on refresh failure",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 admin reject keeps confirmed decision on refresh failure",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR021 failed admin user search clears old options and blocks grant until retry",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 manual grant keeps confirmed transaction and balance when history fails",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 detail clipboard absent supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 detail clipboard reject supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 detail clipboard success supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 manual clipboard absent supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 manual clipboard reject supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 manual clipboard success supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 payos clipboard absent supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 payos clipboard reject supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR022 payos clipboard success supports keyboard and repeat feedback",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 ERR019 ai retains local configuration check after failed refresh",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR015 ERR019 payos retains local configuration check after failed refresh",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-account-payments-errors.spec.ts",
+      "title": "ERR019 payment return explains waiting for confirmation in user language",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-callback.spec.ts",
+      "title": "id_token callback caller handles Google HTTP 409 safely",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-callback.spec.ts",
+      "title": "id_token callback caller handles Google HTTP 401 safely",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-callback.spec.ts",
+      "title": "id_token callback caller handles Google HTTP 503 safely",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-errors.spec.ts",
+      "title": "login caller maps HTTP 401 without raw details",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-errors.spec.ts",
+      "title": "login caller maps HTTP 423 without raw details",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-errors.spec.ts",
+      "title": "login caller maps HTTP 500 without raw details",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-errors.spec.ts",
+      "title": "registration caller treats password validation as invalid input",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-auth-errors.spec.ts",
+      "title": "network failure remains on login with safe recovery guidance",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR014 known absent profile permits a new profile with defaults",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR014 pending profile read locks competing mode/project changes; next mode owns its profile",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR015 AI continuation retains the second confirmed run and cost when only its preview GET fails",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR011 generation shows safe failure and run ID: known",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR011 generation shows safe failure and run ID: unknown",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR011 AI usage exposes safe reason and existing run ID without raw historical text",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR023 submission details retain IDs and uncertainty without inviting resend",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR023 ordinary and missing historical causes keep IDs and safe mixed counts without inventing uncertainty",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR024 Date clear/retype both endpoints blocks invalid POST and sends displayed state",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR024 Time clear/retype both endpoints blocks invalid POST and sends displayed state",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-forms-errors.spec.ts",
+      "title": "ERR024 time step follows existing integer 5–120 bounds and mode defaults match payload",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-nckh-errors.spec.ts",
+      "title": "ERR021 initial list failure stays unknown until read-only retry confirms empty",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-nckh-errors.spec.ts",
+      "title": "ERR017 current partial failure disables mutation and export until GET retry recovers",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-nckh-errors.spec.ts",
+      "title": "ERR017 selection B displays B while A finishes later",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "fah-err-nckh-errors.spec.ts",
+      "title": "ERR021 confirmed import followed by list failure hides stale rows and retry only reads",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "Google authorization failure retains session without attempting JWT refresh",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "forms server failure offers retry without claiming Google is unlinked",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "genuine NCKH JWT failure still clears invalid session and redirects to login",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "unauthenticated user is redirected to /login",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "authenticated user sees NCKH dashboard",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "shows Liên kết Google button when not linked",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "shows status message about linking",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "import form section is hidden when not linked",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "unlinked Google shows linking guidance without asserting an empty form list",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "shows 'Đã liên kết Google' status",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "import form input is visible",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "import button is visible",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "renders form list table with items",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "form title is clickable link",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "pagination shows correct info",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "successful import shows toast and clears input",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "import fails with 401 shows error and resets link status",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "import fails with 409 duplicate",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "prevents duplicate import submit while request is pending",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "callback with ?linked=true shows success toast and cleans URL",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "callback with ?error=... shows error toast",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "direct callback page without code redirects to dashboard",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "callback with valid code calls API and redirects with success",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "callback with invalid code shows error then redirects",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "callback with already-linked account shows 409 then redirects",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "NCKH nav item exists in sidebar",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "clicking NCKH nav item navigates to NCKH page",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "renders form workspace with model tabs",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "opens variables and mapping popups from canvas",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "cancels model impact dialog and shared mapping confirmation without sending DELETE",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "normalizes Likert variable payload from the canvas popup",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "places unsaved new variables on a visible canvas slot",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "renders Phase 9 visual canvas using existing relation and position APIs",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "deletes a relation from the canvas action list",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "blocks duplicate canvas relation before sending API request",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "keeps canvas relation and position edits read-only for active models",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "deletes a variable from the canvas node action button",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "shows export actions without adding new backend contracts",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "uses update action when selected model already has a generated form",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "file": "nckh.spec.ts",
+      "title": "disables update action while request is submitting",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "counts": {
+    "error": 0,
+    "executed": 6,
+    "warning": 0,
+    "failed": 5,
+    "aborted": 0,
+    "notExecuted": 0,
+    "inProgress": 0,
+    "completed": 0,
+    "pending": 0,
+    "timeout": 0,
+    "notRunnable": 0,
+    "disconnected": 0,
+    "inconclusive": 0,
+    "passed": 1,
+    "passedButRunAborted": 0,
+    "total": 6
+  },
+  "compilerErrorCount": 0,
+  "hashDrift": [],
+  "failures": [
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.NestedShape_ImportNullItemMapsSafeExternalFailureWithoutWrites",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.NestedShape_CollectMaps502AndPersistsFailedLogWithoutResponseWrites(body: \"{\\\"responses\\\":[{\\\"responseId\\\":\\\"r1\\\",\\\"answers\\\"\"···)",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.NestedShape_CollectMaps502AndPersistsFailedLogWithoutResponseWrites(body: \"{\\\"responses\\\":[null]}\")",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.NestedShape_CollectMaps502AndPersistsFailedLogWithoutResponseWrites(body: \"{\\\"responses\\\":[{\\\"responseId\\\":\\\"r1\\\",\\\"answers\\\"\"···)",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object."
+    },
+    {
+      "testName": "FormAutoHub.Tests.FahErrBoundaryGoogleTests.NestedShape_CollectPreservesTypedFailureAndDiagnosticIdAfterSaving",
+      "message": "Assert.ThrowsAny() Failure: Exception type was not compatible\r\nExpected: typeof(System.Net.Http.HttpRequestException)\r\nActual:   typeof(System.NullReferenceException)\r\n---- System.NullReferenceException : Object reference not set to an instance of an object."
+    }
+  ],
+  "limit": "InMemory/fakeGoogleHTTP; no actualAPI SQL liveprovider"
+}

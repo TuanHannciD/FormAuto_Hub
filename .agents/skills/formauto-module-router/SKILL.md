@@ -11,7 +11,7 @@ Prevent ownership drift before planning or implementation.
 
 1. Restate task.
 2. Identify affected module(s).
-3. Identify owning layer: controller, service, DTO, EF Core, entity, integration, docs, or frontend-deferred.
+3. Identify owning layer: controller, service, DTO, EF Core, entity, integration, docs, or the implemented Next.js frontend.
 4. List allowed file zones.
 5. List forbidden file zones.
 6. Identify contract and phase gates.
@@ -22,5 +22,4 @@ Prevent ownership drift before planning or implementation.
 - Google Forms behavior belongs in `Integrations.GoogleForms`.
 - DTOs own API contracts.
 - EF Core owns persistence access and migrations.
-- Frontend framework remains Deferred.
-
+- Next.js dashboard is implemented; check the approved task/phase before adding behavior. Use Superpowers for the method and current module/contract docs for ownership.

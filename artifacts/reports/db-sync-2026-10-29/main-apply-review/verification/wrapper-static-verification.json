@@ -1,0 +1,31 @@
+{
+  "hashChecks": [
+    {
+      "path": "D:/TinHoc/FormAuto_Hub/scripts/db-compatibility/bin/Release/net9.0/DbCompatibilityProbe.dll",
+      "sha256": "de5022e8ac451b2b8b926b2e88712111cf7d8dd8e7c08f493eed0109406a1698",
+      "match": true
+    },
+    {
+      "path": "D:/TinHoc/FormAuto_Hub/src/FormAutoHub.Api/bin/Release/net9.0/FormAutoHub.Api.dll",
+      "sha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+      "match": true
+    },
+    {
+      "path": "D:/TinHoc/FormAuto_Hub/scripts/db-compatibility/bin/Release/net9.0/FormAutoHub.Api.dll",
+      "sha256": "1497eab5c545e04ffbdd44091c94af18050e864756855a8747a5ff9a8f268485",
+      "match": true
+    },
+    {
+      "path": "D:/TinHoc/FormAuto_Hub/artifacts/reports/db-sync-2026-10-29/runtime/Capture-Fingerprint.ps1",
+      "sha256": "956b0b7e58623db66a28cdd0fb02a7982b34177435614fabec4e5a5742bcabb2",
+      "match": true
+    },
+    {
+      "path": "D:/TinHoc/FormAuto_Hub/artifacts/reports/db-sync-2026-10-29/runtime/main-apply-reviewed.ps1",
+      "sha256": "dd27c4515da3476961958f3f3ec68b65275cf33aa685451aa1011ca04b9bced9",
+      "match": true
+    }
+  ],
+  "parserErrors": 0,
+  "executed": false
+}

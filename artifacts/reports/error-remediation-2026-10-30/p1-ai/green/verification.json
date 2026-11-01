@@ -1,0 +1,40 @@
+{
+  "utc": "2026-10-30T00:49:11.336438+00:00",
+  "counters": {
+    "total": "23",
+    "executed": "23",
+    "passed": "23",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "sourceAfter": [
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\tests\\FormAutoHub.Tests\\FahErrAiDiagnosticsTests.cs",
+      "sha256": "275976ec600649b190f890d892da9144e3a2c18602a7282d3d45bbc0804540ae",
+      "matchesBefore": true
+    },
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Services\\AiGenerationService.cs",
+      "sha256": "cfe506f970b0ac957585a2e5f1fdc5e97bd50002f28ed0e2c4629151ae342a73",
+      "matchesBefore": true
+    },
+    {
+      "path": "D:\\TinHoc\\FormAuto_Hub\\src\\FormAutoHub.Api\\Integrations\\AI\\OpenAiCompatibleProviderAdapter.cs",
+      "sha256": "52c438f8f9f70af35ca3ba251a84f3b37b0bb11596476bd683579f2dc4f85501",
+      "matchesBefore": true
+    }
+  ],
+  "verified": true,
+  "level": "InMemory/fake integrations; no SQL/API/browser/provider proof"
+}

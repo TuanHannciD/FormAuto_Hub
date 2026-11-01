@@ -1,143 +1,41 @@
-# FormAuto Hub - Repository Instructions
+# FormAuto Hub — Agent instructions
 
-This repository uses explicit role separation, strict scope control, and paired English/Vietnamese documentation.
+Repository rules are subordinate to system/developer/runtime instructions and user authorization. Start with `README.md`, this file, [authority](docs/ai/agent/AUTHORITY_MAP.md), existing task/handoff, then [routing](docs/ai/AI_DOC_ROUTING_MATRIX.md). Read only task-relevant docs and source before changing them. Use Vietnamese for user-facing reports.
 
-## Required Startup Order
+## One workflow and its owners
 
-1. Read `README.md` first.
-2. Read `docs/ai/AI_DOC_ROUTING_MATRIX.md` next.
-3. Read all task-relevant docs before modifying code or documentation.
-4. When creating or editing documentation, read existing `.md` files first.
-5. If existing source code or docs conflict with the task prompt, report the conflict before changing files.
+- [Execution rules](docs/ai/agent/EXECUTION_RULES.md): scope, permissions, task/handoff/resume and resource ownership.
+- [Quality gates](docs/ai/agent/QUALITY_GATES.md): validation, browser testing, review and Done.
+- [Tooling](docs/ai/agent/TOOLING.md): package provenance, runtime discovery and project overrides.
+- [Skill matrix](SKILL_USAGE_MATRIX.md): Superpowers methods, Impeccable UI, UI UX Pro Max research and seven domain specialists. Do not use retired generic FormAuto workflow skills.
+- [Source rules](docs/ai/SOURCE_STRUCTURE_AND_NAMING_RULES.md): find current symbols; read complete affected units and dependency/consumer/test paths. Maps are navigation, not implementation evidence.
 
-## Core Rules
+## Giới hạn cứng cho mọi subagent
 
-- Do not redesign the system unless the task explicitly asks for redesign.
-- Do not invent business rules, API contracts, database fields, statuses, events, lifecycle states, roadmap commitments, or architecture decisions.
-- If a required detail is missing, write `Assumption:` explicitly.
-- If a future item is not approved, write `Deferred:` explicitly.
-- Implement the smallest correct change.
-- Touch only files required for the task.
-- Do not weaken abuse-prevention rules.
-- Do not implement Deferred items as if approved.
-- Keep `docs/ai` and `docs/vi` semantically synced.
-- Preserve UTF-8 and Vietnamese diacritics.
-- Report conflicts, skipped validation, and unverified claims honestly.
+- Có hiệu lực ngay theo yêu cầu người dùng ngày 2026-10-28: mọi subagent chỉ được dùng model Sol, tối đa `gpt-6.1-sol` với reasoning `high`; mức thấp hơn trong họ Sol được phép. Cấm Astra trong mọi trường hợp.
+- Áp dụng cho implementer, runtime, reviewer, review cuối, retry, fallback, escalation và mọi agent con lồng nhau; không có ngoại lệ vì task khó hoặc skill yêu cầu model mạnh nhất.
+- Trước mỗi dispatch, kiểm catalog và chỉ định rõ model cùng reasoning không vượt `high`. Không dùng mức `xhigh`, `max`, `ultra` hoặc model ngoài họ Sol. Nếu tool không xác nhận được cấu hình hợp lệ, không dispatch bằng cấu hình đó.
+- Agent đang có phải nhận ràng buộc ngay; dừng/thay agent nếu cấu hình vượt trần hoặc không xác minh được. Root ghi model/effort thực tế trong ledger; giữ giới hạn này khi tiếp tục sau handoff/compaction. Chi tiết tại [Tooling](docs/ai/agent/TOOLING.md#hard-subagent-model-ceiling).
 
-## Skill Routing Rules
+## Scope and documentation
 
-- Use `formauto-requirement-analyst` for ambiguous or business-rule-heavy requests.
-- Use `formauto-delivery-planner` when work must be decomposed, sequenced, or delegated.
-- Use `formauto-ba-pm-planner-lite` for small, clear, low-dependency tasks.
-- Use `formauto-system-requirement-interviewer` when workflow, actors, lifecycle, or data behavior must be discovered before architecture decisions.
-- Use `formauto-db-architecture-planner` for SQL Server, EF Core entity, migration, transaction, indexing, and persistence strategy.
-- Use `formauto-db-risk-reviewer` before treating high-impact database recommendations as safe.
-- Use `formauto-module-router` when module or layer ownership is unclear.
-- Use `formauto-phase-gate` when a request may exceed the current roadmap phase.
-- Use `formauto-contract-guard` for API, DTO, entity, status, event, webhook, and contract-sensitive work.
-- Use `formauto-bug-triage` for runtime bugs, startup failures, symptoms, logs, and unclear regressions before implementation.
-- Use `formauto-http-behavior-tester` when a route or endpoint should be checked by safe HTTP requests.
-- Use `formauto-controlled-doc-editor` for documentation writing or documentation edits.
-- Use `formauto-stitch-ui-iterative-designer` when a task asks to generate UI with Stitch, self-review the result, iterate fixes, and save design artifacts under `docs/design`.
-- Use `formauto-implementation-worker` only after scope, ownership, and contract safety are clear.
-- Use `formauto-reviewer` after implementation.
+- Preserve existing dirty/untracked/ignored work and evidence. Never reset/clean/overwrite unrelated work.
+- Do not invent business rules, contracts, fields, statuses, events, lifecycle, architecture or phase commitments. Mark missing details `Assumption:` and unapproved future work `Deferred:`.
+- Stay within approved scope/phase/follow-up; use the smallest correct change. Do not redesign or activate Deferred work implicitly.
+- Documentation is proposal-first unless edits are already approved. Read existing relevant Markdown; update `docs/ai/` and same-path `docs/vi/` together, preserving UTF-8 and Vietnamese diacritics. Report conflicts before altering disputed behavior.
+- Skills never grant dispatch, installation, Git/remote/deployment or cleanup permission. Reuse authorization already given; ask only for a genuinely missing decision/right.
 
-## Role Discipline
+## Product and architecture invariants
 
-- Analyst and planner skills do not write production code.
-- Database planning skills do not finalize architecture decisions without explicit approval.
-- Worker skills do not redefine scope.
-- Reviewer skills do not replace missing analysis or planning.
-- Documentation editing remains proposal-first unless edits are explicitly approved.
-- Bug triage separates reproduced evidence from hypotheses.
-- HTTP behavior testing must not send risky mutation requests without clear justification.
+- No spam, captcha bypass, proxy rotation, fake accounts, unauthorized submission, bypassing Google restrictions or AI auto-submit without preview and user confirmation.
+- Require authorized user context, preview and confirmation. Generate 1–100 previews per action; submit controlled sequential batches of 10, with applicable usage/submission logs.
+- Credit changes go through the dedicated credit service and write `CreditTransactions`; tool actions write `UsageLogs`; submission actions write `SubmissionLogs`.
+- Controllers handle HTTP; services own business workflow/validation; DTOs own API contracts; entities represent persisted state; EF Core owns persistence; integrations own external calls. Services do not return framework HTTP results, entities do not call APIs, controllers stay thin.
+- Keep Google Forms and AI provider calls out of account/credit services. Preserve SQL Server/EF Core migrations, .NET 9 API and Next.js dashboard; no implied stack redesign.
+- Core Google login is identity-only; official Forms integration remains Deferred for core. NCKH is a separately approved track; use its ledger/contracts. Approved PayOS and scoped Phase 6 AI behavior do not approve other providers or broader rollout.
 
-## Current Project Baseline
+## Honest completion
 
-- Project: FormAuto Hub.
-- Current global phase state: Phase 9 closeout completed; next phase not selected.
-- Active approved follow-up slice: none. Phase 6 AI mapping/generation scoped implementation is completed; new follow-up work requires explicit approval.
-- Backend: ASP.NET Core Web API .NET 9.
-- API style: controller-based REST API preferred for MVP.
-- Database: SQL Server.
-- ORM: Entity Framework Core.
-- Persistence discipline: EF Core migrations.
-- Frontend framework: Next.js web dashboard.
-- Authentication: JWT access tokens with refresh token/session storage.
-- Google account login/register: identity-only for the core FormAuto Hub product. NCKH Phase 1 is a separate approved module track with repo evidence for Google OAuth link and Google Forms import.
-- Payment gateway integration: PayOS automated credit top-up is approved for Phase 8; other payment providers remain Deferred.
-- Official Google Forms API integration: Deferred for the core FormAuto Hub product. NCKH Phase 1 has a separate approved scope with repo evidence for Google Forms read/import only.
-- AI answer generation and AI mapping: the Phase 6 scoped follow-up slice is completed; scoped OpenAI-compatible live provider calls are allowed only behind explicit runtime configuration, while broader AI rollout remains Deferred.
-- Phase 1 backend foundation exists under `src/FormAutoHub.Api`.
-- Initial test project exists under `tests/FormAutoHub.Tests`.
+Use `Verified`, `Failed`, `Not run`, `Blocked` as appropriate. Missing required checks do not become pass by being disclosed. Runnable API/browser/auth/DB/payment/webhook/tunnel changes need applicable runtime smoke after restarting owned affected processes, correct role/session, browser hydration/chunks, applied schema and relevant logs. Build/test alone is insufficient.
 
-## Product Safety Rules
-
-The system must not support:
-
-- spam
-- abuse automation
-- captcha bypass
-- proxy rotation
-- fake accounts
-- unauthorized form submission
-- bypassing Google restrictions
-- AI auto-submit without preview and user confirmation
-
-The MVP must require preview before submission and limit generated responses to 100 per action, with controlled submission in sequential batches of 10.
-
-## Architecture Boundaries
-
-- Controllers own HTTP request/response handling only.
-- Services own business workflows and validation orchestration.
-- EF Core `DbContext` owns persistence access.
-- Entities represent persisted domain state.
-- DTOs represent API contracts.
-- Integration services own external calls.
-- Controllers must not contain heavy business logic.
-- Services must not return framework-specific HTTP results.
-- Entities must not call external APIs.
-- Google Forms integration must not be mixed into credit/account services.
-- Credit deduction must go through a dedicated credit service.
-- Credit changes must write a transaction ledger entry.
-- Tool usage must write `UsageLogs`.
-- Submission actions must write `SubmissionLogs`.
-- Deferred integrations must not be stubbed as production-complete features.
-
-## Documentation Workflow
-
-- Documentation changes must be proposal-first unless the user explicitly approves edits.
-- High-risk doc changes include database strategy, contract semantics, auth rules, payment workflow, Google integration behavior, safety rules, lifecycle rules, and phase commitments.
-- Every `docs/ai/*.md` change must have a matching `docs/vi/*.md` change.
-- If only one language layer is updated, mark the docs as out of sync and do not claim completion.
-- Existing code and docs override new proposals when conflicts are discovered.
-
-## Validation Honesty
-
-Never claim validation was completed unless it was actually run.
-
-Build/test success alone is not enough to report a runnable code task as complete when the changed behavior is exercised through an API route, browser route, authentication flow, database migration, payment flow, external callback/webhook, or public/tunnel URL. Applicable runtime smoke must pass, or the closeout must be marked `Blocked` or not complete.
-
-Before reporting completion for runnable code, run the smallest applicable runtime checks:
-
-- restart the affected server or app process after code changes
-- verify changed API endpoints with real HTTP requests and the correct auth role/session
-- verify changed browser routes render and hydrate, including static chunks when using Next.js through a tunnel
-- verify database migrations are applied when runtime code depends on new tables/columns
-- inspect relevant server logs or terminal output after smoke checks
-
-Use these labels:
-
-- Verified
-- Not run
-- Blocked
-
-Final implementation responses must include:
-
-- Summary
-- Files changed
-- Scope alignment
-- Validation performed
-- Validation not performed
-- Risks/Deferred items
-- Next recommended step
+Review according to quality gates; self-review is not independent review. Report Summary, Files changed, Scope alignment, Validation performed, Validation not performed, Risks/Deferred items and Next recommended step. Do not claim integration or release from local completion.

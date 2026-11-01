@@ -1,0 +1,20 @@
+[
+  {
+    "path": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\app\\auth\\callback\\page.tsx",
+    "expected": "4F4058CC9876D6313E1960A8E6122F9E7FC5C1156DB2F61A91F8E4F4D5053E07",
+    "actual": "4F4058CC9876D6313E1960A8E6122F9E7FC5C1156DB2F61A91F8E4F4D5053E07",
+    "match": true
+  },
+  {
+    "path": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.test.cjs",
+    "expected": "60A3935E5E0ABBC19DE70EA2FF580554B8BA03471FBE5F7CE04960A08B20D862",
+    "actual": "60A3935E5E0ABBC19DE70EA2FF580554B8BA03471FBE5F7CE04960A08B20D862",
+    "match": true
+  },
+  {
+    "path": "D:\\TinHoc\\FormAuto_Hub\\apps\\web\\tests\\fah-err-auth-callback.spec.ts",
+    "expected": "DC210339282B489F82FCDD30D759DB054EAA7B537610D3D4491B38B92065528C",
+    "actual": "DC210339282B489F82FCDD30D759DB054EAA7B537610D3D4491B38B92065528C",
+    "match": true
+  }
+]

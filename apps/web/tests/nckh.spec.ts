@@ -31,6 +31,17 @@ const MOCK_SESSION = {
 };
 
 async function loginAsUser(page: Page) {
+  // Keep this API-fixture suite isolated from the live API, including overview
+  // navigation and the impact GETs used by the current delete dialog.
+  await page.route("**/api/**", route => {
+    const request = route.request();
+    if (request.method() !== "GET") throw new Error(`Unmocked mutation: ${request.method()} ${new URL(request.url()).pathname}`);
+    const path = new URL(request.url()).pathname;
+    if (path === "/api/dashboard/summary") return route.fulfill({ json: {
+      currentCreditBalance: 20, totalCreditsDeposited: 20, totalCreditsUsed: 0, pendingTopupOrders: 0, recentUsageLogs: [], recentTopupOrders: []
+    } });
+    throw new Error(`Unmocked fixture GET: ${path}`);
+  });
   await page.goto("/login");
   await page.evaluate((session) => {
     window.localStorage.setItem("formauto.auth.session", JSON.stringify(session));
@@ -321,9 +332,10 @@ test.describe("NCKH — Google Not Linked", () => {
     await expect(page.getByPlaceholder(/docs.google.com\/forms/)).not.toBeVisible();
   });
 
-  test("empty state message shown in form list", async ({ page }) => {
+  test("unlinked Google shows linking guidance without asserting an empty form list", async ({ page }) => {
     await page.goto("/dashboard/nckh");
-    await expect(page.getByText(/Liên kết Google để nhập form đầu tiên/)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Liên kết Google để xem và nhập biểu mẫu khảo sát.")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Chưa có form nào", { exact: true })).toHaveCount(0);
   });
 });
 
@@ -348,8 +360,9 @@ test("forms server failure offers retry without claiming Google is unlinked", as
   await loginAsUser(page);
   await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Service unavailable" }, 503);
   await page.goto("/dashboard/nckh");
-  const loadAlert = page.getByRole("alert").filter({ hasText: "Không tải được danh sách form" });
+  const loadAlert = page.getByRole("alert").filter({ has: page.getByRole("button", { name: "Thử lại", exact: true }) });
   await expect(loadAlert).toBeVisible();
+  await expect(page.getByText("Chưa có form nào", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Liên kết Google/ })).toHaveCount(0);
   await mockLinked(page, MOCK_EMPTY_LIST);
   await page.getByRole("button", { name: "Thử lại", exact: true }).click();
@@ -399,11 +412,13 @@ test.describe("NCKH — Google Linked", () => {
   });
 
   test("form title is clickable link", async ({ page }) => {
+    await mockWorkspace(page);
     await page.goto("/dashboard/nckh");
     const link = page.getByRole("button", { name: "Khảo sát sinh viên 2026" });
     await expect(link).toBeVisible({ timeout: 10000 });
     await link.click();
     await expect(page).toHaveURL(/\/dashboard\/nckh\/forms\/11111111-1111-1111-1111-111111111111/);
+    await expect(page.getByRole("heading", { name: "Khảo sát sinh viên 2026", exact: true })).toBeVisible();
   });
 
   test("pagination shows correct info", async ({ page }) => {
@@ -448,7 +463,8 @@ test.describe("NCKH — Import Form", () => {
     await page.getByPlaceholder(/docs.google.com\/forms/).fill("https://docs.google.com/forms/d/dup/edit");
     await page.getByRole("button", { name: /Nhập form/ }).click();
 
-    await expect(page.getByText(/Không nhập được form/).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/Hãy kiểm tra danh sách biểu mẫu đã nhập/).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/Dữ liệu xác thực|hết hạn/)).toHaveCount(0);
   });
 
   test("prevents duplicate import submit while request is pending", async ({ page }) => {
@@ -537,7 +553,7 @@ test.describe("NCKH — Callback Page", () => {
 
     await page.goto("/dashboard/nckh/callback?code=bad-code");
     // Callback page shows error message for 4s then redirects
-    await expect(page.getByText(/Mã xác thực không hợp lệ/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("status").filter({ hasText: "Không hoàn tất được xác thực Google" })).toBeVisible({ timeout: 8000 });
     // After redirect, URL should have error param briefly, then be cleaned
     // Just verify we land on the NCKH page eventually
     await expect(page).toHaveURL(/\/dashboard\/nckh$/, { timeout: 10000 });
@@ -551,7 +567,8 @@ test.describe("NCKH — Callback Page", () => {
 
     await page.goto("/dashboard/nckh/callback?code=dup-code");
     // Should show error about already linked
-    await expect(page.getByText(/đã được liên kết/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("status").filter({ hasText: "Vui lòng kiểm tra tài khoản đang liên kết hoặc dùng tài khoản khác" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/another user|Already linked/)).toHaveCount(0);
     // Eventually redirects to NCKH page
     await expect(page).toHaveURL(/\/dashboard\/nckh$/, { timeout: 10000 });
   });
@@ -621,6 +638,12 @@ test.describe("NCKH — Phase 7 Workspace", () => {
   test("cancels model impact dialog and shared mapping confirmation without sending DELETE", async ({ page }) => {
     const deletes: string[] = [];
     page.on("request", request => { if (request.method() === "DELETE") deletes.push(request.url()); });
+    await mockApi(page, "GET", `/models/${MOCK_MODEL.id}`, MOCK_MODEL);
+    for (const endpoint of ["variables", "mappings", "relations", "responses", "dataset"]) {
+      await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/${endpoint}?page=1&pageSize=1`, {
+        items: [], totalItems: 0, page: 1, pageSize: 1, totalPages: 0
+      });
+    }
     await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/mappings?page=1&pageSize=100`, {
       items: [{ id: "confirmation-mapping", variableId: MOCK_VARIABLE.id, modelId: MOCK_MODEL.id, formQuestionId: MOCK_FORM_DETAIL.questions[0].id, observedCode: "SAT1", questionText: "Câu hỏi thử", questionType: "Radio", sortOrder: 1, createdAt: "2026-10-07T00:00:00Z" }], page: 1, pageSize: 100, totalItems: 1, totalPages: 1
     });
@@ -820,9 +843,15 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await expect(selectedRelationPanel).toContainText("SER -> SAT");
     await selectedRelationPanel.getByRole("button", { name: "Ngược chiều" }).click();
     await expect.poll(() => updateRelationPayload).toMatchObject({ direction: "Negative" });
+    // Mutation confirmation precedes six refresh GETs; interact with the refreshed, enabled canvas.
+    await expect(page.getByRole("button", { name: "Lưu bố cục", exact: true })).toBeEnabled();
+    await expect(page.getByRole("button", { name: "H1 · Ngược chiều", exact: true })).toBeVisible();
 
     const satSourceHandle = satNode.locator(".react-flow__handle.source").first();
     const serTargetHandle = page.locator(`[data-testid="rf__node-Variable:${MOCK_VARIABLE_2.id}"]:visible .react-flow__handle.target`).first();
+    await satSourceHandle.scrollIntoViewIfNeeded();
+    await expect(satSourceHandle).toBeInViewport();
+    await expect(serTargetHandle).toBeInViewport();
     const sourceBox = await satSourceHandle.boundingBox();
     const targetBox = await serTargetHandle.boundingBox();
     expect(sourceBox).not.toBeNull();
@@ -987,7 +1016,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await page.getByRole("button", { name: "Xuất dữ liệu" }).click();
 
     await expect(page.getByRole("button", { name: /Bộ dữ liệu CSV/ })).toBeVisible({ timeout: 10000 });
-    await expect(page.getByRole("button", { name: /Codebook Excel/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Bảng mã biến Excel/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Cú pháp SPSS/ })).toBeVisible();
   });
 

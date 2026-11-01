@@ -1,0 +1,134 @@
+{
+  "utc": "2026-10-30T00:15:30.4855115Z",
+  "status": "Final frozen evidence inventory",
+  "hashAlgorithm": "SHA256",
+  "root": "D:/TinHoc/FormAuto_Hub",
+  "supersededManifest": {
+    "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/evidence-hashes.json",
+    "disposition": "Historical draft; preserved unchanged and superseded by this final manifest",
+    "sha256": "7db8452670eeccb17cafa5cf548b1d9564c93e12d99f6d85b2933f7619f5def5",
+    "bytes": 1217,
+    "staleReportEntry": {
+      "sha256": "b3e0ff75ccb0110baa7b041c6803bb3cb9b2b361bade03a3c00cbd3518aecf97",
+      "bytes": 6852
+    },
+    "currentReportEntry": {
+      "sha256": "633efe26da78e2825d9402cf0b6bd5a9a36468c847042390e4a788d7fac83eb7",
+      "bytes": 7062
+    },
+    "staleReportEntryMatchesCurrent": false
+  },
+  "scope": "Frozen clone/main/supplement API reports, results and logs, plus main cutover and final resource-release proofs. Does not claim browser/provider/full-system coverage.",
+  "entries": [
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/api_runtime.py",
+      "sha256": "bc115d3a0749aaf8c23b2e301fb46eeae892ca6b94717915b4fa06d78a8886be",
+      "bytes": 11712
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-api-server.log",
+      "sha256": "bd6c57443e3058ba192e431273d997723c5b5733325ab245c39c6fb3726d5e9b",
+      "bytes": 61835
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-http-results.json",
+      "sha256": "b4e98f487eacd35da24d7703effea9624a5a26c8dc18742c0f282fac23563213",
+      "bytes": 11423
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-log-correlation.json",
+      "sha256": "5d9237e8f7c0d0e359d368e0c8018388414cb6295d968181cde2fa8f77e70e47",
+      "bytes": 4749
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-resource-release.json",
+      "sha256": "b2b934f73da92d83a1ef6f207c997e262bd361e26858ef61a9d374fafc771783",
+      "bytes": 151
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-resource-start.json",
+      "sha256": "0df8eccff050f5d7968a5186e18cb4f4fa31adc44d935112b1008339960b34e2",
+      "bytes": 536
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/clone-safe-sql-aggregates.json",
+      "sha256": "9d5d886b9e3089a31f40b68d3f940f678e5bb79f1c555c07673d9c995a215bb1",
+      "bytes": 625
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/report.md",
+      "sha256": "633efe26da78e2825d9402cf0b6bd5a9a36468c847042390e4a788d7fac83eb7",
+      "bytes": 7062
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/main-api-server.log",
+      "sha256": "ea21c048c93562cb23426a5dd7b6a1b9b42916e9479100cabaebf01e2f68c00c",
+      "bytes": 9955
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/main-http-results.json",
+      "sha256": "9ec7127ced45c2a3540064b76b6b1a024d6bee8b8130282dbcddc152dfd9d6ce",
+      "bytes": 1382
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/main-resource-release.json",
+      "sha256": "39f449fcd9cd079d1bb73e791af2067202d58a7c613c81cb0c7762dd44e17042",
+      "bytes": 151
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/main-resource-start.json",
+      "sha256": "b0b6072a7eb226ac88c69d90d65b25265784aa9b5819d465a4e9d78194bbbca2",
+      "bytes": 485
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplement-api-server.log",
+      "sha256": "8a937aedb39aef2e635c786505042cd48c6293fbdb97c73a4d5d4a57eab07928",
+      "bytes": 26562
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplement-evidence-report.md",
+      "sha256": "616bc90db4a9e023e47d322ef7e40998745db678cc60231e29249a1f9b233aea",
+      "bytes": 2351
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplement-evidence-results.json",
+      "sha256": "74bb8c0be49cb56269ca3a97687056178bb257bcbe711467aeb3a93c056feb04",
+      "bytes": 1871
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplement-resource-release.json",
+      "sha256": "de88c5b7f803b0e649607bd5969ef0660c96a820d888777ac1791e3952028739",
+      "bytes": 157
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplement-resource-start.json",
+      "sha256": "8e2ab0433ff2378716e3819b3e18ef8c56517202329b112fe53ce1c23f923133",
+      "bytes": 312
+    },
+    {
+      "file": "artifacts/reports/error-audit-2026-10-29/deep/api-sql/supplemental_evidence.py",
+      "sha256": "37993e3f86d1eba189e157ccbcd317eca23e0af1658689c2f464d2fe0192fafb",
+      "bytes": 6685
+    },
+    {
+      "file": "artifacts/reports/db-sync-2026-10-29/runtime/main-cutover-report.md",
+      "sha256": "c79279fe52b31c0779ea55aa100657c0d20423c008e285d801740707a5b85f5b",
+      "bytes": 6826
+    },
+    {
+      "file": "artifacts/reports/db-sync-2026-10-29/runtime/main-cutover-result-03.json",
+      "sha256": "a708bc145b510e6f757a0d31de3ae3def30be4b48a3fbff415ab9b490f88fee8",
+      "bytes": 637
+    },
+    {
+      "file": "artifacts/reports/db-sync-2026-10-29/runtime/final-resource-release-verified.json",
+      "sha256": "61a0d21748792a50fd30b20349c8333bbb0d287c3a8e11307db0cbf0c2750865",
+      "bytes": 359
+    },
+    {
+      "file": "artifacts/reports/db-sync-2026-10-29/runtime/final-resource-release-listen-final.json",
+      "sha256": "6c58412e6150ecb035e4aefef8a008e44801911fa2ca510043406268ca42e27d",
+      "bytes": 1135
+    }
+  ]
+}

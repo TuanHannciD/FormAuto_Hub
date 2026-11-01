@@ -6,7 +6,7 @@ import type { ComponentType } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDollarSign, Clock3, CreditCard, RefreshCw } from "lucide-react";
 import { MetricCard } from "@/components/metric-card";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type AdminPayment, type AdminRevenueSummary } from "@/lib/api";
 import { showError } from "@/lib/toast";
@@ -18,7 +18,7 @@ const recentPaymentColumns: Array<BaseTableColumn<AdminPayment>> = [
     key: "user",
     header: "Người dùng",
     render: (item) => (
-      <span className="block max-w-[220px] truncate" title={displayPaymentUser(item)}>
+      <span className="block max-w-[220px] break-all">
         {displayPaymentUser(item)}
       </span>
     )
@@ -31,27 +31,32 @@ const recentPaymentColumns: Array<BaseTableColumn<AdminPayment>> = [
 
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<AdminRevenueSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")
-      .then(setSummary)
-      .catch((error: Error) => showError(error, "Không tải được tổng quan quản trị."));
-  }, []);
+  async function loadData() {
+    setLoading(true); setError(false);
+    try { setSummary(await apiFetch<AdminRevenueSummary>("/api/admin/revenue/summary")); }
+    catch (error) { setError(true); showError(error, "Không tải được tổng quan quản trị."); }
+    finally { setLoading(false); }
+  }
+  useEffect(() => { loadData(); }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Admin / Tổng quan"
         title="Tổng quan quản trị"
         description="Theo dõi doanh thu, credit và trạng thái thanh toán PayOS."
         actions={
-        <Button type="button" variant="secondary">
+        <Button disabled={loading} type="button" variant="secondary" onClick={loadData}>
           <RefreshCw size={16} />
           <span className="ml-2">Làm mới</span>
         </Button>
         }
       />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {error && <Alert>Không tải được tổng quan quản trị. Bấm “Làm mới” để thử lại.</Alert>}
+      <div aria-busy={loading} className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-3">
         <Metric icon={CircleDollarSign} label="Tổng doanh thu" tone="blue" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
         <Metric icon={CreditCard} label="Credit đã bán" tone="emerald" value={summary ? `${summary.creditSold} cr` : "-"} />
         <Metric icon={CreditCard} label="Credit đã dùng" tone="violet" value={summary ? `${summary.creditUsed} cr` : "-"} />
@@ -64,13 +69,13 @@ export default function AdminDashboardPage() {
         <Card className="min-w-0">
           <CardHeader className="flex flex-row items-center justify-between gap-3">
             <CardTitle>Thanh toán gần đây</CardTitle>
-            <Link className="inline-flex items-center gap-1 text-sm font-medium text-primary" href="/admin/payments">
+            <Link className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg text-sm font-medium text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:min-h-10" href="/admin/payments">
               Xem tất cả
               <ArrowUpRight size={15} />
             </Link>
           </CardHeader>
           <CardContent>
-            {!summary || summary.recentPayments.length === 0 ? (
+            {loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải thanh toán...</p> : error ? <p className="py-4 text-sm text-muted-foreground">Chưa tải được danh sách thanh toán.</p> : !summary || summary.recentPayments.length === 0 ? (
               <EmptyState title="Chưa có thanh toán" detail="Các giao dịch PayOS sẽ hiển thị sau khi người dùng tạo liên kết thanh toán." />
             ) : (
               <BaseTable
@@ -136,7 +141,7 @@ function Metric({
   value: string;
   tone: "blue" | "emerald" | "violet" | "amber" | "red";
 }) {
-  return <MetricCard title={label} value={value} icon={<Icon size={18} />} tone={({ blue: "info", emerald: "success", violet: "primary", amber: "warning", red: "danger" } as const)[tone]} />;
+  return <MetricCard className="min-w-0 [&_[aria-hidden]]:hidden sm:[&_[aria-hidden]]:grid" title={label} value={value} icon={<Icon size={18} />} tone={({ blue: "info", emerald: "success", violet: "primary", amber: "warning", red: "danger" } as const)[tone]} />;
 }
 
 function Detail({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "danger" }) {

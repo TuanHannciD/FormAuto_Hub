@@ -1,3 +1,4 @@
+using FormAutoHub.Api.Integrations.Google;
 using FormAutoHub.Api.Auth;
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Services.Nckh;
@@ -19,8 +20,16 @@ public sealed class ResearchDataController(
         Guid modelId,
         CancellationToken cancellationToken)
     {
-        var result = await researchDataService.CollectResponsesAsync(currentUser.UserId, modelId, cancellationToken);
-        return ToActionResult(result);
+        try
+        {
+            var result = await researchDataService.CollectResponsesAsync(currentUser.UserId, modelId, cancellationToken);
+            return ToActionResult(result);
+        }
+        catch (GoogleIntegrationException exception)
+        {
+            // The service has already durably recorded failure and rethrown its original cause.
+            return ToActionResult(ResearchFormService.ToGoogleFailureResult<NckhCollectResponsesResponse>(exception));
+        }
     }
 
     [HttpGet("responses")]

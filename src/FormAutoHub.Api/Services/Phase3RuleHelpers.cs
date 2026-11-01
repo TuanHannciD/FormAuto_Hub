@@ -44,6 +44,10 @@ internal static class Phase3RuleHelpers
     {
         using var document = JsonDocument.Parse(rule.ConfigJson);
         var root = document.RootElement;
+        if (root.ValueKind != JsonValueKind.Object)
+        {
+            throw new InvalidOperationException("Cấu hình quy tắc phải là một đối tượng JSON.");
+        }
 
         var values = rule.Mode switch
         {
@@ -53,17 +57,17 @@ internal static class Phase3RuleHelpers
             AnswerRuleModes.SampleTextLines => PickSample(root, responseIndex),
             AnswerRuleModes.DateRangeSequential => PickDateRange(root, question, responseIndex),
             AnswerRuleModes.TimeRangeSequential => PickTimeRange(root, question, responseIndex),
-            _ => throw new InvalidOperationException("Unsupported answer rule mode.")
+            _ => throw new InvalidOperationException("Chế độ tạo câu trả lời chưa được hỗ trợ.")
         };
 
         if (values.Count == 0 || values.Count > Phase4SafetyLimits.MaxGeneratedAnswerValues)
         {
-            throw new InvalidOperationException("Generated answer value count is outside the safe range.");
+            throw new InvalidOperationException("Số giá trị trả lời vượt giới hạn cho phép.");
         }
 
         if (values.Any(value => value.Length > Phase4SafetyLimits.MaxGeneratedAnswerValueLength))
         {
-            throw new InvalidOperationException("Generated answer value is too long.");
+            throw new InvalidOperationException("Nội dung trả lời vượt độ dài cho phép.");
         }
 
         return values;
@@ -96,7 +100,7 @@ internal static class Phase3RuleHelpers
 
         if (values.Count == 0)
         {
-            throw new InvalidOperationException("RandomEqually requires values or question options.");
+            throw new InvalidOperationException("Hãy nhập giá trị trả lời hoặc chọn câu hỏi có sẵn lựa chọn.");
         }
 
         EnsureValuesMatchOptions(values, question);
@@ -107,21 +111,21 @@ internal static class Phase3RuleHelpers
     {
         if (!root.TryGetProperty("weights", out var weights) || weights.ValueKind != JsonValueKind.Object)
         {
-            throw new InvalidOperationException("RandomByPercentage requires weights.");
+            throw new InvalidOperationException("Hãy nhập tỷ lệ cho các lựa chọn bằng một đối tượng JSON.");
         }
 
         var entries = new List<(string Value, int Weight)>();
         var totalWeight = 0;
         foreach (var property in weights.EnumerateObject())
         {
-            if (!property.Value.TryGetInt32(out var weight))
+            if (property.Value.ValueKind != JsonValueKind.Number || !property.Value.TryGetInt32(out var weight))
             {
-                throw new InvalidOperationException("Weights must be integers.");
+                throw new InvalidOperationException("Tỷ lệ của mỗi lựa chọn phải là số nguyên.");
             }
 
             if (weight < 0)
             {
-                throw new InvalidOperationException("Weights must not be negative.");
+                throw new InvalidOperationException("Tỷ lệ của lựa chọn không được âm.");
             }
 
             if (weight > 0)
@@ -133,12 +137,12 @@ internal static class Phase3RuleHelpers
 
         if (totalWeight == 0)
         {
-            throw new InvalidOperationException("RandomByPercentage requires at least one positive weight.");
+            throw new InvalidOperationException("Cần ít nhất một lựa chọn có tỷ lệ lớn hơn 0.");
         }
 
         if (totalWeight > PercentageTotal)
         {
-            throw new InvalidOperationException("RandomByPercentage total weight must not exceed 100.");
+            throw new InvalidOperationException("Tổng tỷ lệ của các lựa chọn không được vượt quá 100.");
         }
 
         var expanded = ExpandWeightedValues(entries, PercentageTotal);
@@ -150,20 +154,20 @@ internal static class Phase3RuleHelpers
     {
         if (!root.TryGetProperty("quantities", out var quantities) || quantities.ValueKind != JsonValueKind.Object)
         {
-            throw new InvalidOperationException("RandomByQuantity requires quantities.");
+            throw new InvalidOperationException("Hãy nhập số lượng cho các lựa chọn bằng một đối tượng JSON.");
         }
 
         var expanded = new List<string>();
         foreach (var property in quantities.EnumerateObject())
         {
-            if (!property.Value.TryGetInt32(out var quantity))
+            if (property.Value.ValueKind != JsonValueKind.Number || !property.Value.TryGetInt32(out var quantity))
             {
-                throw new InvalidOperationException("Quantities must be integers.");
+                throw new InvalidOperationException("Số lượng của mỗi lựa chọn phải là số nguyên.");
             }
 
             if (quantity < 0)
             {
-                throw new InvalidOperationException("Quantities must not be negative.");
+                throw new InvalidOperationException("Số lượng của lựa chọn không được âm.");
             }
 
             AddRepeatedValue(expanded, property.Name, quantity);
@@ -171,7 +175,7 @@ internal static class Phase3RuleHelpers
 
         if (expanded.Count == 0)
         {
-            throw new InvalidOperationException("RandomByQuantity requires at least one positive quantity.");
+            throw new InvalidOperationException("Cần ít nhất một lựa chọn có số lượng lớn hơn 0.");
         }
 
         EnsureValuesMatchOptions(expanded.Distinct().ToList(), question);
@@ -183,12 +187,12 @@ internal static class Phase3RuleHelpers
         var samples = ReadStringArray(root, "samples");
         if (samples.Count == 0)
         {
-            throw new InvalidOperationException("SampleTextLines requires samples.");
+            throw new InvalidOperationException("Hãy nhập ít nhất một dòng câu trả lời mẫu.");
         }
 
         if (samples.Count > Phase4SafetyLimits.MaxSampleTextLines)
         {
-            throw new InvalidOperationException("SampleTextLines exceeds the safe sample limit.");
+            throw new InvalidOperationException("Số dòng câu trả lời mẫu vượt giới hạn cho phép.");
         }
 
         return new[] { samples[responseIndex % samples.Count] };
@@ -198,20 +202,20 @@ internal static class Phase3RuleHelpers
     {
         if (question.QuestionType != FormQuestionTypes.Date)
         {
-            throw new InvalidOperationException("DateRangeSequential requires a date question.");
+            throw new InvalidOperationException("Chế độ khoảng ngày chỉ áp dụng cho câu hỏi ngày.");
         }
 
         var fromDate = ReadRequiredDate(root, "fromDate");
         var toDate = ReadRequiredDate(root, "toDate");
         if (fromDate > toDate)
         {
-            throw new InvalidOperationException("Date range start must be before or equal to the end date.");
+            throw new InvalidOperationException("Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.");
         }
 
         var days = toDate.DayNumber - fromDate.DayNumber + 1;
         if (days <= 0)
         {
-            throw new InvalidOperationException("Date range requires at least one date.");
+            throw new InvalidOperationException("Khoảng ngày cần có ít nhất một ngày.");
         }
 
         return new[] { fromDate.AddDays(responseIndex % days).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) };
@@ -221,28 +225,29 @@ internal static class Phase3RuleHelpers
     {
         if (question.QuestionType != FormQuestionTypes.Time)
         {
-            throw new InvalidOperationException("TimeRangeSequential requires a time question.");
+            throw new InvalidOperationException("Chế độ khoảng giờ chỉ áp dụng cho câu hỏi giờ.");
         }
 
         var fromTime = ReadRequiredTime(root, "fromTime");
         var toTime = ReadRequiredTime(root, "toTime");
         if (fromTime > toTime)
         {
-            throw new InvalidOperationException("Time range start must be before or equal to the end time.");
+            throw new InvalidOperationException("Giờ bắt đầu phải trước hoặc bằng giờ kết thúc.");
         }
 
         if (!root.TryGetProperty("stepMinutes", out var stepElement) ||
+            stepElement.ValueKind != JsonValueKind.Number ||
             !stepElement.TryGetInt32(out var stepMinutes) ||
             stepMinutes is < 5 or > 120)
         {
-            throw new InvalidOperationException("Time range step must be between 5 and 120 minutes.");
+            throw new InvalidOperationException("Bước thời gian phải từ 5 đến 120 phút.");
         }
 
         var totalMinutes = (int)(toTime - fromTime).TotalMinutes;
         var slotCount = (totalMinutes / stepMinutes) + 1;
         if (slotCount <= 0)
         {
-            throw new InvalidOperationException("Time range requires at least one time slot.");
+            throw new InvalidOperationException("Khoảng giờ cần có ít nhất một mốc giờ.");
         }
 
         return new[] { fromTime.AddMinutes((responseIndex % slotCount) * stepMinutes).ToString("HH:mm", CultureInfo.InvariantCulture) };
@@ -269,7 +274,7 @@ internal static class Phase3RuleHelpers
             element.ValueKind != JsonValueKind.String ||
             !DateOnly.TryParseExact(element.GetString(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
-            throw new InvalidOperationException("Date range values must use yyyy-MM-dd format.");
+            throw new InvalidOperationException("Ngày bắt đầu và kết thúc phải đúng định dạng yyyy-MM-dd.");
         }
 
         return date;
@@ -281,7 +286,7 @@ internal static class Phase3RuleHelpers
             element.ValueKind != JsonValueKind.String ||
             !TimeOnly.TryParseExact(element.GetString(), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var time))
         {
-            throw new InvalidOperationException("Time range values must use HH:mm format.");
+            throw new InvalidOperationException("Giờ bắt đầu và kết thúc phải đúng định dạng HH:mm.");
         }
 
         return time;
@@ -291,7 +296,7 @@ internal static class Phase3RuleHelpers
     {
         if (values.Count + count > Phase4SafetyLimits.MaxGeneratedAnswerValues)
         {
-            throw new InvalidOperationException("Configured answer value count is outside the safe range.");
+            throw new InvalidOperationException("Số giá trị trả lời đã cấu hình vượt giới hạn cho phép.");
         }
 
         values.AddRange(Enumerable.Repeat(value, count));
@@ -307,7 +312,7 @@ internal static class Phase3RuleHelpers
 
         if (expanded.Count == 0)
         {
-            throw new InvalidOperationException("RandomByPercentage requires at least one positive weight.");
+            throw new InvalidOperationException("Cần ít nhất một lựa chọn có tỷ lệ lớn hơn 0.");
         }
 
         return expanded;
@@ -327,29 +332,29 @@ internal static class Phase3RuleHelpers
         var distinctValues = sourceValues.Distinct(StringComparer.Ordinal).ToList();
         if (distinctValues.Count == 0)
         {
-            throw new InvalidOperationException("Checkbox requires at least one configured value.");
+            throw new InvalidOperationException("Câu hỏi chọn nhiều cần ít nhất một lựa chọn.");
         }
 
         var minSelections = ReadOptionalSelectionCount(root, "minSelections", 1);
         var maxSelections = ReadOptionalSelectionCount(root, "maxSelections", 1);
         if (minSelections < 1)
         {
-            throw new InvalidOperationException("Checkbox minSelections must be at least 1.");
+            throw new InvalidOperationException("Số lựa chọn tối thiểu phải từ 1 trở lên.");
         }
 
         if (maxSelections < minSelections)
         {
-            throw new InvalidOperationException("Checkbox maxSelections must be greater than or equal to minSelections.");
+            throw new InvalidOperationException("Số lựa chọn tối đa phải lớn hơn hoặc bằng số lựa chọn tối thiểu.");
         }
 
         if (maxSelections > distinctValues.Count)
         {
-            throw new InvalidOperationException("Checkbox maxSelections must not exceed the configured option count.");
+            throw new InvalidOperationException("Số lựa chọn tối đa không được vượt số lựa chọn đã cấu hình.");
         }
 
         if (maxSelections > Phase4SafetyLimits.MaxGeneratedAnswerValues)
         {
-            throw new InvalidOperationException("Checkbox maxSelections exceeds the generated answer value limit.");
+            throw new InvalidOperationException("Số lựa chọn tối đa vượt giới hạn giá trị trả lời.");
         }
 
         var selectionCount = minSelections == maxSelections
@@ -381,9 +386,9 @@ internal static class Phase3RuleHelpers
             return fallback;
         }
 
-        if (!element.TryGetInt32(out var value))
+        if (element.ValueKind != JsonValueKind.Number || !element.TryGetInt32(out var value))
         {
-            throw new InvalidOperationException("Checkbox selection counts must be integers.");
+            throw new InvalidOperationException("Số lựa chọn tối thiểu và tối đa phải là số nguyên.");
         }
 
         return value;
@@ -399,7 +404,7 @@ internal static class Phase3RuleHelpers
 
         if (values.Any(value => !options.Contains(value, StringComparer.Ordinal)))
         {
-            throw new InvalidOperationException("Configured values must match question options.");
+            throw new InvalidOperationException("Giá trị trả lời phải khớp với các lựa chọn của câu hỏi.");
         }
     }
 }

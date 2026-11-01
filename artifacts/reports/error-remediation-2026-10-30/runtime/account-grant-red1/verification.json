@@ -1,0 +1,12 @@
+{
+  "exit": 1,
+  "counts": {
+    "executed": 1,
+    "failed": 1,
+    "passed": 0,
+    "skipped": 0
+  },
+  "assertionFailure": "Confirmed creditTransactionId expected confirmed-credit-001 actual undefined",
+  "hashDrift": [],
+  "limit": "Filtered supplemental test1 only; does not run other21 cases; NodeVM handler/fakeAPI"
+}
