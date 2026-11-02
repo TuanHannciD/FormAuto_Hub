@@ -1,6 +1,6 @@
 # FAH-DIRECT-001 — Closeout cục bộ
 
-Ngày: 2026-11-02. Trạng thái: **Done local** trong scope được duyệt sau review độc lập cho lần sửa copy cuối; chưa commit, tích hợp, deploy hoặc phát hành.
+Ngày: 2026-11-02. Trạng thái: **Đã đóng local** sau review độc lập, commit/tích hợp local tại `5568ca0` và cleanup task được duyệt; chưa push, deploy hoặc phát hành.
 
 ## Tóm tắt
 
@@ -32,7 +32,7 @@ Authorization, giới hạn 1..100, batch tuần tự 10, dedicated credit servi
 
 ## Validation chưa thực hiện
 
-- Not run: gửi Google live, AI generation live/trả phí, production/current DB, deployment, production smoke, commit, push, integration hoặc release.
+- Not run: gửi Google live, AI generation live/trả phí, production/current DB, deployment, production smoke, push hoặc release. Commit/tích hợp local và cleanup đã được hoàn tất riêng sau validation đã ghi nhận.
 - Xác nhận sau AI preview được cover bằng frozen Playwright suite, không phải runtime call provider live/trả phí.
 - Closeout này không tuyên bố đã chạy lại broad full-repository suite sau mọi cập nhật tài liệu/runtime cuối.
 - Reviewer copy-fix không chạy lại suite của author hoặc check backend/API/SQL; hash backend không đổi và bằng chứng đã review độc lập/kiểm chứng runtime trước đó được tái sử dụng cho delta chỉ sửa copy frontend.
@@ -46,4 +46,4 @@ Authorization, giới hạn 1..100, batch tuần tự 10, dedicated credit servi
 
 ## Bước tiếp theo đề xuất
 
-Task đủ điều kiện đóng cục bộ trên snapshot đã freeze. Người dùng quyết định có commit và tích hợp hay không. Mọi push, deployment, production validation, cleanup evidence, xóa database hoặc release cần quyền và evidence riêng. Staging chọn lọc phải kiểm kê artifact untracked và secret-check `src/FormAutoHub.Api/artifacts/`; không tự động stage toàn bộ dirty tree.
+Task đã đóng local. Feature đã review được commit/tích hợp trên `main` local và cleanup được duyệt được ghi trong [CLEANUP](CLEANUP.md), gồm archive ngoài repo đã lọc và giải phóng tài nguyên sở hữu. Người dùng sẽ tự push hoặc deploy; production validation và release vẫn là Not run.

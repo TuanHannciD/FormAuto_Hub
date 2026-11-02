@@ -1,6 +1,6 @@
 # FAH-DIRECT-001 — Local closeout
 
-Date: 2026-11-02. Status: **Done locally** within approved scope after independent review of the final copy correction; not committed, integrated, deployed, or released.
+Date: 2026-11-02. Status: **Closed locally** after independent review, local commit/integration at `5568ca0`, and authorized task cleanup; not pushed, deployed, or released.
 
 ## Summary
 
@@ -32,7 +32,7 @@ Authorization, 1..100 limits, sequential batches of 10, dedicated credit service
 
 ## Validation not performed
 
-- Not run: live Google submission, live/paid AI generation, production/current DB, deployment, production smoke, commit, push, integration, or release.
+- Not run: live Google submission, live/paid AI generation, production/current DB, deployment, production smoke, push, or release. Local commit/integration and cleanup were completed separately after the recorded validation.
 - AI confirmation after preview is covered by the frozen Playwright suite, not a paid/live provider runtime call.
 - This closeout does not claim a fresh broad full-repository suite after every final documentation/runtime update.
 - The copy-fix reviewer did not rerun author suites or backend/API/SQL checks; backend hashes remain unchanged and the prior independently reviewed/runtime-verified evidence is reused for this frontend-copy-only delta.
@@ -46,4 +46,4 @@ Authorization, 1..100 limits, sequential batches of 10, dedicated credit service
 
 ## Next recommended step
 
-The task is eligible for local closure on the frozen snapshot. The user decides whether to commit and integrate it. Any push, deployment, production validation, evidence cleanup, database deletion, or release requires its own authorization and recorded evidence. Selective staging must inventory untracked artifacts and secret-check `src/FormAutoHub.Api/artifacts/`; do not automatically stage the whole dirty tree.
+The task is closed locally. The reviewed feature is committed/integrated on local `main`, and the authorized cleanup is recorded in [CLEANUP](CLEANUP.md), including the external sanitized archive and release of owned resources. The user will perform any push or deployment; production validation and release remain Not run.
