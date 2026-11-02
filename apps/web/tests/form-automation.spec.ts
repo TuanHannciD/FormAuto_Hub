@@ -14,100 +14,71 @@ const preview = (id: string) => ({
   answers: [{ questionId: "q1", entryId: "entry.1", label: "Bạn có hài lòng?", questionType: "MultipleChoice", values: ["Có"] }]
 });
 
-async function setup(page: Page, partial = false) {
+async function setup(page: Page) {
   await page.addInitScript(() => localStorage.setItem("formauto.auth.session", JSON.stringify({
     userId: "automation-user", email: "fixture@example.invalid", fullName: "UI Fixture", role: "User",
     accessToken: "fixture", refreshToken: "fixture",
     accessTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(),
     refreshTokenExpiresAt: new Date(Date.now() + 86400000).toISOString()
   })));
-  let generationCalls = 0;
-  let sentIds: string[] = [];
-  let restoredIds: string[] = [];
+  let directCount = 0;
   let failAnalysis = false;
-  let releaseSend: (() => void) | undefined;
   await page.route("**/api/**", async route => {
     const request = route.request();
     const url = new URL(request.url());
     const path = url.pathname;
     if (path === "/api/forms/analyze") {
       await route.fulfill(failAnalysis ? { status: 400, json: { message: "Không phân tích được form" } } : { json: analysis });
-    } else if (path.endsWith("/responses/generate")) {
-      const count = request.postDataJSON().count;
-      generationCalls++;
-      const generatedCount = partial && generationCalls === 1 ? 6 : count;
-      const items = Array.from({ length: generatedCount }, (_, i) => preview(`${generationCalls}-${i}`));
-      await route.fulfill({ json: { items, requestedCount: count, generatedCount, creditsUsed: generatedCount, missingCredits: count - generatedCount, balanceAfter: 20 } });
+    } else if (path.endsWith("/submissions/send-rules-direct")) {
+      directCount = request.postDataJSON().count;
+      await route.fulfill({ json: { id: "direct-job", projectId, status: "Completed", total: directCount, successCount: directCount, failedCount: 0, createdAt: analysis.createdAt, logs: [] } });
     } else if (path.endsWith("/responses")) {
-      restoredIds = url.searchParams.getAll("ids");
-      await route.fulfill({ json: { items: restoredIds.map(preview) } });
+      const ids = url.searchParams.getAll("ids");
+      await route.fulfill({ json: { items: ids.map(preview) } });
     } else if (path.endsWith("/submissions/send")) {
       const payload = request.postDataJSON();
       expect(payload.confirmed).toBe(true);
-      sentIds = payload.responseIds;
-      await new Promise<void>(resolve => { releaseSend = resolve; });
-      await route.fulfill({ json: { id: "job", projectId, status: "Completed", total: sentIds.length, successCount: sentIds.length, failedCount: 0, createdAt: analysis.createdAt, logs: [] } });
+      await route.fulfill({ json: { id: "job", projectId, status: "Completed", total: payload.responseIds.length, successCount: payload.responseIds.length, failedCount: 0, createdAt: analysis.createdAt, logs: [] } });
     } else {
       await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20 } : {} });
     }
   });
   await page.goto("/dashboard/forms");
-  return { sentIds: () => sentIds, restoredIds: () => restoredIds, failAnalysis: () => { failAnalysis = true; }, releaseSend: () => releaseSend?.() };
+  return { directCount: () => directCount, failAnalysis: () => { failAnalysis = true; } };
 }
 
-async function analyzeAndGenerate(page: Page, count = 1) {
+async function analyzeAndSend(page: Page, count = 1) {
   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
   await expect(page.getByRole("button", { name: "Có", exact: true })).toBeVisible();
   await page.locator('input[type="number"]').fill(String(count));
-  await page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true }).click();
-  await expect(page.getByRole("checkbox")).toBeEnabled();
+  await page.getByRole("button", { name: "Tạo và gửi ngay", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Kết quả gửi", exact: true })).toBeVisible();
 }
 
-test("configuration edits invalidate confirmation and block sending old previews", async ({ page }) => {
+test("rules sends the currently displayed configuration without a preview confirmation step", async ({ page }) => {
   const api = await setup(page);
-  await analyzeAndGenerate(page);
-  await page.getByRole("checkbox").check();
-  await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeEnabled();
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
   await page.getByRole("button", { name: "Không", exact: true }).click();
-  await expect(page.getByRole("alert").filter({ hasText: "Cấu hình đã thay đổi" })).toBeVisible();
-  await expect(page.getByRole("checkbox")).not.toBeChecked();
-  await expect(page.getByRole("checkbox")).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();
-  expect(api.sentIds()).toEqual([]);
-});
-
-test("reload restores paid previews, then continuation sends all original and new IDs", async ({ page }) => {
-  const api = await setup(page, true);
-  await analyzeAndGenerate(page, 10);
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 6/10" })).toBeVisible();
-  await page.reload();
-  await expect(page.getByRole("checkbox")).toBeEnabled();
-  expect(api.restoredIds()).toEqual(Array.from({ length: 6 }, (_, i) => `1-${i}`));
-  await page.getByRole("button", { name: "Tiếp tục tạo phần còn thiếu", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 10/10" })).toContainText("Đã trừ 10 credit");
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Xác nhận gửi 10 lượt", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đang gửi các preview" })).toBeVisible();
-  await expect(page.getByLabel("Link Google Form")).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Tạm dừng", exact: true })).toHaveCount(0);
-  expect(api.sentIds()).toEqual([...Array.from({ length: 6 }, (_, i) => `1-${i}`), ...Array.from({ length: 4 }, (_, i) => `2-${i}`)]);
-  api.releaseSend();
-  await expect(page.getByRole("heading", { name: "5. Kết quả gửi", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Lượt gửi đã kết thúc", exact: true })).toBeDisabled();
-  expect(await page.evaluate(() => localStorage.getItem("formauto.formPreviewResume"))).toBeNull();
+  await page.locator('input[type="number"]').fill("2");
+  await page.getByRole("button", { name: "Tạo và gửi ngay", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Kết quả gửi", exact: true })).toBeVisible();
+  expect(api.directCount()).toBe(2);
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
 });
 
 test("changing form URL clears previous analysis even when the next analysis fails", async ({ page }) => {
   const api = await setup(page);
-  await analyzeAndGenerate(page);
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
   api.failAnalysis();
   await page.getByLabel("Link Google Form").fill("https://docs.google.com/forms/d/e/invalid/viewform");
   await expect(page.getByRole("button", { name: "Có", exact: true })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
   await expect(page.locator("[data-sonner-toast]").filter({ hasText: "Thông tin chưa hợp lệ. Vui lòng kiểm tra lại." })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Tạo và gửi ngay", exact: true })).toHaveCount(0);
 });
 
 test("AI partial results without credit shortage report actual previews and cost", async ({ page }) => {
@@ -134,10 +105,10 @@ test("desktop and mobile workflow render without overflow or drawer overlap", as
   page.on("response", response => { if (response.url().includes("/_next/") && response.status() >= 400) errors.push(response.url()); });
   await setup(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await analyzeAndGenerate(page);
+  await analyzeAndSend(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: `${process.env.TEMP ?? "/tmp"}/formauto-automation-desktop.png`, fullPage: true });
-  await expect(page.getByRole("navigation", { name: "Các bước tự động hóa" }).locator('[aria-current="step"]')).toHaveText("3Preview");
+  await expect(page.getByRole("navigation", { name: "Các bước tự động hóa" }).locator('[aria-current="step"]')).toHaveText("5Kết quả");
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 844 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -166,7 +137,7 @@ test("sticky generation actions remain clickable above expanded question editors
   } }));
   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
-  const action = page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true });
+  const action = page.getByRole("button", { name: "Tạo và gửi ngay", exact: true });
   await expect(action).toBeEnabled();
   for (const top of [300, 600, 900]) {
     await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), top);

@@ -19,6 +19,10 @@ async function setup(page: Page, questions = [question]) {
     if (path === "/api/forms/analyze") await route.fulfill({ json: { ...analysis, questions } });
     else if (path.endsWith("/ai-prompt-profile") && request.method() === "GET") await route.fulfill({ json: profile() });
     else if (path.endsWith("/ai-responses/generate")) await route.fulfill({ json: aiResult });
+    else if (path.endsWith("/submissions/send-rules-direct")) {
+      const count = request.postDataJSON().count;
+      await route.fulfill({ json: { id: "direct-default", projectId, status: "Completed", total: count, successCount: count, failedCount: 0, createdAt: stamp, logs: [] } });
+    }
     else if (path.endsWith("/responses/generate")) await route.fulfill({ json: { items: [preview("rule-preview")], requestedCount: 1, generatedCount: 1, creditsUsed: 1, missingCredits: 0, balanceAfter: 19 } });
     else if (path.endsWith("/responses")) await route.fulfill({ json: { items: new URL(request.url()).searchParams.getAll("ids").map(preview) } });
     else await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20 } : {} });
@@ -172,7 +176,7 @@ test("ERR011 AI usage exposes safe reason and existing run ID without raw histor
 
 test("ERR023 submission details retain IDs and uncertainty without inviting resend", async ({ page }) => {
   await setup(page);
-  await page.route("**/submissions/send", route => route.fulfill({ json: {
+  await page.route("**/submissions/send-rules-direct", route => route.fulfill({ json: {
     id: "job-uncertain-23", projectId, status: "Failed", total: 3, successCount: 1, failedCount: 2, createdAt: stamp,
     logs: [
       { id: "attempt-success", responseId: "response-success", status: "Success", errorMessage: "", submittedAt: stamp },
@@ -180,9 +184,7 @@ test("ERR023 submission details retain IDs and uncertainty without inviting rese
       { id: "attempt-legacy", responseId: "response-legacy", status: "Failed", errorMessage: "sk-secret-legacy" + "raw".repeat(300), submittedAt: stamp }
     ]
   } }));
-  await page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true }).click();
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true }).click();
+  await page.getByRole("button", { name: "Tạo và gửi ngay", exact: true }).click();
   await page.getByRole("button", { name: /Chi tiết các lượt gửi/ }).click();
   for (const id of ["job-uncertain-23", "attempt-success", "response-success", "attempt-uncertain", "response-uncertain", "attempt-legacy", "response-legacy"]) await expect(page.getByText(id, { exact: false })).toBeVisible();
   await expect(page.getByText(/Kết quả gửi chưa xác định/).first()).toBeVisible();
@@ -199,12 +201,9 @@ test("ERR023 ordinary and missing historical causes keep IDs and safe mixed coun
     { id: "ordinary-missing", responseId: "ordinary-preview-2", status: "Failed", errorMessage: null },
     { id: "ordinary-unknown", responseId: "ordinary-preview-3", status: "Failed", errorMessage: "sk-private-marker <html>" + "sensitive@example.invalid".repeat(100) }
   ];
-  await page.route("**/responses/generate", route => route.fulfill({ json: { items: logs.map(log => preview(log.responseId)), requestedCount: 4, generatedCount: 4, creditsUsed: 4, missingCredits: 0, balanceAfter: 16 } }));
-  await page.route("**/submissions/send", route => route.fulfill({ json: { id: "job-ordinary-23", projectId, status: "Failed", total: 4, successCount: 1, failedCount: 3, createdAt: stamp, logs: logs.map(log => ({ ...log, submittedAt: stamp })) } }));
+  await page.route("**/submissions/send-rules-direct", route => route.fulfill({ json: { id: "job-ordinary-23", projectId, status: "Failed", total: 4, successCount: 1, failedCount: 3, createdAt: stamp, logs: logs.map(log => ({ ...log, submittedAt: stamp })) } }));
   await page.locator('input[type="number"]').fill("4");
-  await page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true }).click();
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Xác nhận gửi 4 lượt", exact: true }).click();
+  await page.getByRole("button", { name: "Tạo và gửi ngay", exact: true }).click();
   const results = page.locator("#workflow-step-5");
   await expect(results).toContainText("Mã lượt gửi: job-ordinary-23");
   await expect(results).toContainText("Tổng: 4");
@@ -222,7 +221,7 @@ test("ERR023 ordinary and missing historical causes keep IDs and safe mixed coun
   await expect(results).not.toContainText("Kết quả gửi chưa xác định");
   await expect(page.locator("body")).not.toContainText("sk-private-marker");
   await expect(page.locator("body")).not.toContainText("sensitive@example.invalid");
-  await expect(results.getByRole("button", { name: "Thực hiện lại", exact: true })).toBeVisible();
+  await expect(results.getByRole("button", { name: "Thực hiện lại", exact: true })).toHaveCount(0);
 });
 
 for (const type of ["Date", "Time"]) {
@@ -232,7 +231,7 @@ for (const type of ["Date", "Time"]) {
     await page.getByRole("option", { name: type === "Date" ? "Khoảng ngày tuần tự" : "Khoảng giờ tuần tự", exact: true }).click();
     const from = page.getByLabel(type === "Date" ? "Từ ngày" : "Từ giờ", { exact: true });
     const to = page.getByLabel(type === "Date" ? "Đến ngày" : "Đến giờ", { exact: true });
-    const create = page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true });
+    const create = page.getByRole("button", { name: "Tạo và gửi ngay", exact: true });
     await from.fill("");
     await expect(from).toHaveValue("");
     await expect(create).toBeDisabled();
@@ -246,6 +245,7 @@ for (const type of ["Date", "Time"]) {
     await to.fill(type === "Date" ? "2026-10-31" : "12:00");
     await expect(create).toBeEnabled();
     await create.click();
+    await expect(page.getByRole("heading", { name: "Kết quả gửi", exact: true })).toBeVisible();
     const rule = calls.find(c => c.path.endsWith("/answer-rules"))!.json as { configJson: string };
     expect(JSON.parse(rule.configJson)).toEqual(type === "Date" ? { fromDate: "2026-10-01", toDate: "2026-10-31" } : { fromTime: "09:00", toTime: "12:00", stepMinutes: 60 });
   });
@@ -256,7 +256,7 @@ test("ERR024 time step follows existing integer 5–120 bounds and mode defaults
   await page.getByRole("button", { name: "Chế độ trả lời", exact: true }).click();
   await page.getByRole("option", { name: "Khoảng giờ tuần tự", exact: true }).click();
   const step = page.getByLabel("Bước phút", { exact: true });
-  const create = page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true });
+  const create = page.getByRole("button", { name: "Tạo và gửi ngay", exact: true });
   for (const value of ["", "4", "121", "5.5"]) {
     await step.fill(value);
     await expect(create).toBeDisabled();
@@ -274,6 +274,7 @@ test("ERR024 time step follows existing integer 5–120 bounds and mode defaults
   await expect(page.getByLabel("Từ giờ", { exact: true })).toHaveValue("09:00");
   await expect(page.getByLabel("Đến giờ", { exact: true })).toHaveValue("17:00");
   await create.click();
+  await expect(page.getByRole("heading", { name: "Kết quả gửi", exact: true })).toBeVisible();
   const rule = calls.find(call => call.path.endsWith("/answer-rules"))!.json as { configJson: string };
   expect(JSON.parse(rule.configJson)).toEqual({ fromTime: "09:00", toTime: "17:00", stepMinutes: 60 });
 });

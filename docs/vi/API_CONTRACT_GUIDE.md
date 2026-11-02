@@ -647,14 +647,24 @@ Deferred:
 ### Submissions
 
 - `POST /api/projects/{projectId}/submissions/send`
+- `POST /api/projects/{projectId}/submissions/send-rules-direct`
 - `GET /api/projects/{projectId}/submissions/jobs/{jobId}`
 - `POST /api/projects/{projectId}/submissions/jobs/{jobId}/pause`
 - `POST /api/projects/{projectId}/submissions/jobs/{jobId}/cancel`
 
+Contract gửi trực tiếp bằng quy tắc đã duyệt:
+
+- Request: `DirectRuleSubmissionRequest(Guid CommandId, int Count)`, trong đó `CommandId` không được rỗng và `Count` thuộc 1..100.
+- Response: dùng `SubmissionJobResponse` hiện có; `Total` là số lượng thực tế có thể tạo theo credit, không nhất thiết bằng số đã yêu cầu. Tạo bằng quy tắc dùng hệ số credit x1 và không thêm schema, field, status hoặc wrapper.
+- Option 1 chỉ có một thao tác **Tạo và gửi ngay**, không có UI preview, checkbox hoặc lần xác nhận thứ hai. Option 2/3 vẫn giữ human preview và xác nhận rõ qua route gửi chung.
+- `CommandId` trở thành ID của job được chấp nhận. Lần gọi được chấp nhận đầu tiên thắng; replay đã qua kiểm tra owner chỉ đọc và trả job/log hiện có dù `Count` khác, không tạo, trừ credit, gửi, resume hoặc takeover.
+- Admission sai command/count, quy tắc, credit hoặc xung đột active job trả lỗi 4xx và ghi audit usage Failed, zero-credit phù hợp cho owner đã xác thực. Sai owner/project không bị lộ hoặc ghi audit. Replay không tạo debit, lượt gửi hoặc usage mới.
+- Hard crash có thể để lại active job theo fail-closed và cần đối soát thủ công. Kết quả provider không xác định không bao giờ được tự động gửi lại; contract này không hứa exactly-once delivery hoặc tự động resume.
+
 Quy tắc an toàn cho submission:
 
-- Preview generation nhận 1 đến 100 responses mỗi action.
-- Submission nhận tối đa 100 confirmed preview response IDs cho mỗi job.
+- Response generation nhận 1 đến 100 responses mỗi action.
+- Route submission chung nhận tối đa 100 confirmed preview response IDs cho mỗi job; route trực tiếp Option 1 nhận `Count` 1..100 mà không dùng preview ID.
 - Submission phải xử lý tuần tự theo batch 10, không delay nhân tạo và không gửi song song kiểu burst.
 - Mỗi project chỉ có một submission job đang active tại một thời điểm.
 - Pause/cancel chỉ dừng ở batch boundary; response send đang chạy không bị force-kill.

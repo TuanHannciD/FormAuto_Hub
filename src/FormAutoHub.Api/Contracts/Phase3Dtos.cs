@@ -69,6 +69,8 @@ public sealed record SendSubmissionRequest(
     IReadOnlyList<Guid> ResponseIds,
     bool Confirmed);
 
+public sealed record DirectRuleSubmissionRequest(Guid CommandId, int Count);
+
 public sealed record SubmissionLogResponse(
     Guid Id,
     Guid ResponseId,

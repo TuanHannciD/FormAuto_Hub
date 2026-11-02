@@ -3,7 +3,7 @@ import { ClipboardList, Coins } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import type { GenerationMode } from "../_types";
 
-export function WorkflowSummary({ title, questionCount, mode, requestedCount, previewCount, multiplier, balance, creditsUsed, stale }: {
+export function WorkflowSummary({ title, questionCount, mode, requestedCount, previewCount, multiplier, balance, creditsUsed, directSuccessCount, directFailedCount, stale }: {
   title?: string;
   questionCount: number;
   mode: GenerationMode;
@@ -12,6 +12,8 @@ export function WorkflowSummary({ title, questionCount, mode, requestedCount, pr
   multiplier: number;
   balance: number | null;
   creditsUsed?: number;
+  directSuccessCount?: number;
+  directFailedCount?: number;
   stale: boolean;
 }) {
   return (
@@ -24,8 +26,9 @@ export function WorkflowSummary({ title, questionCount, mode, requestedCount, pr
             {[
               ["Cách tạo", mode === "rules" ? "Quy tắc" : mode === "ai-default" ? "AI mặc định" : "AI tùy chỉnh"],
               ["Số lượt yêu cầu", requestedCount],
-              ["Preview hiện có", previewCount],
-              ["Credit mỗi preview", multiplier],
+              [mode === "rules" ? "Đã tạo/nhận xử lý" : "Preview hiện có", previewCount],
+              ...(mode === "rules" ? [["Gửi thành công", directSuccessCount ?? "—"], ["Gửi thất bại", directFailedCount ?? "—"]] : []),
+              [mode === "rules" ? "Credit mỗi lượt" : "Credit mỗi preview", multiplier],
               ["Chi phí dự kiến", `${requestedCount * multiplier} credit`],
               ["Đã sử dụng", creditsUsed === undefined ? "—" : `${creditsUsed} credit`]
             ].map(([label, value]) => <div key={label} className="flex justify-between gap-3"><dt className="text-muted-foreground">{label}</dt><dd className="min-w-0 break-words text-right font-semibold tabular-nums">{value}</dd></div>)}
@@ -35,7 +38,7 @@ export function WorkflowSummary({ title, questionCount, mode, requestedCount, pr
             <Link href="/dashboard/top-up" className="mt-1 inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline sm:min-h-8">Nạp credit →</Link>
           </div>
           {stale && <p className="rounded-xl bg-warning-surface p-3 text-xs leading-5 text-warning">Preview thuộc cấu hình trước. Cần tạo lại trước khi gửi.</p>}
-          <p className="text-xs leading-5 text-muted-foreground">Một preview là một bộ câu trả lời cho toàn bộ biểu mẫu. Credit được trừ khi preview hợp lệ được tạo và lưu thành công. Phân tích biểu mẫu và điền prompt không trừ credit.</p>
+          <p className="text-xs leading-5 text-muted-foreground">{mode === "rules" ? "Quy tắc tạo và gửi ngay, không có bước preview hay xác nhận thứ hai. Chỉ số thực tế được gửi mới xuất hiện trong kết quả." : "Một preview là một bộ câu trả lời cho toàn bộ biểu mẫu. Credit được trừ khi preview hợp lệ được tạo và lưu thành công. Phân tích biểu mẫu và điền prompt không trừ credit."}</p>
         </CardContent>
       </Card>
     </aside>

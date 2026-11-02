@@ -662,14 +662,24 @@ Deferred:
 ### Submissions
 
 - `POST /api/projects/{projectId}/submissions/send`
+- `POST /api/projects/{projectId}/submissions/send-rules-direct`
 - `GET /api/projects/{projectId}/submissions/jobs/{jobId}`
 - `POST /api/projects/{projectId}/submissions/jobs/{jobId}/pause`
 - `POST /api/projects/{projectId}/submissions/jobs/{jobId}/cancel`
 
+Approved direct rules contract:
+
+- Request: `DirectRuleSubmissionRequest(Guid CommandId, int Count)`, where `CommandId` is non-empty and `Count` is 1..100.
+- Response: the existing `SubmissionJobResponse`; `Total` is the actual affordable generated subset, not necessarily the requested count. Rules generation uses the x1 credit multiplier and adds no schema, field, status, or wrapper.
+- Option 1 exposes one **Tạo và gửi ngay** action without preview UI, checkbox, or second confirmation. Options 2/3 keep human preview and explicit confirmation through the common send route.
+- `CommandId` becomes the accepted job ID. The first accepted call wins; an owner-authorized replay returns that existing job and logs read-only even if `Count` differs, and does not generate, debit, submit, resume, or take over work.
+- Invalid command/count, rule, credit, or active-job admissions return a 4xx rejection and write the applicable zero-credit Failed usage audit for the authorized owner. Wrong-owner/project access is not disclosed or audited. Replay writes no new debit, send, or usage activity.
+- A hard crash may leave an active fail-closed job requiring manual reconciliation. An unknown provider outcome is never resent automatically; this contract does not promise exactly-once delivery or automatic resume.
+
 Submission safety rules:
 
-- Preview generation accepts 1 to 100 responses per action.
-- Submission accepts at most 100 confirmed preview response IDs per job.
+- Response generation accepts 1 to 100 responses per action.
+- The common submission route accepts at most 100 confirmed preview response IDs per job; the direct Option 1 route accepts `Count` 1..100 without preview IDs.
 - Submission processing must run sequentially in batches of 10, with no artificial delay and no parallel submission burst.
 - A project may have only one active submission job at a time.
 - Pause/cancel may stop processing only at a batch boundary; an already-running response send is not force-killed.

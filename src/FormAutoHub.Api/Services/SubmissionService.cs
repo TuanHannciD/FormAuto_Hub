@@ -55,61 +55,49 @@ public sealed class SubmissionService(
             throw new InvalidOperationException("Duplicate response IDs are not allowed.");
         }
 
-        var project = await dbContext.FormProjects
-            .SingleOrDefaultAsync(item => item.Id == projectId && item.UserId == currentUser.UserId, cancellationToken);
-
-        if (project is null)
+        SubmissionAdmission.Result? admission;
+        try
         {
-            return null;
+            admission = await SubmissionAdmission.RunAsync(dbContext, currentUser.UserId, projectId, Guid.NewGuid(), async _ =>
+            {
+                var responses = await dbContext.GeneratedResponses
+                    .Where(response => response.ProjectId == projectId && request.ResponseIds.Contains(response.Id))
+                    .ToListAsync(cancellationToken);
+
+                if (responses.Count != request.ResponseIds.Distinct().Count())
+                {
+                    throw new InvalidOperationException("All submitted responses must belong to the project.");
+                }
+
+                if (responses.Any(response => response.Status != GeneratedResponseStatuses.Previewed))
+                {
+                    throw new InvalidOperationException("Only previewed responses can be submitted.");
+                }
+
+                if (await dbContext.SubmissionLogs.AnyAsync(log => request.ResponseIds.Contains(log.ResponseId), cancellationToken))
+                {
+                    throw new InvalidOperationException("Responses with a recorded submission attempt cannot be sent again.");
+                }
+
+                return responses;
+            }, cancellationToken);
         }
-
-        var hasActiveJob = await dbContext.SubmissionJobs.AnyAsync(
-            job => job.ProjectId == projectId &&
-                (job.Status == SubmissionJobStatuses.Pending ||
-                 job.Status == SubmissionJobStatuses.Running ||
-                 job.Status == SubmissionJobStatuses.Paused),
-            cancellationToken);
-
-        if (hasActiveJob)
+        catch (InvalidOperationException exception)
         {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Project already has an active submission job.", cancellationToken);
+            dbContext.ChangeTracker.Clear();
+            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, exception.Message, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Project already has an active submission job.");
+            throw;
         }
+        if (admission is null) return null;
+        if (!admission.Run) return await SubmissionAdmission.ReadAsync(dbContext, admission, cancellationToken);
+        return await RunAsync(admission.Project, admission.Job, admission.Responses, cancellationToken);
+    }
 
-        var responses = await dbContext.GeneratedResponses
-            .Where(response => response.ProjectId == projectId && request.ResponseIds.Contains(response.Id))
-            .ToListAsync(cancellationToken);
-
-        if (responses.Count != request.ResponseIds.Distinct().Count())
-        {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "All submitted responses must belong to the project.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("All submitted responses must belong to the project.");
-        }
-
-        if (responses.Any(response => response.Status != GeneratedResponseStatuses.Previewed))
-        {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Only previewed responses can be submitted.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Only previewed responses can be submitted.");
-        }
-
-        var job = new SubmissionJob
-        {
-            Id = Guid.NewGuid(),
-            ProjectId = projectId,
-            Total = responses.Count,
-            SuccessCount = 0,
-            FailedCount = 0,
-            Status = SubmissionJobStatuses.Running,
-            RateLimitPerMinute = Phase4SafetyLimits.MaxSubmissionBatchSize,
-            CreatedAt = DateTimeOffset.UtcNow,
-            StartedAt = DateTimeOffset.UtcNow
-        };
-        dbContext.SubmissionJobs.Add(job);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
+    internal async Task<SubmissionJobResponse> RunAsync(
+        FormProject project, SubmissionJob job, IReadOnlyList<GeneratedResponse> responses, CancellationToken cancellationToken)
+    {
+        var projectId = project.Id;
         var logs = new List<SubmissionLog>();
         SubmissionLog? pendingAttempt = null;
         UsageLog? completionUsage = null;
@@ -184,11 +172,7 @@ public sealed class SubmissionService(
                 }
             }
 
-            if (job.Status == SubmissionJobStatuses.Running)
-            {
-                job.Status = job.FailedCount == 0 ? SubmissionJobStatuses.Completed : SubmissionJobStatuses.Failed;
-                job.FinishedAt = DateTimeOffset.UtcNow;
-            }
+            await FinalizeJobAsync(job, interrupted: false, cancellationToken);
 
             completionUsage = await WriteUsageLogAsync(
                 projectId,
@@ -220,13 +204,6 @@ public sealed class SubmissionService(
                 }
             }
 
-            // Interruption stops this job; counts retain only confirmed provider results.
-            if (job.Status is not (SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled))
-            {
-                job.Status = SubmissionJobStatuses.Failed;
-                job.FinishedAt = DateTimeOffset.UtcNow;
-            }
-
             var description =
                 $"Gửi form bị gián đoạn: đã xác nhận {job.SuccessCount} thành công, {job.FailedCount} thất bại. " +
                 (providerInvoked && pendingAttempt is not null && pendingAttempt.SubmittedAt is null
@@ -244,6 +221,9 @@ public sealed class SubmissionService(
             }
             try
             {
+                // The runner has stopped; acknowledge cancellation without replacing it.
+                using var finalizationTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                await FinalizeJobAsync(job, interrupted: true, finalizationTimeout.Token);
                 await SaveOutcomeAsync();
             }
             catch (Exception persistenceException)
@@ -252,6 +232,40 @@ public sealed class SubmissionService(
             }
 
             throw;
+        }
+    }
+
+    private async Task FinalizeJobAsync(SubmissionJob job, bool interrupted, CancellationToken ct)
+    {
+        var terminalStatus = interrupted || job.FailedCount > 0 ? SubmissionJobStatuses.Failed : SubmissionJobStatuses.Completed;
+        var finishedAt = DateTimeOffset.UtcNow;
+        if (dbContext.Database.IsRelational())
+        {
+            // Compare-and-set closes the race with Pause/Cancel after the last batch reload.
+            await dbContext.SubmissionJobs.Where(x => x.Id == job.Id &&
+                (x.Status == SubmissionJobStatuses.Running || (interrupted && x.Status == SubmissionJobStatuses.Completed)))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, terminalStatus)
+                    .SetProperty(x => x.FinishedAt, finishedAt), ct);
+            await dbContext.SubmissionJobs.Where(x => x.Id == job.Id && x.Status == SubmissionJobStatuses.Cancelled && x.FinishedAt == null)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.FinishedAt, finishedAt), ct);
+        }
+
+        var persisted = await dbContext.SubmissionJobs.AsNoTracking().SingleAsync(x => x.Id == job.Id, ct);
+        if (dbContext.Database.IsRelational())
+        {
+            // Keep unsaved confirmed counts if a prior outcome save failed, while avoiding a stale status write.
+            var entry = dbContext.Entry(job);
+            entry.Property(x => x.Status).CurrentValue = persisted.Status;
+            entry.Property(x => x.Status).OriginalValue = persisted.Status;
+            entry.Property(x => x.Status).IsModified = false;
+            entry.Property(x => x.FinishedAt).CurrentValue = persisted.FinishedAt;
+            entry.Property(x => x.FinishedAt).OriginalValue = persisted.FinishedAt;
+            entry.Property(x => x.FinishedAt).IsModified = false;
+        }
+        else
+        {
+            job.Status = persisted.Status is SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled ? persisted.Status : terminalStatus;
+            if (job.Status != SubmissionJobStatuses.Paused) job.FinishedAt = finishedAt;
         }
     }
 
@@ -319,8 +333,19 @@ public sealed class SubmissionService(
             return null;
         }
 
-        job.Status = SubmissionJobStatuses.Paused;
-        await dbContext.SaveChangesAsync(cancellationToken);
+        if (dbContext.Database.IsRelational())
+        {
+            var changed = await dbContext.SubmissionJobs.Where(x => x.Id == jobId && x.ProjectId == projectId &&
+                    (x.Status == SubmissionJobStatuses.Pending || x.Status == SubmissionJobStatuses.Running))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, SubmissionJobStatuses.Paused), cancellationToken);
+            if (changed == 0) return null;
+            await dbContext.Entry(job).ReloadAsync(cancellationToken);
+        }
+        else
+        {
+            job.Status = SubmissionJobStatuses.Paused;
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         var logs = await dbContext.SubmissionLogs
             .AsNoTracking()
@@ -348,9 +373,22 @@ public sealed class SubmissionService(
             return null;
         }
 
-        job.Status = SubmissionJobStatuses.Cancelled;
-        job.FinishedAt = DateTimeOffset.UtcNow;
-        await dbContext.SaveChangesAsync(cancellationToken);
+        // Running/paused may still have a batch in flight. Only its runner can acknowledge cancellation.
+        if (dbContext.Database.IsRelational())
+        {
+            var changed = await dbContext.SubmissionJobs.Where(x => x.Id == jobId && x.ProjectId == projectId &&
+                    (x.Status == SubmissionJobStatuses.Pending || x.Status == SubmissionJobStatuses.Running || x.Status == SubmissionJobStatuses.Paused))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, SubmissionJobStatuses.Cancelled)
+                    .SetProperty(x => x.FinishedAt, (DateTimeOffset?)null), cancellationToken);
+            if (changed == 0) return null;
+            await dbContext.Entry(job).ReloadAsync(cancellationToken);
+        }
+        else
+        {
+            job.Status = SubmissionJobStatuses.Cancelled;
+            job.FinishedAt = null;
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         var logs = await dbContext.SubmissionLogs
             .AsNoTracking()

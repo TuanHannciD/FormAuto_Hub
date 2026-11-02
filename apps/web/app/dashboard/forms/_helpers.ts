@@ -2,6 +2,8 @@
 import {
   AI_SHORT_FIELD_MAX_LENGTH,
   CHECKBOX_SELECTION_MIN,
+  DIRECT_RULE_COMMAND_KEY_PREFIX,
+  DIRECT_RULE_COMMAND_LEGACY_KEY,
   FORM_PREVIEW_RESUME_KEY,
   MAX_RULE_VALUES,
   MAX_SAMPLE_LENGTH,
@@ -13,6 +15,7 @@ import {
   defaultAiDirection
 } from "./_constants";
 import type { CreditPackage, FormQuestion, SubmissionJob } from "@/lib/api";
+import type { DirectRuleCommandContext } from "./_types";
 
 export function toBackendAiMode(mode: AiGenerationMode) {
   return mode === "ai-custom" ? "Option3" : "Option2";
@@ -422,6 +425,69 @@ export function clearResumeContext() {
   }
 
   window.localStorage.removeItem(FORM_PREVIEW_RESUME_KEY);
+}
+
+export function saveDirectRuleCommand(context: DirectRuleCommandContext) {
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(directRuleCommandKey(context.userId), JSON.stringify(context));
+  }
+}
+
+export function directRuleCommandKey(userId: string) {
+  return `${DIRECT_RULE_COMMAND_KEY_PREFIX}${userId}`;
+}
+
+function parseDirectRuleCommand(raw: string | null) {
+  if (!raw) return null;
+  const context = JSON.parse(raw) as DirectRuleCommandContext;
+  if (!context.projectId || !context.commandId || !context.userId || !Number.isInteger(context.count) || context.count < 1 || context.count > 100) {
+    throw new Error("Invalid direct command context.");
+  }
+  return context;
+}
+
+export function readDirectRuleCommand(userId: string) {
+  if (typeof window === "undefined") return null;
+  try {
+    const scoped = parseDirectRuleCommand(window.localStorage.getItem(directRuleCommandKey(userId)));
+    if (scoped) return scoped.userId === userId ? scoped : null;
+
+    const legacy = parseDirectRuleCommand(window.localStorage.getItem(DIRECT_RULE_COMMAND_LEGACY_KEY));
+    if (legacy?.userId === userId) {
+      saveDirectRuleCommand(legacy);
+      const currentLegacy = parseDirectRuleCommand(window.localStorage.getItem(DIRECT_RULE_COMMAND_LEGACY_KEY));
+      if (currentLegacy?.commandId === legacy.commandId) window.localStorage.removeItem(DIRECT_RULE_COMMAND_LEGACY_KEY);
+      return legacy;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearDirectRuleCommand(context: DirectRuleCommandContext) {
+  if (typeof window === "undefined") return;
+  const key = directRuleCommandKey(context.userId);
+  try {
+    const stored = parseDirectRuleCommand(window.localStorage.getItem(key));
+    if (stored?.commandId === context.commandId) window.localStorage.removeItem(key);
+    const legacy = parseDirectRuleCommand(window.localStorage.getItem(DIRECT_RULE_COMMAND_LEGACY_KEY));
+    if (legacy?.userId === context.userId && legacy.commandId === context.commandId) window.localStorage.removeItem(DIRECT_RULE_COMMAND_LEGACY_KEY);
+  } catch {
+    // Never delete an unreadable or differently-owned snapshot implicitly.
+  }
+}
+
+export function readSubmissionJob(value: unknown, expected?: { id?: string; projectId: string }): SubmissionJob | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const job = value as Partial<SubmissionJob>;
+  if (typeof job.id !== "string" || typeof job.projectId !== "string" || typeof job.status !== "string" || typeof job.createdAt !== "string") return null;
+  if (expected && (job.projectId !== expected.projectId || (expected.id !== undefined && job.id !== expected.id))) return null;
+  if (![job.total, job.successCount, job.failedCount].every(count => typeof count === "number" && Number.isInteger(count) && count >= 0)) return null;
+  if (!Array.isArray(job.logs) || job.logs.some(log => !log || typeof log !== "object"
+    || typeof log.id !== "string" || typeof log.responseId !== "string" || typeof log.status !== "string"
+    || (log.errorMessage !== null && typeof log.errorMessage !== "string"))) return null;
+  return job as SubmissionJob;
 }
 
 export function buildSubmissionBatches(logs: SubmissionJob["logs"]) {

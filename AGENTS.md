@@ -28,7 +28,7 @@ Repository rules are subordinate to system/developer/runtime instructions and us
 ## Product and architecture invariants
 
 - No spam, captcha bypass, proxy rotation, fake accounts, unauthorized submission, bypassing Google restrictions or AI auto-submit without preview and user confirmation.
-- Require authorized user context, preview and confirmation. Generate 1–100 previews per action; submit controlled sequential batches of 10, with applicable usage/submission logs.
+- Require authorized user context for every flow. Options 2/3 (AI) require preview and explicit confirmation; the approved Option 1 rules flow uses one **Tạo và gửi ngay** action without preview UI or a second confirmation. Generate 1–100 responses per action and submit controlled sequential batches of 10, with applicable usage/submission logs.
 - Credit changes go through the dedicated credit service and write `CreditTransactions`; tool actions write `UsageLogs`; submission actions write `SubmissionLogs`.
 - Controllers handle HTTP; services own business workflow/validation; DTOs own API contracts; entities represent persisted state; EF Core owns persistence; integrations own external calls. Services do not return framework HTTP results, entities do not call APIs, controllers stay thin.
 - Keep Google Forms and AI provider calls out of account/credit services. Preserve SQL Server/EF Core migrations, .NET 9 API and Next.js dashboard; no implied stack redesign.

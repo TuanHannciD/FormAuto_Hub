@@ -26,7 +26,7 @@ import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 
-import type { AiDirectionFields, AiGenerationMode, AiPromptScope, FormPreviewResumeContext, GenerationMode } from "./_types";
+import type { AiDirectionFields, AiGenerationMode, AiPromptScope, DirectRuleCommandContext, FormPreviewResumeContext, GenerationMode } from "./_types";
 import {
   AI_GLOBAL_PROMPT_MAX_LENGTH,
   AI_QUESTION_PROMPT_MAX_LENGTH,
@@ -45,13 +45,18 @@ import {
   buildAiAutoFillContext,
   buildSubmissionBatches,
   clampInteger,
+  clearDirectRuleCommand,
   clearResumeContext,
   defaultRule,
+  directRuleCommandKey,
   limitText,
   readAiDirection,
+  readDirectRuleCommand,
   readResumeContext,
+  readSubmissionJob,
   rangeRuleError,
   safeAiFailureMessage,
+  saveDirectRuleCommand,
   submissionFailureMessage,
   uncertainSubmissionMessage,
   saveResumeContext,
@@ -111,6 +116,11 @@ export default function FormsPage() {
   const [confirmed, setConfirmed] = useState(false);
   const [submissionLocked, setSubmissionLocked] = useState(false);
   const [submission, setSubmission] = useState<SubmissionJob | null>(null);
+  const [directCommand, setDirectCommand] = useState<DirectRuleCommandContext | null>(null);
+  const [directRequestedCount, setDirectRequestedCount] = useState<number | null>(null);
+  const [directResultNotice, setDirectResultNotice] = useState<{ requested: number; total: number; success: number; failed: number } | null>(null);
+  const [directTransportUnknown, setDirectTransportUnknown] = useState(false);
+  const [directLockSupported, setDirectLockSupported] = useState<boolean | null>(null);
   const [submissionLogsOpen, setSubmissionLogsOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [isPasting, setIsPasting] = useState(false);
@@ -123,12 +133,33 @@ export default function FormsPage() {
   const [previewReadError, setPreviewReadError] = useState(false);
   const [creditBalance, setCreditBalance] = useState<number | null>(null);
   const restoredContextRef = useRef<string | null>(null);
+  const directRequestRef = useRef(false);
+  const directCreateRef = useRef(false);
   const currentPreviewSnapshot = JSON.stringify({ projectId: analysis?.projectId, generationMode, config: generationMode === "rules" ? ruleConfigs : { aiDirection, aiGlobalPrompt, aiPromptScope, aiQuestionPrompts } });
   const previewStale = previews.length > 0 && previewSnapshot !== currentPreviewSnapshot;
 
   useEffect(() => { setConfirmed(false); }, [currentPreviewSnapshot]);
   useEffect(() => {
     apiFetch<DashboardSummary>("/api/dashboard/summary").then((value) => setCreditBalance(value.currentCreditBalance)).catch(() => {});
+  }, []);
+  useEffect(() => {
+    setDirectLockSupported(Boolean(navigator.locks));
+    const hydrateCurrentUser = () => {
+      const userId = getStoredSession()?.userId;
+      const stored = userId ? readDirectRuleCommand(userId) : null;
+      setDirectCommand(stored);
+      setDirectRequestedCount(stored?.count ?? null);
+      setDirectTransportUnknown(Boolean(stored));
+    };
+    hydrateCurrentUser();
+    const handleStorage = (event: StorageEvent) => {
+      const userId = getStoredSession()?.userId;
+      if (event.key === "formauto.auth.session" || (userId && (event.key === directRuleCommandKey(userId) || event.key === "formauto.directRuleCommand"))) {
+        hydrateCurrentUser();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
   const rulesSectionRef = useRef<HTMLElement | null>(null);
   const previewSectionRef = useRef<HTMLElement | null>(null);
@@ -155,6 +186,10 @@ export default function FormsPage() {
 
   const restoreResumeContext = useCallback((context: FormPreviewResumeContext) => {
     if (context.userId !== getStoredSession()?.userId || !context.userId) return;
+    if ((context.generationMode ?? "rules") === "rules") {
+      clearResumeContext();
+      return;
+    }
     if (!context.previewIds || !context.previewSnapshot) return;
     if (restoredContextRef.current === context.createdAt) return;
     restoredContextRef.current = context.createdAt;
@@ -303,6 +338,10 @@ export default function FormsPage() {
   }
 
   function selectGenerationMode(mode: GenerationMode) {
+    if (directCommand) {
+      toast.error("Hãy kiểm tra kết quả lượt gửi đang chờ trước khi đổi cách tạo.");
+      return;
+    }
     if (mode === generationMode) {
       return;
     }
@@ -318,6 +357,7 @@ export default function FormsPage() {
   }
 
   function updateFormUrl(value: string) {
+    if (directCommand) return;
     aiProfileRequestRef.current += 1;
     setAiProfileState(null);
     setFormUrl(limitText(value, FORM_URL_MAX_LENGTH));
@@ -355,7 +395,9 @@ export default function FormsPage() {
       setRuleConfigs(Object.fromEntries(result.questions.map((question) => [question.id, defaultRule(question)])));
       setOpenRuleEditors(Object.fromEntries(result.questions.map((question) => [question.id, true])));
       resetAiPreparation(result);
-      toast.success("Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
+      toast.success(generationMode === "rules"
+        ? "Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cách trả lời trước khi tạo và gửi."
+        : "Đã phân tích biểu mẫu. Hãy kiểm tra câu hỏi và cài đặt cách trả lời trước khi tạo bản xem trước.");
     } catch (error) {
       showError(error, "Không phân tích được biểu mẫu.");
     } finally {
@@ -373,7 +415,7 @@ export default function FormsPage() {
       return !config?.mode || !config.configJson.trim() || rangeRuleError(config.mode, config.configJson);
     });
     if (invalidQuestion) {
-      toast.error("Hãy kiểm tra cách trả lời và khoảng ngày, giờ trước khi tạo bản xem trước.");
+      toast.error("Hãy kiểm tra cách trả lời và khoảng ngày, giờ trước khi tiếp tục.");
       return;
     }
 
@@ -443,10 +485,211 @@ export default function FormsPage() {
     }
   }
 
+  function findInvalidRule() {
+    return analysis?.questions.find((question) => {
+      const config = ruleConfigs[question.id];
+      return !config?.mode || !config.configJson.trim() || rangeRuleError(config.mode, config.configJson);
+    });
+  }
+
+  async function applyDirectRuleResult(result: SubmissionJob, context: DirectRuleCommandContext) {
+    setSubmission(result);
+    setDirectRequestedCount(context.count);
+    setDirectResultNotice({ requested: context.count, total: result.total, success: result.successCount, failed: result.failedCount });
+    setSubmissionLogsOpen(false);
+    const uncertain = result.logs.some((log) => log.status !== "Success" && log.errorMessage === uncertainSubmissionMessage);
+    const terminal = !uncertain && (result.status === "Completed" || result.status === "Failed" || result.status === "Cancelled");
+    setSubmissionLocked(true);
+    setDirectTransportUnknown(false);
+    if (terminal) {
+      clearDirectRuleCommand(context);
+      const remaining = readDirectRuleCommand(context.userId);
+      setDirectCommand(remaining);
+      if (remaining) {
+        setDirectRequestedCount(remaining.count);
+        setDirectTransportUnknown(true);
+      }
+    } else {
+      setDirectCommand(context);
+    }
+
+    try {
+      const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
+      setCreditBalance(summary.currentCreditBalance);
+    } catch {
+      toast.info("Đã ghi nhận kết quả gửi, nhưng chưa cập nhật được số dư credit.");
+    }
+
+    if (uncertain) {
+      toast.error("Có lượt gửi chưa xác định. Command tiếp tục bị khóa để kiểm tra cùng mã sau khi đối soát.");
+    } else if (result.total < context.count) {
+      toast.info(`Đã tạo ${result.total}/${context.count} lượt theo số credit khả dụng; gửi thành công ${result.successCount}, thất bại ${result.failedCount}.`);
+    } else if (result.status === "Completed") {
+      toast.success(`Đã gửi thành công ${result.successCount} lượt.`);
+    } else {
+      toast.info(`Lượt gửi hiện có trạng thái ${result.status}.`);
+    }
+  }
+
+  function retainDirectRuleCommand(context: DirectRuleCommandContext) {
+    setDirectCommand(context);
+    setDirectRequestedCount(context.count);
+    setDirectTransportUnknown(true);
+    setSubmissionLocked(true);
+  }
+
+  async function reconcileDirectRuleCommand(context: DirectRuleCommandContext) {
+    if (getStoredSession()?.userId !== context.userId) return "unknown" as const;
+    try {
+      const raw = await apiFetch<unknown>(`/api/projects/${context.projectId}/submissions/jobs/${context.commandId}`);
+      if (getStoredSession()?.userId !== context.userId) return "unknown" as const;
+      const result = readSubmissionJob(raw, { id: context.commandId, projectId: context.projectId });
+      if (!result) return "unknown" as const;
+      await applyDirectRuleResult(result, context);
+      return "resolved" as const;
+    } catch (error) {
+      if (getStoredSession()?.userId !== context.userId) return "unknown" as const;
+      if (error instanceof ApiError && error.kind === "http" && error.status === 404) {
+        clearDirectRuleCommand(context);
+        const remaining = readDirectRuleCommand(context.userId);
+        setDirectCommand(remaining);
+        setDirectRequestedCount(remaining?.count ?? null);
+        setDirectTransportUnknown(Boolean(remaining));
+        setSubmissionLocked(Boolean(remaining));
+        return "absent" as const;
+      }
+      return "unknown" as const;
+    }
+  }
+
+  async function sendDirectRuleCommand(context: DirectRuleCommandContext) {
+    if (directRequestRef.current) return;
+    directRequestRef.current = true;
+    setBusy(true);
+    setIsSending(true);
+    try {
+      const raw = await apiFetch<unknown>(`/api/projects/${context.projectId}/submissions/send-rules-direct`, {
+        method: "POST",
+        json: { commandId: context.commandId, count: context.count }
+      });
+      const result = readSubmissionJob(raw, { projectId: context.projectId });
+      if (!result) throw new ApiError("invalid-response", "POST", `/api/projects/${context.projectId}/submissions/send-rules-direct`);
+      await applyDirectRuleResult(result, context);
+    } catch (error) {
+      if (error instanceof ApiError && error.kind === "http" && (error.status === 400 || error.status === 409)) {
+        const reconciliation = await reconcileDirectRuleCommand(context);
+        if (reconciliation === "resolved") return;
+        if (reconciliation === "absent") {
+          showError(error, "Yêu cầu direct không được tiếp nhận. Hãy kiểm tra rules trước khi thử lại.");
+          return;
+        }
+      }
+      retainDirectRuleCommand(context);
+      if (getStoredSession()?.userId === context.userId) {
+        toast.error("Kết quả gửi chưa xác định. Không tự động gửi lại; hãy kiểm tra bằng đúng mã lệnh đang chờ.");
+      } else {
+        toast.error("Phiên đăng nhập đã thay đổi. Command cũ vẫn được giữ cho đúng tài khoản để đối soát.");
+      }
+    } finally {
+      directRequestRef.current = false;
+      setIsSending(false);
+      setBusy(false);
+    }
+  }
+
+  async function createAndSendRulesDirect() {
+    if (!analysis || generationMode !== "rules" || directCommand || directRequestRef.current || directCreateRef.current) return;
+    if (!directLockSupported) {
+      toast.error("Trình duyệt chưa hỗ trợ khóa an toàn giữa các tab. Không thể tạo command trực tiếp.");
+      return;
+    }
+    if (findInvalidRule()) {
+      toast.error("Hãy kiểm tra cách trả lời và khoảng ngày, giờ trước khi tạo và gửi.");
+      return;
+    }
+
+    const userId = getStoredSession()?.userId;
+    if (!userId) {
+      toast.error("Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại trước khi gửi.");
+      return;
+    }
+
+    directCreateRef.current = true;
+    const createUnderLock = async (): Promise<DirectRuleCommandContext | null> => {
+      const existing = readDirectRuleCommand(userId);
+      if (existing) {
+        setDirectCommand(existing);
+        setDirectRequestedCount(existing.count);
+        setDirectTransportUnknown(true);
+        toast.error("Đang có một command chưa được giải quyết. Hãy kiểm tra command đó trước.");
+        return null;
+      }
+
+      setBusy(true);
+      try {
+        for (const question of analysis.questions) {
+          const config = ruleConfigs[question.id];
+          await apiFetch(`/api/projects/${analysis.projectId}/answer-rules`, {
+            method: "POST",
+            json: { questionId: question.id, mode: config.mode, configJson: config.configJson }
+          });
+        }
+      } catch (error) {
+        showError(error, "Không lưu được cách trả lời.");
+        return null;
+      } finally {
+        setBusy(false);
+      }
+
+      const concurrent = readDirectRuleCommand(userId);
+      if (concurrent) {
+        setDirectCommand(concurrent);
+        setDirectRequestedCount(concurrent.count);
+        setDirectTransportUnknown(true);
+        toast.error("Một tab khác đã tạo command trước. Hãy kiểm tra command đó.");
+        return null;
+      }
+
+      const context: DirectRuleCommandContext = {
+        projectId: analysis.projectId,
+        commandId: crypto.randomUUID(),
+        count: previewCount,
+        userId,
+        createdAt: new Date().toISOString()
+      };
+      saveDirectRuleCommand(context);
+      setDirectCommand(context);
+      setDirectRequestedCount(context.count);
+      setDirectResultNotice(null);
+      setDirectTransportUnknown(false);
+      setSubmission(null);
+      setSubmissionLocked(true);
+      return context;
+    };
+
+    try {
+      const created = await navigator.locks.request(directRuleCommandKey(userId), createUnderLock);
+      if (created) await sendDirectRuleCommand(created);
+    } finally {
+      directCreateRef.current = false;
+    }
+  }
+
+  async function retryDirectRuleCommand() {
+    if (directCommand) await sendDirectRuleCommand(directCommand);
+  }
+
   async function continueMissingGeneration() {
     const context = resumeContext;
     if (!context) {
       toast.error("Không tìm thấy tiến trình cần tiếp tục.");
+      return;
+    }
+
+    if ((context.generationMode ?? "rules") === "rules") {
+      clearResumeContext();
+      setResumeContext(null);
+      toast.error("Tiến trình preview quy tắc cũ không còn được tiếp tục trên luồng gửi trực tiếp.");
       return;
     }
 
@@ -858,9 +1101,9 @@ export default function FormsPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Tự động hóa biểu mẫu" description="Chuẩn bị câu trả lời cho biểu mẫu bạn có quyền vận hành, xem lại rồi xác nhận gửi." />
+      <PageHeader title="Tự động hóa biểu mẫu" description="Dùng quy tắc để tạo và gửi ngay, hoặc dùng AI để xem trước rồi xác nhận gửi." />
       <nav aria-label="Các bước tự động hóa" className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-        {["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"].map((label, index) => {
+        {(generationMode === "rules" ? ["Chọn form", "Cấu hình", "Gửi trực tiếp", "Đang xử lý", "Kết quả"] : ["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"]).map((label, index) => {
           const enabled = index === 0 || (index <= 2 && Boolean(analysis)) || (index === 3 && previews.length > 0) || (index === 4 && Boolean(submission));
           const currentStep = submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
           const content = <><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">{index + 1}</span>{label}</>;
@@ -950,11 +1193,13 @@ export default function FormsPage() {
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Luồng xử lý</p>
-                  <p className="mt-1 font-medium">Cài đặt -&gt; Xem trước -&gt; Xác nhận</p>
+                  <p className="mt-1 font-medium">
+                    {generationMode === "rules" ? "Cài đặt → Tạo và gửi ngay" : "Cài đặt → Xem trước → Xác nhận"}
+                  </p>
                 </div>
               </div>
             </div>
-            <fieldset disabled={Boolean(pendingPreviewRead)} className="m-0 min-w-0 border-0 p-0">
+            <fieldset disabled={Boolean(pendingPreviewRead) || Boolean(directCommand)} className="m-0 min-w-0 border-0 p-0">
               <GenerationModeSelector value={generationMode} onChange={selectGenerationMode} />
             </fieldset>
             {generationMode !== "rules" && !aiProfileReady && !busy && (
@@ -989,6 +1234,11 @@ export default function FormsPage() {
               />
             ) : (
               <div className="space-y-4">
+                {directLockSupported === false && (
+                  <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">
+                    Trình duyệt chưa hỗ trợ khóa an toàn giữa các tab. Tạo và gửi trực tiếp bị khóa để tránh tạo trùng command.
+                  </Alert>
+                )}
                 {analysis.questions.map((question, index) => (
                   <RuleEditor
                     key={question.id}
@@ -1003,10 +1253,10 @@ export default function FormsPage() {
                 <div className="sticky bottom-3 z-[200] flex flex-col gap-3 rounded-xl border border-info-border bg-info-surface p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
                     <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
-                      Tạo bản xem trước
+                      Tạo và gửi trực tiếp
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-foreground">Số câu trả lời xem trước</p>
-                    <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX} cho mỗi lần tạo.</p>
+                    <p className="mt-3 text-sm font-semibold text-foreground">Số lượt cần gửi</p>
+                    <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}. Hệ thống tạo và gửi ngay, không có bước xem trước.</p>
                     <Input
                       className="mt-2 w-full sm:w-32"
                       inputMode="numeric"
@@ -1017,12 +1267,10 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
-                    <p className="mt-2 text-xs font-medium text-info">
-                      Mỗi bản xem trước là một bộ câu trả lời cho cả biểu mẫu. Chỉ trừ 1 credit cho mỗi bản được tạo và lưu thành công.
-                    </p>
+                    <p className="mt-2 text-xs font-medium text-info">Mỗi lượt gửi dùng 1 credit. Nếu số dư không đủ, kết quả chỉ gồm số lượt thực tế có thể tạo và gửi.</p>
                   </div>
-                  <Button className="w-full sm:w-auto" disabled={busy || !canGenerate} onClick={saveRulesAndGenerate} type="button">
-                    Lưu và tạo bản xem trước
+                  <Button className="w-full sm:w-auto" disabled={busy || !canGenerate || Boolean(directCommand) || directLockSupported !== true} onClick={createAndSendRulesDirect} type="button">
+                    {isSending ? "Đang tạo và gửi..." : "Tạo và gửi ngay"}
                   </Button>
                 </div>
               </div>
@@ -1032,7 +1280,23 @@ export default function FormsPage() {
         </section>
       )}
 
-      <section id="workflow-step-3" className="scroll-mt-24" ref={previewSectionRef}>
+      {generationMode === "rules" && directCommand && (
+        <Alert role="alert" className="space-y-3 border-warning-border bg-warning-surface text-warning">
+          <p className="font-semibold">{directTransportUnknown ? "Kết quả gửi chưa xác định" : "Lượt gửi đang được xử lý"}</p>
+          <p>Hệ thống giữ nguyên mã lệnh và số lượng {directCommand.count}. Kiểm tra lại chỉ đọc kết quả của đúng lệnh này, không lưu lại quy tắc và không tự gửi lại câu trả lời.</p>
+          <p className="break-all text-xs">Mã lệnh: {directCommand.commandId}</p>
+          <Button disabled={busy} type="button" variant="secondary" onClick={retryDirectRuleCommand}>Kiểm tra kết quả gửi</Button>
+        </Alert>
+      )}
+
+      {generationMode === "rules" && directResultNotice && (
+        <div role="status" className="rounded-xl border border-border bg-surface-subtle p-4 text-sm leading-6">
+          Đã tạo và nhận xử lý {directResultNotice.total}/{directResultNotice.requested} lượt · Gửi thành công {directResultNotice.success} · Thất bại {directResultNotice.failed}.
+          {directResultNotice.total < directResultNotice.requested ? ` Còn thiếu ${directResultNotice.requested - directResultNotice.total} lượt do số credit khả dụng.` : ""}
+        </div>
+      )}
+
+      {generationMode !== "rules" && <section id="workflow-step-3" className="scroll-mt-24" ref={previewSectionRef}>
         <Card>
           <CardHeader>
             <CardTitle>3. Xem trước · 4. Xác nhận gửi</CardTitle>
@@ -1058,7 +1322,7 @@ export default function FormsPage() {
                       <p className="mt-1 leading-6 text-warning">
                         Đã tạo {generationCreditNotice.generatedCount}/{generationCreditNotice.requestedCount} bản xem trước hợp lệ.
                         Theo số dư, yêu cầu tạo còn thiếu {generationCreditNotice.missingCredits} credit.
-                        {generationMode !== "rules" && " AI có thể tạo ít hơn yêu cầu nếu câu trả lời không hợp lệ."}
+                        {" AI có thể tạo ít hơn yêu cầu nếu câu trả lời không hợp lệ."}
                       </p>
                       {recommendedPackage ? (
                         <p className="mt-2 text-xs font-medium text-warning">
@@ -1194,12 +1458,12 @@ export default function FormsPage() {
             )}
           </CardContent>
         </Card>
-      </section>
+      </section>}
 
       {submission && (
         <Card id="workflow-step-5" className="scroll-mt-24">
           <CardHeader>
-            <CardTitle>5. Kết quả gửi</CardTitle>
+            <CardTitle>{generationMode === "rules" ? "Kết quả gửi" : "5. Kết quả gửi"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="break-all text-xs text-muted-foreground">Mã lượt gửi: {submission.id}</p>
@@ -1210,16 +1474,16 @@ export default function FormsPage() {
               <span>Thành công: {submission.successCount}</span>
               <span>Thất bại: {submission.failedCount}</span>
             </div>
-            {(submission.status === "Running" || submission.status === "Pending") && (
+            {generationMode !== "rules" && (submission.status === "Running" || submission.status === "Pending") && (
               <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                 <Button className="w-full sm:w-auto" disabled={busy} onClick={pauseSubmission} type="button">Tạm dừng</Button>
                 <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy</Button>
               </div>
             )}
-            {submission.status === "Paused" && (
+            {generationMode !== "rules" && submission.status === "Paused" && (
               <Button className="w-full sm:w-auto" disabled={busy} onClick={cancelSubmission} type="button">Hủy lượt gửi đang tạm dừng</Button>
             )}
-            {!hasUncertainSubmission && (submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
+            {generationMode !== "rules" && !hasUncertainSubmission && (submission.status === "Completed" || submission.status === "Failed" || submission.status === "Cancelled") && (
               <div className="rounded-xl border border-info-border bg-info-surface p-4 text-info shadow-sm">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
@@ -1288,7 +1552,7 @@ export default function FormsPage() {
         </Card>
       )}
       </fieldset>
-      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={previewCount} previewCount={previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationResult?.creditsUsed} stale={previewStale} />
+      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={directRequestedCount ?? previewCount} previewCount={generationMode === "rules" ? submission?.total ?? 0 : previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationMode === "rules" ? submission?.total : generationResult?.creditsUsed} directSuccessCount={generationMode === "rules" ? submission?.successCount : undefined} directFailedCount={generationMode === "rules" ? submission?.failedCount : undefined} stale={generationMode === "rules" ? false : previewStale} />
       </div>
     </div>
   );

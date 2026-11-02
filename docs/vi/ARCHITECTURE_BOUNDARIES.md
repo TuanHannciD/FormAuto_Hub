@@ -95,5 +95,5 @@ Hướng AI integration cho Phase 6 requirement package:
 - Submission actions phải ghi `SubmissionLogs`.
 - Credit deduction cho AI generation phải đi qua cùng dedicated credit workflow và ledger discipline.
 - Raw AI provider request/response audit không được thay thế `UsageLogs` hoặc `CreditTransactions`.
-- AI-generated previews vẫn phải được review ở preview và user confirm rõ trước submission.
+- AI-generated preview (Option 2/3) vẫn phải được user review và confirm rõ trước submission. Luồng quy tắc Option 1 đã được duyệt riêng có thể tạo và gửi bằng một thao tác trực tiếp, không có UI preview hoặc lần xác nhận thứ hai; mọi ranh giới về authorization, giới hạn, credit và logging vẫn giữ nguyên.
 - Nếu tool action fail sau credit deduction, refund behavior là Deferred và không được tự bịa.

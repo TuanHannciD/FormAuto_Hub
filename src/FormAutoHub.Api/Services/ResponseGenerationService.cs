@@ -22,10 +22,17 @@ public sealed class ResponseGenerationService(
     ICurrentUserContext currentUser,
     ICreditService creditService) : IResponseGenerationService
 {
-    public async Task<GenerateResponsesResponse?> GenerateAsync(
+    public Task<GenerateResponsesResponse?> GenerateAsync(
         Guid projectId,
         GenerateResponsesRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) => GenerateCoreAsync(projectId, request, null, cancellationToken);
+
+    internal Task<GenerateResponsesResponse?> GenerateForSubmissionAsync(
+        Guid projectId, int count, Guid jobId, CancellationToken cancellationToken) =>
+        GenerateCoreAsync(projectId, new(count), jobId, cancellationToken);
+
+    private async Task<GenerateResponsesResponse?> GenerateCoreAsync(
+        Guid projectId, GenerateResponsesRequest request, Guid? jobId, CancellationToken cancellationToken)
     {
         if (request.Count is < 1 or > Phase4SafetyLimits.MaxPreviewResponsesPerRequest)
         {
@@ -56,6 +63,18 @@ public sealed class ResponseGenerationService(
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Every detected question requires an answer rule before preview generation.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             throw new InvalidOperationException("Every detected question requires an answer rule before preview generation.");
+        }
+
+        if (jobId.HasValue)
+        {
+            if (questions.Any(question => string.IsNullOrWhiteSpace(question.EntryId)) ||
+                questions.Select(question => question.EntryId).Distinct().Count() != questions.Count)
+                throw new InvalidOperationException("Generated response payload is missing or duplicates required entry IDs.");
+            foreach (var question in questions)
+            {
+                var rule = rules.Single(item => item.QuestionId == question.Id);
+                AnswerRuleService.ValidateRequest(new(question.Id, rule.Mode, rule.ConfigJson), question);
+            }
         }
 
         var account = await dbContext.UserCreditAccounts
@@ -105,9 +124,9 @@ public sealed class ResponseGenerationService(
         var creditResult = await creditService.DeductUsageCreditsAsync(
             currentUser.UserId,
             generated.Count,
-            $"Đã tạo {generated.Count} phản hồi xem trước.",
-            nameof(GeneratedResponse),
-            generated.First().Id,
+            jobId.HasValue ? $"Đã tạo {generated.Count} phản hồi theo quy tắc để gửi ngay." : $"Đã tạo {generated.Count} phản hồi xem trước.",
+            jobId.HasValue ? nameof(SubmissionJob) : nameof(GeneratedResponse),
+            jobId ?? generated.First().Id,
             cancellationToken);
 
         if (creditResult is null)
@@ -118,7 +137,10 @@ public sealed class ResponseGenerationService(
         }
 
         dbContext.GeneratedResponses.AddRange(generated);
-        await WriteUsageLogAsync(projectId, generated.Count, UsageLogStatuses.Success, "Xem các câu trả lời đã tạo.", cancellationToken);
+        await WriteUsageLogAsync(projectId, generated.Count, UsageLogStatuses.Success,
+            jobId.HasValue
+                ? $"Đã tạo {generated.Count}/{request.Count} phản hồi để gửi ngay; thiếu {missingCredits} credit."
+                : "Xem các câu trả lời đã tạo.", cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new GenerateResponsesResponse(

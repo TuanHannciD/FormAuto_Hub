@@ -229,7 +229,7 @@ export function RuleEditor({
         {value.mode === "DateRangeSequential" ? (
           <div className="rounded-xl border border-border bg-surface p-3">
             <p className="text-sm font-medium">Khoảng ngày tuần tự</p>
-            <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt từ ngày bắt đầu đến ngày kết thúc.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Các lượt gửi sẽ lần lượt dùng ngày từ ngày bắt đầu đến ngày kết thúc.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="block text-sm font-medium">
                 Từ ngày
@@ -259,7 +259,7 @@ export function RuleEditor({
         ) : value.mode === "TimeRangeSequential" ? (
           <div className="rounded-xl border border-border bg-surface p-3">
             <p className="text-sm font-medium">Khoảng giờ tuần tự</p>
-            <p className="mt-1 text-xs text-muted-foreground">Bản xem trước sẽ lấy lần lượt theo các mốc giờ trong khoảng đã chọn.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Các lượt gửi sẽ lần lượt dùng các mốc giờ trong khoảng đã chọn.</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <label className="block text-sm font-medium">
                 Từ giờ
@@ -324,7 +324,7 @@ export function RuleEditor({
                 <p className="mt-1 text-xs text-muted-foreground">
                   {value.mode === "RandomByPercentage"
                     ? "Nhập phần trăm cho từng lựa chọn. Tổng tối đa 100%."
-                    : `Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi tạo bản xem trước. Tổng tối đa ${MAX_RULE_VALUES}.`}
+                    : `Nhập số lớn hơn 0 cho các lựa chọn muốn dùng khi tạo và gửi. Tổng tối đa ${MAX_RULE_VALUES}.`}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">

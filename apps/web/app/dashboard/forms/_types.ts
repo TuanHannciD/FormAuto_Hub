@@ -31,3 +31,11 @@ export type FormPreviewResumeContext = {
   missingCredits: number;
   createdAt: string;
 };
+
+export type DirectRuleCommandContext = {
+  projectId: string;
+  commandId: string;
+  count: number;
+  userId: string;
+  createdAt: string;
+};

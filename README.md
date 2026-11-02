@@ -38,8 +38,8 @@ Implemented API source is under `src/FormAutoHub.Api`, tests under `tests/FormAu
 - Google account login/register: identity-only for the core FormAuto Hub product; NCKH Survey Module has a separate approved Phase 1 track with repo evidence for Google OAuth link and Google Forms read/import.
 - MVP top-up flow: manual top-up order approval.
 - Phase 8 payment provider: PayOS first, for automated credit top-up.
-- MVP generated response limit: up to 100 preview responses per action, with controlled submission in sequential batches of 10.
-- Preview before submission is required.
+- MVP response limit: 1–100 responses per action, with controlled submission in sequential batches of 10.
+- Options 2/3 (AI) require human preview and explicit confirmation before submission. The approved Option 1 rules flow instead uses one **Tạo và gửi ngay** action without a preview UI, checkbox, or second confirmation; authorization, credit, usage and submission logging, limits, and anti-abuse controls still apply.
 - Credit changes must be written to `CreditTransactions`.
 - Tool actions must be written to `UsageLogs`.
 - Supported MVP answer modes: random equally, random by percentage, random by quantity, sample text lines for text answers, sequential date ranges, and sequential time ranges.

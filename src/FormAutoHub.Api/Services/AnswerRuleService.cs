@@ -97,7 +97,7 @@ public sealed class AnswerRuleService(FormAutoHubDbContext dbContext, ICurrentUs
             .SingleOrDefaultAsync(question => question.Id == questionId && question.ProjectId == projectId, cancellationToken);
     }
 
-    private static void ValidateRequest(UpsertAnswerRuleRequest request, FormQuestion question)
+    internal static void ValidateRequest(UpsertAnswerRuleRequest request, FormQuestion question)
     {
         if (string.IsNullOrWhiteSpace(request.Mode))
         {
