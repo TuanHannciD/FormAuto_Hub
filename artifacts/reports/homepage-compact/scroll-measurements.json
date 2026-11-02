@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-02",
+  "method": "T3 browser requestAnimationFrame normalized full-page scroll over 3000ms; viewport emulation, no CPU throttling; fonts ready. Comparable compact-layout paint control restores old background and overlay layers and applies section blur. Measurements are diagnostic, not physical-device/RUM certification.",
+  "baselineDesktop": {
+    "url": "https://formautohub.servertun.pp.ua/",
+    "viewport": [
+      1280,
+      800
+    ],
+    "height": 5466,
+    "frames": 35,
+    "averageMs": 86.7,
+    "p95Ms": 150,
+    "maxMs": 166.70000000001164,
+    "over34": 31
+  },
+  "baselineMobile": {
+    "url": "https://formautohub.servertun.pp.ua/",
+    "viewport": [
+      390,
+      844
+    ],
+    "height": 8670,
+    "frames": 96,
+    "averageMs": 31.4,
+    "p95Ms": 50,
+    "maxMs": 83.30000000001746,
+    "over34": 11
+  },
+  "compactOldPaintControlDesktop": {
+    "url": "http://localhost:3035/",
+    "viewport": [
+      1280,
+      800
+    ],
+    "height": 3367,
+    "frames": 37,
+    "averageMs": 81.1,
+    "p95Ms": 166.70000000001164,
+    "maxMs": 166.70000000001164,
+    "over34": 32
+  },
+  "afterDesktop": {
+    "url": "http://localhost:3035/",
+    "viewport": [
+      1280,
+      800
+    ],
+    "height": 3367,
+    "frames": 180,
+    "averageMs": 16.8,
+    "p95Ms": 16.79999999998836,
+    "maxMs": 33.29999999998836,
+    "over34": 0
+  },
+  "afterMobile": {
+    "url": "http://localhost:3035/",
+    "viewport": [
+      390,
+      844
+    ],
+    "height": 6014,
+    "frames": 181,
+    "averageMs": 16.7,
+    "p95Ms": 16.70000000001164,
+    "maxMs": 16.800000000017462,
+    "over34": 0
+  }
+}

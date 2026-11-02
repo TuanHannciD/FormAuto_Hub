@@ -1,0 +1,29 @@
+{
+  "task": "FAH-HOME-001",
+  "date": "2026-11-02",
+  "baseCommit": "e380abf08c031fe2e4e7d305f9933370fe830398",
+  "environment": "Local Next.js 15.5.18 production build; public anonymous browser context",
+  "runtimeOrigin": "http://localhost:3035",
+  "configuredSeoOrigin": "http://localhost:3020",
+  "checks": {
+    "npm run build": { "status": "Verified", "exitCode": 0 },
+    "npm run lint": { "status": "Verified", "exitCode": 0 },
+    "homepageBrowserSuiteAfterFreshBuildAndRestart": { "status": "Verified", "passed": 3, "failed": 0 },
+    "seoBrowserSuiteAfterFreshBuildAndRestart": { "status": "Verified", "passed": 26, "failed": 0 },
+    "independentStaticReview": { "status": "Verified", "model": "gpt-6.1-sol", "reasoning": "medium", "blockingFindings": 0 },
+    "ownedServerAndPort3035Released": { "status": "Verified" },
+    "physicalMobileAndCrossBrowser": { "status": "Not run" },
+    "productionDeploymentAndSmoke": { "status": "Not run", "owner": "user" }
+  },
+  "knownWarnings": [
+    "Existing react-hooks/exhaustive-deps ref cleanup warnings in account-profile-panel.tsx and account-security-panel.tsx",
+    "Outdated Browserslist data and deprecated next lint command"
+  ],
+  "historicalFailures": [
+    "Baseline fails compact height requirements before the fix",
+    "Initial mobile test locator targeted the sr-only span; corrected to native summary",
+    "Initial local SEO run expected production origin: 8 failures, 18 passes; corrected test environment to match existing local build origin, then 26 passes"
+  ],
+  "rawEvidence": "Per-run subdirectories are preserved locally and ignored; scroll-measurements.json and scroll-probe.js are tracked.",
+  "scope": "Homepage presentation, tests and evidence; no API, DB, auth, payment or submission changes"
+}

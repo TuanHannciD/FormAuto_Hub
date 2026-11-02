@@ -131,6 +131,34 @@ main.app-aura-bg > :not(header) {
   z-index: 1;
 }
 
+/* Homepage: avoid fixed-background repaints and full-document filter/mask layers.
+   Other aura consumers retain their existing presentation. */
+.app-aura-bg.landing-page {
+  background-image: radial-gradient(ellipse at 50% 0%, rgb(var(--primary) / 0.12), transparent 60%);
+  background-attachment: scroll;
+  background-size: 100% 720px;
+}
+
+main.app-aura-bg.landing-page::before,
+main.app-aura-bg.landing-page::after {
+  content: none;
+}
+
+.landing-page .motion-float {
+  animation-name: landing-float;
+}
+
+@keyframes landing-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@media (max-width: 767px) {
+  .landing-page .motion-float {
+    animation: none;
+  }
+}
+
 .brand-radial-bg {
   background: radial-gradient(circle at center, rgb(var(--accent) / 0.22), transparent 43%);
 }
