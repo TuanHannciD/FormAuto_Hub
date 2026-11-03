@@ -1,3 +1,5 @@
+> **Đã đóng — local (03/11/2026).** Đã kiểm chứng phạm vi user/admin và nhãn AI còn sót; tích hợp main đạt build exit0, auth9/9, fixture browser khởi động lại4/4. Chưa push/deploy. Ngoại lệ policy dọn cache và giới hạn integration giữ nguyên bên dưới.
+
 # FAH-UI-003 — đánh giá tinh gọn UI sau đăng nhập
 
 Bổ sung admin hoàn tất local03/11: rà8route, tinh gọn6trang; regression58/58, build/lint/auth và review độc lập đạt. Đã merge main local; build/auth9/9/browser8/8 sau merge Verified. Người dùng tự push/deploy. [Sổ hiện tại](PROGRESS.md).

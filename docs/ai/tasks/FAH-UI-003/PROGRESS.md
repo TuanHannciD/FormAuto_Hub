@@ -1,3 +1,5 @@
+> **Closed — local (2026-11-03).** User/admin scope and final AI-label residual verified; main integration confirmed by build exit0, auth9/9 and restarted fixture browser4/4. No push/deploy. Cleanup policy exception and integration limits remain recorded below.
+
 # Execution ledger — docs/ai/tasks/FAH-UI-003/PLAN.md
 
 ## Final closure continuation authorized — 2026-11-03

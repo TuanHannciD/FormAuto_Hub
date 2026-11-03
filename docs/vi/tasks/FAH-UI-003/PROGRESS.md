@@ -1,3 +1,5 @@
+> **Đã đóng — local (03/11/2026).** Đã kiểm chứng phạm vi user/admin và nhãn AI còn sót; tích hợp main đạt build exit0, auth9/9, fixture browser khởi động lại4/4. Chưa push/deploy. Ngoại lệ policy dọn cache và giới hạn integration giữ nguyên bên dưới.
+
 # Sổ thực thi — docs/ai/tasks/FAH-UI-003/PLAN.md
 
 ## Tiếp tục chốt task đã được yêu cầu — 2026-11-03
