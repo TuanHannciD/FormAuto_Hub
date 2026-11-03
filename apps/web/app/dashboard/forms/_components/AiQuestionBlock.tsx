@@ -48,9 +48,6 @@ export function AiQuestionBlock({
             <Badge>{questionTypeLabel(question.questionType)}</Badge>
             {question.required && <Badge tone="warning">Bắt buộc</Badge>}
           </span>
-          <span className="mt-1 block text-xs text-muted-foreground">
-            {open ? "Đang mở chi tiết câu hỏi dùng AI." : "Mở câu hỏi để xem chi tiết và hướng dẫn trả lời AI."}
-          </span>
         </span>
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">
           {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -74,7 +71,7 @@ export function AiQuestionBlock({
           </div>
           {promptEnabled && (
             <label className="mt-4 block text-sm font-medium">
-              Prompt riêng cho câu này
+              Hướng dẫn riêng cho câu này
               <Textarea
                 className="mt-2 min-h-24"
                 maxLength={AI_QUESTION_PROMPT_MAX_LENGTH}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
-import { Badge, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, PageHeader } from "@/components/ui";
 import { MetricCard } from "@/components/metric-card";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch } from "@/lib/api";
@@ -52,8 +52,8 @@ type AiUsageStats = {
 // ── Helpers ────────────────────────────────────────────────────────
 
 const modeLabels: Record<string, string> = {
-  FullAi: "Option 2 — AI mặc định",
-  CustomAi: "Option 3 — AI tùy chỉnh"
+  FullAi: "AI mặc định",
+  CustomAi: "AI tùy chỉnh"
 };
 
 const percent = (part: number, total: number) =>
@@ -81,7 +81,7 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
     header: "Chế độ",
     render: (run) => (
       <Badge tone={run.mode === "FullAi" ? "info" : "warning"}>
-        {run.mode === "FullAi" ? "Option 2" : "Option 3"}
+        {run.mode === "FullAi" ? "AI mặc định" : "AI tùy chỉnh"}
       </Badge>
     )
   },
@@ -91,14 +91,16 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
     render: (run) => (
       <div className="space-y-1">
         <StatusBadge status={run.status} />
-        <p className="break-all text-xs text-muted-foreground">Mã lượt AI: {run.id}</p>
+        <p className="hidden break-all text-xs text-muted-foreground md:block">Mã lượt AI: {run.id}</p>
         {run.status === "Failed" && <p className="max-w-sm text-xs leading-5 text-destructive">{safeAiFailureMessage(run.errorMessage)}</p>}
       </div>
     )
   },
   {
     key: "provider",
-    header: "Provider",
+    hideOnMobile: true,
+    className: "max-w-xs break-words [overflow-wrap:anywhere]",
+    header: "Nhà cung cấp",
     render: (run) => (
       <span className="text-xs text-muted-foreground">{run.provider} / {run.model}</span>
     )
@@ -115,7 +117,8 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
   },
   {
     key: "durationMs",
-    header: "Thời gian",
+    hideOnMobile: true,
+    header: "Thời lượng",
     render: (run) => displayDuration(run.durationMs)
   }
 ];
@@ -126,6 +129,7 @@ export default function AiUsagePage() {
   const [stats, setStats] = useState<AiUsageStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -143,7 +147,7 @@ export default function AiUsagePage() {
       });
 
     return () => controller.abort();
-  }, []);
+  }, [reload]);
 
   if (loading) {
     return (
@@ -164,7 +168,7 @@ export default function AiUsagePage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Thống kê AI" description="Không thể tải số liệu." />
-        <EmptyState title="Lỗi" detail={error} />
+        <EmptyState title="Lỗi" detail={error} /><Button type="button" variant="secondary" onClick={() => setReload(value => value + 1)}>Thử lại</Button>
       </div>
     );
   }
@@ -174,11 +178,11 @@ export default function AiUsagePage() {
       <div className="space-y-6">
         <PageHeader
           title="Thống kê AI"
-          description="Xem số liệu sử dụng AI generation của bạn."
+          description="Xem số liệu sử dụng tạo câu trả lời AI của bạn."
         />
         <EmptyState
           title="Chưa có dữ liệu AI"
-          detail="Bạn chưa thực hiện lần tạo AI preview nào. Hãy vào Tự động hóa biểu mẫu và chọn Option 2 hoặc Option 3."
+          detail="Bạn chưa tạo bản xem trước AI nào. Chọn AI mặc định hoặc AI tùy chỉnh trong Tự động hóa biểu mẫu."
         />
       </div>
     );
@@ -190,7 +194,7 @@ export default function AiUsagePage() {
     <div className="space-y-6">
       <PageHeader
         title="Thống kê AI"
-        description="Theo dõi số liệu sử dụng AI generation."
+        description="Theo dõi số liệu sử dụng tạo câu trả lời AI."
       />
 
       {/* ── Metric cards ── */}
@@ -198,24 +202,22 @@ export default function AiUsagePage() {
         <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
         <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
         <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
-        <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
+        <MetricCard title="Bản xem trước đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
       </div>
 
       {/* ── Mode breakdown ── */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-3">
         {stats.modeBreakdown.map((mode) => {
           const colorClass = modeColors[mode.mode] ?? "border-border bg-surface-subtle text-foreground";
           const label = modeLabels[mode.mode] ?? mode.mode;
           return (
-            <Card key={mode.mode}>
-              <CardHeader>
-                <CardTitle>{label}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className={`rounded-xl border p-4 ${colorClass}`}>
-                  <p className="text-sm font-medium">Số lần dùng: <span className="font-bold">{mode.runs}</span></p>
-                  <p className="mt-1 text-sm font-medium">Credit tiêu hao: <span className="font-bold">{mode.creditsUsed}</span></p>
-                </div>
+            <Card key={mode.mode} className={colorClass}>
+              <CardContent className="p-3 sm:p-4">
+                <h2 className="text-sm font-semibold">{label}</h2>
+                <dl className="mt-2 space-y-1 text-sm tabular-nums">
+                  <div className="flex flex-wrap justify-between gap-x-2"><dt>Lượt dùng</dt><dd className="font-bold">{mode.runs}</dd></div>
+                  <div className="flex flex-wrap justify-between gap-x-2"><dt>Credit</dt><dd className="font-bold">{mode.creditsUsed}</dd></div>
+                </dl>
               </CardContent>
             </Card>
           );
@@ -239,7 +241,7 @@ export default function AiUsagePage() {
                     className="group relative flex shrink-0 flex-col items-center"
                   >
                     <div className="text-xs tabular-nums text-muted-foreground">
-                      {day.runs} runs
+                      {day.runs} lượt
                     </div>
                     <div
                       className="w-3 rounded-t bg-accent transition-all hover:bg-accent"
@@ -266,8 +268,16 @@ export default function AiUsagePage() {
           columns={recentRunColumns}
           items={stats.recentRuns}
           getRowKey={(r) => r.id}
+          mobileFooter={run => <details className="border-t border-border text-xs">
+            <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Chi tiết lượt AI</summary>
+            <dl className="space-y-2 pb-2">
+              <div><dt className="text-muted-foreground">Mã lượt AI</dt><dd className="break-all">{run.id}</dd></div>
+              <div><dt className="text-muted-foreground">Nhà cung cấp / mô hình</dt><dd className="break-words [overflow-wrap:anywhere]">{run.provider} / {run.model}</dd></div>
+              <div><dt className="text-muted-foreground">Thời lượng</dt><dd>{displayDuration(run.durationMs)}</dd></div>
+            </dl>
+          </details>}
           emptyTitle="Chưa có lượt AI"
-          emptyDetail="Bạn chưa thực hiện AI generation nào."
+          emptyDetail="Bạn chưa thực hiện tạo câu trả lời AI nào."
         />
         </CardContent>
       </Card>

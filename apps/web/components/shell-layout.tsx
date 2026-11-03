@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useId, type ReactNode } from "react";
 import { Menu, X } from "lucide-react";
-import { Button } from "./ui";
+import { Button, Dialog, DialogContent, DialogTitle, DialogClose } from "./ui";
 
 export const shellNavItemStyles = "group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold text-inverse-muted transition hover:bg-inverse-foreground/10 hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 export const shellNavActiveStyles = "bg-primary/35 text-inverse-foreground";
@@ -21,6 +21,14 @@ export function ShellLayout({ children, navigation, subtitle, heading, actions, 
   children: ReactNode; navigation: ReactNode; subtitle: string; heading: ReactNode; actions: ReactNode;
   mobileOpen: boolean; onMobileChange: (open: boolean) => void;
 }) {
+  const menuId = useId();
+  useEffect(() => {
+    const breakpoint = window.matchMedia("(min-width: 1024px)");
+    const closeAtDesktop = () => { if (breakpoint.matches) onMobileChange(false); };
+    closeAtDesktop();
+    breakpoint.addEventListener("change", closeAtDesktop);
+    return () => breakpoint.removeEventListener("change", closeAtDesktop);
+  }, [onMobileChange]);
   return <div className="min-h-dvh bg-surface-subtle">
     <div className="fixed inset-y-4 left-4 z-20 hidden w-[244px] flex-col gap-3 lg:flex">
       <div className="flex h-[60px] shrink-0 items-center rounded-2xl border border-primary-border bg-primary-soft/60 px-4"><ShellBrand subtitle={subtitle} /></div>
@@ -28,19 +36,19 @@ export function ShellLayout({ children, navigation, subtitle, heading, actions, 
         {navigation}
       </aside>
     </div>
-    {mobileOpen && <div className="fixed inset-0 z-40 p-3 lg:hidden">
-      <button type="button" aria-label="Đóng menu bằng lớp phủ" className="absolute inset-0 bg-overlay/50" onClick={() => onMobileChange(false)} />
-      <div className="relative flex h-full w-[min(290px,84vw)] flex-col gap-3">
-        <div className="flex shrink-0 items-center justify-between gap-2 rounded-2xl border border-primary-border bg-primary-soft px-4 py-3 shadow-soft ring-1 ring-primary/10"><ShellBrand subtitle={subtitle} /><Button type="button" variant="secondary" size="icon" aria-label="Đóng menu" onClick={() => onMobileChange(false)}><X aria-hidden="true" size={18} /></Button></div>
-        <aside aria-label="Menu di động" className="min-h-0 flex-1 overflow-y-auto rounded-2xl bg-surface-inverse px-[18px] py-5 text-inverse-foreground shadow-soft">
+    <Dialog open={mobileOpen} onOpenChange={onMobileChange} className="ml-3 mr-auto max-w-[290px]">
+      <DialogContent id={menuId} className="max-h-[calc(100dvh-2rem)] overflow-hidden" contentClassName="flex max-h-[calc(100dvh-2rem)] flex-col">
+        <div className="flex shrink-0 items-center justify-between gap-2 border-b border-border bg-primary-soft px-4 py-3"><ShellBrand subtitle={subtitle} /><DialogClose size="icon" aria-label="Đóng menu"><X aria-hidden="true" size={18} /></DialogClose></div>
+        <DialogTitle className="sr-only">Điều hướng</DialogTitle>
+        <aside aria-label="Menu di động" className="min-h-0 overflow-y-auto bg-surface-inverse px-[18px] py-4 text-inverse-foreground">
           {navigation}
         </aside>
-      </div>
-    </div>}
+      </DialogContent>
+    </Dialog>
     <main className="min-w-0 pt-4 lg:pl-[260px]">
       <header className="sticky top-4 z-10 mx-4 flex min-h-[60px] items-center justify-between gap-2 rounded-2xl border border-border bg-surface/95 px-3 backdrop-blur sm:mx-6 sm:gap-3 sm:px-5 xl:mx-12">
         <div className="flex min-w-0 items-center gap-3">
-          <Button type="button" variant="secondary" aria-label="Mở menu" className="h-11 w-11 shrink-0 rounded-xl px-0 lg:hidden" onClick={() => onMobileChange(true)}><Menu aria-hidden="true" size={20} /></Button>
+          <Button type="button" variant="secondary" aria-label="Mở menu" aria-expanded={mobileOpen} aria-controls={menuId} className="h-11 w-11 shrink-0 rounded-xl px-0 lg:hidden" onClick={() => onMobileChange(true)}><Menu aria-hidden="true" size={20} /></Button>
           {heading}
         </div>
         <div className="flex shrink-0 items-center gap-2">{actions}</div>

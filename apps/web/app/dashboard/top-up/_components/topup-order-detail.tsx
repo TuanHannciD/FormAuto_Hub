@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Copy, FileImage, X } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, KeyValueRow } from "@/components/ui";
+import { Dialog, DialogBody, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, Input, KeyValueRow } from "@/components/ui";
 import { StatusBadge } from "@/components/status-badge";
 import type { TopupOrder } from "@/lib/api";
 import { displayPaymentMethod } from "@/lib/labels";
@@ -31,7 +31,7 @@ export function TopupOrderDetailDialog({ order, evidenceUrl, evidenceError = fal
   return <Dialog open={order !== null} className="max-w-3xl" onOpenChange={open => { if (!open) onClose(); }}>
     {order && <DialogContent contentClassName="flex max-h-[calc(100dvh-2rem-2px)] flex-col">
       <DialogHeader className="flex shrink-0 items-start justify-between gap-3">
-        <div><DialogTitle>Chi tiết yêu cầu nạp</DialogTitle><DialogDescription>Theo dõi thanh toán và trạng thái ghi nhận credit.</DialogDescription></div>
+        <div><DialogTitle>Chi tiết yêu cầu nạp</DialogTitle></div>
         <DialogClose size="icon" aria-label="Đóng chi tiết"><X size={16} /></DialogClose>
       </DialogHeader>
       <DialogBody className="min-h-0 space-y-4 overflow-y-auto">
@@ -54,7 +54,7 @@ export function TopupOrderDetailDialog({ order, evidenceUrl, evidenceError = fal
           <section className="min-w-0 space-y-3" aria-label="Minh chứng chuyển khoản">
             <h3 className="flex items-center gap-2 text-sm font-bold"><FileImage size={16} className="text-primary" />Minh chứng chuyển khoản</h3>
             {evidenceUrl ? <div className="relative h-[240px] overflow-hidden rounded-xl border border-border bg-surface-subtle"><Image unoptimized fill className="object-contain p-2" src={evidenceUrl} alt="Ảnh minh chứng nạp credit" sizes="(max-width: 768px) 90vw, 350px" /></div>
-              : <div className="flex min-h-32 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-subtle p-4 text-center text-sm text-muted-foreground"><FileImage size={24} aria-hidden="true" /><p>{evidenceError ? "Không tải được ảnh minh chứng." : order.evidenceFileId ? "Đang tải minh chứng..." : "Yêu cầu này không có ảnh minh chứng."}</p></div>}
+              : <div className="flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-subtle p-4 text-center text-sm text-muted-foreground"><FileImage size={24} aria-hidden="true" /><p>{evidenceError ? "Không tải được ảnh minh chứng." : order.evidenceFileId ? "Đang tải minh chứng..." : "Yêu cầu này không có ảnh minh chứng."}</p></div>}
           </section>
         </div>
         <p className="text-xs leading-5 text-muted-foreground">Credit được ghi nhận sau khi thanh toán được xác minh hoặc yêu cầu đối soát được duyệt.</p>

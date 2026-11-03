@@ -1,0 +1,28 @@
+{
+  "task": "FAH-UI-003",
+  "owner": "audit_fixture_runtime",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "date": "2026-11-02",
+  "status": "Blocked",
+  "webOrigin": "http://127.0.0.1:3035",
+  "apiOrigin": "http://127.0.0.1:3036",
+  "webLauncherPid": null,
+  "webListenerPid": null,
+  "mockPid": null,
+  "processesStarted": false,
+  "launcherExecuted": false,
+  "healthChecks": "Not run: startup rejected before execution",
+  "portVerification": "Verified: no listener on 3035/3036 and no node command line matching fixture-api.cjs, 3035 or 3036 after rejection",
+  "automaticReview": {
+    "action": "Start hidden local Node mock API and Next web dev processes with stdout/stderr logs and ownership artifact",
+    "result": "Rejected",
+    "reportedReason": "blocked by policy",
+    "rawErrorSummary": "exec_command failed: CreateProcess { message: Rejected(... rejected: blocked by policy) }",
+    "additionalReasonProvided": false
+  },
+  "files": ["fixture-api.cjs", "start-fixture.ps1"],
+  "stopMethod": "None required: no owned process was started",
+  "generatedNextOutput": "None from this helper; parent authorized ignored apps/web/.next runtime output but startup never ran",
+  "limits": "Synthetic fixtures prepared only; no API/browser/DB/provider verification; launcher remains unexecuted and must not be retried to circumvent rejection"
+}

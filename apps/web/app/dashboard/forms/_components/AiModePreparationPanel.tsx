@@ -1,5 +1,5 @@
-﻿import { LockKeyhole, Sparkles, Wand2 } from "lucide-react";
-import { Badge, Button, Input, Textarea } from "@/components/ui";
+﻿import { Sparkles, Wand2 } from "lucide-react";
+import { Button, Input, Textarea } from "@/components/ui";
 import type { AiDirectionFields, AiGenerationMode, AiPromptScope } from "../_types";
 import {
   AI_GLOBAL_PROMPT_MAX_LENGTH,
@@ -20,6 +20,7 @@ export function AiModePreparationPanel({
   aiQuestionPrompts,
   previewCount,
   multiplier,
+  balance,
   busy,
   canGenerate,
   onDirectionChange,
@@ -40,6 +41,7 @@ export function AiModePreparationPanel({
   aiQuestionPrompts: Record<string, string>;
   previewCount: number;
   multiplier: number;
+  balance: number | null;
   busy: boolean;
   canGenerate: boolean;
   onDirectionChange: (key: keyof AiDirectionFields, value: string) => void;
@@ -55,27 +57,11 @@ export function AiModePreparationPanel({
 
   return (
     <div className="space-y-4">
-      <div className={`rounded-xl border p-4 shadow-sm ring-1 ${
-        isCustom
-          ? "border-primary-border bg-primary-soft text-primary ring-primary-border"
-          : "border-info-border bg-info-surface text-info ring-info-border"
-      }`}>
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge tone={isCustom ? "warning" : "info"}>{isCustom ? "AI tùy chỉnh" : "AI mặc định"}</Badge>
-              <Badge tone={isCustom ? "warning" : "info"}>x{multiplier} credit</Badge>
-            </div>
-            <p className="mt-2 text-sm font-semibold">{isCustom ? "AI tùy chỉnh theo hướng dẫn" : "AI mặc định theo prompt chung"}</p>
-            <p className="mt-1 text-xs leading-5 opacity-80">
-              Câu trả lời hợp lệ được lưu thành bản xem trước. Hãy kiểm tra nội dung trước khi xác nhận gửi.
-            </p>
-          </div>
-          <Button className="w-full gap-2 md:w-auto" disabled={busy} type="button" variant="secondary" onClick={onAutoFill}>
-            <Wand2 className="h-4 w-4" />
-            Điền prompt
-          </Button>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">Miễn phí điền gợi ý; lưu hướng dẫn khi tạo bản xem trước.</p>
+        <Button className="w-full gap-2 sm:w-auto" disabled={busy} type="button" variant="secondary" onClick={onAutoFill}>
+          <Wand2 aria-hidden="true" className="h-4 w-4" />Điền gợi ý hướng dẫn
+        </Button>
       </div>
 
       {isCustom && (
@@ -98,7 +84,7 @@ export function AiModePreparationPanel({
       <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <label className="block flex-1 text-sm font-medium">
-            Prompt chung
+            Hướng dẫn chung
             <Textarea
               className="mt-2 min-h-28"
               maxLength={AI_GLOBAL_PROMPT_MAX_LENGTH}
@@ -116,7 +102,7 @@ export function AiModePreparationPanel({
                 type="button"
                 onClick={() => onPromptScopeChange("global")}
               >
-                Prompt chung
+                Hướng dẫn chung
               </button>
               <button
                 className={`rounded-xl px-3 py-2 transition ${aiPromptScope === "per-question" ? "bg-primary text-inverse-foreground shadow-sm" : "text-muted-foreground hover:bg-primary-soft"}`}
@@ -146,19 +132,17 @@ export function AiModePreparationPanel({
         ))}
       </div>
 
-      <div className={`sticky bottom-3 z-[200] flex flex-col gap-4 rounded-xl border p-4 shadow-soft ring-1 sm:flex-row sm:items-end sm:justify-between ${
+      <div role="region" aria-label="Tạo bản xem trước AI" className={`sticky bottom-3 z-[200] flex flex-col gap-4 rounded-xl border p-4 shadow-soft ring-1 sm:flex-row sm:items-end sm:justify-between ${
         isCustom
           ? "border-primary-border/80 bg-primary-soft ring-primary-border"
           : "border-info-border bg-info-surface ring-info-border"
       }`}>
         <div className="w-full sm:w-auto">
-          <div className="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
-            <LockKeyhole className="h-3.5 w-3.5" />
-            AI preview chỉ đọc
-          </div>
-          <p className="mt-3 text-sm font-semibold text-foreground">Số câu trả lời xem trước</p>
-          <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}; chi phí thật sẽ là {previewCount * multiplier} credit.</p>
+          <label htmlFor="ai-preview-count" className="block text-sm font-semibold text-foreground">Số bản xem trước</label>
+          <p id="ai-count-help" className="mt-1 text-xs text-secondary-foreground">1–{PREVIEW_COUNT_MAX} bản · Xem lại và xác nhận trước khi gửi.</p>
           <Input
+            id="ai-preview-count"
+            aria-describedby="ai-count-help ai-cost"
             className="mt-2 w-full sm:w-32"
             inputMode="numeric"
             max={PREVIEW_COUNT_MAX}
@@ -168,13 +152,11 @@ export function AiModePreparationPanel({
             value={previewCount}
             onChange={(event) => onPreviewCountChange(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
           />
-          <p className="mt-2 text-xs font-medium text-info">
-            Chỉ trừ credit cho bản xem trước hợp lệ được tạo và lưu thành công. Nội dung AI chỉ đọc.
-          </p>
+          <p id="ai-cost" className="mt-2 text-xs font-medium text-info">Chi phí dự kiến: {previewCount * multiplier} credit · {balance === null ? "Chưa tải được số dư" : `${balance} credit khả dụng`}. Chỉ trừ cho bản xem trước hợp lệ đã lưu.</p>
         </div>
         <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-primary text-inverse-foreground hover:bg-primary-hover" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">
           <Sparkles className="h-4 w-4" />
-          Lưu và tạo AI preview
+          Lưu và tạo bản xem trước AI
         </Button>
       </div>
     </div>

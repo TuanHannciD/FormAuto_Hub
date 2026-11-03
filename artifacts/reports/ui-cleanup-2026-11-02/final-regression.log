@@ -1,0 +1,205 @@
+
+[1A[2K[WebServer] (node:16608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:35756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 172 tests using 2 workers
+
+[1A[2K[1/172] [chromium] › tests\account-navigation.spec.ts:63:5 › popup can close during opening, dismiss outside and skip motion when reduced
+[1A[2K[2/172] [chromium] › tests\account-navigation.spec.ts:23:5 › popup grows before revealing content and hides content before closing
+[1A[2K[3/172] [chromium] › tests\account-navigation.spec.ts:100:5 › account entry is in topbar, with shared profile and security navigation
+[1A[2K[4/172] [chromium] › tests\account-navigation.spec.ts:117:5 › account dropdown supports keyboard dismissal, outside click and narrow screens
+[1A[2K[5/172] [chromium] › tests\account-navigation.spec.ts:139:5 › profile save updates topbar name and password keeps the existing request contract
+[1A[2K[6/172] [chromium] › tests\account-navigation.spec.ts:160:5 › admin uses the same account menu and logout clears session
+[1A[2K[7/172] [chromium] › tests\account-navigation.spec.ts:171:5 › compact modal contains focus, fits mobile and restores focus after Escape
+[1A[2K[8/172] [chromium] › tests\account-navigation.spec.ts:194:5 › retired profile and security pages no longer render
+[1A[2K[9/172] [chromium] › tests\account-navigation.spec.ts:204:5 › account popup interpolates height, handles interruption and remains bounded on mobile
+[1A[2K[10/172] [chromium] › tests\account-navigation.spec.ts:245:5 › account keeps native scrolling on mobile after resizing before swapping content
+[1A[2K[11/172] [chromium] › tests\admin-ui-refinement.spec.ts:36:5 › 390px admin task content follows compact summaries within the first viewport
+[1A[2K[12/172] [chromium] › tests\admin-ui-refinement.spec.ts:48:5 › mobile AI tabs remain touch sized and long saved models remain readable
+[1A[2K[13/172] [chromium] › tests\admin-ui-refinement.spec.ts:64:5 › failed AI statistics remain an error instead of an empty dataset
+[1A[2K[14/172] [chromium] › tests\admin-ui-refinement.spec.ts:71:5 › admin data pages distinguish loading and failed reads from empty results
+[1A[2K[15/172] [chromium] › tests\admin-ui-refinement.spec.ts:95:5 › manual payment decisions preserve review details and write payloads in isolated fixtures
+[1A[2K[16/172] [chromium] › tests\admin-ui-refinement.spec.ts:126:5 › manual grants require a selected recipient and retain credit ledger request fields
+[1A[2K[17/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 320px
+[1A[2K[18/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 390px
+[1A[2K[19/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 768px
+[1A[2K[20/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1024px
+[1A[2K[21/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1366px
+[1A[2K[22/172] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1920px
+[1A[2K[23/172] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 1440px
+[1A[2K[24/172] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 320px
+[1A[2K[25/172] [chromium] › tests\admin-ui.spec.ts:67:5 › admin mobile navigation changes routes, closes and keeps account popup accessible
+[1A[2K[26/172] [chromium] › tests\admin-ui.spec.ts:84:5 › admin settings keep their save payloads after restyling
+[1A[2K[27/172] [chromium] › tests\admin-ui.spec.ts:98:5 › normal users still cannot render admin controls
+[1A[2K[28/172] [chromium] › tests\auth-session.spec.ts:10:5 › expired stored session settles on login with one notification
+[1A[2K[29/172] [chromium] › tests\auth-session.spec.ts:26:5 › parallel dashboard requests share refresh and keep the rotated session
+[1A[2K[30/172] [chromium] › tests\dashboard-ui-refinement.spec.ts:22:5 › 390x844 five-package topup keeps selected package, amount and payment action in the initial viewport
+[1A[2K[31/172] [chromium] › tests\dashboard-ui-refinement.spec.ts:48:5 › large dashboard balances stay on a readable single line at narrow and laptop widths
+[1A[2K[32/172] [chromium] › tests\direct-rule-submission.spec.ts:91:5 › rules uses one direct action without preview, checkbox, or common submission payload
+[1A[2K[33/172] [chromium] › tests\direct-rule-submission.spec.ts:135:5 › unknown transport and refresh check the same command without saving rules again
+[1A[2K[34/172] [chromium] › tests\direct-rule-submission.spec.ts:171:5 › 503 retains the command and retry reuses it without saving rules again
+[1A[2K[35/172] [chromium] › tests\direct-rule-submission.spec.ts:204:5 › post-admission 400 reconciles the existing job by command ID
+[1A[2K[36/172] [chromium] › tests\direct-rule-submission.spec.ts:239:5 › pre-admission 400 clears only after same-command GET confirms 404
+[1A[2K[37/172] [chromium] › tests\direct-rule-submission.spec.ts:268:5 › failed reconciliation probe keeps the original command fail-closed
+[1A[2K[38/172] [chromium] › tests\direct-rule-submission.spec.ts:294:5 › unexpected reconciliation job identity retains the original command
+[1A[2K[39/172] [chromium] › tests\direct-rule-submission.spec.ts:316:5 › session change during 400 response retains the original user's command without probing
+[1A[2K[40/172] [chromium] › tests\direct-rule-submission.spec.ts:345:5 › uncertain failed job retains the command and repeated checks cannot create a new one
+[1A[2K[41/172] [chromium] › tests\direct-rule-submission.spec.ts:382:5 › account switching preserves each user's unresolved command
+[1A[2K[42/172] [chromium] › tests\direct-rule-submission.spec.ts:408:5 › storage synchronization locks a second tab for the same user
+[1A[2K[43/172] [chromium] › tests\direct-rule-submission.spec.ts:429:5 › missing Web Locks fails closed before saving rules or creating a command
+[1A[2K[44/172] [chromium] › tests\direct-rule-submission.spec.ts:455:5 › terminal completion only clears the command it resolved
+[1A[2K[45/172] [chromium] › tests\direct-rule-submission.spec.ts:476:5 › partial direct result reports the sent subset and missing count
+[1A[2K[46/172] [chromium] › tests\direct-rule-submission.spec.ts:494:5 › mixed result distinguishes generated attempts, successes, failures, and credit shortage
+[1A[2K[47/172] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option2 still requires preview and confirmation before common send
+[1A[2K[48/172] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option3 still requires preview and confirmation before common send
+[1A[2K[49/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:36:5 › ERR021 failed profile load blocks PUT and retries only the read
+[1A[2K[50/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:54:5 › ERR021 failed security load does not label Google unlinked and retry restores known state
+[1A[2K[51/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:72:49 › ERR016 503 detail offers GET-only retry without claiming missing
+[1A[2K[52/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:72:49 › ERR016 transport detail offers GET-only retry without claiming missing
+[1A[2K[53/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:88:5 › ERR016 404 retains privacy-safe wording
+[1A[2K[54/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:98:5 › ERR015 manual request keeps confirmed ID while history refresh fails; retry never repeats POST
+[1A[2K[55/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:119:5 › ERR015 checkout redirects even when subsequent list reads would fail
+[1A[2K[56/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:132:49 › ERR015 admin approve keeps confirmed decision on refresh failure
+[1A[2K[57/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:132:49 › ERR015 admin reject keeps confirmed decision on refresh failure
+[1A[2K[58/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:159:5 › ERR021 failed admin user search clears old options and blocks grant until retry
+[1A[2K[59/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:180:5 › ERR015 manual grant keeps confirmed transaction and balance when history fails
+[1A[2K[60/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard absent supports keyboard and repeat feedback
+[1A[2K[61/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard reject supports keyboard and repeat feedback
+[1A[2K[62/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard success supports keyboard and repeat feedback
+[1A[2K[63/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard absent supports keyboard and repeat feedback
+[1A[2K[64/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard reject supports keyboard and repeat feedback
+[1A[2K[65/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard success supports keyboard and repeat feedback
+[1A[2K[66/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard absent supports keyboard and repeat feedback
+[1A[2K[67/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard reject supports keyboard and repeat feedback
+[1A[2K[68/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard success supports keyboard and repeat feedback
+[1A[2K[69/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:214:45 › ERR015 ERR019 ai retains local configuration check after failed refresh
+[1A[2K[70/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:214:45 › ERR015 ERR019 payos retains local configuration check after failed refresh
+[1A[2K[71/172] [chromium] › tests\fah-err-account-payments-errors.spec.ts:230:5 › ERR019 payment return explains waiting for confirmation in user language
+[1A[2K[72/172] [chromium] › tests\fah-err-forms-errors.spec.ts:40:5 › ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds
+[1A[2K[73/172] [chromium] › tests\fah-err-forms-errors.spec.ts:60:5 › ERR014 known absent profile permits a new profile with defaults
+[1A[2K[74/172] [chromium] › tests\fah-err-forms-errors.spec.ts:68:5 › ERR014 pending profile read locks competing mode/project changes; next mode owns its profile
+[1A[2K[75/172] [chromium] › tests\fah-err-forms-errors.spec.ts:93:5 › ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews
+[1A[2K[76/172] [chromium] › tests\fah-err-forms-errors.spec.ts:113:5 › ERR015 AI continuation retains the second confirmed run and cost when only its preview GET fails
+[1A[2K[77/172] [chromium] › tests\fah-err-forms-errors.spec.ts:154:7 › ERR011 generation shows safe failure and run ID: known
+[1A[2K[78/172] [chromium] › tests\fah-err-forms-errors.spec.ts:154:7 › ERR011 generation shows safe failure and run ID: unknown
+[1A[2K[79/172] [chromium] › tests\fah-err-forms-errors.spec.ts:165:5 › ERR011 AI usage exposes safe reason and existing run ID without raw historical text
+[1A[2K[80/172] [chromium] › tests\fah-err-forms-errors.spec.ts:177:5 › ERR023 submission details retain IDs and uncertainty without inviting resend
+[1A[2K[81/172] [chromium] › tests\fah-err-forms-errors.spec.ts:196:5 › ERR023 ordinary and missing historical causes keep IDs and safe mixed counts without inventing uncertainty
+[1A[2K[82/172] [chromium] › tests\fah-err-forms-errors.spec.ts:228:7 › ERR024 Date clear/retype both endpoints blocks invalid POST and sends displayed state
+[1A[2K[83/172] [chromium] › tests\fah-err-forms-errors.spec.ts:228:7 › ERR024 Time clear/retype both endpoints blocks invalid POST and sends displayed state
+[1A[2K[84/172] [chromium] › tests\fah-err-forms-errors.spec.ts:254:5 › ERR024 time step follows existing integer 5–120 bounds and mode defaults match payload
+[1A[2K[85/172] [chromium] › tests\fah-err-nckh-errors.spec.ts:27:5 › ERR021 initial list failure stays unknown until read-only retry confirms empty
+[1A[2K[86/172] [chromium] › tests\fah-err-nckh-errors.spec.ts:41:5 › ERR017 current partial failure disables mutation and export until GET retry recovers
+[1A[2K[87/172] [chromium] › tests\fah-err-nckh-errors.spec.ts:55:5 › ERR017 selection B displays B while A finishes later
+[1A[2K[88/172] [chromium] › tests\fah-err-nckh-errors.spec.ts:70:5 › ERR021 confirmed import followed by list failure hides stale rows and retry only reads
+[1A[2K[89/172] [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens
+[1A[2K[90/172] [chromium] › tests\form-automation.spec.ts:102:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K[91/172] [chromium] › tests\form-automation.spec.ts:114:5 › rules step navigation targets existing sections
+[1A[2K[92/172] [chromium] › tests\form-automation.spec.ts:123:5 › rules with no supported questions never links to an absent action
+[1A[2K[93/172] [chromium] › tests\form-automation.spec.ts:133:5 › AI summary uses active request count after direct mode
+[1A[2K[94/172] [chromium] › tests\form-automation.spec.ts:144:5 › quantity and cost context are available by label at each generation action
+[1A[2K[95/172] [chromium] › tests\form-automation.spec.ts:161:5 › changing form URL clears previous analysis even when the next analysis fails
+[1A[2K[96/172] [chromium] › tests\form-automation.spec.ts:174:5 › AI partial results without credit shortage report actual previews and cost
+[1A[2K[97/172] [chromium] › tests\form-automation.spec.ts:192:5 › desktop and mobile workflow render without overflow or drawer overlap
+[1A[2K[98/172] [chromium] › tests\form-automation.spec.ts:221:5 › sticky generation actions remain clickable above expanded question editors
+[1A[2K[99/172] [chromium] › tests\manual-credit-ui.spec.ts:6:38 › history and compact order/grant details work at 1440px
+[1A[2K[100/172] [chromium] › tests\manual-credit-ui.spec.ts:6:38 › history and compact order/grant details work at 320px
+[1A[2K[101/172] [chromium] › tests\nckh-delete-model.spec.ts:59:5 › uses fresh totals, exact Vietnamese name, deletes only requested model and preserves selection
+[1A[2K[102/172] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss cancel sends no DELETE and reopening resets name
+[1A[2K[103/172] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss escape sends no DELETE and reopening resets name
+[1A[2K[104/172] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss backdrop sends no DELETE and reopening resets name
+[1A[2K[105/172] [chromium] › tests\nckh-delete-model.spec.ts:89:5 › loading and partial GET failure block deletion; reload recovers
+[1A[2K[106/172] [chromium] › tests\nckh-delete-model.spec.ts:100:5 › renamed model at final check requires refreshed information and a new confirmation
+[1A[2K[107/172] [chromium] › tests\nckh-delete-model.spec.ts:114:5 › existing generated-form restriction is explained and cannot be confirmed
+[1A[2K[108/172] [chromium] › tests\nckh-delete-model.spec.ts:120:5 › form generated in another tab before final check prevents DELETE
+[1A[2K[109/172] [chromium] › tests\nckh-delete-model.spec.ts:134:5 › malformed count never permits confirmation
+[1A[2K[110/172] [chromium] › tests\nckh-delete-model.spec.ts:141:5 › cancel during impact loading ignores late results
+[1A[2K[111/172] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 404 keeps popup open and requires reload, without automatic replay
+[1A[2K[112/172] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 409 keeps popup open and requires reload, without automatic replay
+[1A[2K[113/172] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 500 keeps popup open and requires reload, without automatic replay
+[1A[2K[114/172] [chromium] › tests\nckh-delete-model.spec.ts:158:5 › while DELETE is pending, repeated click, Escape, backdrop and cancel cannot interrupt it
+[1A[2K[115/172] [chromium] › tests\nckh-delete-model.spec.ts:171:5 › empty model on 320px viewport and reduced motion can be confirmed with accessible footer
+[1A[2K[116/172] [chromium] › tests\nckh.spec.ts:297:7 › NCKH — Auth & Redirect › unauthenticated user is redirected to /login
+[1A[2K[117/172] [chromium] › tests\nckh.spec.ts:302:7 › NCKH — Auth & Redirect › authenticated user sees NCKH dashboard
+[1A[2K[118/172] [chromium] › tests\nckh.spec.ts:319:7 › NCKH — Google Not Linked › shows Liên kết Google button when not linked
+[1A[2K[119/172] [chromium] › tests\nckh.spec.ts:324:7 › NCKH — Google Not Linked › shows status message about linking
+[1A[2K[120/172] [chromium] › tests\nckh.spec.ts:329:7 › NCKH — Google Not Linked › import form section is hidden when not linked
+[1A[2K[121/172] [chromium] › tests\nckh.spec.ts:335:7 › NCKH — Google Not Linked › unlinked Google shows linking guidance without asserting an empty form list
+[1A[2K[122/172] [chromium] › tests\nckh.spec.ts:344:5 › Google authorization failure retains session without attempting JWT refresh
+[1A[2K[123/172] [chromium] › tests\nckh.spec.ts:359:5 › forms server failure offers retry without claiming Google is unlinked
+[1A[2K[124/172] [chromium] › tests\nckh.spec.ts:373:5 › genuine NCKH JWT failure still clears invalid session and redirects to login
+[1A[2K[125/172] [chromium] › tests\nckh.spec.ts:393:7 › NCKH — Google Linked › shows 'Đã liên kết Google' status
+[1A[2K[126/172] [chromium] › tests\nckh.spec.ts:398:7 › NCKH — Google Linked › import form input is visible
+[1A[2K[127/172] [chromium] › tests\nckh.spec.ts:403:7 › NCKH — Google Linked › import button is visible
+[1A[2K[128/172] [chromium] › tests\nckh.spec.ts:408:7 › NCKH — Google Linked › renders form list table with items
+[1A[2K[129/172] [chromium] › tests\nckh.spec.ts:414:7 › NCKH — Google Linked › form title is clickable link
+[1A[2K[130/172] [chromium] › tests\nckh.spec.ts:424:7 › NCKH — Google Linked › pagination shows correct info
+[1A[2K[131/172] [chromium] › tests\nckh.spec.ts:438:7 › NCKH — Import Form › successful import shows toast and clears input
+[1A[2K[132/172] [chromium] › tests\nckh.spec.ts:448:7 › NCKH — Import Form › import fails with 401 shows error and resets link status
+[1A[2K[133/172] [chromium] › tests\nckh.spec.ts:459:7 › NCKH — Import Form › import fails with 409 duplicate
+[1A[2K[134/172] [chromium] › tests\nckh.spec.ts:470:7 › NCKH — Import Form › prevents duplicate import submit while request is pending
+[1A[2K[135/172] [chromium] › tests\nckh.spec.ts:498:7 › NCKH — Callback Page › callback with ?linked=true shows success toast and cleans URL
+[1A[2K[136/172] [chromium] › tests\nckh.spec.ts:509:7 › NCKH — Callback Page › callback with ?error=... shows error toast
+[1A[2K[137/172] [chromium] › tests\nckh.spec.ts:517:7 › NCKH — Callback Page › direct callback page without code redirects to dashboard
+[1A[2K[138/172] [chromium] › tests\nckh.spec.ts:525:7 › NCKH — Callback Page › callback with valid code calls API and redirects with success
+[1A[2K[139/172] [chromium] › tests\nckh.spec.ts:548:7 › NCKH — Callback Page › callback with invalid code shows error then redirects
+[1A[2K[140/172] [chromium] › tests\nckh.spec.ts:562:7 › NCKH — Callback Page › callback with already-linked account shows 409 then redirects
+[1A[2K[141/172] [chromium] › tests\nckh.spec.ts:580:7 › NCKH — Navigation › NCKH nav item exists in sidebar
+[1A[2K[142/172] [chromium] › tests\nckh.spec.ts:588:7 › NCKH — Navigation › clicking NCKH nav item navigates to NCKH page
+[1A[2K[143/172] [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing
+[1A[2K[144/172] [chromium] › tests\nckh.spec.ts:625:7 › NCKH — Phase 7 Workspace › renders form workspace with model tabs
+[1A[2K[145/172] [chromium] › tests\nckh.spec.ts:637:7 › NCKH — Phase 7 Workspace › opens variables and mapping popups from canvas
+[1A[2K[146/172] [chromium] › tests\nckh.spec.ts:656:7 › NCKH — Phase 7 Workspace › cancels model impact dialog and shared mapping confirmation without sending DELETE
+[1A[2K[147/172] [chromium] › tests\nckh.spec.ts:689:7 › NCKH — Phase 7 Workspace › normalizes Likert variable payload from the canvas popup
+[1A[2K[148/172] [chromium] › tests\nckh.spec.ts:727:7 › NCKH — Phase 7 Workspace › places unsaved new variables on a visible canvas slot
+[1A[2K[149/172] [chromium] › tests\nckh.spec.ts:757:7 › NCKH — Phase 7 Workspace › renders Phase 9 visual canvas using existing relation and position APIs
+[1A[2K  1) [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens 
+
+    [31mTest timeout of 90000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('button', { name: /Bản xem trước #1/ })[22m
+
+
+      36 |   await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+      37 |   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
+    > 38 |   await page.getByRole("button", { name: /Bản xem trước #1/ }).click();
+         |                                                                ^
+      39 |   const answers = page.getByRole("region", { name: "Câu trả lời bản xem trước 1", exact: true });
+      40 |   await expect(answers).toBeVisible();
+      41 |   await expect(answers).toContainText(longLabel);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\form-automation.spec.ts:38:64
+
+    Error Context: test-results\form-automation-saved-AI-p-7ba29-ion-on-short-mobile-screens-chromium\error-context.md
+
+
+[1A[2K[150/172] [chromium] › tests\nckh.spec.ts:888:7 › NCKH — Phase 7 Workspace › deletes a relation from the canvas action list
+[1A[2K[151/172] [chromium] › tests\nckh.spec.ts:928:7 › NCKH — Phase 7 Workspace › blocks duplicate canvas relation before sending API request
+[1A[2K[152/172] [chromium] › tests\nckh.spec.ts:958:7 › NCKH — Phase 7 Workspace › keeps canvas relation and position edits read-only for active models
+[1A[2K[153/172] [chromium] › tests\nckh.spec.ts:985:7 › NCKH — Phase 7 Workspace › deletes a variable from the canvas node action button
+[1A[2K[154/172] [chromium] › tests\nckh.spec.ts:1032:7 › NCKH — Phase 7 Workspace › shows export actions without adding new backend contracts
+[1A[2K[155/172] [chromium] › tests\nckh.spec.ts:1041:7 › NCKH — Phase 7 Workspace › uses update action when selected model already has a generated form
+[1A[2K[156/172] [chromium] › tests\nckh.spec.ts:1070:7 › NCKH — Phase 7 Workspace › disables update action while request is submitting
+[1A[2K[157/172] [chromium] › tests\shared-ui.spec.ts:23:5 › mobile menu traps focus, returns focus and clears modal state at desktop breakpoint
+[1A[2K[158/172] [chromium] › tests\shared-ui.spec.ts:51:5 › user AI and admin payments retry failed reads without a mutation
+[1A[2K[159/172] [chromium] › tests\shared-ui.spec.ts:66:5 › profile popup uses shared surfaces and controls while preserving its save request
+[1A[2K[160/172] [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape
+[1A[2K[161/172] [chromium] › tests\shared-ui.spec.ts:101:5 › shared admin dialog opens and cancels without creating a package
+[1A[2K[162/172] [chromium] › tests\shared-ui.spec.ts:114:5 › topup detail popups share closing motion in dashboard, admin and routed detail
+[1A[2K[163/172] [chromium] › tests\shared-ui.spec.ts:152:5 › admin approval retains the popup long enough to animate its automatic close
+[1A[2K[164/172] [chromium] › tests\shared-ui.spec.ts:178:5 › dashboard and admin AI pages use the same metric component and actual values
+[1A[2K[165/172] [chromium] › tests\topup-ui.spec.ts:10:38 › topup selection, history pagination and shared details at 1440px
+[1A[2K[166/172] [chromium] › tests\topup-ui.spec.ts:10:38 › topup selection, history pagination and shared details at 320px
+[1A[2K[167/172] [chromium] › tests\topup-ui.spec.ts:67:5 › topup error retries and empty packages/history disable payment
+[1A[2K[168/172] [chromium] › tests\ui-refinement.spec.ts:18:5 › landing elevation remains translucent when the overlay backdrop token exists
+[1A[2K[169/172] [chromium] › tests\ui-refinement.spec.ts:32:5 › operating shell leaves a compact readable start for the actual task
+[1A[2K[170/172] [chromium] › tests\ui-refinement.spec.ts:49:5 › 320px shell and account popup remain reachable with keyboard and touch-sized primary controls
+[1A[2K[171/172] [chromium] › tests\ui-refinement.spec.ts:87:5 › 390x844 history first record and empty state fit after their filters
+[1A[2K[172/172] [chromium] › tests\ui-refinement.spec.ts:127:5 › native Google provider rendering fits a narrow popup, retains focus on resize and forwards credentials unchanged
+[1A[2K  1 failed
+    [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens 
+  171 passed (3.5m)

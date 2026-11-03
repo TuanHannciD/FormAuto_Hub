@@ -1104,11 +1104,11 @@ export default function FormsPage() {
       <PageHeader title="Tự động hóa biểu mẫu" description="Dùng quy tắc để tạo và gửi ngay, hoặc dùng AI để xem trước rồi xác nhận gửi." />
       <nav aria-label="Các bước tự động hóa" className="grid grid-cols-3 gap-2 sm:grid-cols-5">
         {(generationMode === "rules" ? ["Chọn form", "Cấu hình", "Gửi trực tiếp", "Đang xử lý", "Kết quả"] : ["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"]).map((label, index) => {
-          const enabled = index === 0 || (index <= 2 && Boolean(analysis)) || (index === 3 && previews.length > 0) || (index === 4 && Boolean(submission));
-          const currentStep = submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
+          const enabled = index === 0 || (index === 1 && Boolean(analysis)) || (index === 2 && Boolean(analysis) && (generationMode !== "rules" || Boolean(analysis?.questions.length))) || (index === 3 && generationMode !== "rules" && previews.length > 0) || (index === 4 && Boolean(submission));
+          const currentStep = isSending || directCommand ? 3 : submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
           const content = <><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">{index + 1}</span>{label}</>;
           const className = `flex min-h-12 items-center gap-2 rounded-xl border px-3 text-xs font-semibold ${index === currentStep ? "border-primary bg-primary-soft text-primary" : "border-border bg-surface text-muted-foreground"}`;
-          return enabled ? <a key={label} aria-current={index === currentStep ? "step" : undefined} href={`#workflow-step-${index + 1}`} className={`${className} hover:border-primary hover:text-primary`}>{content}</a> : <span key={label} aria-disabled="true" className={`${className} opacity-60`}>{content}</span>;
+          return enabled ? <a key={label} aria-current={index === currentStep ? "step" : undefined} href={`#workflow-step-${index + 1}`} className={`${className} hover:border-primary hover:text-primary`}>{content}</a> : <span key={label} aria-current={index === currentStep ? "step" : undefined} aria-disabled="true" className={`${className} opacity-60`}>{content}</span>;
         })}
       </nav>
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
@@ -1176,28 +1176,10 @@ export default function FormsPage() {
             )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-xl border border-border bg-surface p-4">
-              <div className="flex flex-wrap items-center gap-3 text-sm">
-                <Badge tone="info">{analysis.formTitle}</Badge>
-                <StatusBadge status={analysis.status} />
-                <span className="text-muted-foreground">Tạo lúc {formatDate(analysis.createdAt)}</span>
-              </div>
-              <div className="mt-3 grid gap-3 text-sm md:grid-cols-3">
-                <div>
-                  <p className="text-xs text-muted-foreground">Tên nội bộ</p>
-                  <p className="mt-1 font-medium">{analysis.name}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Số câu hỏi hỗ trợ</p>
-                  <p className="mt-1 font-medium">{analysis.questions.length}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Luồng xử lý</p>
-                  <p className="mt-1 font-medium">
-                    {generationMode === "rules" ? "Cài đặt → Tạo và gửi ngay" : "Cài đặt → Xem trước → Xác nhận"}
-                  </p>
-                </div>
-              </div>
+            <div className="space-y-2 border-b border-border pb-3 text-sm">
+              <p className="break-words font-semibold">{analysis.formTitle}</p>
+              <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">{analysis.questions.length} câu hỏi được hỗ trợ</span><StatusBadge status={analysis.status} /></div>
+              <details className="text-xs text-muted-foreground"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Thông tin biểu mẫu</summary><dl className="space-y-1 pb-2"><div><dt className="inline">Tên nội bộ: </dt><dd className="inline break-words">{analysis.name}</dd></div><div><dt className="inline">Tạo lúc: </dt><dd className="inline">{formatDate(analysis.createdAt)}</dd></div></dl></details>
             </div>
             <fieldset disabled={Boolean(pendingPreviewRead) || Boolean(directCommand)} className="m-0 min-w-0 border-0 p-0">
               <GenerationModeSelector value={generationMode} onChange={selectGenerationMode} />
@@ -1220,6 +1202,7 @@ export default function FormsPage() {
                 busy={busy || !aiProfileReady || Boolean(pendingPreviewRead)}
                 canGenerate={canGenerateAi}
                 mode={generationMode}
+                balance={creditBalance}
                 multiplier={aiCreditMultiplier}
                 previewCount={previewCount}
                 questions={analysis.questions}
@@ -1250,14 +1233,13 @@ export default function FormsPage() {
                     onToggle={() => setOpenRuleEditors((current) => ({ ...current, [question.id]: !(current[question.id] ?? true) }))}
                   />
                 ))}
-                <div className="sticky bottom-3 z-[200] flex flex-col gap-3 rounded-xl border border-info-border bg-info-surface p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+                <div id="workflow-step-3" role="region" aria-label="Tạo và gửi theo quy tắc" className="scroll-mt-24 sticky bottom-3 z-[200] flex flex-col gap-3 rounded-xl border border-info-border bg-info-surface p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
-                    <div className="inline-flex rounded-full bg-surface px-3 py-1 text-xs font-semibold text-info shadow-sm">
-                      Tạo và gửi trực tiếp
-                    </div>
-                    <p className="mt-3 text-sm font-semibold text-foreground">Số lượt cần gửi</p>
-                    <p className="mt-1 text-xs text-secondary-foreground">Tối thiểu 1, tối đa {PREVIEW_COUNT_MAX}. Hệ thống tạo và gửi ngay, không có bước xem trước.</p>
+                    <label htmlFor="rules-count" className="block text-sm font-semibold text-foreground">Số lượt cần gửi</label>
+                    <p id="rules-count-help" className="mt-1 text-xs text-secondary-foreground">1–{PREVIEW_COUNT_MAX} lượt · Tạo và gửi ngay, không xem trước.</p>
                     <Input
+                      id="rules-count"
+                      aria-describedby="rules-count-help rules-cost"
                       className="mt-2 w-full sm:w-32"
                       inputMode="numeric"
                       max={PREVIEW_COUNT_MAX}
@@ -1267,7 +1249,7 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
-                    <p className="mt-2 text-xs font-medium text-info">Mỗi lượt gửi dùng 1 credit. Nếu số dư không đủ, kết quả chỉ gồm số lượt thực tế có thể tạo và gửi.</p>
+                    <p id="rules-cost" className="mt-2 text-xs font-medium text-info">Chi phí dự kiến: {previewCount} credit · {creditBalance === null ? "Chưa tải được số dư" : `${creditBalance} credit khả dụng`}. Chỉ gửi trong số dư cho phép.</p>
                   </div>
                   <Button className="w-full sm:w-auto" disabled={busy || !canGenerate || Boolean(directCommand) || directLockSupported !== true} onClick={createAndSendRulesDirect} type="button">
                     {isSending ? "Đang tạo và gửi..." : "Tạo và gửi ngay"}
@@ -1552,7 +1534,7 @@ export default function FormsPage() {
         </Card>
       )}
       </fieldset>
-      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={directRequestedCount ?? previewCount} previewCount={generationMode === "rules" ? submission?.total ?? 0 : previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationMode === "rules" ? submission?.total : generationResult?.creditsUsed} directSuccessCount={generationMode === "rules" ? submission?.successCount : undefined} directFailedCount={generationMode === "rules" ? submission?.failedCount : undefined} stale={generationMode === "rules" ? false : previewStale} />
+      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={generationMode === "rules" ? directRequestedCount ?? previewCount : previewCount} previewCount={generationMode === "rules" ? submission?.total ?? 0 : previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationMode === "rules" ? submission?.total : generationResult?.creditsUsed} directSuccessCount={generationMode === "rules" ? submission?.successCount : undefined} directFailedCount={generationMode === "rules" ? submission?.failedCount : undefined} stale={generationMode === "rules" ? false : previewStale} />
       </div>
     </div>
   );

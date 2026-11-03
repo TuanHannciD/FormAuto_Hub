@@ -1,4 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
+import { mkdirSync } from "node:fs";
+import { resolve } from "node:path";
 
 // Browser regression tests use API fixtures; they never submit to Google Forms.
 const projectId = "automation-fixture";
@@ -12,6 +14,58 @@ const preview = (id: string) => ({
   id, projectId, status: "Previewed", source: "Rule", isReadOnly: false,
   previewText: "Có", createdAt: analysis.createdAt,
   answers: [{ questionId: "q1", entryId: "entry.1", label: "Bạn có hài lòng?", questionType: "MultipleChoice", values: ["Có"] }]
+});
+
+test("saved AI previews remain readable and require confirmation on short mobile screens", async ({ page }) => {
+  test.setTimeout(90000);
+  await setup(page);
+  const destination = resolve(__dirname, "../../../artifacts/reports/ui-cleanup-2026-11-02/after-only");
+  mkdirSync(destination, { recursive: true });
+  const longLabel = "Câu hỏi khảo sát có tiêu đề dài để kiểm tra khả năng đọc đầy đủ trên điện thoại. ".repeat(4);
+  await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
+  await page.route("**/ai-responses/generate", route => route.fulfill({ json: {
+    runId: "mobile-ai", status: "Completed", requestedCount: 1, generatedCount: 1,
+    multiplier: 2, creditsUsed: 2, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["mobile-ai-1"]
+  } }));
+  await page.route("**/responses?*", route => route.fulfill({ json: { items: [{ ...preview("mobile-ai-1"), source: "Ai", isReadOnly: true,
+    answers: Array.from({ length: 30 }, (_, index) => ({ ...preview("mobile-ai-1").answers[0], questionId: `q${index}`, label: `${index + 1}. ${longLabel}`, values: ["Câu trả lời đã lưu, giữ nguyên nội dung để xem lại trước khi gửi."] }))
+  }] } }));
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
+  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
+  const listToggle = page.getByRole("button", { name: /Danh sách bản xem trước/ });
+  await expect(listToggle).toBeVisible();
+  if (await listToggle.getAttribute("aria-expanded") === "false") await listToggle.click();
+  const previewToggle = page.getByRole("button", { name: /Bản xem trước #1/ });
+  await expect(previewToggle).toBeVisible();
+  if (await previewToggle.getAttribute("aria-expanded") === "false") await previewToggle.click();
+  const answers = page.getByRole("region", { name: "Câu trả lời bản xem trước 1", exact: true });
+  await expect(answers).toBeVisible();
+  await expect(answers).toContainText(longLabel);
+  const send = page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true });
+  await expect(send).toBeDisabled();
+  // Browser-zoom reflow surrogate: 1366x768 at 200% has 683x384 CSS pixels.
+  // CSS zoom on the root does not update media queries and is not equivalent.
+  await page.setViewportSize({ width: 683, height: 384 });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await send.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: resolve(destination, "ai-preview-desktop-reflow-200.png"), fullPage: true, animations: "disabled" });
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 568 });
+    await answers.focus();
+    await expect(answers).toBeFocused();
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await send.scrollIntoViewIfNeeded();
+    expect(await send.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    await page.screenshot({ path: resolve(destination, `ai-preview-long-${width}.png`), fullPage: true, animations: "disabled" });
+  }
+  await page.getByRole("checkbox").check();
+  await expect(send).toBeEnabled();
+  await send.click();
+  await expect(page.getByRole("heading", { name: "5. Kết quả gửi", exact: true })).toBeVisible();
+  await page.screenshot({ path: resolve(destination, "ai-result-430.png"), fullPage: true, animations: "disabled" });
 });
 
 async function setup(page: Page) {
@@ -66,6 +120,53 @@ test("rules sends the currently displayed configuration without a preview confir
   await expect(page.getByRole("heading", { name: "Kết quả gửi", exact: true })).toBeVisible();
   expect(api.directCount()).toBe(2);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
+});
+
+test("rules step navigation targets existing sections", async ({ page }) => {
+  await setup(page);
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Tạo và gửi ngay", exact: true })).toBeEnabled();
+  const missing = await page.getByRole("navigation", { name: "Các bước tự động hóa" }).locator("a").evaluateAll(links => links.map(link => (link as HTMLAnchorElement).hash).filter(hash => !document.querySelector(hash)));
+  expect(missing).toEqual([]);
+});
+
+test("rules with no supported questions never links to an absent action", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/forms/analyze", route => route.fulfill({ json: { ...analysis, questions: [] } }));
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
+  await expect(page.getByText("Không có câu hỏi được hỗ trợ", { exact: true })).toBeVisible();
+  const missing = await page.getByRole("navigation", { name: "Các bước tự động hóa" }).locator("a").evaluateAll(links => links.map(link => (link as HTMLAnchorElement).hash).filter(hash => !document.querySelector(hash)));
+  expect(missing).toEqual([]);
+});
+
+test("AI summary uses active request count after direct mode", async ({ page }) => {
+  await setup(page);
+  await analyzeAndSend(page, 2);
+  await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
+  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.locator('input[type="number"]').fill("3");
+  const summary = page.getByRole("complementary", { name: "Tóm tắt lượt tạo" });
+  await expect(summary.locator("dl > div").filter({ hasText: "Số lượt yêu cầu" })).toHaveText("Số lượt yêu cầu3");
+  await expect(summary.locator("dl > div").filter({ hasText: "Chi phí dự kiến" })).toHaveText("Chi phí dự kiến6 credit");
+});
+
+test("quantity and cost context are available by label at each generation action", async ({ page }) => {
+  await setup(page);
+  await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
+  await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+  await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
+  await expect(page.getByLabel("Số lượt cần gửi", { exact: true })).toBeVisible();
+  let region = page.getByRole("region", { name: "Tạo và gửi theo quy tắc" });
+  await expect(region).toContainText("20 credit khả dụng");
+  await expect(region).toContainText("Chi phí dự kiến: 1 credit");
+  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.getByLabel("Số bản xem trước", { exact: true }).fill("3");
+  region = page.getByRole("region", { name: "Tạo bản xem trước AI" });
+  await expect(region).toContainText("Chi phí dự kiến: 6 credit");
+  await expect(region).toContainText("20 credit khả dụng");
+  await expect(region).not.toContainText("chi phí thật");
 });
 
 test("changing form URL clears previous analysis even when the next analysis fails", async ({ page }) => {

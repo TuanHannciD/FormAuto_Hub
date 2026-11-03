@@ -20,7 +20,7 @@ function createTopupOrderColumns(onOpenDetail: (orderId: string) => void): Array
   { key: "package", header: "Gói", render: (order) => order.packageName || "-" },
   { key: "credits", header: "Số credit", render: (order) => order.credits },
   { key: "amount", header: "Số tiền", render: (order) => formatCurrency(order.amount) },
-  { key: "paymentMethod", header: "Phương thức", render: (order) => displayPaymentMethod(order.paymentMethod) },
+  { key: "paymentMethod", hideOnMobile: true, header: "Phương thức", render: (order) => displayPaymentMethod(order.paymentMethod) },
   { key: "status", header: "Trạng thái", render: (order) => <StatusBadge status={order.status} /> },
   {
     key: "evidence",
@@ -209,15 +209,13 @@ export default function TopUpPage() {
           <CardContent className="space-y-3">
             <div className="space-y-2">
               <p className="text-sm font-semibold">Chọn gói thanh toán</p>
-              <DropdownSelect className="[&_button]:min-h-11" value={packageId} options={packages.map(item => ({ value: item.id, label: item.name }))} onChange={setPackageId} disabled={isLoading || loadError || isCreatingPayos || isSubmittingManual || packages.length === 0} placeholder="Chưa có gói credit" />
+              <DropdownSelect ariaLabel="Chọn gói thanh toán" className="[&_button]:min-h-11" value={packageId} options={packages.map(item => ({ value: item.id, label: item.name }))} onChange={setPackageId} disabled={isLoading || loadError || isCreatingPayos || isSubmittingManual || packages.length === 0} placeholder="Chưa có gói credit" />
             </div>
             <div className="space-y-2 text-sm"><KeyValueRow label="Gói credit" value={selectedPackage?.name ?? "Chưa chọn"} /><KeyValueRow label="Credit nhận" value={selectedPackage ? `${selectedPackage.credits} credit` : "—"} /></div>
             <div className="rounded-xl border border-primary-border bg-primary-soft p-4"><p className="text-xs text-muted-foreground">Tổng thanh toán</p><p className="mt-1 text-2xl font-extrabold text-primary">{selectedPackage ? formatCurrency(selectedPackage.price) : "—"}</p></div>
             <Button className="w-full" disabled={isLoading || loadError || !selectedPackage || isCreatingPayos || isSubmittingManual} type="button" onClick={createPayosLink}><span>{isCreatingPayos ? "Đang tạo liên kết..." : "Tạo liên kết thanh toán"}</span>{!isCreatingPayos && <ArrowRight size={16} />}</Button>
             <p className="text-xs leading-5 text-muted-foreground">Bạn sẽ được chuyển sang PayOS để thanh toán. Credit được cộng sau khi giao dịch được xác minh thành công.</p>
-            <ol className="space-y-3 border-t border-border pt-4 text-sm">
-              {["Chọn gói credit", "Hoàn tất thanh toán trên PayOS", "Theo dõi trạng thái trong lịch sử"].map((step, index) => <li key={step} className="flex items-center gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{index + 1}</span><span>{step}</span></li>)}
-            </ol>
+
           </CardContent>
         </Card>
         <div className="order-2 min-w-0 space-y-5 xl:order-1">
@@ -228,8 +226,8 @@ export default function TopUpPage() {
                 {packages.map(item => <button type="button" key={item.id} aria-pressed={packageId === item.id} disabled={loadError || isCreatingPayos || isSubmittingManual} onClick={() => setPackageId(item.id)}
                   className={`relative flex min-w-0 flex-col rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 ${packageId === item.id ? "border-primary bg-primary-soft ring-1 ring-primary" : "border-border-strong bg-surface hover:border-primary-border hover:bg-surface-subtle"}`}>
                   <div className="flex items-start justify-between gap-2"><p className="break-words text-sm font-semibold">{item.name}</p><CheckCircle2 size={18} aria-hidden="true" className={`shrink-0 ${packageId === item.id ? "text-primary" : "text-border-strong"}`} /></div>
-                  <p className="mt-4 text-2xl font-extrabold tracking-tight text-primary">{item.credits} <span className="text-sm font-semibold">credit</span></p>
-                  <p className="mt-3 border-t border-border/70 pt-3 text-base font-bold">{formatCurrency(item.price)}</p>
+                  <p className="mt-2 text-2xl font-extrabold tracking-tight text-primary">{item.credits} <span className="text-sm font-semibold">credit</span></p>
+                  <p className="mt-2 border-t border-border/70 pt-2 text-base font-bold">{formatCurrency(item.price)}</p>
                 </button>)}
               </div>}
             </CardContent>
@@ -266,7 +264,7 @@ export default function TopUpPage() {
         <CardContent>
           {isLoading ? <p className="py-5 text-sm text-muted-foreground">Đang tải lịch sử nạp...</p> : loadError ? <p className="py-5 text-sm text-muted-foreground">Chưa tải được lịch sử. Bấm “Làm mới” để thử lại.</p> : <>
             <BaseTable items={pagedOrders} columns={topupOrderColumns} getRowKey={order => order.id} emptyTitle="Chưa có yêu cầu nạp" emptyDetail="Yêu cầu mới sẽ hiển thị ở đây để theo dõi trạng thái thanh toán."
-              mobileFooter={order => <Button className="w-full" type="button" variant="secondary" onClick={() => setSelectedOrderId(order.id)}>Xem chi tiết</Button>} />
+              mobileFooter={order => <><p className="py-2 text-xs text-muted-foreground">{displayPaymentMethod(order.paymentMethod)} · {order.evidenceFileId ? "Đã có ảnh minh chứng" : "Không có ảnh minh chứng"}</p><Button className="w-full" type="button" variant="secondary" onClick={() => setSelectedOrderId(order.id)}>Xem chi tiết</Button></>} />
             <PaginationControls page={currentPage} totalPages={totalPages} totalItems={orders.length} onPrevious={() => setHistoryPage(Math.max(1, currentPage - 1))} onNext={() => setHistoryPage(Math.min(totalPages, currentPage + 1))} />
           </>}
         </CardContent>
@@ -296,7 +294,7 @@ function RequestCode({ id }: { id: string }) {
     <span className="inline-flex items-center gap-1 align-middle">
       <span className="font-mono text-xs font-semibold">{shortId}</span>
       {copyError && <Input aria-label="Mã yêu cầu đầy đủ" className="min-w-40 font-mono text-xs" readOnly value={id} onFocus={event => event.target.select()} />}
-      <button className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-border-strong bg-surface-subtle text-muted-foreground hover:text-primary" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
+      <button className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border-strong bg-surface-subtle text-muted-foreground hover:text-primary sm:h-7 sm:w-7" type="button" onClick={copyId} aria-label="Sao chép đầy đủ mã yêu cầu">
         <Copy size={13} />
       </button>
     </span>

@@ -1,0 +1,20 @@
+{
+  "productionDiffSha256": "b0dfa7fc3043392a94b3758aba09ccfec34a7f7413ecbe4c9ea1e45afe970f3d",
+  "build": "Verified exit0",
+  "lint": "Verified exit0; two existing account warnings",
+  "auth": "Verified9/9",
+  "selectedRegression": "171 passed,1 test authoring failure; corrected full forms10/10; final reflow1/1. All172 selected cases covered across runs, not one172/172 run.",
+  "afterFrames": 61,
+  "pageErrors": 0,
+  "horizontalOverflowFrames": 0,
+  "runtime": "Runner stopped; no listeners3000/3001/3035/3036 on final ownership check",
+  "sourceReview": "final_source_review gpt-6.1-sol/high no remaining P1/P2",
+  "visualReview": "final_visual_review gpt-6.1-sol/high representative16PNG no P1/P2",
+  "limits": [
+    "No before saved AI preview/result frames",
+    "No physical device or real browser chrome zoom; reflow surrogate tested",
+    "Unchanged3001textarea-host case not run",
+    "API interception only; no live provider/DB integration",
+    "CSS zoom experiment artifact excluded from acceptance"
+  ]
+}

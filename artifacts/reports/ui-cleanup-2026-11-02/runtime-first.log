@@ -1,0 +1,15 @@
+
+[1A[2K[WebServer] (node:34728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:40256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\form-automation.spec.ts:59:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K  1 passed (25.9s)

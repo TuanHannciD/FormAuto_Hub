@@ -50,7 +50,7 @@ for (const width of [1440, 320]) {
       if (path.endsWith("ai-usage")) {
         await expect(page.getByText("Tổng lượt AI", { exact: true })).toBeVisible();
         await page.getByRole("button", { name: "Lịch sử", exact: true }).click();
-        await expect(page.getByRole("heading", { name: "Lịch sử AI generation", exact: true })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Lịch sử tạo câu trả lời AI", exact: true })).toBeVisible();
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         await page.getByRole("button", { name: "Tổng quan", exact: true }).click();
         await expect(page.getByText("Tổng lượt AI", { exact: true })).toBeVisible();

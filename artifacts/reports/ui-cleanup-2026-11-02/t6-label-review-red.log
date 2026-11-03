@@ -1,0 +1,14 @@
+
+[1A[2K[WebServer] (node:39464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:40608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing

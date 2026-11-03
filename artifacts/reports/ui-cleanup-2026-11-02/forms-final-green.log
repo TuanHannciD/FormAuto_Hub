@@ -1,0 +1,48 @@
+
+[1A[2K[WebServer] (node:14228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:32168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+[1A[2K[1/10] [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens
+[1A[2K  1) [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('region', { name: 'Câu trả lời bản xem trước 1', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('region', { name: 'Câu trả lời bản xem trước 1', exact: true })[22m
+
+
+      39 |   await page.getByRole("button", { name: /Bản xem trước #1/ }).click();
+      40 |   const answers = page.getByRole("region", { name: "Câu trả lời bản xem trước 1", exact: true });
+    > 41 |   await expect(answers).toBeVisible();
+         |                         ^
+      42 |   await expect(answers).toContainText(longLabel);
+      43 |   const send = page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true });
+      44 |   await expect(send).toBeDisabled();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\form-automation.spec.ts:41:25
+
+    Error Context: test-results\form-automation-saved-AI-p-7ba29-ion-on-short-mobile-screens-chromium\error-context.md
+
+
+[1A[2K[2/10] [chromium] › tests\form-automation.spec.ts:109:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K[3/10] [chromium] › tests\form-automation.spec.ts:121:5 › rules step navigation targets existing sections
+[1A[2K[4/10] [chromium] › tests\form-automation.spec.ts:130:5 › rules with no supported questions never links to an absent action
+[1A[2K[5/10] [chromium] › tests\form-automation.spec.ts:140:5 › AI summary uses active request count after direct mode
+[1A[2K[6/10] [chromium] › tests\form-automation.spec.ts:151:5 › quantity and cost context are available by label at each generation action
+[1A[2K[7/10] [chromium] › tests\form-automation.spec.ts:168:5 › changing form URL clears previous analysis even when the next analysis fails
+[1A[2K[8/10] [chromium] › tests\form-automation.spec.ts:181:5 › AI partial results without credit shortage report actual previews and cost
+[1A[2K[9/10] [chromium] › tests\form-automation.spec.ts:199:5 › desktop and mobile workflow render without overflow or drawer overlap
+[1A[2K[10/10] [chromium] › tests\form-automation.spec.ts:228:5 › sticky generation actions remain clickable above expanded question editors
+[1A[2K  1 failed
+    [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens 
+  9 passed (29.5s)

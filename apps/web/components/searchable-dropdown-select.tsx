@@ -22,6 +22,7 @@ type SearchableDropdownSelectProps = {
   loadingText?: string;
   loading?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
 };
 
 export function SearchableDropdownSelect({
@@ -35,7 +36,8 @@ export function SearchableDropdownSelect({
   emptyText = "Không có kết quả phù hợp",
   loadingText = "Đang tìm kiếm...",
   loading = false,
-  disabled = false
+  disabled = false,
+  ariaLabel
 }: SearchableDropdownSelectProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -72,6 +74,7 @@ export function SearchableDropdownSelect({
       >
         <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
+          aria-label={ariaLabel}
           aria-autocomplete="list"
           aria-controls={id}
           aria-expanded={open}

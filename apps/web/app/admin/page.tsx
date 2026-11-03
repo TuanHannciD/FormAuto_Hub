@@ -91,21 +91,7 @@ export default function AdminDashboardPage() {
         </Card>
 
         <div className="min-w-0 space-y-4">
-          <Card className="min-w-0 border-warning-border bg-warning-surface/70">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-warning">
-                <AlertTriangle size={18} />
-                Cảnh báo webhook/payment
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-warning">
-              <p>Credit chỉ được cộng sau khi PayOS được xác minh ở backend và giao dịch credit được ghi vào sổ.</p>
-              <div className="rounded-xl border border-warning-border bg-surface-subtle p-3">
-                <p className="text-xs font-medium uppercase text-warning">Cần theo dõi</p>
-                <p className="mt-1">Theo dõi các giao dịch chưa xác minh hoặc cần đối soát lại.</p>
-              </div>
-            </CardContent>
-          </Card>
+          <details className="rounded-xl border border-border bg-surface px-4 text-sm"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Cách ghi nhận thanh toán</summary><p className="pb-3 text-muted-foreground">Credit được cộng sau khi hệ thống xác minh PayOS và ghi giao dịch vào sổ credit.</p></details>
 
           <Card className="min-w-0">
             <CardHeader>
@@ -115,9 +101,7 @@ export default function AdminDashboardPage() {
               <Detail label="Tổng tiền đã thanh toán" value={summary ? formatCurrency(summary.totalRevenue) : "-"} />
               <Detail label="Credit đã cấp" value={summary ? `${summary.creditSold} cr` : "-"} />
               <Detail label="Giao dịch cần kiểm tra" value={summary ? String(summary.failedPayments) : "-"} tone="danger" />
-              <Button className="w-full" type="button" variant="secondary">
-                Xuất báo cáo đối soát
-              </Button>
+
             </CardContent>
           </Card>
         </div>

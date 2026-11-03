@@ -1,0 +1,110 @@
+
+[1A[2K[WebServer] (node:23932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:33776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+Running 96 tests using 2 workers
+
+[1A[2K[1/96] [chromium] › tests\admin-ui-refinement.spec.ts:36:5 › 390px admin task content follows compact summaries within the first viewport
+[1A[2K[2/96] [chromium] › tests\admin-ui-refinement.spec.ts:48:5 › mobile AI tabs remain touch sized and long saved models remain readable
+[1A[2K[3/96] [chromium] › tests\admin-ui-refinement.spec.ts:64:5 › failed AI statistics remain an error instead of an empty dataset
+[1A[2K[4/96] [chromium] › tests\admin-ui-refinement.spec.ts:71:5 › admin data pages distinguish loading and failed reads from empty results
+[1A[2K[5/96] [chromium] › tests\admin-ui-refinement.spec.ts:95:5 › manual payment decisions preserve review details and write payloads in isolated fixtures
+[1A[2K[6/96] [chromium] › tests\admin-ui-refinement.spec.ts:126:5 › manual grants require a selected recipient and retain credit ledger request fields
+[1A[2K[7/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 320px
+[1A[2K[8/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 390px
+[1A[2K[9/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 768px
+[1A[2K[10/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1024px
+[1A[2K[11/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1366px
+[1A[2K[12/96] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1920px
+[1A[2K[13/96] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 1440px
+[1A[2K[14/96] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 320px
+[1A[2K[15/96] [chromium] › tests\admin-ui.spec.ts:67:5 › admin mobile navigation changes routes, closes and keeps account popup accessible
+[1A[2K[16/96] [chromium] › tests\admin-ui.spec.ts:84:5 › admin settings keep their save payloads after restyling
+[1A[2K[17/96] [chromium] › tests\admin-ui.spec.ts:98:5 › normal users still cannot render admin controls
+[1A[2K[18/96] [chromium] › tests\dashboard-ui-refinement.spec.ts:22:5 › 390x844 five-package topup keeps selected package, amount and payment action in the initial viewport
+[1A[2K[19/96] [chromium] › tests\dashboard-ui-refinement.spec.ts:48:5 › large dashboard balances stay on a readable single line at narrow and laptop widths
+[1A[2K[20/96] [chromium] › tests\fah-err-nckh-errors.spec.ts:27:5 › ERR021 initial list failure stays unknown until read-only retry confirms empty
+[1A[2K[21/96] [chromium] › tests\fah-err-nckh-errors.spec.ts:41:5 › ERR017 current partial failure disables mutation and export until GET retry recovers
+[1A[2K[22/96] [chromium] › tests\fah-err-nckh-errors.spec.ts:55:5 › ERR017 selection B displays B while A finishes later
+[1A[2K[23/96] [chromium] › tests\fah-err-nckh-errors.spec.ts:70:5 › ERR021 confirmed import followed by list failure hides stale rows and retry only reads
+[1A[2K[24/96] [chromium] › tests\form-automation.spec.ts:59:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K[25/96] [chromium] › tests\form-automation.spec.ts:71:5 › rules step navigation targets existing sections
+[1A[2K[26/96] [chromium] › tests\form-automation.spec.ts:80:5 › rules with no supported questions never links to an absent action
+[1A[2K[27/96] [chromium] › tests\form-automation.spec.ts:90:5 › AI summary uses active request count after direct mode
+[1A[2K[28/96] [chromium] › tests\form-automation.spec.ts:101:5 › quantity and cost context are available by label at each generation action
+[1A[2K[29/96] [chromium] › tests\form-automation.spec.ts:118:5 › changing form URL clears previous analysis even when the next analysis fails
+[1A[2K[30/96] [chromium] › tests\form-automation.spec.ts:131:5 › AI partial results without credit shortage report actual previews and cost
+[1A[2K[31/96] [chromium] › tests\form-automation.spec.ts:149:5 › desktop and mobile workflow render without overflow or drawer overlap
+[1A[2K[32/96] [chromium] › tests\form-automation.spec.ts:178:5 › sticky generation actions remain clickable above expanded question editors
+[1A[2K[33/96] [chromium] › tests\nckh-delete-model.spec.ts:59:5 › uses fresh totals, exact Vietnamese name, deletes only requested model and preserves selection
+[1A[2K[34/96] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss cancel sends no DELETE and reopening resets name
+[1A[2K[35/96] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss escape sends no DELETE and reopening resets name
+[1A[2K[36/96] [chromium] › tests\nckh-delete-model.spec.ts:78:72 › dismiss backdrop sends no DELETE and reopening resets name
+[1A[2K[37/96] [chromium] › tests\nckh-delete-model.spec.ts:89:5 › loading and partial GET failure block deletion; reload recovers
+[1A[2K[38/96] [chromium] › tests\nckh-delete-model.spec.ts:100:5 › renamed model at final check requires refreshed information and a new confirmation
+[1A[2K[39/96] [chromium] › tests\nckh-delete-model.spec.ts:114:5 › existing generated-form restriction is explained and cannot be confirmed
+[1A[2K[40/96] [chromium] › tests\nckh-delete-model.spec.ts:120:5 › form generated in another tab before final check prevents DELETE
+[1A[2K[41/96] [chromium] › tests\nckh-delete-model.spec.ts:134:5 › malformed count never permits confirmation
+[1A[2K[42/96] [chromium] › tests\nckh-delete-model.spec.ts:141:5 › cancel during impact loading ignores late results
+[1A[2K[43/96] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 404 keeps popup open and requires reload, without automatic replay
+[1A[2K[44/96] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 409 keeps popup open and requires reload, without automatic replay
+[1A[2K[45/96] [chromium] › tests\nckh-delete-model.spec.ts:150:43 › DELETE 500 keeps popup open and requires reload, without automatic replay
+[1A[2K[46/96] [chromium] › tests\nckh-delete-model.spec.ts:158:5 › while DELETE is pending, repeated click, Escape, backdrop and cancel cannot interrupt it
+[1A[2K[47/96] [chromium] › tests\nckh-delete-model.spec.ts:171:5 › empty model on 320px viewport and reduced motion can be confirmed with accessible footer
+[1A[2K[48/96] [chromium] › tests\nckh.spec.ts:297:7 › NCKH — Auth & Redirect › unauthenticated user is redirected to /login
+[1A[2K[49/96] [chromium] › tests\nckh.spec.ts:302:7 › NCKH — Auth & Redirect › authenticated user sees NCKH dashboard
+[1A[2K[50/96] [chromium] › tests\nckh.spec.ts:319:7 › NCKH — Google Not Linked › shows Liên kết Google button when not linked
+[1A[2K[51/96] [chromium] › tests\nckh.spec.ts:324:7 › NCKH — Google Not Linked › shows status message about linking
+[1A[2K[52/96] [chromium] › tests\nckh.spec.ts:329:7 › NCKH — Google Not Linked › import form section is hidden when not linked
+[1A[2K[53/96] [chromium] › tests\nckh.spec.ts:335:7 › NCKH — Google Not Linked › unlinked Google shows linking guidance without asserting an empty form list
+[1A[2K[54/96] [chromium] › tests\nckh.spec.ts:344:5 › Google authorization failure retains session without attempting JWT refresh
+[1A[2K[55/96] [chromium] › tests\nckh.spec.ts:359:5 › forms server failure offers retry without claiming Google is unlinked
+[1A[2K[56/96] [chromium] › tests\nckh.spec.ts:373:5 › genuine NCKH JWT failure still clears invalid session and redirects to login
+[1A[2K[57/96] [chromium] › tests\nckh.spec.ts:393:7 › NCKH — Google Linked › shows 'Đã liên kết Google' status
+[1A[2K[58/96] [chromium] › tests\nckh.spec.ts:398:7 › NCKH — Google Linked › import form input is visible
+[1A[2K[59/96] [chromium] › tests\nckh.spec.ts:403:7 › NCKH — Google Linked › import button is visible
+[1A[2K[60/96] [chromium] › tests\nckh.spec.ts:408:7 › NCKH — Google Linked › renders form list table with items
+[1A[2K[61/96] [chromium] › tests\nckh.spec.ts:414:7 › NCKH — Google Linked › form title is clickable link
+[1A[2K[62/96] [chromium] › tests\nckh.spec.ts:424:7 › NCKH — Google Linked › pagination shows correct info
+[1A[2K[63/96] [chromium] › tests\nckh.spec.ts:438:7 › NCKH — Import Form › successful import shows toast and clears input
+[1A[2K[64/96] [chromium] › tests\nckh.spec.ts:448:7 › NCKH — Import Form › import fails with 401 shows error and resets link status
+[1A[2K[65/96] [chromium] › tests\nckh.spec.ts:459:7 › NCKH — Import Form › import fails with 409 duplicate
+[1A[2K[66/96] [chromium] › tests\nckh.spec.ts:470:7 › NCKH — Import Form › prevents duplicate import submit while request is pending
+[1A[2K[67/96] [chromium] › tests\nckh.spec.ts:498:7 › NCKH — Callback Page › callback with ?linked=true shows success toast and cleans URL
+[1A[2K[68/96] [chromium] › tests\nckh.spec.ts:509:7 › NCKH — Callback Page › callback with ?error=... shows error toast
+[1A[2K[69/96] [chromium] › tests\nckh.spec.ts:517:7 › NCKH — Callback Page › direct callback page without code redirects to dashboard
+[1A[2K[70/96] [chromium] › tests\nckh.spec.ts:525:7 › NCKH — Callback Page › callback with valid code calls API and redirects with success
+[1A[2K[71/96] [chromium] › tests\nckh.spec.ts:548:7 › NCKH — Callback Page › callback with invalid code shows error then redirects
+[1A[2K[72/96] [chromium] › tests\nckh.spec.ts:562:7 › NCKH — Callback Page › callback with already-linked account shows 409 then redirects
+[1A[2K[73/96] [chromium] › tests\nckh.spec.ts:580:7 › NCKH — Navigation › NCKH nav item exists in sidebar
+[1A[2K[74/96] [chromium] › tests\nckh.spec.ts:588:7 › NCKH — Navigation › clicking NCKH nav item navigates to NCKH page
+[1A[2K[75/96] [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing
+[1A[2K[76/96] [chromium] › tests\nckh.spec.ts:625:7 › NCKH — Phase 7 Workspace › renders form workspace with model tabs
+[1A[2K[77/96] [chromium] › tests\nckh.spec.ts:637:7 › NCKH — Phase 7 Workspace › opens variables and mapping popups from canvas
+[1A[2K[78/96] [chromium] › tests\nckh.spec.ts:656:7 › NCKH — Phase 7 Workspace › cancels model impact dialog and shared mapping confirmation without sending DELETE
+[1A[2K[79/96] [chromium] › tests\nckh.spec.ts:689:7 › NCKH — Phase 7 Workspace › normalizes Likert variable payload from the canvas popup
+[1A[2K[80/96] [chromium] › tests\nckh.spec.ts:727:7 › NCKH — Phase 7 Workspace › places unsaved new variables on a visible canvas slot
+[1A[2K[81/96] [chromium] › tests\nckh.spec.ts:757:7 › NCKH — Phase 7 Workspace › renders Phase 9 visual canvas using existing relation and position APIs
+[1A[2K[82/96] [chromium] › tests\nckh.spec.ts:888:7 › NCKH — Phase 7 Workspace › deletes a relation from the canvas action list
+[1A[2K[83/96] [chromium] › tests\nckh.spec.ts:928:7 › NCKH — Phase 7 Workspace › blocks duplicate canvas relation before sending API request
+[1A[2K[84/96] [chromium] › tests\nckh.spec.ts:958:7 › NCKH — Phase 7 Workspace › keeps canvas relation and position edits read-only for active models
+[1A[2K[85/96] [chromium] › tests\nckh.spec.ts:985:7 › NCKH — Phase 7 Workspace › deletes a variable from the canvas node action button
+[1A[2K[86/96] [chromium] › tests\nckh.spec.ts:1032:7 › NCKH — Phase 7 Workspace › shows export actions without adding new backend contracts
+[1A[2K[87/96] [chromium] › tests\nckh.spec.ts:1041:7 › NCKH — Phase 7 Workspace › uses update action when selected model already has a generated form
+[1A[2K[88/96] [chromium] › tests\nckh.spec.ts:1070:7 › NCKH — Phase 7 Workspace › disables update action while request is submitting
+[1A[2K[89/96] [chromium] › tests\shared-ui.spec.ts:23:5 › mobile menu traps focus, returns focus and clears modal state at desktop breakpoint
+[1A[2K[90/96] [chromium] › tests\shared-ui.spec.ts:51:5 › user AI and admin payments retry failed reads without a mutation
+[1A[2K[91/96] [chromium] › tests\shared-ui.spec.ts:66:5 › profile popup uses shared surfaces and controls while preserving its save request
+[1A[2K[92/96] [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape
+[1A[2K[93/96] [chromium] › tests\shared-ui.spec.ts:101:5 › shared admin dialog opens and cancels without creating a package
+[1A[2K[94/96] [chromium] › tests\shared-ui.spec.ts:114:5 › topup detail popups share closing motion in dashboard, admin and routed detail
+[1A[2K[95/96] [chromium] › tests\shared-ui.spec.ts:152:5 › admin approval retains the popup long enough to animate its automatic close
+[1A[2K[96/96] [chromium] › tests\shared-ui.spec.ts:178:5 › dashboard and admin AI pages use the same metric component and actual values
+[1A[2K  96 passed (1.9m)

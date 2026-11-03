@@ -54,7 +54,7 @@ export const generationModeOptions: Array<{
   {
     value: "ai-default",
     title: "AI mặc định",
-    description: "Tạo câu trả lời theo prompt chung",
+    description: "Tạo câu trả lời theo hướng dẫn chung",
     badge: "x2"
   },
   {

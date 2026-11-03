@@ -1,0 +1,467 @@
+{
+  "fixtures": {
+    "/health": {
+      "status": "ok",
+      "mode": "synthetic-ui-fixtures",
+      "outboundNetwork": false
+    },
+    "/api/profile": {
+      "id": "ui-audit-fixture",
+      "email": "audit@example.invalid",
+      "fullName": "Người dùng khảo sát UI",
+      "role": "Admin",
+      "createdAt": "2026-11-02T00:00:00Z",
+      "googleLinked": false,
+      "googleEmail": null
+    },
+    "/api/packages": [
+      {
+        "id": "fixture-package-0",
+        "name": "Cơ bản",
+        "credits": 100,
+        "price": 50000,
+        "isActive": true,
+        "createdAt": "2026-11-02T00:00:00Z"
+      },
+      {
+        "id": "fixture-package-1",
+        "name": "Tiêu chuẩn",
+        "credits": 300,
+        "price": 150000,
+        "isActive": true,
+        "createdAt": "2026-11-02T00:00:00Z"
+      },
+      {
+        "id": "fixture-package-2",
+        "name": "Nâng cao",
+        "credits": 600,
+        "price": 300000,
+        "isActive": true,
+        "createdAt": "2026-11-02T00:00:00Z"
+      }
+    ],
+    "/api/dashboard/summary": {
+      "currentCreditBalance": 1250,
+      "totalCreditsDeposited": 1500,
+      "totalCreditsUsed": 250,
+      "pendingTopupOrders": 0,
+      "recentTopupOrders": [
+        {
+          "id": "fixture-order",
+          "userId": "ui-audit-fixture",
+          "userEmail": "audit@example.invalid",
+          "packageId": "fixture-package-0",
+          "packageName": "Cơ bản",
+          "credits": 100,
+          "amount": 50000,
+          "status": "Approved",
+          "paymentMethod": "PayOS",
+          "paymentNote": "Dữ liệu minh họa giao diện",
+          "createdAt": "2026-11-02T00:00:00Z",
+          "paidAt": "2026-11-02T00:00:00Z",
+          "approvedAt": "2026-11-02T00:00:00Z"
+        }
+      ],
+      "recentUsageLogs": [
+        {
+          "id": "fixture-usage",
+          "toolName": "FormAutomation",
+          "action": "Analyze",
+          "creditsUsed": 1,
+          "status": "Success",
+          "description": "Phân tích khảo sát minh họa",
+          "createdAt": "2026-11-02T00:00:00Z"
+        }
+      ]
+    },
+    "/api/topup-orders": {
+      "items": [
+        {
+          "id": "fixture-order",
+          "userId": "ui-audit-fixture",
+          "userEmail": "audit@example.invalid",
+          "packageId": "fixture-package-0",
+          "packageName": "Cơ bản",
+          "credits": 100,
+          "amount": 50000,
+          "status": "Approved",
+          "paymentMethod": "PayOS",
+          "paymentNote": "Dữ liệu minh họa giao diện",
+          "createdAt": "2026-11-02T00:00:00Z",
+          "paidAt": "2026-11-02T00:00:00Z",
+          "approvedAt": "2026-11-02T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 1,
+      "totalPages": 1
+    },
+    "/api/topup-orders/fixture-order": {
+      "id": "fixture-order",
+      "userId": "ui-audit-fixture",
+      "userEmail": "audit@example.invalid",
+      "packageId": "fixture-package-0",
+      "packageName": "Cơ bản",
+      "credits": 100,
+      "amount": 50000,
+      "status": "Approved",
+      "paymentMethod": "PayOS",
+      "paymentNote": "Dữ liệu minh họa giao diện",
+      "createdAt": "2026-11-02T00:00:00Z",
+      "paidAt": "2026-11-02T00:00:00Z",
+      "approvedAt": "2026-11-02T00:00:00Z"
+    },
+    "/api/usage-logs": {
+      "items": [
+        {
+          "id": "fixture-usage",
+          "toolName": "FormAutomation",
+          "action": "Analyze",
+          "creditsUsed": 1,
+          "status": "Success",
+          "description": "Phân tích khảo sát minh họa",
+          "createdAt": "2026-11-02T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 1,
+      "totalPages": 1
+    },
+    "/api/credit-transactions": {
+      "items": [
+        {
+          "id": "fixture-transaction",
+          "amount": 100,
+          "balanceAfter": 1250,
+          "type": "Topup",
+          "description": "Nạp credit minh họa",
+          "referenceType": "TopupOrder",
+          "referenceId": "fixture-order",
+          "createdAt": "2026-11-02T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 1,
+      "totalPages": 1
+    },
+    "/api/dashboard/ai-usage": {
+      "totalRuns": 10,
+      "successfulRuns": 8,
+      "failedRuns": 2,
+      "totalCreditsUsed": 20,
+      "totalPreviewsGenerated": 10,
+      "totalUsers": 1,
+      "modeBreakdown": [],
+      "recentRuns": [],
+      "usageByDay": [],
+      "providerPerformance": [],
+      "topUsers": []
+    },
+    "/api/admin/ai-usage": {
+      "totalRuns": 10,
+      "successfulRuns": 8,
+      "failedRuns": 2,
+      "totalCreditsUsed": 20,
+      "totalPreviewsGenerated": 10,
+      "totalUsers": 1,
+      "modeBreakdown": [],
+      "recentRuns": [],
+      "usageByDay": [],
+      "providerPerformance": [],
+      "topUsers": []
+    },
+    "/api/admin/ai-usage/runs": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0
+    },
+    "/api/admin/revenue/summary": {
+      "totalRevenue": 50000,
+      "creditSold": 100,
+      "creditUsed": 20,
+      "successfulTopupOrders": 1,
+      "pendingTopupOrders": 0,
+      "failedPayments": 0,
+      "recentPayments": [
+        {
+          "id": "fixture-payment",
+          "topupOrderId": "fixture-order",
+          "userId": "ui-audit-fixture",
+          "userEmail": "audit@example.invalid",
+          "provider": "PayOS",
+          "providerOrderCode": "123456",
+          "providerPaymentLinkId": "fixture-link",
+          "amount": 50000,
+          "credits": 100,
+          "currency": "VND",
+          "providerStatus": "Paid",
+          "topupOrderStatus": "Approved",
+          "createdAt": "2026-11-02T00:00:00Z",
+          "completedAt": "2026-11-02T00:00:00Z",
+          "lastWebhookAt": "2026-11-02T00:00:00Z"
+        }
+      ]
+    },
+    "/api/admin/payments": {
+      "items": [
+        {
+          "id": "fixture-payment",
+          "topupOrderId": "fixture-order",
+          "userId": "ui-audit-fixture",
+          "userEmail": "audit@example.invalid",
+          "provider": "PayOS",
+          "providerOrderCode": "123456",
+          "providerPaymentLinkId": "fixture-link",
+          "amount": 50000,
+          "credits": 100,
+          "currency": "VND",
+          "providerStatus": "Paid",
+          "topupOrderStatus": "Approved",
+          "createdAt": "2026-11-02T00:00:00Z",
+          "completedAt": "2026-11-02T00:00:00Z",
+          "lastWebhookAt": "2026-11-02T00:00:00Z"
+        }
+      ]
+    },
+    "/api/admin/packages": {
+      "items": [
+        {
+          "id": "fixture-package-0",
+          "name": "Cơ bản",
+          "credits": 100,
+          "price": 50000,
+          "isActive": true,
+          "createdAt": "2026-11-02T00:00:00Z"
+        },
+        {
+          "id": "fixture-package-1",
+          "name": "Tiêu chuẩn",
+          "credits": 300,
+          "price": 150000,
+          "isActive": true,
+          "createdAt": "2026-11-02T00:00:00Z"
+        },
+        {
+          "id": "fixture-package-2",
+          "name": "Nâng cao",
+          "credits": 600,
+          "price": 300000,
+          "isActive": true,
+          "createdAt": "2026-11-02T00:00:00Z"
+        }
+      ]
+    },
+    "/api/admin/topup-orders/manual": [],
+    "/api/admin/credit-operations/users": {
+      "items": [
+        {
+          "id": "ui-audit-fixture",
+          "email": "audit@example.invalid",
+          "fullName": "Người dùng khảo sát UI"
+        }
+      ]
+    },
+    "/api/admin/credit-operations/manual-grants": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0
+    },
+    "/api/admin/ai-provider-settings": {
+      "provider": "OpenAI",
+      "displayName": "AI minh họa",
+      "hasApiKey": false,
+      "apiKeyPreview": "",
+      "baseUrl": "",
+      "defaultModel": "fixture-model",
+      "allowedModels": [
+        "fixture-model"
+      ],
+      "isEnabled": false,
+      "lastCheckStatus": "NotChecked",
+      "lastCheckMessage": "Chưa kiểm tra",
+      "updatedAt": "2026-11-02T00:00:00Z"
+    },
+    "/api/admin/payment-providers/payos": {
+      "provider": "PayOS",
+      "clientId": "fixture-client",
+      "hasApiKey": false,
+      "hasChecksumKey": false,
+      "apiKeyPreview": "",
+      "checksumKeyPreview": "",
+      "returnUrl": "https://example.invalid/return",
+      "cancelUrl": "https://example.invalid/cancel",
+      "isEnabled": false,
+      "lastCheckStatus": "NotChecked",
+      "lastCheckMessage": "Chưa kiểm tra",
+      "updatedAt": "2026-11-02T00:00:00Z"
+    },
+    "/api/v1/nckh/forms": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0
+    },
+    "/api/v1/nckh/models": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0
+    },
+    "/api/projects/ui-audit-project/responses": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0
+    }
+  },
+  "analysis": {
+    "projectId": "ui-audit-project",
+    "name": "Khảo sát trải nghiệm sản phẩm",
+    "formTitle": "Khảo sát trải nghiệm sản phẩm",
+    "formUrl": "https://docs.google.com/forms/d/e/ui-audit-fixture/viewform",
+    "status": "Analyzed",
+    "createdAt": "2026-11-02T00:00:00Z",
+    "questions": [
+      {
+        "id": "fixture-question-1",
+        "projectId": "ui-audit-project",
+        "label": "Bạn biết đến dịch vụ qua kênh nào?",
+        "entryId": "entry.1",
+        "questionType": "MultipleChoice",
+        "options": [
+          "Bạn bè",
+          "Mạng xã hội",
+          "Tìm kiếm"
+        ],
+        "required": true,
+        "orderIndex": 0
+      },
+      {
+        "id": "fixture-question-2",
+        "projectId": "ui-audit-project",
+        "label": "Bạn thường dùng những tính năng nào?",
+        "entryId": "entry.2",
+        "questionType": "Checkbox",
+        "options": [
+          "Phân tích biểu mẫu",
+          "Quy tắc trả lời",
+          "Thống kê"
+        ],
+        "required": true,
+        "orderIndex": 1
+      },
+      {
+        "id": "fixture-question-3",
+        "projectId": "ui-audit-project",
+        "label": "Khu vực bạn đang sống",
+        "entryId": "entry.3",
+        "questionType": "Dropdown",
+        "options": [
+          "Miền Bắc",
+          "Miền Trung",
+          "Miền Nam"
+        ],
+        "required": true,
+        "orderIndex": 2
+      },
+      {
+        "id": "fixture-question-4",
+        "projectId": "ui-audit-project",
+        "label": "Họ và tên người tham gia khảo sát",
+        "entryId": "entry.4",
+        "questionType": "ShortText",
+        "options": [],
+        "required": true,
+        "orderIndex": 3
+      },
+      {
+        "id": "fixture-question-5",
+        "projectId": "ui-audit-project",
+        "label": "Điều gì giúp trải nghiệm của bạn tốt hơn?",
+        "entryId": "entry.5",
+        "questionType": "ParagraphText",
+        "options": [],
+        "required": true,
+        "orderIndex": 4
+      },
+      {
+        "id": "fixture-question-6",
+        "projectId": "ui-audit-project",
+        "label": "Ngày bắt đầu sử dụng",
+        "entryId": "entry.6",
+        "questionType": "Date",
+        "options": [],
+        "required": true,
+        "orderIndex": 5
+      },
+      {
+        "id": "fixture-question-7",
+        "projectId": "ui-audit-project",
+        "label": "Khung giờ thuận tiện liên hệ",
+        "entryId": "entry.7",
+        "questionType": "Time",
+        "options": [],
+        "required": true,
+        "orderIndex": 6
+      },
+      {
+        "id": "fixture-question-8",
+        "projectId": "ui-audit-project",
+        "label": "Mức độ hài lòng với giao diện",
+        "entryId": "entry.8",
+        "questionType": "MultipleChoice",
+        "options": [
+          "Rất hài lòng",
+          "Hài lòng",
+          "Bình thường",
+          "Chưa hài lòng"
+        ],
+        "required": false,
+        "orderIndex": 7
+      },
+      {
+        "id": "fixture-question-9",
+        "projectId": "ui-audit-project",
+        "label": "Nội dung bạn muốn tìm hiểu thêm",
+        "entryId": "entry.9",
+        "questionType": "Checkbox",
+        "options": [
+          "Quản lý credit",
+          "Tạo quy tắc",
+          "Nghiên cứu khảo sát"
+        ],
+        "required": false,
+        "orderIndex": 8
+      },
+      {
+        "id": "fixture-question-10",
+        "projectId": "ui-audit-project",
+        "label": "Góp ý khác dành cho nhóm phát triển",
+        "entryId": "entry.10",
+        "questionType": "ParagraphText",
+        "options": [],
+        "required": false,
+        "orderIndex": 9
+      }
+    ]
+  },
+  "profile": {
+    "id": "ui-audit-fixture",
+    "email": "audit@example.invalid",
+    "fullName": "Người dùng khảo sát UI",
+    "role": "Admin",
+    "createdAt": "2026-11-02T00:00:00Z",
+    "googleLinked": false,
+    "googleEmail": null
+  }
+}

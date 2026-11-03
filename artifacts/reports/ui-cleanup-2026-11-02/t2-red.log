@@ -1,0 +1,38 @@
+
+[1A[2K[WebServer] (node:37528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:1940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\form-automation.spec.ts:91:5 › quantity and cost context are available by label at each generation action
+[1A[2K  1) [chromium] › tests\form-automation.spec.ts:91:5 › quantity and cost context are available by label at each generation action 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByLabel('Số lượt cần gửi', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByLabel('Số lượt cần gửi', { exact: true })[22m
+
+
+      94 |   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
+      95 |   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
+    > 96 |   await expect(page.getByLabel("Số lượt cần gửi", { exact: true })).toBeVisible();
+         |                                                                     ^
+      97 |   let region = page.getByRole("region", { name: "Tạo và gửi theo quy tắc" });
+      98 |   await expect(region).toContainText("20 credit khả dụng");
+      99 |   await expect(region).toContainText("Chi phí dự kiến: 1 credit");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\form-automation.spec.ts:96:69
+
+    Error Context: test-results\form-automation-quantity-a-8522a-l-at-each-generation-action-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\form-automation.spec.ts:91:5 › quantity and cost context are available by label at each generation action 

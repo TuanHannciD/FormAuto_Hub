@@ -1,0 +1,221 @@
+
+[1A[2K[WebServer] (node:34228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:32756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 47 tests using 2 workers
+
+[1A[2K[1/47] [chromium] › tests\dashboard-ui-refinement.spec.ts:22:5 › 390x844 five-package topup keeps selected package, amount and payment action in the initial viewport
+[1A[2K[2/47] [chromium] › tests\dashboard-ui-refinement.spec.ts:48:5 › large dashboard balances stay on a readable single line at narrow and laptop widths
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1A[2K[3/47] [chromium] › tests\direct-rule-submission.spec.ts:91:5 › rules uses one direct action without preview, checkbox, or common submission payload
+[1A[2K[4/47] [chromium] › tests\direct-rule-submission.spec.ts:135:5 › unknown transport and refresh check the same command without saving rules again
+[1A[2K[5/47] [chromium] › tests\direct-rule-submission.spec.ts:171:5 › 503 retains the command and retry reuses it without saving rules again
+[1A[2K[6/47] [chromium] › tests\direct-rule-submission.spec.ts:204:5 › post-admission 400 reconciles the existing job by command ID
+[1A[2K[7/47] [chromium] › tests\direct-rule-submission.spec.ts:239:5 › pre-admission 400 clears only after same-command GET confirms 404
+[1A[2K[8/47] [chromium] › tests\direct-rule-submission.spec.ts:268:5 › failed reconciliation probe keeps the original command fail-closed
+[1A[2K  1) [chromium] › tests\direct-rule-submission.spec.ts:91:5 › rules uses one direct action without preview, checkbox, or common submission payload 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Cài đặt → Tạo và gửi ngay', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Cài đặt → Tạo và gửi ngay', { exact: true })[22m
+
+
+      119 |   await analyze(page);
+      120 |   await expect(page.locator("[data-sonner-toast]").filter({ hasText: "trước khi tạo và gửi" })).toBeVisible();
+    > 121 |   await expect(page.getByText("Cài đặt → Tạo và gửi ngay", { exact: true })).toBeVisible();
+          |                                                                              ^
+      122 |   await expect(page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true })).toHaveCount(0);
+      123 |   await expect(page.getByRole("checkbox")).toHaveCount(0);
+      124 |   const action = page.getByRole("button", { name: "Tạo và gửi ngay", exact: true });
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\direct-rule-submission.spec.ts:121:78
+
+    Error Context: test-results\direct-rule-submission-rul-f8af0-r-common-submission-payload-chromium\error-context.md
+
+
+[1A[2K[9/47] [chromium] › tests\direct-rule-submission.spec.ts:316:5 › session change during 400 response retains the original user's command without probing
+[1A[2K[10/47] [chromium] › tests\direct-rule-submission.spec.ts:294:5 › unexpected reconciliation job identity retains the original command
+[1A[2K[11/47] [chromium] › tests\direct-rule-submission.spec.ts:345:5 › uncertain failed job retains the command and repeated checks cannot create a new one
+[1A[2K[12/47] [chromium] › tests\direct-rule-submission.spec.ts:382:5 › account switching preserves each user's unresolved command
+[1A[2K[13/47] [chromium] › tests\direct-rule-submission.spec.ts:408:5 › storage synchronization locks a second tab for the same user
+[1A[2K[14/47] [chromium] › tests\direct-rule-submission.spec.ts:429:5 › missing Web Locks fails closed before saving rules or creating a command
+[1A[2K[15/47] [chromium] › tests\direct-rule-submission.spec.ts:455:5 › terminal completion only clears the command it resolved
+[1A[2K[16/47] [chromium] › tests\direct-rule-submission.spec.ts:476:5 › partial direct result reports the sent subset and missing count
+[1A[2K[17/47] [chromium] › tests\direct-rule-submission.spec.ts:494:5 › mixed result distinguishes generated attempts, successes, failures, and credit shortage
+[1A[2K[18/47] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option2 still requires preview and confirmation before common send
+[1A[2K  2) [chromium] › tests\direct-rule-submission.spec.ts:382:5 › account switching preserves each user's unresolved command 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('button', { name: 'Kiểm tra kết quả gửi', exact: true })
+    Expected: [32m0[39m
+    Received: [31m1[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Kiểm tra kết quả gửi', exact: true })[22m
+    [2m    14 × locator resolved to 1 element[22m
+    [2m       - unexpected value "1"[22m
+
+
+      398 |   await page.evaluate(() => localStorage.setItem("formauto.auth.session", JSON.stringify({ userId: "user-b", role: "User", accessToken: "fixture-b", refreshToken: "fixture-b", accessTokenExpiresAt: new Date(Date.now() + 3_600_000).toISOString(), refreshTokenExpiresAt: new Date(Date.now() + 86_400_000).toISOString() })));
+      399 |   await page.reload();
+    > 400 |   await expect(page.getByRole("button", { name: "Kiểm tra kết quả gửi", exact: true })).toHaveCount(0);
+          |                                                                                         ^
+      401 |   expect(await page.evaluate(() => localStorage.getItem("formauto.directRuleCommand.direct-rule-user"))).toBe(commandA);
+      402 |
+      403 |   await page.evaluate(() => localStorage.setItem("formauto.auth.session", JSON.stringify({ userId: "direct-rule-user", role: "User", accessToken: "fixture", refreshToken: "fixture", accessTokenExpiresAt: new Date(Date.now() + 3_600_000).toISOString(), refreshTokenExpiresAt: new Date(Date.now() + 86_400_000).toISOString() })));
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\direct-rule-submission.spec.ts:400:89
+
+    Error Context: test-results\direct-rule-submission-acc-3adff-h-user-s-unresolved-command-chromium\error-context.md
+
+
+[1A[2K[19/47] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option3 still requires preview and confirmation before common send
+[1A[2K  3) [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option2 still requires preview and confirmation before common send 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Cài đặt → Xem trước → Xác nhận', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Cài đặt → Xem trước → Xác nhận', { exact: true })[22m
+
+
+      555 |   await analyze(page);
+      556 |   await page.getByRole("button", { name: mode.button }).click();
+    > 557 |   await expect(page.getByText("Cài đặt → Xem trước → Xác nhận", { exact: true })).toBeVisible();
+          |                                                                                   ^
+      558 |   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
+      559 |   await expect(page.getByRole("checkbox")).toBeEnabled();
+      560 |   await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\direct-rule-submission.spec.ts:557:83
+
+    Error Context: test-results\direct-rule-submission-AI--6d1a5-irmation-before-common-send-chromium\error-context.md
+
+
+[1A[2K[20/47] [chromium] › tests\fah-err-forms-errors.spec.ts:40:5 › ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds
+[1A[2K  4) [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option3 still requires preview and confirmation before common send 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Cài đặt → Xem trước → Xác nhận', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Cài đặt → Xem trước → Xác nhận', { exact: true })[22m
+
+
+      555 |   await analyze(page);
+      556 |   await page.getByRole("button", { name: mode.button }).click();
+    > 557 |   await expect(page.getByText("Cài đặt → Xem trước → Xác nhận", { exact: true })).toBeVisible();
+          |                                                                                   ^
+      558 |   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
+      559 |   await expect(page.getByRole("checkbox")).toBeEnabled();
+      560 |   await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\direct-rule-submission.spec.ts:557:83
+
+    Error Context: test-results\direct-rule-submission-AI--96d04-irmation-before-common-send-chromium\error-context.md
+
+
+[1A[2K[21/47] [chromium] › tests\fah-err-forms-errors.spec.ts:60:5 › ERR014 known absent profile permits a new profile with defaults
+[1A[2K  5) [chromium] › tests\fah-err-forms-errors.spec.ts:40:5 › ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveValue[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('textbox', { name: /^Prompt chung\s+\d+\/2000 ký tự$/ })
+    Expected: [32m"Hướng dẫn đã lưu"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toHaveValue" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('textbox', { name: /^Prompt chung\s+\d+\/2000 ký tự$/ })[22m
+
+
+      41 |   const calls = await setup(page);
+      42 |   await chooseAi(page, true);
+    > 43 |   await expect(globalPrompt(page)).toHaveValue("Hướng dẫn đã lưu");
+         |                                    ^
+      44 |   await globalPrompt(page).fill("Nội dung đang chỉnh sửa");
+      45 |   let fail = true;
+      46 |   await page.route("**/ai-prompt-profile?*", route => route.fulfill(fail ? { status: 503, json: { detail: "sk-secret-profile" } } : { json: profile("Hướng dẫn tải lại") }));
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\fah-err-forms-errors.spec.ts:43:36
+
+    Error Context: test-results\fah-err-forms-errors-ERR01-12d08-il-read-only-retry-succeeds-chromium\error-context.md
+
+
+[1A[2K[22/47] [chromium] › tests\fah-err-forms-errors.spec.ts:68:5 › ERR014 pending profile read locks competing mode/project changes; next mode owns its profile
+[1A[2K  6) [chromium] › tests\fah-err-forms-errors.spec.ts:60:5 › ERR014 known absent profile permits a new profile with defaults 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeEnabled[2m([22m[2m)[22m failed
+
+    Locator: getByRole('button', { name: 'Lưu và tạo AI preview', exact: true })
+    Expected: enabled
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeEnabled" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Lưu và tạo AI preview', exact: true })[22m
+
+
+      62 |   await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
+      63 |   await chooseAi(page);
+    > 64 |   await expect(createAi(page)).toBeEnabled();
+         |                                ^
+      65 |   await expect(globalPrompt(page)).toHaveValue(/Tạo câu trả lời/);
+      66 | });
+      67 |
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\fah-err-forms-errors.spec.ts:64:32
+
+    Error Context: test-results\fah-err-forms-errors-ERR01-02db8-a-new-profile-with-defaults-chromium\error-context.md
+
+
+[1A[2K[23/47] [chromium] › tests\fah-err-forms-errors.spec.ts:93:5 › ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews
+[1A[2K  7) [chromium] › tests\fah-err-forms-errors.spec.ts:68:5 › ERR014 pending profile read locks competing mode/project changes; next mode owns its profile 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeDisabled[2m([22m[2m)[22m failed
+
+    Locator: getByRole('button', { name: 'Lưu và tạo AI preview', exact: true })
+    Expected: disabled
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeDisabled" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Lưu và tạo AI preview', exact: true })[22m
+
+
+      81 |   await expect(page.getByRole("button", { name: /AI mặc định.*x2/ })).toBeDisabled();
+      82 |   await expect(page.getByLabel("Link Google Form")).toBeDisabled();
+    > 83 |   await expect(createAi(page)).toBeDisabled();
+         |                                ^
+      84 |   expect(calls.filter(c => c.method === "PUT")).toHaveLength(0);
+      85 |   const completed = page.waitForResponse(response => response.url().includes("ai-prompt-profile?mode=Option3"));
+      86 |   release!();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\fah-err-forms-errors.spec.ts:83:32
+
+    Error Context: test-results\fah-err-forms-errors-ERR01-a8968--next-mode-owns-its-profile-chromium\error-context.md
+
+
+[1A[2K[24/47] [chromium] › tests\fah-err-forms-errors.spec.ts:113:5 › ERR015 AI continuation retains the second confirmed run and cost when only its preview GET fails

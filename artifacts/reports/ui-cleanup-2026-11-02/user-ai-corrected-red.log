@@ -1,0 +1,43 @@
+
+[1A[2K[WebServer] (node:27348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:34404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible
+[1A[2K  1) [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('article').first().getByText('model-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-')
+    Expected: not visible
+    Error: strict mode violation: locator('article').first().getByText('model-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-') resolved to 2 elements:
+        1) <span class="text-xs text-muted-foreground">FixtureProvider / model-very-long-model-name-very…</span> aka getByText('FixtureProvider / model-very-').first()
+        2) <dd class="break-words [overflow-wrap:anywhere]">FixtureProvider / model-very-long-model-name-very…</dd> aka getByRole('group').getByText('FixtureProvider / model-very-')
+
+    Call log:
+    [2m  - Expect "not toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('article').first().getByText('model-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-very-long-model-name-')[22m
+
+
+      40 |       await expect(record.getByText("Thất bại", { exact: true })).toBeVisible();
+      41 |       await expect(record.locator("p.text-destructive")).toBeVisible();
+    > 42 |       await expect(record.getByText(longModel, { exact: false })).not.toBeVisible();
+         |                                                                       ^
+      43 |       await record.getByText("Chi tiết lượt AI", { exact: true }).click();
+      44 |       await expect(record).toContainText("long-run-id-001");
+      45 |       await expect(record.getByText(longModel, { exact: false })).toBeVisible();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\user-pages-cleanup.spec.ts:42:71
+
+    Error Context: test-results\user-pages-cleanup-populat-5f414-condary-metadata-accessible-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible 

@@ -18,6 +18,7 @@ type DropdownSelectProps = {
   className?: string;
   placeholder?: string;
   disabled?: boolean;
+  ariaLabel?: string;
 };
 
 export function DropdownSelect({
@@ -26,7 +27,8 @@ export function DropdownSelect({
   onChange,
   className,
   placeholder = "Chọn một mục",
-  disabled = false
+  disabled = false,
+  ariaLabel
 }: DropdownSelectProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -57,6 +59,8 @@ export function DropdownSelect({
   return (
     <div className={cn("relative", className)} ref={rootRef}>
       <button
+        aria-label={ariaLabel}
+        aria-describedby={ariaLabel ? `${id}-value` : undefined}
         aria-controls={id}
         aria-expanded={open}
         className={controlStyles({ className: "flex items-center justify-between gap-3 text-left hover:border-primary/70" })}
@@ -64,7 +68,7 @@ export function DropdownSelect({
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        <span className={cn("truncate", !selected && "text-muted-foreground")}>{selected?.label ?? placeholder}</span>
+        <span id={`${id}-value`} className={cn("truncate", !selected && "text-muted-foreground")}>{selected?.label ?? placeholder}</span>
         <ChevronDown className={cn("h-4 w-4 shrink-0 text-muted-foreground transition", open && "rotate-180")} />
       </button>
 

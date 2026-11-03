@@ -22,7 +22,7 @@ export function GenerationModeSelector({
         const Icon = option.value === "rules" ? SlidersHorizontal : option.value === "ai-default" ? Bot : Sparkles;
         return (
           <button
-            className={cn(panelStyles, `relative flex min-h-[92px] flex-col items-start justify-between p-3 text-left transition ${
+            className={cn(panelStyles, `relative flex min-h-[68px] flex-col items-start justify-between p-3 text-left transition ${
               active
                 ? "border-primary bg-primary-soft text-primary ring-1 ring-primary"
                 : "border-border bg-surface text-secondary-foreground hover:border-primary-border hover:bg-primary-soft "
@@ -62,7 +62,7 @@ export function GenerationModeSelector({
                         : "warning"
               }>{option.badge}</Badge>
             </span>
-            <span className="mt-3 text-xs font-medium text-muted-foreground group-hover:text-secondary-foreground">
+            <span className="mt-1 text-xs font-medium text-muted-foreground group-hover:text-secondary-foreground">
               {option.description}
             </span>
           </button>

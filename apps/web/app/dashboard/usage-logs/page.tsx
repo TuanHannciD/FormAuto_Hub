@@ -28,7 +28,7 @@ const columns: Array<BaseTableColumn<UsageLog>> = [
   { key: "action", header: "Thao tác", render: (log) => displayAction(log.action) },
   { key: "creditsUsed", header: "Credit", render: (log) => log.creditsUsed },
   { key: "status", header: "Kết quả", render: (log) => <StatusBadge status={log.status} /> },
-  { key: "description", header: "Mô tả", render: (log) => log.description }
+  { key: "description", hideOnMobile: true, header: "Mô tả", render: (log) => log.description }
 ];
 
 export default function UsageLogsPage() {
@@ -117,9 +117,9 @@ export default function UsageLogsPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Lịch sử sử dụng" description="Mặc định chỉ hiển thị thao tác xem câu trả lời được tạo, vì đây là nhóm thao tác thể hiện giao dịch credit." />
+      <PageHeader title="Lịch sử sử dụng" description="Mặc định hiển thị câu trả lời được tạo; đổi bộ lọc để xem thao tác khác." />
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <Metric label="Kết quả theo filter" value={String(totalItems)} />
+        <Metric label="Kết quả theo bộ lọc" value={String(totalItems)} />
         <Metric label="Credit trong trang" value={String(creditsUsed)} />
         <Metric label="Thất bại trong trang" value={String(failedInPage)} />
       </div>
@@ -127,9 +127,6 @@ export default function UsageLogsPage() {
         <CardHeader className="space-y-3">
           <div>
             <CardTitle>Bảng lịch sử sử dụng</CardTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Dữ liệu được tải theo từng trang và theo filter hiện tại.
-            </p>
           </div>
           <UsageLogFilters
             action={action}
@@ -154,6 +151,7 @@ export default function UsageLogsPage() {
               items={logs}
               columns={columns}
               getRowKey={(log) => log.id}
+              mobileFooter={log => <details className="border-t border-border text-xs"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Mô tả thao tác</summary><p className="break-words pb-2">{log.description || "Không có mô tả"}</p></details>}
               emptyTitle="Không có kết quả phù hợp"
               emptyDetail="Thử đổi từ khóa tìm kiếm hoặc chọn lại loại thao tác."
             />
@@ -222,7 +220,7 @@ function UsageLogFilters({
           onChange={(event) => setSearchInput(event.target.value)}
         />
       </label>
-      <DropdownSelect className="col-span-2 lg:col-span-1" value={action} options={actionOptions} onChange={onActionChange} />
+      <DropdownSelect ariaLabel="Lọc loại thao tác" className="col-span-2 lg:col-span-1" value={action} options={actionOptions} onChange={onActionChange} />
       <Button type="submit">{isRefreshing ? "Đang lọc..." : "Tìm"}</Button>
       <Button type="button" variant="secondary" onClick={resetFilters}>Đặt lại</Button>
     </form>

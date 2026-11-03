@@ -45,12 +45,12 @@ export function PreviewAccordion({
       </button>
 
       {open && (
-        <div className="max-h-[420px] space-y-2 overflow-y-auto border-t border-border bg-surface p-3">
+        <div role="region" aria-label={`Câu trả lời bản xem trước ${index + 1}`} tabIndex={0} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-h-[420px] space-y-2 overflow-y-auto border-t border-border bg-surface p-3">
           {preview.answers.map((answer, answerIndex) => (
             <div className="rounded-xl border border-border bg-surface px-3 py-3" key={`${preview.id}-${answer.questionId}-${answerIndex}`}>
-              <div className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
+              <div className="mb-2 flex items-start gap-2 text-xs font-medium text-muted-foreground">
                 <FileText className="h-3.5 w-3.5" />
-                <span className="truncate">{answer.label || "Không có tiêu đề"}</span>
+                <span className="min-w-0 break-words">{answer.label || "Không có tiêu đề"}</span>
               </div>
               <div className="space-y-1">
                 {answer.values.map((value, valueIndex) => (

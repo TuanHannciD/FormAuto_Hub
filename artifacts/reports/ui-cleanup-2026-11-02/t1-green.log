@@ -1,0 +1,51 @@
+
+[1A[2K[WebServer] (node:36496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:19672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+Running 37 tests using 2 workers
+
+[1A[2K[1/37] [chromium] › tests\direct-rule-submission.spec.ts:91:5 › rules uses one direct action without preview, checkbox, or common submission payload
+[1A[2K[2/37] [chromium] › tests\direct-rule-submission.spec.ts:135:5 › unknown transport and refresh check the same command without saving rules again
+[1A[2K[3/37] [chromium] › tests\direct-rule-submission.spec.ts:171:5 › 503 retains the command and retry reuses it without saving rules again
+[1A[2K[4/37] [chromium] › tests\direct-rule-submission.spec.ts:204:5 › post-admission 400 reconciles the existing job by command ID
+[1A[2K[5/37] [chromium] › tests\direct-rule-submission.spec.ts:239:5 › pre-admission 400 clears only after same-command GET confirms 404
+[1A[2K[6/37] [chromium] › tests\direct-rule-submission.spec.ts:268:5 › failed reconciliation probe keeps the original command fail-closed
+[1A[2K[7/37] [chromium] › tests\direct-rule-submission.spec.ts:294:5 › unexpected reconciliation job identity retains the original command
+[1A[2K[8/37] [chromium] › tests\direct-rule-submission.spec.ts:316:5 › session change during 400 response retains the original user's command without probing
+[1A[2K[9/37] [chromium] › tests\direct-rule-submission.spec.ts:345:5 › uncertain failed job retains the command and repeated checks cannot create a new one
+[1A[2K[10/37] [chromium] › tests\direct-rule-submission.spec.ts:382:5 › account switching preserves each user's unresolved command
+[1A[2K[11/37] [chromium] › tests\direct-rule-submission.spec.ts:408:5 › storage synchronization locks a second tab for the same user
+[1A[2K[12/37] [chromium] › tests\direct-rule-submission.spec.ts:429:5 › missing Web Locks fails closed before saving rules or creating a command
+[1A[2K[13/37] [chromium] › tests\direct-rule-submission.spec.ts:455:5 › terminal completion only clears the command it resolved
+[1A[2K[14/37] [chromium] › tests\direct-rule-submission.spec.ts:476:5 › partial direct result reports the sent subset and missing count
+[1A[2K[15/37] [chromium] › tests\direct-rule-submission.spec.ts:494:5 › mixed result distinguishes generated attempts, successes, failures, and credit shortage
+[1A[2K[16/37] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option2 still requires preview and confirmation before common send
+[1A[2K[17/37] [chromium] › tests\direct-rule-submission.spec.ts:519:8 › AI Option3 still requires preview and confirmation before common send
+[1A[2K[18/37] [chromium] › tests\fah-err-forms-errors.spec.ts:40:5 › ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds
+[1A[2K[19/37] [chromium] › tests\fah-err-forms-errors.spec.ts:60:5 › ERR014 known absent profile permits a new profile with defaults
+[1A[2K[20/37] [chromium] › tests\fah-err-forms-errors.spec.ts:68:5 › ERR014 pending profile read locks competing mode/project changes; next mode owns its profile
+[1A[2K[21/37] [chromium] › tests\fah-err-forms-errors.spec.ts:93:5 › ERR015 confirmed AI result and IDs survive GET failure; retry only reads previews
+[1A[2K[22/37] [chromium] › tests\fah-err-forms-errors.spec.ts:113:5 › ERR015 AI continuation retains the second confirmed run and cost when only its preview GET fails
+[1A[2K[23/37] [chromium] › tests\fah-err-forms-errors.spec.ts:154:7 › ERR011 generation shows safe failure and run ID: known
+[1A[2K[24/37] [chromium] › tests\fah-err-forms-errors.spec.ts:154:7 › ERR011 generation shows safe failure and run ID: unknown
+[1A[2K[25/37] [chromium] › tests\fah-err-forms-errors.spec.ts:165:5 › ERR011 AI usage exposes safe reason and existing run ID without raw historical text
+[1A[2K[26/37] [chromium] › tests\fah-err-forms-errors.spec.ts:177:5 › ERR023 submission details retain IDs and uncertainty without inviting resend
+[1A[2K[27/37] [chromium] › tests\fah-err-forms-errors.spec.ts:196:5 › ERR023 ordinary and missing historical causes keep IDs and safe mixed counts without inventing uncertainty
+[1A[2K[28/37] [chromium] › tests\fah-err-forms-errors.spec.ts:228:7 › ERR024 Date clear/retype both endpoints blocks invalid POST and sends displayed state
+[1A[2K[29/37] [chromium] › tests\fah-err-forms-errors.spec.ts:228:7 › ERR024 Time clear/retype both endpoints blocks invalid POST and sends displayed state
+[1A[2K[30/37] [chromium] › tests\fah-err-forms-errors.spec.ts:254:5 › ERR024 time step follows existing integer 5–120 bounds and mode defaults match payload
+[1A[2K[31/37] [chromium] › tests\form-automation.spec.ts:59:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K[32/37] [chromium] › tests\form-automation.spec.ts:71:5 › rules step navigation targets existing sections
+[1A[2K[33/37] [chromium] › tests\form-automation.spec.ts:80:5 › AI summary uses active request count after direct mode
+[1A[2K[34/37] [chromium] › tests\form-automation.spec.ts:91:5 › changing form URL clears previous analysis even when the next analysis fails
+[1A[2K[35/37] [chromium] › tests\form-automation.spec.ts:104:5 › AI partial results without credit shortage report actual previews and cost
+[1A[2K[36/37] [chromium] › tests\form-automation.spec.ts:122:5 › desktop and mobile workflow render without overflow or drawer overlap
+[1A[2K[37/37] [chromium] › tests\form-automation.spec.ts:151:5 › sticky generation actions remain clickable above expanded question editors
+[1A[2K  37 passed (34.5s)

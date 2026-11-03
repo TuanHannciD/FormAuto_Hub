@@ -1,0 +1,85 @@
+{
+  "task": "FAH-UI-003",
+  "date": "2026-11-02",
+  "status": "Verified",
+  "documents": [
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "41fb9e1b6a9cb4fdd73038abd7ac65da34217e8f6aa5fc383776649b6303896b",
+      "lines": 62,
+      "relativeLinks": [
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "16aa74433494f1e550817d6f532e473ee54990662e91bd9c557fe62273328fdd",
+      "lines": 123,
+      "relativeLinks": [
+        "INDEX.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "632933a1f117029dc2c9de3192166327d3eb9bcd664ec61c8e903ba07d6f26d7",
+      "lines": 136,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "02c54f989ac97032ef6e1989dd5b1d09fba7cc5077b1ec64561330d76a50cfcd",
+      "lines": 62,
+      "relativeLinks": [
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "440d52c00827c8821556db4c0203495fc9cb64aed112744cb91ee7bea0cf30ea",
+      "lines": 123,
+      "relativeLinks": [
+        "INDEX.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "da66f2955a51c09169cccb18fb5436ce28c5060ce92e11f3824ee591dfb7426e",
+      "lines": 136,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md"
+      ]
+    }
+  ],
+  "routes": [
+    "/dashboard/ai-usage",
+    "/dashboard/credit-transactions",
+    "/dashboard/forms",
+    "/dashboard/nckh/callback",
+    "/dashboard/nckh/forms/[formId]",
+    "/dashboard/nckh",
+    "/dashboard",
+    "/dashboard/top-up/[id]",
+    "/dashboard/top-up",
+    "/dashboard/usage-logs",
+    "/admin/ai-provider-settings",
+    "/admin/ai-usage",
+    "/admin/manual-credits",
+    "/admin/packages",
+    "/admin",
+    "/admin/payments",
+    "/admin/payos-settings",
+    "/admin/revenue"
+  ],
+  "trackedFilesChanged": [],
+  "unexpectedUntrackedFiles": [],
+  "failures": [],
+  "limits": "Identifier/link/encoding/source-preservation checks only. Bilingual semantic review is independent human-like assessment; no app runtime/test pass is claimed."
+}

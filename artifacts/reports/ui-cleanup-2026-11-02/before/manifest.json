@@ -1,0 +1,2616 @@
+{
+  "phase": "before",
+  "manifest": [
+    {
+      "name": "_dashboard-390",
+      "url": "http://localhost:3000/dashboard",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1262,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 198
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 640
+        },
+        {
+          "text": "Nạp credit",
+          "y": 948.5
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_forms-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1259,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Nạp credit →",
+          "y": 1102
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_top-up-390",
+      "url": "http://localhost:3000/dashboard/top-up",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 2228,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Cơ bản",
+          "y": 361
+        },
+        {
+          "text": "Tạo liên kết thanh toán",
+          "y": 592
+        },
+        {
+          "text": "Cơ bản100 credit50.000 ₫",
+          "y": 960
+        },
+        {
+          "text": "Tiêu chuẩn300 credit150.000 ₫",
+          "y": 1123
+        },
+        {
+          "text": "Nâng cao600 credit300.000 ₫",
+          "y": 1286
+        },
+        {
+          "text": "Gửi yêu cầu đối soát",
+          "y": 0
+        },
+        {
+          "text": "Làm mới",
+          "y": 1689
+        },
+        {
+          "text": "",
+          "y": 1775
+        },
+        {
+          "text": "Xem chi tiết",
+          "y": 2037
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_top-up_fixture-order-390",
+      "url": "http://localhost:3000/dashboard/top-up/fixture-order",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 844,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_usage-logs-390",
+      "url": "http://localhost:3000/dashboard/usage-logs",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 977,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Chỉ xem câu trả lời được tạo",
+          "y": 479
+        },
+        {
+          "text": "Tìm",
+          "y": 531
+        },
+        {
+          "text": "Đặt lại",
+          "y": 531
+        },
+        {
+          "text": "Trước",
+          "y": 896
+        },
+        {
+          "text": "Sau",
+          "y": 896
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_credit-transactions-390",
+      "url": "http://localhost:3000/dashboard/credit-transactions",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 916,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tất cả loại",
+          "y": 455
+        },
+        {
+          "text": "Tìm",
+          "y": 507
+        },
+        {
+          "text": "Đặt lại",
+          "y": 507
+        },
+        {
+          "text": "Trước",
+          "y": 835
+        },
+        {
+          "text": "Sau",
+          "y": 835
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_ai-usage-390",
+      "url": "http://localhost:3000/dashboard/ai-usage",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 844,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh-390",
+      "url": "http://localhost:3000/dashboard/nckh",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 844,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Nhập form",
+          "y": 445
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh_callback-390",
+      "url": "http://localhost:3000/dashboard/nckh/callback",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 844,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh_forms_fixture-form-390",
+      "url": "http://localhost:3000/dashboard/nckh/forms/fixture-form",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 844,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Danh sách form",
+          "y": 168
+        },
+        {
+          "text": "Tạo mô hình",
+          "y": 410
+        }
+      ]
+    },
+    {
+      "name": "_admin-390",
+      "url": "http://localhost:3000/admin",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1566,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 212
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 587
+        },
+        {
+          "text": "Xuất báo cáo đối soát",
+          "y": 1485
+        }
+      ]
+    },
+    {
+      "name": "_admin_payments-390",
+      "url": "http://localhost:3000/admin/payments",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 959,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Lọc",
+          "y": 573
+        }
+      ]
+    },
+    {
+      "name": "_admin_manual-credits-390",
+      "url": "http://localhost:3000/admin/manual-credits",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1288,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "",
+          "y": 448
+        },
+        {
+          "text": "Cộng credit",
+          "y": 606
+        },
+        {
+          "text": "Tìm kiếm",
+          "y": 801
+        },
+        {
+          "text": "Làm mới",
+          "y": 801
+        },
+        {
+          "text": "Trước",
+          "y": 1009
+        },
+        {
+          "text": "Sau",
+          "y": 1009
+        }
+      ]
+    },
+    {
+      "name": "_admin_packages-390",
+      "url": "http://localhost:3000/admin/packages",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1484,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tạo gói mới",
+          "y": 212
+        },
+        {
+          "text": "Sửa",
+          "y": 856
+        },
+        {
+          "text": "Sửa",
+          "y": 1123
+        },
+        {
+          "text": "Sửa",
+          "y": 1390
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        }
+      ]
+    },
+    {
+      "name": "_admin_revenue-390",
+      "url": "http://localhost:3000/admin/revenue",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1247,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Xuất CSV đang cập nhật",
+          "y": 264
+        },
+        {
+          "text": "",
+          "y": 264
+        }
+      ]
+    },
+    {
+      "name": "_admin_payos-settings-390",
+      "url": "http://localhost:3000/admin/payos-settings",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 3249,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 212
+        },
+        {
+          "text": "Sao chép",
+          "y": 1489
+        },
+        {
+          "text": "Lưu thay đổi",
+          "y": 1622
+        },
+        {
+          "text": "Kiểm tra cấu hình",
+          "y": 1674
+        }
+      ]
+    },
+    {
+      "name": "_admin_ai-provider-settings-390",
+      "url": "http://localhost:3000/admin/ai-provider-settings",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 2659,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 212
+        },
+        {
+          "text": "Lưu thay đổi",
+          "y": 1342
+        },
+        {
+          "text": "Kiểm tra cấu hình",
+          "y": 1394
+        }
+      ]
+    },
+    {
+      "name": "_admin_ai-usage-390",
+      "url": "http://localhost:3000/admin/ai-usage",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 940,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tổng quan",
+          "y": 197
+        },
+        {
+          "text": "Lịch sử",
+          "y": 197
+        }
+      ]
+    },
+    {
+      "name": "account-profile-390",
+      "url": "http://localhost:3000/dashboard",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1262,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 198
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 640
+        },
+        {
+          "text": "Nạp credit",
+          "y": 948.5
+        }
+      ]
+    },
+    {
+      "name": "account-security-390",
+      "url": "http://localhost:3000/dashboard",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 1262,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 198
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 640
+        },
+        {
+          "text": "Nạp credit",
+          "y": 948.5
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-1-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 2864,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 792
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1131
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1231
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1331
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-1-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 3020,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-1-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 3660,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-10-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 7690,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 792
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1131
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1231
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1331
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-10-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 4430,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-10-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 5070,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-30-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 18487,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 792
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1131
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1231
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1331
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-30-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 7606,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-30-390",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 390,
+      "height": 844,
+      "pageHeight": 8246,
+      "scrollWidth": 390,
+      "actions": [
+        {
+          "text": "",
+          "y": 879
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 879
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 878
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 200
+        },
+        {
+          "text": "3Preview",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 1075
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 1175
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 1275
+        },
+        {
+          "text": "Điền prompt",
+          "y": 1508
+        }
+      ]
+    },
+    {
+      "name": "_dashboard-1440",
+      "url": "http://localhost:3000/dashboard",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 100
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 393
+        },
+        {
+          "text": "Nạp credit",
+          "y": 393
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_forms-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Nạp credit →",
+          "y": 648
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_top-up-1440",
+      "url": "http://localhost:3000/dashboard/top-up",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1053,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Cơ bản",
+          "y": 279
+        },
+        {
+          "text": "Tạo liên kết thanh toán",
+          "y": 510
+        },
+        {
+          "text": "Cơ bản100 credit50.000 ₫",
+          "y": 275
+        },
+        {
+          "text": "Tiêu chuẩn300 credit150.000 ₫",
+          "y": 275
+        },
+        {
+          "text": "Nâng cao600 credit300.000 ₫",
+          "y": 438
+        },
+        {
+          "text": "Gửi yêu cầu đối soát",
+          "y": 0
+        },
+        {
+          "text": "Làm mới",
+          "y": 781
+        },
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Xem chi tiết",
+          "y": 0
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_top-up_fixture-order-1440",
+      "url": "http://localhost:3000/dashboard/top-up/fixture-order",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_usage-logs-1440",
+      "url": "http://localhost:3000/dashboard/usage-logs",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Chỉ xem câu trả lời được tạo",
+          "y": 360
+        },
+        {
+          "text": "Tìm",
+          "y": 360
+        },
+        {
+          "text": "Đặt lại",
+          "y": 360
+        },
+        {
+          "text": "Trước",
+          "y": 551
+        },
+        {
+          "text": "Sau",
+          "y": 551
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_credit-transactions-1440",
+      "url": "http://localhost:3000/dashboard/credit-transactions",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tất cả loại",
+          "y": 360
+        },
+        {
+          "text": "Tìm",
+          "y": 360
+        },
+        {
+          "text": "Đặt lại",
+          "y": 360
+        },
+        {
+          "text": "Trước",
+          "y": 551
+        },
+        {
+          "text": "Sau",
+          "y": 551
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_ai-usage-1440",
+      "url": "http://localhost:3000/dashboard/ai-usage",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh-1440",
+      "url": "http://localhost:3000/dashboard/nckh",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Nhập form",
+          "y": 374
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh_callback-1440",
+      "url": "http://localhost:3000/dashboard/nckh",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Nhập form",
+          "y": 374
+        }
+      ]
+    },
+    {
+      "name": "_dashboard_nckh_forms_fixture-form-1440",
+      "url": "http://localhost:3000/dashboard/nckh/forms/fixture-form",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Danh sách form",
+          "y": 100
+        },
+        {
+          "text": "Tạo mô hình",
+          "y": 251
+        }
+      ]
+    },
+    {
+      "name": "_admin-1440",
+      "url": "http://localhost:3000/admin",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1051,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 100
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 446
+        },
+        {
+          "text": "Xuất báo cáo đối soát",
+          "y": 970
+        }
+      ]
+    },
+    {
+      "name": "_admin_payments-1440",
+      "url": "http://localhost:3000/admin/payments",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Lọc",
+          "y": 368
+        }
+      ]
+    },
+    {
+      "name": "_admin_manual-credits-1440",
+      "url": "http://localhost:3000/admin/manual-credits",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 941,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "",
+          "y": 394
+        },
+        {
+          "text": "Cộng credit",
+          "y": 385
+        },
+        {
+          "text": "Tìm kiếm",
+          "y": 526
+        },
+        {
+          "text": "Làm mới",
+          "y": 526
+        },
+        {
+          "text": "Trước",
+          "y": 682
+        },
+        {
+          "text": "Sau",
+          "y": 682
+        }
+      ]
+    },
+    {
+      "name": "_admin_packages-1440",
+      "url": "http://localhost:3000/admin/packages",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tạo gói mới",
+          "y": 100
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        },
+        {
+          "text": "Sửa",
+          "y": 0
+        },
+        {
+          "text": "Sửa",
+          "y": 480
+        },
+        {
+          "text": "Sửa",
+          "y": 541
+        },
+        {
+          "text": "Sửa",
+          "y": 602
+        }
+      ]
+    },
+    {
+      "name": "_admin_revenue-1440",
+      "url": "http://localhost:3000/admin/revenue",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Xuất CSV đang cập nhật",
+          "y": 100
+        },
+        {
+          "text": "",
+          "y": 100
+        }
+      ]
+    },
+    {
+      "name": "_admin_payos-settings-1440",
+      "url": "http://localhost:3000/admin/payos-settings",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1566,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 100
+        },
+        {
+          "text": "Sao chép",
+          "y": 869
+        },
+        {
+          "text": "Lưu thay đổi",
+          "y": 1018
+        },
+        {
+          "text": "Kiểm tra cấu hình",
+          "y": 1018
+        }
+      ]
+    },
+    {
+      "name": "_admin_ai-provider-settings-1440",
+      "url": "http://localhost:3000/admin/ai-provider-settings",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1368,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Làm mới",
+          "y": 100
+        },
+        {
+          "text": "Lưu thay đổi",
+          "y": 968
+        },
+        {
+          "text": "Kiểm tra cấu hình",
+          "y": 968
+        }
+      ]
+    },
+    {
+      "name": "_admin_ai-usage-1440",
+      "url": "http://localhost:3000/admin/ai-usage",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Tổng quan",
+          "y": 206
+        },
+        {
+          "text": "Lịch sử",
+          "y": 206
+        }
+      ]
+    },
+    {
+      "name": "account-profile-1440",
+      "url": "http://localhost:3000/dashboard",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 100
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 393
+        },
+        {
+          "text": "Nạp credit",
+          "y": 393
+        }
+      ]
+    },
+    {
+      "name": "account-security-1440",
+      "url": "http://localhost:3000/dashboard",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 900,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "Bắt đầu điền form ",
+          "y": 100
+        },
+        {
+          "text": "Xem tất cả",
+          "y": 393
+        },
+        {
+          "text": "Nạp credit",
+          "y": 393
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-1-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1369,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 522
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 720
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 720
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 720
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-1-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1699,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-1-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 1929,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-10-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 4082,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 522
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 720
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 720
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 720
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-10-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 2437,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-10-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 2667,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-rules-30-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 10204,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Gửi trực tiếp",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Đóng tất cả",
+          "y": 522
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 720
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 720
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 720
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-default-30-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 4077,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-ai-custom-30-1440",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 1440,
+      "height": 900,
+      "pageHeight": 4307,
+      "scrollWidth": 1440,
+      "actions": [
+        {
+          "text": "",
+          "y": 0
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "2Cấu hình",
+          "y": 185
+        },
+        {
+          "text": "3Preview",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 347
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 431
+        },
+        {
+          "text": "Quy tắcx1Dùng mẫu và lựa chọn bạn cấu hình",
+          "y": 740
+        },
+        {
+          "text": "AI mặc địnhx2Tạo câu trả lời theo prompt chung",
+          "y": 740
+        },
+        {
+          "text": "AI tùy chỉnhx3Điều chỉnh hướng trả lời và từng câu hỏi",
+          "y": 740
+        },
+        {
+          "text": "Điền prompt",
+          "y": 885
+        }
+      ]
+    },
+    {
+      "name": "forms-initial-320",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 320,
+      "height": 844,
+      "pageHeight": 1261,
+      "scrollWidth": 320,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 480
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 628
+        },
+        {
+          "text": "Nạp credit →",
+          "y": 1104
+        }
+      ]
+    },
+    {
+      "name": "forms-initial-430",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 430,
+      "height": 844,
+      "pageHeight": 1239,
+      "scrollWidth": 430,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 24
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 200
+        },
+        {
+          "text": "Dán link",
+          "y": 478
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 626
+        },
+        {
+          "text": "Nạp credit →",
+          "y": 1102
+        }
+      ]
+    },
+    {
+      "name": "forms-initial-768",
+      "url": "http://localhost:3000/dashboard/forms",
+      "width": 768,
+      "height": 844,
+      "pageHeight": 1144,
+      "scrollWidth": 768,
+      "actions": [
+        {
+          "text": "",
+          "y": 24
+        },
+        {
+          "text": "Nạp creditNạp credit",
+          "y": 26
+        },
+        {
+          "text": "NNgười dùng khảo sát UI",
+          "y": 23
+        },
+        {
+          "text": "1Chọn form",
+          "y": 185
+        },
+        {
+          "text": "Dán link",
+          "y": 403
+        },
+        {
+          "text": "Phân tích biểu mẫu",
+          "y": 543
+        },
+        {
+          "text": "Nạp credit →",
+          "y": 1015
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

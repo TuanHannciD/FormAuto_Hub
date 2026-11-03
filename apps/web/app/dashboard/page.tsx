@@ -8,7 +8,6 @@ import { Alert, Button, Card, CardContent, CardHeader, CardTitle, EmptyState, Pa
 import { buttonStyles } from "@/components/ui-styles";
 import { StatusBadge } from "@/components/status-badge";
 import { apiFetch, type DashboardSummary, type TopupOrder } from "@/lib/api";
-import { getStoredSession } from "@/lib/auth";
 import { displayAction } from "@/lib/labels";
 import { showError } from "@/lib/toast";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -29,7 +28,6 @@ const metrics = [
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [accountName, setAccountName] = useState("bạn");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -47,13 +45,12 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    setAccountName(getStoredSession()?.fullName || "bạn");
     void loadSummary();
   }, [loadSummary]);
 
   return (
     <div className="space-y-[22px]">
-      <PageHeader title={`Xin chào, ${accountName}`} description="Theo dõi credit và hoạt động gần đây của tài khoản." actions={
+      <PageHeader title="Tổng quan" description="Theo dõi credit và hoạt động gần đây của tài khoản." actions={
         <Link href="/dashboard/forms" className={buttonStyles({ className: "shrink-0" })}>Bắt đầu điền form <ArrowRight aria-hidden="true" size={18} /></Link>
       } />
 
@@ -64,11 +61,11 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      <Card className="grid overflow-hidden sm:grid-cols-2 2xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
+      <Card className="grid grid-cols-2 overflow-hidden sm:grid-cols-2 2xl:grid-cols-4" aria-label="Tổng quan credit" aria-busy={isLoading}>
         {metrics.map(({ key, title, icon: Icon }, index) => (
-          <div key={key} className={`flex min-w-0 items-center gap-3 border-border px-4 py-4 ${index < 3 ? "border-b" : ""} ${index % 2 === 0 ? "sm:border-r" : ""} ${index < 2 ? "sm:border-b" : "sm:border-b-0"} ${index < 3 ? "2xl:border-b-0 2xl:border-r" : ""}`}>
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary"><Icon aria-hidden="true" size={22} /></span>
-            <div className="min-w-0"><p className="text-xs font-medium text-secondary-foreground">{title}</p><p className="mt-1 whitespace-nowrap text-2xl font-bold leading-8 tabular-nums tracking-tight">{summary ? summary[key].toLocaleString("vi-VN") : "–"}</p></div>
+          <div key={key} className={`flex min-w-0 items-center gap-3 border-border px-4 py-3 ${index === 0 || index === 3 ? "col-span-2 sm:col-span-1" : ""} ${index < 3 ? "border-b" : ""} ${index % 2 === 0 ? "sm:border-r" : ""} ${index < 2 ? "sm:border-b" : "sm:border-b-0"} ${index < 3 ? "2xl:border-b-0 2xl:border-r" : ""}`}>
+            <span className={`${index > 0 ? "hidden sm:grid" : "grid"} h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary`}><Icon aria-hidden="true" size={22} /></span>
+            <div className="min-w-0"><p className="text-xs font-medium text-secondary-foreground">{title}</p><p className={`mt-1 whitespace-nowrap ${index === 0 ? "text-2xl" : "text-xl sm:text-2xl"} font-bold leading-8 tabular-nums tracking-tight`}>{summary ? summary[key].toLocaleString("vi-VN") : "–"}</p></div>
           </div>
         ))}
       </Card>
@@ -79,7 +76,7 @@ export default function DashboardPage() {
             <div><CardTitle className="text-[17px]">Sử dụng gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Các lượt tạo và gửi phản hồi mới nhất.</p></div>
             <Link href="/dashboard/usage-logs" className="shrink-0 text-xs font-semibold text-primary hover:underline">Xem tất cả</Link>
           </CardHeader>
-          <CardContent className="min-h-[210px] px-5 py-4">
+          <CardContent className="px-4 py-3">
             {isLoading ? <LoadingPanel /> : errorMessage ? <UnavailablePanel /> : summary?.recentUsageLogs.length ? (
               <div className="divide-y divide-border">
                 {summary.recentUsageLogs.slice(0, 4).map((log) => (
@@ -98,7 +95,7 @@ export default function DashboardPage() {
             <div><CardTitle className="text-[17px]">Yêu cầu nạp gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Theo dõi số tiền, credit và trạng thái yêu cầu.</p></div>
             <Link href="/dashboard/top-up" className="shrink-0 text-xs font-semibold text-primary hover:underline">Nạp credit</Link>
           </CardHeader>
-          <CardContent className="min-h-[210px] px-5 py-4">
+          <CardContent className="px-4 py-3">
             {isLoading ? <LoadingPanel /> : errorMessage ? <UnavailablePanel /> : summary?.recentTopupOrders.length ? (
               <BaseTable items={summary.recentTopupOrders} columns={recentTopupColumns} getRowKey={(order) => order.id} emptyTitle="Chưa có yêu cầu nạp gần đây" emptyDetail="Nạp thêm credit khi cần tiếp tục sử dụng." minWidthClassName="min-w-[500px]" />
             ) : <div className="py-3"><CreditCard aria-hidden="true" className="mx-auto mb-4 text-secondary-foreground" size={30} /><EmptyState title="Chưa có yêu cầu nạp gần đây" detail="Nạp thêm credit khi cần tiếp tục sử dụng." /></div>}

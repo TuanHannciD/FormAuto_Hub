@@ -34,8 +34,8 @@ async function setup(page: Page, questions = [question]) {
   return calls;
 }
 const chooseAi = (page: Page, custom = false) => page.getByRole("button", { name: custom ? /AI tùy chỉnh.*x3/ : /AI mặc định.*x2/ }).click();
-const createAi = (page: Page) => page.getByRole("button", { name: "Lưu và tạo AI preview", exact: true });
-const globalPrompt = (page: Page) => page.getByRole("textbox", { name: /^Prompt chung\s+\d+\/2000 ký tự$/ });
+const createAi = (page: Page) => page.getByRole("button", { name: "Lưu và tạo bản xem trước AI", exact: true });
+const globalPrompt = (page: Page) => page.getByRole("textbox", { name: /^Hướng dẫn chung\s+\d+\/2000 ký tự$/ });
 
 test("ERR014 failed profile read preserves edited prompt and blocks writes until read-only retry succeeds", async ({ page }) => {
   const calls = await setup(page);

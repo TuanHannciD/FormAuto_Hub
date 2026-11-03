@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, Bell, Bot, Boxes, CreditCard, HandCoins, HelpCircle, LayoutDashboard, Search, Settings, ShieldCheck } from "lucide-react";
+import { BarChart3, Bot, Boxes, CreditCard, HandCoins, LayoutDashboard, Settings, ShieldCheck } from "lucide-react";
 import { AccountMenu } from "@/components/account-menu";
 import { ShellLayout, shellNavItemStyles, shellNavActiveStyles } from "./shell-layout";
-import { Button, Input } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
 
@@ -106,9 +105,6 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return <ShellLayout subtitle="Quản trị hệ thống" navigation={navigation} mobileOpen={isMobileNavOpen} onMobileChange={setIsMobileNavOpen}
     heading={<p className="min-w-0 truncate text-xs text-secondary-foreground"><span>Admin</span><span className="mx-2">/</span><strong className="text-foreground">{navItems.find(item => isActiveHref(item.href))?.label || "Quản trị hệ thống"}</strong></p>}
     actions={<>
-      <div className="relative hidden w-48 xl:block"><Search aria-hidden="true" className="pointer-events-none absolute left-3 top-3 text-muted-foreground" size={16} /><Input disabled className="pl-9" placeholder="Tìm kiếm hệ thống..." /></div>
-      <Button aria-label="Thông báo" className="hidden sm:inline-flex" size="icon" type="button" variant="secondary"><Bell aria-hidden="true" size={18} /></Button>
-      <Button aria-label="Trợ giúp" className="hidden sm:inline-flex" size="icon" type="button" variant="secondary"><HelpCircle aria-hidden="true" size={18} /></Button>
       <AccountMenu session={session} onLogout={logout} />
     </>}>
     {children}

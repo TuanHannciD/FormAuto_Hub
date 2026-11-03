@@ -27,24 +27,26 @@ const paymentColumns: Array<BaseTableColumn<AdminPayment>> = [
   { key: "credits", header: "Credit", render: (item) => `${item.credits} cr` },
   { key: "providerStatus", header: "Thanh toán", render: (item) => <StatusBadge status={item.providerStatus} /> },
   { key: "topupOrderStatus", header: "Top-up", render: (item) => <StatusBadge status={item.topupOrderStatus} /> },
-  { key: "lastWebhookAt", header: "Webhook gần nhất", render: (item) => item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có" }
+  { key: "lastWebhookAt", hideOnMobile: true, header: "Webhook gần nhất", render: (item) => item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có" }
 ];
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [reload, setReload] = useState(0);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [providerFilter, setProviderFilter] = useState("");
   const [appliedFilters, setAppliedFilters] = useState({ query: "", status: "", provider: "" });
 
   useEffect(() => {
+    setLoading(true); setError(false);
     apiFetch<{ items: AdminPayment[] }>("/api/admin/payments")
       .then((data) => setPayments(data.items))
       .catch((error: Error) => { setError(true); showError(error, "Không tải được danh sách thanh toán."); })
       .finally(() => setLoading(false));
-  }, []);
+  }, [reload]);
 
   const statusOptions = useMemo(
     () => Array.from(new Set(payments.flatMap((item) => [item.providerStatus, item.topupOrderStatus]))).filter(Boolean).sort(),
@@ -132,12 +134,13 @@ export default function AdminPaymentsPage() {
           </form>
         </CardHeader>
         <CardContent>
-          {error ? <Alert>Không tải được danh sách thanh toán. Tải lại trang để thử lại.</Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải thanh toán...</p> : <BaseTable
+          {error ? <Alert><p>Không tải được danh sách thanh toán.</p><Button type="button" variant="secondary" onClick={() => setReload(value => value + 1)}>Thử lại</Button></Alert> : loading ? <p role="status" className="py-4 text-sm text-muted-foreground">Đang tải thanh toán...</p> : <BaseTable
             items={filteredPayments}
             columns={paymentColumns}
             getRowKey={(item) => item.id}
             emptyTitle={payments.length === 0 ? "Chưa có thanh toán" : "Không có thanh toán phù hợp"}
             emptyDetail={payments.length === 0 ? "Thanh toán PayOS sẽ xuất hiện sau khi user tạo yêu cầu nạp credit." : "Đổi từ khóa, trạng thái hoặc phương thức để xem thêm kết quả."}
+            mobileFooter={item => <details className="border-t border-border pt-2 text-xs"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Chi tiết giao dịch</summary><p className="pb-2">Webhook gần nhất: {item.lastWebhookAt ? formatDate(item.lastWebhookAt) : "Chưa có"}</p></details>}
             minWidthClassName="min-w-[860px]"
           />}
         </CardContent>

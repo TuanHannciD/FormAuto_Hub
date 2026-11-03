@@ -86,7 +86,7 @@ function PaymentResultShell({
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               {hasFormPreviewResume && (
                 <Button type="button" onClick={returnToFormPreviewProgress}>
-                  Quay lại tiếp tục tạo preview
+                  Quay lại tạo bản xem trước
                 </Button>
               )}
               <Link className={buttonStyles()} href="/dashboard">

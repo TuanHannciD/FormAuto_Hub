@@ -53,7 +53,7 @@ test("mobile AI tabs remain touch sized and long saved models remain readable", 
   await expect(tab).toBeVisible();
   expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await tab.focus(); await page.keyboard.press("Enter");
-  await expect(page.getByRole("heading", { name: "Lịch sử AI generation" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Lịch sử tạo câu trả lời AI" })).toBeVisible();
   await page.goto("/admin/ai-provider-settings");
   await expect(page.getByLabel("Model mặc định", { exact: true })).toHaveValue(model);
   const saved = page.getByText(model, { exact: true }).last();
@@ -72,8 +72,8 @@ test("admin data pages distinguish loading and failed reads from empty results",
   await setup(page);
   const states = [
     ["", "/api/admin/revenue/summary", "Đang tải thanh toán...", "Không tải được tổng quan quản trị. Bấm “Làm mới” để thử lại."],
-    ["payments", "/api/admin/payments", "Đang tải thanh toán...", "Không tải được danh sách thanh toán. Tải lại trang để thử lại."],
-    ["packages", "/api/admin/packages", "Đang tải gói credit...", "Không tải được danh sách gói credit. Tải lại trang để thử lại."],
+    ["payments", "/api/admin/payments", "Đang tải thanh toán...", "Không tải được danh sách thanh toán."],
+    ["packages", "/api/admin/packages", "Đang tải gói credit...", "Không tải được danh sách gói credit."],
     ["revenue", "/api/admin/revenue/summary", "Đang tải báo cáo doanh thu...", "Không tải được báo cáo doanh thu. Bấm “Làm mới báo cáo” để thử lại."],
     ["ai-provider-settings", "/api/admin/ai-provider-settings", "Đang tải cấu hình AI...", "Không tải được cấu hình AI. Bấm “Làm mới” để thử lại."],
     ["payos-settings", "/api/admin/payment-providers/payos", "Đang tải cấu hình PayOS...", "Không tải được cấu hình PayOS. Bấm “Làm mới” để thử lại."]

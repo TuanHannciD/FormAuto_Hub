@@ -34,6 +34,7 @@ export function DatasetPreview({ dataset, isLoading = false, error }: { dataset:
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-semibold">Bộ dữ liệu</h3>
+      <p className="text-xs text-muted-foreground">Xem trước {dataset.items.length}/{dataset.totalItems} dòng · {previewColumns.length}/{dataset.columns.length} biến.</p>
       <BaseTable columns={columns} items={rows} getRowKey={(item) => item.previewKey} emptyTitle="Chưa có bộ dữ liệu" emptyDetail="Chạy chuẩn hóa sau khi đã có phản hồi thô và ánh xạ." />
     </div>
   );

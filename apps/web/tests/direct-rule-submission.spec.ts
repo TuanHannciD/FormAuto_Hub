@@ -53,7 +53,7 @@ function job(total: number, id = "direct-job") {
 }
 
 async function addSession(page: Page) {
-  await page.addInitScript(() => localStorage.setItem("formauto.auth.session", JSON.stringify({
+  await page.addInitScript(() => { if (!localStorage.getItem("formauto.auth.session")) localStorage.setItem("formauto.auth.session", JSON.stringify({
     userId: "direct-rule-user",
     email: "direct@example.invalid",
     fullName: "Direct Fixture",
@@ -62,7 +62,7 @@ async function addSession(page: Page) {
     refreshToken: "fixture",
     accessTokenExpiresAt: new Date(Date.now() + 3_600_000).toISOString(),
     refreshTokenExpiresAt: new Date(Date.now() + 86_400_000).toISOString()
-  })));
+  })); });
 }
 
 async function analyze(page: Page) {
@@ -118,7 +118,7 @@ test("rules uses one direct action without preview, checkbox, or common submissi
   await page.goto("/dashboard/forms");
   await analyze(page);
   await expect(page.locator("[data-sonner-toast]").filter({ hasText: "trước khi tạo và gửi" })).toBeVisible();
-  await expect(page.getByText("Cài đặt → Tạo và gửi ngay", { exact: true })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Tạo và gửi theo quy tắc" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Lưu và tạo bản xem trước", exact: true })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   const action = page.getByRole("button", { name: "Tạo và gửi ngay", exact: true });
@@ -554,7 +554,7 @@ for (const mode of [
   await page.goto("/dashboard/forms");
   await analyze(page);
   await page.getByRole("button", { name: mode.button }).click();
-  await expect(page.getByText("Cài đặt → Xem trước → Xác nhận", { exact: true })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Tạo bản xem trước AI" })).toBeVisible();
   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
   await expect(page.getByRole("checkbox")).toBeEnabled();
   await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();

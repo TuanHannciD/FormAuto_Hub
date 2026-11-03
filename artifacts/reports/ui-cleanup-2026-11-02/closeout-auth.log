@@ -1,0 +1,59 @@
+
+> formauto-hub-web@0.1.0 test:auth
+> node --test tests/auth-session.test.cjs tests/api-auth.test.cjs
+
+TAP version 13
+# Subtest: known Google 401s preserve FormAuto session without refresh for JSON and downloads
+ok 1 - known Google 401s preserve FormAuto session without refresh for JSON and downloads
+  ---
+  duration_ms: 273.8295
+  ...
+# Subtest: unknown, empty and malformed 401s still expire an invalid FormAuto session
+ok 2 - unknown, empty and malformed 401s still expire an invalid FormAuto session
+  ---
+  duration_ms: 171.6994
+  ...
+# Subtest: Google-looking errors outside NCKH cannot bypass FormAuto session recovery
+ok 3 - Google-looking errors outside NCKH cannot bypass FormAuto session recovery
+  ---
+  duration_ms: 11.4692
+  ...
+# Subtest: real JWT 401 refreshes once then preserves rotated session on a Google 401
+ok 4 - real JWT 401 refreshes once then preserves rotated session on a Google 401
+  ---
+  duration_ms: 20.8248
+  ...
+# Subtest: parallel callers share one refresh and retain the new session
+ok 5 - parallel callers share one refresh and retain the new session
+  ---
+  duration_ms: 4.1642
+  ...
+# Subtest: 503 and network failures preserve the session
+ok 6 - 503 and network failures preserve the session
+  ---
+  duration_ms: 1.9317
+  ...
+# Subtest: invalid refresh expires the session once for all parallel callers
+ok 7 - invalid refresh expires the session once for all parallel callers
+  ---
+  duration_ms: 1.0623
+  ...
+# Subtest: a stale refresh response cannot clear or overwrite a newer login
+ok 8 - a stale refresh response cannot clear or overwrite a newer login
+  ---
+  duration_ms: 1.5698
+  ...
+# Subtest: expired stored sessions do not attempt refresh
+ok 9 - expired stored sessions do not attempt refresh
+  ---
+  duration_ms: 1.1125
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 816.9648

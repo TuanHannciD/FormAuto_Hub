@@ -26,7 +26,7 @@ test("landing elevation remains translucent when the overlay backdrop token exis
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/dashboard/credit-transactions");
   await page.getByRole("button", { name: "Mở menu", exact: true }).click();
-  expect(await page.getByRole("button", { name: "Đóng menu bằng lớp phủ" }).evaluate(element => getComputedStyle(element).backgroundColor)).toBe("rgba(24, 36, 74, 0.5)");
+  expect(await page.getByRole("dialog", { name: "Điều hướng" }).evaluate(element => getComputedStyle(element, "::backdrop").backgroundColor)).toBe("rgba(24, 36, 74, 0.5)");
 });
 
 test("operating shell leaves a compact readable start for the actual task", async ({ page }) => {

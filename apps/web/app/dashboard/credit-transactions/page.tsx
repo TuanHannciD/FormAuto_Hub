@@ -25,7 +25,7 @@ const transactionColumns: Array<BaseTableColumn<CreditTransaction>> = [
   { key: "type", header: "Loại", render: (transaction) => <Badge tone="info">{displayCreditTransactionType(transaction.type)}</Badge> },
   { key: "amount", header: "Số credit", render: (transaction) => transaction.amount },
   { key: "balanceAfter", header: "Số dư sau đó", render: (transaction) => transaction.balanceAfter },
-  { key: "description", header: "Mô tả", render: (transaction) => transaction.description }
+  { key: "description", hideOnMobile: true, header: "Mô tả", render: (transaction) => transaction.description }
 ];
 
 export default function CreditTransactionsPage() {
@@ -115,17 +115,14 @@ export default function CreditTransactionsPage() {
     <div className="space-y-4">
       <PageHeader title="Giao dịch credit" description="Lịch sử ghi nhận credit được nạp và credit đã sử dụng." />
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <Metric label="Kết quả theo filter" value={String(totalItems)} />
+        <Metric label="Kết quả theo bộ lọc" value={String(totalItems)} />
         <Metric label="Credit trong trang" value={String(creditsInPage)} />
-        <Metric label="Credit mới nhất" value={transactions[0] ? String(transactions[0].amount) : "-"} />
+        <Metric label="Credit giao dịch đầu trang" value={transactions[0] ? String(transactions[0].amount) : "-"} />
       </div>
       <Card>
         <CardHeader className="space-y-3">
           <div>
             <CardTitle>Sổ ghi credit</CardTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Dữ liệu được tải theo từng trang và theo từ khóa hiện tại.
-            </p>
           </div>
           <CreditTransactionFilters
             search={search}
@@ -150,6 +147,7 @@ export default function CreditTransactionsPage() {
                 items={transactions}
                 columns={transactionColumns}
                 getRowKey={(transaction) => transaction.id}
+                mobileFooter={transaction => <details className="border-t border-border text-xs"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Mô tả giao dịch</summary><p className="break-words pb-2">{transaction.description || "Không có mô tả"}</p></details>}
                 emptyTitle="Không có kết quả phù hợp"
                 emptyDetail="Thử đổi từ khóa tìm kiếm hoặc đặt lại bộ lọc."
               />
@@ -218,7 +216,7 @@ function CreditTransactionFilters({
           onChange={(event) => setSearchInput(event.target.value)}
         />
       </label>
-      <DropdownSelect className="col-span-2 lg:col-span-1" value={type} options={typeOptions} onChange={onTypeChange} />
+      <DropdownSelect ariaLabel="Lọc loại giao dịch" className="col-span-2 lg:col-span-1" value={type} options={typeOptions} onChange={onTypeChange} />
       <Button type="submit">{isRefreshing ? "Đang lọc..." : "Tìm"}</Button>
       <Button type="button" variant="secondary" onClick={resetFilters}>Đặt lại</Button>
     </form>

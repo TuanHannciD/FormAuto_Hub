@@ -55,7 +55,7 @@ export default function AdminManualCreditsPage() {
     { key: "createdAt", header: "Tạo lúc", render: (item) => formatDate(item.createdAt) },
     { key: "request", header: "Mã yêu cầu", render: (item) => <RequestCode id={item.id} /> },
     { key: "email", header: "Người dùng", render: (item) => <span className="block max-w-[240px] break-all">{item.userEmail || "-"}</span> },
-    { key: "package", header: "Gói", render: (item) => <span className="block max-w-[240px] whitespace-normal [overflow-wrap:anywhere]">{item.packageName || "-"}</span> },
+    { key: "package", hideOnMobile: true, header: "Gói", render: (item) => <span className="block max-w-[240px] whitespace-normal [overflow-wrap:anywhere]">{item.packageName || "-"}</span> },
     { key: "credits", header: "Số credit", render: (item) => `${item.credits} credit` },
     { key: "amount", header: "Số tiền", render: (item) => formatCurrency(item.amount) },
     { key: "status", header: "Trạng thái", render: (item) => <StatusBadge status={item.status} /> },
@@ -316,9 +316,9 @@ export default function AdminManualCreditsPage() {
             emptyDetail="Yêu cầu mới sẽ xuất hiện sau khi người dùng gửi ghi chú chuyển khoản."
             minWidthClassName="min-w-[980px]"
             mobileFooter={(item) => (
-              <Button className="w-full" type="button" variant="secondary" onClick={() => { setRejectReason(""); setSelectedRequestId(item.id); }}>
+              <><p className="break-words py-2 text-xs text-muted-foreground">Gói: {item.packageName || "—"}</p><Button className="w-full" type="button" variant="secondary" onClick={() => { setRejectReason(""); setSelectedRequestId(item.id); }}>
                 Xem chi tiết
-              </Button>
+              </Button></>
             )}
           />}
         </CardContent>

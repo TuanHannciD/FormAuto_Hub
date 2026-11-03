@@ -236,7 +236,7 @@ export default function AdminPackagesPage() {
                 <input checked={form.isActive} onChange={(event) => setForm((current) => ({ ...current, isActive: event.target.checked }))} type="checkbox" />
               </label>
               <Alert className="border-warning-border bg-warning-surface text-warning">
-                Giá sử dụng cho PayOS phải là số nguyên VNĐ và lớn hơn 0. Đơn hàng nạp tiền đã được tạo sẽ giữ tín dụng chụp nhanh và số tiền cũ.
+                Giá sử dụng cho PayOS phải là số nguyên VNĐ và lớn hơn 0. Đơn nạp đã tạo giữ nguyên số credit và số tiền tại thời điểm tạo.
               </Alert>
             </DialogBody>
             <DialogFooter>

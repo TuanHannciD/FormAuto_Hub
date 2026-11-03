@@ -1,0 +1,32 @@
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing
+[1A[2K  1) [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('button', { name: 'Loại biến', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Loại biến', exact: true })[22m
+
+
+      614 |     await expect(page.getByText("Tên biến", { exact: true }).first()).toBeVisible();
+      615 |     await expect(page.getByLabel("Mã biến", { exact: true })).toBeVisible();
+    > 616 |     await expect(page.getByRole("button", { name: "Loại biến", exact: true })).toBeVisible();
+          |                                                                                ^
+      617 |     await expect(page.getByRole("button", { name: "Thang đo", exact: true })).toBeVisible();
+      618 |     await page.getByRole("button", { name: "Đóng", exact: true }).click();
+      619 |     await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\nckh.spec.ts:616:80
+
+    Error Context: test-results\nckh-NCKH-—-Phase-7-Worksp-eb3ad-visible-labels-after-typing-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing 

@@ -180,6 +180,7 @@ function NckhContent() {
       <PageHeader title="NCKH — Nghiên cứu Khoa học" description="Quản lý Google Forms khảo sát cho nghiên cứu khoa học." />
 
       {/* Google Link Status */}
+      {(googleLinked !== true || isLoading || Boolean(loadError)) && (
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -225,6 +226,7 @@ function NckhContent() {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* Import Form */}
       {googleLinked === true && !isLoading && !loadError && (
@@ -234,10 +236,11 @@ function NckhContent() {
               <FileUp size={18} />
               Nhập Google Form
             </CardTitle>
+            <p className="mt-1 text-xs text-success">Đã liên kết Google — có thể nhập form.</p>
           </CardHeader>
           <CardContent>
-            <form className="flex min-w-0 flex-col gap-3 sm:flex-row" onSubmit={handleImport}>
-              <Input
+            <form className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end" onSubmit={handleImport}>
+              <label className="grid min-w-0 flex-1 gap-1 text-sm font-medium">Link Google Form khảo sát<Input
                 className="min-w-0 flex-1"
                 aria-label="Link Google Form khảo sát"
                 placeholder="https://docs.google.com/forms/d/..."
@@ -245,7 +248,7 @@ function NckhContent() {
                 value={formUrl}
                 onChange={(event) => setFormUrl(event.target.value)}
                 required
-              />
+              /></label>
               <Button type="submit" disabled={isImporting}>
                 {isImporting ? (
                   <>

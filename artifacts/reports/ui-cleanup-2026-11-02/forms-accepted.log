@@ -1,0 +1,20 @@
+
+[1A[2K[WebServer] (node:27432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:36820) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+[1A[2K[1/10] [chromium] › tests\form-automation.spec.ts:19:5 › saved AI previews remain readable and require confirmation on short mobile screens
+[1A[2K[2/10] [chromium] › tests\form-automation.spec.ts:113:5 › rules sends the currently displayed configuration without a preview confirmation step
+[1A[2K[3/10] [chromium] › tests\form-automation.spec.ts:125:5 › rules step navigation targets existing sections
+[1A[2K[4/10] [chromium] › tests\form-automation.spec.ts:134:5 › rules with no supported questions never links to an absent action
+[1A[2K[5/10] [chromium] › tests\form-automation.spec.ts:144:5 › AI summary uses active request count after direct mode
+[1A[2K[6/10] [chromium] › tests\form-automation.spec.ts:155:5 › quantity and cost context are available by label at each generation action
+[1A[2K[7/10] [chromium] › tests\form-automation.spec.ts:172:5 › changing form URL clears previous analysis even when the next analysis fails
+[1A[2K[8/10] [chromium] › tests\form-automation.spec.ts:185:5 › AI partial results without credit shortage report actual previews and cost
+[1A[2K[9/10] [chromium] › tests\form-automation.spec.ts:203:5 › desktop and mobile workflow render without overflow or drawer overlap
+[1A[2K[10/10] [chromium] › tests\form-automation.spec.ts:232:5 › sticky generation actions remain clickable above expanded question editors
+[1A[2K  10 passed (24.5s)

@@ -1,0 +1,137 @@
+{
+  "task": "FAH-UI-003",
+  "date": "2026-11-02",
+  "status": "Verified",
+  "documents": [
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "d1a1c0a7582dd8f4da7b2dda2b8cfb130b5566116eeb1421d27485ce757529bf",
+      "lines": 63,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "9e668fef846298d38d4cffcc7abc89ad1815c322b1e01651459d5fff04722dbc",
+      "lines": 123,
+      "relativeLinks": [
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "44b40b55fcf3d062f54065670ac1ebc1c2fe18c0b1ffadaec423e6e14a1c297a",
+      "lines": 134,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
+      "sha256": "a2639ef5d8b2ba419f20cb5b4063ef7981a9b4a314003238b8d8962577cb432f",
+      "lines": 71,
+      "relativeLinks": []
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "b809a5bb41a1f495c67144b331b5ac29f61e3bb7078c8826d050017f3205f711",
+      "lines": 63,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "bcf03f03c5e7992174844c0811343537e352939af650d0ed4df1ead54d77cd49",
+      "lines": 123,
+      "relativeLinks": [
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "950c0257462e81b6db271e46c06a98ffe526f68dc665694c0457522acbef69b1",
+      "lines": 138,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
+      "sha256": "0b758e559f286e7f42c2c26730da3043080a6ee2b1e08fea91c596456fab95dc",
+      "lines": 64,
+      "relativeLinks": []
+    }
+  ],
+  "routes": [
+    "/dashboard/ai-usage",
+    "/dashboard/credit-transactions",
+    "/dashboard/forms",
+    "/dashboard/nckh/callback",
+    "/dashboard/nckh/forms/[formId]",
+    "/dashboard/nckh",
+    "/dashboard",
+    "/dashboard/top-up/[id]",
+    "/dashboard/top-up",
+    "/dashboard/usage-logs",
+    "/admin/ai-provider-settings",
+    "/admin/ai-usage",
+    "/admin/manual-credits",
+    "/admin/packages",
+    "/admin",
+    "/admin/payments",
+    "/admin/payos-settings",
+    "/admin/revenue"
+  ],
+  "trackedFilesChanged": [
+    "apps/web/app/admin/ai-provider-settings/page.tsx",
+    "apps/web/app/admin/ai-usage/page.tsx",
+    "apps/web/app/admin/manual-credits/page.tsx",
+    "apps/web/app/admin/packages/page.tsx",
+    "apps/web/app/admin/page.tsx",
+    "apps/web/app/admin/payments/page.tsx",
+    "apps/web/app/admin/payos-settings/page.tsx",
+    "apps/web/app/admin/revenue/page.tsx",
+    "apps/web/app/dashboard/ai-usage/page.tsx",
+    "apps/web/app/dashboard/credit-transactions/page.tsx",
+    "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+    "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
+    "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
+    "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
+    "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
+    "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+    "apps/web/app/dashboard/forms/_constants.ts",
+    "apps/web/app/dashboard/forms/page.tsx",
+    "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
+    "apps/web/app/dashboard/nckh/page.tsx",
+    "apps/web/app/dashboard/page.tsx",
+    "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
+    "apps/web/app/dashboard/top-up/page.tsx",
+    "apps/web/app/dashboard/usage-logs/page.tsx",
+    "apps/web/app/payment/payos/return/page.tsx",
+    "apps/web/components/admin-shell.tsx",
+    "apps/web/components/dropdown-select.tsx",
+    "apps/web/components/searchable-dropdown-select.tsx",
+    "apps/web/components/shell-layout.tsx",
+    "apps/web/tests/admin-ui-refinement.spec.ts",
+    "apps/web/tests/admin-ui.spec.ts",
+    "apps/web/tests/direct-rule-submission.spec.ts",
+    "apps/web/tests/fah-err-forms-errors.spec.ts",
+    "apps/web/tests/form-automation.spec.ts",
+    "apps/web/tests/nckh.spec.ts",
+    "apps/web/tests/shared-ui.spec.ts",
+    "apps/web/tests/ui-refinement.spec.ts"
+  ],
+  "unexpectedUntrackedFiles": [],
+  "failures": [],
+  "limits": "Identifier/link/encoding/implementation-scope checks only. Bilingual semantic review is independent human-like assessment; no app runtime/test pass is claimed."
+}

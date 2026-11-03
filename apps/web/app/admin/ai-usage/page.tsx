@@ -95,12 +95,12 @@ const displayDuration = (ms: number | null) => {
 };
 
 const modeLabels: Record<string, string> = {
-  FullAi: "Option 2 — AI mặc định",
-  CustomAi: "Option 3 — AI tùy chỉnh"
+  FullAi: "AI mặc định",
+  CustomAi: "AI tùy chỉnh"
 };
 
 const perfColumns: Array<BaseTableColumn<AiProviderPerf>> = [
-  { key: "provider", header: "Provider", render: (p) => p.provider },
+  { key: "provider", header: "Nhà cung cấp", render: (p) => p.provider },
   { key: "model", header: "Model", render: (p) => <span className="block max-w-[260px] [overflow-wrap:anywhere]">{p.model}</span> },
   {
     key: "successfulRuns",
@@ -112,7 +112,7 @@ const perfColumns: Array<BaseTableColumn<AiProviderPerf>> = [
     header: "Thất bại",
     render: (p) => <span className={p.failedRuns > 0 ? "text-destructive font-semibold" : ""}>{p.failedRuns}</span>
   },
-  { key: "avgDurationMs", header: "TB thời gian", render: (p) => displayDuration(Math.round(p.avgDurationMs)) }
+  { key: "avgDurationMs", header: "Thời lượng TB", render: (p) => displayDuration(Math.round(p.avgDurationMs)) }
 ];
 
 const topUserColumns: Array<BaseTableColumn<AiTopUser>> = [
@@ -126,17 +126,17 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
   {
     key: "mode",
     header: "Chế độ",
-    render: (r) => <Badge tone={r.mode === "FullAi" ? "info" : "warning"}>{r.mode === "FullAi" ? "Option 2" : "Option 3"}</Badge>
+    render: (r) => <Badge tone={r.mode === "FullAi" ? "info" : "warning"}>{r.mode === "FullAi" ? "AI mặc định" : "AI tùy chỉnh"}</Badge>
   },
   { key: "status", header: "Kết quả", render: (r) => <StatusBadge status={r.status} /> },
-  { key: "provider", header: "Provider", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
+  { key: "provider", header: "Nhà cung cấp", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
   {
     key: "generatedCount",
     header: "Đã tạo",
     render: (r) => `${r.generatedCount}/${r.requestedCount}`
   },
   { key: "creditsUsed", header: "Credit", render: (r) => r.creditsUsed },
-  { key: "durationMs", header: "Thời gian", render: (r) => displayDuration(r.durationMs) }
+  { key: "durationMs", header: "Thời lượng", render: (r) => displayDuration(r.durationMs) }
 ];
 
 // ── Page ───────────────────────────────────────────────────────────
@@ -244,7 +244,7 @@ export default function AdminAiUsagePage() {
 
   if (statsError) {
     return <div className="space-y-4">
-      <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu AI generation toàn hệ thống." />
+      <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu tạo câu trả lời AI toàn hệ thống." />
       <Alert className="space-y-3"><p>Không tải được thống kê AI.</p><Button type="button" variant="secondary" onClick={() => setReload(value => value + 1)}>Thử lại</Button></Alert>
     </div>;
   }
@@ -252,8 +252,8 @@ export default function AdminAiUsagePage() {
   if (!stats || stats.totalRuns === 0) {
     return (
       <div className="space-y-4">
-        <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu AI generation toàn hệ thống." />
-        <EmptyState title="Chưa có dữ liệu AI" detail="Chưa có người dùng nào thực hiện AI generation." />
+        <PageHeader eyebrow="Admin / Thống kê AI" title="Thống kê AI" description="Xem số liệu tạo câu trả lời AI toàn hệ thống." />
+        <EmptyState title="Chưa có dữ liệu AI" detail="Chưa có người dùng nào thực hiện tạo câu trả lời AI." />
       </div>
     );
   }
@@ -265,7 +265,7 @@ export default function AdminAiUsagePage() {
       <PageHeader
         eyebrow="Admin / Thống kê AI"
         title="Thống kê AI"
-        description="Số liệu AI generation toàn hệ thống."
+        description="Số liệu tạo câu trả lời AI toàn hệ thống."
       />
 
       {/* Tabs */}
@@ -294,7 +294,7 @@ export default function AdminAiUsagePage() {
             <MetricCard title="Tổng lượt AI" value={String(stats.totalRuns)} />
             <MetricCard title="Tỉ lệ thành công" value={successRate} tone="success" />
             <MetricCard title="Credit đã dùng" value={String(stats.totalCreditsUsed)} tone="primary" />
-            <MetricCard title="Previews đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
+            <MetricCard title="Bản xem trước đã tạo" value={String(stats.totalPreviewsGenerated)} tone="info" />
             <MetricCard title="Người dùng" value={String(stats.totalUsers)} tone="neutral" />
           </div>
 
@@ -342,7 +342,7 @@ export default function AdminAiUsagePage() {
                     return (
                       <div key={day.date} className="group relative flex shrink-0 flex-col items-center">
                         <div className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                          {day.runs} runs
+                          {day.runs} lượt
                         </div>
                         <div className="w-3 rounded-t bg-accent transition-all hover:bg-accent" style={{ height: `${Math.max(height, 2)}px` }} />
                         <div className="mt-1 text-[10px] text-muted-foreground">{day.date.slice(5)}</div>
@@ -359,7 +359,7 @@ export default function AdminAiUsagePage() {
       {activeTab === "history" && (
         <Card className="min-w-0">
           <CardHeader>
-            <CardTitle>Lịch sử AI generation</CardTitle>
+            <CardTitle>Lịch sử tạo câu trả lời AI</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Filters */}
@@ -388,8 +388,8 @@ export default function AdminAiUsagePage() {
                   className="min-w-0"
                 >
                   <option value="">Tất cả</option>
-                  <option value="Option2">Option 2</option>
-                  <option value="Option3">Option 3</option>
+                  <option value="Option2">AI mặc định</option>
+                  <option value="Option3">AI tùy chỉnh</option>
                 </Select>
               </div>
               <div className="flex min-w-0 flex-col gap-1">
@@ -465,7 +465,7 @@ export default function AdminAiUsagePage() {
                 />
               </>
             ) : (
-              <EmptyState title="Không có dữ liệu" detail="Chưa có lượt AI generation nào." />
+              <EmptyState title="Không có dữ liệu" detail="Chưa có lượt tạo câu trả lời AI nào." />
             )}
           </CardContent>
         </Card>

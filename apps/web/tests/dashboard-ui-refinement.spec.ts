@@ -36,7 +36,7 @@ test("390x844 five-package topup keeps selected package, amount and payment acti
     expect(box.y + box.height).toBeLessThanOrEqual(844);
   }
   await expect(page.locator("button[aria-pressed]")).toHaveCount(5);
-  await payment.getByRole("button", { name: "Gói credit 1", exact: true }).click();
+  await payment.getByRole("button", { name: "Chọn gói thanh toán", exact: true }).click();
   await payment.getByRole("option", { name: "Gói credit 5", exact: true }).click();
   await expect(payment).toContainText("250.000");
   await expect(payment).toContainText("500 credit");

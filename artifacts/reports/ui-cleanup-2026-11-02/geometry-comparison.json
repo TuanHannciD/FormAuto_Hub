@@ -1,0 +1,368 @@
+[
+  {
+    "name": "_dashboard-390",
+    "beforeHeight": 1262,
+    "afterHeight": 988,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_forms-390",
+    "beforeHeight": 1259,
+    "afterHeight": 1183,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_top-up-390",
+    "beforeHeight": 2228,
+    "afterHeight": 2050,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_top-up_fixture-order-390",
+    "beforeHeight": 844,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_usage-logs-390",
+    "beforeHeight": 977,
+    "afterHeight": 925,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_credit-transactions-390",
+    "beforeHeight": 916,
+    "afterHeight": 888,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_ai-usage-390",
+    "beforeHeight": 844,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh-390",
+    "beforeHeight": 844,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh_callback-390",
+    "beforeHeight": 844,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh_forms_fixture-form-390",
+    "beforeHeight": 844,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_admin-390",
+    "beforeHeight": 1566,
+    "afterHeight": 1315,
+    "overflow": false
+  },
+  {
+    "name": "_admin_payments-390",
+    "beforeHeight": 959,
+    "afterHeight": 983,
+    "overflow": false
+  },
+  {
+    "name": "_admin_manual-credits-390",
+    "beforeHeight": 1288,
+    "afterHeight": 1288,
+    "overflow": false
+  },
+  {
+    "name": "_admin_packages-390",
+    "beforeHeight": 1484,
+    "afterHeight": 1484,
+    "overflow": false
+  },
+  {
+    "name": "_admin_revenue-390",
+    "beforeHeight": 1247,
+    "afterHeight": 844,
+    "overflow": false
+  },
+  {
+    "name": "_admin_payos-settings-390",
+    "beforeHeight": 3249,
+    "afterHeight": 3107,
+    "overflow": false
+  },
+  {
+    "name": "_admin_ai-provider-settings-390",
+    "beforeHeight": 2659,
+    "afterHeight": 2643,
+    "overflow": false
+  },
+  {
+    "name": "_admin_ai-usage-390",
+    "beforeHeight": 940,
+    "afterHeight": 960,
+    "overflow": false
+  },
+  {
+    "name": "account-profile-390",
+    "beforeHeight": 1262,
+    "afterHeight": 988,
+    "overflow": false
+  },
+  {
+    "name": "account-security-390",
+    "beforeHeight": 1262,
+    "afterHeight": 988,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-1-390",
+    "beforeHeight": 2864,
+    "afterHeight": 2447,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-1-390",
+    "beforeHeight": 3020,
+    "afterHeight": 2550,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-1-390",
+    "beforeHeight": 3660,
+    "afterHeight": 3210,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-10-390",
+    "beforeHeight": 7690,
+    "afterHeight": 6958,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-10-390",
+    "beforeHeight": 4430,
+    "afterHeight": 3636,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-10-390",
+    "beforeHeight": 5070,
+    "afterHeight": 4296,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-30-390",
+    "beforeHeight": 18487,
+    "afterHeight": 16966,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-30-390",
+    "beforeHeight": 7606,
+    "afterHeight": 6092,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-30-390",
+    "beforeHeight": 8246,
+    "afterHeight": 6752,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_forms-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_top-up-1440",
+    "beforeHeight": 1053,
+    "afterHeight": 985,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_top-up_fixture-order-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_usage-logs-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_credit-transactions-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_ai-usage-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh_callback-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_dashboard_nckh_forms_fixture-form-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_admin-1440",
+    "beforeHeight": 1051,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_admin_payments-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_admin_manual-credits-1440",
+    "beforeHeight": 941,
+    "afterHeight": 941,
+    "overflow": false
+  },
+  {
+    "name": "_admin_packages-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_admin_revenue-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "_admin_payos-settings-1440",
+    "beforeHeight": 1566,
+    "afterHeight": 1536,
+    "overflow": false
+  },
+  {
+    "name": "_admin_ai-provider-settings-1440",
+    "beforeHeight": 1368,
+    "afterHeight": 1368,
+    "overflow": false
+  },
+  {
+    "name": "_admin_ai-usage-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "account-profile-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "account-security-1440",
+    "beforeHeight": 900,
+    "afterHeight": 900,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-1-1440",
+    "beforeHeight": 1369,
+    "afterHeight": 1290,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-1-1440",
+    "beforeHeight": 1699,
+    "afterHeight": 1563,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-1-1440",
+    "beforeHeight": 1929,
+    "afterHeight": 1793,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-10-1440",
+    "beforeHeight": 4082,
+    "afterHeight": 3883,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-10-1440",
+    "beforeHeight": 2437,
+    "afterHeight": 2229,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-10-1440",
+    "beforeHeight": 2667,
+    "afterHeight": 2459,
+    "overflow": false
+  },
+  {
+    "name": "forms-rules-30-1440",
+    "beforeHeight": 10204,
+    "afterHeight": 9617,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-default-30-1440",
+    "beforeHeight": 4077,
+    "afterHeight": 3709,
+    "overflow": false
+  },
+  {
+    "name": "forms-ai-custom-30-1440",
+    "beforeHeight": 4307,
+    "afterHeight": 3939,
+    "overflow": false
+  },
+  {
+    "name": "forms-initial-320",
+    "beforeHeight": 1261,
+    "afterHeight": 1185,
+    "overflow": false
+  },
+  {
+    "name": "forms-initial-430",
+    "beforeHeight": 1239,
+    "afterHeight": 1183,
+    "overflow": false
+  },
+  {
+    "name": "forms-initial-768",
+    "beforeHeight": 1144,
+    "afterHeight": 1088,
+    "overflow": false
+  }
+]

@@ -893,9 +893,9 @@ export default function NckhFormWorkspacePage() {
           <CardTitle className="flex items-center gap-2"><Layers3 size={18} /> Mô hình nghiên cứu</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" onSubmit={createModel}>
-            <Input placeholder="Tên mô hình" value={modelName} onChange={(event) => setModelName(event.target.value)} required />
-            <Input placeholder="Mô tả ngắn" value={modelDescription} onChange={(event) => setModelDescription(event.target.value)} />
+          <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end" onSubmit={createModel}>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Tên mô hình</span><Input placeholder="Tên mô hình" value={modelName} onChange={(event) => setModelName(event.target.value)} required /></label>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Mô tả ngắn</span><Input placeholder="Mô tả ngắn" value={modelDescription} onChange={(event) => setModelDescription(event.target.value)} /></label>
             <Button type="submit" disabled={isSavingModel || hasPendingAction}>{isSavingModel ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isSavingModel ? "Đang tạo..." : "Tạo mô hình"}</span></Button>
           </form>
           <BaseTable columns={modelColumns} items={models} getRowKey={(item) => item.id} emptyTitle="Chưa có mô hình nghiên cứu" emptyDetail="Tạo mô hình đầu tiên để cấu hình biến, ánh xạ, sơ đồ quan hệ, dữ liệu và xuất dữ liệu." />
@@ -903,7 +903,7 @@ export default function NckhFormWorkspacePage() {
       </Card>
 
       {!selectedModel ? (
-        <EmptyState title="Chưa chọn mô hình" detail="Tạo hoặc mở một mô hình để cấu hình khảo sát." />
+        models.length > 0 && <EmptyState title="Chưa chọn mô hình" detail="Mở một mô hình để cấu hình khảo sát." />
       ) : (
         <>
           <nav aria-label="Các mục mô hình nghiên cứu" className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-2">
@@ -951,11 +951,12 @@ export default function NckhFormWorkspacePage() {
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><FileText size={18} /> Biến nghiên cứu</CardTitle></CardHeader>
         <CardContent className="space-y-5">
-          <form className="grid gap-3 md:grid-cols-2 xl:grid-cols-4" onSubmit={createVariable}>
-            <Input disabled={!canEditCanvas} placeholder="Tên biến" value={variableDraft.name} onChange={(event) => setVariableDraft({ ...variableDraft, name: event.target.value })} required />
-            <Input disabled={!canEditCanvas} placeholder="Mã biến" value={variableDraft.code} onChange={(event) => setVariableDraft({ ...variableDraft, code: event.target.value.toUpperCase() })} required />
-            <DropdownSelect disabled={!canEditCanvas} value={variableDraft.variableType} options={variableTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, variableType: value })} />
-            <DropdownSelect
+          <form className="grid items-end gap-3 md:grid-cols-2 xl:grid-cols-4" onSubmit={createVariable}>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Tên biến</span><Input disabled={!canEditCanvas} placeholder="Tên biến" value={variableDraft.name} onChange={(event) => setVariableDraft({ ...variableDraft, name: event.target.value })} required /></label>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Mã biến</span><Input disabled={!canEditCanvas} placeholder="Mã biến" value={variableDraft.code} onChange={(event) => setVariableDraft({ ...variableDraft, code: event.target.value.toUpperCase() })} required /></label>
+            <div className="grid min-w-0 gap-1"><span className="text-sm font-medium">Loại biến</span><DropdownSelect ariaLabel="Loại biến" disabled={!canEditCanvas} value={variableDraft.variableType} options={variableTypeOptions} onChange={(value) => setVariableDraft({ ...variableDraft, variableType: value })} /></div>
+            <div className="grid min-w-0 gap-1"><span className="text-sm font-medium">Thang đo</span><DropdownSelect
+              ariaLabel="Thang đo"
               disabled={!canEditCanvas}
               value={variableDraft.scaleType}
               options={scaleTypeOptions}
@@ -966,11 +967,11 @@ export default function NckhFormWorkspacePage() {
                 minValue: value === "Scale" ? draft.minValue : "",
                 maxValue: value === "Scale" ? draft.maxValue : ""
               }))}
-            />
-            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Likert"} placeholder="Điểm thang đo" type="number" min={2} max={10} step={1} value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} />
-            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} />
-            <Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} />
-            <div className="flex gap-2"><Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={variableDraft.sortOrder} onChange={(event) => setVariableDraft({ ...variableDraft, sortOrder: event.target.value })} /><Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createVariable") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createVariable") ? "Đang thêm..." : "Thêm"}</span></Button></div>
+            /></div>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Điểm thang đo</span><Input disabled={!canEditCanvas || variableDraft.scaleType !== "Likert"} placeholder="Điểm thang đo" type="number" min={2} max={10} step={1} value={variableDraft.scalePoint} onChange={(event) => setVariableDraft({ ...variableDraft, scalePoint: event.target.value })} /></label>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Giá trị nhỏ nhất</span><Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị nhỏ nhất" type="number" value={variableDraft.minValue} onChange={(event) => setVariableDraft({ ...variableDraft, minValue: event.target.value })} /></label>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Giá trị lớn nhất</span><Input disabled={!canEditCanvas || variableDraft.scaleType !== "Scale"} placeholder="Giá trị lớn nhất" type="number" value={variableDraft.maxValue} onChange={(event) => setVariableDraft({ ...variableDraft, maxValue: event.target.value })} /></label>
+            <div className="flex items-end gap-2"><label className="grid min-w-0 gap-1 text-sm font-medium"><span>Thứ tự</span><Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={variableDraft.sortOrder} onChange={(event) => setVariableDraft({ ...variableDraft, sortOrder: event.target.value })} /></label><Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createVariable") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createVariable") ? "Đang thêm..." : "Thêm"}</span></Button></div>
           </form>
           <BaseTable columns={variableColumns} items={variables} getRowKey={(item) => item.id} emptyTitle="Chưa có biến" emptyDetail="Thêm biến để tạo ánh xạ, sơ đồ quan hệ và bộ dữ liệu." />
         </CardContent>
@@ -983,8 +984,9 @@ export default function NckhFormWorkspacePage() {
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><GitBranch size={18} /> Ánh xạ câu hỏi - biến</CardTitle></CardHeader>
         <CardContent className="space-y-5">
-          <form className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_180px_120px_auto]" onSubmit={createMapping}>
-            <SearchableDropdownSelect
+          <form className="grid items-end gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_180px_120px_auto]" onSubmit={createMapping}>
+            <div className="grid min-w-0 gap-1"><span className="text-sm font-medium">Biến nghiên cứu</span><SearchableDropdownSelect
+              ariaLabel="Biến nghiên cứu"
               disabled={!canEditCanvas}
               value={mappingDraft.variableId}
               searchValue={mappingVariableSearch}
@@ -996,8 +998,9 @@ export default function NckhFormWorkspacePage() {
                 setMappingDraft({ ...mappingDraft, variableId: value });
                 setMappingVariableSearch(option.label);
               }}
-            />
-            <SearchableDropdownSelect
+            /></div>
+            <div className="grid min-w-0 gap-1"><span className="text-sm font-medium">Câu hỏi khảo sát</span><SearchableDropdownSelect
+              ariaLabel="Câu hỏi khảo sát"
               disabled={!canEditCanvas}
               value={mappingDraft.formQuestionId}
               searchValue={mappingQuestionSearch}
@@ -1009,9 +1012,9 @@ export default function NckhFormWorkspacePage() {
                 setMappingDraft({ ...mappingDraft, formQuestionId: value });
                 setMappingQuestionSearch(option.label);
               }}
-            />
-            <Input disabled={!canEditCanvas} placeholder="Mã quan sát" value={mappingDraft.observedCode} onChange={(event) => setMappingDraft({ ...mappingDraft, observedCode: event.target.value.toUpperCase() })} required />
-            <Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={mappingDraft.sortOrder} onChange={(event) => setMappingDraft({ ...mappingDraft, sortOrder: event.target.value })} />
+            /></div>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Mã quan sát</span><Input disabled={!canEditCanvas} placeholder="Mã quan sát" value={mappingDraft.observedCode} onChange={(event) => setMappingDraft({ ...mappingDraft, observedCode: event.target.value.toUpperCase() })} required /></label>
+            <label className="grid min-w-0 gap-1 text-sm font-medium"><span>Thứ tự</span><Input disabled={!canEditCanvas} placeholder="Thứ tự" type="number" value={mappingDraft.sortOrder} onChange={(event) => setMappingDraft({ ...mappingDraft, sortOrder: event.target.value })} /></label>
             <Button type="submit" disabled={hasPendingAction || !canEditCanvas}>{isActionPending("createMapping") ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}<span className="ml-2">{isActionPending("createMapping") ? "Đang thêm..." : "Thêm"}</span></Button>
           </form>
           <BaseTable columns={mappingColumns} items={mappings} getRowKey={(item) => item.id} emptyTitle="Chưa có ánh xạ" emptyDetail="Chọn biến và câu hỏi tương ứng để tạo ánh xạ." />
@@ -1230,8 +1233,7 @@ export default function NckhFormWorkspacePage() {
         <DialogContent className="max-w-6xl overflow-hidden" contentClassName="flex max-h-[calc(100dvh-2rem-2px)] flex-col">
           <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border px-4 py-3">
             <div>
-              <DialogTitle className="text-sm">Canvas tools</DialogTitle>
-              <p className="text-xs text-muted-foreground">Biến và ánh xạ mở trong pop-up từ sơ đồ.</p>
+              <DialogTitle className="text-sm">{canvasModal === "variables" ? "Biến nghiên cứu" : "Ánh xạ câu hỏi"}</DialogTitle>
             </div>
             <DialogClose>Đóng</DialogClose>
           </div>

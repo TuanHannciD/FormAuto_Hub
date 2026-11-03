@@ -1,0 +1,178 @@
+
+[1A[2K[WebServer] (node:40032) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:27536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+[1A[2K[1/6] [chromium] › tests\nckh.spec.ts:632:7 › NCKH — Phase 7 Workspace › mapping popup names its task and keeps submit aligned with inputs
+[1A[2K[2/6] [chromium] › tests\nckh.spec.ts:625:7 › NCKH — Phase 7 Workspace › empty workspace gives one model-creation instruction
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1A[2K  1) [chromium] › tests\nckh.spec.ts:632:7 › NCKH — Phase 7 Workspace › mapping popup names its task and keeps submit aligned with inputs 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('dialog', { name: 'Ánh xạ câu hỏi', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('dialog', { name: 'Ánh xạ câu hỏi', exact: true })[22m
+
+
+      636 |     await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
+      637 |     const popup = page.getByRole("dialog", { name: "Ánh xạ câu hỏi", exact: true });
+    > 638 |     await expect(popup).toBeVisible();
+          |                         ^
+      639 |     const input = (await popup.getByLabel("Mã quan sát", { exact: true }).boundingBox())!;
+      640 |     const button = (await popup.getByRole("button", { name: "Thêm", exact: true }).boundingBox())!;
+      641 |     expect(Math.abs(button.y + button.height - input.y - input.height)).toBeLessThanOrEqual(2);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\nckh.spec.ts:638:25
+
+    Error Context: test-results\nckh-NCKH-—-Phase-7-Worksp-c8ccd--submit-aligned-with-inputs-chromium\error-context.md
+
+
+[1A[2K  2) [chromium] › tests\nckh.spec.ts:625:7 › NCKH — Phase 7 Workspace › empty workspace gives one model-creation instruction 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByText('Chưa chọn mô hình', { exact: true })
+    Expected: [32m0[39m
+    Received: [31m1[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Chưa chọn mô hình', { exact: true })[22m
+    [2m    14 × locator resolved to 1 element[22m
+    [2m       - unexpected value "1"[22m
+
+
+      627 |     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+      628 |     await expect(page.getByText("Chưa có mô hình nghiên cứu", { exact: true })).toBeVisible();
+    > 629 |     await expect(page.getByText("Chưa chọn mô hình", { exact: true })).toHaveCount(0);
+          |                                                                        ^
+      630 |   });
+      631 |
+      632 |   test("mapping popup names its task and keeps submit aligned with inputs", async ({ page }) => {
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\nckh.spec.ts:629:72
+
+    Error Context: test-results\nckh-NCKH-—-Phase-7-Worksp-f06f6--model-creation-instruction-chromium\error-context.md
+
+
+[1A[2K[3/6] [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible
+[1A[2K[4/6] [chromium] › tests\nckh.spec.ts:645:7 › NCKH — Phase 7 Workspace › dataset preview states its row and column limits
+[1A[2K  3) [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('article').first().locator('.text-destructive')
+    Expected: visible
+    Error: strict mode violation: locator('article').first().locator('.text-destructive') resolved to 2 elements:
+        1) <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-destructive-surface text-destructive">Thất bại</span> aka getByRole('article').getByText('Thất bại')
+        2) <p class="max-w-sm text-xs leading-5 text-destructive">Không tạo được bản xem trước AI. Nếu lỗi tiếp diễ…</p> aka getByRole('article').getByText('Không tạo được bản xem trước')
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('article').first().locator('.text-destructive')[22m
+
+
+      39 |       const record = page.locator("article").first();
+      40 |       await expect(record.getByText("Thất bại", { exact: true })).toBeVisible();
+    > 41 |       await expect(record.locator(".text-destructive")).toBeVisible();
+         |                                                         ^
+      42 |       await expect(record.getByText(longModel, { exact: false })).not.toBeVisible();
+      43 |       await record.getByText("Chi tiết lượt AI", { exact: true }).click();
+      44 |       await expect(record).toContainText("long-run-id-001");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\user-pages-cleanup.spec.ts:41:57
+
+    Error Context: test-results\user-pages-cleanup-populat-5f414-condary-metadata-accessible-chromium\error-context.md
+
+
+[1A[2K[5/6] [chromium] › tests\user-pages-cleanup.spec.ts:57:5 › history filter names stay stable and ledger labels describe current page
+[1A[2K  4) [chromium] › tests\nckh.spec.ts:645:7 › NCKH — Phase 7 Workspace › dataset preview states its row and column limits 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Xem trước 1/25 dòng · 6/7 biến.', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Xem trước 1/25 dòng · 6/7 biến.', { exact: true })[22m
+
+
+      650 |     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+      651 |     await page.getByRole("button", { name: "Dữ liệu", exact: true }).click();
+    > 652 |     await expect(page.getByText("Xem trước 1/25 dòng · 6/7 biến.", { exact: true })).toBeVisible();
+          |                                                                                      ^
+      653 |   });
+      654 |
+      655 |   test("renders form workspace with model tabs", async ({ page }) => {
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\nckh.spec.ts:652:86
+
+    Error Context: test-results\nckh-NCKH-—-Phase-7-Worksp-ef87b-s-its-row-and-column-limits-chromium\error-context.md
+
+
+[1A[2K[6/6] [chromium] › tests\user-pages-cleanup.spec.ts:67:5 › mobile topup copy action is touch-sized and routed detail has settled content
+[1A[2K  5) [chromium] › tests\user-pages-cleanup.spec.ts:57:5 › history filter names stay stable and ledger labels describe current page 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('button', { name: 'Lọc loại thao tác', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Lọc loại thao tác', exact: true })[22m
+
+
+      59 |   for (const [path, label] of [["/dashboard/usage-logs", "Lọc loại thao tác"], ["/dashboard/credit-transactions", "Lọc loại giao dịch"]]) {
+      60 |     await page.goto(path);
+    > 61 |     await expect(page.getByRole("button", { name: label, exact: true })).toBeVisible();
+         |                                                                          ^
+      62 |   }
+      63 |   await expect(page.getByText("Credit giao dịch đầu trang", { exact: true })).toBeVisible();
+      64 |   await expect(page.getByText("Credit mới nhất", { exact: true })).toHaveCount(0);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\user-pages-cleanup.spec.ts:61:74
+
+    Error Context: test-results\user-pages-cleanup-history-11049-abels-describe-current-page-chromium\error-context.md
+
+
+[1A[2K  6) [chromium] › tests\user-pages-cleanup.spec.ts:67:5 › mobile topup copy action is touch-sized and routed detail has settled content 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m44[39m
+    Received:    [31m28[39m
+
+      72 |   await expect(copy).toBeVisible();
+      73 |   const box = (await copy.boundingBox())!;
+    > 74 |   expect(box.width).toBeGreaterThanOrEqual(44);
+         |                     ^
+      75 |   expect(box.height).toBeGreaterThanOrEqual(44);
+      76 |   await expect(page.getByRole("button", { name: "Chọn gói thanh toán", exact: true })).toBeVisible();
+      77 |   for (const width of [390, 1440]) {
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\user-pages-cleanup.spec.ts:74:21
+
+    Error Context: test-results\user-pages-cleanup-mobile--72795--detail-has-settled-content-chromium\error-context.md
+
+
+[1A[2K  6 failed
+    [chromium] › tests\nckh.spec.ts:625:7 › NCKH — Phase 7 Workspace › empty workspace gives one model-creation instruction 
+    [chromium] › tests\nckh.spec.ts:632:7 › NCKH — Phase 7 Workspace › mapping popup names its task and keeps submit aligned with inputs 
+    [chromium] › tests\nckh.spec.ts:645:7 › NCKH — Phase 7 Workspace › dataset preview states its row and column limits 
+    [chromium] › tests\user-pages-cleanup.spec.ts:29:5 › populated user AI records keep errors visible and secondary metadata accessible 
+    [chromium] › tests\user-pages-cleanup.spec.ts:57:5 › history filter names stay stable and ledger labels describe current page 
+    [chromium] › tests\user-pages-cleanup.spec.ts:67:5 › mobile topup copy action is touch-sized and routed detail has settled content 

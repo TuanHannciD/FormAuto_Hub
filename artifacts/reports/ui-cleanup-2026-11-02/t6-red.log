@@ -1,0 +1,37 @@
+
+[1A[2K[WebServer] (node:35372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:37596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing
+[1A[2K  1) [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for getByLabel('Tên mô hình', { exact: true })[22m
+
+
+      607 |   test("workspace draft fields retain visible labels after typing", async ({ page }) => {
+      608 |     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    > 609 |     await page.getByLabel("Tên mô hình", { exact: true }).fill("Mô hình mới");
+          |                                                           ^
+      610 |     await expect(page.getByText("Tên mô hình", { exact: true })).toBeVisible();
+      611 |     await page.getByRole("button", { name: "Biến", exact: true }).click();
+      612 |     await page.getByLabel("Tên biến", { exact: true }).fill("Tên dài để kiểm tra nhãn");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\nckh.spec.ts:609:59
+
+    Error Context: test-results\nckh-NCKH-—-Phase-7-Worksp-eb3ad-visible-labels-after-typing-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\nckh.spec.ts:607:7 › NCKH — Phase 7 Workspace › workspace draft fields retain visible labels after typing 

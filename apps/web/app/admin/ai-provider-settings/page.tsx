@@ -164,7 +164,7 @@ export default function AiProviderSettingsPage() {
                     onChange={(event) => setBaseUrl(event.target.value)}
                   />
                   <span className="mt-1 block text-xs text-muted-foreground">
-                    Dùng cho OpenAI-compatible gateway. Nếu để trống, backend chỉ lưu provider/model/API key.
+                    Dùng cho gateway tương thích OpenAI; để trống nếu không cấu hình endpoint riêng.
                   </span>
                 </label>
 
@@ -220,7 +220,7 @@ export default function AiProviderSettingsPage() {
               <CardTitle>Điều kiện tối thiểu</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <CheckRow label="Provider đã nhập" ok={Boolean(provider.trim())} />
+              <CheckRow label="Nhà cung cấp đã nhập" ok={Boolean(provider.trim())} />
               <CheckRow label="Model mặc định đã nhập" ok={Boolean(defaultModel.trim())} />
               <CheckRow label="Có API key đã lưu hoặc đang nhập mới" ok={hasAnyApiKey} />
               <CheckRow label="Base URL trống hoặc là URL http/https hợp lệ" ok={hasValidBaseUrl} />
@@ -277,7 +277,7 @@ export default function AiProviderSettingsPage() {
             <CardContent className="space-y-3 text-sm">
               <p className="text-muted-foreground">Cập nhật gần nhất</p>
               <p className="font-medium">{settings?.updatedAt ? formatDate(settings.updatedAt) : "Chưa có dữ liệu"}</p>
-              <p className="text-xs text-muted-foreground">Chỉ hiển thị cấu hình đã lưu và thời điểm cập nhật; khóa API được giữ ẩn.</p>
+              <p className="text-xs text-muted-foreground">Khóa API được giữ ẩn.</p>
             </CardContent>
           </Card>
         </div>

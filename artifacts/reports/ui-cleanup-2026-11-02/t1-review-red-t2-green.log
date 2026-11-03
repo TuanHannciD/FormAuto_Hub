@@ -1,0 +1,110 @@
+
+[1A[2K[WebServer] (node:29724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:30144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+Running 2 tests using 1 worker
+
+[1A[2K[1/2] [chromium] › tests\form-automation.spec.ts:80:5 › rules with no supported questions never links to an absent action
+
+[1A[2K[WebServer]  ⨯ ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] Error:   x Expected '</', got 'jsx text (
+[WebServer]   |         )'
+[WebServer]     ,-[C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\app\dashboard\forms\_components\AiQuestionBlock.tsx:52:1]
+[WebServer]  49 |                 {question.required && <Badge tone="warning">Bắt buộc</Badge>}
+[WebServer]  50 |               </span>
+[WebServer]  51 |             </span>
+[WebServer]  52 | ,->         </span>
+[WebServer]  53 | `->         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">
+[WebServer]  54 |               {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+[WebServer]  55 |             </span>
+[WebServer]  55 |           </button>
+[WebServer]     `----
+[WebServer] 
+[WebServer] Caused by:
+[WebServer]     Syntax Error
+[WebServer] 
+[WebServer] Import trace for requested module:
+[WebServer] ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] ./app/dashboard/forms/_components/AiModePreparationPanel.tsx
+[WebServer] ./app/dashboard/forms/page.tsx
+
+[1A[2K[WebServer]  ⨯ ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] Error:   x Expected '</', got 'jsx text (
+[WebServer]   |         )'
+[WebServer]     ,-[C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\app\dashboard\forms\_components\AiQuestionBlock.tsx:52:1]
+[WebServer]  49 |                 {question.required && <Badge tone="warning">Bắt buộc</Badge>}
+[WebServer]  50 |               </span>
+[WebServer]  51 |             </span>
+[WebServer]  52 | ,->         </span>
+[WebServer]  53 | `->         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">
+[WebServer]  54 |               {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+[WebServer]  55 |             </span>
+[WebServer]  55 |           </button>
+[WebServer]     `----
+[WebServer] 
+[WebServer] Caused by:
+[WebServer]     Syntax Error
+[WebServer] 
+[WebServer] Import trace for requested module:
+[WebServer] ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] ./app/dashboard/forms/_components/AiModePreparationPanel.tsx
+[WebServer] ./app/dashboard/forms/page.tsx
+
+[1A[2K[WebServer]  ⨯ ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] Error:   x Expected '</', got 'jsx text (
+[WebServer]   |         )'
+[WebServer]     ,-[C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\app\dashboard\forms\_components\AiQuestionBlock.tsx:52:1]
+[WebServer]  49 |                 {question.required && <Badge tone="warning">Bắt buộc</Badge>}
+[WebServer]  50 |               </span>
+[WebServer]  51 |             </span>
+[WebServer]  52 | ,->         </span>
+[WebServer]  53 | `->         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground">
+[WebServer]  54 |               {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+[WebServer]  55 |             </span>
+[WebServer]  55 |           </button>
+[WebServer]     `----
+[WebServer] 
+[WebServer] Caused by:
+[WebServer]     Syntax Error
+[WebServer] 
+[WebServer] Import trace for requested module:
+[WebServer] ./app/dashboard/forms/_components/AiQuestionBlock.tsx
+[WebServer] ./app/dashboard/forms/_components/AiModePreparationPanel.tsx
+[WebServer] ./app/dashboard/forms/page.tsx
+
+[1A[2K[WebServer]  ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[1A[2K  1) [chromium] › tests\form-automation.spec.ts:80:5 › rules with no supported questions never links to an absent action 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "#workflow-step-3",[39m
+    [31m+ ][39m
+
+      85 |   await expect(page.getByText("Không có câu hỏi được hỗ trợ", { exact: true })).toBeVisible();
+      86 |   const missing = await page.getByRole("navigation", { name: "Các bước tự động hóa" }).locator("a").evaluateAll(links => links.map(link => (link as HTMLAnchorElement).hash).filter(hash => !document.querySelector(hash)));
+    > 87 |   expect(missing).toEqual([]);
+         |                   ^
+      88 | });
+      89 |
+      90 | test("AI summary uses active request count after direct mode", async ({ page }) => {
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\form-automation.spec.ts:87:19
+
+    Error Context: test-results\form-automation-rules-with-133ac-r-links-to-an-absent-action-chromium\error-context.md
+
+
+[1A[2K[2/2] [chromium] › tests\form-automation.spec.ts:101:5 › quantity and cost context are available by label at each generation action
+[1A[2K  1 failed
+    [chromium] › tests\form-automation.spec.ts:80:5 › rules with no supported questions never links to an absent action 
+  1 passed (26.8s)

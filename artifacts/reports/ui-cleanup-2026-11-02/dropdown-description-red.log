@@ -1,0 +1,44 @@
+
+[1A[2K[WebServer] (node:11684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:12392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1A[2K  1) [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveAccessibleDescription[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('button', { name: 'Lọc loại giao dịch', exact: true })
+    Expected: [32m"Tất cả loại"[39m
+    Received: [31m""[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveAccessibleDescription" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Lọc loại giao dịch', exact: true })[22m
+    [2m    13 × locator resolved to <button type="button" aria-controls="_r_2_" aria-expanded="false" aria-label="Lọc loại giao dịch" class="w-full rounded-xl border border-border-strong bg-surface px-3 py-2 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-50 min-h-[var(--control-height)] [--control-height:44px] sm:[--control-height:40px] flex items-center justify-between gap-3 text-left hover:border-primary/70">…</button>[22m
+    [2m       - unexpected value ""[22m
+
+
+      88 |   await page.goto("/dashboard/credit-transactions");
+      89 |   const trigger = page.getByRole("button", { name: "Lọc loại giao dịch", exact: true });
+    > 90 |   await expect(trigger).toHaveAccessibleDescription("Tất cả loại");
+         |                         ^
+      91 |   await trigger.click();
+      92 |   await expect(page.getByRole("listbox")).toBeVisible();
+      93 |   await page.getByRole("option", { name: "Credit đã sử dụng", exact: true }).click();
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\shared-ui.spec.ts:90:25
+
+    Error Context: test-results\shared-ui-shared-dropdown--ce164-ptions-and-closes-on-Escape-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape 

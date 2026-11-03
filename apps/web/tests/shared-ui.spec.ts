@@ -20,6 +20,49 @@ async function setup(page: Page) {
   return writes;
 }
 
+test("mobile menu traps focus, returns focus and clears modal state at desktop breakpoint", async ({ page }) => {
+  await setup(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/dashboard/credit-transactions");
+  const trigger = page.getByRole("button", { name: "Mở menu", exact: true });
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog", { name: "Điều hướng", exact: true });
+  await expect(dialog).toBeVisible();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  for (const key of ["Tab", "Shift+Tab"]) {
+    for (let index = 0; index < 14; index++) {
+      await page.keyboard.press(key);
+      expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true);
+    }
+  }
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await expect(dialog).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(dialog).toHaveCount(0);
+  expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+});
+
+test("user AI and admin payments retry failed reads without a mutation", async ({ page }) => {
+  const writes = await setup(page);
+  for (const [path, endpoint] of [["/dashboard/ai-usage", "/api/dashboard/ai-usage"], ["/admin/payments", "/api/admin/payments"]]) {
+    let failed = true;
+    await page.route(`**${endpoint}`, route => route.fulfill(failed ? { status: 503, json: {} } : { json: endpoint.includes("ai-usage") ? stats : { items: [] } }));
+    await page.goto(path);
+    const retry = page.getByRole("button", { name: "Thử lại", exact: true });
+    await expect(retry).toBeVisible();
+    failed = false;
+    await retry.click();
+    await expect(retry).toHaveCount(0);
+  }
+  expect(writes).toEqual([]);
+});
+
 test("profile popup uses shared surfaces and controls while preserving its save request", async ({ page }) => {
   const writes = await setup(page);
   await page.goto("/dashboard/credit-transactions");
@@ -43,12 +86,15 @@ test("profile popup uses shared surfaces and controls while preserving its save 
 test("shared dropdown still selects options and closes on Escape", async ({ page }) => {
   await setup(page);
   await page.goto("/dashboard/credit-transactions");
-  const trigger = page.getByRole("button", { name: "Tất cả loại", exact: true });
+  const trigger = page.getByRole("button", { name: "Lọc loại giao dịch", exact: true });
+  await expect(trigger).toHaveAccessibleDescription("Tất cả loại");
   await trigger.click();
   await expect(page.getByRole("listbox")).toBeVisible();
   await page.getByRole("option", { name: "Credit đã sử dụng", exact: true }).click();
   await expect(page.getByRole("listbox")).toHaveCount(0);
-  const selected = page.getByRole("button", { name: "Credit đã sử dụng", exact: true });
+  const selected = page.getByRole("button", { name: "Lọc loại giao dịch", exact: true });
+  await expect(selected).toHaveText("Credit đã sử dụng");
+  await expect(selected).toHaveAccessibleDescription("Credit đã sử dụng");
   expect(await selected.evaluate(element => getComputedStyle(element).borderRadius)).toBe("12px");
   await selected.click();
   await page.keyboard.press("Escape");

@@ -1,4 +1,13 @@
 import { test, expect, type Page } from "@playwright/test";
+import { mkdirSync } from "node:fs";
+import { resolve } from "node:path";
+
+async function captureUserNckh(page: Page, name: string) {
+  const folder = resolve(__dirname, "../../../artifacts/reports/ui-cleanup-2026-11-02/user-final");
+  mkdirSync(folder, { recursive: true });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: resolve(folder, `${name}.png`), fullPage: true, animations: "disabled" });
+}
 
 // === FILE MAP (nckh.spec.ts - NCKH browser smoke suite) ===
 // Line    Test Region                    Purpose
@@ -393,6 +402,10 @@ test.describe("NCKH — Google Linked", () => {
   test("shows 'Đã liên kết Google' status", async ({ page }) => {
     await page.goto("/dashboard/nckh");
     await expect(page.getByText(/Đã liên kết Google/).first()).toBeVisible({ timeout: 10000 });
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 844 });
+      await captureUserNckh(page, `nckh-linked-${width}`);
+    }
   });
 
   test("import form input is visible", async ({ page }) => {
@@ -604,6 +617,68 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     await mockWorkspace(page);
   });
 
+  test("workspace draft fields retain visible labels after typing", async ({ page }) => {
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByLabel("Tên mô hình", { exact: true }).fill("Mô hình mới");
+    await expect(page.getByText("Tên mô hình", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Sơ đồ quan hệ", exact: true }).click();
+    await page.getByRole("button", { name: "Biến", exact: true }).click();
+    await page.getByLabel("Tên biến", { exact: true }).fill("Tên dài để kiểm tra nhãn");
+    await expect(page.getByText("Tên biến", { exact: true }).first()).toBeVisible();
+    await expect(page.getByLabel("Mã biến", { exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Loại biến", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Thang đo", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Đóng", exact: true }).click();
+    await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
+    await expect(page.getByLabel("Mã quan sát", { exact: true })).toBeVisible();
+    await expect(page.getByRole("combobox", { name: "Biến nghiên cứu", exact: true })).toBeVisible();
+    await expect(page.getByRole("combobox", { name: "Câu hỏi khảo sát", exact: true })).toBeVisible();
+  });
+
+  test("empty workspace gives one model-creation instruction", async ({ page }) => {
+    await mockApi(page, "GET", "/models?page=1&pageSize=100", MOCK_EMPTY_LIST);
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await expect(page.getByText("Chưa có mô hình nghiên cứu", { exact: true })).toBeVisible();
+    await expect(page.getByText("Chưa chọn mô hình", { exact: true })).toHaveCount(0);
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 844 });
+      await captureUserNckh(page, `nckh-empty-workspace-${width}`);
+    }
+  });
+
+  test("mapping popup names its task and keeps submit aligned with inputs", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Sơ đồ quan hệ", exact: true }).click();
+    await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
+    const popup = page.getByRole("dialog", { name: "Ánh xạ câu hỏi", exact: true });
+    await expect(popup).toHaveAttribute("data-popup-phase", "open");
+    const input = (await popup.getByLabel("Mã quan sát", { exact: true }).boundingBox())!;
+    const button = (await popup.getByRole("button", { name: "Thêm", exact: true }).boundingBox())!;
+    expect(Math.abs(button.y + button.height - input.y - input.height)).toBeLessThanOrEqual(2);
+    expect(button.height).toBeLessThanOrEqual(44);
+    await captureUserNckh(page, "nckh-mapping-1440");
+    await page.setViewportSize({ width: 390, height: 640 });
+    await expect(popup.getByRole("button", { name: "Đóng", exact: true })).toBeInViewport();
+    expect(await popup.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+    await captureUserNckh(page, "nckh-mapping-390");
+  });
+
+  test("dataset preview states its row and column limits", async ({ page }) => {
+    await mockApi(page, "GET", `/models/${MOCK_MODEL.id}/dataset?page=1&pageSize=20`, {
+      columns: ["A", "B", "C", "D", "E", "F", "G"], hasStaleData: false,
+      items: [{ respondentId: "fixture-row", values: { A: 1 }, isStale: false }], page: 1, pageSize: 20, totalItems: 25, totalPages: 2
+    });
+    await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
+    await page.getByRole("button", { name: "Dữ liệu", exact: true }).click();
+    await expect(page.getByText("Xem trước 1/25 dòng · 6/7 biến.", { exact: true })).toBeVisible();
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 844 });
+      await captureUserNckh(page, `nckh-dataset-${width}`);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  });
+
   test("renders form workspace with model tabs", async ({ page }) => {
     await page.goto(`/dashboard/nckh/forms/${MOCK_FORM_DETAIL.id}`);
 
@@ -656,7 +731,7 @@ test.describe("NCKH — Phase 7 Workspace", () => {
     const confirmation = page.getByRole("dialog", { name: "Xác nhận xóa" });
     await page.getByRole("button", { name: "Sơ đồ quan hệ" }).click();
     await page.getByRole("button", { name: "Ánh xạ", exact: true }).click();
-    const parent = page.getByRole("dialog", { name: "Canvas tools" });
+    const parent = page.getByRole("dialog", { name: "Ánh xạ câu hỏi", exact: true });
     await parent.getByRole("row").filter({ hasText: "SAT1" }).getByRole("button").last().click();
     await expect(confirmation).toContainText('Xóa ánh xạ "SAT1"?');
     await page.keyboard.press("Escape");

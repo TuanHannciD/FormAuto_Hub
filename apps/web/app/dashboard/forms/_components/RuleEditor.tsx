@@ -151,7 +151,7 @@ export function RuleEditor({
 
   return (
     <div
-      className={cn(panelStyles, `relative p-4 transition ${expanded ? "border-border" : "border-primary-border"}`)}
+      className={cn(panelStyles, `relative p-3 transition ${expanded ? "border-border" : "border-primary-border"}`)}
       style={{ zIndex: expanded ? Math.max(1, 100 - index) : undefined }}
     >
       <div className="mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
@@ -165,14 +165,14 @@ export function RuleEditor({
               <Badge>{questionTypeLabel(question.questionType)}</Badge>
               {question.required && <Badge tone="warning">Bắt buộc</Badge>}
             </div>
-            <p className="mt-1 break-all text-xs text-muted-foreground">{question.entryId}</p>
+            <details className="text-xs text-muted-foreground"><summary className="inline-flex min-h-11 cursor-pointer items-center">Mã câu hỏi</summary><p className="break-all">{question.entryId}</p></details>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone={isTextQuestion ? "neutral" : "info"}>{isTextQuestion ? "Nhập chữ" : `${question.options.length} lựa chọn`}</Badge>
           <button
             aria-expanded={expanded}
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+            className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
               expanded
                 ? "border-border bg-surface text-muted-foreground hover:bg-muted/50"
                 : "border-primary-border bg-primary-soft text-primary hover:bg-primary-soft"
@@ -190,14 +190,14 @@ export function RuleEditor({
         <div className="mt-4">
 
       {!isTextQuestion && question.options.length > 0 && (
-        <div className="mb-4 rounded-xl border border-border bg-surface p-3">
+        <div className="mb-3">
           <p className="mb-2 text-xs font-medium text-muted-foreground">Lựa chọn lấy từ form gốc</p>
           <div className="flex flex-wrap gap-2">
             {question.options.map((option) => {
               const active = selectedOptions.includes(option);
               return (
                 <button
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
+                  className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
                     active ? "border-primary-border bg-primary-soft text-primary" : "border-border bg-surface text-muted-foreground"
                   }`}
                   key={option}
@@ -365,11 +365,9 @@ export function RuleEditor({
             )}
           </div>
         ) : (
-          <div className="rounded-xl border border-border bg-surface p-3 text-sm">
-            <p className="font-medium">Cách trả lời sẽ dùng các lựa chọn đang bật.</p>
-            <p className="mt-1 text-muted-foreground">
-              Với chế độ hiện tại, hệ thống tự tạo cấu hình từ lựa chọn thật của biểu mẫu, không cần nhập JSON thủ công.
-            </p>
+          <div className="text-sm">
+            <p className="font-medium">Dùng các lựa chọn đang bật.</p>
+
             {isCheckboxQuestion && (
               <CheckboxSelectionFields
                 maxOptionCount={Math.max(1, selectedOptions.length || question.options.length)}

@@ -88,7 +88,7 @@ export default function PayosSettingsPage() {
       <PageHeader
         eyebrow="Admin / Cấu hình PayOS"
         title="Cấu hình PayOS"
-        description="Quản lý trạng thái bật PayOS cho top-up credit tự động."
+        description="Quản lý kết nối PayOS cho nạp credit."
         actions={
         <Button type="button" variant="secondary" onClick={() => loadData().catch((error: Error) => showError(error, "Không tải được cấu hình PayOS."))}>
           <RefreshCw size={16} />
@@ -103,9 +103,7 @@ export default function PayosSettingsPage() {
       <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
         Không hiển thị API key hoặc checksum key thật trên giao diện. Nếu để trống khóa bí mật khi lưu, hệ thống sẽ giữ khóa hiện có.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
-        PayOS cần 3 đường dẫn: Return URL và Cancel URL trỏ về trang frontend bên dưới; Webhook URL cấu hình trong PayOS dashboard và có thể dùng chính domain frontend nhờ proxy `/api/payments/payos/webhook`.
-      </Alert>
+      <details className="text-sm"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Hướng dẫn đường dẫn PayOS</summary><p className="pb-3 text-muted-foreground">Return URL và Cancel URL trỏ về frontend. Cấu hình Webhook URL trong PayOS để hệ thống xác minh thanh toán.</p></details>
       </div>
       <div className="grid items-start gap-4 xl:grid-cols-[1.35fr_0.75fr]">
         <div className="min-w-0 space-y-4">
@@ -223,7 +221,7 @@ export default function PayosSettingsPage() {
             <CardContent className="space-y-3 text-sm">
               <p className="text-muted-foreground">Cập nhật gần nhất</p>
               <p className="font-medium">{settings?.updatedAt ? formatDate(settings.updatedAt) : "Chưa có dữ liệu"}</p>
-              <p className="text-xs text-muted-foreground">Nhật ký audit chi tiết đang cập nhật.</p>
+              <p className="text-xs text-muted-foreground"></p>
             </CardContent>
           </Card>
           <Card className="min-w-0">

@@ -1,0 +1,38 @@
+
+[1A[2K[WebServer] (node:39400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:38816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\shared-ui.spec.ts:49:5 › user AI and admin payments retry failed reads without a mutation
+[1A[2K  1) [chromium] › tests\shared-ui.spec.ts:49:5 › user AI and admin payments retry failed reads without a mutation 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('button', { name: 'Thử lại', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('button', { name: 'Thử lại', exact: true })[22m
+
+
+      54 |     await page.goto(path);
+      55 |     const retry = page.getByRole("button", { name: "Thử lại", exact: true });
+    > 56 |     await expect(retry).toBeVisible();
+         |                         ^
+      57 |     failed = false;
+      58 |     await retry.click();
+      59 |     await expect(retry).toHaveCount(0);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\shared-ui.spec.ts:56:25
+
+    Error Context: test-results\shared-ui-user-AI-and-admi-c7bf2-ed-reads-without-a-mutation-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\shared-ui.spec.ts:49:5 › user AI and admin payments retry failed reads without a mutation 
