@@ -43,3 +43,6 @@ SHA256 nguồn: `e0d9219b73d1c05baa7599849bb4368d9f47ca74c003686009872b5a6274901
 Origin runtime: `http://localhost:3000` do runner quản lý; trang công khai, test mới chặn API, không DB/provider. Hồi quy bóng đổ dùng context User/Admin tổng hợp hiện có. Kiểm cổng trước khi runner chạy và sau khi giải phóng. Không chạy helper detached; không thử lại startup/cleanup từng bị từ chối. Cache ignored và checkout T3 giữ nguyên.
 
 Kết quả: **Đã triển khai và kiểm chứng local; phần homepage chưa commit trong checkout feature**. Tiếp theo: xem đối chiếu và tích hợp local khi nằm trong lần tích hợp tiếp theo của người dùng. Main vẫn ở snapshot đóng task trước `d42eff5`; không khẳng định release.
+## Tích hợp local sau merge — 03/11/2026
+
+Người dùng đã duyệt merge local. Commit homepage `cf5fdfc4daadf102f0dc19a3703edf8b3491b53f` đã fast-forward vào `main` local. Build sau merge exit 0, auth 9/9 và browser smoke 5/5 đạt (`merged-build.log`, `merged-auth.log`, `merged-browser.log`); ảnh sau merge nằm trong `merged/`. Nhánh feature đã đồng bộ cùng commit main cuối. Không push/deploy/live provider hay DB.

@@ -1,0 +1,19 @@
+[1A[2K[WebServer] (node:27540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:20328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 5 tests using 2 workers
+
+[1A[2K[1/5] [chromium] › tests\homepage-cleanup.spec.ts:60:5 › homepage explains direct rules separately from confirmed AI previews
+[1A[2K[2/5] [chromium] › tests\homepage-cleanup.spec.ts:8:5 › homepage viewport evidence and navigation
+[1A[2K[3/5] [chromium] › tests\public-ui-refinement.spec.ts:60:5 › homepage primary CTA fits the laptop viewport
+[1A[2K[4/5] [chromium] › tests\public-ui-refinement.spec.ts:82:5 › public routes avoid horizontal document overflow across supported widths
+[1A[2K[5/5] [chromium] › tests\public-ui-refinement.spec.ts:179:5 › mobile landing navigation opens by keyboard and keeps its targets reachable
+[1A[2K  5 passed (58.9s)

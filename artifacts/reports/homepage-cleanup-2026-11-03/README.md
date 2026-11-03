@@ -11,4 +11,6 @@
 - `public-regression.log`: 3/3 existing public CTA/overflow/menu checks.
 - `build.log`, `lint.log`, `auth.log`, `detector.json`, `independent-review.md`: supporting gates.
 
-Geometry is local Playwright with synthetic API-aborted public pages and simulated viewports; it is not live integration, physical-device, browser-zoom or screen-reader evidence. No product source is committed or merged by this follow-up.
+Geometry is local Playwright with synthetic API-aborted public pages and simulated viewports; it is not live integration, physical-device, browser-zoom or screen-reader evidence. Homepage source is committed and merged locally after user approval; no push/deploy was performed.
+
+Merged local: commit cf5fdfc4daadf102f0dc19a3703edf8b3491b53f; merged-build.log exit0, merged-auth.log9/9, merged-browser.log5/5; merged/ frames.

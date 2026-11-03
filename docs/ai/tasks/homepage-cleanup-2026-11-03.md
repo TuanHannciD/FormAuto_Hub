@@ -43,3 +43,6 @@ At390px, document height6014→3194px, pricing top3295→1403px; at1440px3332→
 Runtime origin: runner-owned `http://localhost:3000`; public page, APIs aborted by new fixture test, no DB/provider. Shared elevation regression uses existing synthetic User/Admin context. Checked ports before runner acquisition and after release. No detached helper was run; prior rejected startup/cleanup actions were not retried. Ignored caches and T3-owned checkout remain intact.
 
 Outcome: **Implemented and verified locally; homepage follow-up remains uncommitted in feature checkout**. Next: inspect comparison and integrate locally when included in the user's next integration action. Main remains the previously closed `d42eff5` snapshot; no release claim.
+## Merged local integration — 2026-11-03
+
+User approved local merge. Homepage follow-up commit `cf5fdfc4daadf102f0dc19a3703edf8b3491b53f` was fast-forwarded into local `main`. Post-merge build exit 0, auth 9/9 and browser smoke 5/5 passed (`merged-build.log`, `merged-auth.log`, `merged-browser.log`); `merged/` preserves the post-merge frames. Feature branch is synchronized to the final main commit. No push/deploy/live provider or DB effects.
