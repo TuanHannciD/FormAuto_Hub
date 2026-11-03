@@ -1,10 +1,12 @@
+> **Đã đóng — local, 03/11/2026.** Triển khai và kiểm sau merge đạt. Git sạch; xóa cache sinh tự động vẫn Blocked do policy từ chối trước đó, không thử lại. Giữ checkout T3 do host quản lý.
+
 # Tinh gọn homepage — bổ sung local, 03/11/2026
 
 ## Quyền và phạm vi
 
 Sau khi FAH-UI-003 đóng local tại `d42eff5`, người dùng yêu cầu tinh gọn homepage theo cùng quy tắc và duyệt thiết kế cụ thể trong chat bằng “Approved”. Bổ sung giới hạn ở homepage hiện có; root làm inline, một reviewer Sol độc lập chỉ đọc. Hồ sơ này không mở lại hoặc sửa kết quả đóng task các trang sau đăng nhập.
 
-Workspace: `C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003`, nhánh `ui/fah-ui-003`, base sạch `d42eff5eff288c936d2f9c8a5e49799830305598`. Giữ nguyên main và worktree normalize-topup khác. Không cài dependency, đổi backend/API/DB/provider, commit, merge, push hay deploy trong bổ sung này.
+Workspace: `C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003`, nhánh `ui/fah-ui-003`, base sạch `d42eff5eff288c936d2f9c8a5e49799830305598`. Giữ nguyên main và worktree normalize-topup khác. Không cài dependency hoặc đổi backend/API/DB/provider. Commit và merge local đã được duyệt sau đó và hoàn tất; không push/deploy.
 
 ## Đã triển khai
 
@@ -42,7 +44,8 @@ SHA256 nguồn: `e0d9219b73d1c05baa7599849bb4368d9f47ca74c003686009872b5a6274901
 
 Origin runtime: `http://localhost:3000` do runner quản lý; trang công khai, test mới chặn API, không DB/provider. Hồi quy bóng đổ dùng context User/Admin tổng hợp hiện có. Kiểm cổng trước khi runner chạy và sau khi giải phóng. Không chạy helper detached; không thử lại startup/cleanup từng bị từ chối. Cache ignored và checkout T3 giữ nguyên.
 
-Kết quả: **Đã triển khai và kiểm chứng local; phần homepage chưa commit trong checkout feature**. Tiếp theo: xem đối chiếu và tích hợp local khi nằm trong lần tích hợp tiếp theo của người dùng. Main vẫn ở snapshot đóng task trước `d42eff5`; không khẳng định release.
+Kết quả: **Đã đóng — local**. Triển khai homepage `cf5fdfc` đã tích hợp; bằng chứng kiểm sau merge đã commit tại `a3d130c`. Không còn phần triển khai đã duyệt phải làm. Người dùng tự push/deploy; không khẳng định release.
+
 ## Tích hợp local sau merge — 03/11/2026
 
 Người dùng đã duyệt merge local. Commit homepage `cf5fdfc4daadf102f0dc19a3703edf8b3491b53f` đã fast-forward vào `main` local. Build sau merge exit 0, auth 9/9 và browser smoke 5/5 đạt (`merged-build.log`, `merged-auth.log`, `merged-browser.log`); ảnh sau merge nằm trong `merged/`. Nhánh feature đã đồng bộ cùng commit main cuối. Không push/deploy/live provider hay DB.

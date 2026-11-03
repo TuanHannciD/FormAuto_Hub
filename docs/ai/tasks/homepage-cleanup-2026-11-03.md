@@ -1,10 +1,12 @@
+> **Closed — local, 2026-11-03.** Implementation and post-merge gates passed. Git clean; generated-cache deletion remains Blocked by prior policy rejection and was not retried. Host-owned T3 checkout retained.
+
 # Homepage cleanup — local follow-up, 2026-11-03
 
 ## Authorization and scope
 
 After FAH-UI-003 closed locally at `d42eff5`, the user requested a more compact homepage under the same rules and approved the concrete in-chat design with “Approved”. Bounded follow-up: existing homepage only; root implements inline, one independent read-only Sol reviewer. This record does not reopen or alter the historical authenticated-page closeout.
 
-Workspace: `C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003`, branch `ui/fah-ui-003`, clean base `d42eff5eff288c936d2f9c8a5e49799830305598`. Main and unrelated normalize-topup worktree were preserved. No dependency installation, backend/API/DB/provider changes, commit, merge, push or deployment in this follow-up.
+Workspace: `C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003`, branch `ui/fah-ui-003`, clean base `d42eff5eff288c936d2f9c8a5e49799830305598`. Main and unrelated normalize-topup worktree were preserved. No dependency installation or backend/API/DB/provider change. Commit and local merge were subsequently authorized and completed; no push/deployment.
 
 ## Implemented
 
@@ -42,7 +44,8 @@ At390px, document height6014→3194px, pricing top3295→1403px; at1440px3332→
 
 Runtime origin: runner-owned `http://localhost:3000`; public page, APIs aborted by new fixture test, no DB/provider. Shared elevation regression uses existing synthetic User/Admin context. Checked ports before runner acquisition and after release. No detached helper was run; prior rejected startup/cleanup actions were not retried. Ignored caches and T3-owned checkout remain intact.
 
-Outcome: **Implemented and verified locally; homepage follow-up remains uncommitted in feature checkout**. Next: inspect comparison and integrate locally when included in the user's next integration action. Main remains the previously closed `d42eff5` snapshot; no release claim.
+Outcome: **Closed — local**. Approved homepage implementation `cf5fdfc` is integrated; post-merge verification and evidence were committed at `a3d130c`. No approved implementation work remains. User owns push/deploy; no release claim.
+
 ## Merged local integration — 2026-11-03
 
 User approved local merge. Homepage follow-up commit `cf5fdfc4daadf102f0dc19a3703edf8b3491b53f` was fast-forwarded into local `main`. Post-merge build exit 0, auth 9/9 and browser smoke 5/5 passed (`merged-build.log`, `merged-auth.log`, `merged-browser.log`); `merged/` preserves the post-merge frames. Feature branch is synchronized to the final main commit. No push/deploy/live provider or DB effects.

@@ -1,0 +1,42 @@
+
+[1A[2K[WebServer] (node:4264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:1556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+[1A[2K[1/2] [chromium] › tests\homepage-cleanup.spec.ts:8:5 › homepage viewport evidence and navigation
+[1A[2K[2/2] [chromium] › tests\homepage-cleanup.spec.ts:60:5 › homepage explains direct rules separately from confirmed AI previews
+[1A[2K  1) [chromium] › tests\homepage-cleanup.spec.ts:60:5 › homepage explains direct rules separately from confirmed AI previews 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: locator('#faq details').filter({ hasText: 'Tôi có được xem lại trước khi gửi không?' })
+    Expected substring: [32m"T[7mạo và gửi ngay[27m"[39m
+    Received string:    [31m"T[7môi có được xem lại trước khi gửi không?Có. Kết quả được chuẩn bị để bạn kiểm tra và cần xác nhận trước khi hệ thống tiến hành gửi.[27m"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for locator('#faq details').filter({ hasText: 'Tôi có được xem lại trước khi gửi không?' })[22m
+    [2m    14 × locator resolved to <details open="" class="group border-b border-border">…</details>[22m
+    [2m       - unexpected value "Tôi có được xem lại trước khi gửi không?Có. Kết quả được chuẩn bị để bạn kiểm tra và cần xác nhận trước khi hệ thống tiến hành gửi."[22m
+
+
+      62 |   const faq = page.locator("#faq details").filter({ hasText: "Tôi có được xem lại trước khi gửi không?" });
+      63 |   await faq.locator("summary").click();
+    > 64 |   await expect(faq).toContainText("Tạo và gửi ngay");
+         |                     ^
+      65 |   await expect(faq).toContainText("AI cần xem trước và xác nhận");
+      66 |   await expect(page.locator("h1")).toHaveCount(1);
+      67 |   await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\homepage-cleanup.spec.ts:64:21
+
+    Error Context: test-results\homepage-cleanup-homepage--014b2--from-confirmed-AI-previews-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\homepage-cleanup.spec.ts:60:5 › homepage explains direct rules separately from confirmed AI previews 
+  1 passed (33.2s)

@@ -4,7 +4,7 @@ Actual provider/model: `codex_cx_via_9router / gpt-6.1-sol`; configured reasonin
 
 Task: `homepage-cleanup-review-20261103-r1`
 
-+Không phát hiện blocker P1/P2 hoặc P3 đáng kể mới trong snapshot SHA256 `e0d9219b…749014`.
+Không phát hiện blocker P1/P2 hoặc P3 đáng kể mới trong snapshot SHA256 `e0d9219b…749014`.
 
 - **Summary — Verified:** Đã đọc toàn bộ diff so với `d42eff5`, source liên quan, hai homepage specs và sáu ảnh trước/sau được yêu cầu. Bản rút gọn giữ nội dung thiết yếu, brand và CTA ≥44px.
 - **Files changed:** Phạm vi review gồm [page.tsx](C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003/apps/web/app/page.tsx) và [homepage-cleanup.spec.ts](C:/Users/Tuan/.t3/worktrees/FormAuto_Hub/ui-fah-ui-003/apps/web/tests/homepage-cleanup.spec.ts). Reviewer không sửa file.

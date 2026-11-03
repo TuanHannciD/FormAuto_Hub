@@ -1,0 +1,13 @@
+{
+  "status": "Verified",
+  "sourceSha256": "e0d9219b73d1c05baa7599849bb4368d9f47ca74c003686009872b5a62749014",
+  "screenshots": 40,
+  "pairedDocs": "UTF-8 and relative links checked",
+  "postmerge": {
+    "build": "exit0",
+    "auth": "9/9",
+    "browser": "5/5"
+  },
+  "cleanup": "Git closure; prior policy-blocked generated deletion not retried; T3 host checkout retained",
+  "release": "Not run; user owns push/deploy"
+}
