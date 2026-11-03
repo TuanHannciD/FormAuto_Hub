@@ -1,6 +1,6 @@
 # FAH-UI-003 — đánh giá tinh gọn UI sau đăng nhập
 
-Ngày: 2026-11-03. Người dùng đã nghiệm thu báo cáo ảnh, duyệt rà/tinh gọn trang user còn lại, dọn task và merge local. Đã triển khai U1–U3; đang kiểm tra/review cuối và tích hợp. [Sổ hiện tại](PROGRESS.md). Người dùng tự push/deploy.
+Ngày: 2026-11-03. Người dùng nghiệm thu báo cáo ảnh và duyệt rà/tinh gọn trang user còn lại, merge local. U1–U4 hoàn tất; main local đã merge, kiểm tra sau merge đạt. Xóa cache sinh ra Blocked do policy; giữ checkout host. [Sổ hiện tại](PROGRESS.md). Người dùng tự push/deploy.
 
 > Phần dưới là lịch sử đánh giá/lập kế hoạch; quyền triển khai và bằng chứng runtime mới trong PROGRESS thay thế các trạng thái chờ duyệt/Blocked ở giai đoạn đó.
 ## Quyền và kết quả cần đạt

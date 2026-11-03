@@ -5,7 +5,7 @@
   "documents": [
     {
       "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "a26afaffa5805dbcb8dfef145273c3fca624b7535af90d4fe68b1f3388d4893a",
+      "sha256": "14280423720822f6bb1dbb509e33ae0c9fd0f51ac4f7c417ba577549cd649a84",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -24,8 +24,8 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "c814aa2b18caa516e3d904c16d4afd37dc4c97624b8ef73700b67b459fb87007",
-      "lines": 146,
+      "sha256": "453226ca09555133954cf25f10667bf0547afaaa4a033dd02db1bf1bcc67e980",
+      "lines": 145,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -34,13 +34,13 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "76c642f537ec505e0c89dfa26cb173f3b38ef5a98b55cf507fb672579607a449",
-      "lines": 111,
+      "sha256": "df033ce32201a28641d4e28950b6f452d635a70b68c4e2b0924c08e26b8a1c2b",
+      "lines": 121,
       "relativeLinks": []
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "491e381b632eb1355e6c934e01f6ceab04207029b386d6923e26759185f4f910",
+      "sha256": "517c2367ff81158435b19e19a3888d2b3496f2aaf4f2cd1b022de4044bbcd371",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -59,8 +59,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "9638dd85ef622bd81267b4e399d92f4224201162775fd294b93500c653e4f4a0",
-      "lines": 150,
+      "sha256": "b1a8fc67c94d1183c676fe314fe073150bb95cc1c0dd1dab9f60a8c9155ea55d",
+      "lines": 149,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -69,8 +69,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "7f86fe62a7dc16b6139c507443960ec94f028c28d71a5dd3f7c9e68e90e7423c",
-      "lines": 104,
+      "sha256": "0e92c4f2a7849383cd6fa17366c190acdcfb7c10eee56b25f0093d62cb30c187",
+      "lines": 114,
       "relativeLinks": []
     }
   ],
@@ -95,45 +95,15 @@
     "/admin/revenue"
   ],
   "trackedFilesChanged": [
-    "apps/web/app/admin/ai-provider-settings/page.tsx",
-    "apps/web/app/admin/ai-usage/page.tsx",
-    "apps/web/app/admin/manual-credits/page.tsx",
-    "apps/web/app/admin/packages/page.tsx",
-    "apps/web/app/admin/page.tsx",
-    "apps/web/app/admin/payments/page.tsx",
-    "apps/web/app/admin/payos-settings/page.tsx",
-    "apps/web/app/admin/revenue/page.tsx",
-    "apps/web/app/dashboard/ai-usage/page.tsx",
-    "apps/web/app/dashboard/credit-transactions/page.tsx",
-    "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
-    "apps/web/app/dashboard/forms/_components/AiQuestionBlock.tsx",
-    "apps/web/app/dashboard/forms/_components/GenerationModeSelector.tsx",
-    "apps/web/app/dashboard/forms/_components/PreviewAccordion.tsx",
-    "apps/web/app/dashboard/forms/_components/RuleEditor.tsx",
-    "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
-    "apps/web/app/dashboard/forms/_constants.ts",
-    "apps/web/app/dashboard/forms/page.tsx",
-    "apps/web/app/dashboard/nckh/forms/[formId]/_components/dataset-preview.tsx",
-    "apps/web/app/dashboard/nckh/forms/[formId]/page.tsx",
-    "apps/web/app/dashboard/nckh/page.tsx",
-    "apps/web/app/dashboard/page.tsx",
-    "apps/web/app/dashboard/top-up/_components/topup-order-detail.tsx",
-    "apps/web/app/dashboard/top-up/page.tsx",
-    "apps/web/app/dashboard/usage-logs/page.tsx",
-    "apps/web/app/payment/payos/return/page.tsx",
-    "apps/web/components/admin-shell.tsx",
-    "apps/web/components/dropdown-select.tsx",
-    "apps/web/components/searchable-dropdown-select.tsx",
-    "apps/web/components/shell-layout.tsx",
-    "apps/web/tests/admin-ui-refinement.spec.ts",
-    "apps/web/tests/admin-ui.spec.ts",
-    "apps/web/tests/dashboard-ui-refinement.spec.ts",
-    "apps/web/tests/direct-rule-submission.spec.ts",
-    "apps/web/tests/fah-err-forms-errors.spec.ts",
-    "apps/web/tests/form-automation.spec.ts",
-    "apps/web/tests/nckh.spec.ts",
-    "apps/web/tests/shared-ui.spec.ts",
-    "apps/web/tests/ui-refinement.spec.ts"
+    "artifacts/reports/ui-cleanup-2026-11-02/README.md",
+    "artifacts/reports/ui-cleanup-2026-11-02/closeout-validation.json",
+    "artifacts/reports/ui-cleanup-2026-11-02/verify-implementation-docs.py",
+    "docs/ai/tasks/FAH-UI-003/INDEX.md",
+    "docs/ai/tasks/FAH-UI-003/PLAN.md",
+    "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
+    "docs/vi/tasks/FAH-UI-003/INDEX.md",
+    "docs/vi/tasks/FAH-UI-003/PLAN.md",
+    "docs/vi/tasks/FAH-UI-003/PROGRESS.md"
   ],
   "unexpectedUntrackedFiles": [],
   "failures": [],

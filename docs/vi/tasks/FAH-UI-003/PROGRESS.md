@@ -1,5 +1,15 @@
 # Sổ thực thi — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Chốt local cuối — 2026-11-03
+
+Verified: đã rà/tinh gọn trang user còn lại; fast-forward triển khai vào main local tại `56a98a2f52d0854e92949fc0d412ff45b6f701ef`. Regression chọn cuối179/179, build/lint và auth9/9 đạt. Sau merge ở main: build exit0, auth9/9 và smoke giao diện8/8 đạt (`merged-build.log`, `merged-auth.log`, `merged-browser-smoke.log`). Nguồn giữ nguyên bản triển khai đã review. Reviewer chốt độc lập: gpt-6.1-sol/high; không còn P1/P2. Chỉ hai cảnh báo lint tài khoản có sẵn.
+
+Phạm vi:30 file sản phẩm; không đổi backend/contract/DB/hành vi provider. Hồ sơ task gốc ở main đã sao lưu ngoài repo và kiểm hash. Helper không dùng/thử nghiệm không hợp lệ đã lưu trữ. Không push/deploy. Đủ điều kiện chốt local với ngoại lệ dọn ổ đĩa dưới đây; người dùng tự push/deploy.
+
+Blocked: kiểm tra phê duyệt tự động từ chối xóa `.next`, `test-results`, `playwright-report`, `node_modules` do task sinh ra trong checkout tính năng, báo `blocked by policy`; không có lý do chi tiết khác. Không thử lại/đi vòng. Giữ các thư mục ignored này và checkout/branch T3 do host quản lý. Không đụng worktree normalize-topup không liên quan. Runner kết thúc exit0; không còn listener tại các cổng task đã kiểm3000/3001/3020/3035/3036.
+
+Not run: login/API/DB/Google/AI/PayOS thật, thiết bị/zoom trình duyệt thật, ca textarea-host3001 không đổi; thiếu ảnh baseline AI đã lưu/kết quả. Các mục lịch sử dưới giữ nguyên trạng thái theo giai đoạn; mục này quyết định kết luận chốt task.
+
 ## Nghiệm thu ảnh và quyền chốt task — 2026-11-03
 
 Người dùng đã nghiệm thu kết quả ảnh, yêu cầu rà/tinh gọn trang user còn lại theo cùng quy tắc, dọn task và merge local; người dùng tự push/deploy. Quyền này thay giới hạn không commit/merge local trước đó cho file thuộc task. Không push/deploy/install/tác động thật. Root triển khai inline; scout chỉ đọc user_pages_final_audit và nckh_user_final_audit đều kiểm catalog gpt-6.1-sol/high, không agent lồng.

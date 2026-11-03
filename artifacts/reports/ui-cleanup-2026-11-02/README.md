@@ -14,3 +14,5 @@ Hồ sơ/ảnh gốc ở main đã sao lưu ngoài repo và kiểm SHA256 tại 
 Giới hạn: fixture/session giả lập, viewport mô phỏng; không live login/API/DB/Google/AI/PayOS, thiết bị thật hoặc zoom bằng UI trình duyệt. Người dùng nghiệm thu phạm vi hình ảnh và cho merge local, tự push/deploy. Đo chiều cao không đo thời gian thao tác.
 
 Log runner được giữ nguyên byte UTF-8/ANSI qua `.gitattributes` cục bộ (`-text -diff`); đọc trực tiếp file để xem kết quả, không sửa log gốc chỉ để chuẩn hóa whitespace.
+
+Sau merge local main: `merged-build.log`, `merged-auth.log` (9/9), `merged-browser-smoke.log` (8/8); `postmerge-smoke/` chứa ảnh bổ sung và hash. Nguồn giữ nguyên commit triển khai; `local-integration.json` ghi kết quả. Xóa cache/dependency sinh ra bị kiểm tra phê duyệt tự động từ chối (`blocked by policy`); giữ thư mục ignored và checkout T3, không thử lại. Không push/deploy.

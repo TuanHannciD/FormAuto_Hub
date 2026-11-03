@@ -52,7 +52,7 @@ if len(routes) != 18:
     failures.append(f"Expected inventory18, got{len(routes)}")
 
 tracked = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], cwd=root, text=True).splitlines()
-approved = ("apps/web/app/dashboard/", "apps/web/app/admin/", "apps/web/app/payment/payos/return/", "apps/web/tests/")
+approved = ("apps/web/app/dashboard/", "apps/web/app/admin/", "apps/web/app/payment/payos/return/", "apps/web/tests/", "docs/ai/tasks/FAH-UI-003/", "docs/vi/tasks/FAH-UI-003/", "artifacts/reports/ui-cleanup-2026-11-02/")
 shared = {"apps/web/components/admin-shell.tsx", "apps/web/components/shell-layout.tsx", "apps/web/components/dropdown-select.tsx", "apps/web/components/searchable-dropdown-select.tsx"}
 unexpected_tracked = [path for path in tracked if not path.startswith(approved) and path not in shared]
 if unexpected_tracked:

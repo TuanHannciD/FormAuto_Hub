@@ -18,5 +18,6 @@
     "Unchanged3001textarea host excluded",
     "No physical-device or real browser zoom/live API/DB/provider check"
   ],
-  "integration": "Approved and ready for local merge; post-merge verification pending"
+  "integration": "Verified local main fast-forward 56a98a2f52d0854e92949fc0d412ff45b6f701ef; postmerge build exit0, auth9/9, browser8/8; no push/deploy",
+  "cleanup": "Generated-cache deletion Blocked: automatic approval review returned blocked by policy; retained with host-bound checkout, no retry"
 }

@@ -1,6 +1,6 @@
 # FAH-UI-003 — authenticated UI cleanup assessment
 
-Date: 2026-11-03. User accepted the visual report and authorized remaining user-page refinement, task cleanup and local merge. U1–U3 implemented; final validation/review and integration in progress. [Current ledger](PROGRESS.md). User owns push/deploy.
+Date: 2026-11-03. User accepted the visual report and authorized remaining user-page refinement and local merge. U1–U4 completed; local main merged and postmerge checks passed. Generated-cache deletion Blocked by policy; host checkout retained. [Current ledger](PROGRESS.md). User owns push/deploy.
 
 > Historical assessment/planning record below; later implementation approval and runtime evidence in PROGRESS supersede its pending/Blocked statements.
 ## Authorization and outcome

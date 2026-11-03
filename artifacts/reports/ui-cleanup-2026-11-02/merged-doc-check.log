@@ -1,0 +1,111 @@
+{
+  "task": "FAH-UI-003",
+  "date": "2026-11-02",
+  "status": "Verified",
+  "documents": [
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "14280423720822f6bb1dbb509e33ae0c9fd0f51ac4f7c417ba577549cd649a84",
+      "lines": 63,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "16122278f49264cbfb9d24d401c3a1fc5545569c9d4a188447af32dd3609aa84",
+      "lines": 127,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "453226ca09555133954cf25f10667bf0547afaaa4a033dd02db1bf1bcc67e980",
+      "lines": 145,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
+      "sha256": "df033ce32201a28641d4e28950b6f452d635a70b68c4e2b0924c08e26b8a1c2b",
+      "lines": 121,
+      "relativeLinks": []
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
+      "sha256": "517c2367ff81158435b19e19a3888d2b3496f2aaf4f2cd1b022de4044bbcd371",
+      "lines": 63,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "AUDIT.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/AUDIT.md",
+      "sha256": "127e2de5d73980031d38b36f3ba9a45aa0965a22ccbb4248b77df4159b8b153e",
+      "lines": 127,
+      "relativeLinks": [
+        "PROGRESS.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
+      "sha256": "b1a8fc67c94d1183c676fe314fe073150bb95cc1c0dd1dab9f60a8c9155ea55d",
+      "lines": 149,
+      "relativeLinks": [
+        "AUDIT.md",
+        "INDEX.md",
+        "PROGRESS.md"
+      ]
+    },
+    {
+      "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
+      "sha256": "0e92c4f2a7849383cd6fa17366c190acdcfb7c10eee56b25f0093d62cb30c187",
+      "lines": 114,
+      "relativeLinks": []
+    }
+  ],
+  "routes": [
+    "/dashboard/ai-usage",
+    "/dashboard/credit-transactions",
+    "/dashboard/forms",
+    "/dashboard/nckh/callback",
+    "/dashboard/nckh/forms/[formId]",
+    "/dashboard/nckh",
+    "/dashboard",
+    "/dashboard/top-up/[id]",
+    "/dashboard/top-up",
+    "/dashboard/usage-logs",
+    "/admin/ai-provider-settings",
+    "/admin/ai-usage",
+    "/admin/manual-credits",
+    "/admin/packages",
+    "/admin",
+    "/admin/payments",
+    "/admin/payos-settings",
+    "/admin/revenue"
+  ],
+  "trackedFilesChanged": [
+    "artifacts/reports/ui-cleanup-2026-11-02/README.md",
+    "artifacts/reports/ui-cleanup-2026-11-02/closeout-validation.json",
+    "artifacts/reports/ui-cleanup-2026-11-02/verify-implementation-docs.py",
+    "docs/ai/tasks/FAH-UI-003/INDEX.md",
+    "docs/ai/tasks/FAH-UI-003/PLAN.md",
+    "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
+    "docs/vi/tasks/FAH-UI-003/INDEX.md",
+    "docs/vi/tasks/FAH-UI-003/PLAN.md",
+    "docs/vi/tasks/FAH-UI-003/PROGRESS.md"
+  ],
+  "unexpectedUntrackedFiles": [],
+  "failures": [],
+  "limits": "Identifier/link/encoding/implementation-scope checks only. Bilingual semantic review is independent human-like assessment; no app runtime/test pass is claimed."
+}

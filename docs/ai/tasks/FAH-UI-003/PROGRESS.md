@@ -1,5 +1,15 @@
 # Execution ledger — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Final local closeout — 2026-11-03
+
+Verified: remaining user pages reviewed/refined; implementation merged by fast-forward into local main at `56a98a2f52d0854e92949fc0d412ff45b6f701ef`. Final selected regression179/179, build/lint and auth9/9 passed. Fresh main postmerge build exit0, auth9/9 and browser smoke8/8 passed (`merged-build.log`, `merged-auth.log`, `merged-browser-smoke.log`). Source remains identical to the reviewed implementation. Independent closeout reviewer: gpt-6.1-sol/high; no remaining P1/P2. Only two pre-existing account lint warnings.
+
+Scope:30 production files; no backend/contracts/DB/provider behavior changes. Original main task material preserved in verified external archive. Retired unused helpers/invalid experiments archived. No push/deploy. Task is ready for local closeout with disk-cleanup exception below; user owns push/deploy.
+
+Blocked: automatic approval review rejected deletion of task-owned generated `.next`, `test-results`, `playwright-report`, `node_modules` in the feature checkout with `blocked by policy`; no further reason provided. No retry/bypass. These ignored directories and the host-bound T3 checkout/branch are retained. Unrelated normalize-topup worktree untouched. Runner finished exit0; no listener on checked task ports3000/3001/3020/3035/3036.
+
+Not run: live login/API/DB/Google/AI/PayOS, physical device/actual browser zoom, unchanged isolated3001 textarea-host case; saved AI preview/result baseline images unavailable. Prior historical entries below retain their original phase status; this section is authoritative for closeout.
+
 ## Accepted visuals and authorized closeout — 2026-11-03
 
 User explicitly accepted the visual outcome, authorized remaining user-page refinement under the same rules, task cleanup and local merge; user will push/deploy. This supersedes prior no-commit/no-local-merge limit for task-owned files only. No push/deploy/install/live effects. Root implements inline; catalog-confirmed read-only scouts user_pages_final_audit and nckh_user_final_audit each gpt-6.1-sol/high, no nested agents.

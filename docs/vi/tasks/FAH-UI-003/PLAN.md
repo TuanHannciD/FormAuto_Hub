@@ -146,4 +146,4 @@ T1–T7 được đánh dấu cho triển khai và regression/review fixture áp
 - [x] U2: tinh gọn lượt/card chế độ AI có dữ liệu, nhãn metric theo trang, tên filter ổn định, nút copy44px mobile.
 - [x] U3: gom linked NCKH vào nhập, bỏ hướng dẫn rỗng lặp, tiêu đề popup theo việc, canh nút ánh xạ, nêu giới hạn preview dataset có sẵn.
 - [x] U4:179 ca fixture chọn gồm61ảnh bản cuối, ảnh user/NCKH có dữ liệu/đã ổn định, build/lint/auth, review nguồn/ảnh độc lập mới và tài liệu song ngữ.
-- [ ] U5: kiểm sao lưu task untracked gốc ở main; lưu trữ helper/thử nghiệm không hợp lệ; commit file task, merge local và smoke bản đã merge; main sạch và dọn file sinh ra thuộc task. Giữ checkout gắn host nếu không có công cụ thoát được hỗ trợ. Không push/deploy.
+- [x] U5 tích hợp: đã sao lưu/kiểm hash task gốc ở main; lưu trữ helper; commit và fast-forward merge local; build/auth9/9/browser8/8 sau merge Verified. Không push/deploy. Xóa thư mục sinh ra Blocked bởi policy tự động; giữ thư mục và checkout host. Checkbox xác nhận tích hợp local, không khẳng định dọn sạch ổ đĩa.
