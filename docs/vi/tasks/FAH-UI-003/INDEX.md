@@ -1,6 +1,6 @@
 # FAH-UI-003 — đánh giá tinh gọn UI sau đăng nhập
 
-Bổ sung admin đã xác minh03/11: regression58/58, build/lint/auth cuối, runtime8/8 và review độc lập đạt. Đang chốt tích hợp local. [Sổ hiện tại](PROGRESS.md).
+Bổ sung admin hoàn tất local03/11: rà8route, tinh gọn6trang; regression58/58, build/lint/auth và review độc lập đạt. Đã merge main local; build/auth9/9/browser8/8 sau merge Verified. Người dùng tự push/deploy. [Sổ hiện tại](PROGRESS.md).
 
 > Phần dưới là lịch sử đánh giá/lập kế hoạch; quyền triển khai và bằng chứng runtime mới trong PROGRESS thay thế các trạng thái chờ duyệt/Blocked ở giai đoạn đó.
 ## Quyền và kết quả cần đạt

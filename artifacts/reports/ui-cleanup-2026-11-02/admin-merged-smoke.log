@@ -1,0 +1,22 @@
+
+[1A[2K[WebServer] (node:35752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:28792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 8 tests using 2 workers
+
+[1A[2K[1/8] [chromium] › tests\admin-cleanup.spec.ts:38:5 › capture all admin routes with populated AI data
+[1A[2K[2/8] [chromium] › tests\admin-cleanup.spec.ts:70:5 › manual credit form keeps visible labels after entry
+[1A[2K[3/8] [chromium] › tests\admin-cleanup.spec.ts:81:5 › PayOS masks new secrets and does not invent an environment
+[1A[2K[4/8] [chromium] › tests\admin-cleanup.spec.ts:92:5 › AI history translates stored modes and preserves mobile technical details
+[1A[2K[5/8] [chromium] › tests\admin-cleanup.spec.ts:111:5 › AI filters apply only on request and reset pagination without duplicate GETs
+[1A[2K[6/8] [chromium] › tests\admin-cleanup.spec.ts:135:7 › payments metrics distinguish unknown from zero
+[1A[2K[7/8] [chromium] › tests\admin-cleanup.spec.ts:135:7 › packages metrics distinguish unknown from zero
+[1A[2K[8/8] [chromium] › tests\admin-cleanup.spec.ts:135:7 › manual-credits metrics distinguish unknown from zero
+[1A[2K  8 passed (25.6s)

@@ -5,7 +5,7 @@
   "documents": [
     {
       "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "d0ded0d9e2655509f4533e6c566f8bb8c0c20e90a7555fe5b0b4a690910128d0",
+      "sha256": "63f0c6399f0f27793495b506471f9d894cec0265788fb524c718675b082356c4",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -24,7 +24,7 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "a8a55c0127aa14cea13ae0e48415cde8cd7b2760fb0790a02237c1d3a9dfe9d5",
+      "sha256": "011b19b7c92ed59e5a3765454d8a86910f5a7d0d596e381ce7c5c0d1619e8298",
       "lines": 152,
       "relativeLinks": [
         "AUDIT.md",
@@ -34,13 +34,13 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "3677fc905ef6deaaa7a41efa76d9d805f544a0de217f197df5f88c0f26a98582",
-      "lines": 139,
+      "sha256": "2a2350bf5de2a0b6214c9aab6f421abfffe987369266ae0f35500730baf37d04",
+      "lines": 147,
       "relativeLinks": []
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "43ad59596bb0a1acccfcd6a7f4cee300360b9d1e288803f9ed0a5180e9461db8",
+      "sha256": "f1cbf4f5bbff3e9de2534f9355994eba6e712cccb2fc49487a9a0c0334cb2cb8",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -59,7 +59,7 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "631aeb48f7ea8453e020b9ba2792f1fa62aeb5934a387d97215381654ce15b8a",
+      "sha256": "9ffee8e3f3a5aae4f9281dc2d6edd9cceaae6b17ce0b593969f294594ab292e1",
       "lines": 156,
       "relativeLinks": [
         "AUDIT.md",
@@ -69,8 +69,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "8e439916ea99f49daf37754ba90aa7e2d184dd48c3506ccb8dd1d829b463d550",
-      "lines": 132,
+      "sha256": "41b217eaa56c3ff2983dca736d6ad3f0b7d3e1264d89ae0edfecda89dd482b8d",
+      "lines": 140,
       "relativeLinks": []
     }
   ],
@@ -95,15 +95,8 @@
     "/admin/revenue"
   ],
   "trackedFilesChanged": [
-    "apps/web/app/admin/ai-provider-settings/page.tsx",
-    "apps/web/app/admin/ai-usage/page.tsx",
-    "apps/web/app/admin/manual-credits/page.tsx",
-    "apps/web/app/admin/packages/page.tsx",
-    "apps/web/app/admin/payments/page.tsx",
-    "apps/web/app/admin/payos-settings/page.tsx",
     "artifacts/reports/ui-cleanup-2026-11-02/README.md",
-    "artifacts/reports/ui-cleanup-2026-11-02/implementation-doc-verification.json",
-    "artifacts/reports/ui-cleanup-2026-11-02/verify-implementation-docs.py",
+    "artifacts/reports/ui-cleanup-2026-11-02/admin-validation.json",
     "docs/ai/tasks/FAH-UI-003/INDEX.md",
     "docs/ai/tasks/FAH-UI-003/PLAN.md",
     "docs/ai/tasks/FAH-UI-003/PROGRESS.md",

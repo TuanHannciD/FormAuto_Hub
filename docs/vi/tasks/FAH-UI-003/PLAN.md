@@ -153,4 +153,4 @@ T1–T7 được đánh dấu cho triển khai và regression/review fixture áp
 - [x] A1: rà8route admin/contract và chụp18ảnh baseline.
 - [x] A2: tái hiện finding; sửa nhãn/metric/chế độ/filter/khóa/chữ trong phạm vi.
 - [x] A3: regression chọn cuối, build/lint/auth, ảnh đối chiếu và review Sol độc lập.
-- [ ] A4: chốt hồ sơ/bằng chứng song ngữ; tích hợp local theo quyền trước. Không push/deploy hoặc thử lại dọn cache bị từ chối.
+- [x] A4: chốt hồ sơ/bằng chứng song ngữ; tích hợp local theo quyền trước. Không push/deploy hoặc thử lại dọn cache bị từ chối.

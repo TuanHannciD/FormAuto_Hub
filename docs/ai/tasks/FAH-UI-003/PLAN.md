@@ -149,4 +149,4 @@ Checked T1–T7 tasks mean implementation and applicable fixture regressions/rev
 - [x] A1: inspect8admin routes/contracts and capture18baseline frames.
 - [x] A2: reproduce findings; implement bounded labels/metric/mode/filter/secrets/copy fixes.
 - [x] A3: final selected regression, build/lint/auth, paired screenshots and independent Sol review.
-- [ ] A4: paired dossier/evidence closeout; local integration within prior authorization. No push/deploy or rejected cleanup retry.
+- [x] A4: paired dossier/evidence closeout; local integration within prior authorization. No push/deploy or rejected cleanup retry.

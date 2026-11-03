@@ -19,5 +19,8 @@
     "User AI page has same legacy mode display mapping issue; outside this approved admin delta, deferred follow-up",
     "Previously blocked cleanup not retried; ignored generated dirs/host checkout retained"
   ],
-  "integration": "Pending local commit/fast-forward main; no push/deploy"
+  "integration": "Verified main build exit0 admin-merged-build.log, auth9/9 admin-merged-auth.log, restarted browser8/8 admin-merged-smoke.log; source unchanged; no push/deploy",
+  "implementationCommit": "e3fbf42",
+  "localMerge": "Verified main fast-forward b1a5df1 including raw evidence preservation",
+  "cleanup": "Main/feature Git closeout; retain host checkout/ignored generated dirs because previous automatic deletion rejection blocked by policy; no retry"
 }

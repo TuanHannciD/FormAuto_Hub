@@ -1,5 +1,13 @@
 # Sổ thực thi — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Chốt local phần admin hoàn tất — 2026-11-03
+
+Verified: main đã fast-forward gồm triển khai e3fbf42 và bảo toàn bằng chứng b1a5df1. Sau merge ở main: build exit0, auth9/9, browser admin khởi động lại8/8 (admin-merged-build.log, admin-merged-auth.log, admin-merged-smoke.log). Nguồn sản phẩm giữ nguyên snapshot đã review độc lập. Regression58/58, detector[], gate tài liệu song ngữ/whitespace đạt. Không còn P1/P2/P3 trong phạm vi admin này. Commit chốt tích hợp chỉ sửa hồ sơ/bằng chứng; người dùng tự push/deploy.
+
+File:6trang admin,1spec regression fixture và hồ sơ/artifacts task. Không đổi backend/DTO/contract/quyền/quyết định credit. Root đã xem mobile/desktop;18ảnh trước/19ảnh sau có hash và admin-before-after-report.html mở offline. Bổ sung19ảnh smoke main tại admin-merged. Gate staging ban đầu bắt dấu cách context của diff thô và dòng trắng EOF review; đã bảo toàn byte snapshot bằng -text/-diff cục bộ artifact và cắt EOF dư. Kiểm whitespace toàn dbb4fb2..tip sau đó đạt; hash snapshot nguồn giữ nguyên.
+
+Giới hạn vẫn Not run với login/API/DB/provider thật, thiết bị/zoom trình duyệt thật. Mapping nhãn AI user Deferred ngoài delta admin. Xóa thư mục sinh ra vẫn Blocked vì kiểm phê duyệt tự động trước báo blocked by policy, không thử lại; giữ checkout/branch T3. Worktree normalize-topup không liên quan giữ nguyên. Các mục giai đoạn bên dưới là lịch sử. Tích hợp local hoàn tất; người dùng có thể push/deploy khi sẵn sàng.
+
 ## Bản admin đã xác minh — 2026-11-03
 
 Verified: tinh gọn6trang admin, đánh giá/giữ nguyên2trang còn lại; regression cuối58/58, build cuối exit0 sau sửa chữ Succeeded, lint exit0 (hai warning tài khoản có sẵn), auth9/9, browser fixture khởi động lại sau build8/8. Log: admin-regression.log, admin-build-final.log, admin-lint.log, admin-auth.log, admin-smoke-final.log. Detector[]; checker tài liệu song ngữ và whitespace diff đạt. Review độc lập nguồn/ảnh đại diện actual gpt-6.1-sol/high, task fah-ui-003-admin-final-review-20261103-r1: không còn P1/P2/P3 trong phạm vi. SHA256snapshot nguồn294b891c3282feb8a02468a2b385d805ac1fe8518f811ef6964a328051eedd28. Không sửa sản phẩm sau review.

@@ -1,5 +1,13 @@
 # Execution ledger — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Admin local closeout complete — 2026-11-03
+
+Verified: main fast-forward includes implementation e3fbf42 and evidence-preservation b1a5df1. Main postmerge build exit0, auth9/9, restarted admin browser8/8 (admin-merged-build.log, admin-merged-auth.log, admin-merged-smoke.log). Production source unchanged from independent reviewed snapshot. Regression58/58, detector[], paired docs/whitespace gates pass. No remaining review P1/P2/P3 in this admin scope. Final integration commit only updates dossier/evidence; user owns push/deploy.
+
+Files:6admin pages,1fixture regression spec and task dossier/artifacts. No backend/DTO/contracts/roles/credit-decision change. Root inspected mobile/desktop;18before/19after with hashes and portable admin-before-after-report.html. Additional19main smoke frames in admin-merged. Staging initially flagged raw diff context spaces and an extra review EOF blank; preserve snapshot bytes via artifact-local -text/-diff and trim review EOF. Full dbb4fb2..tip whitespace check then passed; source snapshot hash remains identical.
+
+Limits remain Not run for real login/API/DB/provider, physical device/actual browser zoom. User AI mode display mapping is Deferred outside this admin delta. Generated-directory deletion stays Blocked by prior automatic approval rejection, blocked by policy, not retried; T3 checkout/branch retained. Unrelated normalize-topup worktree unchanged. Earlier phase entries below are historical. Local integration complete; next user action is push/deploy when ready.
+
 ## Admin verified snapshot — 2026-11-03
 
 Verified:6admin pages refined, remaining2assessed/preserved; final regression58/58, final build exit0 after Succeeded copy, lint exit0 (two existing account warnings), auth9/9, post-build restarted fixture browser8/8. Logs: admin-regression.log, admin-build-final.log, admin-lint.log, admin-auth.log, admin-smoke-final.log. Detector[]; paired doc checker and diff whitespace passed. Final independent source/representative-image review actual gpt-6.1-sol/high, task fah-ui-003-admin-final-review-20261103-r1: no P1/P2/P3 in scope. Source snapshot SHA256294b891c3282feb8a02468a2b385d805ac1fe8518f811ef6964a328051eedd28. No source edits after review.
