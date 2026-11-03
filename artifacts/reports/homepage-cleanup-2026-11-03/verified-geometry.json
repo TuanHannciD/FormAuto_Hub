@@ -1,0 +1,42 @@
+[
+  {
+    "width": 320,
+    "height": 3281,
+    "documentWidth": 320,
+    "pricingTop": 1450.125,
+    "heroHeight": 651.5,
+    "ctaBottom": 319.5
+  },
+  {
+    "width": 390,
+    "height": 3194,
+    "documentWidth": 390,
+    "pricingTop": 1403.25,
+    "heroHeight": 651.5,
+    "ctaBottom": 319.5
+  },
+  {
+    "width": 768,
+    "height": 2232,
+    "documentWidth": 768,
+    "pricingTop": 1085.34375,
+    "heroHeight": 541.59375,
+    "ctaBottom": 271.59375
+  },
+  {
+    "width": 1024,
+    "height": 1981,
+    "documentWidth": 1024,
+    "pricingTop": 911.3125,
+    "heroHeight": 384,
+    "ctaBottom": 330.859375
+  },
+  {
+    "width": 1440,
+    "height": 1978,
+    "documentWidth": 1440,
+    "pricingTop": 901.65625,
+    "heroHeight": 384,
+    "ctaBottom": 342.59375
+  }
+]
