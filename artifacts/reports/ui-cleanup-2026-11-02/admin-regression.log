@@ -1,0 +1,72 @@
+[1A[2K[WebServer] (node:33856) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:38100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 58 tests using 2 workers
+
+[1A[2K[1/58] [chromium] › tests\admin-cleanup.spec.ts:38:5 › capture all admin routes with populated AI data
+[1A[2K[2/58] [chromium] › tests\admin-cleanup.spec.ts:70:5 › manual credit form keeps visible labels after entry
+[1A[2K[3/58] [chromium] › tests\admin-cleanup.spec.ts:81:5 › PayOS masks new secrets and does not invent an environment
+[1A[2K[4/58] [chromium] › tests\admin-cleanup.spec.ts:92:5 › AI history translates stored modes and preserves mobile technical details
+[1A[2K[5/58] [chromium] › tests\admin-cleanup.spec.ts:111:5 › AI filters apply only on request and reset pagination without duplicate GETs
+[1A[2K[6/58] [chromium] › tests\admin-cleanup.spec.ts:135:7 › payments metrics distinguish unknown from zero
+[1A[2K[7/58] [chromium] › tests\admin-cleanup.spec.ts:135:7 › packages metrics distinguish unknown from zero
+[1A[2K[8/58] [chromium] › tests\admin-cleanup.spec.ts:135:7 › manual-credits metrics distinguish unknown from zero
+[1A[2K[9/58] [chromium] › tests\admin-ui-refinement.spec.ts:36:5 › 390px admin task content follows compact summaries within the first viewport
+[1A[2K[10/58] [chromium] › tests\admin-ui-refinement.spec.ts:48:5 › mobile AI tabs remain touch sized and long saved models remain readable
+[1A[2K[11/58] [chromium] › tests\admin-ui-refinement.spec.ts:64:5 › failed AI statistics remain an error instead of an empty dataset
+[1A[2K[12/58] [chromium] › tests\admin-ui-refinement.spec.ts:71:5 › admin data pages distinguish loading and failed reads from empty results
+[1A[2K[13/58] [chromium] › tests\admin-ui-refinement.spec.ts:95:5 › manual payment decisions preserve review details and write payloads in isolated fixtures
+[1A[2K[14/58] [chromium] › tests\admin-ui-refinement.spec.ts:126:5 › manual grants require a selected recipient and retain credit ledger request fields
+[1A[2K[15/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 320px
+[1A[2K[16/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 390px
+[1A[2K[17/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 768px
+[1A[2K[18/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1024px
+[1A[2K[19/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1366px
+[1A[2K[20/58] [chromium] › tests\admin-ui-refinement.spec.ts:148:60 › admin long data stays within the document at 1920px
+[1A[2K[21/58] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 1440px
+[1A[2K[22/58] [chromium] › tests\admin-ui.spec.ts:37:7 › all admin routes render without overflow or runtime errors at 320px
+[1A[2K[23/58] [chromium] › tests\admin-ui.spec.ts:67:5 › admin mobile navigation changes routes, closes and keeps account popup accessible
+[1A[2K[24/58] [chromium] › tests\admin-ui.spec.ts:84:5 › admin settings keep their save payloads after restyling
+[1A[2K[25/58] [chromium] › tests\admin-ui.spec.ts:98:5 › normal users still cannot render admin controls
+[1A[2K[26/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:36:5 › ERR021 failed profile load blocks PUT and retries only the read
+[1A[2K[27/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:54:5 › ERR021 failed security load does not label Google unlinked and retry restores known state
+[1A[2K[28/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:72:49 › ERR016 503 detail offers GET-only retry without claiming missing
+[1A[2K[29/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:72:49 › ERR016 transport detail offers GET-only retry without claiming missing
+[1A[2K[30/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:88:5 › ERR016 404 retains privacy-safe wording
+[1A[2K[31/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:98:5 › ERR015 manual request keeps confirmed ID while history refresh fails; retry never repeats POST
+[1A[2K[32/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:119:5 › ERR015 checkout redirects even when subsequent list reads would fail
+[1A[2K[33/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:132:49 › ERR015 admin approve keeps confirmed decision on refresh failure
+[1A[2K[34/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:132:49 › ERR015 admin reject keeps confirmed decision on refresh failure
+[1A[2K[35/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:159:5 › ERR021 failed admin user search clears old options and blocks grant until retry
+[1A[2K[36/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:180:5 › ERR015 manual grant keeps confirmed transaction and balance when history fails
+[1A[2K[37/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard absent supports keyboard and repeat feedback
+[1A[2K[38/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard reject supports keyboard and repeat feedback
+[1A[2K[39/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 detail clipboard success supports keyboard and repeat feedback
+[1A[2K[40/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard absent supports keyboard and repeat feedback
+[1A[2K[41/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard reject supports keyboard and repeat feedback
+[1A[2K[42/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 manual clipboard success supports keyboard and repeat feedback
+[1A[2K[43/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard absent supports keyboard and repeat feedback
+[1A[2K[44/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard reject supports keyboard and repeat feedback
+[1A[2K[45/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:202:110 › ERR022 payos clipboard success supports keyboard and repeat feedback
+[1A[2K[46/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:214:45 › ERR015 ERR019 ai retains local configuration check after failed refresh
+[1A[2K[47/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:214:45 › ERR015 ERR019 payos retains local configuration check after failed refresh
+[1A[2K[48/58] [chromium] › tests\fah-err-account-payments-errors.spec.ts:230:5 › ERR019 payment return explains waiting for confirmation in user language
+[1A[2K[49/58] [chromium] › tests\manual-credit-ui.spec.ts:6:38 › history and compact order/grant details work at 1440px
+[1A[2K[50/58] [chromium] › tests\manual-credit-ui.spec.ts:6:38 › history and compact order/grant details work at 320px
+[1A[2K[51/58] [chromium] › tests\shared-ui.spec.ts:23:5 › mobile menu traps focus, returns focus and clears modal state at desktop breakpoint
+[1A[2K[52/58] [chromium] › tests\shared-ui.spec.ts:51:5 › user AI and admin payments retry failed reads without a mutation
+[1A[2K[53/58] [chromium] › tests\shared-ui.spec.ts:66:5 › profile popup uses shared surfaces and controls while preserving its save request
+[1A[2K[54/58] [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape
+[1A[2K[55/58] [chromium] › tests\shared-ui.spec.ts:104:5 › shared admin dialog opens and cancels without creating a package
+[1A[2K[56/58] [chromium] › tests\shared-ui.spec.ts:117:5 › topup detail popups share closing motion in dashboard, admin and routed detail
+[1A[2K[57/58] [chromium] › tests\shared-ui.spec.ts:155:5 › admin approval retains the popup long enough to animate its automatic close
+[1A[2K[58/58] [chromium] › tests\shared-ui.spec.ts:181:5 › dashboard and admin AI pages use the same metric component and actual values
+[1A[2K  58 passed (1.3m)

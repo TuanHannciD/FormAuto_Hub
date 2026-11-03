@@ -1,0 +1,134 @@
+
+[1A[2K[WebServer] (node:25008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:36768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 2 workers
+
+[1A[2K[1/4] [chromium] › tests\admin-cleanup.spec.ts:37:5 › capture all admin routes with populated AI data
+[1A[2K[2/4] [chromium] › tests\admin-cleanup.spec.ts:133:7 › payments metrics distinguish unknown from zero
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1A[2K  1) [chromium] › tests\admin-cleanup.spec.ts:133:7 › payments metrics distinguish unknown from zero 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByText('Đã thanh toán', { exact: true }).last().locator('../..')
+    Expected substring: [32m"—"[39m
+    Received string:    [31m"Đã thanh toán0"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Đã thanh toán', { exact: true }).last().locator('../..')[22m
+    [2m    13 × locator resolved to <div class="p-4 py-4">…</div>[22m
+    [2m       - unexpected value "Đã thanh toán0"[22m
+
+
+      137 |     await page.goto(`/admin/${slug}`);
+      138 |     const metric = page.getByText(label, { exact: true }).last().locator("../..");
+    > 139 |     await expect(metric).toContainText("—");
+          |                          ^
+      140 |     release();
+      141 |     await expect(page.getByText(/Không tải được danh sách/).first()).toBeVisible();
+      142 |     await expect(metric).toContainText("—");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\admin-cleanup.spec.ts:139:26
+
+    Error Context: test-results\admin-cleanup-payments-metrics-distinguish-unknown-from-zero-chromium\error-context.md
+
+
+[1A[2K[3/4] [chromium] › tests\admin-cleanup.spec.ts:133:7 › packages metrics distinguish unknown from zero
+[1A[2K  2) [chromium] › tests\admin-cleanup.spec.ts:133:7 › packages metrics distinguish unknown from zero 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByText('Tổng gói', { exact: true }).last().locator('../..')
+    Expected substring: [32m"—"[39m
+    Received string:    [31m"Tổng gói0"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Tổng gói', { exact: true }).last().locator('../..')[22m
+    [2m    13 × locator resolved to <div class="p-4 py-4">…</div>[22m
+    [2m       - unexpected value "Tổng gói0"[22m
+
+
+      137 |     await page.goto(`/admin/${slug}`);
+      138 |     const metric = page.getByText(label, { exact: true }).last().locator("../..");
+    > 139 |     await expect(metric).toContainText("—");
+          |                          ^
+      140 |     release();
+      141 |     await expect(page.getByText(/Không tải được danh sách/).first()).toBeVisible();
+      142 |     await expect(metric).toContainText("—");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\admin-cleanup.spec.ts:139:26
+
+    Error Context: test-results\admin-cleanup-packages-metrics-distinguish-unknown-from-zero-chromium\error-context.md
+
+
+[1A[2K[4/4] [chromium] › tests\admin-cleanup.spec.ts:133:7 › manual-credits metrics distinguish unknown from zero
+[1A[2K  3) [chromium] › tests\admin-cleanup.spec.ts:37:5 › capture all admin routes with populated AI data 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  getByText('123456', { exact: true }).first()
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('123456', { exact: true }).first()[22m
+    [2m    12 × locator resolved to <span class="min-w-0 break-words text-right text-sm font-medium">123456</span>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      51 |       else if (slug === "packages") await expect(page.getByText("Cơ bản", { exact: true }).first()).toBeVisible();
+      52 |       else if (slug === "revenue") await expect(page.getByText("50.000 ₫", { exact: true }).first()).toBeVisible();
+    > 53 |       else await expect(page.getByText("123456", { exact: true }).first()).toBeVisible();
+         |                                                                            ^
+      54 |       await capture(page, `${slug || "overview"}-${width}`);
+      55 |       heights[`${slug || "overview"}-${width}`] = await page.evaluate(() => document.documentElement.scrollHeight);
+      56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\admin-cleanup.spec.ts:53:76
+
+    Error Context: test-results\admin-cleanup-capture-all--16562-utes-with-populated-AI-data-chromium\error-context.md
+
+
+[1A[2K  4) [chromium] › tests\admin-cleanup.spec.ts:133:7 › manual-credits metrics distinguish unknown from zero 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByText('Yêu cầu đối soát', { exact: true }).last().locator('../..')
+    Expected substring: [32m"—"[39m
+    Received string:    [31m"Yêu cầu đối soát0"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Yêu cầu đối soát', { exact: true }).last().locator('../..')[22m
+    [2m    13 × locator resolved to <div class="p-4 py-4">…</div>[22m
+    [2m       - unexpected value "Yêu cầu đối soát0"[22m
+
+
+      137 |     await page.goto(`/admin/${slug}`);
+      138 |     const metric = page.getByText(label, { exact: true }).last().locator("../..");
+    > 139 |     await expect(metric).toContainText("—");
+          |                          ^
+      140 |     release();
+      141 |     await expect(page.getByText(/Không tải được danh sách/).first()).toBeVisible();
+      142 |     await expect(metric).toContainText("—");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\admin-cleanup.spec.ts:139:26
+
+    Error Context: test-results\admin-cleanup-manual-credi-add8a-stinguish-unknown-from-zero-chromium\error-context.md
+
+
+[1A[2K  4 failed
+    [chromium] › tests\admin-cleanup.spec.ts:37:5 › capture all admin routes with populated AI data 
+    [chromium] › tests\admin-cleanup.spec.ts:133:7 › payments metrics distinguish unknown from zero 
+    [chromium] › tests\admin-cleanup.spec.ts:133:7 › packages metrics distinguish unknown from zero 
+    [chromium] › tests\admin-cleanup.spec.ts:133:7 › manual-credits metrics distinguish unknown from zero 

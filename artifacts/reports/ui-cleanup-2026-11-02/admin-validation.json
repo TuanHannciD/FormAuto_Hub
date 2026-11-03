@@ -1,0 +1,23 @@
+{
+  "task": "FAH-UI-003 admin follow-up",
+  "date": "2026-11-03",
+  "base": "dbb4fb2db033f5bc928782145df60da5f7146cf4",
+  "scope": "8admin routes reviewed;6admin pages changed; no API/contracts/role/ledger changes",
+  "sourceDiffSha256": "294b891c3282feb8a02468a2b385d805ac1fe8518f811ef6964a328051eedd28",
+  "regression": "Verified58/58 admin-regression.log",
+  "finalBuild": "Verified exit0 admin-build-final.log",
+  "lint": "Verified exit0 admin-lint.log; two pre-existing account warnings",
+  "auth": "Verified9/9 admin-auth.log",
+  "runtimeAfterFinalBuild": "Verified8/8 admin-smoke-final.log; runner-owned Next restarted; intercepted APIs",
+  "detector": [],
+  "baselineFrames": 18,
+  "afterFrames": 19,
+  "review": "Verified independent gpt-6.1-sol/high: no P1/P2/P3 in approved delta; admin-independent-review.md",
+  "limits": [
+    "Synthetic admin session/API fixtures, no live DB/provider/login",
+    "No physical device/actual browser zoom",
+    "User AI page has same legacy mode display mapping issue; outside this approved admin delta, deferred follow-up",
+    "Previously blocked cleanup not retried; ignored generated dirs/host checkout retained"
+  ],
+  "integration": "Pending local commit/fast-forward main; no push/deploy"
+}

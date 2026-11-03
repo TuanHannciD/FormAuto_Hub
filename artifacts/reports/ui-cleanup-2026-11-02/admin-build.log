@@ -1,0 +1,82 @@
+
+> formauto-hub-web@0.1.0 prebuild
+> npm run check:colors
+
+
+> formauto-hub-web@0.1.0 check:colors
+> node scripts/check-color-tokens.mjs
+
+Color token compliance passed (100 source files checked).
+
+> formauto-hub-web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.18
+
+   Creating an optimized production build ...
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully in 12.8s
+   Linting and checking validity of types ...
+
+./components/account-profile-panel.tsx
+39:35  Warning: The ref value 'requestVersion.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'requestVersion.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+
+./components/account-security-panel.tsx
+80:35  Warning: The ref value 'requestVersion.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'requestVersion.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/33) ...
+   Generating static pages (8/33) 
+   Generating static pages (16/33) 
+   Generating static pages (24/33) 
+ ✓ Generating static pages (33/33)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                      166 B         106 kB
+├ ○ /_not-found                            996 B         103 kB
+├ ○ /admin                               4.31 kB         133 kB
+├ ○ /admin/ai-provider-settings          4.45 kB         130 kB
+├ ○ /admin/ai-usage                       4.4 kB         122 kB
+├ ○ /admin/manual-credits                9.57 kB         141 kB
+├ ○ /admin/packages                       7.2 kB         130 kB
+├ ○ /admin/payments                      4.32 kB         130 kB
+├ ○ /admin/payos-settings                4.33 kB         130 kB
+├ ○ /admin/revenue                       5.24 kB         128 kB
+├ ○ /anti-abuse                            820 B         119 kB
+├ ƒ /api/payments/payos/webhook            150 B         103 kB
+├ ○ /auth/callback                       6.72 kB         129 kB
+├ ○ /dashboard                           7.07 kB         133 kB
+├ ○ /dashboard/ai-usage                  3.24 kB         124 kB
+├ ○ /dashboard/credit-transactions       3.95 kB         130 kB
+├ ○ /dashboard/forms                     19.5 kB         153 kB
+├ ○ /dashboard/nckh                      5.71 kB         132 kB
+├ ○ /dashboard/nckh/callback              4.3 kB         127 kB
+├ ƒ /dashboard/nckh/forms/[formId]       73.5 kB         200 kB
+├ ○ /dashboard/top-up                    6.17 kB         142 kB
+├ ƒ /dashboard/top-up/[id]               4.37 kB         136 kB
+├ ○ /dashboard/usage-logs                4.21 kB         131 kB
+├ ○ /google-forms/sample-data              820 B         119 kB
+├ ○ /google-forms/sheets-report            820 B         119 kB
+├ ○ /google-forms/student-report           820 B         119 kB
+├ ○ /google-forms/survey-demo              820 B         119 kB
+├ ○ /llms.txt                              150 B         103 kB
+├ ○ /login                               3.91 kB         136 kB
+├ ○ /payment/payos/cancel                2.14 kB         119 kB
+├ ○ /payment/payos/return                2.15 kB         119 kB
+├ ○ /register                            4.03 kB         136 kB
+├ ○ /robots.txt                            150 B         103 kB
+└ ○ /sitemap.xml                           150 B         103 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/1255-b28ea36bf0cdbd65.js      46.2 kB
+  ├ chunks/4bd1b696-f785427dddbba9fb.js  54.2 kB
+  └ other shared chunks (total)          2.01 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

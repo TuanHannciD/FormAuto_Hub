@@ -105,14 +105,9 @@ export default function AiProviderSettingsPage() {
       {checkResult && <Alert role="status">{configurationCheckMessage(checkResult.status)} Thời điểm kiểm tra: {formatDate(checkResult.checkedAt)}.</Alert>}
       {loadError && <Alert>Không tải được cấu hình AI. Bấm “Làm mới” để thử lại.</Alert>}
       {isLoading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình AI...</p>}
-      <div className="space-y-2">
       <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
-        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có.
+        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có. Nút kiểm tra chỉ đọc cấu hình đã lưu; không gọi nhà cung cấp, tạo câu trả lời hoặc trừ credit.
       </Alert>
-      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
-        Quản trị viên thiết lập nhà cung cấp, mô hình và địa chỉ API. Kiểm tra cấu hình chỉ kiểm tra thông tin đã lưu, chưa kiểm tra kết nối tới nhà cung cấp; không tạo câu trả lời hoặc trừ credit.
-      </Alert>
-      </div>
 
       <div className="grid items-start gap-4 xl:grid-cols-[1.25fr_0.75fr]">
         <div className="min-w-0 space-y-4">
@@ -189,17 +184,17 @@ export default function AiProviderSettingsPage() {
                   </span>
                 </label>
 
-                <div className="rounded-xl border border-info-border/80 bg-info-surface p-4 text-sm text-info">
+                <details className="rounded-xl border border-info-border/80 bg-info-surface p-3 text-sm text-info">
+                  <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold">Quyền cấu hình server-side</summary>
                   <div className="flex items-start gap-3">
                     <Bot className="mt-0.5 shrink-0 text-primary" size={18} />
                     <div>
-                      <p className="font-semibold">Cấu hình này là quyền server-side</p>
                       <p className="mt-1 text-info">
                         Người dùng thường không được gửi provider, model, API endpoint hoặc API key trong request generate. Backend dùng cấu hình đang bật tại đây.
                       </p>
                     </div>
                   </div>
-                </div>
+                </details>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <Button disabled={isLoading || loadError || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">

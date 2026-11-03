@@ -147,3 +147,10 @@ T1–T7 được đánh dấu cho triển khai và regression/review fixture áp
 - [x] U3: gom linked NCKH vào nhập, bỏ hướng dẫn rỗng lặp, tiêu đề popup theo việc, canh nút ánh xạ, nêu giới hạn preview dataset có sẵn.
 - [x] U4:179 ca fixture chọn gồm61ảnh bản cuối, ảnh user/NCKH có dữ liệu/đã ổn định, build/lint/auth, review nguồn/ảnh độc lập mới và tài liệu song ngữ.
 - [x] U5 tích hợp: đã sao lưu/kiểm hash task gốc ở main; lưu trữ helper; commit và fast-forward merge local; build/auth9/9/browser8/8 sau merge Verified. Không push/deploy. Xóa thư mục sinh ra Blocked bởi policy tự động; giữ thư mục và checkout host. Checkbox xác nhận tích hợp local, không khẳng định dọn sạch ổ đĩa.
+
+## A1–A4 — bổ sung admin đã duyệt
+
+- [x] A1: rà8route admin/contract và chụp18ảnh baseline.
+- [x] A2: tái hiện finding; sửa nhãn/metric/chế độ/filter/khóa/chữ trong phạm vi.
+- [x] A3: regression chọn cuối, build/lint/auth, ảnh đối chiếu và review Sol độc lập.
+- [ ] A4: chốt hồ sơ/bằng chứng song ngữ; tích hợp local theo quyền trước. Không push/deploy hoặc thử lại dọn cache bị từ chối.

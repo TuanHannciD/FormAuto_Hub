@@ -266,9 +266,9 @@ export default function AdminManualCreditsPage() {
       />
 
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <Metric icon={<HandCoins size={18} />} label="Yêu cầu đối soát" value={String(requests.length)} />
-        <Metric icon={<CheckCircle2 size={18} />} label="Đang chờ" value={String(pendingCount)} />
-        <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={String(requests.length - pendingCount)} />
+        <Metric icon={<HandCoins size={18} />} label="Yêu cầu đối soát" value={isLoadingRequests || requestsError ? "—" : String(requests.length)} />
+        <Metric icon={<CheckCircle2 size={18} />} label="Đang chờ" value={isLoadingRequests || requestsError ? "—" : String(pendingCount)} />
+        <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={isLoadingRequests || requestsError ? "—" : String(requests.length - pendingCount)} />
       </div>
 
       <Card className="min-w-0">
@@ -276,8 +276,12 @@ export default function AdminManualCreditsPage() {
           <CardTitle>Cộng credit thủ công</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
-            <SearchableDropdownSelect
+          <form className="grid items-end gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
+            <label className="block min-w-0 text-sm font-medium">
+              Email người nhận
+              <SearchableDropdownSelect
+              className="mt-2"
+              ariaLabel="Email người nhận"
               disabled={isWorking}
               emptyText={usersError ? "Chưa tải được kết quả tìm kiếm" : "Không tìm thấy email người dùng phù hợp"}
               loading={isLoadingUsers}
@@ -287,9 +291,16 @@ export default function AdminManualCreditsPage() {
               value={grantUserId}
               onChange={(value, option) => chooseGrantUser(value, option.label)}
               onSearchChange={changeGrantEmail}
-            />
-            <Input aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
-            <Input aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Lý do cộng credit" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
+              />
+            </label>
+            <label className="block min-w-0 text-sm font-medium">
+              Số credit
+              <Input className="mt-2" aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Nhập số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
+            </label>
+            <label className="block min-w-0 text-sm font-medium">
+              Lý do cộng credit
+              <Input className="mt-2" aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Nêu lý do nội bộ" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
+            </label>
             <Button disabled={isWorking || !usersReady || Boolean(usersError) || isLoadingUsers || !grantUserId || !Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
               Cộng credit
             </Button>

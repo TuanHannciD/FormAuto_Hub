@@ -1,0 +1,306 @@
+diff --git a/apps/web/app/admin/ai-provider-settings/page.tsx b/apps/web/app/admin/ai-provider-settings/page.tsx
+index 2dbdd9e..6f6bba8 100644
+--- a/apps/web/app/admin/ai-provider-settings/page.tsx
++++ b/apps/web/app/admin/ai-provider-settings/page.tsx
+@@ -105,14 +105,9 @@ export default function AiProviderSettingsPage() {
+       {checkResult && <Alert role="status">{configurationCheckMessage(checkResult.status)} Thời điểm kiểm tra: {formatDate(checkResult.checkedAt)}.</Alert>}
+       {loadError && <Alert>Không tải được cấu hình AI. Bấm “Làm mới” để thử lại.</Alert>}
+       {isLoading && <p role="status" className="text-sm text-muted-foreground">Đang tải cấu hình AI...</p>}
+-      <div className="space-y-2">
+       <Alert className="border-warning-border/80 bg-warning-surface p-3 text-warning">
+-        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có.
++        Khóa API được lưu dạng ẩn. Để trống khi lưu để giữ khóa hiện có. Nút kiểm tra chỉ đọc cấu hình đã lưu; không gọi nhà cung cấp, tạo câu trả lời hoặc trừ credit.
+       </Alert>
+-      <Alert className="border-info-border/80 bg-info-surface p-3 text-info">
+-        Quản trị viên thiết lập nhà cung cấp, mô hình và địa chỉ API. Kiểm tra cấu hình chỉ kiểm tra thông tin đã lưu, chưa kiểm tra kết nối tới nhà cung cấp; không tạo câu trả lời hoặc trừ credit.
+-      </Alert>
+-      </div>
+ 
+       <div className="grid items-start gap-4 xl:grid-cols-[1.25fr_0.75fr]">
+         <div className="min-w-0 space-y-4">
+@@ -189,17 +184,17 @@ export default function AiProviderSettingsPage() {
+                   </span>
+                 </label>
+ 
+-                <div className="rounded-xl border border-info-border/80 bg-info-surface p-4 text-sm text-info">
++                <details className="rounded-xl border border-info-border/80 bg-info-surface p-3 text-sm text-info">
++                  <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold">Quyền cấu hình server-side</summary>
+                   <div className="flex items-start gap-3">
+                     <Bot className="mt-0.5 shrink-0 text-primary" size={18} />
+                     <div>
+-                      <p className="font-semibold">Cấu hình này là quyền server-side</p>
+                       <p className="mt-1 text-info">
+                         Người dùng thường không được gửi provider, model, API endpoint hoặc API key trong request generate. Backend dùng cấu hình đang bật tại đây.
+                       </p>
+                     </div>
+                   </div>
+-                </div>
++                </details>
+ 
+                 <div className="flex flex-col gap-2 sm:flex-row">
+                   <Button disabled={isLoading || loadError || isSaving || !defaultModel || !hasValidBaseUrl} type="submit">
+diff --git a/apps/web/app/admin/ai-usage/page.tsx b/apps/web/app/admin/ai-usage/page.tsx
+index 1bf0f4f..c94d32b 100644
+--- a/apps/web/app/admin/ai-usage/page.tsx
++++ b/apps/web/app/admin/ai-usage/page.tsx
+@@ -95,6 +95,8 @@ const displayDuration = (ms: number | null) => {
+ };
+ 
+ const modeLabels: Record<string, string> = {
++  Option2: "AI mặc định",
++  Option3: "AI tùy chỉnh",
+   FullAi: "AI mặc định",
+   CustomAi: "AI tùy chỉnh"
+ };
+@@ -126,17 +128,17 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
+   {
+     key: "mode",
+     header: "Chế độ",
+-    render: (r) => <Badge tone={r.mode === "FullAi" ? "info" : "warning"}>{r.mode === "FullAi" ? "AI mặc định" : "AI tùy chỉnh"}</Badge>
++    render: (r) => <Badge tone={r.mode === "FullAi" || r.mode === "Option2" ? "info" : "warning"}>{modeLabels[r.mode] ?? r.mode}</Badge>
+   },
+-  { key: "status", header: "Kết quả", render: (r) => <StatusBadge status={r.status} /> },
+-  { key: "provider", header: "Nhà cung cấp", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
++  { key: "status", header: "Kết quả", render: (r) => r.status === "Succeeded" ? <Badge tone="success">Thành công</Badge> : <StatusBadge status={r.status} /> },
++  { key: "provider", hideOnMobile: true, header: "Nhà cung cấp", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
+   {
+     key: "generatedCount",
+     header: "Đã tạo",
+     render: (r) => `${r.generatedCount}/${r.requestedCount}`
+   },
+   { key: "creditsUsed", header: "Credit", render: (r) => r.creditsUsed },
+-  { key: "durationMs", header: "Thời lượng", render: (r) => displayDuration(r.durationMs) }
++  { key: "durationMs", hideOnMobile: true, header: "Thời lượng", render: (r) => displayDuration(r.durationMs) }
+ ];
+ 
+ // ── Page ───────────────────────────────────────────────────────────
+@@ -155,6 +157,7 @@ export default function AdminAiUsagePage() {
+   const [filters, setFilters] = useState<RunFilters>({
+     status: "", mode: "", provider: "", model: "", fromDate: "", toDate: ""
+   });
++  const [appliedFilters, setAppliedFilters] = useState<RunFilters>(filters);
+   const [page, setPage] = useState(1);
+   const pageSize = 20;
+ 
+@@ -205,23 +208,24 @@ export default function AdminAiUsagePage() {
+     }
+   }, []);
+ 
+-  // Load runs when tab switches to history or filters/page change
++  // Draft fields only affect requests after applying the filter.
+   useEffect(() => {
+     if (activeTab === "history") {
+-      fetchRuns(page, filters);
++      fetchRuns(page, appliedFilters);
+     }
+-  }, [activeTab, page, filters, fetchRuns]);
++    return () => abortRef.current?.abort();
++  }, [activeTab, page, appliedFilters, fetchRuns]);
+ 
+   const applyFilters = () => {
+     setPage(1);
+-    fetchRuns(1, filters);
++    setAppliedFilters({ ...filters });
+   };
+ 
+   const resetFilters = () => {
+     const cleared: RunFilters = { status: "", mode: "", provider: "", model: "", fromDate: "", toDate: "" };
+     setFilters(cleared);
+     setPage(1);
+-    fetchRuns(1, cleared);
++    setAppliedFilters(cleared);
+   };
+ 
+   const tabs = [
+@@ -299,24 +303,21 @@ export default function AdminAiUsagePage() {
+           </div>
+ 
+           {/* Mode breakdown */}
+-          <div className="grid gap-4 sm:grid-cols-2">
++          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
+             {stats.modeBreakdown.map((m) => {
+               const label = modeLabels[m.mode] ?? m.mode;
+               return (
+-                <Card key={m.mode}>
+-                  <CardHeader><CardTitle>{label}</CardTitle></CardHeader>
+-                  <CardContent className="space-y-1 text-sm">
+-                    <p>Số lần dùng: <strong>{m.runs}</strong></p>
+-                    <p>Credit tiêu hao: <strong>{m.creditsUsed}</strong></p>
+-                  </CardContent>
+-                </Card>
++                <section key={m.mode} className="border-b border-border py-2 text-sm">
++                  <h2 className="font-semibold">{label}</h2>
++                  <p className="mt-1 text-muted-foreground"><strong className="text-foreground">{m.runs}</strong> lượt · <strong className="text-foreground">{m.creditsUsed}</strong> credit</p>
++                </section>
+               );
+             })}
+           </div>
+ 
+           {/* Provider performance */}
+           <Card className="min-w-0">
+-            <CardHeader><CardTitle>Hiệu suất provider</CardTitle></CardHeader>
++            <CardHeader><CardTitle>Hiệu suất nhà cung cấp</CardTitle></CardHeader>
+             <CardContent>
+               <BaseTable columns={perfColumns} items={stats.providerPerformance} getRowKey={(p) => p.provider + p.model} emptyTitle="Chưa có provider" emptyDetail="Không có dữ liệu provider." />
+             </CardContent>
+@@ -443,7 +444,7 @@ export default function AdminAiUsagePage() {
+             </div>
+ 
+             {/* Runs table */}
+-            {runsError ? <Alert>Không tải được lịch sử AI. Bấm “Lọc” để thử lại.</Alert> : runsLoading && !pagedRuns ? (
++            {runsError ? <Alert>Không tải được lịch sử AI. Bấm “Lọc” để thử lại.</Alert> : runsLoading ? (
+               <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+                 Đang tải dữ liệu...
+               </div>
+@@ -455,6 +456,11 @@ export default function AdminAiUsagePage() {
+                   getRowKey={(r) => r.id}
+                   emptyTitle="Không tìm thấy"
+                   emptyDetail="Không có lượt AI nào phù hợp với bộ lọc."
++                  mobileFooter={run => <details className="border-t border-border pt-2 text-xs">
++                    <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Chi tiết lượt AI</summary>
++                    <p className="pb-2 [overflow-wrap:anywhere]">{run.provider} / {run.model}</p>
++                    <p className="pb-2">Thời lượng: {displayDuration(run.durationMs)}</p>
++                  </details>}
+                 />
+                 <PaginationControls
+                   page={pagedRuns.page}
+diff --git a/apps/web/app/admin/manual-credits/page.tsx b/apps/web/app/admin/manual-credits/page.tsx
+index 845aa74..709e2d8 100644
+--- a/apps/web/app/admin/manual-credits/page.tsx
++++ b/apps/web/app/admin/manual-credits/page.tsx
+@@ -266,9 +266,9 @@ export default function AdminManualCreditsPage() {
+       />
+ 
+       <div className="grid grid-cols-3 gap-2 sm:gap-3">
+-        <Metric icon={<HandCoins size={18} />} label="Yêu cầu đối soát" value={String(requests.length)} />
+-        <Metric icon={<CheckCircle2 size={18} />} label="Đang chờ" value={String(pendingCount)} />
+-        <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={String(requests.length - pendingCount)} />
++        <Metric icon={<HandCoins size={18} />} label="Yêu cầu đối soát" value={isLoadingRequests || requestsError ? "—" : String(requests.length)} />
++        <Metric icon={<CheckCircle2 size={18} />} label="Đang chờ" value={isLoadingRequests || requestsError ? "—" : String(pendingCount)} />
++        <Metric icon={<XCircle size={18} />} label="Đã xử lý" value={isLoadingRequests || requestsError ? "—" : String(requests.length - pendingCount)} />
+       </div>
+ 
+       <Card className="min-w-0">
+@@ -276,8 +276,12 @@ export default function AdminManualCreditsPage() {
+           <CardTitle>Cộng credit thủ công</CardTitle>
+         </CardHeader>
+         <CardContent>
+-          <form className="grid gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
+-            <SearchableDropdownSelect
++          <form className="grid items-end gap-3 lg:grid-cols-[1.2fr_0.5fr_1.4fr_auto]" onSubmit={submitManualGrant}>
++            <label className="block min-w-0 text-sm font-medium">
++              Email người nhận
++              <SearchableDropdownSelect
++              className="mt-2"
++              ariaLabel="Email người nhận"
+               disabled={isWorking}
+               emptyText={usersError ? "Chưa tải được kết quả tìm kiếm" : "Không tìm thấy email người dùng phù hợp"}
+               loading={isLoadingUsers}
+@@ -287,9 +291,16 @@ export default function AdminManualCreditsPage() {
+               value={grantUserId}
+               onChange={(value, option) => chooseGrantUser(value, option.label)}
+               onSearchChange={changeGrantEmail}
+-            />
+-            <Input aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
+-            <Input aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Lý do cộng credit" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
++              />
++            </label>
++            <label className="block min-w-0 text-sm font-medium">
++              Số credit
++              <Input className="mt-2" aria-label="Số credit" disabled={isWorking} min={1} max={2147483647} step={1} placeholder="Nhập số credit" type="number" value={grantCredits} onChange={(event) => setGrantCredits(event.target.value)} />
++            </label>
++            <label className="block min-w-0 text-sm font-medium">
++              Lý do cộng credit
++              <Input className="mt-2" aria-label="Lý do cộng credit" disabled={isWorking} maxLength={1000} placeholder="Nêu lý do nội bộ" value={grantReason} onChange={(event) => setGrantReason(event.target.value)} />
++            </label>
+             <Button disabled={isWorking || !usersReady || Boolean(usersError) || isLoadingUsers || !grantUserId || !Number.isInteger(Number(grantCredits)) || Number(grantCredits) <= 0 || !grantReason.trim()} type="submit">
+               Cộng credit
+             </Button>
+diff --git a/apps/web/app/admin/packages/page.tsx b/apps/web/app/admin/packages/page.tsx
+index 9f718b9..ce93786 100644
+--- a/apps/web/app/admin/packages/page.tsx
++++ b/apps/web/app/admin/packages/page.tsx
+@@ -157,10 +157,10 @@ export default function AdminPackagesPage() {
+ 
+       {confirmedPackage && <Alert role="status">Đã lưu gói {confirmedPackage.name}. Mã gói: {confirmedPackage.id}.</Alert>}
+       <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
+-        <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
+-        <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={String(packages.filter((item) => item.isActive).length)} />
+-        <Stat icon={XCircle} label="Đang tắt" tone="warning" value={String(packages.filter((item) => !item.isActive).length)} />
+-        <Stat icon={Boxes} label="Gói PayOS hợp lệ" value={String(packages.filter((item) => item.isActive && item.price > 0 && item.price === Math.trunc(item.price)).length)} />
++        <Stat icon={Boxes} label="Tổng gói" value={loading || loadError ? "—" : String(packages.length)} />
++        <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={loading || loadError ? "—" : String(packages.filter((item) => item.isActive).length)} />
++        <Stat icon={XCircle} label="Đang tắt" tone="warning" value={loading || loadError ? "—" : String(packages.filter((item) => !item.isActive).length)} />
++        <Stat icon={Boxes} label="Gói PayOS hợp lệ" value={loading || loadError ? "—" : String(packages.filter((item) => item.isActive && item.price > 0 && item.price === Math.trunc(item.price)).length)} />
+       </div>
+ 
+       <div className="grid gap-4">
+diff --git a/apps/web/app/admin/payments/page.tsx b/apps/web/app/admin/payments/page.tsx
+index d039b41..27b45cc 100644
+--- a/apps/web/app/admin/payments/page.tsx
++++ b/apps/web/app/admin/payments/page.tsx
+@@ -88,16 +88,16 @@ export default function AdminPaymentsPage() {
+         description="Theo dõi đơn nạp credit, xác minh PayOS và lịch sử callback."
+       />
+       <div className="grid grid-cols-2 gap-2 md:hidden">
+-        <CompactStat label="Chờ" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
+-        <CompactStat label="Đã trả" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
+-        <CompactStat label="Lỗi" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
+-        <CompactStat label="Đối soát" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
++        <CompactStat label="Chờ" value={loading || error ? "—" : String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
++        <CompactStat label="Đã trả" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Paid").length)} />
++        <CompactStat label="Lỗi" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Failed").length)} />
++        <CompactStat label="Đối soát" value={loading || error ? "—" : String(payments.filter((item) => !item.lastWebhookAt).length)} />
+       </div>
+       <div className="hidden gap-4 md:grid md:grid-cols-4">
+-        <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
+-        <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
+-        <Stat icon={XCircle} label="Lỗi xác minh" tone="red" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
+-        <Stat icon={Filter} label="Cần đối soát" tone="slate" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
++        <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={loading || error ? "—" : String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
++        <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Paid").length)} />
++        <Stat icon={XCircle} label="Lỗi xác minh" tone="red" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Failed").length)} />
++        <Stat icon={Filter} label="Cần đối soát" tone="slate" value={loading || error ? "—" : String(payments.filter((item) => !item.lastWebhookAt).length)} />
+       </div>
+ 
+       <Card className="min-w-0">
+diff --git a/apps/web/app/admin/payos-settings/page.tsx b/apps/web/app/admin/payos-settings/page.tsx
+index 95d7d75..6f1f146 100644
+--- a/apps/web/app/admin/payos-settings/page.tsx
++++ b/apps/web/app/admin/payos-settings/page.tsx
+@@ -3,7 +3,7 @@
+ import { useEffect, useState } from "react";
+ import type { ComponentType, FormEvent } from "react";
+ import { AlertCircle, BookOpen, CheckCircle2, Clipboard, Clock3, KeyRound, RefreshCw, Save, ShieldCheck } from "lucide-react";
+-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
++import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
+ import { apiFetch, type CheckPayosProviderSettingsResponse, type PayosProviderSettings } from "@/lib/api";
+ import { showError } from "@/lib/toast";
+ import { formatDate } from "@/lib/utils";
+@@ -127,12 +127,6 @@ export default function PayosSettingsPage() {
+                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
+                   </span>
+                 </label>
+-                <label className="block text-sm font-medium">
+-                  Môi trường
+-                  <Select className="mt-2" disabled defaultValue="sandbox">
+-                    <option value="sandbox">Sandbox</option>
+-                  </Select>
+-                </label>
+               </div>
+               <label className="block text-sm font-medium">
+                 Client ID
+@@ -141,11 +135,11 @@ export default function PayosSettingsPage() {
+               <div className="grid gap-4 md:grid-cols-2">
+                 <label className="block text-sm font-medium">
+                   API key
+-                  <Input className="mt-2" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={settings?.apiKeyPreview || "Nhập API key"} />
++                  <Input className="mt-2" autoComplete="new-password" type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={settings?.apiKeyPreview || "Nhập API key"} />
+                 </label>
+                 <label className="block text-sm font-medium">
+                   Checksum key
+-                  <Input className="mt-2" value={checksumKey} onChange={(event) => setChecksumKey(event.target.value)} placeholder={settings?.checksumKeyPreview || "Nhập checksum key"} />
++                  <Input className="mt-2" autoComplete="new-password" type="password" value={checksumKey} onChange={(event) => setChecksumKey(event.target.value)} placeholder={settings?.checksumKeyPreview || "Nhập checksum key"} />
+                 </label>
+               </div>
+               <div className="grid gap-4 md:grid-cols-2">

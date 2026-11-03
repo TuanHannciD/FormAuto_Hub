@@ -95,6 +95,8 @@ const displayDuration = (ms: number | null) => {
 };
 
 const modeLabels: Record<string, string> = {
+  Option2: "AI mặc định",
+  Option3: "AI tùy chỉnh",
   FullAi: "AI mặc định",
   CustomAi: "AI tùy chỉnh"
 };
@@ -126,17 +128,17 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
   {
     key: "mode",
     header: "Chế độ",
-    render: (r) => <Badge tone={r.mode === "FullAi" ? "info" : "warning"}>{r.mode === "FullAi" ? "AI mặc định" : "AI tùy chỉnh"}</Badge>
+    render: (r) => <Badge tone={r.mode === "FullAi" || r.mode === "Option2" ? "info" : "warning"}>{modeLabels[r.mode] ?? r.mode}</Badge>
   },
-  { key: "status", header: "Kết quả", render: (r) => <StatusBadge status={r.status} /> },
-  { key: "provider", header: "Nhà cung cấp", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
+  { key: "status", header: "Kết quả", render: (r) => r.status === "Succeeded" ? <Badge tone="success">Thành công</Badge> : <StatusBadge status={r.status} /> },
+  { key: "provider", hideOnMobile: true, header: "Nhà cung cấp", render: (r) => <span className="block max-w-[260px] text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.provider} / {r.model}</span> },
   {
     key: "generatedCount",
     header: "Đã tạo",
     render: (r) => `${r.generatedCount}/${r.requestedCount}`
   },
   { key: "creditsUsed", header: "Credit", render: (r) => r.creditsUsed },
-  { key: "durationMs", header: "Thời lượng", render: (r) => displayDuration(r.durationMs) }
+  { key: "durationMs", hideOnMobile: true, header: "Thời lượng", render: (r) => displayDuration(r.durationMs) }
 ];
 
 // ── Page ───────────────────────────────────────────────────────────
@@ -155,6 +157,7 @@ export default function AdminAiUsagePage() {
   const [filters, setFilters] = useState<RunFilters>({
     status: "", mode: "", provider: "", model: "", fromDate: "", toDate: ""
   });
+  const [appliedFilters, setAppliedFilters] = useState<RunFilters>(filters);
   const [page, setPage] = useState(1);
   const pageSize = 20;
 
@@ -205,23 +208,24 @@ export default function AdminAiUsagePage() {
     }
   }, []);
 
-  // Load runs when tab switches to history or filters/page change
+  // Draft fields only affect requests after applying the filter.
   useEffect(() => {
     if (activeTab === "history") {
-      fetchRuns(page, filters);
+      fetchRuns(page, appliedFilters);
     }
-  }, [activeTab, page, filters, fetchRuns]);
+    return () => abortRef.current?.abort();
+  }, [activeTab, page, appliedFilters, fetchRuns]);
 
   const applyFilters = () => {
     setPage(1);
-    fetchRuns(1, filters);
+    setAppliedFilters({ ...filters });
   };
 
   const resetFilters = () => {
     const cleared: RunFilters = { status: "", mode: "", provider: "", model: "", fromDate: "", toDate: "" };
     setFilters(cleared);
     setPage(1);
-    fetchRuns(1, cleared);
+    setAppliedFilters(cleared);
   };
 
   const tabs = [
@@ -299,24 +303,21 @@ export default function AdminAiUsagePage() {
           </div>
 
           {/* Mode breakdown */}
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
             {stats.modeBreakdown.map((m) => {
               const label = modeLabels[m.mode] ?? m.mode;
               return (
-                <Card key={m.mode}>
-                  <CardHeader><CardTitle>{label}</CardTitle></CardHeader>
-                  <CardContent className="space-y-1 text-sm">
-                    <p>Số lần dùng: <strong>{m.runs}</strong></p>
-                    <p>Credit tiêu hao: <strong>{m.creditsUsed}</strong></p>
-                  </CardContent>
-                </Card>
+                <section key={m.mode} className="border-b border-border py-2 text-sm">
+                  <h2 className="font-semibold">{label}</h2>
+                  <p className="mt-1 text-muted-foreground"><strong className="text-foreground">{m.runs}</strong> lượt · <strong className="text-foreground">{m.creditsUsed}</strong> credit</p>
+                </section>
               );
             })}
           </div>
 
           {/* Provider performance */}
           <Card className="min-w-0">
-            <CardHeader><CardTitle>Hiệu suất provider</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Hiệu suất nhà cung cấp</CardTitle></CardHeader>
             <CardContent>
               <BaseTable columns={perfColumns} items={stats.providerPerformance} getRowKey={(p) => p.provider + p.model} emptyTitle="Chưa có provider" emptyDetail="Không có dữ liệu provider." />
             </CardContent>
@@ -443,7 +444,7 @@ export default function AdminAiUsagePage() {
             </div>
 
             {/* Runs table */}
-            {runsError ? <Alert>Không tải được lịch sử AI. Bấm “Lọc” để thử lại.</Alert> : runsLoading && !pagedRuns ? (
+            {runsError ? <Alert>Không tải được lịch sử AI. Bấm “Lọc” để thử lại.</Alert> : runsLoading ? (
               <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
                 Đang tải dữ liệu...
               </div>
@@ -455,6 +456,11 @@ export default function AdminAiUsagePage() {
                   getRowKey={(r) => r.id}
                   emptyTitle="Không tìm thấy"
                   emptyDetail="Không có lượt AI nào phù hợp với bộ lọc."
+                  mobileFooter={run => <details className="border-t border-border pt-2 text-xs">
+                    <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Chi tiết lượt AI</summary>
+                    <p className="pb-2 [overflow-wrap:anywhere]">{run.provider} / {run.model}</p>
+                    <p className="pb-2">Thời lượng: {displayDuration(run.durationMs)}</p>
+                  </details>}
                 />
                 <PaginationControls
                   page={pagedRuns.page}

@@ -157,10 +157,10 @@ export default function AdminPackagesPage() {
 
       {confirmedPackage && <Alert role="status">Đã lưu gói {confirmedPackage.name}. Mã gói: {confirmedPackage.id}.</Alert>}
       <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
-        <Stat icon={Boxes} label="Tổng gói" value={String(packages.length)} />
-        <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={String(packages.filter((item) => item.isActive).length)} />
-        <Stat icon={XCircle} label="Đang tắt" tone="warning" value={String(packages.filter((item) => !item.isActive).length)} />
-        <Stat icon={Boxes} label="Gói PayOS hợp lệ" value={String(packages.filter((item) => item.isActive && item.price > 0 && item.price === Math.trunc(item.price)).length)} />
+        <Stat icon={Boxes} label="Tổng gói" value={loading || loadError ? "—" : String(packages.length)} />
+        <Stat icon={CheckCircle2} label="Đang bật" tone="success" value={loading || loadError ? "—" : String(packages.filter((item) => item.isActive).length)} />
+        <Stat icon={XCircle} label="Đang tắt" tone="warning" value={loading || loadError ? "—" : String(packages.filter((item) => !item.isActive).length)} />
+        <Stat icon={Boxes} label="Gói PayOS hợp lệ" value={loading || loadError ? "—" : String(packages.filter((item) => item.isActive && item.price > 0 && item.price === Math.trunc(item.price)).length)} />
       </div>
 
       <div className="grid gap-4">

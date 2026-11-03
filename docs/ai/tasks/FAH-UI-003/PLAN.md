@@ -143,3 +143,10 @@ Checked T1–T7 tasks mean implementation and applicable fixture regressions/rev
 - [x] U3: combine linked NCKH status/import, remove duplicate empty instruction, label popup by task, align mapping submit, disclose existing dataset preview limits.
 - [x] U4:179 selected fixture cases including61-frame final capture, populated/settled user/NCKH images, build/lint/auth, fresh independent source/visual review and paired docs.
 - [x] U5 integration: original main task dirs backed up/hash-verified; retired helpers archived; implementation committed and fast-forward merged locally; main postmerge build/auth9/9/browser8/8 Verified. No push/deploy. Generated-directory deletion Blocked by automatic policy; keep directories and host-bound checkout. This checkbox covers local integration, not complete disk cleanup.
+
+## A1–A4 — approved admin follow-up
+
+- [x] A1: inspect8admin routes/contracts and capture18baseline frames.
+- [x] A2: reproduce findings; implement bounded labels/metric/mode/filter/secrets/copy fixes.
+- [x] A3: final selected regression, build/lint/auth, paired screenshots and independent Sol review.
+- [ ] A4: paired dossier/evidence closeout; local integration within prior authorization. No push/deploy or rejected cleanup retry.

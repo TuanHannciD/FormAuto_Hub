@@ -5,7 +5,7 @@
   "documents": [
     {
       "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "14280423720822f6bb1dbb509e33ae0c9fd0f51ac4f7c417ba577549cd649a84",
+      "sha256": "d0ded0d9e2655509f4533e6c566f8bb8c0c20e90a7555fe5b0b4a690910128d0",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -24,8 +24,8 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "453226ca09555133954cf25f10667bf0547afaaa4a033dd02db1bf1bcc67e980",
-      "lines": 145,
+      "sha256": "a8a55c0127aa14cea13ae0e48415cde8cd7b2760fb0790a02237c1d3a9dfe9d5",
+      "lines": 152,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -34,13 +34,13 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "df033ce32201a28641d4e28950b6f452d635a70b68c4e2b0924c08e26b8a1c2b",
-      "lines": 121,
+      "sha256": "3677fc905ef6deaaa7a41efa76d9d805f544a0de217f197df5f88c0f26a98582",
+      "lines": 139,
       "relativeLinks": []
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "517c2367ff81158435b19e19a3888d2b3496f2aaf4f2cd1b022de4044bbcd371",
+      "sha256": "43ad59596bb0a1acccfcd6a7f4cee300360b9d1e288803f9ed0a5180e9461db8",
       "lines": 63,
       "relativeLinks": [
         "PROGRESS.md",
@@ -59,8 +59,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "b1a8fc67c94d1183c676fe314fe073150bb95cc1c0dd1dab9f60a8c9155ea55d",
-      "lines": 149,
+      "sha256": "631aeb48f7ea8453e020b9ba2792f1fa62aeb5934a387d97215381654ce15b8a",
+      "lines": 156,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -69,8 +69,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "0e92c4f2a7849383cd6fa17366c190acdcfb7c10eee56b25f0093d62cb30c187",
-      "lines": 114,
+      "sha256": "8e439916ea99f49daf37754ba90aa7e2d184dd48c3506ccb8dd1d829b463d550",
+      "lines": 132,
       "relativeLinks": []
     }
   ],
@@ -95,8 +95,14 @@
     "/admin/revenue"
   ],
   "trackedFilesChanged": [
+    "apps/web/app/admin/ai-provider-settings/page.tsx",
+    "apps/web/app/admin/ai-usage/page.tsx",
+    "apps/web/app/admin/manual-credits/page.tsx",
+    "apps/web/app/admin/packages/page.tsx",
+    "apps/web/app/admin/payments/page.tsx",
+    "apps/web/app/admin/payos-settings/page.tsx",
     "artifacts/reports/ui-cleanup-2026-11-02/README.md",
-    "artifacts/reports/ui-cleanup-2026-11-02/closeout-validation.json",
+    "artifacts/reports/ui-cleanup-2026-11-02/implementation-doc-verification.json",
     "artifacts/reports/ui-cleanup-2026-11-02/verify-implementation-docs.py",
     "docs/ai/tasks/FAH-UI-003/INDEX.md",
     "docs/ai/tasks/FAH-UI-003/PLAN.md",

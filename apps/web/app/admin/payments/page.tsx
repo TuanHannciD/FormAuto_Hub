@@ -88,16 +88,16 @@ export default function AdminPaymentsPage() {
         description="Theo dõi đơn nạp credit, xác minh PayOS và lịch sử callback."
       />
       <div className="grid grid-cols-2 gap-2 md:hidden">
-        <CompactStat label="Chờ" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
-        <CompactStat label="Đã trả" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
-        <CompactStat label="Lỗi" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
-        <CompactStat label="Đối soát" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
+        <CompactStat label="Chờ" value={loading || error ? "—" : String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
+        <CompactStat label="Đã trả" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Paid").length)} />
+        <CompactStat label="Lỗi" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Failed").length)} />
+        <CompactStat label="Đối soát" value={loading || error ? "—" : String(payments.filter((item) => !item.lastWebhookAt).length)} />
       </div>
       <div className="hidden gap-4 md:grid md:grid-cols-4">
-        <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
-        <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={String(payments.filter((item) => item.providerStatus === "Paid").length)} />
-        <Stat icon={XCircle} label="Lỗi xác minh" tone="red" value={String(payments.filter((item) => item.providerStatus === "Failed").length)} />
-        <Stat icon={Filter} label="Cần đối soát" tone="slate" value={String(payments.filter((item) => !item.lastWebhookAt).length)} />
+        <Stat icon={Clock3} label="Đang chờ xác minh" tone="amber" value={loading || error ? "—" : String(payments.filter((item) => item.topupOrderStatus === "Pending").length)} />
+        <Stat icon={CheckCircle2} label="Đã thanh toán" tone="emerald" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Paid").length)} />
+        <Stat icon={XCircle} label="Lỗi xác minh" tone="red" value={loading || error ? "—" : String(payments.filter((item) => item.providerStatus === "Failed").length)} />
+        <Stat icon={Filter} label="Cần đối soát" tone="slate" value={loading || error ? "—" : String(payments.filter((item) => !item.lastWebhookAt).length)} />
       </div>
 
       <Card className="min-w-0">

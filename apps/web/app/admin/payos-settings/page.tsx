@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ComponentType, FormEvent } from "react";
 import { AlertCircle, BookOpen, CheckCircle2, Clipboard, Clock3, KeyRound, RefreshCw, Save, ShieldCheck } from "lucide-react";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader, Select } from "@/components/ui";
+import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Input, PageHeader } from "@/components/ui";
 import { apiFetch, type CheckPayosProviderSettingsResponse, type PayosProviderSettings } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
@@ -127,12 +127,6 @@ export default function PayosSettingsPage() {
                     <input checked={isEnabled} onChange={(event) => setIsEnabled(event.target.checked)} type="checkbox" />
                   </span>
                 </label>
-                <label className="block text-sm font-medium">
-                  Môi trường
-                  <Select className="mt-2" disabled defaultValue="sandbox">
-                    <option value="sandbox">Sandbox</option>
-                  </Select>
-                </label>
               </div>
               <label className="block text-sm font-medium">
                 Client ID
@@ -141,11 +135,11 @@ export default function PayosSettingsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   API key
-                  <Input className="mt-2" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={settings?.apiKeyPreview || "Nhập API key"} />
+                  <Input className="mt-2" autoComplete="new-password" type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={settings?.apiKeyPreview || "Nhập API key"} />
                 </label>
                 <label className="block text-sm font-medium">
                   Checksum key
-                  <Input className="mt-2" value={checksumKey} onChange={(event) => setChecksumKey(event.target.value)} placeholder={settings?.checksumKeyPreview || "Nhập checksum key"} />
+                  <Input className="mt-2" autoComplete="new-password" type="password" value={checksumKey} onChange={(event) => setChecksumKey(event.target.value)} placeholder={settings?.checksumKeyPreview || "Nhập checksum key"} />
                 </label>
               </div>
               <div className="grid gap-4 md:grid-cols-2">

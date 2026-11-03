@@ -58,7 +58,7 @@ unexpected_tracked = [path for path in tracked if not path.startswith(approved) 
 if unexpected_tracked:
     failures.append(f"Out-of-scope tracked changes: {unexpected_tracked}")
 untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"], cwd=root, text=True).splitlines()
-allowed = ("docs/ai/tasks/FAH-UI-003/", "docs/vi/tasks/FAH-UI-003/", "artifacts/reports/ui-cleanup-2026-11-02/", "apps/web/tests/ui-cleanup.spec.ts", "apps/web/tests/user-pages-cleanup.spec.ts")
+allowed = ("docs/ai/tasks/FAH-UI-003/", "docs/vi/tasks/FAH-UI-003/", "artifacts/reports/ui-cleanup-2026-11-02/", "apps/web/tests/ui-cleanup.spec.ts", "apps/web/tests/user-pages-cleanup.spec.ts", "apps/web/tests/admin-cleanup.spec.ts")
 unexpected = [path for path in untracked if not path.startswith(allowed)]
 if unexpected:
     failures.append(f"Unexpected untracked files: {unexpected}")

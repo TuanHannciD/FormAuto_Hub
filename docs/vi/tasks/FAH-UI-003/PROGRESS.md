@@ -1,5 +1,23 @@
 # Sổ thực thi — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Bản admin đã xác minh — 2026-11-03
+
+Verified: tinh gọn6trang admin, đánh giá/giữ nguyên2trang còn lại; regression cuối58/58, build cuối exit0 sau sửa chữ Succeeded, lint exit0 (hai warning tài khoản có sẵn), auth9/9, browser fixture khởi động lại sau build8/8. Log: admin-regression.log, admin-build-final.log, admin-lint.log, admin-auth.log, admin-smoke-final.log. Detector[]; checker tài liệu song ngữ và whitespace diff đạt. Review độc lập nguồn/ảnh đại diện actual gpt-6.1-sol/high, task fah-ui-003-admin-final-review-20261103-r1: không còn P1/P2/P3 trong phạm vi. SHA256snapshot nguồn294b891c3282feb8a02468a2b385d805ac1fe8518f811ef6964a328051eedd28. Không sửa sản phẩm sau review.
+
+Ảnh:18trước/19sau tại admin-before/admin-after; so sánh admin-before-after-report.html. Tại390px cùng fixture: tổng quan AI2137→1775; cấu hình AI2643→2473; PayOS3107→3019; cộng credit1288→1372 vì nhãn luôn hiện. Số đo chiều cao mang tính tham khảo, không đo tốc độ thao tác. Ảnh full-page của sticky không chứng minh che khuất khi tương tác viewport.
+
+Not run: login/API/DB/Google/AI/PayOS thật, thiết bị/zoom trình duyệt thật. Deferred: lỗi nhãn chế độ cũ tương tự ở trang AI user, ngoài delta chỉ-admin này. Việc xóa thư mục sinh ra trước vẫn Blocked, không thử lại; giữ checkout/branch host và worktree không liên quan. Tiếp theo: commit task/fast-forward main và smoke sau merge theo quyền tích hợp local đã có; người dùng tự push/deploy.
+
+## Bổ sung admin đã duyệt — 2026-11-03
+
+Người dùng duyệt đề xuất admin cụ thể bằng “Duyệt admin”. Tiếp tục FAH-UI-003 trên ui/fah-ui-003 sạch tại dbb4fb2. Phạm vi: rà8route admin; nhãn cộng credit luôn hiện, metric chưa biết, lịch sử AI có dữ liệu gọn, nhãn chế độ hiện hành/cũ, áp dụng/xóa filter chủ động về trang1, bỏ Sandbox PayOS không có căn cứ, che khóa PayOS mới nhập, tinh gọn hướng dẫn AI. Giữ API/payload/quyền/quyết định credit/thanh toán/gửi biểu mẫu. Root inline theo executing-plans/TDD, reviewer Sol độc lập chỉ đọc. Audit T3 đầu actual gpt-6.1-sol/high, taskId kết thúc fah-ui-003-admin-audit-20261103, finding từ source đã đối chiếu trước khi sửa.
+
+Ruling: tiếp tục bounded đã duyệt, không cần duyệt lại thiết kế/phase mới. Bằng chứng API: AiAnalyticsService trả Mode đang lưu; AiGenerationService lưu Option2/Option3; giữ FullAi/CustomAi làm alias hiển thị cũ; mã lạ hiện nguyên văn. Draft filter áp dụng qua nút Lọc hiện có, về trang1, không đổi contract query. Không thêm field môi trường/khả năng provider. Không ghi thật/install/push/deploy. Không thử lại helper startup hoặc xóa cache bị từ chối.
+
+Baseline: admin-before gồm18ảnh của8route và lịch sử AI tại390/1440; runner chụp xong trước sửa sản phẩm (ảnh cuối12:39:50, sửa đầu12:40:36). admin-baseline.log1/1. admin-baseline-red.log ghi3metric lỗi: cần dấu gạch nhưng hiện0. Lượt tác giả test trước sai locator-parent/ẩn ở desktop; đã sửa trước baseline. Các lỗi khác tái hiện: thiếu tên email, key PayOS không che, Option2 sai nhãn, GET tự chạy khi nhập filter. Lượt chọn test tạm đầu không tìm thấy test do tác giả khôi phục suite trước khi runner thu test; không tác động sản phẩm.
+
+Trạng thái: đang triển khai; chờ regression cuối, build/lint/auth, ảnh và review độc lập. Lần merge local trước là lịch sử; delta mới này chưa merge.
+
 ## Chốt local cuối — 2026-11-03
 
 Verified: đã rà/tinh gọn trang user còn lại; fast-forward triển khai vào main local tại `56a98a2f52d0854e92949fc0d412ff45b6f701ef`. Regression chọn cuối179/179, build/lint và auth9/9 đạt. Sau merge ở main: build exit0, auth9/9 và smoke giao diện8/8 đạt (`merged-build.log`, `merged-auth.log`, `merged-browser-smoke.log`). Nguồn giữ nguyên bản triển khai đã review. Reviewer chốt độc lập: gpt-6.1-sol/high; không còn P1/P2. Chỉ hai cảnh báo lint tài khoản có sẵn.

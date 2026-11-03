@@ -1,5 +1,23 @@
 # Execution ledger — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Admin verified snapshot — 2026-11-03
+
+Verified:6admin pages refined, remaining2assessed/preserved; final regression58/58, final build exit0 after Succeeded copy, lint exit0 (two existing account warnings), auth9/9, post-build restarted fixture browser8/8. Logs: admin-regression.log, admin-build-final.log, admin-lint.log, admin-auth.log, admin-smoke-final.log. Detector[]; paired doc checker and diff whitespace passed. Final independent source/representative-image review actual gpt-6.1-sol/high, task fah-ui-003-admin-final-review-20261103-r1: no P1/P2/P3 in scope. Source snapshot SHA256294b891c3282feb8a02468a2b385d805ac1fe8518f811ef6964a328051eedd28. No source edits after review.
+
+Images:18before/19after in admin-before/admin-after; comparison admin-before-after-report.html. At390px same fixture: AI overview2137→1775; AI settings2643→2473; PayOS3107→3019; grant1288→1372 due persistent labels. Measurements are indicative height, not task speed. Full-page sticky capture is not proof of viewport occlusion.
+
+Not run: real-login/API/DB/Google/AI/PayOS, physical device/actual browser zoom. Deferred: same legacy mode-display defect in user AI page, outside this admin-only delta. Prior generated-directory cleanup rejection remains Blocked, no retry; host checkout/branch and unrelated worktree retained. Next: task-owned commit/fast-forward main and postmerge smoke within existing local integration authorization; user owns push/deploy.
+
+## Admin follow-up approved — 2026-11-03
+
+User approved the concrete admin proposal with “Duyệt admin”. Resume FAH-UI-003 on clean ui/fah-ui-003 at dbb4fb2. Approved: eight-route admin audit; persistent grant labels, unknown metric state, compact populated AI history, current/legacy mode labels, explicit filter apply/reset with page1, remove unsupported PayOS Sandbox claim, mask newly entered PayOS secrets, simplify AI settings copy. Preserve APIs, payloads, roles, credit/payment/submission decisions. Root inline under executing-plans/TDD, independent read-only Sol reviewer. Initial T3 audit actual gpt-6.1-sol/high, taskId suffix fah-ui-003-admin-audit-20261103, source-only findings confirmed before implementation.
+
+Ruling: bounded approved continuation; no new phase/design approval required. API evidence: AiAnalyticsService returns stored Mode unchanged; AiGenerationService persists Option2/Option3; FullAi/CustomAi retained as existing display aliases; unknown codes shown verbatim. Draft filter fields apply on existing Lọc action, reset page1, no query contract change. No new environment field/provider capability. No live writes/install/push/deploy. Do not retry rejected startup or cleanup helpers.
+
+Baseline: admin-before holds18 frames across8routes plus AI history at390/1440; captured by runner before product edits (last baseline12:39:50, first product edit12:40:36). admin-baseline.log1/1. admin-baseline-red.log shows three metric failures expecting dash but receiving0. Earlier authoring run had locator-parent/hidden-desktop assumptions; corrected before baseline. Other regressions reproduced missing grant name, unmasked PayOS key, Option2 mislabeled, automatic filter GETs. An initial temporary test-selection run found no tests because author restored the suite before collection; no product effect.
+
+Status: implementation in progress; final regressions, build/lint/auth, images and independent review pending. Previous local merge remains historical; this new delta is not yet merged.
+
 ## Final local closeout — 2026-11-03
 
 Verified: remaining user pages reviewed/refined; implementation merged by fast-forward into local main at `56a98a2f52d0854e92949fc0d412ff45b6f701ef`. Final selected regression179/179, build/lint and auth9/9 passed. Fresh main postmerge build exit0, auth9/9 and browser smoke8/8 passed (`merged-build.log`, `merged-auth.log`, `merged-browser-smoke.log`). Source remains identical to the reviewed implementation. Independent closeout reviewer: gpt-6.1-sol/high; no remaining P1/P2. Only two pre-existing account lint warnings.
