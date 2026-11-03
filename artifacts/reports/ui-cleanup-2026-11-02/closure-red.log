@@ -1,0 +1,44 @@
+
+[1A[2K[WebServer] (node:40812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:20532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\user-pages-cleanup.spec.ts:68:5 › user AI labels support current and legacy modes without inventing unknown labels
+
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1A[2K  1) [chromium] › tests\user-pages-cleanup.spec.ts:68:5 › user AI labels support current and legacy modes without inventing unknown labels 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('heading', { name: 'AI mặc định', exact: true })
+    Expected: [32m2[39m
+    Received: [31m0[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('heading', { name: 'AI mặc định', exact: true })[22m
+    [2m    14 × locator resolved to 0 elements[22m
+    [2m       - unexpected value "0"[22m
+
+
+      77 |     await page.setViewportSize({ width, height: 844 });
+      78 |     await page.goto("/dashboard/ai-usage");
+    > 79 |     await expect(page.getByRole("heading", { name: "AI mặc định", exact: true })).toHaveCount(2);
+         |                                                                                   ^
+      80 |     await expect(page.getByRole("heading", { name: "AI tùy chỉnh", exact: true })).toHaveCount(2);
+      81 |     if (width < 768) {
+      82 |       const records = page.locator("article");
+        at C:\Users\Tuan\.t3\worktrees\FormAuto_Hub\ui-fah-ui-003\apps\web\tests\user-pages-cleanup.spec.ts:79:83
+
+    Error Context: test-results\user-pages-cleanup-user-AI-718e7-ut-inventing-unknown-labels-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\user-pages-cleanup.spec.ts:68:5 › user AI labels support current and legacy modes without inventing unknown labels 

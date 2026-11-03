@@ -52,6 +52,8 @@ type AiUsageStats = {
 // ── Helpers ────────────────────────────────────────────────────────
 
 const modeLabels: Record<string, string> = {
+  Option2: "AI mặc định",
+  Option3: "AI tùy chỉnh",
   FullAi: "AI mặc định",
   CustomAi: "AI tùy chỉnh"
 };
@@ -66,6 +68,8 @@ const displayDuration = (ms: number | null) => {
 };
 
 const modeColors: Record<string, string> = {
+  Option2: "border-info-border bg-info-surface text-info",
+  Option3: "border-primary-border bg-primary-soft text-primary",
   FullAi: "border-info-border bg-info-surface text-info",
   CustomAi: "border-primary-border bg-primary-soft text-primary"
 };
@@ -80,8 +84,8 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
     key: "mode",
     header: "Chế độ",
     render: (run) => (
-      <Badge tone={run.mode === "FullAi" ? "info" : "warning"}>
-        {run.mode === "FullAi" ? "AI mặc định" : "AI tùy chỉnh"}
+      <Badge tone={run.mode === "FullAi" || run.mode === "Option2" ? "info" : "warning"}>
+        {modeLabels[run.mode] ?? run.mode}
       </Badge>
     )
   },
@@ -90,7 +94,7 @@ const recentRunColumns: Array<BaseTableColumn<AiRecentRun>> = [
     header: "Kết quả",
     render: (run) => (
       <div className="space-y-1">
-        <StatusBadge status={run.status} />
+        {run.status === "Succeeded" ? <Badge tone="success">Thành công</Badge> : <StatusBadge status={run.status} />}
         <p className="hidden break-all text-xs text-muted-foreground md:block">Mã lượt AI: {run.id}</p>
         {run.status === "Failed" && <p className="max-w-sm text-xs leading-5 text-destructive">{safeAiFailureMessage(run.errorMessage)}</p>}
       </div>

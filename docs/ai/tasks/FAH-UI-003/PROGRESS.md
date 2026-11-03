@@ -1,5 +1,11 @@
 # Execution ledger — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Final closure continuation authorized — 2026-11-03
+
+User asks to continue the process to close the task. Ruling: activate the explicitly recorded user AI label follow-up only; same bounded display correction as approved admin, no new design or contract decision. Current base8b487fa, clean main/feature. Source1page + regression1spec: support current Option2/Option3, old FullAi/CustomAi and unknown mode fallback; localize existing Succeeded presentation. Preserve all fetch, totals, credit/error/disclosure behavior.
+
+RED: closure-red-settled.log reproduces missing current-mode headings (expected2, got1). First closure-red.log stopped at cold auth hydration and is not product-failure proof; test now waits for settled page heading before assertions. Inline systematic-debugging/TDD; final independent reviewer live-catalog-confirmed actual gpt-6.1-sol/high, task fah-ui-003-closure-review-20261103-r1, read-only/no nested. Regression/build/runtime and local merge/Closed status pending. No install/push/deploy/live effects or rejected cleanup retries.
+
 ## Admin local closeout complete — 2026-11-03
 
 Verified: main fast-forward includes implementation e3fbf42 and evidence-preservation b1a5df1. Main postmerge build exit0, auth9/9, restarted admin browser8/8 (admin-merged-build.log, admin-merged-auth.log, admin-merged-smoke.log). Production source unchanged from independent reviewed snapshot. Regression58/58, detector[], paired docs/whitespace gates pass. No remaining review P1/P2/P3 in this admin scope. Final integration commit only updates dossier/evidence; user owns push/deploy.
@@ -145,3 +151,10 @@ Retired helpers/invalid experiment moved with SHA256 verification to external ar
 
 
 Independent final review accepted source and representative final images, no remaining P1/P2. Reviewer closeout_independent_review actual gpt-6.1-sol/high; report stored as closeout-review.md. U4 Verified; next authorized step: task-only commit, local main fast-forward, merged snapshot smoke and clean status.
+## Closure continuation — 2026-11-03
+
+The remaining user AI display residual is resolved in `apps/web/app/dashboard/ai-usage/page.tsx`: current `Option2`/`Option3` values now use the reviewed Vietnamese labels and colors, legacy `FullAi`/`CustomAi` remain supported, unknown values stay verbatim, and `Succeeded` is shown as `Thành công`. This is display-only; API, roles, credits, payloads and handlers are unchanged.
+
+Verified evidence: closure regression 14/14, build exit 0, lint exit 0 with two pre-existing account hook warnings, auth 9/9, post-build fixture browser 4/4, detector `[]`, and independent read-only `gpt-6.1-sol/high` review with no P1/P2 blocker. Source SHA256: `7747b5e486601bb93acac7123855c36a691c9e3a450deb3b02c5b2dd45dce2f3`.
+
+Status: **Closed — local** after task-owned commit and fast-forward local `main`; no push/deploy/live provider or DB effects. Remaining limits: synthetic session/viewport, no live integration or physical-device/browser-zoom check. Generated-directory deletion remains **Blocked** by the earlier automatic review (`blocked by policy`); it was not retried, and ignored caches plus the host-owned T3 checkout remain.

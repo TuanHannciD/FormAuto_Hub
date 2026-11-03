@@ -1,5 +1,11 @@
 # Sổ thực thi — docs/ai/tasks/FAH-UI-003/PLAN.md
 
+## Tiếp tục chốt task đã được yêu cầu — 2026-11-03
+
+Người dùng yêu cầu tiếp tục quy trình để đóng task. Ruling: chỉ xử lý mục nhãn AI user đã ghi rõ; cùng sửa hiển thị bounded như admin đã duyệt, không quyết định thiết kế/contract mới. Base8b487fa, main/feature sạch. Nguồn1trang +1spec regression: nhận Option2/Option3 hiện hành, FullAi/CustomAi cũ, mã lạ hiện nguyên văn; Việt hóa trạng thái Succeeded hiện có. Giữ fetch/tổng số/credit/lỗi/disclosure.
+
+RED: closure-red-settled.log tái hiện thiếu heading chế độ hiện hành (cần2, nhận1). closure-red.log đầu dừng ở hydration xác thực khi cold start, không là bằng chứng lỗi sản phẩm; test nay chờ heading trang ổn định trước khi assert. Inline systematic-debugging/TDD; reviewer cuối kiểm live catalog actual gpt-6.1-sol/high, task fah-ui-003-closure-review-20261103-r1, chỉ đọc/không lồng. Đang chờ regression/build/runtime, merge local và trạng thái Closed. Không install/push/deploy/tác động thật hoặc thử lại cleanup bị từ chối.
+
 ## Chốt local phần admin hoàn tất — 2026-11-03
 
 Verified: main đã fast-forward gồm triển khai e3fbf42 và bảo toàn bằng chứng b1a5df1. Sau merge ở main: build exit0, auth9/9, browser admin khởi động lại8/8 (admin-merged-build.log, admin-merged-auth.log, admin-merged-smoke.log). Nguồn sản phẩm giữ nguyên snapshot đã review độc lập. Regression58/58, detector[], gate tài liệu song ngữ/whitespace đạt. Không còn P1/P2/P3 trong phạm vi admin này. Commit chốt tích hợp chỉ sửa hồ sơ/bằng chứng; người dùng tự push/deploy.
@@ -138,3 +144,10 @@ Verified:179/179 ca Playwright chọn (`closeout-regression-final.log`), gồm61
 
 
 Review cuối độc lập chấp nhận nguồn và ảnh cuối đại diện, không còn P1/P2. Reviewer closeout_independent_review thực tế gpt-6.1-sol/high; lưu closeout-review.md. U4 Verified; tiếp theo đã được duyệt: commit riêng task, fast-forward main local, smoke bản đã merge và kiểm trạng thái sạch.
+## Bổ sung đóng task local — 03/11/2026
+
+Đã xử lý phần còn sót của giao diện AI user trong `apps/web/app/dashboard/ai-usage/page.tsx`: `Option2`/`Option3` dùng nhãn và màu tiếng Việt đã duyệt, vẫn hỗ trợ `FullAi`/`CustomAi`, giữ nguyên giá trị lạ và hiển thị `Succeeded` là `Thành công`. Chỉ đổi hiển thị; không đổi API, role, credit, payload hay handler.
+
+Bằng chứng Verified: regression closure 14/14, build exit 0, lint exit 0 với hai cảnh báo hook account có từ trước, auth 9/9, browser fixture sau build 4/4, detector `[]`, review độc lập chỉ đọc `gpt-6.1-sol/high` không có blocker P1/P2. SHA256 nguồn: `7747b5e486601bb93acac7123855c36a691c9e3a450deb3b02c5b2dd45dce2f3`.
+
+Trạng thái: **Đã đóng — local** sau commit task và fast-forward `main` local; không push/deploy/live provider hay DB. Giới hạn còn lại: session/viewport tổng hợp, chưa chạy live integration hoặc thiết bị/zoom thật. Xóa thư mục sinh tự động vẫn **Blocked** do review tự động trước đó trả `blocked by policy`; không thử lại, giữ cache ignored và checkout T3 do host quản lý.

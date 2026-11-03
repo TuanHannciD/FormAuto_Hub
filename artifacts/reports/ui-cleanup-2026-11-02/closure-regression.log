@@ -1,0 +1,28 @@
+
+[1A[2K[WebServer] (node:35376) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[WebServer] (node:35364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[1A[2K[WebServer] Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 14 tests using 2 workers
+
+[1A[2K[1/14] [chromium] › tests\dashboard-ui-refinement.spec.ts:48:5 › large dashboard balances stay on a readable single line at narrow and laptop widths
+[1A[2K[2/14] [chromium] › tests\dashboard-ui-refinement.spec.ts:22:5 › 390x844 five-package topup keeps selected package, amount and payment action in the initial viewport
+[1A[2K[3/14] [chromium] › tests\shared-ui.spec.ts:23:5 › mobile menu traps focus, returns focus and clears modal state at desktop breakpoint
+[1A[2K[4/14] [chromium] › tests\shared-ui.spec.ts:51:5 › user AI and admin payments retry failed reads without a mutation
+[1A[2K[5/14] [chromium] › tests\shared-ui.spec.ts:66:5 › profile popup uses shared surfaces and controls while preserving its save request
+[1A[2K[6/14] [chromium] › tests\shared-ui.spec.ts:86:5 › shared dropdown still selects options and closes on Escape
+[1A[2K[7/14] [chromium] › tests\shared-ui.spec.ts:104:5 › shared admin dialog opens and cancels without creating a package
+[1A[2K[8/14] [chromium] › tests\shared-ui.spec.ts:117:5 › topup detail popups share closing motion in dashboard, admin and routed detail
+[1A[2K[9/14] [chromium] › tests\shared-ui.spec.ts:155:5 › admin approval retains the popup long enough to animate its automatic close
+[1A[2K[10/14] [chromium] › tests\shared-ui.spec.ts:181:5 › dashboard and admin AI pages use the same metric component and actual values
+[1A[2K[11/14] [chromium] › tests\user-pages-cleanup.spec.ts:30:5 › populated user AI records keep errors visible and secondary metadata accessible
+[1A[2K[12/14] [chromium] › tests\user-pages-cleanup.spec.ts:58:5 › history filter names stay stable and ledger labels describe current page
+[1A[2K[13/14] [chromium] › tests\user-pages-cleanup.spec.ts:68:5 › user AI labels support current and legacy modes without inventing unknown labels
+[1A[2K[14/14] [chromium] › tests\user-pages-cleanup.spec.ts:99:5 › mobile topup copy action is touch-sized and routed detail has settled content
+[1A[2K  14 passed (27.4s)

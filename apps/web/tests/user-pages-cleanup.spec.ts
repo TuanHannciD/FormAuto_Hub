@@ -65,6 +65,37 @@ test("history filter names stay stable and ledger labels describe current page",
   await expect(page.getByText("Credit mới nhất", { exact: true })).toHaveCount(0);
 });
 
+test("user AI labels support current and legacy modes without inventing unknown labels", async ({ page }) => {
+  await setup(page);
+  const modes = ["Option2", "Option3", "FullAi", "CustomAi", "FutureMode"];
+  await page.route("**/api/dashboard/ai-usage", route => route.fulfill({ json: {
+    ...stats, totalRuns: 5,
+    modeBreakdown: modes.map(mode => ({ mode, runs: 1, creditsUsed: 2 })),
+    recentRuns: modes.map((mode, i) => ({ ...stats.recentRuns[0], id: `mode-run-${i}`, mode, status: "Succeeded", errorMessage: null }))
+  } }));
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/dashboard/ai-usage");
+    await expect(page.getByRole("heading", { name: "Lượt AI gần đây", exact: true })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByRole("heading", { name: "AI mặc định", exact: true })).toHaveCount(2);
+    await expect(page.getByRole("heading", { name: "AI tùy chỉnh", exact: true })).toHaveCount(2);
+    if (width < 768) {
+      const records = page.locator("article");
+      for (const [i, label] of ["AI mặc định", "AI tùy chỉnh", "AI mặc định", "AI tùy chỉnh", "FutureMode"].entries()) {
+        await expect(records.nth(i).getByText(label, { exact: true })).toBeVisible();
+        await expect(records.nth(i).getByText("Thành công", { exact: true })).toBeVisible();
+      }
+    } else {
+      const rows = page.getByRole("table").locator("tbody tr");
+      await expect(rows.first()).toContainText("AI mặc định");
+      await expect(rows.last()).toContainText("FutureMode");
+      await expect(rows.first()).toContainText("Thành công");
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await capture(page, `ai-modes-${width}`);
+  }
+});
+
 test("mobile topup copy action is touch-sized and routed detail has settled content", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 320, height: 640 });

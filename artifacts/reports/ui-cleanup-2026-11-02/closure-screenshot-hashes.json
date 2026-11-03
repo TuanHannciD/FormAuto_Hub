@@ -1,0 +1,47 @@
+[
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-details-320.png",
+    "sha256": "3e0178c0c931a9c2b070e80f6354ec572569d81b244ab1cf9a50e95c67709b77",
+    "bytes": 78937
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-details-390.png",
+    "sha256": "b804bbaddbf97cc3b7d1987b762bb414bdfd4d1e8f0e3ee33ab2d1fd0d8db1c9",
+    "bytes": 82403
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-modes-1440.png",
+    "sha256": "84badb4db8a9bd707b6c6d664cb41b6234a408b6439c14838af9f53a695480fa",
+    "bytes": 191546
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-modes-320.png",
+    "sha256": "374fb089c03245cec7ddab80d9e02c7f8f745089ebb639bbe2df8aa4ae94f7b3",
+    "bytes": 124389
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-populated-1440.png",
+    "sha256": "862b308294a9d334bacb6537e4b8f463f6a60f3ea1e77e4264e18557e658f7b0",
+    "bytes": 108433
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-populated-320.png",
+    "sha256": "c84749dae35459823c11d549346aaa871b16b9d3c003500f2d1b9c923a267717",
+    "bytes": 66100
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/ai-populated-390.png",
+    "sha256": "3045556c6c644746e86d939dc33dfbf71e9cc324537be14fa5cd4d20494c13df",
+    "bytes": 67513
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/topup-detail-settled-1440.png",
+    "sha256": "9abde79167abf46a36a0cab73cd949588b5f3fc939a1a53a9ab9f510fc908c80",
+    "bytes": 90028
+  },
+  {
+    "path": "artifacts/reports/ui-cleanup-2026-11-02/closure-final/topup-detail-settled-390.png",
+    "sha256": "6d95d05b7dc9656fb013a3cc7f2b95d19826286b2e61be02ac8f79e8a1986514",
+    "bytes": 52432
+  }
+]

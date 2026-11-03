@@ -5,8 +5,8 @@
   "documents": [
     {
       "path": "docs/ai/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "63f0c6399f0f27793495b506471f9d894cec0265788fb524c718675b082356c4",
-      "lines": 63,
+      "sha256": "00565dc7b0f8810d28034350007a48c9d6675dbe1985291ba3ee8336eae7b378",
+      "lines": 67,
       "relativeLinks": [
         "PROGRESS.md",
         "AUDIT.md",
@@ -24,8 +24,8 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "011b19b7c92ed59e5a3765454d8a86910f5a7d0d596e381ce7c5c0d1619e8298",
-      "lines": 152,
+      "sha256": "1fa8fe268a07e742b743e4425eca2899800594c2d93e85b0e7f70d1c9b05be8c",
+      "lines": 156,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -34,14 +34,14 @@
     },
     {
       "path": "docs/ai/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "2a2350bf5de2a0b6214c9aab6f421abfffe987369266ae0f35500730baf37d04",
-      "lines": 147,
+      "sha256": "f659a678af7d1ca74431fde6ca305efadd8a63ee843ede3e81cfdfbdaaf959bc",
+      "lines": 160,
       "relativeLinks": []
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/INDEX.md",
-      "sha256": "f1cbf4f5bbff3e9de2534f9355994eba6e712cccb2fc49487a9a0c0334cb2cb8",
-      "lines": 63,
+      "sha256": "1057b11c4442878f7a2a08c6b56cc271181c56e3033436e020f8d8654cf3bbee",
+      "lines": 67,
       "relativeLinks": [
         "PROGRESS.md",
         "AUDIT.md",
@@ -59,8 +59,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PLAN.md",
-      "sha256": "9ffee8e3f3a5aae4f9281dc2d6edd9cceaae6b17ce0b593969f294594ab292e1",
-      "lines": 156,
+      "sha256": "f140bbdaef1238d8cdf79fb45ecb32a5302e9b143ed17eed02b8f014e3e544fc",
+      "lines": 160,
       "relativeLinks": [
         "AUDIT.md",
         "INDEX.md",
@@ -69,8 +69,8 @@
     },
     {
       "path": "docs/vi/tasks/FAH-UI-003/PROGRESS.md",
-      "sha256": "41b217eaa56c3ff2983dca736d6ad3f0b7d3e1264d89ae0edfecda89dd482b8d",
-      "lines": 140,
+      "sha256": "312f4c3644df959e62c77815e16bb0aadc822c3dfd598ee5590e53d2d54b67a6",
+      "lines": 153,
       "relativeLinks": []
     }
   ],
@@ -95,8 +95,9 @@
     "/admin/revenue"
   ],
   "trackedFilesChanged": [
+    "apps/web/app/dashboard/ai-usage/page.tsx",
+    "apps/web/tests/user-pages-cleanup.spec.ts",
     "artifacts/reports/ui-cleanup-2026-11-02/README.md",
-    "artifacts/reports/ui-cleanup-2026-11-02/admin-validation.json",
     "docs/ai/tasks/FAH-UI-003/INDEX.md",
     "docs/ai/tasks/FAH-UI-003/PLAN.md",
     "docs/ai/tasks/FAH-UI-003/PROGRESS.md",

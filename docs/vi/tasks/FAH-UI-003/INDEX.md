@@ -61,3 +61,7 @@ Tự review kế hoạch: F01–F10 ánh xạ T1–T7; đủ owner cho18 route/t
 ## Bước tiếp theo
 
 Người dùng xem PLAN và chọn inline hoặc agent con theo từng task. Sau duyệt làm T0, giải quyết runtime qua đường được phép và ghi snapshot/ownership thực tế; không vượt startup đã bị từ chối. Chưa chọn phase toàn cục hay phát hành. Tách sửa hành vi với trình bày, đặc biệt điều hướng bước, binding số lượng và xử lý trạng thái gửi.
+
+## Trạng thái đóng hiện tại
+
+Phần còn sót về nhãn chế độ AI user đã được triển khai và kiểm chứng; xem `PROGRESS.md`. Task **chỉ đóng local** sau commit task và fast-forward main. Không bao gồm push/deploy. Việc xóa thư mục sinh tự động từng bị từ chối vẫn Blocked và không được thử lại.

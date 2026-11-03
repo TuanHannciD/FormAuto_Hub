@@ -61,3 +61,7 @@ Plan self-review: spec findings F01–F10 map to T1–T7; all18 routes/account/p
 ## Next action
 
 User reviews PLAN and selects inline or per-task subagent execution. After approval execute T0, resolve runtime prerequisites through a permitted path and record the actual snapshot/ownership; do not bypass the rejected startup. No new global phase or release is selected. Keep behavioral repairs separately identifiable from presentation changes, especially step navigation, count binding and submission state handling.
+
+## Current closure status
+
+The continuation residual for user AI mode labels is implemented and verified; see `PROGRESS.md`. Closure is **local only** after task commit and fast-forward main. No push/deploy is included. Prior generated-directory cleanup rejection remains Blocked and was not retried.

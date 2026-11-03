@@ -1,0 +1,14 @@
+{
+  "task": "FAH-UI-003",
+  "scope": "user AI mode display residual",
+  "status": "Verified",
+  "regression": "14/14 passed",
+  "build": "exit 0",
+  "lint": "exit 0; two pre-existing account hook warnings",
+  "auth": "9/9 passed",
+  "runtime": "Playwright fixture runner after build; 4/4 user cleanup tests passed",
+  "detector": [],
+  "review": "No P1/P2 blocker; gpt-6.1-sol/high independent read-only review",
+  "sourceSha256": "7747b5e486601bb93acac7123855c36a691c9e3a450deb3b02c5b2dd45dce2f3",
+  "limits": ["No live login/API/DB/provider", "synthetic session and viewport", "physical device and browser zoom not run", "generated-directory deletion remained blocked by prior policy rejection"]
+}

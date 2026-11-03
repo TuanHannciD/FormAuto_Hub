@@ -154,3 +154,7 @@ T1–T7 được đánh dấu cho triển khai và regression/review fixture áp
 - [x] A2: tái hiện finding; sửa nhãn/metric/chế độ/filter/khóa/chữ trong phạm vi.
 - [x] A3: regression chọn cuối, build/lint/auth, ảnh đối chiếu và review Sol độc lập.
 - [x] A4: chốt hồ sơ/bằng chứng song ngữ; tích hợp local theo quyền trước. Không push/deploy hoặc thử lại dọn cache bị từ chối.
+
+## Kết quả thực thi đóng task
+
+Toàn bộ hạng mục đã duyệt và phần bổ sung nhãn AI user đã hoàn tất. Bằng chứng đóng task nằm trong `PROGRESS.md`; task đủ điều kiện commit local và tích hợp fast-forward local. Push, deploy, kiểm tra live provider/DB và dọn thư mục sinh do host quản lý không thuộc closeout này.
