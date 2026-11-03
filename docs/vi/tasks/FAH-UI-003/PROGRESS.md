@@ -151,3 +151,6 @@ Review cuối độc lập chấp nhận nguồn và ảnh cuối đại diện,
 Bằng chứng Verified: regression closure 14/14, build exit 0, lint exit 0 với hai cảnh báo hook account có từ trước, auth 9/9, browser fixture sau build 4/4, detector `[]`, review độc lập chỉ đọc `gpt-6.1-sol/high` không có blocker P1/P2. SHA256 nguồn: `7747b5e486601bb93acac7123855c36a691c9e3a450deb3b02c5b2dd45dce2f3`.
 
 Trạng thái: **Đã đóng — local** sau commit task và fast-forward `main` local; không push/deploy/live provider hay DB. Giới hạn còn lại: session/viewport tổng hợp, chưa chạy live integration hoặc thiết bị/zoom thật. Xóa thư mục sinh tự động vẫn **Blocked** do review tự động trước đó trả `blocked by policy`; không thử lại, giữ cache ignored và checkout T3 do host quản lý.
+## Đóng tích hợp local — 03/11/2026
+
+`main` local đã fast-forward từ `8b487fa` lên commit triển khai `7d2348c`. Trên snapshot sau merge, build exit 0, auth 9/9 và Playwright fixture browser khởi động lại đạt 4/4 test user (`closure-merged-browser.log`); ảnh kết quả nằm trong `closure-merged/`. Đây là bằng chứng tích hợp local cuối cho phạm vi đã duyệt. Không push, deploy, kiểm tra live API/DB/provider hoặc xóa thư mục sinh tự động.

@@ -22,3 +22,5 @@ Bổ sung admin03/11: `admin-before/`18ảnh, `admin-after/`19ảnh gồm chi ti
 Admin đã merge main local: `admin-merged-build.log` exit0, `admin-merged-auth.log`9/9, `admin-merged-smoke.log`8/8, `admin-merged/`19ảnh và hash. Review độc lập trong `admin-independent-review.md`; không còn P1/P2/P3 trong delta admin. Nguồn giữ nguyên sau review. Chưa push/deploy.
 
 Closure bổ sung03/11: closure-regression.log14/14, closure-build.log exit0, closure-lint.log exit0 (hai warning cũ), closure-auth.log9/9, closure-runtime.log4/4 sau build; closure-final/9ảnh và closure-screenshot-hashes.json. Review độc lập trong closure-independent-review.md, không blocker P1/P2. closure-red-settled.log là RED thật; closure-red.log chỉ dừng ở cold auth hydration. Chỉ sửa nhãn hiển thị AI user, không live integration.
+
+Merged closure03/11: main fast-forward to7d2348c; closure-merged-build.log exit0, closure-merged-auth.log9/9, closure-merged-browser.log4/4, closure-merged/ frames.

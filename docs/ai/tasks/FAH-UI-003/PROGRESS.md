@@ -158,3 +158,6 @@ The remaining user AI display residual is resolved in `apps/web/app/dashboard/ai
 Verified evidence: closure regression 14/14, build exit 0, lint exit 0 with two pre-existing account hook warnings, auth 9/9, post-build fixture browser 4/4, detector `[]`, and independent read-only `gpt-6.1-sol/high` review with no P1/P2 blocker. Source SHA256: `7747b5e486601bb93acac7123855c36a691c9e3a450deb3b02c5b2dd45dce2f3`.
 
 Status: **Closed — local** after task-owned commit and fast-forward local `main`; no push/deploy/live provider or DB effects. Remaining limits: synthetic session/viewport, no live integration or physical-device/browser-zoom check. Generated-directory deletion remains **Blocked** by the earlier automatic review (`blocked by policy`); it was not retried, and ignored caches plus the host-owned T3 checkout remain.
+## Local integration closeout — 2026-11-03
+
+Local `main` fast-forwarded from `8b487fa` to implementation commit `7d2348c`. On the merged snapshot, build exited 0, auth tests passed 9/9, and the restarted Playwright fixture browser passed 4/4 user cleanup tests (`closure-merged-browser.log`); `closure-merged/` preserves the resulting frames. This is the final local integration evidence for the approved scope. No push, deployment, live API/DB/provider check or generated-directory deletion was performed.
