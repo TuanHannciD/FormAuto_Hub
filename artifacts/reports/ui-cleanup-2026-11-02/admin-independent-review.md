@@ -15,4 +15,3 @@ Task: fah-ui-003-admin-final-review-20261103-r1. Source snapshot SHA256: 294b891
 Không sửa file hay khởi động server. Bước còn lại để chốt validation là xác nhận build lại sau chỉnh nhãn `Succeeded` cuối cùng; review này không xác nhận tích hợp hoặc phát hành.
 
 Root verification: admin-build-final.log exit0 and admin-smoke-final.log8/8 completed after the final Succeeded copy edit. Reviewer did not rerun these checks. No production changes after reviewed snapshot.
-

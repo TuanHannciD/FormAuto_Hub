@@ -1,2 +1,3 @@
 # Raw runner evidence: preserve bytes and ANSI output; do not normalize/diff logs.
 *.log -text -diff
+admin-source.diff -text -diff
