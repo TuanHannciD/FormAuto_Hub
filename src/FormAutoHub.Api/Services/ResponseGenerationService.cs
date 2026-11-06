@@ -10,6 +10,7 @@ namespace FormAutoHub.Api.Services;
 
 public interface IResponseGenerationService
 {
+    Task<bool> OwnsProjectAsync(Guid projectId, CancellationToken ct);
     Task<GenerateResponsesResponse?> GenerateAsync(Guid projectId, GenerateResponsesRequest request, CancellationToken cancellationToken);
     Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(
         Guid projectId,
@@ -22,25 +23,20 @@ public sealed class ResponseGenerationService(
     ICurrentUserContext currentUser,
     ICreditService creditService) : IResponseGenerationService
 {
+    public Task<bool> OwnsProjectAsync(Guid projectId, CancellationToken ct) => dbContext.FormProjects.AsNoTracking().AnyAsync(x => x.Id == projectId && x.UserId == currentUser.UserId, ct);
     public Task<GenerateResponsesResponse?> GenerateAsync(
         Guid projectId,
         GenerateResponsesRequest request,
-        CancellationToken cancellationToken) => GenerateCoreAsync(projectId, request, null, cancellationToken);
+        CancellationToken cancellationToken) => GenerateCoreAsync(projectId, request, request.Count, cancellationToken);
 
-    internal Task<GenerateResponsesResponse?> GenerateForSubmissionAsync(
-        Guid projectId, int count, Guid jobId, CancellationToken cancellationToken) =>
-        GenerateCoreAsync(projectId, new(count), jobId, cancellationToken);
+    internal Task<GenerateResponsesResponse?> GenerateForDirectSubmissionAsync(
+        Guid projectId, int count, int requestedCount, CancellationToken cancellationToken) =>
+        GenerateCoreAsync(projectId, new(count), requestedCount, cancellationToken);
 
     private async Task<GenerateResponsesResponse?> GenerateCoreAsync(
-        Guid projectId, GenerateResponsesRequest request, Guid? jobId, CancellationToken cancellationToken)
+        Guid projectId, GenerateResponsesRequest request, int requestedCount, CancellationToken cancellationToken)
     {
-        if (request.Count is < 1 or > Phase4SafetyLimits.MaxPreviewResponsesPerRequest)
-        {
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Preview response count must be between 1 and 100.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Preview response count must be between 1 and 100.");
-        }
-
+        _ = creditService; // Constructor compatibility; rules generation is free under SeparatedV1.
         var project = await dbContext.FormProjects
             .SingleOrDefaultAsync(item => item.Id == projectId && item.UserId == currentUser.UserId, cancellationToken);
 
@@ -49,10 +45,20 @@ public sealed class ResponseGenerationService(
             return null;
         }
 
+        if (request.Count is < 1 or > Phase4SafetyLimits.MaxPreviewResponsesPerRequest)
+        {
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Preview response count must be between 1 and 100.", cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            throw new InvalidOperationException("Preview response count must be between 1 and 100.");
+        }
+
         var questions = await dbContext.FormQuestions
             .Where(question => question.ProjectId == projectId)
             .OrderBy(question => question.OrderIndex)
             .ToListAsync(cancellationToken);
+
+        var batchWriter = new GenerationBatchWriter(dbContext, currentUser);
+        batchWriter.CaptureObservation(project, questions);
 
         var rules = await dbContext.AnswerRules
             .Where(rule => rule.ProjectId == projectId)
@@ -65,31 +71,16 @@ public sealed class ResponseGenerationService(
             throw new InvalidOperationException("Every detected question requires an answer rule before preview generation.");
         }
 
-        if (jobId.HasValue)
+        if (questions.Any(question => string.IsNullOrWhiteSpace(question.EntryId)) ||
+            questions.Select(question => question.EntryId).Distinct().Count() != questions.Count)
+            throw new InvalidOperationException("Generated response payload is missing or duplicates required entry IDs.");
+        foreach (var question in questions)
         {
-            if (questions.Any(question => string.IsNullOrWhiteSpace(question.EntryId)) ||
-                questions.Select(question => question.EntryId).Distinct().Count() != questions.Count)
-                throw new InvalidOperationException("Generated response payload is missing or duplicates required entry IDs.");
-            foreach (var question in questions)
-            {
-                var rule = rules.Single(item => item.QuestionId == question.Id);
-                AnswerRuleService.ValidateRequest(new(question.Id, rule.Mode, rule.ConfigJson), question);
-            }
+            var rule = rules.Single(item => item.QuestionId == question.Id);
+            AnswerRuleService.ValidateRequest(new(question.Id, rule.Mode, rule.ConfigJson), question);
         }
-
-        var account = await dbContext.UserCreditAccounts
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.UserId == currentUser.UserId, cancellationToken);
-        var availableCredits = Math.Max(0, (int)Math.Floor(account?.Balance ?? 0));
-        var generationCount = Math.Min(request.Count, availableCredits);
-        var missingCredits = request.Count - generationCount;
-
-        if (generationCount == 0)
-        {
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Không đủ credit để tạo bản xem trước.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Không đủ credit để tạo bản xem trước.");
-        }
+        var generationCount = request.Count;
+        var missingCredits = requestedCount - generationCount;
 
         var generated = new List<GeneratedResponse>();
         for (var responseIndex = 0; responseIndex < generationCount; responseIndex++)
@@ -121,35 +112,22 @@ public sealed class ResponseGenerationService(
             });
         }
 
-        var creditResult = await creditService.DeductUsageCreditsAsync(
-            currentUser.UserId,
-            generated.Count,
-            jobId.HasValue ? $"Đã tạo {generated.Count} phản hồi theo quy tắc để gửi ngay." : $"Đã tạo {generated.Count} phản hồi xem trước.",
-            jobId.HasValue ? nameof(SubmissionJob) : nameof(GeneratedResponse),
-            jobId ?? generated.First().Id,
-            cancellationToken);
-
-        if (creditResult is null)
+        return await CreditWriteTransaction.RunStagedAsync<GenerateResponsesResponse?>(dbContext, currentUser.UserId, async (read, readCt) =>
         {
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "Không đủ credit để tạo bản xem trước.", cancellationToken);
+            if (!await read.GenerationBatches.AsNoTracking().AnyAsync(x => x.Id == generated[0].Id, readCt)) return (false, null);
+            var batchId = await new GenerationBatchWriter(read, currentUser).AppendBatchAsync(projectId, "rules", generated, requestedCount, 0, readCt);
+            var currentCredits = await new CreditReservationService(read).GetCreditAvailabilityAsync(currentUser.UserId, readCt);
+            return (true, new GenerateResponsesResponse(generated.Select(x => x.ToResponse()).ToList(), 0, currentCredits.Balance,
+                requestedCount, generated.Count, missingCredits, batchId, 0, currentCredits));
+        }, async () =>
+        {
+            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Success, "Xem các câu trả lời đã tạo.", cancellationToken);
+            var batchId = await batchWriter.AppendBatchAsync(projectId, "rules", generated, requestedCount, 0, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Không đủ credit để tạo bản xem trước.");
-        }
-
-        dbContext.GeneratedResponses.AddRange(generated);
-        await WriteUsageLogAsync(projectId, generated.Count, UsageLogStatuses.Success,
-            jobId.HasValue
-                ? $"Đã tạo {generated.Count}/{request.Count} phản hồi để gửi ngay; thiếu {missingCredits} credit."
-                : "Xem các câu trả lời đã tạo.", cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return new GenerateResponsesResponse(
-            generated.Select(item => item.ToResponse()).ToList(),
-            generated.Count,
-            creditResult.Value.Account.Balance,
-            request.Count,
-            generated.Count,
-            missingCredits);
+            var currentCredits = await new CreditReservationService(dbContext).GetCreditAvailabilityAsync(currentUser.UserId, cancellationToken);
+            return new GenerateResponsesResponse(generated.Select(item => item.ToResponse()).ToList(), 0, currentCredits.Balance,
+                requestedCount, generated.Count, missingCredits, batchId, 0, currentCredits);
+        }, cancellationToken);
     }
 
     public async Task<GeneratedResponseListResponse?> GetProjectResponsesAsync(
@@ -167,16 +145,23 @@ public sealed class ResponseGenerationService(
 
         var query = dbContext.GeneratedResponses
             .AsNoTracking()
-            .Where(response => response.ProjectId == projectId);
+            .Where(response => response.ProjectId == projectId &&
+                (dbContext.GenerationBatches.Any(batch => batch.Id == response.GenerationBatchId && batch.UserId == currentUser.UserId && batch.EvictedAt == null) ||
+                 (response.GenerationBatchId == null && response.PricingPolicy == "LegacyBundledV1" && response.LegacyEvidenceReference != null && response.LegacyEvidenceReference.Trim() != "" &&
+                  response.LegacyEntitlementState != null)));
 
         if (responseIds.Count > 0)
         {
             query = query.Where(response => responseIds.Contains(response.Id));
         }
 
+        // Materialize once so eligibility and explicit membership come from the same SELECT.
+        // An eviction between a separate count and payload query must never return a silent subset.
         var responses = await query
             .OrderByDescending(response => response.CreatedAt)
             .ToListAsync(cancellationToken);
+
+        if (responseIds.Count > 0 && responses.Count != responseIds.Distinct().Count()) return null;
 
         return new GeneratedResponseListResponse(responses.Select(response => response.ToResponse()).ToList());
     }
@@ -186,11 +171,12 @@ public sealed class ResponseGenerationService(
         int creditsUsed,
         string status,
         string description,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        Guid? logId = null)
     {
         dbContext.UsageLogs.Add(new UsageLog
         {
-            Id = Guid.NewGuid(),
+            Id = logId ?? Guid.NewGuid(),
             UserId = currentUser.UserId,
             ToolName = "FormAutomation",
             Action = "Xem lại câu trả lời được tạo",

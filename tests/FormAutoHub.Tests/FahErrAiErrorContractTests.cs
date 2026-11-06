@@ -194,9 +194,9 @@ public sealed class FahErrAiErrorContractTests
         Assert.Equal(status, response.Status);
         Assert.Null(ReadErrorMessage(response));
         Assert.Single(response.GeneratedPreviewIds);
-        Assert.Equal(2, response.CreditsUsed);
-        Assert.Equal(0, response.BalanceAfter);
-        Assert.Equal(-2, (await context.CreditTransactions.SingleAsync()).Amount);
+        Assert.Equal(1, response.CreditsUsed);
+        Assert.Equal(1, response.BalanceAfter);
+        Assert.Equal(-1, (await context.CreditTransactions.SingleAsync()).Amount);
     }
 
     private static string? ReadErrorMessage<T>(T response)

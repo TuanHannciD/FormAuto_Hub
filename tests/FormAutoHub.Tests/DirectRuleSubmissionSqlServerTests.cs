@@ -29,7 +29,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
     [InlineData("empty-command")]
     [InlineData("active-conflict")]
     [InlineData("rejected-reservation")]
-    public async Task RejectedAdmission_PersistsOnlyFailureUsageAfterRollback(string failure)
+    public async Task RejectedAdmission_RollsBackGenerationHoldDebitAndUsageTogether(string failure)
     {
         var options = await Options();
         var (user, project, _) = await Seed(options, failure == "no-credit" ? 0 : 2);
@@ -50,15 +50,11 @@ public sealed class DirectRuleSubmissionSqlServerTests
         var command = failure == "empty-command" ? Guid.Empty : Guid.NewGuid();
         var count = failure == "zero-count" ? 0 : failure == "excess-count" ? 101 : 1;
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => Direct(db, user, client).SendAsync(project, new(command, count), default));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => Direct(db, user, client).SendAsync(project, new(2, command, count), default));
 
         await using var verify = new FormAutoHubDbContext(options);
-        var log = Assert.Single(await verify.UsageLogs.Where(x => x.ProjectId == project).ToListAsync());
-        Assert.Equal(UsageLogStatuses.Failed, log.Status);
-        Assert.Equal(0, log.CreditsUsed);
-        Assert.Equal(user.UserId, log.UserId);
-        Assert.Equal("SubmitResponses", log.Action);
-        Assert.False(string.IsNullOrWhiteSpace(log.Description));
+        Assert.Empty(await verify.UsageLogs.Where(x => x.ProjectId == project).ToListAsync());
+        Assert.Empty(await verify.CreditReservations.Where(x => x.JobId == command).ToListAsync());
         Assert.Equal(failure == "no-credit" ? 0 : 2, (await verify.UserCreditAccounts.SingleAsync(x => x.UserId == user.UserId)).Balance);
         Assert.Empty(await verify.CreditTransactions.Where(x => x.UserId == user.UserId).ToListAsync());
         Assert.Equal(failure == "active-conflict" ? 1 : 0, await verify.SubmissionJobs.CountAsync(x => x.ProjectId == project));
@@ -80,7 +76,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
         var client = new GateClient();
 
         var result = await Direct(db, stranger, client).SendAsync(project,
-            new(request == "empty-command" ? Guid.Empty : Guid.NewGuid(), request == "zero-count" ? 0 : 1), default);
+            new(2, request == "empty-command" ? Guid.Empty : Guid.NewGuid(), request == "zero-count" ? 0 : 1), default);
 
         Assert.Null(result);
         await using var verify = new FormAutoHubDbContext(options);
@@ -102,7 +98,9 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await db.SaveChangesAsync();
         var client = new GateClient();
 
-        var result = await Direct(db, user, client).SendAsync(project, new(command, 100), default);
+        var upgrade = await Assert.ThrowsAsync<SubmissionContractException>(() => Direct(db, user, client).SendAsync(project, new(2, command, 100), default));
+        Assert.Equal("ClientUpgradeRequired", upgrade.Code);
+        var result = await new SubmissionService(db, user, client).GetJobAsync(project, command, default);
 
         Assert.Equal(command, result!.Id);
         Assert.Equal(1, result.Total);
@@ -126,12 +124,12 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await using var firstDb = new FormAutoHubDbContext(heldOptions);
         await using var secondDb = new FormAutoHubDbContext(options);
         var client = new GateClient();
-        var first = Direct(firstDb, user, client).SendAsync(project, new(command, 1), default);
+        var first = Direct(firstDb, user, client).SendAsync(project, new(2, command, 1), default);
         await admissionGate.Entered.Task.WaitAsync(TimeSpan.FromSeconds(15));
 
         var second = contender == "common"
-            ? new SubmissionService(secondDb, user, client).SendAsync(project, new([preview], true), default)
-            : Direct(secondDb, user, client).SendAsync(project, new(contender == "same" ? command : Guid.NewGuid(), 1), default);
+            ? new SubmissionService(secondDb, user, client, new SubmissionV2Fixture.Compatibility()).SendAsync(project, new(2, Guid.NewGuid(), null, [preview], true, false), default)
+            : Direct(secondDb, user, client).SendAsync(project, new(2, contender == "same" ? command : Guid.NewGuid(), 1), default);
         try
         {
             // The first transaction owns the project lock, but its reservation has not been inserted yet.
@@ -148,7 +146,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
                 Assert.Equal(SubmissionJobStatuses.Running, replay.Status);
             }
             else
-                await Assert.ThrowsAsync<InvalidOperationException>(() => second.WaitAsync(TimeSpan.FromSeconds(15)));
+                await Assert.ThrowsAnyAsync<InvalidOperationException>(() => second.WaitAsync(TimeSpan.FromSeconds(15)));
         }
         finally
         {
@@ -173,9 +171,9 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await using var firstDb = new FormAutoHubDbContext(new DbContextOptionsBuilder<FormAutoHubDbContext>(options).AddInterceptors(admissionGate).Options);
         await using var secondDb = new FormAutoHubDbContext(options);
         var client = new GateClient();
-        var first = new SubmissionService(firstDb, user, client).SendAsync(project, new([preview], true), default);
+        var first = new SubmissionService(firstDb, user, client, new SubmissionV2Fixture.Compatibility()).SendAsync(project, new(2, Guid.NewGuid(), null, [preview], true, false), default);
         await admissionGate.Entered.Task.WaitAsync(TimeSpan.FromSeconds(15));
-        var second = Direct(secondDb, user, client).SendAsync(project, new(Guid.NewGuid(), 1), default);
+        var second = Direct(secondDb, user, client).SendAsync(project, new(2, Guid.NewGuid(), 1), default);
         try
         {
             await Task.Delay(200);
@@ -183,7 +181,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
             Assert.Equal(0, client.Calls);
             admissionGate.Release.TrySetResult();
             await client.Entered.Task.WaitAsync(TimeSpan.FromSeconds(15));
-            await Assert.ThrowsAsync<InvalidOperationException>(() => second.WaitAsync(TimeSpan.FromSeconds(15)));
+            await Assert.ThrowsAnyAsync<InvalidOperationException>(() => second.WaitAsync(TimeSpan.FromSeconds(15)));
         }
         finally
         {
@@ -194,6 +192,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await using var verify = new FormAutoHubDbContext(options);
         Assert.Empty(await verify.CreditTransactions.Where(x => x.UserId == user.UserId).ToListAsync());
         Assert.Single(await verify.SubmissionJobs.Where(x => x.ProjectId == project).ToListAsync());
+        Assert.Equal("Consumed", (await verify.GeneratedResponses.SingleAsync(x => x.Id == preview)).LegacyEntitlementState);
     }
 
     [DirectSqlFact]
@@ -205,16 +204,16 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await using var one = new FormAutoHubDbContext(options);
         await using var two = new FormAutoHubDbContext(options);
         var client = new GateClient();
-        // Both reads see one credit before either debit is persisted. One RowVersion update must lose.
-        var barrier = new CreditReadBarrier();
-        var first = Direct(one, user, client, new BarrierCreditService(new CreditService(one), barrier))
-            .SendAsync(project, new(Guid.NewGuid(), 1), default);
-        var second = Direct(two, user, client, new BarrierCreditService(new CreditService(two), barrier))
-            .SendAsync(secondProject, new(Guid.NewGuid(), 1), default);
+        // Account-first admission serializes spending before the debit; a post-debit two-reader barrier
+        // would prevent the lock owner from committing and manufacture a test-only deadlock.
+        var first = Direct(one, user, client)
+            .SendAsync(project, new(2, Guid.NewGuid(), 1), default);
+        var second = Direct(two, user, client)
+            .SendAsync(secondProject, new(2, Guid.NewGuid(), 1), default);
         client.Release.TrySetResult();
         var outcomes = await Task.WhenAll(Capture(first), Capture(second)).WaitAsync(TimeSpan.FromSeconds(30));
         Assert.Single(outcomes, x => x is null);
-        Assert.Single(outcomes, x => x is InvalidOperationException);
+        Assert.Single(outcomes, x => x is SubmissionContractException { Code: "InsufficientAvailableCredit" });
         await using var verify = new FormAutoHubDbContext(options);
         Assert.Equal(0, (await verify.UserCreditAccounts.SingleAsync(x => x.UserId == user.UserId)).Balance);
         Assert.Single(await verify.CreditTransactions.Where(x => x.UserId == user.UserId).ToListAsync());
@@ -228,14 +227,18 @@ public sealed class DirectRuleSubmissionSqlServerTests
         var options = await Options();
         var (user, project, _) = await Seed(options, 1);
         var command = Guid.NewGuid();
-        var cancellation = new CancelBeforeCompletion(options, user, project, command);
-        await using var db = new FormAutoHubDbContext(new DbContextOptionsBuilder<FormAutoHubDbContext>(options).AddInterceptors(cancellation).Options);
-        var client = new GateClient();
+        await using var db = new FormAutoHubDbContext(options);
+        var invoked = false;
+        var client = new GateClient { OnReturned = async () => {
+            await using var control = new FormAutoHubDbContext(options);
+            await new SubmissionService(control, user, new GateClient()).CancelAsync(project, command, default);
+            invoked = true;
+        } };
         client.Release.TrySetResult();
 
-        var result = await Direct(db, user, client).SendAsync(project, new(command, 1), default);
+        var result = await Direct(db, user, client).SendAsync(project, new(2, command, 1), default);
 
-        Assert.True(cancellation.Invoked);
+        Assert.True(invoked);
         Assert.Equal(SubmissionJobStatuses.Cancelled, result!.Status);
         Assert.NotNull(result.FinishedAt);
         Assert.Equal(1, result.SuccessCount);
@@ -252,7 +255,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
         var client = new GateClient();
         client.Release.TrySetResult();
 
-        var result = await Direct(db, user, client).SendAsync(project, new(command, 1), default);
+        var result = await Direct(db, user, client).SendAsync(project, new(2, command, 1), default);
 
         Assert.True(fault.Invoked);
         Assert.Equal(command, result!.Id);
@@ -260,8 +263,9 @@ public sealed class DirectRuleSubmissionSqlServerTests
         Assert.Equal(0, client.Calls);
         Assert.Empty(result.Logs);
         await using var verify = new FormAutoHubDbContext(options);
-        Assert.Single(await verify.CreditTransactions.Where(x => x.UserId == user.UserId).ToListAsync());
-        Assert.Equal(1, (await verify.UserCreditAccounts.SingleAsync(x => x.UserId == user.UserId)).Balance);
+        Assert.Empty(await verify.CreditTransactions.Where(x => x.UserId == user.UserId).ToListAsync());
+        Assert.Equal(2, (await verify.UserCreditAccounts.SingleAsync(x => x.UserId == user.UserId)).Balance);
+        Assert.Equal(1, (await verify.CreditReservations.SingleAsync(x => x.JobId == command)).OutstandingAmount);
         Assert.Equal(2, await verify.GeneratedResponses.CountAsync(x => x.ProjectId == project)); // Seed preview + direct response.
     }
 
@@ -273,7 +277,7 @@ public sealed class DirectRuleSubmissionSqlServerTests
         await using var db = new FormAutoHubDbContext(new DbContextOptionsBuilder<FormAutoHubDbContext>(options).AddInterceptors(new FailReservation()).Options);
         var client = new GateClient();
 
-        await Assert.ThrowsAsync<DbUpdateException>(() => Direct(db, user, client).SendAsync(project, new(Guid.NewGuid(), 1), default));
+        await Assert.ThrowsAsync<DbUpdateException>(() => Direct(db, user, client).SendAsync(project, new(2, Guid.NewGuid(), 1), default));
 
         await using var verify = new FormAutoHubDbContext(options);
         Assert.Equal(2, (await verify.UserCreditAccounts.SingleAsync(x => x.UserId == user.UserId)).Balance);
@@ -290,10 +294,18 @@ public sealed class DirectRuleSubmissionSqlServerTests
     }
 
     private static DirectRuleSubmissionService Direct(FormAutoHubDbContext db, UserContext user, GateClient client, ICreditService? credits = null) =>
-        new(db, user, credits ?? new CreditService(db), new SubmissionService(db, user, client));
+        new(db, user, credits ?? new CreditService(db), new SubmissionService(db, user, client, new SubmissionV2Fixture.Compatibility()));
 
     private static async Task<DbContextOptions<FormAutoHubDbContext>> Options()
     {
+        // Task6 may execute these existing cases only through the strict owned history fixture.
+        // This path never opens, migrates or takes over the historical direct-rule database.
+        if (Environment.GetEnvironmentVariable("FAH_HISTORY_SQL_SERVER") is not null)
+        {
+            await using var owned = await GenerationHistorySqlFixture.OpenAsync();
+            return new DbContextOptionsBuilder<FormAutoHubDbContext>()
+                .UseSqlServer(owned.Database.GetConnectionString()!, sql => sql.EnableRetryOnFailure()).Options;
+        }
         var server = Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_SERVER");
         if (server is not ("." or "localhost") || Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_DATABASE") != Database)
             throw new InvalidOperationException("Runtime owner must opt in to the exact isolated local direct-rule SQL safety database.");
@@ -322,11 +334,11 @@ public sealed class DirectRuleSubmissionSqlServerTests
             db.Users.Add(new User { Id = user.UserId, Email = $"direct-{user.UserId:N}@example.invalid", FullName = "Synthetic safety test", Role = UserRoles.User, CreatedAt = DateTimeOffset.UtcNow });
             db.UserCreditAccounts.Add(new UserCreditAccount { Id = Guid.NewGuid(), UserId = user.UserId, Balance = balance, UpdatedAt = DateTimeOffset.UtcNow });
         }
-        db.FormProjects.Add(new FormProject { Id = project, UserId = user.UserId, Name = "Direct SQL safety", FormUrl = "https://example.invalid/form", FormActionUrl = "https://example.invalid/send", CreatedAt = DateTimeOffset.UtcNow });
+        db.FormProjects.Add(new FormProject { Id = project, UserId = user.UserId, Name = "Direct SQL safety", FormUrl = "https://docs.google.com/forms/d/e/synthetic/viewform", FormActionUrl = "https://docs.google.com/forms/d/e/synthetic/formResponse", CreatedAt = DateTimeOffset.UtcNow });
         db.FormQuestions.Add(new FormQuestion { Id = question, ProjectId = project, EntryId = "entry.1", Label = "Synthetic", QuestionType = FormQuestionTypes.ShortText });
         db.AnswerRules.Add(new AnswerRule { Id = Guid.NewGuid(), ProjectId = project, QuestionId = question, Mode = AnswerRuleModes.SampleTextLines, ConfigJson = "{\"samples\":[\"synthetic\"]}", CreatedAt = DateTimeOffset.UtcNow });
         db.GeneratedResponses.Add(new GeneratedResponse { Id = preview, ProjectId = project, Source = GeneratedResponseSources.Rule,
-            Status = GeneratedResponseStatuses.Previewed, CreatedAt = DateTimeOffset.UtcNow,
+            Status = GeneratedResponseStatuses.Previewed, CreatedAt = DateTimeOffset.UtcNow, PricingPolicy = "LegacyBundledV1", LegacyEntitlementState = "Available", LegacyEvidenceReference = "test:reviewed-legacy-unattempted",
             PayloadJson = JsonSerializer.Serialize(new[] { new GeneratedAnswerResponse(question, "entry.1", "Synthetic", FormQuestionTypes.ShortText, ["synthetic"]) }) });
         await db.SaveChangesAsync();
         return (user, project, preview);
@@ -337,14 +349,21 @@ public sealed class DirectRuleSubmissionSqlServerTests
     {
         private int calls;
         public int Calls => Volatile.Read(ref calls);
+        public Func<Task>? OnReturned { get; init; }
         public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken ct) => throw new NotSupportedException();
+        public async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string url, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
+        {
+            await SubmitAsync(url, answers, ct);
+            return GenerationCreditReservationTests.Outcome(SubmissionOutcomeKind.ConfirmedSuccess);
+        }
         public async Task<GoogleFormSubmitResult> SubmitAsync(string url, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
         {
             Interlocked.Increment(ref calls);
             Entered.TrySetResult();
             await Release.Task.WaitAsync(TimeSpan.FromSeconds(20), ct);
+            if (OnReturned is not null) await OnReturned();
             return new(true, "");
         }
     }
@@ -447,7 +466,7 @@ public sealed class DirectSqlFactAttribute : FactAttribute
 {
     public DirectSqlFactAttribute()
     {
-        if (Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_SERVER") is null)
+        if (Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_SERVER") is null && Environment.GetEnvironmentVariable("FAH_HISTORY_SQL_SERVER") is null)
             Skip = "Not run: runtime owner must provision and opt in to isolated direct-rule SQL safety DB.";
     }
 }
@@ -456,7 +475,7 @@ public sealed class DirectSqlTheoryAttribute : TheoryAttribute
 {
     public DirectSqlTheoryAttribute()
     {
-        if (Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_SERVER") is null)
+        if (Environment.GetEnvironmentVariable("FORMAUTO_DIRECT_SQL_SERVER") is null && Environment.GetEnvironmentVariable("FAH_HISTORY_SQL_SERVER") is null)
             Skip = "Not run: runtime owner must provision and opt in to isolated direct-rule SQL safety DB.";
     }
 }

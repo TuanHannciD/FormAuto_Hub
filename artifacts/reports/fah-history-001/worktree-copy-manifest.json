@@ -1,0 +1,95 @@
+{
+  "base": "df5cce54f4a8516ab9dd0bf2b5dff561c1cb8d5c",
+  "source": "D:\\TinHoc\\FormAuto_Hub",
+  "target": "D:\\TinHoc\\FormAuto_Hub\\.worktrees\\fah-history-001",
+  "files": [
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\CONTRACTS.md",
+      "sha256": "b3e0bcec5f28072809353e809a289b3aad787ca1ec65f47a330f5285a9797320"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\CUTOVER.md",
+      "sha256": "a44dd0d9b04c7acda5e0408a68fec9611211432fe736593f44f5457678d9737d"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\DB_REVIEW.md",
+      "sha256": "58be3df983ad9333eabb6d9edd6c919fa375f19ce8b99e6f95b82c9198f5e68f"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\IMPLEMENTATION_PLAN.md",
+      "sha256": "a0e31a20b5983e0068fc9738c3a7bccb09806f2cb0f4e901ffbe501d983461f6"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\INDEX.md",
+      "sha256": "5fa0709fb37b8569818b0c755ef85ee6020792adeb4d57ff315acc724eb8c30f"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\PROGRESS.md",
+      "sha256": "01026e95a2e0e8844516c1ea107556f2c2634995e6ccfa1ae6a8b7930eb2d9a2"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\TASK1_BRIEF.md",
+      "sha256": "694984f63c7c0db1d57544944f0aea53db6fb741b8a3627191f9d81b5e7511c4"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\TASK1_REPORT.md",
+      "sha256": "4c154f5f464cf2a5364687ecf49ea76e70830830fbd17d03a81ec1277322c1ad"
+    },
+    {
+      "path": "docs\\ai\\tasks\\FAH-HISTORY-001\\TASK2_BRIEF.md",
+      "sha256": "9fa1590385976e961f977f4457d19035f066bce98b5a153d1f4fa6cb05565716"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\CONTRACTS.md",
+      "sha256": "6cef1c46bb108d06d4e46ccedfb79878f356cc0e5cc23d486613f3f05257aaa9"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\CUTOVER.md",
+      "sha256": "319fa16a6b6a81760c40e5de85b9c677bd1f3e4ce6438e522a9841f1a5b93fbe"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\DB_REVIEW.md",
+      "sha256": "e1402594d406201ee77576a220ceadbe90570a7f80038e4cf5d97836e4c7804e"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\IMPLEMENTATION_PLAN.md",
+      "sha256": "2633c29e899c306738522dda815f6190784dd0da6afdb4a3850d9301da28fe00"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\INDEX.md",
+      "sha256": "31157bbb96359646a4a28c10168d46d367c41dc0e8854cd0e28636d4febc4d57"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\PROGRESS.md",
+      "sha256": "01026e95a2e0e8844516c1ea107556f2c2634995e6ccfa1ae6a8b7930eb2d9a2"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\TASK1_BRIEF.md",
+      "sha256": "694984f63c7c0db1d57544944f0aea53db6fb741b8a3627191f9d81b5e7511c4"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\TASK1_REPORT.md",
+      "sha256": "80c3d50779b02b93c6e9004f92f51e2c788f4713470c8c988a5d15f943af7e0d"
+    },
+    {
+      "path": "docs\\vi\\tasks\\FAH-HISTORY-001\\TASK2_BRIEF.md",
+      "sha256": "9fa1590385976e961f977f4457d19035f066bce98b5a153d1f4fa6cb05565716"
+    },
+    {
+      "path": "artifacts\\reports\\fah-history-001\\task1-review-r1.md",
+      "sha256": "b378be19b9c87c49e045cddad9adbd9ce0ee8c8ed44219d4ee8294827a293f22"
+    },
+    {
+      "path": "artifacts\\reports\\fah-history-001\\task1-review-r2.md",
+      "sha256": "a19776319773ad8fd1c86794da8a3544108b94a04c62b1f49620dbf3000d554e"
+    },
+    {
+      "path": "artifacts\\reports\\fah-history-001\\task1-review-r2b.md",
+      "sha256": "c084fa763ff526140d0f79e736b966348da2eec9f1d129cf843a287dc6e04a81"
+    },
+    {
+      "path": "artifacts\\reports\\fah-history-001\\task1-review-r3.md",
+      "sha256": "db781a6b17bc6ecc200fe0206d27e109aa8101ca0f720d16da6736999a819994"
+    }
+  ]
+}

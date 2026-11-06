@@ -14,6 +14,8 @@ export type AiDirectionFields = {
 };
 
 export type FormPreviewResumeContext = {
+  contractVersion?: number;
+  generationBatchId?: string | null;
   projectId: string;
   analysis: AnalyzeFormResponse;
   ruleConfigs: Record<string, { mode: string; configJson: string }>;
@@ -33,6 +35,7 @@ export type FormPreviewResumeContext = {
 };
 
 export type DirectRuleCommandContext = {
+  contractVersion?: number;
   projectId: string;
   commandId: string;
   count: number;

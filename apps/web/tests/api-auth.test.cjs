@@ -23,6 +23,7 @@ function setup(responses, refreshResult = null) {
     SessionExpiredError,
     getValidAccessToken: async () => stored?.accessToken,
     getStoredSession: () => stored,
+    getSessionBoundary: () => 0,
     refreshSession: async () => {
       calls.refresh++;
       if (refreshResult) stored = { accessToken: 'new-access' };

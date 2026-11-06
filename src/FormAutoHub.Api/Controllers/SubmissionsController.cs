@@ -7,6 +7,7 @@ namespace FormAutoHub.Api.Controllers;
 
 [ApiController]
 [Authorize]
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 [Route("api/projects/{projectId:guid}/submissions")]
 public sealed class SubmissionsController(ISubmissionService submissionService, IDirectRuleSubmissionService directRuleSubmissionService) : ControllerBase
 {
@@ -21,7 +22,9 @@ public sealed class SubmissionsController(ISubmissionService submissionService, 
         }
         catch (InvalidOperationException exception)
         {
-            return BadRequest(new ProblemDetails { Title = "Submission rejected", Detail = exception.Message });
+            var contract = exception as SubmissionContractException;
+            Response.Headers.CacheControl = "no-store";
+            return StatusCode(contract?.StatusCode ?? 400, new ProblemDetails { Title = "Submission rejected", Detail = exception.Message, Status = contract?.StatusCode ?? 400, Extensions = { ["code"] = contract?.Code ?? "SubmissionRejected" } });
         }
     }
 
@@ -38,7 +41,9 @@ public sealed class SubmissionsController(ISubmissionService submissionService, 
         }
         catch (InvalidOperationException exception)
         {
-            return BadRequest(new ProblemDetails { Title = "Submission rejected", Detail = exception.Message });
+            var contract = exception as SubmissionContractException;
+            Response.Headers.CacheControl = "no-store";
+            return StatusCode(contract?.StatusCode ?? 400, new ProblemDetails { Title = "Submission rejected", Detail = exception.Message, Status = contract?.StatusCode ?? 400, Extensions = { ["code"] = contract?.Code ?? "SubmissionRejected" } });
         }
     }
 
@@ -58,8 +63,12 @@ public sealed class SubmissionsController(ISubmissionService submissionService, 
         Guid jobId,
         CancellationToken cancellationToken)
     {
-        var response = await submissionService.CancelAsync(projectId, jobId, cancellationToken);
-        return response is null ? Conflict() : Ok(response);
+        try
+        {
+            var response = await submissionService.CancelAsync(projectId, jobId, cancellationToken);
+            return response is null ? NotFound() : Ok(response);
+        }
+        catch (SubmissionContractException exception) { return ContractProblem(exception); }
     }
 
     [HttpPost("jobs/{jobId:guid}/pause")]
@@ -68,7 +77,14 @@ public sealed class SubmissionsController(ISubmissionService submissionService, 
         Guid jobId,
         CancellationToken cancellationToken)
     {
-        var response = await submissionService.PauseAsync(projectId, jobId, cancellationToken);
-        return response is null ? Conflict() : Ok(response);
+        try
+        {
+            var response = await submissionService.PauseAsync(projectId, jobId, cancellationToken);
+            return response is null ? NotFound() : Ok(response);
+        }
+        catch (SubmissionContractException exception) { return ContractProblem(exception); }
     }
+
+    private ObjectResult ContractProblem(SubmissionContractException exception) => StatusCode(exception.StatusCode,
+        new ProblemDetails { Status = exception.StatusCode, Title = "Submission rejected", Extensions = { ["code"] = exception.Code } });
 }

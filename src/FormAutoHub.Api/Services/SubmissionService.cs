@@ -2,7 +2,6 @@ using System.Text.Json;
 using FormAutoHub.Api.Auth;
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Data;
-using FormAutoHub.Api.Domain;
 using FormAutoHub.Api.Entities;
 using FormAutoHub.Api.Integrations.GoogleForms;
 using Microsoft.EntityFrameworkCore;
@@ -17,403 +16,215 @@ public interface ISubmissionService
     Task<SubmissionJobResponse?> CancelAsync(Guid projectId, Guid jobId, CancellationToken cancellationToken);
 }
 
-public sealed class SubmissionService(
-    FormAutoHubDbContext dbContext,
-    ICurrentUserContext currentUser,
-    IGoogleFormsClient googleFormsClient) : ISubmissionService
+public sealed class SubmissionService(FormAutoHubDbContext dbContext, ICurrentUserContext currentUser,
+    IGoogleFormsClient googleFormsClient, ISubmissionCompatibilityService? compatibilityService = null) : ISubmissionService
 {
-    public async Task<SubmissionJobResponse?> SendAsync(
-        Guid projectId,
-        SendSubmissionRequest request,
-        CancellationToken cancellationToken)
+    private ISubmissionCompatibilityService Compatibility => compatibilityService ?? new SubmissionCompatibilityService(dbContext, currentUser);
+    private Task<bool> OwnedAsync(Guid project, CancellationToken ct) => dbContext.FormProjects.AsNoTracking().AnyAsync(x => x.Id == project && x.UserId == currentUser.UserId, ct);
+    private static void Version(int version) { if (version != 2) throw new SubmissionContractException("ClientUpgradeRequired", 409); }
+    private static void Require(bool condition, string code, int status = 400) { if (!condition) throw new SubmissionContractException(code, status); }
+
+    public async Task<SubmissionJobResponse?> SendAsync(Guid projectId, SendSubmissionRequest request, CancellationToken ct)
     {
-        if (!request.Confirmed)
+        if (!await OwnedAsync(projectId, ct)) return null;
+        Version(request.ContractVersion);
+        Require(request.CommandId != Guid.Empty, "InvalidCommand");
+        var ids = request.ResponseIds ?? [];
+        var fingerprint = SubmissionAdmission.Fingerprint(currentUser.UserId, projectId, "selected", request.BatchId, ids, null, request.Confirmed, request.DuplicateWarningAccepted);
+        if (await SubmissionAdmission.ReplayAsync(dbContext, currentUser.UserId, projectId, request.CommandId, fingerprint, ct) is { } replay)
+            return await ReadAsync(replay, ct);
+        Require(ids.Count is >= 1 and <= 100 && ids.All(x => x != Guid.Empty) && ids.Distinct().Count() == ids.Count, "InvalidResponseSelection");
+        Require(request.Confirmed, "ConfirmationRequired");
+        if (request.BatchId is Guid requestedBatch)
         {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Submission requires explicit confirmation.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Submission requires explicit confirmation.");
+            var selectedBatch = await dbContext.GenerationBatches.AsNoTracking().SingleOrDefaultAsync(x => x.Id == requestedBatch && x.UserId == currentUser.UserId, ct);
+            Require(selectedBatch is not null && selectedBatch.ProjectId == projectId, "NotFound", 404);
+            Require(selectedBatch!.EvictedAt is null, "HistoryExpired", 409);
         }
+        Require(await dbContext.GeneratedResponses.AsNoTracking().CountAsync(x => x.ProjectId == projectId && ids.Contains(x.Id), ct) == ids.Count, "NotFound", 404);
+        // Metadata cannot be manufactured from generation observations. This refresh stays outside SQL retries.
+        var compatibility = await Compatibility.CheckAsync(projectId, request.BatchId, ids, ct);
+        RequireCompatibility(compatibility);
+        var admission = await SubmissionAdmission.RunAsync(dbContext, currentUser.UserId, projectId, request.CommandId, fingerprint,
+            "selected", compatibility, token => SelectAsync(projectId, request, token), ct);
+        if (admission.Run) await RunAsync(admission.Job, ct);
+        return await ReadAsync(admission.Job, CancellationToken.None);
+    }
 
-        if (request.ResponseIds.Count == 0)
+    internal async Task<SubmissionJobResponse?> SendDirectAsync(Guid projectId, DirectRuleSubmissionRequest request, ICreditService credits, CancellationToken ct)
+    {
+        if (!await OwnedAsync(projectId, ct)) return null;
+        Version(request.ContractVersion);
+        Require(request.CommandId != Guid.Empty, "InvalidCommand");
+        var fingerprint = SubmissionAdmission.Fingerprint(currentUser.UserId, projectId, "direct", null, [], request.Count, false, false);
+        if (await SubmissionAdmission.ReplayAsync(dbContext, currentUser.UserId, projectId, request.CommandId, fingerprint, ct) is { } replay)
+            return await ReadAsync(replay, ct);
+        Require(request.Count is >= 1 and <= 100, "InvalidCount");
+        var compatibility = await Compatibility.CheckAsync(projectId, null, [], ct);
+        RequireCompatibility(compatibility);
+        var admission = await SubmissionAdmission.RunAsync(dbContext, currentUser.UserId, projectId, request.CommandId, fingerprint,
+            "direct", compatibility, async token =>
+            {
+                var available = await new CreditReservationService(dbContext).GetCreditAvailabilityAsync(currentUser.UserId, token);
+                var count = (int)Math.Min(request.Count, Math.Max(0m, Math.Floor(available.Available)));
+                Require(count > 0, "InsufficientAvailableCredit", 409);
+                var generated = await new ResponseGenerationService(dbContext, currentUser, credits).GenerateForDirectSubmissionAsync(projectId, count, request.Count, token);
+                var ids = generated!.Items.Select(x => x.Id).ToArray();
+                return await dbContext.GeneratedResponses.Where(x => ids.Contains(x.Id)).OrderBy(x => x.BatchOrdinal).ToListAsync(token);
+            }, ct);
+        if (admission.Run) await RunAsync(admission.Job, ct);
+        return await ReadAsync(admission.Job, CancellationToken.None);
+    }
+
+    private async Task<IReadOnlyList<GeneratedResponse>> SelectAsync(Guid project, SendSubmissionRequest request, CancellationToken ct)
+    {
+        GenerationBatch? batch = null;
+        if (request.BatchId is Guid batchId)
         {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Submission requires at least one preview response.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Submission requires at least one preview response.");
+            batch = dbContext.Database.IsSqlServer()
+                ? await dbContext.GenerationBatches.FromSqlInterpolated($"SELECT * FROM [GenerationBatches] WITH (UPDLOCK,HOLDLOCK) WHERE [Id]={batchId} AND [UserId]={currentUser.UserId}").SingleOrDefaultAsync(ct)
+                : await dbContext.GenerationBatches.SingleOrDefaultAsync(x => x.Id == batchId && x.UserId == currentUser.UserId, ct);
+            Require(batch is not null && batch.ProjectId == project, "NotFound", 404);
+            if (dbContext.Database.IsSqlServer()) await dbContext.Entry(batch!).ReloadAsync(ct);
+            Require(batch!.EvictedAt is null, "HistoryExpired", 409);
         }
-
-        if (request.ResponseIds.Count > Phase4SafetyLimits.MaxSubmissionResponsesPerRequest)
+        var ids = request.ResponseIds;
+        var responses = await dbContext.GeneratedResponses.Where(x => x.ProjectId == project && ids.Contains(x.Id)).OrderBy(x => x.BatchOrdinal).ThenBy(x => x.Id).ToListAsync(ct);
+        Require(responses.Count == ids.Count, "NotFound", 404);
+        foreach (var response in responses)
         {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Submission response count must not exceed 100.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Submission response count must not exceed 100.");
+            if (dbContext.Database.IsSqlServer()) await dbContext.Entry(response).ReloadAsync(ct);
+            Require(response.GenerationBatchId == request.BatchId, "MixedBatchSelection");
+            Require(response.PricingPolicy is "SeparatedV1" or "LegacyBundledV1", "OutcomeUnresolved", 409);
+            if (response.PricingPolicy == "LegacyBundledV1")
+            {
+                Require(!string.IsNullOrWhiteSpace(response.LegacyEvidenceReference) && response.LegacyEntitlementState is "Available" or "Consumed" && response.LegacyClaimItemId == null, "OutcomeUnresolved", 409);
+                Require(!await dbContext.SubmissionLogs.AnyAsync(log => log.ResponseId == response.Id && log.ItemId == null &&
+                    !dbContext.LegacyAttemptEvidence.Any(e => e.ResponseId == response.Id && e.LegacySubmissionLogId == log.Id &&
+                        (e.OutcomeKind == "ConfirmedSuccess" || e.OutcomeKind == "ConfirmedRejected")), ct), "OutcomeUnresolved", 409);
+            }
+            else Require(batch is not null && batch.PricingPolicy == "SeparatedV1", "InvalidResponseSelection");
+            _ = Payload(response.PayloadJson);
         }
+        Require(responses.Select(x => x.PricingPolicy).Distinct().Count() == 1, "MixedPricingSelection");
+        Require(!await dbContext.SubmissionJobItems.AnyAsync(x => ids.Contains(x.ResponseId) &&
+            (x.AttemptState == "PossibleDispatch" || x.AttemptState == "Unknown" || x.SettlementState == "Held" || x.SettlementState == "PrepaidHeld"), ct), "OutcomeUnresolved", 409);
+        var hasAttempt = await dbContext.SubmissionLogs.AnyAsync(x => ids.Contains(x.ResponseId), ct) ||
+            await dbContext.SubmissionJobItems.AnyAsync(x => ids.Contains(x.ResponseId) && x.PossibleDispatchAt != null, ct);
+        Require(!hasAttempt || request.DuplicateWarningAccepted, "DuplicateWarningRequired");
+        return responses;
+    }
 
-        if (request.ResponseIds.Count != request.ResponseIds.Distinct().Count())
-        {
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, "Duplicate response IDs are not allowed.", cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            throw new InvalidOperationException("Duplicate response IDs are not allowed.");
-        }
+    private static void RequireCompatibility(SubmissionCompatibilityResult value)
+    {
+        Require(value.Compatible, value.RejectionCode is "FormIncompatible" ? "FormIncompatible" : "FormEvidenceUnavailable", 409);
+        Require(value.CheckedAt != default && !string.IsNullOrWhiteSpace(value.CompatibilityEvidenceJson) &&
+            SubmissionAdmission.Hash(value.CompatibilityEvidenceJson) == value.CompatibilityEvidenceSha256, "FormEvidenceUnavailable", 409);
+    }
 
-        SubmissionAdmission.Result? admission;
+    private static IReadOnlyDictionary<string, IReadOnlyList<string>> Payload(string json)
+    {
         try
         {
-            admission = await SubmissionAdmission.RunAsync(dbContext, currentUser.UserId, projectId, Guid.NewGuid(), async _ =>
-            {
-                var responses = await dbContext.GeneratedResponses
-                    .Where(response => response.ProjectId == projectId && request.ResponseIds.Contains(response.Id))
-                    .ToListAsync(cancellationToken);
-
-                if (responses.Count != request.ResponseIds.Distinct().Count())
-                {
-                    throw new InvalidOperationException("All submitted responses must belong to the project.");
-                }
-
-                if (responses.Any(response => response.Status != GeneratedResponseStatuses.Previewed))
-                {
-                    throw new InvalidOperationException("Only previewed responses can be submitted.");
-                }
-
-                if (await dbContext.SubmissionLogs.AnyAsync(log => request.ResponseIds.Contains(log.ResponseId), cancellationToken))
-                {
-                    throw new InvalidOperationException("Responses with a recorded submission attempt cannot be sent again.");
-                }
-
-                return responses;
-            }, cancellationToken);
+            var answers = JsonSerializer.Deserialize<GeneratedAnswerResponse[]>(json) ?? [];
+            Require(answers.Length > 0 && answers.All(x => !string.IsNullOrWhiteSpace(x.EntryId) && x.Values != null) &&
+                answers.Select(x => x.EntryId).Distinct().Count() == answers.Length, "InvalidPayload");
+            return answers.ToDictionary(x => x.EntryId, x => x.Values);
         }
-        catch (InvalidOperationException exception)
+        catch (JsonException exception) { throw new SubmissionContractException("InvalidPayload", 400, exception); }
+    }
+
+    private async Task RunAsync(SubmissionJob job, CancellationToken ct)
+    {
+        var settlement = new SubmissionSettlementService(dbContext, new CreditService(dbContext));
+        var interrupted = false;
+        try
         {
+            // Admission has acknowledged this runner; even its initial read/cancellation must
+            // reach bounded finalization so durable Planned holds can be safely released.
+            var items = await dbContext.SubmissionJobItems.AsNoTracking().Where(x => x.JobId == job.Id).OrderBy(x => x.Ordinal).ToListAsync(ct);
+            foreach (var batch in items.Chunk(10))
+            {
+                ct.ThrowIfCancellationRequested();
+                var fresh = await Compatibility.CheckAsync(job.ProjectId, job.GenerationBatchId, items.Select(x => x.ResponseId).ToArray(), ct);
+                if (!fresh.Compatible || fresh.CompatibilityEvidenceSha256 != batch[0].CompatibilityEvidenceSha256) { interrupted = true; break; }
+                foreach (var item in batch)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var payload = Payload(item.PayloadJson);
+                    // Only an acknowledged FIRST transition grants this runner one outbound invocation.
+                    if (!await settlement.MarkPossibleDispatchAsync(item.Id, ct)) { interrupted = true; break; }
+                    VerifiedSubmissionOutcome outcome;
+                    try { outcome = await googleFormsClient.SubmitVerifiedAsync(item.FormActionUrl, payload, ct); }
+                    catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException)
+                    { outcome = GoogleSubmissionEvidence.Unknown("TransportUncertain", e.GetType().Name); }
+                    await settlement.SettleAttemptAsync(item.Id, outcome, CancellationToken.None);
+                    if (outcome.Kind == SubmissionOutcomeKind.Unknown) { interrupted = true; break; }
+                }
+                if (interrupted) break;
+                var control = await dbContext.SubmissionJobs.AsNoTracking().SingleAsync(x => x.Id == job.Id, CancellationToken.None);
+                if (control.Status is "Paused" or "Cancelled") break;
+            }
+        }
+        catch (Exception)
+        {
+            // Persistence/pre-call uncertainty never authorizes provider replay. Stop and retain any possible attempt.
             dbContext.ChangeTracker.Clear();
-            await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, exception.Message, cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
+            interrupted = true;
             throw;
         }
-        if (admission is null) return null;
-        if (!admission.Run) return await SubmissionAdmission.ReadAsync(dbContext, admission, cancellationToken);
-        return await RunAsync(admission.Project, admission.Job, admission.Responses, cancellationToken);
-    }
-
-    internal async Task<SubmissionJobResponse> RunAsync(
-        FormProject project, SubmissionJob job, IReadOnlyList<GeneratedResponse> responses, CancellationToken cancellationToken)
-    {
-        var projectId = project.Id;
-        var logs = new List<SubmissionLog>();
-        SubmissionLog? pendingAttempt = null;
-        UsageLog? completionUsage = null;
-        var providerInvoked = false;
-        try
+        finally
         {
-            foreach (var batch in responses.Chunk(Phase4SafetyLimits.MaxSubmissionBatchSize))
-            {
-                foreach (var response in batch)
-                {
-                    IReadOnlyList<GeneratedAnswerResponse> answers;
-                    try
-                    {
-                        answers = JsonSerializer.Deserialize<IReadOnlyList<GeneratedAnswerResponse>>(response.PayloadJson)
-                            ?? Array.Empty<GeneratedAnswerResponse>();
-                    }
-                    catch (JsonException exception)
-                    {
-                        throw new InvalidOperationException("Generated response payload is invalid.", exception);
-                    }
-
-                    if (answers.Count == 0 || answers.Any(answer => string.IsNullOrWhiteSpace(answer.EntryId)))
-                    {
-                        throw new InvalidOperationException("Generated response payload is missing required entry IDs.");
-                    }
-
-                    var payload = answers.ToDictionary(answer => answer.EntryId, answer => answer.Values);
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var log = new SubmissionLog
-                    {
-                        Id = Guid.NewGuid(),
-                        JobId = job.Id,
-                        ResponseId = response.Id,
-                        PayloadJson = response.PayloadJson,
-                        // Failed describes an unfinished local attempt, not a confirmed remote rejection.
-                        Status = SubmissionLogStatuses.Failed,
-                        ErrorMessage = "Kết quả gửi chưa xác định. Không tự động gửi lại; hãy kiểm tra kết quả trên Google Forms."
-                    };
-                    logs.Add(log);
-                    dbContext.SubmissionLogs.Add(log);
-                    pendingAttempt = log;
-                    providerInvoked = false;
-                    await dbContext.SaveChangesAsync(cancellationToken);
-
-                    providerInvoked = true;
-                    var submitResult = await googleFormsClient.SubmitAsync(project.FormActionUrl, payload, cancellationToken);
-                    log.Status = submitResult.Success ? SubmissionLogStatuses.Success : SubmissionLogStatuses.Failed;
-                    log.ErrorMessage = submitResult.ErrorMessage;
-                    log.SubmittedAt = DateTimeOffset.UtcNow;
-
-                    if (submitResult.Success)
-                    {
-                        response.Status = GeneratedResponseStatuses.Submitted;
-                        job.SuccessCount++;
-                    }
-                    else
-                    {
-                        response.Status = GeneratedResponseStatuses.Failed;
-                        job.FailedCount++;
-                    }
-
-                    // Preserve a returned result before attempting another external send, even after request cancellation.
-                    await SaveOutcomeAsync();
-                    pendingAttempt = null;
-                }
-
-                await dbContext.SaveChangesAsync(cancellationToken);
-                await dbContext.Entry(job).ReloadAsync(cancellationToken);
-                if (job.Status is SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled)
-                {
-                    break;
-                }
-            }
-
-            await FinalizeJobAsync(job, interrupted: false, cancellationToken);
-
-            completionUsage = await WriteUsageLogAsync(
-                projectId,
-                job.Status == SubmissionJobStatuses.Completed ? UsageLogStatuses.Success : UsageLogStatuses.Failed,
-                DescribeOutcome(job),
-                cancellationToken);
-            AuditLogWriter.Add(dbContext, currentUser.UserId, "SubmitResponses", nameof(SubmissionJob), job.Id, new
-            {
-                projectId,
-                total = job.Total,
-                successCount = job.SuccessCount,
-                failedCount = job.FailedCount
-            });
-            await dbContext.SaveChangesAsync(cancellationToken);
-
-            return job.ToResponse(logs);
-        }
-        catch (Exception exception)
-        {
-            exception.Data["SubmissionJobId"] = job.Id;
-            exception.Data["ProjectId"] = projectId;
-            if (pendingAttempt is not null)
-            {
-                exception.Data["SubmissionLogId"] = pendingAttempt.Id;
-                exception.Data["ResponseId"] = pendingAttempt.ResponseId;
-                if (!providerInvoked)
-                {
-                    pendingAttempt.ErrorMessage = "Lượt gửi chưa thực hiện vì không ghi nhận được lần gửi trước khi gọi Google Forms.";
-                }
-            }
-
-            var description =
-                $"Gửi form bị gián đoạn: đã xác nhận {job.SuccessCount} thành công, {job.FailedCount} thất bại. " +
-                (providerInvoked && pendingAttempt is not null && pendingAttempt.SubmittedAt is null
-                    ? "Kết quả lượt gửi cuối chưa xác định; hãy kiểm tra Google Forms trước khi gửi lại."
-                    : "Hãy kiểm tra kết quả đã ghi nhận trước khi gửi lại.");
-            if (completionUsage is null)
-            {
-                await WriteUsageLogAsync(projectId, UsageLogStatuses.Failed, description, CancellationToken.None);
-            }
-            else
-            {
-                // The completion save failed; update its tracked row rather than add a contradictory second outcome.
-                completionUsage.Status = UsageLogStatuses.Failed;
-                completionUsage.Description = description;
-            }
-            try
-            {
-                // The runner has stopped; acknowledge cancellation without replacing it.
-                using var finalizationTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-                await FinalizeJobAsync(job, interrupted: true, finalizationTimeout.Token);
-                await SaveOutcomeAsync();
-            }
-            catch (Exception persistenceException)
-            {
-                throw new AggregateException("Submission interrupted and its final diagnostic record could not be saved.", exception, persistenceException);
-            }
-
-            throw;
+            using var diagnostic = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            await new CreditReservationService(dbContext).AcknowledgeRunnerAsync(job.Id, interrupted, diagnostic.Token);
         }
     }
 
-    private async Task FinalizeJobAsync(SubmissionJob job, bool interrupted, CancellationToken ct)
+    public async Task<SubmissionJobResponse?> GetJobAsync(Guid projectId, Guid jobId, CancellationToken ct)
     {
-        var terminalStatus = interrupted || job.FailedCount > 0 ? SubmissionJobStatuses.Failed : SubmissionJobStatuses.Completed;
-        var finishedAt = DateTimeOffset.UtcNow;
-        if (dbContext.Database.IsRelational())
-        {
-            // Compare-and-set closes the race with Pause/Cancel after the last batch reload.
-            await dbContext.SubmissionJobs.Where(x => x.Id == job.Id &&
-                (x.Status == SubmissionJobStatuses.Running || (interrupted && x.Status == SubmissionJobStatuses.Completed)))
-                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, terminalStatus)
-                    .SetProperty(x => x.FinishedAt, finishedAt), ct);
-            await dbContext.SubmissionJobs.Where(x => x.Id == job.Id && x.Status == SubmissionJobStatuses.Cancelled && x.FinishedAt == null)
-                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.FinishedAt, finishedAt), ct);
-        }
-
-        var persisted = await dbContext.SubmissionJobs.AsNoTracking().SingleAsync(x => x.Id == job.Id, ct);
-        if (dbContext.Database.IsRelational())
-        {
-            // Keep unsaved confirmed counts if a prior outcome save failed, while avoiding a stale status write.
-            var entry = dbContext.Entry(job);
-            entry.Property(x => x.Status).CurrentValue = persisted.Status;
-            entry.Property(x => x.Status).OriginalValue = persisted.Status;
-            entry.Property(x => x.Status).IsModified = false;
-            entry.Property(x => x.FinishedAt).CurrentValue = persisted.FinishedAt;
-            entry.Property(x => x.FinishedAt).OriginalValue = persisted.FinishedAt;
-            entry.Property(x => x.FinishedAt).IsModified = false;
-        }
-        else
-        {
-            job.Status = persisted.Status is SubmissionJobStatuses.Paused or SubmissionJobStatuses.Cancelled ? persisted.Status : terminalStatus;
-            if (job.Status != SubmissionJobStatuses.Paused) job.FinishedAt = finishedAt;
-        }
+        if (!await OwnedAsync(projectId, ct)) return null;
+        var job = await dbContext.SubmissionJobs.AsNoTracking().SingleOrDefaultAsync(x => x.Id == jobId && x.ProjectId == projectId, ct);
+        return job is null ? null : await ReadAsync(job, ct);
     }
 
-    private async Task SaveOutcomeAsync()
+    private async Task<SubmissionJobResponse> ReadAsync(SubmissionJob identity, CancellationToken ct)
     {
-        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        await dbContext.SaveChangesAsync(timeout.Token);
+        var job = await dbContext.SubmissionJobs.AsNoTracking().SingleAsync(x => x.Id == identity.Id, ct);
+        var logs = await dbContext.SubmissionLogs.AsNoTracking().Where(x => x.JobId == job.Id).ToListAsync(ct);
+        var result = job.ToResponse(logs);
+        if (job.ContractVersion != 2) return result;
+        var items = await dbContext.SubmissionJobItems.AsNoTracking().Where(x => x.JobId == job.Id).OrderBy(x => x.Ordinal).ToListAsync(ct);
+        var reservation = await dbContext.CreditReservations.AsNoTracking().SingleAsync(x => x.JobId == job.Id, ct);
+        var evidence = await dbContext.CreditReservationEvents.AsNoTracking().Where(x => x.ReservationId == reservation.Id && x.EvidenceCode != null).OrderByDescending(x => x.Sequence).ToListAsync(ct);
+        return result with { CommandId = job.CommandId, ContractVersion = job.ContractVersion, BatchId = job.GenerationBatchId,
+            UnknownCount = job.UnknownCount, NotDispatchedCount = job.NotDispatchedCount, HeldCount = job.HeldCount, RunnerAcknowledgedAt = job.RunnerAcknowledgedAt,
+            Items = items.Select(x => new SubmissionItemResponse(x.Id, x.ResponseId, x.AttemptState, x.SettlementState, x.MaximumSendCredits,
+                x.SettlementState == "Settled" ? 1 : 0, evidence.FirstOrDefault(e => e.ItemId == x.Id)?.EvidenceCode)).ToArray(),
+            Fees = new(reservation.Id, (int)reservation.InitialAmount, reservation.OutstandingAmount, (int)reservation.SettledAmount,
+                reservation.ReleasedAmount, job.UnknownCount ?? 0, job.NotDispatchedCount ?? 0, job.RunnerAcknowledgedAt != null,
+                await new CreditReservationService(dbContext).GetCreditAvailabilityAsync(currentUser.UserId, ct)) };
     }
 
-    private static string DescribeOutcome(SubmissionJob job)
+    public Task<SubmissionJobResponse?> PauseAsync(Guid projectId, Guid jobId, CancellationToken ct) => ControlAsync(projectId, jobId, false, ct);
+    public Task<SubmissionJobResponse?> CancelAsync(Guid projectId, Guid jobId, CancellationToken ct) => ControlAsync(projectId, jobId, true, ct);
+    private async Task<SubmissionJobResponse?> ControlAsync(Guid projectId, Guid jobId, bool cancel, CancellationToken ct)
     {
-        var outcome = job.Status switch
+        if (!await OwnedAsync(projectId, ct)) return null;
+        var found = await dbContext.SubmissionJobs.AsNoTracking().SingleOrDefaultAsync(x => x.Id == jobId && x.ProjectId == projectId, ct);
+        if (found is null) return null;
+        await CreditWriteTransaction.RunAsync(dbContext, async () =>
         {
-            SubmissionJobStatuses.Completed => "Gửi form thành công",
-            SubmissionJobStatuses.Paused => "Đã tạm dừng gửi form",
-            SubmissionJobStatuses.Cancelled => "Đã hủy gửi form",
-            _ when job.SuccessCount > 0 => "Gửi form hoàn tất một phần",
-            _ => "Gửi form thất bại"
-        };
-        return $"{outcome}: {job.SuccessCount} thành công, {job.FailedCount} thất bại trên tổng {job.Total} câu trả lời.";
-    }
-
-    public async Task<SubmissionJobResponse?> GetJobAsync(Guid projectId, Guid jobId, CancellationToken cancellationToken)
-    {
-        var ownsProject = await dbContext.FormProjects
-            .AnyAsync(project => project.Id == projectId && project.UserId == currentUser.UserId, cancellationToken);
-
-        if (!ownsProject)
-        {
-            return null;
-        }
-
-        var job = await dbContext.SubmissionJobs
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.Id == jobId && item.ProjectId == projectId, cancellationToken);
-
-        if (job is null)
-        {
-            return null;
-        }
-
-        var logs = await dbContext.SubmissionLogs
-            .AsNoTracking()
-            .Where(log => log.JobId == jobId)
-            .ToListAsync(cancellationToken);
-
-        return job.ToResponse(logs);
-    }
-
-    public async Task<SubmissionJobResponse?> PauseAsync(Guid projectId, Guid jobId, CancellationToken cancellationToken)
-    {
-        var ownsProject = await dbContext.FormProjects
-            .AnyAsync(project => project.Id == projectId && project.UserId == currentUser.UserId, cancellationToken);
-
-        if (!ownsProject)
-        {
-            return null;
-        }
-
-        var job = await dbContext.SubmissionJobs
-            .SingleOrDefaultAsync(item => item.Id == jobId && item.ProjectId == projectId, cancellationToken);
-
-        if (job is null || job.Status is not (SubmissionJobStatuses.Pending or SubmissionJobStatuses.Running))
-        {
-            return null;
-        }
-
-        if (dbContext.Database.IsRelational())
-        {
-            var changed = await dbContext.SubmissionJobs.Where(x => x.Id == jobId && x.ProjectId == projectId &&
-                    (x.Status == SubmissionJobStatuses.Pending || x.Status == SubmissionJobStatuses.Running))
-                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, SubmissionJobStatuses.Paused), cancellationToken);
-            if (changed == 0) return null;
-            await dbContext.Entry(job).ReloadAsync(cancellationToken);
-        }
-        else
-        {
-            job.Status = SubmissionJobStatuses.Paused;
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        var logs = await dbContext.SubmissionLogs
-            .AsNoTracking()
-            .Where(log => log.JobId == jobId)
-            .ToListAsync(cancellationToken);
-
-        return job.ToResponse(logs);
-    }
-
-    public async Task<SubmissionJobResponse?> CancelAsync(Guid projectId, Guid jobId, CancellationToken cancellationToken)
-    {
-        var ownsProject = await dbContext.FormProjects
-            .AnyAsync(project => project.Id == projectId && project.UserId == currentUser.UserId, cancellationToken);
-
-        if (!ownsProject)
-        {
-            return null;
-        }
-
-        var job = await dbContext.SubmissionJobs
-            .SingleOrDefaultAsync(item => item.Id == jobId && item.ProjectId == projectId, cancellationToken);
-
-        if (job is null || job.Status is SubmissionJobStatuses.Completed or SubmissionJobStatuses.Failed or SubmissionJobStatuses.Cancelled)
-        {
-            return null;
-        }
-
-        // Running/paused may still have a batch in flight. Only its runner can acknowledge cancellation.
-        if (dbContext.Database.IsRelational())
-        {
-            var changed = await dbContext.SubmissionJobs.Where(x => x.Id == jobId && x.ProjectId == projectId &&
-                    (x.Status == SubmissionJobStatuses.Pending || x.Status == SubmissionJobStatuses.Running || x.Status == SubmissionJobStatuses.Paused))
-                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, SubmissionJobStatuses.Cancelled)
-                    .SetProperty(x => x.FinishedAt, (DateTimeOffset?)null), cancellationToken);
-            if (changed == 0) return null;
-            await dbContext.Entry(job).ReloadAsync(cancellationToken);
-        }
-        else
-        {
-            job.Status = SubmissionJobStatuses.Cancelled;
-            job.FinishedAt = null;
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        var logs = await dbContext.SubmissionLogs
-            .AsNoTracking()
-            .Where(log => log.JobId == jobId)
-            .ToListAsync(cancellationToken);
-
-        return job.ToResponse(logs);
-    }
-
-    private Task<UsageLog> WriteUsageLogAsync(Guid projectId, string status, string description, CancellationToken cancellationToken)
-    {
-        var log = new UsageLog
-        {
-            Id = Guid.NewGuid(),
-            UserId = currentUser.UserId,
-            ToolName = "FormAutomation",
-            Action = "SubmitResponses",
-            CreditsUsed = 0,
-            Status = status,
-            Description = description,
-            ProjectId = projectId,
-            CreatedAt = DateTimeOffset.UtcNow
-        };
-        dbContext.UsageLogs.Add(log);
-
-        return Task.FromResult(log);
+            await CreditAccountLock.AcquireAsync(dbContext, currentUser.UserId, ct);
+            await CreditAccountLock.LockProjectAsync(dbContext, currentUser.UserId, projectId, ct);
+            var job = await dbContext.SubmissionJobs.SingleAsync(x => x.Id == jobId, ct);
+            if (dbContext.Database.IsSqlServer()) await dbContext.Entry(job).ReloadAsync(ct);
+            Require(job.Status is "Pending" or "Running" || cancel && job.Status == "Paused", "InvalidControlTransition", 409);
+            job.Status = cancel ? "Cancelled" : "Paused";
+            // If an already acknowledged paused runner is cancelled, no new runner/lease is created.
+            if (cancel && job.RunnerAcknowledgedAt != null) job.FinishedAt = DateTimeOffset.UtcNow;
+            await dbContext.SaveChangesAsync(ct);
+            return true;
+        }, ct);
+        return await ReadAsync(found, ct);
     }
 }

@@ -1,0 +1,177 @@
+{
+  "task": "FAH-HISTORY-001 Task4",
+  "base": "df5cce54f4a8516ab9dd0bf2b5dff561c1cb8d5c",
+  "baselineManifest": "task4-baseline-20261105-151913/manifest.json",
+  "baselineMethod": "47-file starting manifest; other previously clean tracked files reconstructed with git cat-file --filters HEAD:path",
+  "files": [
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase3Dtos.cs",
+      "state": "Changed",
+      "baselineSha256": "7d9bbbad1956737784ec5ee6313219ee320c73655d2e654c86d6d126bca237e6",
+      "sha256": "19f97f5824806f1505034a35c17d5f58d6343a42d33a09617fba7f79703f0234"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/SubmissionCompatibilityDtos.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "73323fa397b18080e5a60758f74c3c9543319fa4bad05792228c838ecb490732"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/AiResponsesController.cs",
+      "state": "Changed",
+      "baselineSha256": "5e49916ae6a7869438142a05d3facb718e96c716c2b85d3c78db649a084021e0",
+      "sha256": "4ac8c277d9e6c13674d464851261a63a480ae123ff35b24a526b8af45a9bd3bd"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/GeneratedResponsesController.cs",
+      "state": "Changed",
+      "baselineSha256": "ae734b35af5a0622fcaf617289e0e6ead4ba7eccbc1e824f617ef3d94866080c",
+      "sha256": "0eed4c51d912f2a93719ce5cf9194f02e7521d59aff116c428547d42469ddef2"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/GenerationContractFence.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "05bbde5f03e2017e6e4cd3d63fd18f9c670e845817ca9422b436a0f887974860"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/SubmissionsController.cs",
+      "state": "Changed",
+      "baselineSha256": "b6a50703d49dec5802cbfda7a96516a730fd02f36c6ab8f502ab9f03d4794d26",
+      "sha256": "c272cf5afde01725866127145ff74d0290e5c230a5f8e92e480bd90420d12b84"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleFormsClient.cs",
+      "state": "Changed",
+      "baselineSha256": "a151340f8c21fe1c0d6237449955bde09299bbeb4cba48ed882a2af69cf647f2",
+      "sha256": "02fce0472db808b9c3fd4b952ac47f91d238099d323b86dcab9697914ca78849"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Integrations/GoogleForms/GoogleSubmissionEvidence.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "ef28682fb7a148673e675d5ef78a52c488bb0f7539cf6ee11a590a1d70ffb9e5"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Program.cs",
+      "state": "Changed",
+      "baselineSha256": "22f52eabb7371cae2f89950490b7be263760fb141411820de3c8b759c0c657ea",
+      "sha256": "d33d6f3aa8d7906782a560217067deea6bfb922951b3f3a64074964ff09175ae"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/AiGenerationService.cs",
+      "state": "Changed",
+      "baselineSha256": "fded197cf10ee5842b39e1927e9636a8af64c451a8a2aea4217eb241f15bca40",
+      "sha256": "e01b4d8a07344ad3a9f19194d03603bf5cdd88ab71b552a7a71d55ce9131f518"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/CreditReservationService.cs",
+      "state": "Changed",
+      "baselineSha256": "e893de38062d37acb75e8737f27ab8a3283794136d5e392f0e2bf53af86d806e",
+      "sha256": "0eb52dc421b03b38063f8c706402d5a09ff6cc985c517a4428d2115604011a80"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/DirectRuleSubmissionService.cs",
+      "state": "Changed",
+      "baselineSha256": "0d7961814a2dbf1f1536e1cad1f22f8fa9194a669fcfd1e1b5734d914fd4b2e8",
+      "sha256": "d5d8da4ae8fb8f0aad739dc60eeeba940012620ab3bfd361f64dccc9b84b4da2"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/ResponseGenerationService.cs",
+      "state": "Changed",
+      "baselineSha256": "89037e2003acc6fb00edda6d8806790a2a9196798899822df850f4ae2a5f0d5c",
+      "sha256": "250d185f8d642d84fc95a9615f0de6aa4cbe511b86b428715c32a31a7a428175"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionAdmission.cs",
+      "state": "Changed",
+      "baselineSha256": "77960274619da4c65160589a4828daca8a45e803b0527f51ef37ebf42add38bd",
+      "sha256": "de48897a5a5bb02440eb6a180307c8bcafd88893098d336d4de7e0f5bd69b328"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionCompatibilityService.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "d5d8e15112324b91cc9acd93844fa39a3f8a976c8dcc8f70e72178cc5a13b0f2"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionContractException.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "5147bfcd5ba8c7d9340a54d6defced4bc893489a5685c711505028a671280e1f"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionItemMutation.cs",
+      "state": "Changed",
+      "baselineSha256": "3423e0407862bae055d4a5e5da35f94f997ebca45302b652494b11a62f6ed289",
+      "sha256": "382de88ed3d8669d6fae1030afcb631f9295f64b1a0a7fc802564ebbf17a7e6d"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionService.cs",
+      "state": "Changed",
+      "baselineSha256": "61aa49943794f08e43d2ecb83b20d0f749f0848548ca7e361f89a79a27f52dda",
+      "sha256": "57a416b43910cebaafbc7b739363e3c676f9b6340b0e61aa6d5f2f072b3b4be5"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/SubmissionSettlementService.cs",
+      "state": "Changed",
+      "baselineSha256": "0706b9e9ed657c1d001988a81633f1bae02e3154d6671af0f9cd94492a9eeb08",
+      "sha256": "286b4c7c51d4d2b8d0d257e69296f0f0943289b0d1179a422df472818968ced2"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DirectRuleSubmissionServiceTests.cs",
+      "state": "Changed",
+      "baselineSha256": "02d42a2b62076e557609ec910f284e1d9bf80027c8f0d71288f0b94a84cfdf4a",
+      "sha256": "2d96c7bfde673af4baee2b8c388ae81ec6732e61b933151afda10d0d9b6a2b3e"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DirectRuleSubmissionSqlServerTests.cs",
+      "state": "Changed",
+      "baselineSha256": "95b4c86e76ceaaab28e8777cc4d8f2f37654b64e82ac4deaff74ed3809cd2b16",
+      "sha256": "7086cd49ddf50f3b04a7202fce4d096ae01b94a1089179e8c6496e29a9ae3cec"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/FahErrSubmissionPersistenceTests.cs",
+      "state": "Changed",
+      "baselineSha256": "cb167f069beb508c204e9f60dde5132076b3b6e8d40fbc0c8858a4518c6a3293",
+      "sha256": "62c5df48ec3754339c1b686a1d7ecea80db979ae43e5a466ee9a2e2421d14870"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/GenerationHistorySqlTests.cs",
+      "state": "Changed",
+      "baselineSha256": "b6814fa0172d4a4a05f21d9378933084253f207b21d1b19b43b3e2484dc40e39",
+      "sha256": "e40264d6b18eaea1101829de7ff4f65b416e15fffe9fb111c7a421e06e7fa23f"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/GenerationHistorySubmissionSqlTests.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "e9b673e1c98327be9a827da1221116f3e12dc8230c6119183282560a7fdeb86e"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/GoogleFormsOutcomeTests.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "949469d0778013606b74d218e60e2d953d21b6ba03e243bbb585177ed3107677"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/Phase3FormAutomationTests.cs",
+      "state": "Changed",
+      "baselineSha256": "084dc3e46098deb3509cd49d79c7076905ab9fcf98be808ffc595e553a83ecf5",
+      "sha256": "9f3bc83d0205f68dd1d00064f93cbef317ec042802bdf6c1b3b5d08c045ee3a5"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/SubmissionV2Fixture.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "1796984485f0a9e1ad841596102f5b7092f7b38fc9d8943edbe11e5cc634170b"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/SubmissionV2Tests.cs",
+      "state": "Added",
+      "baselineSha256": null,
+      "sha256": "68da385e332a49ef72973cbe54b29b402de1ef18f291c56ad0407b38a2193fd2"
+    }
+  ],
+  "revision": "R1 I1 fix round1; initial acknowledged runner query protected by finalization"
+}

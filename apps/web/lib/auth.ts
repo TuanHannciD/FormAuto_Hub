@@ -9,6 +9,19 @@ function normalizeBaseUrl(value: string) {
 const SESSION_KEY = "formauto.auth.session";
 const EXPIRY_BUFFER_MS = 60_000;
 let refreshInFlight: Promise<AuthSession | null> | null = null;
+let sessionBoundary = 0;
+let observedUser: string | null | undefined;
+
+// Token rotation keeps a boundary; logout or a different account invalidates outstanding UI reads.
+export function getSessionBoundary() {
+  const user = getStoredSession()?.userId ?? null;
+  if (observedUser !== undefined && user !== observedUser) {
+    sessionBoundary++;
+    window.localStorage.removeItem("formauto.formPreviewResume");
+  }
+  observedUser = user;
+  return sessionBoundary;
+}
 
 export class SessionExpiredError extends Error {
   constructor() {
@@ -47,7 +60,13 @@ export function getStoredSession(): AuthSession | null {
 }
 
 export function saveSession(session: AuthSession) {
+  getSessionBoundary();
+  if (getStoredSession()?.userId !== session.userId) {
+    sessionBoundary++;
+    window.localStorage.removeItem("formauto.formPreviewResume");
+  }
   window.localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  observedUser = session.userId;
   window.dispatchEvent(new Event("formauto-auth-session-changed"));
 }
 
@@ -57,6 +76,9 @@ export function clearStoredSession() {
   }
 
   window.localStorage.removeItem(SESSION_KEY);
+  window.localStorage.removeItem("formauto.formPreviewResume");
+  sessionBoundary++;
+  observedUser = null;
   window.dispatchEvent(new Event("formauto-auth-session-changed"));
 }
 

@@ -1,4 +1,4 @@
-import { clearStoredSession, getStoredSession, getValidAccessToken, refreshSession, SessionExpiredError } from "@/lib/auth";
+import { clearStoredSession, getSessionBoundary, getStoredSession, getValidAccessToken, refreshSession, SessionExpiredError } from "@/lib/auth";
 import { readNckhGoogleAuthorizationError } from "@/lib/nckh-google-auth";
 
 export const API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000");
@@ -21,9 +21,10 @@ export class ApiError extends Error {
   readonly fieldErrors: Readonly<Record<string, readonly string[]>>;
   readonly traceId?: string;
   readonly kind: ApiErrorKind;
+  readonly code?: string;
 
   constructor(kind: ApiErrorKind, method: string, path: string, status: number | null = null,
-    metadata: { fieldErrors?: Record<string, string[]>; traceId?: string } = {}) {
+    metadata: { fieldErrors?: Record<string, string[]>; traceId?: string; code?: string } = {}) {
     super(kind === "network"
       ? "Không kết nối được máy chủ. Vui lòng kiểm tra kết nối và thử lại."
       : kind === "invalid-response"
@@ -46,6 +47,7 @@ export class ApiError extends Error {
     this.path = path.split(/[?#]/, 1)[0].slice(0, 256);
     this.fieldErrors = metadata.fieldErrors ?? {};
     this.traceId = metadata.traceId;
+    this.code = metadata.code;
   }
 }
 
@@ -78,12 +80,15 @@ async function request(path: string, options: RequestInit): Promise<Response> {
 async function httpError(response: Response, method: string, path: string): Promise<ApiError> {
   const fieldErrors: Record<string, string[]> = {};
   let traceId: string | undefined;
+  let code: string | undefined;
   try {
     const text = await response.text();
     // Oversized/unstructured bodies are never kept as diagnostics or UI copy.
     const problem: unknown = text.length <= 32_768 ? JSON.parse(text) : null;
     if (problem && typeof problem === "object" && !Array.isArray(problem)) {
       const { errors, traceId: trace } = problem as { errors?: unknown; traceId?: unknown };
+      const candidate = (problem as { code?: unknown }).code;
+      if (typeof candidate === "string" && historyProblemCodes.has(candidate)) code = candidate;
       if (errors && typeof errors === "object" && !Array.isArray(errors)) {
         for (const [field, guidance] of Object.entries(validationGuidance)) {
           const messages = (errors as Record<string, unknown>)[field];
@@ -101,11 +106,17 @@ async function httpError(response: Response, method: string, path: string): Prom
     if (isAbort(error)) throw error;
     // Empty, malformed and unreadable error bodies retain HTTP classification.
   }
-  return new ApiError("http", method, path, response.status, { fieldErrors, traceId });
+  return new ApiError("http", method, path, response.status, { fieldErrors, traceId, code });
 }
 
+const historyProblemCodes = new Set(["ClientUpgradeRequired", "ActiveSubmissionJob", "HistoryExpired", "FormIncompatible", "FormEvidenceUnavailable", "InsufficientAvailableCredit", "CommandConflict", "OutcomeUnresolved", "ConcurrentAdmission"]);
+
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  return apiFetchInternal<T>(path, options, false);
+  const owner = options.skipAuth ? null : getStoredSession()?.userId;
+  const boundary = options.skipAuth ? null : getSessionBoundary();
+  const result = await apiFetchInternal<T>(path, options, false, owner, boundary);
+  if (!options.skipAuth && (getStoredSession()?.userId !== owner || getSessionBoundary() !== boundary)) throw new SessionExpiredError();
+  return result;
 }
 
 export async function apiFetchBlob(path: string, retried = false): Promise<Blob> {
@@ -146,9 +157,10 @@ export async function apiFetchBlob(path: string, retried = false): Promise<Blob>
   }
 }
 
-async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean): Promise<T> {
+async function apiFetchInternal<T>(path: string, options: RequestOptions, retried: boolean, owner?: string | null, boundary?: number | null): Promise<T> {
   const headers = new Headers(options.headers);
   headers.set("Accept", "application/json");
+  if (/\/api\/projects\/[^/]+\/(?:responses|ai-responses)\/generate$/.test(path)) headers.set("X-FormAuto-Contract-Version", "2");
 
   if (!options.skipAuth) {
     const accessToken = await getValidAccessToken();
@@ -158,6 +170,7 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
+    if (getStoredSession()?.userId !== owner || getSessionBoundary() !== boundary) throw new SessionExpiredError();
   }
 
   let body = options.body;
@@ -180,7 +193,7 @@ async function apiFetchInternal<T>(path: string, options: RequestOptions, retrie
     const rejectedToken = headers.get("Authorization")?.replace(/^Bearer /, "");
     const refreshed = !retried ? await refreshSession(rejectedToken) : null;
     if (refreshed) {
-      return apiFetchInternal<T>(path, options, true);
+      return apiFetchInternal<T>(path, options, true, owner, boundary);
     }
     if (getStoredSession()?.accessToken === rejectedToken) clearStoredSession();
     throw new SessionExpiredError();
@@ -297,6 +310,8 @@ export type UsageLogPageResponse = {
 
 export type DashboardSummary = {
   currentCreditBalance: number;
+  reservedCreditBalance: number;
+  availableCreditBalance: number;
   totalCreditsDeposited: number;
   totalCreditsUsed: number;
   pendingTopupOrders: number;
@@ -469,6 +484,9 @@ export type GeneratedResponseListResponse = {
 };
 
 export type GenerateResponsesResult = {
+  generationBatchId: string | null;
+  generationFeePerResponse: number;
+  credits: CreditAvailability;
   items: GeneratedResponse[];
   creditsUsed: number;
   balanceAfter: number;
@@ -511,6 +529,9 @@ export type AiPromptAutoFillResponse = {
 };
 
 export type AiGenerateResponsesResult = {
+  generationBatchId: string | null;
+  generationFeePerResponse: number;
+  credits: CreditAvailability;
   runId: string;
   status: string;
   requestedCount: number;
@@ -524,6 +545,15 @@ export type AiGenerateResponsesResult = {
 };
 
 export type SubmissionJob = {
+  commandId?: string | null;
+  contractVersion?: number | null;
+  batchId?: string | null;
+  unknownCount?: number | null;
+  notDispatchedCount?: number | null;
+  heldCount?: number | null;
+  runnerAcknowledgedAt?: string | null;
+  fees?: SubmissionFees | null;
+  items?: Array<{ itemId: string; responseId: string; attemptState: string; settlementState: string; maximumSendCredits: number; settledCredits: number; evidenceCode: string | null }>;
   id: string;
   projectId: string;
   total: number;
@@ -541,6 +571,13 @@ export type SubmissionJob = {
     submittedAt?: string | null;
   }>;
 };
+export type CreditAvailability = { balance: number; reserved: number; available: number };
+export type SubmissionFees = { reservationId: string; maximumSendCredits: number; heldCredits: number; settledCredits: number; releasedCredits: number; unknownCount: number; notDispatchedCount: number; runnerAcknowledged: boolean; credits: CreditAvailability };
+export type HistoryOutcomes = { successfulAttempts: number; rejectedAttempts: number; unknownAttempts: number; neverAttemptedResponses: number };
+export type GenerationHistoryRun = { batchId: string; projectId: string; formName: string; mode: string; createdAt: string; requestedCount: number; generatedCount: number; generationCredits: number; pricingPolicy: string; outcomes: HistoryOutcomes };
+export type GenerationHistoryPage = { items: GenerationHistoryRun[]; page: number; pageSize: number; totalItems: number; totalPages: number };
+export type HistoryResponseItem = { ordinal: number; response: GeneratedResponse; prepaidFirstSuccessAvailable: boolean; sendBlocked: boolean; blockReason: string | null; outcomes: HistoryOutcomes };
+export type GenerationHistoryDetail = { run: GenerationHistoryRun; formUrl: string; observation: { questions: Array<{ questionId: string | null; entryId: string | null; questionType: string | null; required: boolean | null; options: string[] | null; constraintsJson: string | null; provenance: string }>; completeness: string; receiptCapability: string }; responses: HistoryResponseItem[]; credits: CreditAvailability };
 // ── NCKH Survey Module ──────────────────────────────────────────
 
 export type NckhGoogleLinkRequest = {

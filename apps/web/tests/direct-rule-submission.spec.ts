@@ -79,7 +79,7 @@ async function baseRoutes(page: Page, onApi?: (route: Route, path: string) => Pr
     if (path === "/api/forms/analyze") return route.fulfill({ json: analysis });
     if (path === "/api/dashboard/summary") {
       balanceReads++;
-      return route.fulfill({ json: { currentCreditBalance: balanceReads === 1 ? 20 : 17 } });
+      return route.fulfill({ json: { currentCreditBalance: balanceReads === 1 ? 20 : 17, reservedCreditBalance: 0, availableCreditBalance: balanceReads === 1 ? 20 : 17 } });
     }
     if (path.endsWith("/answer-rules")) return route.fulfill({ json: {} });
     if (path === "/api/packages") return route.fulfill({ json: [] });
@@ -128,7 +128,7 @@ test("rules uses one direct action without preview, checkbox, or common submissi
   expect(directCalls).toBe(1);
   expect(previewCalls).toBe(0);
   expect(commonSendCalls).toBe(0);
-  expect(directPayload).toEqual({ commandId: expect.stringMatching(/^[0-9a-f-]{36}$/i), count: 1 });
+  expect(directPayload).toEqual({ contractVersion: 2, commandId: expect.stringMatching(/^[0-9a-f-]{36}$/i), count: 1 });
   await expect.poll(api.balanceReads).toBeGreaterThanOrEqual(2);
 });
 
@@ -147,9 +147,10 @@ test("unknown transport and refresh check the same command without saving rules 
       directCalls++;
       commandIds.push(route.request().postDataJSON().commandId);
       if (directCalls === 1) await route.abort("connectionreset");
-      else await route.fulfill({ json: job(1, "recovered-job") });
+      else throw new Error("A recovery must never POST again");
       return true;
     }
+    if (path.includes("/submissions/jobs/")) { await route.fulfill({ json: job(1, commandIds[0]) }); return true; }
     return false;
   });
 
@@ -163,8 +164,8 @@ test("unknown transport and refresh check the same command without saving rules 
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.directRuleCommand.direct-rule-user") ?? "null"));
   expect(stored).toMatchObject({ projectId, count: 1, commandId: commandIds[0] });
   await page.getByRole("button", { name: "Kiểm tra kết quả gửi", exact: true }).click();
-  await expect(page.getByText("recovered-job", { exact: false })).toBeVisible();
-  expect(commandIds).toEqual([commandIds[0], commandIds[0]]);
+  await expect(page.getByText(commandIds[0], { exact: false })).toBeVisible();
+  expect(commandIds).toEqual([commandIds[0]]);
   expect(ruleWrites).toBe(1);
 });
 
@@ -183,9 +184,10 @@ test("503 retains the command and retry reuses it without saving rules again", a
       directCalls++;
       commandIds.push(route.request().postDataJSON().commandId);
       if (directCalls === 1) await route.fulfill({ status: 503, json: {} });
-      else await route.fulfill({ json: job(1, "recovered-after-503") });
+      else throw new Error("A recovery must never POST again");
       return true;
     }
+    if (path.includes("/submissions/jobs/")) { await route.fulfill({ json: job(1, commandIds[0]) }); return true; }
     return false;
   });
 
@@ -196,8 +198,8 @@ test("503 retains the command and retry reuses it without saving rules again", a
   await expect(page.getByRole("button", { name: "Tạo và gửi ngay", exact: true })).toBeDisabled();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.directRuleCommand.direct-rule-user") ?? "null")?.commandId)).toBe(commandIds[0]);
   await page.getByRole("button", { name: "Kiểm tra kết quả gửi", exact: true }).click();
-  await expect(page.getByText("recovered-after-503", { exact: false })).toBeVisible();
-  expect(commandIds).toEqual([commandIds[0], commandIds[0]]);
+  await expect(page.getByText(commandIds[0], { exact: false })).toBeVisible();
+  expect(commandIds).toEqual([commandIds[0]]);
   expect(ruleWrites).toBe(1);
 });
 
@@ -374,7 +376,7 @@ test("uncertain failed job retains the command and repeated checks cannot create
   await page.getByRole("button", { name: "Không", exact: true }).click({ force: true });
   expect(ruleWrites).toBe(1);
   await page.getByRole("button", { name: "Kiểm tra kết quả gửi", exact: true }).click();
-  expect(commandIds).toEqual([commandIds[0], commandIds[0]]);
+  expect(commandIds).toEqual([commandIds[0]]);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.directRuleCommand.direct-rule-user") ?? "null")?.commandId)).toBe(commandIds[0]);
   expect(ruleWrites).toBe(1);
 });
@@ -514,8 +516,8 @@ test("mixed result distinguishes generated attempts, successes, failures, and cr
 });
 
 for (const mode of [
-  { button: /AI mặc định.*x2/, backend: "Option2" },
-  { button: /AI tùy chỉnh.*x3/, backend: "Option3" }
+  { button: /AI mặc định.*Tạo 1/, backend: "Option2" },
+  { button: /AI tùy chỉnh.*Tạo 2/, backend: "Option3" }
 ]) test(`AI ${mode.backend} still requires preview and confirmation before common send`, async ({ page }) => {
   await addSession(page);
   let commonPayload: Record<string, unknown> | null = null;
@@ -531,7 +533,7 @@ for (const mode of [
     }
     if (path.endsWith("/ai-responses/generate")) {
       expect(route.request().postDataJSON()).toMatchObject({ mode: mode.backend, count: 1 });
-      await route.fulfill({ json: { runId: `run-${mode.backend}`, status: "Succeeded", requestedCount: 1, generatedCount: 1, multiplier: mode.backend === "Option2" ? 2 : 3, creditsUsed: mode.backend === "Option2" ? 2 : 3, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: [preview.id] } });
+      await route.fulfill({ json: { runId: `run-${mode.backend}`, status: "Succeeded", requestedCount: 1, generatedCount: 1, generationBatchId: "fixture-batch", credits: { balance: 18, reserved: 0, available: 18 }, generationFeePerResponse: mode.backend === "Option2" ? 1 : 2, multiplier: mode.backend === "Option2" ? 1 : 2, creditsUsed: mode.backend === "Option2" ? 1 : 2, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: [preview.id] } });
       return true;
     }
     if (path.endsWith("/responses")) {
@@ -560,6 +562,6 @@ for (const mode of [
   await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true }).click();
-  expect(commonPayload).toEqual({ responseIds: [preview.id], confirmed: true });
+  expect(commonPayload).toEqual({ contractVersion: 2, commandId: expect.stringMatching(/^[0-9a-f-]{36}$/i), batchId: "fixture-batch", responseIds: [preview.id], confirmed: true, duplicateWarningAccepted: false });
   expect(directCalls).toBe(0);
 });

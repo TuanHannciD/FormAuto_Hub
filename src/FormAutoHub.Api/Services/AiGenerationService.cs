@@ -14,10 +14,9 @@ namespace FormAutoHub.Api.Services;
 // Dòng    Method                      Mục đích
 // 43      AiGenerationService()       Constructor – DI: DbContext, user context, prompt guard, validator, provider adapter, config
 // 53      GenerateAsync()             Entry point – validate input, gọi provider, tạo previews, trừ credit, ghi audit
-// 383     GetCurrentBalanceAsync()    Truy vấn số dư credit của user hiện tại
 // 392     NormalizeMode()             Chuẩn hóa chế độ generate (default → Option2)
 // 394     IsSupportedMode()           Kiểm tra chế độ generate có được hỗ trợ
-// 397     GetMultiplier()             Tính hệ số nhân credit theo chế độ (Option2=2, Option3=3)
+// 397     GetMultiplier()             Tính hệ số nhân credit theo chế độ (Option2=1, Option3=2)
 // 400     IsConfiguredProviderSetting() Kiểm tra provider setting đã được admin cấu hình
 // 405     BuildPromptSnapshotJson()   Tạo snapshot JSON của prompt profile để audit
 // 423     BuildQuestionSnapshotJson() Tạo snapshot JSON của question để audit
@@ -29,11 +28,12 @@ namespace FormAutoHub.Api.Services;
 // 511     CompleteRun()               Đánh dấu run hoàn tất thành công
 // 522     FailRun()                   Đánh dấu run thất bại kèm lý do
 // 530     WriteUsageLogAsync()        Ghi UsageLog sau mỗi lần generate
-// 553     ToResponse()                Map entity sang DTO AiGenerateResponsesResponse
+// 553     ToResponseAsync()           Map entity sang DTO AiGenerateResponsesResponse
 // 570     GenerateBatchAsync()        Gọi provider, validate output, tạo preview, ghi credit + audit
 // 585     RawAnswerItem               Record nội bộ chứa answer text/value thô từ AI provider
 public interface IAiGenerationService
 {
+    Task<bool> OwnsProjectAsync(Guid projectId, CancellationToken ct);
     Task<AiGenerateResponsesResponse?> GenerateAsync(
         Guid projectId,
         AiGenerateResponsesRequest request,
@@ -51,11 +51,19 @@ public sealed class AiGenerationService(
     ICreditService creditService,
     ILogger<AiGenerationService>? logger = null) : IAiGenerationService
 {
+    public Task<bool> OwnsProjectAsync(Guid projectId, CancellationToken ct) => dbContext.FormProjects.AsNoTracking().AnyAsync(x => x.Id == projectId && x.UserId == currentUser.UserId, ct);
     public async Task<AiGenerateResponsesResponse?> GenerateAsync(
         Guid projectId,
         AiGenerateResponsesRequest request,
         CancellationToken cancellationToken)
     {
+        var project = await dbContext.FormProjects
+            .SingleOrDefaultAsync(item => item.Id == projectId && item.UserId == currentUser.UserId, cancellationToken);
+        if (project is null)
+        {
+            return null;
+        }
+
         var mode = NormalizeMode(request.Mode);
         if (!IsSupportedMode(mode))
         {
@@ -71,13 +79,6 @@ public sealed class AiGenerationService(
             throw new InvalidOperationException("AI preview response count must be between 1 and 100.");
         }
 
-        var project = await dbContext.FormProjects
-            .SingleOrDefaultAsync(item => item.Id == projectId && item.UserId == currentUser.UserId, cancellationToken);
-        if (project is null)
-        {
-            return null;
-        }
-
         var questions = await dbContext.FormQuestions
             .Where(question => question.ProjectId == projectId)
             .OrderBy(question => question.OrderIndex)
@@ -88,6 +89,9 @@ public sealed class AiGenerationService(
             await dbContext.SaveChangesAsync(cancellationToken);
             throw new InvalidOperationException("Project has no detected questions for AI generation.");
         }
+
+        var batchWriter = new GenerationBatchWriter(dbContext, currentUser);
+        batchWriter.CaptureObservation(project, questions);
 
         var profile = await dbContext.AiPromptProfiles
             .SingleOrDefaultAsync(item => item.ProjectId == projectId && item.Mode == mode, cancellationToken);
@@ -152,21 +156,18 @@ public sealed class AiGenerationService(
             FailRun(run, guardResult.RejectionReason ?? "Prompt requests unsafe or forbidden AI behavior.");
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, 0, await GetCurrentBalanceAsync(cancellationToken), []);
+            return await ToResponseAsync(run, 0, []);
         }
 
-        var account = await dbContext.UserCreditAccounts
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.UserId == currentUser.UserId, cancellationToken);
-        var availableCredits = Math.Max(0, (int)Math.Floor(account?.Balance ?? 0));
-        var generationLimit = Math.Min(request.Count, availableCredits / multiplier);
+        var credits = await new CreditReservationService(dbContext).GetCreditAvailabilityAsync(currentUser.UserId, cancellationToken);
+        var generationLimit = (int)Math.Min(request.Count, Math.Max(0m, Math.Floor(credits.Available / multiplier)));
         var missingCredits = Math.Max(0, (request.Count - generationLimit) * multiplier);
         if (generationLimit == 0)
         {
             FailRun(run, "Không đủ credit để tạo bản xem trước AI.");
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
+            return await ToResponseAsync(run, missingCredits, []);
         }
 
         var batchSize = Math.Max(1, configuration.GetValue<int>("AI:BatchSize", 10));
@@ -202,7 +203,7 @@ public sealed class AiGenerationService(
             logger?.LogWarning("AI generation run failed. Cause: {Cause}.", exception.GetType().Name);
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, "AI provider generation timed out.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
+            return await ToResponseAsync(run, missingCredits, []);
         }
         catch (Exception exception) when (exception is not OperationCanceledException)
         {
@@ -210,7 +211,7 @@ public sealed class AiGenerationService(
             logger?.LogWarning("AI generation run failed. Cause: {Cause}.", exception.GetType().Name);
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
+            return await ToResponseAsync(run, missingCredits, []);
         }
 
         var successfulBatches = batchResults
@@ -331,69 +332,77 @@ public sealed class AiGenerationService(
             run.ValidationSummaryJson = JsonSerializer.Serialize(validationSummaries);
             await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, missingCredits, account?.Balance ?? 0, []);
+            return await ToResponseAsync(run, missingCredits, []);
         }
 
-        dbContext.GeneratedResponses.AddRange(generatedResponses);
-        var creditsUsed = generatedResponses.Count * multiplier;
-        var creditResult = await creditService.DeductUsageCreditsAsync(
-            currentUser.UserId,
-            creditsUsed,
-            $"Đã tạo {generatedResponses.Count} phản hồi xem trước AI.",
-            nameof(AiGenerationRun),
-            run.Id,
-            cancellationToken);
-
-        if (creditResult is null)
+        var completedAt = DateTimeOffset.UtcNow;
+        foreach (var response in generatedResponses) response.CreatedAt = completedAt;
+        var historyMode = mode == AiPromptProfileModes.Option3 ? "ai-custom" : "ai-default";
+        return await CreditWriteTransaction.RunStagedAsync<AiGenerateResponsesResponse?>(dbContext, currentUser.UserId, async (read, readCt) =>
         {
-            foreach (var response in generatedResponses)
+            var persisted = await read.AiGenerationRuns.AsNoTracking().SingleOrDefaultAsync(x => x.Id == run.Id && x.CompletedAt != null, readCt);
+            if (persisted is null) return (false, null);
+            var ids = await read.GeneratedResponses.AsNoTracking().Where(x => x.GenerationBatchId == generatedResponses[0].Id).OrderBy(x => x.BatchOrdinal).Select(x => x.Id).ToListAsync(readCt);
+            if (persisted.GeneratedCount > 0 && !await read.GenerationBatches.AsNoTracking().AnyAsync(x => x.Id == generatedResponses[0].Id && x.AiGenerationRunId == run.Id, readCt))
+                throw new InvalidOperationException("Committed AI run is missing its generation batch.");
+            if (persisted.GeneratedCount > 0)
+                await new GenerationBatchWriter(read, currentUser).AppendBatchAsync(projectId, historyMode, generatedResponses, request.Count, persisted.CreditsUsed, readCt);
+            return (true, await ToResponseAsync(persisted, persisted.GeneratedCount == 0 ? request.Count * multiplier : missingCredits, ids, read));
+        }, async () =>
+        {
+            dbContext.GeneratedResponses.AddRange(generatedResponses);
+            var creditsUsed = generatedResponses.Count * multiplier;
+            var creditResult = await creditService.DeductUsageCreditsAsync(
+                currentUser.UserId,
+                creditsUsed,
+                $"Đã tạo {generatedResponses.Count} phản hồi xem trước AI.",
+                nameof(AiGenerationRun),
+                run.Id,
+                cancellationToken);
+
+            if (creditResult is null)
             {
-                dbContext.GeneratedResponses.Remove(response);
+                foreach (var response in generatedResponses)
+                {
+                    dbContext.GeneratedResponses.Remove(response);
+                }
+
+                foreach (var item in runItems.Where(item => item.GeneratedResponseId is not null))
+                {
+                    item.GeneratedResponseId = null;
+                    item.Status = AiGenerationRunItemStatuses.Invalid;
+                    item.ValidationMessage = "Credit deduction failed; preview was not stored.";
+                }
+
+                FailRun(run, "Không đủ credit để lưu bản xem trước AI.");
+                run.ValidationSummaryJson = JsonSerializer.Serialize(validationSummaries);
+                await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return await ToResponseAsync(run, Math.Max(0, request.Count * multiplier), []);
             }
 
-            foreach (var item in runItems.Where(item => item.GeneratedResponseId is not null))
-            {
-                item.GeneratedResponseId = null;
-                item.Status = AiGenerationRunItemStatuses.Invalid;
-                item.ValidationMessage = "Credit deduction failed; preview was not stored.";
-            }
-
-            FailRun(run, "Không đủ credit để lưu bản xem trước AI.");
+            run.GeneratedCount = generatedResponses.Count;
+            run.CreditsUsed = creditsUsed;
             run.ValidationSummaryJson = JsonSerializer.Serialize(validationSummaries);
-            await WriteUsageLogAsync(projectId, 0, UsageLogStatuses.Failed, run.ErrorMessage, cancellationToken);
+            CompleteRun(run, generatedResponses.Count == request.Count
+                ? AiGenerationRunStatuses.Succeeded
+                : AiGenerationRunStatuses.Partial);
+            run.CompletedAt = completedAt;
+
+            await WriteUsageLogAsync(
+                projectId,
+                creditsUsed,
+                UsageLogStatuses.Success,
+                "Xem các câu trả lời AI đã tạo.",
+                cancellationToken);
+            await batchWriter.AppendBatchAsync(projectId, historyMode, generatedResponses, request.Count, creditsUsed, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return ToResponse(run, Math.Max(0, request.Count * multiplier), account?.Balance ?? 0, []);
-        }
 
-        run.GeneratedCount = generatedResponses.Count;
-        run.CreditsUsed = creditsUsed;
-        run.ValidationSummaryJson = JsonSerializer.Serialize(validationSummaries);
-        CompleteRun(run, generatedResponses.Count == request.Count
-            ? AiGenerationRunStatuses.Succeeded
-            : AiGenerationRunStatuses.Partial);
-
-        await WriteUsageLogAsync(
-            projectId,
-            creditsUsed,
-            UsageLogStatuses.Success,
-            "Xem các câu trả lời AI đã tạo.",
-            cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return ToResponse(
-            run,
-            missingCredits,
-            creditResult.Value.Account.Balance,
-            generatedResponses.Select(response => response.Id).ToList());
-    }
-
-    private async Task<decimal> GetCurrentBalanceAsync(CancellationToken cancellationToken)
-    {
-        var account = await dbContext.UserCreditAccounts
-            .AsNoTracking()
-            .SingleOrDefaultAsync(item => item.UserId == currentUser.UserId, cancellationToken);
-
-        return account?.Balance ?? 0;
+            return await ToResponseAsync(
+                run,
+                missingCredits,
+                generatedResponses.Select(response => response.Id).ToList());
+        }, cancellationToken);
     }
 
     private static string NormalizeMode(string? mode) => mode?.Trim() ?? string.Empty;
@@ -402,7 +411,7 @@ public sealed class AiGenerationService(
         mode is AiPromptProfileModes.Option2 or AiPromptProfileModes.Option3;
 
     private static int GetMultiplier(string mode) =>
-        mode == AiPromptProfileModes.Option3 ? 3 : 2;
+        mode == AiPromptProfileModes.Option3 ? 2 : 1;
 
     private static bool IsConfiguredProviderSetting(AiProviderSetting setting)
         => !string.IsNullOrWhiteSpace(setting.Provider) &&
@@ -557,12 +566,16 @@ public sealed class AiGenerationService(
         await Task.CompletedTask;
     }
 
-    private static AiGenerateResponsesResponse ToResponse(
+    private async Task<AiGenerateResponsesResponse> ToResponseAsync(
         AiGenerationRun run,
         int missingCredits,
-        decimal balanceAfter,
-        IReadOnlyList<Guid> generatedPreviewIds) =>
-        new(
+        IReadOnlyList<Guid> generatedPreviewIds,
+        FormAutoHubDbContext? read = null)
+    {
+        var context = read ?? dbContext;
+        var credits = await new CreditReservationService(context).GetCreditAvailabilityAsync(currentUser.UserId, CancellationToken.None);
+        var batchId = await context.GenerationBatches.AsNoTracking().Where(x => x.AiGenerationRunId == run.Id).Select(x => (Guid?)x.Id).SingleOrDefaultAsync();
+        return new(
             run.Id,
             run.Status,
             run.RequestedCount,
@@ -570,9 +583,13 @@ public sealed class AiGenerationService(
             run.Multiplier,
             run.CreditsUsed,
             missingCredits,
-            balanceAfter,
+            credits.Balance,
             generatedPreviewIds,
-            AiGenerationErrorMessages.ToPublicMessage(run.Status, run.ErrorMessage));
+            AiGenerationErrorMessages.ToPublicMessage(run.Status, run.ErrorMessage),
+            batchId,
+            run.Multiplier,
+            credits);
+    }
 
 
     private async Task<AiProviderGenerateResult> GenerateBatchAsync(

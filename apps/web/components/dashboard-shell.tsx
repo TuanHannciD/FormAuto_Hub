@@ -13,7 +13,7 @@ import {
   Shield,
   ReceiptText,
 } from "lucide-react";
-import { getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
+import { getSessionBoundary, getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { AccountMenu } from "@/components/account-menu";
 import { ShellLayout, shellNavItemStyles, shellNavActiveStyles } from "./shell-layout";
@@ -21,6 +21,7 @@ import { ShellLayout, shellNavItemStyles, shellNavActiveStyles } from "./shell-l
 const navItems = [
   { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
   { href: "/dashboard/forms", label: "Tự động hóa biểu mẫu", icon: FormInput },
+  { href: "/dashboard/forms/history", label: "Lịch sử tạo câu trả lời", icon: FileClock },
   { href: "/dashboard/top-up", label: "Nạp credit", icon: CreditCard },
   { href: "/dashboard/usage-logs", label: "Lịch sử sử dụng", icon: FileClock },
   { href: "/dashboard/credit-transactions", label: "Giao dịch credit", icon: ReceiptText },
@@ -32,12 +33,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [session, setSession] = useState<AuthSession | null>(null);
+  const [boundary, setBoundary] = useState(0);
   const [isChecking, setIsChecking] = useState(true);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     function syncSession() {
       const nextSession = getStoredSession();
+      setBoundary(getSessionBoundary());
       setSession(hasUsableSession() ? nextSession : null);
       if (!hasUsableSession()) {
         router.replace("/login?reason=session-expired");
@@ -118,6 +121,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <Link href="/dashboard/top-up" className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-primary transition hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:min-h-10"><CreditCard aria-hidden="true" size={18} /><span className="hidden sm:inline">Nạp credit</span><span className="sr-only sm:hidden">Nạp credit</span></Link>
       <AccountMenu session={session} onLogout={logout} />
     </>}>
-    {children}
+    <div key={`${session.userId}:${boundary}`}>{children}</div>
   </ShellLayout>;
 }

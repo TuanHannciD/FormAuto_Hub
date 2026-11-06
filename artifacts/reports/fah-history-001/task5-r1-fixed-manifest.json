@@ -1,0 +1,206 @@
+{
+  "base": "df5cce54f4a8516ab9dd0bf2b5dff561c1cb8d5c",
+  "comparison": "Full28 versus Task5 baseline64/HEAD; scoped9 versus original R1 task5-final-snapshot-20261105-2306",
+  "status": "FROZEN for independent scoped re-review I1/M1",
+  "snapshot": "artifacts/reports/fah-history-001/task5-r1-fixed-snapshot-20261105",
+  "files": [
+    {
+      "path": "apps/web/app/dashboard/forms/_components/AiModePreparationPanel.tsx",
+      "baselineSha256": "c7c53afde0632cc555a1d085a16eb1ebbbabd4f4a60762fb0603f5e6f3b79851",
+      "sha256": "bdf553ed70d5dbc493dd611e0061b8d9ed05473a4f972415e1c32c7d4a6ec419"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "baselineSha256": "c51f2a0af74803ebf1df8302986ba8c9ad5959b43bbc15c6e97bf14f55bfa3b7",
+      "sha256": "33017385a9fea417be086e43e23cb756aba40b6d85c6dad1f1ee5599c14d0014"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_constants.ts",
+      "baselineSha256": "b38e6370495c6521f50d40f24ce069f430247669c1f6d460327a32faf7f24559",
+      "sha256": "149da32cf82fce9b8dd87ab604d9e21a917b2eb598fde5d2e39875c5eee5a134"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/_types.ts",
+      "baselineSha256": "9f6c2cd94a4cc690fcb47adc53a3382ab798af745be5368807a0b466c3ab6c58",
+      "sha256": "67d74d9fa533db2270ebda620ed1c2eeffe4e51ad9ce1c4ecbec016a02dd33cf"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/page.tsx",
+      "baselineSha256": "f7f6dbb224a94ec924e0fb60a0031533ad6f3fcac0b7dc8e0951594690c71684",
+      "sha256": "3af26f5e29cef2c9b18c024a5cc21c6a9d31c03e5ce00bd332cd5e47bb0811e7"
+    },
+    {
+      "path": "apps/web/app/dashboard/page.tsx",
+      "baselineSha256": "aff9c82e9fdbc802ad74b5a9cb68bd67849022ef4de46f8b9e6419f448353a3e",
+      "sha256": "0c7e42e999008cf95e4128a0f4028df216608dd9001fa990d12020fc22e1d02e"
+    },
+    {
+      "path": "apps/web/components/dashboard-shell.tsx",
+      "baselineSha256": "4e59ac6f23fc5409305383e8e64862ba4d0a80fde9658ffdc8e369338a011a67",
+      "sha256": "1941f6c208565a1e965a51994abdee3aba113e146716d1e8795c046eec5c172b"
+    },
+    {
+      "path": "apps/web/lib/api.ts",
+      "baselineSha256": "fe2cece4c5036fbe4737c43f128b1a69947524086e3788a81a156130588d91ba",
+      "sha256": "7f9f8d8a35afeab77213dc10e679495e9401d4fdb1aa0275f38f01e7094a730e"
+    },
+    {
+      "path": "apps/web/lib/auth.ts",
+      "baselineSha256": "7087a7b33170e9763ba3769d54e797f072dc789a9e70692c48b87bd1edf2133a",
+      "sha256": "115be5895b6a2412fbca2c449133798330ae86273a22795b0a197465e7b11f5e"
+    },
+    {
+      "path": "apps/web/tests/api-auth.test.cjs",
+      "baselineSha256": "7ef2ad733d5a602aded05c48c255616cb6d9e3154cbfb8f94d4aee506436dd02",
+      "sha256": "d0641e7ee31499727c42710fb5aadbee693cf92517c6e41a70fdc065322d693c"
+    },
+    {
+      "path": "apps/web/tests/auth-session.test.cjs",
+      "baselineSha256": "fc25d0e2057d8840b983f7a4585c7f0caf2989806a9d045e6aec86c7f709a305",
+      "sha256": "8ba814829b30fac766c71d0cc99993042550688e308eeea1b6796e2acc09435b"
+    },
+    {
+      "path": "apps/web/tests/direct-rule-submission.spec.ts",
+      "baselineSha256": "7055504d9d764c15b3c19717f4b9ad1c3694e31f4c5faced455f29d85fb86c35",
+      "sha256": "22dbf9fe5e0c04edfa63b2fe19ea5446b550f7b5f4c784853c838a0e7e073ee9"
+    },
+    {
+      "path": "apps/web/tests/fah-err-forms-errors.spec.ts",
+      "baselineSha256": "06386526f540a3ce8c58b104048acb1111b1db1699c842b7308b2c507755d482",
+      "sha256": "cc1793e41bd413075938f334b187c6edafa8221789fdab4cfd5acf91507ce2c2"
+    },
+    {
+      "path": "apps/web/tests/fah-err-shared-errors.test.cjs",
+      "baselineSha256": "ca14e43b5df0d64e7a41e02398e45b2fee55252586a0e99da04c87adff80c5ce",
+      "sha256": "69cc3126fac619f47bbb8cabf1e4486d4e8e7d5c41d82ca0e1c38858f2d1dcdf"
+    },
+    {
+      "path": "apps/web/tests/form-automation.spec.ts",
+      "baselineSha256": "0493c01c8dfd54fda86e7d163c4676a28c50578f8793ed3f23204d4a49ed6786",
+      "sha256": "e5be11ffc6b2b656d2a14fc56331730d43905f406d0ac03ce71d6e7553db4001"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Contracts/Phase2Dtos.cs",
+      "baselineSha256": "9b5091f4ecdb305bc24ef88dce7d499bc8d287f4211dd4a44116e1c04d8231a4",
+      "sha256": "861f94b1bfadf86ca8faada275b4887ad8269e30dfda9200a4aab6bd77a294dc"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/DashboardService.cs",
+      "baselineSha256": "a8023898aa97cadc38a7d83512900e396aa0d8ff700db95426bfa5d222077595",
+      "sha256": "914946a8fac5edd052c3114a684f88a3a4c496771404c517c8b893998607ca17"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/GenerationHistory.tsx",
+      "baselineSha256": null,
+      "sha256": "5f12623fae6824cdaed00ef6b563bd31a77e49abe40f6f794c1c7139923a966d"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/HistoryRunDetail.tsx",
+      "baselineSha256": null,
+      "sha256": "d5daca67abb9bf13c6f211d03241a9006f8d781c60ca4bf3c0f9c8157a2fbfa4"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/history-command.ts",
+      "baselineSha256": null,
+      "sha256": "c18895d7edf8f81ac7f7d1cad232c3731ae229547d3c57e848a49fd12d81aae7"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/page.tsx",
+      "baselineSha256": null,
+      "sha256": "06f881e71112954a4097ea283abacd639e0d28a414ffe627ca849b0f318605b2"
+    },
+    {
+      "path": "apps/web/playwright.history.config.ts",
+      "baselineSha256": null,
+      "sha256": "63666f2e0d99664a2884ae398bce2253ed6b82303bb6963efb5e4646274b8fa0"
+    },
+    {
+      "path": "apps/web/tests/generation-history.spec.ts",
+      "baselineSha256": null,
+      "sha256": "bbdd644550accf8d5a37d8486170196b9a39feb7b7740e9af8158c704c969133"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Controllers/GenerationHistoryController.cs",
+      "baselineSha256": null,
+      "sha256": "955bc97c48e7f0ce5d0b67dad8457a907cd40878a993b85105b0bd8b7f5ae381"
+    },
+    {
+      "path": "src/FormAutoHub.Api/Services/GenerationHistoryService.cs",
+      "baselineSha256": "584d2b5d47eb99c71a66813e8d7a244d9f4dc1ac4432e3322503ba1b3f875254",
+      "sha256": "9030095005967b80de86336ac40e061df6a1c7b52d7d6fb66d97989fbdfa4751"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/GenerationHistoryApiTests.cs",
+      "baselineSha256": null,
+      "sha256": "d3f1fbff0279c077d5d968f11c4bed7f17da2a5dd48fe3bb620ef49675d21c37"
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/GenerationHistorySqlTests.cs",
+      "baselineSha256": "e40264d6b18eaea1101829de7ff4f65b416e15fffe9fb111c7a421e06e7fa23f",
+      "sha256": "0827564aa2b326fe32c927228bda01c375913515ddbc0d9f78b90800f750258b"
+    },
+    {
+      "path": "apps/web/tests/history-command.test.cjs",
+      "baselineSha256": null,
+      "sha256": "85d59ad823d2d16d8c47d9f056e0edd493d936f37ad0af6d88ac8f324430beec"
+    }
+  ],
+  "r1FixFiles": [
+    {
+      "path": "apps/web/app/dashboard/forms/_components/WorkflowSummary.tsx",
+      "r1Sha256": "47b49d0be0ec43d779c19378ebd37d60824adbe65e00ddc28575c5464fed7029",
+      "sha256": "33017385a9fea417be086e43e23cb756aba40b6d85c6dad1f1ee5599c14d0014"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/page.tsx",
+      "r1Sha256": "1180711627bbcc2d237220fe25fb9532dde8062083509697fe8d88fbec0d6e35",
+      "sha256": "3af26f5e29cef2c9b18c024a5cc21c6a9d31c03e5ce00bd332cd5e47bb0811e7"
+    },
+    {
+      "path": "apps/web/tests/fah-err-forms-errors.spec.ts",
+      "r1Sha256": "7c8835f801c7019ddb1910ea3b9c42cf530d253f9769c2215cfb2e39592931e8",
+      "sha256": "cc1793e41bd413075938f334b187c6edafa8221789fdab4cfd5acf91507ce2c2"
+    },
+    {
+      "path": "apps/web/tests/form-automation.spec.ts",
+      "r1Sha256": "8a1475022df024c275fddf3804cd8e991879e0ef89c684113d600d766c9e90fe",
+      "sha256": "e5be11ffc6b2b656d2a14fc56331730d43905f406d0ac03ce71d6e7553db4001"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/GenerationHistory.tsx",
+      "r1Sha256": "bfb1e9c1c9a584e023c838d9a4b39a34a6a45f8b962b1d02311a5658adf9fc75",
+      "sha256": "5f12623fae6824cdaed00ef6b563bd31a77e49abe40f6f794c1c7139923a966d"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/HistoryRunDetail.tsx",
+      "r1Sha256": "3a337e56e55273d160bc3cbcc72a7414ba86fd5cae6ca206210e9ef7727788d3",
+      "sha256": "d5daca67abb9bf13c6f211d03241a9006f8d781c60ca4bf3c0f9c8157a2fbfa4"
+    },
+    {
+      "path": "apps/web/app/dashboard/forms/history/_components/history-command.ts",
+      "r1Sha256": "72fd5fa00e1d41321bf562c1e911d63a143c3775f95599f60bfd7d60296cb736",
+      "sha256": "c18895d7edf8f81ac7f7d1cad232c3731ae229547d3c57e848a49fd12d81aae7"
+    },
+    {
+      "path": "apps/web/tests/generation-history.spec.ts",
+      "r1Sha256": "e909a5f69da359201aec566b29792407a07668061eded03aeac5fca7b9dbcba5",
+      "sha256": "bbdd644550accf8d5a37d8486170196b9a39feb7b7740e9af8158c704c969133"
+    },
+    {
+      "path": "apps/web/tests/history-command.test.cjs",
+      "r1Sha256": null,
+      "sha256": "85d59ad823d2d16d8c47d9f056e0edd493d936f37ad0af6d88ac8f324430beec"
+    }
+  ],
+  "reportHashes": [
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/TASK5_REPORT.md",
+      "sha256": "f52d02b39a93f86daef61658aab28dd619babf0c3fdaefa2a58568e2d256eccb"
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/TASK5_REPORT.md",
+      "sha256": "313f83730354ddfb8c17c6e971c6a621ac0ab7e64bb4e5973a886415cba8a3c7"
+    }
+  ],
+  "resources": "production11632/task5-r1-web-owner.json; T3 owned incognito tab retained; no Task6 execution"
+}

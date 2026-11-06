@@ -42,8 +42,11 @@ public sealed class AdminTopupOrderService(FormAutoHubDbContext dbContext, ICred
     {
         if (!currentUser.IsAdmin) throw new UnauthorizedAccessException();
         var transactionId = Guid.NewGuid();
+        var owner = await dbContext.TopupOrders.AsNoTracking().Where(x => x.Id == id).Select(x => (Guid?)x.UserId).SingleOrDefaultAsync(cancellationToken);
+        if (owner is null) return null;
         return await CreditWriteTransaction.RunAsync<ApproveTopupOrderResponse?>(dbContext, async () =>
         {
+            await CreditAccountLock.AcquireAsync(dbContext, owner.Value, cancellationToken);
             var committed = await dbContext.CreditTransactions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == transactionId, cancellationToken);
             if (committed is not null) return new(id, TopupOrderStatuses.Approved, committed.Id, committed.BalanceAfter);
             var order = await dbContext.TopupOrders.SingleOrDefaultAsync(item => item.Id == id, cancellationToken);

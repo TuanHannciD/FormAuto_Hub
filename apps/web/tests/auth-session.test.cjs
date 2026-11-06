@@ -68,3 +68,15 @@ test('expired stored sessions do not attempt refresh', async () => {
   assert.equal(env.stored(), null);
   assert.equal(calls, 0);
 });
+
+test('logout and a fresh login change session boundary while token refresh preserves it', async () => {
+  const env = setup(async () => ({ ok: true, status: 200, json: async () => next() }));
+  const before = env.auth.getSessionBoundary();
+  await env.auth.refreshSession();
+  assert.equal(env.auth.getSessionBoundary(), before);
+  env.auth.clearStoredSession();
+  const loggedOut = env.auth.getSessionBoundary();
+  assert.notEqual(loggedOut, before);
+  env.auth.saveSession(next());
+  assert.notEqual(env.auth.getSessionBoundary(), loggedOut);
+});

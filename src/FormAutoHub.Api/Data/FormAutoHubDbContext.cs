@@ -13,6 +13,11 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<TopupOrder> TopupOrders => Set<TopupOrder>();
     public DbSet<TopupEvidence> TopupEvidence => Set<TopupEvidence>();
     public DbSet<CreditTransaction> CreditTransactions => Set<CreditTransaction>();
+    public DbSet<GenerationBatch> GenerationBatches => Set<GenerationBatch>();
+    public DbSet<CreditReservation> CreditReservations => Set<CreditReservation>();
+    public DbSet<CreditReservationEvent> CreditReservationEvents => Set<CreditReservationEvent>();
+    public DbSet<SubmissionJobItem> SubmissionJobItems => Set<SubmissionJobItem>();
+    public DbSet<LegacyAttemptEvidence> LegacyAttemptEvidence => Set<LegacyAttemptEvidence>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<UserExternalLogin> UserExternalLogins => Set<UserExternalLogin>();
     public DbSet<UsageLog> UsageLogs => Set<UsageLog>();
@@ -42,6 +47,54 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
     public DbSet<NormalizedDataset> NormalizedDatasets => Set<NormalizedDataset>();
     public DbSet<DataCollectionLog> DataCollectionLogs => Set<DataCollectionLog>();
 
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        ValidateHistoryWrites();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        ValidateHistoryWrites();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    private void ValidateHistoryWrites()
+    {
+        ChangeTracker.DetectChanges();
+        foreach (var entry in ChangeTracker.Entries<GenerationBatch>())
+        {
+            if (entry.State == EntityState.Deleted) throw new InvalidOperationException("Generation history is logically evicted, never deleted.");
+            if (entry.State == EntityState.Modified && entry.Properties.Any(p => p.IsModified && p.Metadata.Name != nameof(GenerationBatch.EvictedAt)))
+                throw new InvalidOperationException("Generation batch snapshots are immutable.");
+            if (entry.State == EntityState.Modified && entry.Property(x => x.EvictedAt).IsModified &&
+                (entry.Property(x => x.EvictedAt).OriginalValue != null || entry.Entity.EvictedAt == null))
+                throw new InvalidOperationException("Generation history eviction cannot be reversed or rewritten.");
+        }
+        foreach (var entry in ChangeTracker.Entries<GeneratedResponse>())
+        {
+            if (entry.Entity.GenerationBatchId == null && entry.Property(x => x.GenerationBatchId).OriginalValue == null) continue;
+            if (entry.State == EntityState.Deleted) throw new InvalidOperationException("Generation batch payloads cannot be deleted.");
+            string[] immutable = [nameof(GeneratedResponse.GenerationBatchId), nameof(GeneratedResponse.BatchOrdinal), nameof(GeneratedResponse.ProjectId),
+                nameof(GeneratedResponse.PayloadJson), nameof(GeneratedResponse.PreviewText), nameof(GeneratedResponse.Source),
+                nameof(GeneratedResponse.IsReadOnly), nameof(GeneratedResponse.CreatedAt), nameof(GeneratedResponse.PricingPolicy)];
+            if (entry.State == EntityState.Modified && entry.Properties.Any(p => p.IsModified && immutable.Contains(p.Metadata.Name)))
+                throw new InvalidOperationException("Generation response snapshots and membership are immutable.");
+        }
+        foreach (var entry in ChangeTracker.Entries<CreditReservationEvent>())
+            if (entry.State is EntityState.Modified or EntityState.Deleted) throw new InvalidOperationException("Reservation evidence is append-only.");
+        foreach (var entry in ChangeTracker.Entries<LegacyAttemptEvidence>())
+            if (entry.State is EntityState.Modified or EntityState.Deleted) throw new InvalidOperationException("Legacy evidence is append-only.");
+        foreach (var entry in ChangeTracker.Entries<SubmissionJobItem>())
+        {
+            if (entry.State == EntityState.Deleted) throw new InvalidOperationException("Admitted attempt snapshots cannot be deleted.");
+            string[] mutable = [nameof(SubmissionJobItem.AttemptState), nameof(SubmissionJobItem.SettlementState), nameof(SubmissionJobItem.PossibleDispatchAt),
+                nameof(SubmissionJobItem.OutcomeAt), nameof(SubmissionJobItem.SettlementCreditTransactionId), nameof(SubmissionJobItem.RowVersion)];
+            if (entry.State == EntityState.Modified && entry.Properties.Any(p => p.IsModified && !mutable.Contains(p.Metadata.Name)))
+                throw new InvalidOperationException("Admitted attempt snapshots are immutable.");
+        }
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -63,6 +116,7 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
 
         modelBuilder.Entity<UserCreditAccount>(entity =>
         {
+            entity.HasIndex(item => item.UserId).IsUnique();
             entity.Property(item => item.RowVersion).IsRowVersion();
             entity.Property(item => item.Balance).HasPrecision(18, 2);
             entity.Property(item => item.TotalDeposited).HasPrecision(18, 2);
@@ -93,6 +147,42 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
         {
             entity.Property(item => item.Amount).HasPrecision(18, 2);
             entity.Property(item => item.BalanceAfter).HasPrecision(18, 2);
+            entity.HasIndex(item => item.ReferenceId).HasFilter("[Type] = 'CreditUsed' AND [ReferenceType] = 'SubmissionJobItem' AND [ReferenceId] IS NOT NULL").IsUnique();
+        });
+
+        modelBuilder.Entity<GenerationBatch>(entity =>
+        {
+            entity.Property(item => item.Mode).HasMaxLength(16).IsUnicode(false);
+            entity.Property(item => item.PricingPolicy).HasMaxLength(24).IsUnicode(false);
+            entity.Property(item => item.ObservedMetadataSha256).HasMaxLength(64).IsUnicode(false);
+            entity.HasIndex(item => new { item.UserId, item.CreatedAt, item.Id });
+            entity.HasIndex(item => item.AiGenerationRunId).IsUnique().HasFilter("[AiGenerationRunId] IS NOT NULL");
+        });
+        modelBuilder.Entity<CreditReservation>(entity =>
+        {
+            entity.Property(item => item.InitialAmount).HasPrecision(18, 2);
+            entity.Property(item => item.OutstandingAmount).HasPrecision(18, 2);
+            entity.Property(item => item.SettledAmount).HasPrecision(18, 2);
+            entity.Property(item => item.ReleasedAmount).HasPrecision(18, 2);
+            entity.Property(item => item.RowVersion).IsRowVersion();
+            entity.HasIndex(item => item.JobId).IsUnique();
+            entity.HasIndex(item => new { item.UserId, item.ClosedAt });
+        });
+        modelBuilder.Entity<CreditReservationEvent>(entity =>
+        {
+            entity.Property(item => item.Kind).HasMaxLength(32).IsUnicode(false);
+            entity.HasIndex(item => new { item.ReservationId, item.Sequence }).IsUnique();
+            entity.HasIndex(item => new { item.ItemId, item.EvidenceId }).IsUnique().HasFilter("[ItemId] IS NOT NULL AND [EvidenceId] IS NOT NULL");
+        });
+        modelBuilder.Entity<SubmissionJobItem>(entity =>
+        {
+            entity.Property(item => item.PricingPolicy).HasMaxLength(24).IsUnicode(false);
+            entity.Property(item => item.AttemptState).HasMaxLength(24).IsUnicode(false);
+            entity.Property(item => item.SettlementState).HasMaxLength(24).IsUnicode(false);
+            entity.HasIndex(item => new { item.JobId, item.Ordinal }).IsUnique();
+            entity.HasIndex(item => new { item.JobId, item.ResponseId }).IsUnique();
+            entity.HasIndex(item => new { item.ResponseId, item.AttemptState });
+            entity.Property(item => item.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<PaymentProviderSetting>(entity =>
@@ -321,5 +411,6 @@ public sealed class FormAutoHubDbContext(DbContextOptions<FormAutoHubDbContext> 
                 .HasForeignKey(item => item.ModelId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+        GenerationHistoryModel.Configure(modelBuilder);
     }
 }

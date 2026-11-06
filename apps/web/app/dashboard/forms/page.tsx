@@ -25,6 +25,9 @@ import { WorkflowSummary } from "./_components/WorkflowSummary";
 import { showError } from "@/lib/toast";
 import { formatDate } from "@/lib/utils";
 import { toast } from "sonner";
+import Link from "next/link";
+import { JobResult } from "./history/_components/HistoryRunDetail";
+import { historyError, readHistoryCommand, removeHistoryCommand, storeHistoryCommand, subscribeHistoryCommands, terminalJob, unresolvedJob, type HistoryCommand } from "./history/_components/history-command";
 
 import type { AiDirectionFields, AiGenerationMode, AiPromptScope, DirectRuleCommandContext, FormPreviewResumeContext, GenerationMode } from "./_types";
 import {
@@ -132,6 +135,13 @@ export default function FormsPage() {
   const [pendingPreviewRead, setPendingPreviewRead] = useState<{ projectId: string; ids: string[]; previousItems: GeneratedResponse[] } | null>(null);
   const [previewReadError, setPreviewReadError] = useState(false);
   const [creditBalance, setCreditBalance] = useState<number | null>(null);
+  const [postedBalance, setPostedBalance] = useState<number | null>(null);
+  const [reservedBalance, setReservedBalance] = useState<number | null>(null);
+  const [generationBatchId, setGenerationBatchId] = useState<string | null>(null);
+  const [aiCommand, setAiCommand] = useState<HistoryCommand | null>(null);
+  const [upgradeNotice, setUpgradeNotice] = useState("");
+  const [sendNotice, setSendNotice] = useState("");
+  const selectedRequestRef = useRef(false);
   const restoredContextRef = useRef<string | null>(null);
   const directRequestRef = useRef(false);
   const directCreateRef = useRef(false);
@@ -140,7 +150,10 @@ export default function FormsPage() {
 
   useEffect(() => { setConfirmed(false); }, [currentPreviewSnapshot]);
   useEffect(() => {
-    apiFetch<DashboardSummary>("/api/dashboard/summary").then((value) => setCreditBalance(value.currentCreditBalance)).catch(() => {});
+    apiFetch<DashboardSummary>("/api/dashboard/summary").then(applySummary).catch(() => {});
+    const sync = () => { const userId = getStoredSession()?.userId; setAiCommand(userId ? readHistoryCommand(userId) : null); };
+    sync();
+    return subscribeHistoryCommands(sync);
   }, []);
   useEffect(() => {
     setDirectLockSupported(Boolean(navigator.locks));
@@ -177,15 +190,31 @@ export default function FormsPage() {
 
   const ruleOpenCount = analysis?.questions.filter((question) => openRuleEditors[question.id] ?? true).length ?? 0;
   const allRuleEditorsOpen = analysis ? ruleOpenCount === analysis.questions.length : false;
-  const aiCreditMultiplier = generationMode === "ai-custom" ? 3 : generationMode === "ai-default" ? 2 : 1;
+  const aiCreditMultiplier = generationMode === "ai-custom" ? 2 : generationMode === "ai-default" ? 1 : 0;
   const aiProfileReady = aiProfileState?.key === `${analysis?.projectId}:${generationMode}` && aiProfileState.ready;
   const canGenerateAi = Boolean(analysis && analysis.questions.length > 0 && generationMode !== "rules" && aiGlobalPrompt.trim() && aiProfileReady && !pendingPreviewRead);
-  const hasUncertainSubmission = submission?.logs.some((log) => log.status !== "Success" && log.errorMessage === uncertainSubmissionMessage) ?? false;
+  const hasUncertainSubmission = Boolean(submission && (unresolvedJob(submission) || submission.logs.some((log) => log.status !== "Success" && log.errorMessage === uncertainSubmissionMessage)));
+
+  function applySummary(value: DashboardSummary) {
+    setCreditBalance(typeof value.availableCreditBalance === "number" ? value.availableCreditBalance : null);
+    setPostedBalance(value.currentCreditBalance);
+    setReservedBalance(typeof value.reservedCreditBalance === "number" ? value.reservedCreditBalance : null);
+  }
+  function applyCredits(value: GenerateResponsesResult | AiGenerateResponsesResult) {
+    setGenerationBatchId(value.generationBatchId ?? null);
+    setCreditBalance(value.credits?.available ?? null);
+    setPostedBalance(value.balanceAfter);
+    setReservedBalance(value.credits?.reserved ?? null);
+  }
 
   useEffect(() => () => { aiProfileRequestRef.current += 1; }, []);
 
   const restoreResumeContext = useCallback((context: FormPreviewResumeContext) => {
     if (context.userId !== getStoredSession()?.userId || !context.userId) return;
+    if (context.contractVersion !== 2) {
+      setUpgradeNotice("Bản lưu dùng cách tính phí cũ. Hãy xem lịch sử hoặc tạo lượt mới sau khi xem lại giá; không tiếp tục gửi bằng bản lưu cũ.");
+      return;
+    }
     if ((context.generationMode ?? "rules") === "rules") {
       clearResumeContext();
       return;
@@ -197,6 +226,7 @@ export default function FormsPage() {
     setName(context.analysis.name);
     setConfirmed(false);
     setResumeContext(context);
+    setGenerationBatchId(context.generationBatchId ?? null);
     setAnalysis(context.analysis);
     setRuleConfigs(context.ruleConfigs);
     const contextMode = context.generationMode ?? "rules";
@@ -228,8 +258,8 @@ export default function FormsPage() {
   const refreshResumeCreditState = useCallback(async (context: FormPreviewResumeContext) => {
     try {
       const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
-      setCreditBalance(summary.currentCreditBalance);
-      setResumeCreditReady(summary.currentCreditBalance >= context.missingCredits);
+      applySummary(summary);
+      setResumeCreditReady(typeof summary.availableCreditBalance === "number" && summary.availableCreditBalance >= context.missingCredits);
     } catch {
       setResumeCreditReady(false);
     }
@@ -323,6 +353,8 @@ export default function FormsPage() {
     setSubmissionLogsOpen(false);
     setSubmissionLocked(false);
     setAiPreviewMode(null);
+    setGenerationBatchId(null);
+    setSendNotice("");
   }
 
   function resetAiPreparation(nextAnalysis: AnalyzeFormResponse) {
@@ -441,7 +473,7 @@ export default function FormsPage() {
       setPreviews(result.items);
       setPreviewSnapshot(currentPreviewSnapshot);
       setGenerationResult({ ...result, partial: result.generatedCount < result.requestedCount });
-      setCreditBalance(result.balanceAfter);
+      applyCredits(result);
       setAiPreviewMode(null);
       setPreviewListOpen(false);
       setOpenPreviews(Object.fromEntries(result.items.map((preview, index) => [preview.id, index === 0])));
@@ -454,6 +486,8 @@ export default function FormsPage() {
         : null);
       if (result.missingCredits > 0) {
         const nextContext = {
+          contractVersion: 2,
+          generationBatchId: result.generationBatchId,
           projectId: analysis.projectId,
           analysis,
           ruleConfigs,
@@ -497,8 +531,8 @@ export default function FormsPage() {
     setDirectRequestedCount(context.count);
     setDirectResultNotice({ requested: context.count, total: result.total, success: result.successCount, failed: result.failedCount });
     setSubmissionLogsOpen(false);
-    const uncertain = result.logs.some((log) => log.status !== "Success" && log.errorMessage === uncertainSubmissionMessage);
-    const terminal = !uncertain && (result.status === "Completed" || result.status === "Failed" || result.status === "Cancelled");
+    const uncertain = Boolean(unresolvedJob(result)) || result.logs.some((log) => log.status !== "Success" && log.errorMessage === uncertainSubmissionMessage);
+    const terminal = !uncertain && terminalJob(result);
     setSubmissionLocked(true);
     setDirectTransportUnknown(false);
     if (terminal) {
@@ -515,7 +549,7 @@ export default function FormsPage() {
 
     try {
       const summary = await apiFetch<DashboardSummary>("/api/dashboard/summary");
-      setCreditBalance(summary.currentCreditBalance);
+      applySummary(summary);
     } catch {
       toast.info("Đã ghi nhận kết quả gửi, nhưng chưa cập nhật được số dư credit.");
     }
@@ -570,7 +604,7 @@ export default function FormsPage() {
     try {
       const raw = await apiFetch<unknown>(`/api/projects/${context.projectId}/submissions/send-rules-direct`, {
         method: "POST",
-        json: { commandId: context.commandId, count: context.count }
+        json: { contractVersion: 2, commandId: context.commandId, count: context.count }
       });
       const result = readSubmissionJob(raw, { projectId: context.projectId });
       if (!result) throw new ApiError("invalid-response", "POST", `/api/projects/${context.projectId}/submissions/send-rules-direct`);
@@ -651,6 +685,7 @@ export default function FormsPage() {
       }
 
       const context: DirectRuleCommandContext = {
+        contractVersion: 2,
         projectId: analysis.projectId,
         commandId: crypto.randomUUID(),
         count: previewCount,
@@ -676,7 +711,11 @@ export default function FormsPage() {
   }
 
   async function retryDirectRuleCommand() {
-    if (directCommand) await sendDirectRuleCommand(directCommand);
+    if (directCommand) {
+      setBusy(true);
+      try { await reconcileDirectRuleCommand(directCommand); }
+      finally { setBusy(false); }
+    }
   }
 
   async function continueMissingGeneration() {
@@ -701,7 +740,7 @@ export default function FormsPage() {
     try {
       const contextMode = context.generationMode ?? "rules";
       const isAiContext = contextMode !== "rules";
-      const multiplier = contextMode === "ai-custom" ? 3 : contextMode === "ai-default" ? 2 : 1;
+      const multiplier = contextMode === "ai-custom" ? 2 : contextMode === "ai-default" ? 1 : 0;
       const continueCount = isAiContext
         ? Math.max(1, Math.ceil(context.missingCredits / multiplier))
         : context.missingCredits;
@@ -712,15 +751,16 @@ export default function FormsPage() {
             json: { count: continueCount }
           });
       const resultItems = "items" in result ? result.items : [];
-      const allItems = [...previews, ...resultItems];
-      const allIds = "items" in result ? allItems.map((item) => item.id) : [...previews.map((item) => item.id), ...result.generatedPreviewIds];
-      const generatedCount = previews.length + result.generatedCount;
-      const creditsUsed = (context.creditsUsed ?? 0) + result.creditsUsed;
+      // Every successful creation is a separate immutable run; never merge batches for sending.
+      const allItems = resultItems;
+      const allIds = "items" in result ? allItems.map((item) => item.id) : result.generatedPreviewIds;
+      const generatedCount = result.generatedCount;
+      const creditsUsed = result.creditsUsed;
       setPreviews(allItems);
       setConfirmed(false);
       setPreviewSnapshot(context.previewSnapshot ?? currentPreviewSnapshot);
-      setGenerationResult({ ...result, requestedCount: context.requestedCount, generatedCount, creditsUsed, partial: generatedCount < context.requestedCount });
-      setCreditBalance(result.balanceAfter);
+      setGenerationResult({ ...result, generatedCount, creditsUsed, partial: generatedCount < result.requestedCount });
+      applyCredits(result);
       setAiPreviewMode(isAiContext ? contextMode : null);
       setPreviewListOpen(false);
       setOpenPreviews((current) => ({
@@ -730,7 +770,9 @@ export default function FormsPage() {
       if (result.missingCredits > 0) {
         const nextContext = {
           ...context,
-          requestedCount: context.requestedCount,
+          contractVersion: 2,
+          generationBatchId: result.generationBatchId,
+          requestedCount: result.requestedCount,
           generatedCount,
           previewIds: allIds,
           creditsUsed,
@@ -752,7 +794,7 @@ export default function FormsPage() {
       }
       setSubmissionLocked(false);
       if (!("items" in result) && result.generatedPreviewIds.length > 0) {
-        const read = { projectId: context.projectId, ids: result.generatedPreviewIds, previousItems: previews };
+        const read = { projectId: context.projectId, ids: result.generatedPreviewIds, previousItems: [] };
         setPendingPreviewRead(read);
         await readConfirmedAiPreviews(read);
       }
@@ -775,6 +817,8 @@ export default function FormsPage() {
     }
 
     const nextContext: FormPreviewResumeContext = {
+      contractVersion: 2,
+      generationBatchId,
       projectId: analysis.projectId,
       analysis,
       ruleConfigs,
@@ -819,35 +863,62 @@ export default function FormsPage() {
   }
 
   async function submitConfirmed() {
-    if (!analysis || previews.length === 0 || !confirmed || previewStale || submissionLocked || pendingPreviewRead) {
+    if (!analysis || previews.length === 0 || !confirmed || previewStale || submissionLocked || pendingPreviewRead || aiCommand || selectedRequestRef.current) {
       toast.error("Bạn phải xem lại bản xem trước và chọn ô xác nhận trước khi gửi.");
       return;
     }
 
+    const userId = getStoredSession()?.userId;
+    if (!userId || !generationBatchId) { setSendNotice("Không có định danh lượt tạo theo hợp đồng v2. Hãy khôi phục từ lịch sử hoặc tạo lượt mới."); return; }
+    const command: HistoryCommand = { contractVersion: 2, userId, projectId: analysis.projectId, batchId: generationBatchId, commandId: crypto.randomUUID() };
+    selectedRequestRef.current = true;
+    storeHistoryCommand(command); setAiCommand(command); setSubmissionLocked(true);
     setBusy(true);
     setIsSending(true);
     try {
       const result = await apiFetch<SubmissionJob>(`/api/projects/${analysis.projectId}/submissions/send`, {
         method: "POST",
         json: {
+          contractVersion: 2,
+          commandId: command.commandId,
+          batchId: generationBatchId,
           responseIds: previews.map((preview) => preview.id),
-          confirmed: true
+          confirmed: true,
+          duplicateWarningAccepted: false
         }
       });
       setSubmission(result);
+      if (terminalJob(result)) removeHistoryCommand(command);
       clearResumeContext();
       setResumeContext(null);
       setGenerationCreditNotice(null);
-      setSubmissionLocked(result.status === "Completed" || result.status === "Failed");
+      setSubmissionLocked(true);
       setSubmissionLogsOpen(false);
-      if (result.status === "Completed") toast.success(`Đã gửi thành công ${result.successCount} lượt.`);
+      if (unresolvedJob(result)) setSendNotice("Kết quả gửi chưa xác định. Credit liên quan tiếp tục được giữ; chỉ kiểm tra trạng thái, không gửi lại.");
+      else if (result.status === "Completed") toast.success(`Đã gửi thành công ${result.successCount} lượt.`);
       else toast.info(`Lượt gửi kết thúc: ${result.successCount} thành công, ${result.failedCount} lỗi.`);
     } catch (error) {
-      showError(error, "Không gửi được bản xem trước.");
+      if (error instanceof ApiError && error.kind === "http" && [400, 404, 409].includes(error.status ?? 0) && error.code !== "CommandConflict") {
+        removeHistoryCommand(command); setSendNotice(historyError(error));
+      } else setSendNotice("Kết quả gửi chưa xác định. Giữ nguyên mã lệnh để kiểm tra; không tự động gửi lại.");
     } finally {
+      selectedRequestRef.current = false;
       setIsSending(false);
       setBusy(false);
     }
+  }
+
+  async function recoverSelectedCommand() {
+    if (!aiCommand || busy) return;
+    setBusy(true);
+    try {
+      const raw = await apiFetch<unknown>(`/api/projects/${aiCommand.projectId}/submissions/jobs/${aiCommand.commandId}`);
+      const result = readSubmissionJob(raw, { id: aiCommand.commandId, projectId: aiCommand.projectId });
+      if (!result) { setSendNotice("Chưa xác minh được kết quả lệnh. Không tự gửi lại."); return; }
+      setSubmission(result); setSubmissionLocked(true);
+      if (terminalJob(result)) removeHistoryCommand(aiCommand);
+    } catch { setSendNotice("Chưa xác minh được kết quả lệnh đã lưu. Không tự gửi lại."); }
+    finally { setBusy(false); }
   }
 
   async function pauseSubmission() {
@@ -1043,7 +1114,7 @@ export default function FormsPage() {
       const result = await generateAiResponses(analysis.projectId, generationMode, previewCount);
       setPreviewSnapshot(currentPreviewSnapshot);
       setGenerationResult({ ...result, partial: result.generatedCount < result.requestedCount });
-      setCreditBalance(result.balanceAfter);
+      applyCredits(result);
       setAiPreviewMode(generationMode);
       setPreviewListOpen(false);
       setGenerationCreditNotice(result.missingCredits > 0
@@ -1055,6 +1126,8 @@ export default function FormsPage() {
         : null);
       if (result.missingCredits > 0) {
         const nextContext: FormPreviewResumeContext = {
+          contractVersion: 2,
+          generationBatchId: result.generationBatchId,
           projectId: analysis.projectId,
           analysis,
           ruleConfigs,
@@ -1101,7 +1174,10 @@ export default function FormsPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Tự động hóa biểu mẫu" description="Dùng quy tắc để tạo và gửi ngay, hoặc dùng AI để xem trước rồi xác nhận gửi." />
+      <PageHeader title="Tự động hóa biểu mẫu" description="Dùng quy tắc để tạo và gửi ngay, hoặc dùng AI để xem trước rồi xác nhận gửi." actions={<Link href="/dashboard/forms/history" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline">Lịch sử tạo câu trả lời</Link>} />
+      {upgradeNotice && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{upgradeNotice}</Alert>}
+      {sendNotice && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{sendNotice}</Alert>}
+      {aiCommand && <Alert role="status" className="space-y-2"><p>Đang giữ mã lệnh để kiểm tra kết quả; không tự động gửi lại.</p><p className="break-all text-xs">Mã lệnh: {aiCommand.commandId}</p><Button disabled={busy} variant="secondary" onClick={recoverSelectedCommand}>Kiểm tra kết quả gửi</Button><Link href="/dashboard/forms/history" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline">Xem tất cả mã lệnh đang chờ</Link></Alert>}
       <nav aria-label="Các bước tự động hóa" className="grid grid-cols-3 gap-2 sm:grid-cols-5">
         {(generationMode === "rules" ? ["Chọn form", "Cấu hình", "Gửi trực tiếp", "Đang xử lý", "Kết quả"] : ["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"]).map((label, index) => {
           const enabled = index === 0 || (index === 1 && Boolean(analysis)) || (index === 2 && Boolean(analysis) && (generationMode !== "rules" || Boolean(analysis?.questions.length))) || (index === 3 && generationMode !== "rules" && previews.length > 0) || (index === 4 && Boolean(submission));
@@ -1249,7 +1325,7 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
-                    <p id="rules-cost" className="mt-2 text-xs font-medium text-info">Chi phí dự kiến: {previewCount} credit · {creditBalance === null ? "Chưa tải được số dư" : `${creditBalance} credit khả dụng`}. Chỉ gửi trong số dư cho phép.</p>
+                    <p id="rules-cost" className="mt-2 text-xs font-medium text-info">Phí tạo: 0 credit · Phí gửi tối đa: {previewCount} credit · {creditBalance === null ? "Chưa tải được số dư khả dụng" : `${creditBalance} credit khả dụng`}. Chỉ trừ phí gửi thành công.</p>
                   </div>
                   <Button className="w-full sm:w-auto" disabled={busy || !canGenerate || Boolean(directCommand) || directLockSupported !== true} onClick={createAndSendRulesDirect} type="button">
                     {isSending ? "Đang tạo và gửi..." : "Tạo và gửi ngay"}
@@ -1266,7 +1342,7 @@ export default function FormsPage() {
         <Alert role="alert" className="space-y-3 border-warning-border bg-warning-surface text-warning">
           <p className="font-semibold">{directTransportUnknown ? "Kết quả gửi chưa xác định" : "Lượt gửi đang được xử lý"}</p>
           <p>Hệ thống giữ nguyên mã lệnh và số lượng {directCommand.count}. Kiểm tra lại chỉ đọc kết quả của đúng lệnh này, không lưu lại quy tắc và không tự gửi lại câu trả lời.</p>
-          <p className="break-all text-xs">Mã lệnh: {directCommand.commandId}</p>
+            <p className="break-all text-xs">Mã lệnh: {directCommand.commandId}</p>
           <Button disabled={busy} type="button" variant="secondary" onClick={retryDirectRuleCommand}>Kiểm tra kết quả gửi</Button>
         </Alert>
       )}
@@ -1448,6 +1524,7 @@ export default function FormsPage() {
             <CardTitle>{generationMode === "rules" ? "Kết quả gửi" : "5. Kết quả gửi"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
+            {submission.fees && <JobResult job={submission} />}
             <p className="break-all text-xs text-muted-foreground">Mã lượt gửi: {submission.id}</p>
             {hasUncertainSubmission && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{uncertainSubmissionMessage}</Alert>}
             <div className="flex flex-wrap items-center gap-3">
@@ -1534,7 +1611,7 @@ export default function FormsPage() {
         </Card>
       )}
       </fieldset>
-      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={generationMode === "rules" ? directRequestedCount ?? previewCount : previewCount} previewCount={generationMode === "rules" ? submission?.total ?? 0 : previews.length} multiplier={aiCreditMultiplier} balance={creditBalance} creditsUsed={generationMode === "rules" ? submission?.total : generationResult?.creditsUsed} directSuccessCount={generationMode === "rules" ? submission?.successCount : undefined} directFailedCount={generationMode === "rules" ? submission?.failedCount : undefined} stale={generationMode === "rules" ? false : previewStale} />
+      <WorkflowSummary title={analysis?.formTitle} questionCount={analysis?.questions.length ?? 0} mode={generationMode} requestedCount={generationMode === "rules" ? directRequestedCount ?? previewCount : generationResult?.requestedCount ?? previewCount} previewCount={generationMode === "rules" ? submission?.total ?? 0 : previews.length} sendCount={generationMode === "rules" ? submission?.total ?? previewCount : generationResult?.generatedCount} generationCredits={generationMode === "rules" ? undefined : generationResult?.creditsUsed} multiplier={aiCreditMultiplier} balance={creditBalance} posted={postedBalance} reserved={reservedBalance} creditsUsed={generationMode === "rules" ? submission?.fees?.settledCredits : generationResult?.creditsUsed} directSuccessCount={generationMode === "rules" ? submission?.successCount : undefined} directFailedCount={generationMode === "rules" ? submission?.failedCount : undefined} stale={generationMode === "rules" ? false : previewStale} />
       </div>
     </div>
   );

@@ -161,7 +161,7 @@ public sealed class Phase3FormAutomationTests
     }
 
     [Fact]
-    public async Task GenerateAsync_DeductsCreditsAndWritesUsageAndCreditTransaction()
+    public async Task GenerateAsync_RulesAreFreeAndWriteUsageWithoutLedger()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
@@ -178,21 +178,19 @@ public sealed class Phase3FormAutomationTests
         var result = await service.GenerateAsync(projectId, new GenerateResponsesRequest(2), CancellationToken.None);
 
         Assert.NotNull(result);
-        Assert.Equal(2, result.CreditsUsed);
-        Assert.Equal(3, result.BalanceAfter);
+        Assert.Equal(0, result.CreditsUsed);
+        Assert.Equal(5, result.BalanceAfter);
         Assert.Equal(2, await context.GeneratedResponses.CountAsync());
 
         var account = await context.UserCreditAccounts.SingleAsync(item => item.UserId == userId);
-        Assert.Equal(3, account.Balance);
-        Assert.Equal(2, account.TotalUsed);
+        Assert.Equal(5, account.Balance);
+        Assert.Equal(0, account.TotalUsed);
 
-        var transaction = await context.CreditTransactions.SingleAsync(item => item.UserId == userId);
-        Assert.Equal(CreditTransactionTypes.CreditUsed, transaction.Type);
-        Assert.Equal(-2, transaction.Amount);
+        Assert.Empty(context.CreditTransactions);
 
         var usageLog = await context.UsageLogs.SingleAsync(item => item.UserId == userId);
         Assert.Equal(UsageLogStatuses.Success, usageLog.Status);
-        Assert.Equal(2, usageLog.CreditsUsed);
+        Assert.Equal(0, usageLog.CreditsUsed);
     }
 
     [Fact]
@@ -493,7 +491,7 @@ public sealed class Phase3FormAutomationTests
     }
 
     [Fact]
-    public async Task GenerateAsync_GeneratesOnlyAvailableCreditCountWhenCreditsAreInsufficient()
+    public async Task GenerateAsync_RulesIgnoreAvailableCreditCount()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
@@ -511,22 +509,22 @@ public sealed class Phase3FormAutomationTests
 
         Assert.NotNull(result);
         Assert.Equal(2, result.RequestedCount);
-        Assert.Equal(1, result.GeneratedCount);
-        Assert.Equal(1, result.CreditsUsed);
-        Assert.Equal(1, result.MissingCredits);
-        Assert.Single(context.GeneratedResponses);
-        Assert.Single(context.CreditTransactions);
+        Assert.Equal(2, result.GeneratedCount);
+        Assert.Equal(0, result.CreditsUsed);
+        Assert.Equal(0, result.MissingCredits);
+        Assert.Equal(2, context.GeneratedResponses.Count());
+        Assert.Empty(context.CreditTransactions);
 
         var account = await context.UserCreditAccounts.SingleAsync(item => item.UserId == userId);
-        Assert.Equal(0, account.Balance);
+        Assert.Equal(1, account.Balance);
 
         var usageLog = await context.UsageLogs.SingleAsync(item => item.UserId == userId);
         Assert.Equal(UsageLogStatuses.Success, usageLog.Status);
-        Assert.Equal(1, usageLog.CreditsUsed);
+        Assert.Equal(0, usageLog.CreditsUsed);
     }
 
     [Fact]
-    public async Task GenerateAsync_RejectsWhenNoCreditsAreAvailable()
+    public async Task GenerateAsync_RulesCreateOneHundredAtZeroBalance()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
@@ -540,170 +538,80 @@ public sealed class Phase3FormAutomationTests
             new TestCurrentUserContext(userId),
             new CreditService(context));
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.GenerateAsync(projectId, new GenerateResponsesRequest(2), CancellationToken.None));
-
-        Assert.Empty(context.GeneratedResponses);
+        var result = await service.GenerateAsync(projectId, new GenerateResponsesRequest(100), CancellationToken.None);
+        Assert.Equal(100, result!.GeneratedCount);
+        Assert.Equal(100, await context.GeneratedResponses.CountAsync());
         Assert.Empty(context.CreditTransactions);
 
         var account = await context.UserCreditAccounts.SingleAsync(item => item.UserId == userId);
         Assert.Equal(0, account.Balance);
 
         var usageLog = await context.UsageLogs.SingleAsync(item => item.UserId == userId);
-        Assert.Equal(UsageLogStatuses.Failed, usageLog.Status);
+        Assert.Equal(UsageLogStatuses.Success, usageLog.Status);
         Assert.Equal(0, usageLog.CreditsUsed);
     }
 
     [Fact]
     public async Task SendAsync_RejectsSubmissionWithoutConfirmation()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        var responseId = Guid.NewGuid();
-        await using var context = CreateContext();
-        SeedSubmittedPreview(context, userId, projectId, responseId);
-        await context.SaveChangesAsync();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            new TestGoogleFormsClient());
-
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.SendAsync(projectId, new SendSubmissionRequest(new[] { responseId }, false), CancellationToken.None));
-
-        Assert.Empty(context.SubmissionJobs);
-        Assert.Empty(context.SubmissionLogs);
-        Assert.Equal(GeneratedResponseStatuses.Previewed, (await context.GeneratedResponses.SingleAsync()).Status);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var receiver = new SubmissionV2Fixture.Receiver();
+        var error = await Assert.ThrowsAsync<SubmissionContractException>(() => SubmissionV2Fixture.Service(db, f.User, receiver)
+            .SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, f.Ids, false, false), default));
+        Assert.Equal("ConfirmationRequired", error.Code); Assert.Empty(db.SubmissionJobs); Assert.Empty(db.SubmissionLogs); Assert.Equal(0, receiver.Calls);
     }
 
     [Fact]
     public async Task SendAsync_RejectsDuplicateResponseIds()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        var responseId = Guid.NewGuid();
-        await using var context = CreateContext();
-        SeedSubmittedPreview(context, userId, projectId, responseId);
-        await context.SaveChangesAsync();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            new TestGoogleFormsClient());
-
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.SendAsync(projectId, new SendSubmissionRequest(new[] { responseId, responseId }, true), CancellationToken.None));
-
-        Assert.Empty(context.SubmissionJobs);
-        Assert.Empty(context.SubmissionLogs);
-        Assert.Equal(UsageLogStatuses.Failed, (await context.UsageLogs.SingleAsync()).Status);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var receiver = new SubmissionV2Fixture.Receiver();
+        var error = await Assert.ThrowsAsync<SubmissionContractException>(() => SubmissionV2Fixture.Service(db, f.User, receiver)
+            .SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, [f.Ids[0], f.Ids[0]], true, false), default));
+        Assert.Equal("InvalidResponseSelection", error.Code); Assert.Empty(db.SubmissionJobs); Assert.Empty(db.SubmissionLogs); Assert.Equal(0, receiver.Calls);
     }
 
     [Fact]
-    public async Task SendAsync_RejectsAlreadySubmittedResponse()
+    public async Task SendAsync_PreviouslySubmittedResponseRequiresNewDuplicateWarning()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        var responseId = Guid.NewGuid();
-        await using var context = CreateContext();
-        SeedSubmittedPreview(context, userId, projectId, responseId, GeneratedResponseStatuses.Submitted);
-        await context.SaveChangesAsync();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            new TestGoogleFormsClient());
-
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.SendAsync(projectId, new SendSubmissionRequest(new[] { responseId }, true), CancellationToken.None));
-
-        Assert.Empty(context.SubmissionJobs);
-        Assert.Empty(context.SubmissionLogs);
-        Assert.Equal(UsageLogStatuses.Failed, (await context.UsageLogs.SingleAsync()).Status);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var receiver = new SubmissionV2Fixture.Receiver(); var service = SubmissionV2Fixture.Service(db, f.User, receiver);
+        await service.SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, f.Ids, true, false), default);
+        var error = await Assert.ThrowsAsync<SubmissionContractException>(() => service.SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, f.Ids, true, false), default));
+        Assert.Equal("DuplicateWarningRequired", error.Code); Assert.Single(db.SubmissionJobs); Assert.Single(db.SubmissionLogs); Assert.Equal(1, receiver.Calls);
     }
 
     [Fact]
     public async Task SendAsync_SubmitsConfirmedPreviewAndWritesSubmissionLog()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        var responseId = Guid.NewGuid();
-        await using var context = CreateContext();
-        SeedSubmittedPreview(context, userId, projectId, responseId);
-        await context.SaveChangesAsync();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            new TestGoogleFormsClient());
-
-        var result = await service.SendAsync(
-            projectId,
-            new SendSubmissionRequest(new[] { responseId }, true),
-            CancellationToken.None);
-
-        Assert.NotNull(result);
-        Assert.Equal(SubmissionJobStatuses.Completed, result.Status);
-        Assert.Equal(1, result.SuccessCount);
-        Assert.Equal(0, result.FailedCount);
-        Assert.Single(result.Logs);
-
-        Assert.Equal(GeneratedResponseStatuses.Submitted, (await context.GeneratedResponses.SingleAsync()).Status);
-        Assert.Equal(SubmissionLogStatuses.Success, (await context.SubmissionLogs.SingleAsync()).Status);
-        Assert.Equal(UsageLogStatuses.Success, (await context.UsageLogs.SingleAsync()).Status);
-        Assert.Equal("SubmitResponses", (await context.AuditLogs.SingleAsync()).Action);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var receiver = new SubmissionV2Fixture.Receiver();
+        var result = await SubmissionV2Fixture.Service(db, f.User, receiver).SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, f.Ids, true, false), default);
+        Assert.Equal("Completed", result!.Status); Assert.Equal(1, result.SuccessCount); Assert.Equal(0, result.FailedCount); Assert.Single(result.Logs);
+        Assert.Equal("Submitted", (await db.GeneratedResponses.SingleAsync()).Status); Assert.Equal("Success", (await db.SubmissionLogs.SingleAsync()).Status);
+        Assert.Equal(1, await db.UsageLogs.CountAsync(x => x.SubmissionItemId != null && x.Status == "Success"));
+        Assert.Equal("SubmitResponses", (await db.AuditLogs.SingleAsync(x => x.TargetType == nameof(SubmissionJob))).Action);
     }
 
     [Fact]
     public async Task SendAsync_AllowsUpToOneHundredConfirmedPreviews()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        await using var context = CreateContext();
-        var responseIds = SeedSubmittedPreviews(context, userId, projectId, 100);
-        await context.SaveChangesAsync();
-        var googleFormsClient = new CountingGoogleFormsClient();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            googleFormsClient);
-
-        var result = await service.SendAsync(
-            projectId,
-            new SendSubmissionRequest(responseIds, true),
-            CancellationToken.None);
-
-        Assert.NotNull(result);
-        Assert.Equal(SubmissionJobStatuses.Completed, result.Status);
-        Assert.Equal(100, result.Total);
-        Assert.Equal(100, result.SuccessCount);
-        Assert.Equal(100, googleFormsClient.SubmitCount);
-        Assert.Equal(100, await context.SubmissionLogs.CountAsync());
-        Assert.Equal(10, (await context.SubmissionJobs.SingleAsync()).RateLimitPerMinute);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 100, 100);
+        var receiver = new SubmissionV2Fixture.Receiver();
+        var result = await SubmissionV2Fixture.Service(db, f.User, receiver).SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, f.Ids, true, false), default);
+        Assert.Equal("Completed", result!.Status); Assert.Equal(100, result.Total); Assert.Equal(100, result.SuccessCount); Assert.Equal(100, receiver.Calls);
+        Assert.Equal(100, await db.SubmissionLogs.CountAsync()); Assert.Equal(10, (await db.SubmissionJobs.SingleAsync()).RateLimitPerMinute);
     }
 
     [Fact]
     public async Task SendAsync_RejectsMoreThanOneHundredConfirmedPreviews()
     {
-        var userId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        await using var context = CreateContext();
-        var responseIds = SeedSubmittedPreviews(context, userId, projectId, 101);
-        await context.SaveChangesAsync();
-
-        var service = new SubmissionService(
-            context,
-            new TestCurrentUserContext(userId),
-            new TestGoogleFormsClient());
-
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.SendAsync(projectId, new SendSubmissionRequest(responseIds, true), CancellationToken.None));
-
-        Assert.Empty(context.SubmissionJobs);
-        Assert.Empty(context.SubmissionLogs);
-        Assert.Equal(UsageLogStatuses.Failed, (await context.UsageLogs.SingleAsync()).Status);
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var receiver = new SubmissionV2Fixture.Receiver();
+        var ids = Enumerable.Range(0, 101).Select(_ => Guid.NewGuid()).ToArray();
+        var error = await Assert.ThrowsAsync<SubmissionContractException>(() => SubmissionV2Fixture.Service(db, f.User, receiver)
+            .SendAsync(f.Project, new(2, Guid.NewGuid(), f.Batch, ids, true, false), default));
+        Assert.Equal("InvalidResponseSelection", error.Code); Assert.Empty(db.SubmissionJobs); Assert.Empty(db.SubmissionLogs); Assert.Equal(0, receiver.Calls);
     }
 
     [Fact]

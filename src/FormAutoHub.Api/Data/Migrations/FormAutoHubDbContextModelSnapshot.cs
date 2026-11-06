@@ -372,6 +372,166 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.ToTable("CreditPackages");
                 });
 
+            modelBuilder.Entity("FormAutoHub.Api.Entities.CreditReservation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("InitialAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("OutstandingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ReleasedAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<decimal>("SettledAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "ClosedAt");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("UserId", "ClosedAt"), new[] { "OutstandingAmount" });
+
+                    b.ToTable("CreditReservations", t =>
+                        {
+                            t.HasCheckConstraint("CK_CreditReservations_Amounts", "[InitialAmount]>=0 AND [OutstandingAmount]>=0 AND [SettledAmount]>=0 AND [ReleasedAmount]>=0 AND [InitialAmount]=[OutstandingAmount]+[SettledAmount]+[ReleasedAmount] AND [InitialAmount]=FLOOR([InitialAmount]) AND [OutstandingAmount]=FLOOR([OutstandingAmount]) AND [SettledAmount]=FLOOR([SettledAmount]) AND [ReleasedAmount]=FLOOR([ReleasedAmount])");
+                        });
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.CreditReservationEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ArtifactReference")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ArtifactSha256")
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<string>("AttemptStateAfter")
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<string>("ClassifierVersion")
+                        .HasMaxLength(32)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreditTransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EvidenceCode")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<Guid?>("EvidenceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTimeOffset?>("ObservedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("OutstandingDelta")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<decimal>("ReleasedDelta")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SettledDelta")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SettlementStateAfter")
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActorUserId");
+
+                    b.HasIndex("CreditTransactionId");
+
+                    b.HasIndex("EvidenceId");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique()
+                        .HasFilter("[Kind] IN ('Settled','Released','PrepaidConsumed','PrepaidReleased')");
+
+                    b.HasIndex("ItemId", "EvidenceId")
+                        .IsUnique()
+                        .HasFilter("[ItemId] IS NOT NULL AND [EvidenceId] IS NOT NULL");
+
+                    b.HasIndex("ReservationId", "Sequence")
+                        .IsUnique();
+
+                    b.ToTable("CreditReservationEvents", t =>
+                        {
+                            t.HasCheckConstraint("CK_CreditReservationEvents_Kind", "[Kind] IN ('Reserved','PrepaidClaimed','PossibleDispatch','OutcomeUnknown','Settled','Released','PrepaidConsumed','PrepaidReleased') AND [Sequence]>=0 AND ([ItemId] IS NULL OR ([AttemptStateAfter] IS NOT NULL AND [SettlementStateAfter] IS NOT NULL))");
+                        });
+                });
+
             modelBuilder.Entity("FormAutoHub.Api.Entities.CreditTransaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -408,6 +568,10 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReferenceId")
+                        .IsUnique()
+                        .HasFilter("[Type] = 'CreditUsed' AND [ReferenceType] = 'SubmissionJobItem' AND [ReferenceId] IS NOT NULL");
 
                     b.ToTable("CreditTransactions");
                 });
@@ -491,13 +655,31 @@ namespace FormAutoHub.Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("BatchOrdinal")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("GenerationBatchId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsReadOnly")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<Guid?>("LegacyClaimItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LegacyEntitlementState")
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<string>("LegacyEvidenceReference")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("PayloadJson")
                         .IsRequired()
@@ -506,6 +688,11 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<string>("PreviewText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PricingPolicy")
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
@@ -522,7 +709,219 @@ namespace FormAutoHub.Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GeneratedResponses");
+                    b.HasIndex("GenerationBatchId");
+
+                    b.HasIndex("LegacyClaimItemId");
+
+                    b.HasIndex("GenerationBatchId", "BatchOrdinal")
+                        .IsUnique()
+                        .HasFilter("[GenerationBatchId] IS NOT NULL AND [BatchOrdinal] IS NOT NULL");
+
+                    b.HasIndex("GenerationBatchId", "ProjectId");
+
+                    b.ToTable("GeneratedResponses", t =>
+                        {
+                            t.HasCheckConstraint("CK_GeneratedResponses_Batch", "([GenerationBatchId] IS NULL AND [BatchOrdinal] IS NULL) OR ([GenerationBatchId] IS NOT NULL AND [BatchOrdinal] IS NOT NULL AND [BatchOrdinal]>=0 AND [BatchOrdinal]<100)");
+
+                            t.HasCheckConstraint("CK_GeneratedResponses_Entitlement", "([PricingPolicy] IS NULL AND [LegacyEntitlementState] IS NULL AND [LegacyClaimItemId] IS NULL) OR ([PricingPolicy] IS NOT NULL AND [PricingPolicy]='SeparatedV1' AND [LegacyEntitlementState] IS NOT NULL AND [LegacyEntitlementState]='NotApplicable' AND [LegacyClaimItemId] IS NULL) OR ([PricingPolicy] IS NOT NULL AND [PricingPolicy]='LegacyBundledV1' AND [LegacyEntitlementState] IS NOT NULL AND (([LegacyEntitlementState] IN ('Available','Consumed') AND [LegacyClaimItemId] IS NULL) OR ([LegacyEntitlementState]='Claimed' AND [LegacyClaimItemId] IS NOT NULL) OR [LegacyEntitlementState]='ReconciliationRequired'))");
+                        });
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.GenerationBatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AiGenerationRunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("EvictedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FormActionUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("FormName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FormUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<int>("GeneratedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenerationCredits")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LegacyGroupingEvidence")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<string>("ObservedMetadataJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ObservedMetadataSha256")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<string>("PricingPolicy")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RequestedCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AiGenerationRunId")
+                        .IsUnique()
+                        .HasFilter("[AiGenerationRunId] IS NOT NULL");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectId", "UserId");
+
+                    b.HasIndex("UserId", "CreatedAt", "Id")
+                        .IsDescending(false, true, true)
+                        .HasFilter("[EvictedAt] IS NULL");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("UserId", "CreatedAt", "Id"), new[] { "ProjectId", "Mode", "RequestedCount", "GeneratedCount", "GenerationCredits", "PricingPolicy" });
+
+                    b.ToTable("GenerationBatches", t =>
+                        {
+                            t.HasCheckConstraint("CK_GenerationBatches_Counts", "[GeneratedCount]>=1 AND [GeneratedCount]<=[RequestedCount] AND [RequestedCount]<=100 AND [GenerationCredits]>=0");
+
+                            t.HasCheckConstraint("CK_GenerationBatches_Pricing", "[Mode] IN ('rules','ai-default','ai-custom') AND [PricingPolicy] IN ('SeparatedV1','LegacyBundledV1') AND ([PricingPolicy]<>'SeparatedV1' OR [GenerationCredits]=[GeneratedCount]*CASE [Mode] WHEN 'rules' THEN 0 WHEN 'ai-default' THEN 1 WHEN 'ai-custom' THEN 2 END)");
+                        });
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.LegacyAttemptEvidence", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ActorUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ArtifactReference")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ArtifactSha256")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<string>("ClassifierVersion")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("EntitlementState")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<string>("EvidenceCode")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<Guid>("EvidenceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LegacyEvidenceHash")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<Guid?>("LegacySubmissionLogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("ObservedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("OutcomeKind")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("ResponseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActorUserId");
+
+                    b.HasIndex("LegacySubmissionLogId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ProjectId", "UserId");
+
+                    b.HasIndex("ResponseId", "EvidenceId")
+                        .IsUnique();
+
+                    b.HasIndex("ResponseId", "LegacyEvidenceHash")
+                        .IsUnique()
+                        .HasFilter("[OutcomeKind] IN ('ConfirmedSuccess','ConfirmedRejected')");
+
+                    b.HasIndex("ResponseId", "ProjectId");
+
+                    b.HasIndex("ResponseId", "CreatedAt", "Id");
+
+                    b.ToTable("LegacyAttemptEvidence", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_LegacyAttemptEvidence_Outcome", "[OutcomeKind] IN ('ConfirmedSuccess','ConfirmedRejected','Unknown') AND LEN(LTRIM(RTRIM([Reason])))>0");
+                        });
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.DataCollectionLog", b =>
@@ -1163,6 +1562,12 @@ namespace FormAutoHub.Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CommandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ContractVersion")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -1172,11 +1577,43 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<DateTimeOffset?>("FinishedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid?>("GenerationBatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("HeldCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NotDispatchedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PricingPolicy")
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("RateLimitPerMinute")
                         .HasColumnType("int");
+
+                    b.Property<string>("RequestFingerprint")
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<string>("RouteKind")
+                        .HasMaxLength(16)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTimeOffset?>("RunnerAcknowledgedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset?>("StartedAt")
                         .HasColumnType("datetimeoffset");
@@ -1191,9 +1628,159 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<int>("Total")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UnknownCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("SubmissionJobs");
+                    b.HasIndex("GenerationBatchId");
+
+                    b.HasIndex("ProjectId", "RunnerAcknowledgedAt");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("ProjectId", "RunnerAcknowledgedAt"), new[] { "Status" });
+
+                    b.HasIndex("ProjectId", "UserId");
+
+                    b.HasIndex("UserId", "CommandId")
+                        .IsUnique()
+                        .HasFilter("[CommandId] IS NOT NULL");
+
+                    b.ToTable("SubmissionJobs", t =>
+                        {
+                            t.HasCheckConstraint("CK_SubmissionJobs_V2", "[ContractVersion] IS NULL OR ([ContractVersion]=2 AND [CommandId] IS NOT NULL AND [CommandId]=[Id] AND [UserId] IS NOT NULL AND [RequestFingerprint] IS NOT NULL AND [RouteKind] IS NOT NULL AND [RouteKind] IN ('selected','direct') AND [PricingPolicy] IS NOT NULL AND [PricingPolicy] IN ('SeparatedV1','LegacyBundledV1') AND [UnknownCount] IS NOT NULL AND [UnknownCount]>=0 AND [NotDispatchedCount] IS NOT NULL AND [NotDispatchedCount]>=0 AND [HeldCount] IS NOT NULL AND [HeldCount]>=0)");
+                        });
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.SubmissionJobItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AttemptState")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<DateTimeOffset>("CompatibilityCheckedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CompatibilityEvidenceJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompatibilityEvidenceSha256")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FormActionUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<Guid?>("GenerationBatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MaximumSendCredits")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ObservedMetadataJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ObservedMetadataSha256")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("OutcomeAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayloadSha256")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<DateTimeOffset?>("PossibleDispatchAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("PricingPolicy")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResponseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid?>("SettlementCreditTransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SettlementState")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(24)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GenerationBatchId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("SettlementCreditTransactionId")
+                        .IsUnique()
+                        .HasFilter("[SettlementCreditTransactionId] IS NOT NULL");
+
+                    b.HasIndex("JobId", "Ordinal")
+                        .IsUnique();
+
+                    b.HasIndex("JobId", "ProjectId");
+
+                    b.HasIndex("JobId", "ResponseId")
+                        .IsUnique();
+
+                    b.HasIndex("ResponseId", "AttemptState");
+
+                    b.HasIndex("ResponseId", "ProjectId");
+
+                    b.ToTable("SubmissionJobItems", t =>
+                        {
+                            t.HasCheckConstraint("CK_SubmissionJobItems_Dispatch", "([AttemptState] IN ('PossibleDispatch','Unknown','Succeeded','Rejected') AND [PossibleDispatchAt] IS NOT NULL) OR ([AttemptState] IN ('Planned','NotDispatched') AND [PossibleDispatchAt] IS NULL)");
+
+                            t.HasCheckConstraint("CK_SubmissionJobItems_Ledger", "([SettlementState]='Settled' AND [SettlementCreditTransactionId] IS NOT NULL) OR ([SettlementState]<>'Settled' AND [SettlementCreditTransactionId] IS NULL)");
+
+                            t.HasCheckConstraint("CK_SubmissionJobItems_Outcome", "([AttemptState] IN ('Planned','PossibleDispatch','Unknown') AND [SettlementState] IN ('Held','PrepaidHeld')) OR ([AttemptState]='Succeeded' AND [SettlementState] IN ('Settled','PrepaidConsumed')) OR ([AttemptState] IN ('Rejected','NotDispatched') AND [SettlementState] IN ('Released','PrepaidReleased'))");
+
+                            t.HasCheckConstraint("CK_SubmissionJobItems_Price", "[Ordinal]>=0 AND [Ordinal]<100 AND (([MaximumSendCredits]=1 AND [SettlementState] IN ('Held','Settled','Released')) OR ([MaximumSendCredits]=0 AND [PricingPolicy]='LegacyBundledV1' AND [SettlementState] IN ('PrepaidHeld','PrepaidConsumed','PrepaidReleased')))");
+                        });
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.SubmissionLog", b =>
@@ -1205,6 +1792,9 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Property<string>("ErrorMessage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("JobId")
                         .HasColumnType("uniqueidentifier");
@@ -1224,6 +1814,10 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique()
+                        .HasFilter("[ItemId] IS NOT NULL");
 
                     b.ToTable("SubmissionLogs");
                 });
@@ -1351,6 +1945,9 @@ namespace FormAutoHub.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SubmissionItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ToolName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1359,6 +1956,10 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubmissionItemId")
+                        .IsUnique()
+                        .HasFilter("[SubmissionItemId] IS NOT NULL");
 
                     b.ToTable("UsageLogs");
                 });
@@ -1432,6 +2033,9 @@ namespace FormAutoHub.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserCreditAccounts");
                 });
@@ -1559,6 +2163,114 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.CreditReservation", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJob", null)
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.CreditReservationEvent", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.CreditTransaction", null)
+                        .WithMany()
+                        .HasForeignKey("CreditTransactionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJobItem", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.CreditReservation", null)
+                        .WithMany("Events")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.GeneratedResponse", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJobItem", null)
+                        .WithMany()
+                        .HasForeignKey("LegacyClaimItemId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.GenerationBatch", null)
+                        .WithMany()
+                        .HasForeignKey("GenerationBatchId", "ProjectId")
+                        .HasPrincipalKey("Id", "ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.GenerationBatch", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.AiGenerationRun", null)
+                        .WithMany()
+                        .HasForeignKey("AiGenerationRunId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.FormProject", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId", "UserId")
+                        .HasPrincipalKey("Id", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.LegacyAttemptEvidence", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionLog", null)
+                        .WithMany()
+                        .HasForeignKey("LegacySubmissionLogId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.FormProject", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId", "UserId")
+                        .HasPrincipalKey("Id", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.GeneratedResponse", null)
+                        .WithMany()
+                        .HasForeignKey("ResponseId", "ProjectId")
+                        .HasPrincipalKey("Id", "ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.DataCollectionLog", b =>
@@ -1739,12 +2451,74 @@ namespace FormAutoHub.Api.Data.Migrations
                     b.Navigation("TopupOrder");
                 });
 
+            modelBuilder.Entity("FormAutoHub.Api.Entities.SubmissionJob", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.GenerationBatch", null)
+                        .WithMany()
+                        .HasForeignKey("GenerationBatchId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.FormProject", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId", "UserId")
+                        .HasPrincipalKey("Id", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.SubmissionJobItem", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.GenerationBatch", null)
+                        .WithMany()
+                        .HasForeignKey("GenerationBatchId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.CreditTransaction", null)
+                        .WithMany()
+                        .HasForeignKey("SettlementCreditTransactionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJob", null)
+                        .WithMany()
+                        .HasForeignKey("JobId", "ProjectId")
+                        .HasPrincipalKey("Id", "ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FormAutoHub.Api.Entities.GeneratedResponse", null)
+                        .WithMany()
+                        .HasForeignKey("ResponseId", "ProjectId")
+                        .HasPrincipalKey("Id", "ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.SubmissionLog", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJobItem", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
             modelBuilder.Entity("FormAutoHub.Api.Entities.TopupOrder", b =>
                 {
                     b.HasOne("FormAutoHub.Api.Entities.TopupEvidence", null)
                         .WithMany()
                         .HasForeignKey("EvidenceFileId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.UsageLog", b =>
+                {
+                    b.HasOne("FormAutoHub.Api.Entities.SubmissionJobItem", null)
+                        .WithMany()
+                        .HasForeignKey("SubmissionItemId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("FormAutoHub.Api.Entities.CreditReservation", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("FormAutoHub.Api.Entities.Nckh.ModelRelation", b =>

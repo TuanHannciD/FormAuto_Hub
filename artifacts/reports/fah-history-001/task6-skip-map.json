@@ -1,0 +1,198 @@
+[
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.TwentyOneTiedCompletions_UseSqlGuidOrderingAcrossProjects",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.TenSevenTwoOne_DurableLedgerReceiverCountsAndReadOnlyReplay",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationConsumerSqlTests.AiAvailabilityRetry_PersistsFailedRunAndCallsProviderOnce",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.HeldCredits_ActualAiConsumersOnlySpendAvailableAndRulesRemainFree",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.TwoProjectsShareAvailableWithoutSpendingTheFirstJobsOwnHold",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.LostCommitAcknowledgementReturnsDurableJobWithoutStartingOrRetryingRunner",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LockTimeoutScope_RestoresCallerAfterSuccess_AndOriginalThrow",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.AiSqlRetryAndLostCommitAck_CallProviderOnceAndAppendOneRun",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.ConcurrentAdmissions_AreSerializedBeforeReservationAndOnlyOneRunnerSends",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.AcknowledgedAdmissionInitialRunnerReadFaultOrCancellationReleasesOnlyUnattemptedForSelectedAndDirect",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.SettlementRollbackThenLostCommitAcknowledgement_ReplayCreatesOneDebit",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.LegacyPrepaidSqlSuccessRejectUnknownAndReplayNeverDoubleChargeOrReopenConsumed",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.ReservationPersistenceFailureRollsBackGeneratedResponsesDebitAndUsageTogether",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.DifferentProjectsSharingAccount_RollBackStaleDebitAndRecheckAffordableCount",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.AppendRollback_DoesNotEvictOrPersistDebitAuditOrPayload",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.CompetingAiConsumers_ReserveAwareCommitNeverOverspendsAndNeverRepeatsProvider",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.UnownedProject_DoesNotLogOrRevealAdmissionValidation",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.WithoutTransaction_FailsBeforeSchemaChange",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.CompetingProjectReservations_AndConcurrentGrants_SerializeSharedAccount",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.DatabaseConstraints_RejectCounterCorruptionDuplicateLedgerAndOrphanItem",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Oversize_ThrowsBeforeEitherAlter_AndRollbackPreservesBaseline",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.DirectAdmission_UnversionedClientDoesNotEnableFreeSending",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.ExistingCommandReplay_DoesNotCreateFreshFailureUsage",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.UnexpectedShape_RejectsBeforeOtherColumnAlter",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.Recovery_EvictionBeforePayloadRead_ReturnsWholeRequestedMembershipOrNotFound",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationConsumerSqlTests.AiGeneration_AvailabilityLostBeforeCommit_PreservesFailedUsageWithoutDebitOrPreview",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.CommonAdmissionAlsoBlocksDirectAdmissionUntilItsReservationCommits",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.InFlightCancelAndEvictionPreserveSnapshotsUntilRunnerAcknowledgementReleasesOnlyPlanned",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.LegacyMaxColumns_PreserveUnicodeTrailingSpacesAndBinary_AndRepeatUp",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.CancellationAtFinalBoundaryCannotBeOverwrittenByCompletedStatus",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.NonTransientLostCommitAck_ObservesFreshDurableGenerationWithoutRepeatingProvider",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.AdmittedSnapshotsAndHolds_SurviveConcurrentAppendEviction",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationMigrationTests.PopulatedBaseline_PreflightRejectsDuplicateAndOrphan_ThenPreservesHistoricalRows",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.CleanMigration_ReservationSettlementReplayAndUnknown_AreDurable",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationConsumerSqlTests.AiGeneration_FailedAuditCommitRetry_PreservesExactlyOneFailedUsage",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationConsumerSqlTests.AiAvailabilityRetry_PersistsOneSuccessfulRunAndCallsProviderOnce",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.HistoryCutoverRehearsalSqlTests.LegacyNoHoldUnknownRemainsFencedWithoutInventedGroupingHoldOrLedgerRewrite",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.DirectRuleSubmissionSqlServerTests.RejectedAdmission_RollsBackGenerationHoldDebitAndUsageTogether",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.ConcurrentAppends_KeepExactlyTwentyAndOrderedParentLocks",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.RulesLostCommitAck_ReplaysBatchWithoutSecondUsageOrEviction",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.TopupEvidenceSqlServerTests.Writer_IsBlockedUntilNormalizationTransactionCommits_ThenOversizeRejected",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.HistoryCutoverRehearsalSqlTests.SyntheticUnknownReconciliationPreservesAcknowledgedDrainAndIdempotentActorEvidence",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySqlTests.Rules100_ZeroBalanceAndNoAccount_CreateWithoutLedger",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.MissingAccount_ConcurrentTopupsCreateOneAccountWithoutLosingCredit",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.DirectRulesBatchAndSendHoldCommitAtomicallyOrRollbackTogether",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.FaultsBeforeDispatchAfterReceiverAndCommitAcknowledgementNeverReplayProvider",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.NullableV2Fields_CannotBypassMandatorySchemaChecks",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationCreditReservationSqlTests.TwoProjects_SendVersusGeneration_AndTopup_DoNotOverspendOrLoseUpdates",
+    "outcome": "NotExecuted"
+  },
+  {
+    "name": "FormAutoHub.Tests.GenerationHistorySubmissionSqlTests.SameCommandDuringProvider_ReadsHoldWithoutRunnerTakeover_DifferentCommandIsFenced",
+    "outcome": "NotExecuted"
+  }
+]

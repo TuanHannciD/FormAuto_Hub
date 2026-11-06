@@ -70,6 +70,8 @@ export default function DashboardPage() {
         ))}
       </Card>
 
+      {summary && <p className="text-sm text-secondary-foreground">Credit đang giữ: {typeof summary.reservedCreditBalance === "number" ? summary.reservedCreditBalance.toLocaleString("vi-VN") : "—"} · Khả dụng: {typeof summary.availableCreditBalance === "number" ? summary.availableCreditBalance.toLocaleString("vi-VN") : "—"}. Khoản giữ chưa phải chi phí đã trừ.</p>}
+
       <div className="grid items-start gap-[22px] xl:grid-cols-2">
         <Card className="min-w-0 overflow-hidden">
           <CardHeader className="flex items-start justify-between gap-3">

@@ -54,8 +54,10 @@ public sealed class AdminCreditOperationsService(FormAutoHubDbContext db, ICredi
         if (request.UserId == Guid.Empty || request.Credits <= 0 || string.IsNullOrWhiteSpace(request.Reason) || request.Reason.Trim().Length > 1000)
             throw new ArgumentException("Người dùng, số credit nguyên dương và lý do (tối đa 1000 ký tự) là bắt buộc.");
         var transactionId = Guid.NewGuid();
+        if (!await db.Users.AsNoTracking().AnyAsync(x => x.Id == request.UserId, ct)) return null;
         return await CreditWriteTransaction.RunAsync<ManualCreditGrantResponse?>(db, async () =>
         {
+            await CreditAccountLock.AcquireAsync(db, request.UserId, ct);
             var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == request.UserId, ct);
             if (user is null) return null;
             var committed = await db.CreditTransactions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == transactionId, ct);

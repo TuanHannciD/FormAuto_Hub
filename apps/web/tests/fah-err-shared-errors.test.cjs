@@ -16,7 +16,7 @@ function load(relative, globals = {}) {
 }
 function setup(response) {
   class SessionExpiredError extends Error {}
-  const auth = { SessionExpiredError, getValidAccessToken: async () => 'access', getStoredSession: () => ({ accessToken: 'access' }) };
+  const auth = { SessionExpiredError, getSessionBoundary: () => 0, getValidAccessToken: async () => 'access', getStoredSession: () => ({ accessToken: 'access' }) };
   const google = load('lib/nckh-google-auth.ts');
   const api = load('lib/api.ts', {
     require: name => name === '@/lib/auth' ? auth : google,

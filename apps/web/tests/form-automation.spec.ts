@@ -19,13 +19,13 @@ const preview = (id: string) => ({
 test("saved AI previews remain readable and require confirmation on short mobile screens", async ({ page }) => {
   test.setTimeout(90000);
   await setup(page);
-  const destination = resolve(__dirname, "../../../artifacts/reports/ui-cleanup-2026-11-02/after-only");
+  const destination = test.info().outputPath("form-preview-visuals");
   mkdirSync(destination, { recursive: true });
   const longLabel = "Câu hỏi khảo sát có tiêu đề dài để kiểm tra khả năng đọc đầy đủ trên điện thoại. ".repeat(4);
   await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
   await page.route("**/ai-responses/generate", route => route.fulfill({ json: {
     runId: "mobile-ai", status: "Completed", requestedCount: 1, generatedCount: 1,
-    multiplier: 2, creditsUsed: 2, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["mobile-ai-1"]
+    generationBatchId: "fixture-batch", credits: { balance: 19, reserved: 0, available: 19 }, generationFeePerResponse: 1, multiplier: 1, creditsUsed: 1, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["mobile-ai-1"]
   } }));
   await page.route("**/responses?*", route => route.fulfill({ json: { items: [{ ...preview("mobile-ai-1"), source: "Ai", isReadOnly: true,
     answers: Array.from({ length: 30 }, (_, index) => ({ ...preview("mobile-ai-1").answers[0], questionId: `q${index}`, label: `${index + 1}. ${longLabel}`, values: ["Câu trả lời đã lưu, giữ nguyên nội dung để xem lại trước khi gửi."] }))
@@ -33,7 +33,7 @@ test("saved AI previews remain readable and require confirmation on short mobile
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
-  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.getByRole("button", { name: /AI mặc định.*Tạo 1/ }).click();
   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
   const listToggle = page.getByRole("button", { name: /Danh sách bản xem trước/ });
   await expect(listToggle).toBeVisible();
@@ -94,7 +94,7 @@ async function setup(page: Page) {
       expect(payload.confirmed).toBe(true);
       await route.fulfill({ json: { id: "job", projectId, status: "Completed", total: payload.responseIds.length, successCount: payload.responseIds.length, failedCount: 0, createdAt: analysis.createdAt, logs: [] } });
     } else {
-      await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20 } : {} });
+      await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20, reservedCreditBalance: 0, availableCreditBalance: 20 } : {} });
     }
   });
   await page.goto("/dashboard/forms");
@@ -145,11 +145,11 @@ test("AI summary uses active request count after direct mode", async ({ page }) 
   await setup(page);
   await analyzeAndSend(page, 2);
   await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
-  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.getByRole("button", { name: /AI mặc định.*Tạo 1/ }).click();
   await page.locator('input[type="number"]').fill("3");
   const summary = page.getByRole("complementary", { name: "Tóm tắt lượt tạo" });
   await expect(summary.locator("dl > div").filter({ hasText: "Số lượt yêu cầu" })).toHaveText("Số lượt yêu cầu3");
-  await expect(summary.locator("dl > div").filter({ hasText: "Chi phí dự kiến" })).toHaveText("Chi phí dự kiến6 credit");
+  await expect(summary.locator("dl > div").filter({ hasText: "Phí tạo dự kiến" })).toHaveText("Phí tạo dự kiến3 credit");
 });
 
 test("quantity and cost context are available by label at each generation action", async ({ page }) => {
@@ -160,11 +160,11 @@ test("quantity and cost context are available by label at each generation action
   await expect(page.getByLabel("Số lượt cần gửi", { exact: true })).toBeVisible();
   let region = page.getByRole("region", { name: "Tạo và gửi theo quy tắc" });
   await expect(region).toContainText("20 credit khả dụng");
-  await expect(region).toContainText("Chi phí dự kiến: 1 credit");
-  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await expect(region).toContainText("Phí gửi tối đa: 1 credit");
+  await page.getByRole("button", { name: /AI mặc định.*Tạo 1/ }).click();
   await page.getByLabel("Số bản xem trước", { exact: true }).fill("3");
   region = page.getByRole("region", { name: "Tạo bản xem trước AI" });
-  await expect(region).toContainText("Chi phí dự kiến: 6 credit");
+  await expect(region).toContainText("Phí tạo dự kiến: 3 credit");
   await expect(region).toContainText("20 credit khả dụng");
   await expect(region).not.toContainText("chi phí thật");
 });
@@ -187,15 +187,18 @@ test("AI partial results without credit shortage report actual previews and cost
   await page.route("**/ai-prompt-profile?*", route => route.fulfill({ status: 404 }));
   await page.route("**/ai-responses/generate", route => route.fulfill({ json: {
     runId: "ai-run", status: "Partial", requestedCount: 3, generatedCount: 1,
-    multiplier: 2, creditsUsed: 2, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["ai-1"]
+    generationBatchId: "fixture-batch", credits: { balance: 19, reserved: 0, available: 19 }, generationFeePerResponse: 1, multiplier: 1, creditsUsed: 1, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["ai-1"]
   } }));
   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
   await page.getByRole("button", { name: "Phân tích biểu mẫu", exact: true }).click();
-  await page.getByRole("button", { name: /AI mặc định.*x2/ }).click();
+  await page.getByRole("button", { name: /AI mặc định.*Tạo 1/ }).click();
   await page.locator('input[type="number"]').fill("3");
   await page.getByRole("button", { name: /Tạo.*preview|Tạo.*xem trước/i }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/3" })).toContainText("Đã trừ 2 credit");
+  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/3" })).toContainText("Đã trừ 1 credit");
   await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/3" })).toContainText("Chưa tạo đủ");
+  const partialSummary = page.getByRole("complementary", { name: "Tóm tắt lượt tạo" });
+  await expect(partialSummary.locator("dl > div").filter({ hasText: "Phí tạo đã trả" })).toHaveText("Phí tạo đã trả1 credit");
+  await expect(partialSummary.locator("dl > div").filter({ hasText: "Phí gửi tối đa" })).toHaveText("Phí gửi tối đa1 credit");
   await expect(page.getByRole("button", { name: "Nạp thêm credit", exact: true })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toBeEnabled();
 });

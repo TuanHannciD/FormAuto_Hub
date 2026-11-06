@@ -10,5 +10,6 @@ public sealed class UsageLog
     public string Status { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Guid? ProjectId { get; set; }
+    public Guid? SubmissionItemId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }

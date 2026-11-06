@@ -1,0 +1,81 @@
+{
+  "task": "FAH-HISTORY-001",
+  "status": "Done - user accepted local scope",
+  "branch": "fah-history-001",
+  "base": "df5cce54f4a8516ab9dd0bf2b5dff561c1cb8d5c",
+  "authorization": "User requested cleanup and local commit; user owns push/deploy",
+  "reviewedSourceFilesUnchanged": 95,
+  "validation": {
+    "dotnet": {
+      "passed": 393,
+      "failed": 0,
+      "defaultOptInSkipped": 49
+    },
+    "node": {
+      "passed": 112,
+      "failed": 0
+    },
+    "lint": {
+      "exitCode": 0,
+      "existingWarnings": 2
+    },
+    "priorOwnedSqlActual": {
+      "Safety": 56,
+      "cutover": 2,
+      "Baseline": 1
+    },
+    "priorActualBrowser": 6,
+    "priorApiAssertions": 61
+  },
+  "cleanup": {
+    "sessionRevocations": [
+      {
+        "status": 200,
+        "revoked": true,
+        "role": "owner"
+      },
+      {
+        "status": 200,
+        "revoked": true,
+        "role": "other"
+      },
+      {
+        "status": 200,
+        "revoked": true,
+        "role": "admin"
+      }
+    ],
+    "processes": {
+      "stopped": [
+        14444,
+        9668,
+        11748
+      ],
+      "remainingProcesses": 0,
+      "remainingListeners": 0,
+      "at": "2026-11-06T16:33:52.3479497+07:00"
+    },
+    "secrets": {
+      "removedTaskSecretFiles": 6,
+      "fixturePreserved": true,
+      "evidencePreserved": true
+    },
+    "browserTaskTabsClosed": 2,
+    "rawEvidenceAndDatabasesPreserved": true,
+    "generatedTrackedCachePreservedThenRestored": true
+  },
+  "delivery": {
+    "localCommitAuthorized": true,
+    "push": false,
+    "deploy": false,
+    "worktreeRetained": true
+  },
+  "remaining": "Real Google receipt/reconciliation unverified follow-up; fail-closed unchanged; six old TopupEvidence SQL methods Not run",
+  "commitPackaging": {
+    "stagedFiles": 157,
+    "secretCandidates": 0,
+    "stagedWhitespaceErrors": 0,
+    "reviewedSourceFilesUnchanged": 95,
+    "rawEvidencePreservedLocally": true
+  }
+}

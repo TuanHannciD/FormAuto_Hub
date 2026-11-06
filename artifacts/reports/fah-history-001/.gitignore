@@ -1,0 +1,11 @@
+# Preserve machine-local raw evidence without publishing duplicated snapshots,
+# browser profiles/traces/screenshots, test output or process-specific data.
+*
+!.gitignore
+!README.md
+!final-review.md
+!task[2-6]-review-r2.md
+!task[5-6]-review-r1.md
+!*-manifest.json
+!task6-skip-map.json
+!closeout.json

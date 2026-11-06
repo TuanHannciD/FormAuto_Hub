@@ -7,6 +7,7 @@ namespace FormAutoHub.Api.Controllers;
 
 [ApiController]
 [Authorize]
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 [Route("api/projects/{projectId:guid}/responses")]
 public sealed class GeneratedResponsesController(IResponseGenerationService responseGenerationService) : ControllerBase
 {
@@ -16,6 +17,8 @@ public sealed class GeneratedResponsesController(IResponseGenerationService resp
         GenerateResponsesRequest request,
         CancellationToken cancellationToken)
     {
+        if (!await responseGenerationService.OwnsProjectAsync(projectId, cancellationToken)) return NotFound();
+        if (GenerationContractFence.Check(this) is { } upgrade) return upgrade;
         try
         {
             var response = await responseGenerationService.GenerateAsync(projectId, request, cancellationToken);

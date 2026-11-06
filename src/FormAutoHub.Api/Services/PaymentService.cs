@@ -134,50 +134,57 @@ public sealed class PaymentService(
         }
 
         var orderCode = webhookData.OrderCode.ToString();
-        var payment = await dbContext.PaymentRecords
-            .Include(item => item.TopupOrder)
-            .SingleOrDefaultAsync(item => item.Provider == PaymentProviders.PayOS && item.ProviderOrderCode == orderCode, cancellationToken);
-        if (payment?.TopupOrder is null)
+        var owner = await dbContext.PaymentRecords.AsNoTracking().Where(x => x.Provider == PaymentProviders.PayOS && x.ProviderOrderCode == orderCode)
+            .Select(x => (Guid?)x.TopupOrder!.UserId).SingleOrDefaultAsync(cancellationToken);
+        if (owner is null) return new PayosWebhookResponse(false, "Không tìm thấy giao dịch PayOS tương ứng.");
+        return await CreditWriteTransaction.RunAsync(dbContext, async () =>
         {
-            return new PayosWebhookResponse(false, "Không tìm thấy giao dịch PayOS tương ứng.");
-        }
+            await CreditAccountLock.AcquireAsync(dbContext, owner.Value, cancellationToken);
+            var payment = await dbContext.PaymentRecords
+                .Include(item => item.TopupOrder)
+                .SingleOrDefaultAsync(item => item.Provider == PaymentProviders.PayOS && item.ProviderOrderCode == orderCode, cancellationToken);
+            if (payment?.TopupOrder is null)
+            {
+                return new PayosWebhookResponse(false, "Không tìm thấy giao dịch PayOS tương ứng.");
+            }
 
-        payment.SignatureVerifiedAt = DateTimeOffset.UtcNow;
-        payment.LastWebhookAt = DateTimeOffset.UtcNow;
-        payment.RawPayloadJson = JsonSerializer.Serialize(request);
-        payment.UpdatedAt = DateTimeOffset.UtcNow;
+            payment.SignatureVerifiedAt = DateTimeOffset.UtcNow;
+            payment.LastWebhookAt = DateTimeOffset.UtcNow;
+            payment.RawPayloadJson = JsonSerializer.Serialize(request);
+            payment.UpdatedAt = DateTimeOffset.UtcNow;
 
-        if (payment.Amount != webhookData.Amount ||
-            !string.Equals(payment.ProviderPaymentLinkId, webhookData.PaymentLinkId, StringComparison.Ordinal))
-        {
-            payment.ProviderStatus = PaymentRecordStatuses.Failed;
+            if (payment.Amount != webhookData.Amount ||
+                !string.Equals(payment.ProviderPaymentLinkId, webhookData.PaymentLinkId, StringComparison.Ordinal))
+            {
+                payment.ProviderStatus = PaymentRecordStatuses.Failed;
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return new PayosWebhookResponse(false, "Thông tin thanh toán không khớp.");
+            }
+
+            if (payment.TopupOrder.Status == TopupOrderStatuses.Approved)
+            {
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return new PayosWebhookResponse(false, "Webhook đã được xử lý trước đó.");
+            }
+
+            if (payment.TopupOrder.Status != TopupOrderStatuses.Pending || !request.Success)
+            {
+                payment.ProviderStatus = PaymentRecordStatuses.Failed;
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return new PayosWebhookResponse(false, "Thanh toán chưa đủ điều kiện cộng credit.");
+            }
+
+            payment.ProviderStatus = PaymentRecordStatuses.Paid;
+            payment.CompletedAt = DateTimeOffset.UtcNow;
+            payment.TopupOrder.Status = TopupOrderStatuses.Approved;
+            payment.TopupOrder.PaidAt = payment.CompletedAt;
+            payment.TopupOrder.ApprovedAt = payment.CompletedAt;
+            payment.TopupOrder.PaymentNote = "PayOS đã xác minh thanh toán.";
+
+            await creditService.AddTopupCreditsAsync(payment.TopupOrder, "PayOS đã xác minh thanh toán.", cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return new PayosWebhookResponse(false, "Thông tin thanh toán không khớp.");
-        }
-
-        if (payment.TopupOrder.Status == TopupOrderStatuses.Approved)
-        {
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return new PayosWebhookResponse(false, "Webhook đã được xử lý trước đó.");
-        }
-
-        if (payment.TopupOrder.Status != TopupOrderStatuses.Pending || !request.Success)
-        {
-            payment.ProviderStatus = PaymentRecordStatuses.Failed;
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return new PayosWebhookResponse(false, "Thanh toán chưa đủ điều kiện cộng credit.");
-        }
-
-        payment.ProviderStatus = PaymentRecordStatuses.Paid;
-        payment.CompletedAt = DateTimeOffset.UtcNow;
-        payment.TopupOrder.Status = TopupOrderStatuses.Approved;
-        payment.TopupOrder.PaidAt = payment.CompletedAt;
-        payment.TopupOrder.ApprovedAt = payment.CompletedAt;
-        payment.TopupOrder.PaymentNote = "PayOS đã xác minh thanh toán.";
-
-        await creditService.AddTopupCreditsAsync(payment.TopupOrder, "PayOS đã xác minh thanh toán.", cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new PayosWebhookResponse(true, TopupOrderStatuses.Approved);
+            return new PayosWebhookResponse(true, TopupOrderStatuses.Approved);
+        }, cancellationToken);
     }
 
     private static long GenerateOrderCode()

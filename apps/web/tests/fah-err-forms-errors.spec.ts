@@ -7,7 +7,7 @@ const question = { id: "q1", projectId, label: "Câu hỏi thử", entryId: "ent
 const analysis = { projectId, name: "Lỗi giả lập", formTitle: "Biểu mẫu giả lập", formUrl: "https://docs.google.com/forms/d/e/error-fixture/viewform", status: "Analyzed", createdAt: stamp, questions: [question] };
 const preview = (id: string) => ({ id, projectId, status: "Previewed", source: "Ai", isReadOnly: true, previewText: "Có", createdAt: stamp, answers: [{ questionId: "q1", entryId: "entry.1", label: question.label, questionType: "MultipleChoice", values: ["Có"] }] });
 const profile = (globalPrompt = "Hướng dẫn đã lưu") => ({ id: "profile1", projectId, mode: "Option2", audienceJson: "{}", globalPrompt, createdAt: stamp, updatedAt: stamp, questions: [] });
-const aiResult = { runId: "run-fixture-15", status: "Completed", requestedCount: 1, generatedCount: 1, multiplier: 2, creditsUsed: 2, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["paid-preview-15"] };
+const aiResult = { runId: "run-fixture-15", status: "Completed", requestedCount: 1, generatedCount: 1, generationBatchId: "fixture-batch", credits: { balance: 19, reserved: 0, available: 19 }, generationFeePerResponse: 1, multiplier: 1, creditsUsed: 1, missingCredits: 0, balanceAfter: 18, generatedPreviewIds: ["paid-preview-15"] };
 
 async function setup(page: Page, questions = [question]) {
   const calls: { path: string; method: string; json: unknown }[] = [];
@@ -25,7 +25,7 @@ async function setup(page: Page, questions = [question]) {
     }
     else if (path.endsWith("/responses/generate")) await route.fulfill({ json: { items: [preview("rule-preview")], requestedCount: 1, generatedCount: 1, creditsUsed: 1, missingCredits: 0, balanceAfter: 19 } });
     else if (path.endsWith("/responses")) await route.fulfill({ json: { items: new URL(request.url()).searchParams.getAll("ids").map(preview) } });
-    else await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20 } : {} });
+    else await route.fulfill({ json: path === "/api/packages" ? [] : path === "/api/dashboard/summary" ? { currentCreditBalance: 20, reservedCreditBalance: 0, availableCreditBalance: 20 } : {} });
   });
   await page.goto("/dashboard/forms");
   await page.getByLabel("Link Google Form").fill(analysis.formUrl);
@@ -33,7 +33,7 @@ async function setup(page: Page, questions = [question]) {
   await expect(page.getByText("Câu 1: Câu hỏi thử", { exact: true })).toBeVisible();
   return calls;
 }
-const chooseAi = (page: Page, custom = false) => page.getByRole("button", { name: custom ? /AI tùy chỉnh.*x3/ : /AI mặc định.*x2/ }).click();
+const chooseAi = (page: Page, custom = false) => page.getByRole("button", { name: custom ? /AI tùy chỉnh.*Tạo 2/ : /AI mặc định.*Tạo 1/ }).click();
 const createAi = (page: Page) => page.getByRole("button", { name: "Lưu và tạo bản xem trước AI", exact: true });
 const globalPrompt = (page: Page) => page.getByRole("textbox", { name: /^Hướng dẫn chung\s+\d+\/2000 ký tự$/ });
 
@@ -78,7 +78,7 @@ test("ERR014 pending profile read locks competing mode/project changes; next mod
   await expect.poll(() => Boolean(release)).toBe(true);
   // Existing fieldset intentionally blocks overlapping reads. Exercise that protection
   // instead of forcing a click on a disabled mode and inventing a reachable UI race.
-  await expect(page.getByRole("button", { name: /AI mặc định.*x2/ })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /AI mặc định.*Tạo 1/ })).toBeDisabled();
   await expect(page.getByLabel("Link Google Form")).toBeDisabled();
   await expect(createAi(page)).toBeDisabled();
   expect(calls.filter(c => c.method === "PUT")).toHaveLength(0);
@@ -98,7 +98,11 @@ test("ERR015 confirmed AI result and IDs survive GET failure; retry only reads p
   await page.route("**/responses?*", route => { reads++; return route.fulfill(reads === 1 ? { status: 503 } : { json: { items: [preview("paid-preview-15")] } }); });
   await chooseAi(page);
   await createAi(page).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/1" })).toContainText("Đã trừ 2 credit");
+  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/1" })).toContainText("Đã trừ 1 credit");
+  const currentRunSummary = page.getByRole("complementary", { name: "Tóm tắt lượt tạo" });
+  await expect(currentRunSummary.locator("dl > div").filter({ hasText: "Số lượt yêu cầu" })).toHaveText("Số lượt yêu cầu1");
+  await expect(currentRunSummary.locator("dl > div").filter({ hasText: "Phí tạo đã trả" })).toHaveText("Phí tạo đã trả1 credit");
+  await expect(currentRunSummary.locator("dl > div").filter({ hasText: "Phí gửi tối đa" })).toHaveText("Phí gửi tối đa1 credit");
   await expect(page.getByText("Mã lượt AI: run-fixture-15", { exact: true })).toBeVisible();
   await expect(page.getByRole("alert").filter({ hasText: "paid-preview-15" })).toBeVisible();
   await expect(createAi(page)).toBeDisabled();
@@ -115,12 +119,12 @@ test("ERR015 AI continuation retains the second confirmed run and cost when only
   const posts: { method: string; json: { count: number; mode: string } }[] = [];
   const reads: string[][] = [];
   // A subsequent summary read represents an independently replenished test balance.
-  await page.route("**/api/dashboard/summary", route => route.fulfill({ json: { currentCreditBalance: 2 } }));
+  await page.route("**/api/dashboard/summary", route => route.fulfill({ json: { currentCreditBalance: 2, reservedCreditBalance: 0, availableCreditBalance: 2 } }));
   await page.route("**/ai-responses/generate", route => {
     posts.push({ method: route.request().method(), json: route.request().postDataJSON() });
     return route.fulfill({ json: posts.length === 1
-      ? { ...aiResult, status: "Partial", requestedCount: 2, missingCredits: 2, balanceAfter: 0 }
-      : { ...aiResult, runId: "run-continued-15", balanceAfter: 0, generatedPreviewIds: ["continued-preview-15"] } });
+      ? { ...aiResult, status: "Partial", requestedCount: 2, missingCredits: 1, balanceAfter: 0, credits: { balance: 0, reserved: 0, available: 0 } }
+      : { ...aiResult, runId: "run-continued-15", generationBatchId: "continued-batch", balanceAfter: 0, credits: { balance: 0, reserved: 0, available: 0 }, generatedPreviewIds: ["continued-preview-15"] } });
   });
   await page.route("**/responses?*", route => {
     const ids = new URL(route.request().url()).searchParams.getAll("ids");
@@ -130,21 +134,26 @@ test("ERR015 AI continuation retains the second confirmed run and cost when only
   await chooseAi(page);
   await page.locator('input[type="number"]').fill("2");
   await createAi(page).click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/2" })).toContainText("Đã trừ 2 credit");
+  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/2" })).toContainText("Đã trừ 1 credit");
   const continueButton = page.getByRole("button", { name: "Tiếp tục tạo phần còn thiếu", exact: true });
   await expect(continueButton).toBeEnabled();
   await continueButton.click();
-  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 2/2" })).toContainText("Đã trừ 4 credit");
+  // The supplement is a new immutable one-response run, with its own actual fee.
+  await expect(page.getByRole("status").filter({ hasText: "Đã tạo 1/1" })).toContainText("Đã trừ 1 credit");
+  const supplementSummary = page.getByRole("complementary", { name: "Tóm tắt lượt tạo" });
+  await expect(supplementSummary.locator("dl > div").filter({ hasText: "Số lượt yêu cầu" })).toHaveText("Số lượt yêu cầu1");
+  await expect(supplementSummary.locator("dl > div").filter({ hasText: "Phí tạo đã trả" })).toHaveText("Phí tạo đã trả1 credit");
+  await expect(supplementSummary.locator("dl > div").filter({ hasText: "Phí gửi tối đa" })).toHaveText("Phí gửi tối đa1 credit");
   await expect(page.getByText("Mã lượt AI: run-continued-15", { exact: true })).toBeVisible();
   await expect(page.getByRole("alert").filter({ hasText: "continued-preview-15" })).toBeVisible();
   await expect(page.getByRole("complementary", { name: "Tóm tắt lượt tạo" })).toContainText("0 credit khả dụng");
-  await expect(page.getByRole("checkbox")).toBeDisabled();
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(createAi(page)).toBeDisabled();
   const writesBeforeRetry = calls.filter(call => call.method === "PUT").length;
   await page.getByRole("button", { name: "Tải lại bản xem trước", exact: true }).click();
   await expect(page.getByRole("checkbox")).toBeEnabled();
   await expect(page.getByRole("checkbox")).not.toBeChecked();
-  await expect(page.getByRole("button", { name: "Xác nhận gửi 2 lượt", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Xác nhận gửi 1 lượt", exact: true })).toBeDisabled();
   expect(posts).toEqual([{ method: "POST", json: { mode: "Option2", count: 2 } }, { method: "POST", json: { mode: "Option2", count: 1 } }]);
   expect(reads).toEqual([["paid-preview-15"], ["continued-preview-15"], ["continued-preview-15"]]);
   expect(calls.filter(call => call.method === "PUT")).toHaveLength(writesBeforeRetry);

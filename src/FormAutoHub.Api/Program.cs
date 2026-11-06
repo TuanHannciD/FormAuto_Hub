@@ -82,6 +82,8 @@ builder.Services.AddScoped<IAdminTopupOrderService, AdminTopupOrderService>();
 builder.Services.AddScoped<AdminCreditOperationsService>();
 builder.Services.AddScoped<TopupEvidenceService>();
 builder.Services.AddScoped<ICreditService, CreditService>();
+builder.Services.AddScoped<ICreditReservationService, CreditReservationService>();
+builder.Services.AddScoped<ISubmissionSettlementService, SubmissionSettlementService>();
 builder.Services.AddScoped<IUsageLogService, UsageLogService>();
 builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
@@ -95,6 +97,8 @@ builder.Services.AddScoped<IAdminPaymentReportService, AdminPaymentReportService
 builder.Services.AddScoped<IFormProjectService, FormProjectService>();
 builder.Services.AddScoped<IAnswerRuleService, AnswerRuleService>();
 builder.Services.AddScoped<IResponseGenerationService, ResponseGenerationService>();
+builder.Services.AddScoped<IGenerationBatchWriter, GenerationBatchWriter>();
+builder.Services.AddScoped<IGenerationHistoryService, GenerationHistoryService>();
 builder.Services.AddScoped<IAiPromptGuardService, AiPromptGuardService>();
 builder.Services.AddScoped<IAiOutputValidator, AiOutputValidator>();
 builder.Services.AddScoped<IAiPromptProfileService, AiPromptProfileService>();
@@ -121,7 +125,9 @@ builder.Services.AddScoped<IAiAnalyticsService, AiAnalyticsService>();
 builder.Services.AddScoped<SubmissionService>();
 builder.Services.AddScoped<ISubmissionService>(services => services.GetRequiredService<SubmissionService>());
 builder.Services.AddScoped<IDirectRuleSubmissionService, DirectRuleSubmissionService>();
-builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>();
+builder.Services.AddScoped<ISubmissionCompatibilityService, SubmissionCompatibilityService>();
+builder.Services.AddHttpClient<IGoogleFormsClient, GoogleFormsClient>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
 builder.Services.AddHttpClient<IPayosClient, PayosClient>();
 
 builder.Services.AddScoped<IGoogleTokenProtector, GoogleTokenProtector>();

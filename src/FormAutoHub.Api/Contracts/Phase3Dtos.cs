@@ -63,13 +63,28 @@ public sealed record GenerateResponsesResponse(
     decimal BalanceAfter,
     int RequestedCount,
     int GeneratedCount,
-    int MissingCredits);
+    int MissingCredits,
+    Guid? GenerationBatchId,
+    int GenerationFeePerResponse,
+    CreditAvailabilityResponse Credits);
 
+[method: System.Text.Json.Serialization.JsonConstructor]
 public sealed record SendSubmissionRequest(
+    int ContractVersion,
+    Guid CommandId,
+    Guid? BatchId,
     IReadOnlyList<Guid> ResponseIds,
-    bool Confirmed);
+    bool Confirmed,
+    bool DuplicateWarningAccepted);
 
-public sealed record DirectRuleSubmissionRequest(Guid CommandId, int Count);
+[method: System.Text.Json.Serialization.JsonConstructor]
+public sealed record DirectRuleSubmissionRequest(int ContractVersion, Guid CommandId, int Count);
+
+public sealed record SubmissionItemResponse(Guid ItemId, Guid ResponseId, string AttemptState,
+    string SettlementState, int MaximumSendCredits, int SettledCredits, string? EvidenceCode);
+public sealed record SubmissionFeeResponse(Guid ReservationId, int MaximumSendCredits,
+    decimal HeldCredits, int SettledCredits, decimal ReleasedCredits, int UnknownCount,
+    int NotDispatchedCount, bool RunnerAcknowledged, CreditAvailabilityResponse Credits);
 
 public sealed record SubmissionLogResponse(
     Guid Id,
@@ -88,4 +103,15 @@ public sealed record SubmissionJobResponse(
     DateTimeOffset CreatedAt,
     DateTimeOffset? StartedAt,
     DateTimeOffset? FinishedAt,
-    IReadOnlyList<SubmissionLogResponse> Logs);
+    IReadOnlyList<SubmissionLogResponse> Logs)
+{
+    public Guid? CommandId { get; init; }
+    public int? ContractVersion { get; init; }
+    public Guid? BatchId { get; init; }
+    public SubmissionFeeResponse? Fees { get; init; }
+    public IReadOnlyList<SubmissionItemResponse> Items { get; init; } = [];
+    public int? UnknownCount { get; init; }
+    public int? NotDispatchedCount { get; init; }
+    public int? HeldCount { get; init; }
+    public DateTimeOffset? RunnerAcknowledgedAt { get; init; }
+}

@@ -2,6 +2,9 @@ using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using FormAutoHub.Api.Domain;
+using FormAutoHub.Api.Contracts;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FormAutoHub.Api.Integrations.GoogleForms;
 
@@ -9,6 +12,12 @@ public interface IGoogleFormsClient
 {
     Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken cancellationToken);
     Task<GoogleFormSubmitResult> SubmitAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken cancellationToken);
+    async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
+    {
+        // A legacy bool has no receipt provenance, including a true bool.
+        _ = await SubmitAsync(actionUrl, answers, ct);
+        return GoogleSubmissionEvidence.Unknown("UnverifiedLegacyResult", "legacy-result");
+    }
 }
 
 public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFormsClient
@@ -88,20 +97,49 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
         IReadOnlyDictionary<string, IReadOnlyList<string>> answers,
         CancellationToken cancellationToken)
     {
-        if (!Uri.TryCreate(actionUrl, UriKind.Absolute, out var actionUri))
+        var outcome = await SubmitVerifiedAsync(actionUrl, answers, cancellationToken);
+        return new(false, outcome.Evidence.Code);
+    }
+
+    public async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl,
+        IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
+    {
+        if (!GoogleFormIdentity.TryNormalize(actionUrl, "formResponse", out var action))
+            return GoogleSubmissionEvidence.Unknown("UnsupportedTarget", "invalid-target");
+        var trace = new StringBuilder();
+        try
         {
-            return new GoogleFormSubmitResult(false, "Invalid form action URL.");
+            var pairs = answers.SelectMany(x => x.Value.Select(value => new KeyValuePair<string, string>(x.Key, value)));
+            using var content = new FormUrlEncodedContent(pairs);
+            using var request = new HttpRequestMessage(HttpMethod.Post, action) { Content = content };
+            using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+            trace.Append((int)response.StatusCode).Append('|').Append(action);
+            // No automatic redirect/POST replay. Capture the proposed hop, but no real receipt
+            // classifier has been independently accepted, so no hop authorizes settlement.
+            if (response.Headers.Location is { } location)
+            {
+                trace.Append('|').Append(location);
+                var target = new Uri(new Uri(action), location);
+                if (!GoogleFormIdentity.TryNormalize(target.AbsoluteUri, "formResponse", out var normalized) || normalized != action)
+                    return GoogleSubmissionEvidence.Unknown("UnverifiedRedirect", trace.ToString());
+                return GoogleSubmissionEvidence.Unknown("UnverifiedRedirect", trace.ToString());
+            }
+            await using var stream = await response.Content.ReadAsStreamAsync(ct);
+            var bytes = new byte[1024 * 1024 + 1];
+            var read = 0;
+            while (read < bytes.Length)
+            {
+                var next = await stream.ReadAsync(bytes.AsMemory(read), ct);
+                if (next == 0) break;
+                read += next;
+            }
+            trace.Append('|').Append(Convert.ToHexStringLower(SHA256.HashData(bytes.AsSpan(0, read))));
+            return GoogleSubmissionEvidence.Unknown(read == bytes.Length ? "ResponseTooLarge" : "ReceiptEvidenceUnavailable", trace.ToString());
         }
-
-        var pairs = answers.SelectMany(answer =>
-            answer.Value.Select(value => new KeyValuePair<string, string>(answer.Key, value)));
-
-        using var content = new FormUrlEncodedContent(pairs);
-        using var response = await httpClient.PostAsync(actionUri, content, cancellationToken);
-
-        return response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.Found
-            ? new GoogleFormSubmitResult(true, string.Empty)
-            : new GoogleFormSubmitResult(false, $"Google Form returned HTTP {(int)response.StatusCode}.");
+        catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException)
+        {
+            return GoogleSubmissionEvidence.Unknown("TransportUncertain", trace.Append('|').Append(e.GetType().Name).ToString());
+        }
     }
 
     [GeneratedRegex("<title>(?<title>.*?)</title>", RegexOptions.IgnoreCase | RegexOptions.Singleline)]

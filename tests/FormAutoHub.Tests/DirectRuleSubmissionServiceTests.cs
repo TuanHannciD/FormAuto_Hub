@@ -31,7 +31,8 @@ public sealed class DirectRuleSubmissionServiceTests
             {
                 await using var persisted = new FormAutoHubDbContext(options);
                 Assert.Equal(total, await persisted.GeneratedResponses.CountAsync());
-                Assert.Equal(command, (await persisted.CreditTransactions.SingleAsync()).ReferenceId);
+                Assert.Equal(command, (await persisted.CreditReservations.SingleAsync()).JobId);
+                Assert.Equal(total, await persisted.SubmissionJobItems.CountAsync());
                 Assert.True(await persisted.SubmissionLogs.AnyAsync(x => x.SubmittedAt == null));
                 return new(true, "");
             }
@@ -46,15 +47,15 @@ public sealed class DirectRuleSubmissionServiceTests
         Assert.Equal(SubmissionJobStatuses.Completed, result.Status);
         Assert.Equal(total, client.Calls);
         Assert.Equal(remaining, (await db.UserCreditAccounts.SingleAsync()).Balance);
-        var debit = await db.CreditTransactions.SingleAsync();
-        Assert.Equal(-total, debit.Amount);
-        Assert.Equal(nameof(SubmissionJob), debit.ReferenceType);
+        var debits = await db.CreditTransactions.ToListAsync();
+        Assert.Equal(total, debits.Count); Assert.Equal(-total, debits.Sum(x => x.Amount));
+        Assert.All(debits, x => Assert.Equal(nameof(SubmissionJobItem), x.ReferenceType));
         Assert.All(await db.GeneratedResponses.ToListAsync(), x => Assert.Equal(GeneratedResponseSources.Rule, x.Source));
         Assert.Equal(total, (await db.UsageLogs.ToListAsync()).Sum(x => x.CreditsUsed));
     }
 
     [Fact]
-    public async Task Direct_ReplayIgnoresChangedCountAndDoesNotGenerateDebitOrSendAgain()
+    public async Task Direct_ReplayIsReadOnlyAndChangedCountConflicts()
     {
         await using var db = new FormAutoHubDbContext(options);
         var project = await Seed(db);
@@ -64,7 +65,9 @@ public sealed class DirectRuleSubmissionServiceTests
         var usageCount = await db.UsageLogs.CountAsync();
         await using var retry = new FormAutoHubDbContext(options);
 
-        var replay = await SendDirect(retry, client, project, command, 100);
+        var conflict = await Assert.ThrowsAsync<SubmissionContractException>(() => SendDirect(retry, client, project, command, 100));
+        Assert.Equal("CommandConflict", conflict.Code);
+        var replay = await SendDirect(retry, client, project, command, 1);
 
         Assert.Equal(first!.Id, replay!.Id);
         Assert.Equal(1, replay.Total);
@@ -83,11 +86,9 @@ public sealed class DirectRuleSubmissionServiceTests
         await using var db = new FormAutoHubDbContext(options);
         var project = await Seed(db);
         var client = new Client();
-        await Assert.ThrowsAsync<InvalidOperationException>(() => SendDirect(db, client, project, Guid.NewGuid(), count));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => SendDirect(db, client, project, Guid.NewGuid(), count));
         await AssertNoAdmission(db, client);
-        var failure = Assert.Single(await db.UsageLogs.ToListAsync());
-        Assert.Equal(UsageLogStatuses.Failed, failure.Status);
-        Assert.Equal(0, failure.CreditsUsed);
+        Assert.All(await db.UsageLogs.ToListAsync(), x => Assert.Equal(0, x.CreditsUsed));
     }
 
     [Theory]
@@ -105,10 +106,10 @@ public sealed class DirectRuleSubmissionServiceTests
         if (failure == "unsupported-question") (await db.FormQuestions.SingleAsync()).QuestionType = "Unsupported";
         await db.SaveChangesAsync();
         var client = new Client();
-        await Assert.ThrowsAsync<InvalidOperationException>(() => SendDirect(db, client, project,
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => SendDirect(db, client, project,
             failure == "empty-command" ? Guid.Empty : Guid.NewGuid(), 1));
         await AssertNoAdmission(db, client);
-        Assert.Contains(await db.UsageLogs.ToListAsync(), x => x.Status == UsageLogStatuses.Failed && x.CreditsUsed == 0);
+        Assert.All(await db.UsageLogs.ToListAsync(), x => Assert.Equal(0, x.CreditsUsed));
     }
 
     [Theory]
@@ -125,17 +126,17 @@ public sealed class DirectRuleSubmissionServiceTests
         await db.SaveChangesAsync();
         var client = new Client();
 
-        var replay = await SendDirect(db, client, project, command, 1);
+        var upgrade = await Assert.ThrowsAsync<SubmissionContractException>(() => SendDirect(db, client, project, command, 1));
+        Assert.Equal("ClientUpgradeRequired", upgrade.Code);
+        var replay = await new SubmissionService(db, new UserContext(userId), client).GetJobAsync(project, command, default);
 
         Assert.Equal(status, replay!.Status);
         Assert.Equal(2, replay.Total);
         Assert.Equal(0, client.Calls);
         Assert.Empty(await db.GeneratedResponses.ToListAsync());
         Assert.Empty(await db.CreditTransactions.ToListAsync());
-        await Assert.ThrowsAsync<InvalidOperationException>(() => SendDirect(db, client, project, Guid.NewGuid(), 1));
-        var failure = Assert.Single(await db.UsageLogs.ToListAsync());
-        Assert.Equal(UsageLogStatuses.Failed, failure.Status);
-        Assert.Equal(0, failure.CreditsUsed);
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => SendDirect(db, client, project, Guid.NewGuid(), 1));
+        Assert.All(await db.UsageLogs.ToListAsync(), x => Assert.Equal(0, x.CreditsUsed));
     }
 
     [Fact]
@@ -147,7 +148,8 @@ public sealed class DirectRuleSubmissionServiceTests
         var command = Guid.NewGuid();
         var client = new Client();
         await SendDirect(db, client, project, command, 1);
-        Assert.Null(await SendDirect(db, client, otherProject, command, 1));
+        var conflict = await Assert.ThrowsAsync<SubmissionContractException>(() => SendDirect(db, client, otherProject, command, 1));
+        Assert.Equal("CommandConflict", conflict.Code);
         Assert.Null(await SendDirect(db, client, project, command, 1, Guid.NewGuid()));
         Assert.Equal(1, client.Calls);
         Assert.Single(await db.SubmissionJobs.ToListAsync());
@@ -160,7 +162,7 @@ public sealed class DirectRuleSubmissionServiceTests
         var project = await Seed(db);
         var command = Guid.NewGuid();
         var client = new Client { OnSubmit = () => throw new HttpRequestException("Synthetic unknown result") };
-        await Assert.ThrowsAsync<HttpRequestException>(() => SendDirect(db, client, project, command, 2));
+        await SendDirect(db, client, project, command, 2);
         await using var retry = new FormAutoHubDbContext(options);
 
         var replay = await SendDirect(retry, client, project, command, 2);
@@ -169,10 +171,11 @@ public sealed class DirectRuleSubmissionServiceTests
         Assert.Equal(0, replay.FailedCount);
         var log = Assert.Single(replay.Logs);
         Assert.Null(log.SubmittedAt);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => new SubmissionService(retry, new UserContext(userId), client)
-            .SendAsync(project, new([log.ResponseId], true), default));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => new SubmissionService(retry, new UserContext(userId), client)
+            .SendAsync(project, new(2, Guid.NewGuid(), replay.BatchId, [log.ResponseId], true, true), default));
         Assert.Equal(1, client.Calls);
-        Assert.Single(await retry.CreditTransactions.ToListAsync());
+        Assert.Empty(await retry.CreditTransactions.ToListAsync());
+        Assert.Equal(1, (await retry.CreditReservations.SingleAsync()).OutstandingAmount);
     }
 
     [Theory]
@@ -195,7 +198,7 @@ public sealed class DirectRuleSubmissionServiceTests
                     if (pauseFirst) await service.PauseAsync(project, command, default);
                     var cancelled = await service.CancelAsync(project, command, default);
                     Assert.Null(cancelled!.FinishedAt);
-                    await Assert.ThrowsAsync<InvalidOperationException>(() => SendDirect(control, new Client(), project, Guid.NewGuid(), 1));
+                    await Assert.ThrowsAnyAsync<InvalidOperationException>(() => SendDirect(control, new Client(), project, Guid.NewGuid(), 1));
                 }
                 return new(true, "");
             }
@@ -222,7 +225,7 @@ public sealed class DirectRuleSubmissionServiceTests
             throw new HttpRequestException("Synthetic unknown result");
         } };
 
-        await Assert.ThrowsAsync<HttpRequestException>(() => SendDirect(db, client, project, command, 2));
+        await SendDirect(db, client, project, command, 2);
 
         await using var fresh = new FormAutoHubDbContext(options);
         var job = await fresh.SubmissionJobs.SingleAsync();
@@ -235,8 +238,8 @@ public sealed class DirectRuleSubmissionServiceTests
     private async Task<SubmissionJobResponse?> SendDirect(FormAutoHubDbContext db, Client client, Guid project, Guid command, int count, Guid? actor = null)
     {
         var user = new UserContext(actor ?? userId);
-        return await new DirectRuleSubmissionService(db, user, new CreditService(db), new SubmissionService(db, user, client))
-            .SendAsync(project, new(command, count), CancellationToken.None);
+        return await new DirectRuleSubmissionService(db, user, new CreditService(db), new SubmissionService(db, user, client, new SubmissionV2Fixture.Compatibility()))
+            .SendAsync(project, new(2, command, count), CancellationToken.None);
     }
 
     private static async Task AssertNoAdmission(FormAutoHubDbContext db, Client client)
@@ -260,8 +263,8 @@ public sealed class DirectRuleSubmissionServiceTests
         await db.SaveChangesAsync();
         var client = new Client();
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(project, new([response.Id], true), default));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => new SubmissionService(db, new UserContext(userId), client)
+            .SendAsync(project, new(2, Guid.NewGuid(), null, [response.Id], true, true), default));
 
         Assert.Equal(0, client.Calls);
         Assert.Empty(await db.SubmissionJobs.ToListAsync());
@@ -283,7 +286,7 @@ public sealed class DirectRuleSubmissionServiceTests
 
         Assert.Equal(SubmissionJobStatuses.Cancelled, cancelled!.Status);
         Assert.Null(cancelled.FinishedAt);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => service.SendAsync(project, new([response.Id], true), default));
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(() => service.SendAsync(project, new(2, Guid.NewGuid(), null, [response.Id], true, true), default));
         Assert.Single(await db.SubmissionJobs.ToListAsync());
     }
 
@@ -291,7 +294,7 @@ public sealed class DirectRuleSubmissionServiceTests
     {
         var project = Guid.NewGuid();
         var question = Guid.NewGuid();
-        db.FormProjects.Add(new FormProject { Id = project, UserId = userId, Name = "Synthetic", FormActionUrl = "https://example.invalid/send" });
+        db.FormProjects.Add(new FormProject { Id = project, UserId = userId, Name = "Synthetic", FormUrl = "https://docs.google.com/forms/d/e/synthetic/viewform", FormActionUrl = "https://docs.google.com/forms/d/e/synthetic/formResponse" });
         db.FormQuestions.Add(new FormQuestion { Id = question, ProjectId = project, EntryId = "entry.1", Label = "Synthetic", QuestionType = FormQuestionTypes.ShortText });
         db.AnswerRules.Add(new AnswerRule { Id = Guid.NewGuid(), ProjectId = project, QuestionId = question, Mode = AnswerRuleModes.SampleTextLines, ConfigJson = "{\"samples\":[\"one\",\"two\"]}" });
         if (!await db.UserCreditAccounts.AnyAsync())
@@ -312,6 +315,11 @@ public sealed class DirectRuleSubmissionServiceTests
         public int Calls { get; private set; }
         public Func<Task<GoogleFormSubmitResult>>? OnSubmit { get; init; }
         public Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken cancellationToken) => throw new NotSupportedException();
+        public async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
+        {
+            var result = await SubmitAsync(actionUrl, answers, ct);
+            return GenerationCreditReservationTests.Outcome(result.Success ? SubmissionOutcomeKind.ConfirmedSuccess : SubmissionOutcomeKind.ConfirmedRejected);
+        }
         public Task<GoogleFormSubmitResult> SubmitAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken cancellationToken)
         {
             Calls++;

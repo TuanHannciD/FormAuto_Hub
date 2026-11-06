@@ -13,7 +13,7 @@ namespace FormAutoHub.Tests;
 // === FILE MAP (AiGenerationServiceTests.cs – 558 dòng) ===
 // Dòng    Test method                                                   Mục đích
 // 31      GenerateAsync_Option2WritesPreviewsCreditUsageAndAudit         Generate mode Option2 – ghi previews, credit, audit đầy đủ
-// 96      GenerateAsync_Option3UsesMultiplierThree                       Generate mode Option3 – nhân credit x3
+// 96      GenerateAsync_Option3UsesGenerationFeeTwo                       Generate mode Option3 – nhân credit x3
 // 125     GenerateAsync_PartialGenerationRespectsLimitedCredits          Generate với credit hạn chế – chỉ sinh đúng số credit còn
 // 160     GenerateAsync_FailedProviderCallChargesZero                    Provider lỗi – không trừ credit
 // 190     GenerateAsync_ProviderTimeoutChargesZero                       Provider timeout – không trừ credit
@@ -52,10 +52,10 @@ public sealed class AiGenerationServiceTests
         Assert.NotNull(response);
         Assert.Equal(AiGenerationRunStatuses.Succeeded, response.Status);
         Assert.Equal(2, response.GeneratedCount);
-        Assert.Equal(2, response.Multiplier);
-        Assert.Equal(4, response.CreditsUsed);
+        Assert.Equal(1, response.Multiplier);
+        Assert.Equal(2, response.CreditsUsed);
         Assert.Equal(0, response.MissingCredits);
-        Assert.Equal(6, response.BalanceAfter);
+        Assert.Equal(8, response.BalanceAfter);
         Assert.Equal(2, response.GeneratedPreviewIds.Count);
 
         Assert.Equal(2, await context.GeneratedResponses.CountAsync());
@@ -67,20 +67,20 @@ public sealed class AiGenerationServiceTests
 
         var transaction = await context.CreditTransactions.SingleAsync();
         Assert.Equal(CreditTransactionTypes.CreditUsed, transaction.Type);
-        Assert.Equal(-4, transaction.Amount);
+        Assert.Equal(-2, transaction.Amount);
         Assert.Equal(nameof(AiGenerationRun), transaction.ReferenceType);
         Assert.Equal(response.RunId, transaction.ReferenceId);
 
         var usageLog = await context.UsageLogs.SingleAsync();
         Assert.Equal(UsageLogStatuses.Success, usageLog.Status);
-        Assert.Equal(4, usageLog.CreditsUsed);
+        Assert.Equal(2, usageLog.CreditsUsed);
         Assert.Equal("AiGenerateResponses", usageLog.Action);
 
         var run = await context.AiGenerationRuns.SingleAsync();
         Assert.Equal(response.RunId, run.Id);
         Assert.Equal(AiGenerationRunStatuses.Succeeded, run.Status);
         Assert.Equal(2, run.GeneratedCount);
-        Assert.Equal(4, run.CreditsUsed);
+        Assert.Equal(2, run.CreditsUsed);
         Assert.Contains("raw-request", run.RawProviderRequestJson, StringComparison.Ordinal);
         Assert.Contains("raw-response", run.RawProviderResponseJson, StringComparison.Ordinal);
         Assert.NotNull(run.StartedAt);
@@ -93,7 +93,7 @@ public sealed class AiGenerationServiceTests
     }
 
     [Fact]
-    public async Task GenerateAsync_Option3UsesMultiplierThree()
+    public async Task GenerateAsync_Option3UsesGenerationFeeTwo()
     {
         var userId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
@@ -116,9 +116,9 @@ public sealed class AiGenerationServiceTests
 
         Assert.NotNull(response);
         Assert.Equal(AiGenerationRunStatuses.Succeeded, response.Status);
-        Assert.Equal(3, response.Multiplier);
-        Assert.Equal(3, response.CreditsUsed);
-        Assert.Equal(7, response.BalanceAfter);
+        Assert.Equal(2, response.Multiplier);
+        Assert.Equal(2, response.CreditsUsed);
+        Assert.Equal(8, response.BalanceAfter);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public sealed class AiGenerationServiceTests
 
         var adapter = new TestAiProviderAdapter(request =>
         {
-            Assert.Equal(6, request.Count);
+            Assert.Equal(9, request.Count);
             return ValidOutputs(request.Count, textQuestionId, choiceQuestionId, "Có");
         });
         var service = CreateService(context, userId, adapter);
@@ -148,11 +148,11 @@ public sealed class AiGenerationServiceTests
 
         Assert.NotNull(response);
         Assert.Equal(AiGenerationRunStatuses.Partial, response.Status);
-        Assert.Equal(6, response.GeneratedCount);
+        Assert.Equal(9, response.GeneratedCount);
         Assert.Equal(18, response.CreditsUsed);
-        Assert.Equal(12, response.MissingCredits);
+        Assert.Equal(2, response.MissingCredits);
         Assert.Equal(0, response.BalanceAfter);
-        Assert.Equal(6, await context.GeneratedResponses.CountAsync());
+        Assert.Equal(9, await context.GeneratedResponses.CountAsync());
         Assert.Single(context.CreditTransactions);
     }
 
@@ -379,6 +379,78 @@ public sealed class AiGenerationServiceTests
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
             adapter.GenerateAsync(request, CancellationToken.None));
         Assert.Contains("not configured", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData(AiPromptProfileModes.Option2, 10, 10)]
+    [InlineData(AiPromptProfileModes.Option3, 10, 20)]
+    [InlineData(AiPromptProfileModes.Option2, 3, 3)]
+    [InlineData(AiPromptProfileModes.Option3, 3, 6)]
+    [InlineData(AiPromptProfileModes.Option2, 0, 0)]
+    public async Task CreationFees_ChargeOnlyValidCommittedOutputs(string mode, int validCount, int expectedCredits)
+    {
+        await using var db = CreateContext(); var user = Guid.NewGuid(); var project = Guid.NewGuid(); var text = Guid.NewGuid(); var choice = Guid.NewGuid();
+        SeedProject(db, user, project, text, choice, 100); SeedProvider(db); SeedPromptProfile(db, user, project, mode); await db.SaveChangesAsync();
+        var adapter = new TestAiProviderAdapter(_ => ValidOutputs(validCount, text, choice, "Có"));
+        var result = await CreateService(db, user, adapter).GenerateAsync(project, new(mode, 10), default);
+        Assert.NotNull(result); Assert.Equal(validCount, result.GeneratedCount); Assert.Equal(expectedCredits, result.CreditsUsed);
+        Assert.Equal(100 - expectedCredits, result.BalanceAfter); Assert.Equal(result.BalanceAfter, result.Credits.Balance);
+        Assert.Equal(validCount == 0 ? 0 : 1, await db.GenerationBatches.CountAsync());
+        Assert.Equal(validCount == 0 ? 0 : 1, await db.CreditTransactions.CountAsync());
+        if (validCount == 0) Assert.Null(result.GenerationBatchId);
+        else
+        {
+            var batch = await db.GenerationBatches.SingleAsync(); Assert.Equal(result.GenerationBatchId, batch.Id);
+            Assert.Equal(result.RunId, batch.AiGenerationRunId); Assert.Equal(expectedCredits, batch.GenerationCredits);
+            Assert.Equal(mode == AiPromptProfileModes.Option2 ? "ai-default" : "ai-custom", batch.Mode);
+        }
+        var analytics = await new AiAnalyticsService(db, new TestCurrentUserContext(user)).GetMyStatsAsync(default);
+        Assert.Equal(expectedCredits, analytics.TotalCreditsUsed);
+    }
+
+    [Fact]
+    public async Task Request101_RejectsBeforeProviderAndPreservesTwentySlots()
+    {
+        await using var db = CreateContext(); var user = Guid.NewGuid(); var project = Guid.NewGuid(); var text = Guid.NewGuid(); var choice = Guid.NewGuid();
+        SeedProject(db, user, project, text, choice, 100); SeedProvider(db); SeedPromptProfile(db, user, project, AiPromptProfileModes.Option2); await db.SaveChangesAsync();
+        var adapter = new TestAiProviderAdapter(_ => ValidOutputs(0, text, choice, "Có"));
+        var service = CreateService(db, user, adapter);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.GenerateAsync(project, new(AiPromptProfileModes.Option2, 101), default));
+        Assert.Equal(0, adapter.CallCount); Assert.Empty(db.GenerationBatches); Assert.Empty(db.CreditTransactions);
+        var rulesProject = GenerationHistoryServiceTests.Seed(db, user); await db.SaveChangesAsync();
+        var rules = new ResponseGenerationService(db, new TestCurrentUserContext(user), new CreditService(db));
+        for (var i = 0; i < 20; i++) await rules.GenerateAsync(rulesProject, new(1), default);
+        var before = await db.GenerationBatches.Select(x => x.Id).ToArrayAsync();
+        var zero = await service.GenerateAsync(project, new(AiPromptProfileModes.Option2, 10), default);
+        Assert.Null(zero!.GenerationBatchId); Assert.Equal(20, await db.GenerationBatches.CountAsync(x => x.EvictedAt == null));
+        Assert.Equal(before.Order(), (await db.GenerationBatches.Select(x => x.Id).ToArrayAsync()).Order()); Assert.Empty(db.CreditTransactions);
+    }
+
+    [Fact]
+    public async Task Observation_UsesQuestionsSeenBeforeProviderEvenWhenProjectChangesDuringCall()
+    {
+        await using var db = CreateContext(); var user = Guid.NewGuid(); var project = Guid.NewGuid(); var text = Guid.NewGuid(); var choice = Guid.NewGuid();
+        SeedProject(db, user, project, text, choice, 100); SeedProvider(db); SeedPromptProfile(db, user, project, AiPromptProfileModes.Option2); await db.SaveChangesAsync();
+        var adapter = new TestAiProviderAdapter(request =>
+        {
+            db.FormProjects.Single(x => x.Id == project).Name = "Changed during provider";
+            db.FormQuestions.Single(x => x.Id == text).EntryId = "entry.changed";
+            return ValidOutputs(request.Count, text, choice, "Có");
+        });
+        var result = await CreateService(db, user, adapter).GenerateAsync(project, new(AiPromptProfileModes.Option2, 1), default);
+        var detail = await new GenerationHistoryService(db, new TestCurrentUserContext(user)).GetDetailAsync(result!.GenerationBatchId!.Value, default);
+        Assert.NotNull(detail); Assert.DoesNotContain(detail.Observation.Questions, x => x.EntryId == "entry.changed");
+        Assert.NotEqual("Changed during provider", detail.Run.FormName);
+    }
+
+    [Fact]
+    public async Task UnownedInvalidGeneration_DoesNotWriteProjectAudit()
+    {
+        await using var db = CreateContext(); var owner = Guid.NewGuid(); var project = Guid.NewGuid();
+        SeedProject(db, owner, project, Guid.NewGuid(), Guid.NewGuid(), 10); await db.SaveChangesAsync();
+        var adapter = new TestAiProviderAdapter(_ => throw new Exception("Must not call provider"));
+        var result = await CreateService(db, Guid.NewGuid(), adapter).GenerateAsync(project, new(AiPromptProfileModes.Option2, 101), default);
+        Assert.Null(result); Assert.Empty(db.UsageLogs); Assert.Empty(db.AiGenerationRuns);
     }
 
     private static AiGenerationService CreateService(

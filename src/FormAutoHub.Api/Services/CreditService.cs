@@ -37,7 +37,7 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
     {
         if (credits <= 0 || string.IsNullOrWhiteSpace(reason))
             throw new ArgumentException("Số credit phải lớn hơn 0 và phải có lý do cộng credit.");
-        var account = await dbContext.UserCreditAccounts.SingleOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+        var account = await CreditAccountLock.AcquireAsync(dbContext, userId, cancellationToken);
         if (account is null)
         {
             account = new UserCreditAccount { Id = Guid.NewGuid(), UserId = userId };
@@ -67,8 +67,7 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
             throw new ArgumentOutOfRangeException(nameof(credits), "Credits must be greater than zero.");
         }
 
-        var account = await dbContext.UserCreditAccounts
-            .SingleOrDefaultAsync(item => item.UserId == userId, cancellationToken);
+        var account = await CreditAccountLock.AcquireAsync(dbContext, userId, cancellationToken);
 
         if (account is null)
         {
@@ -111,8 +110,7 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
         CancellationToken cancellationToken,
         Guid? transactionId = null)
     {
-        var account = await dbContext.UserCreditAccounts
-            .SingleOrDefaultAsync(item => item.UserId == order.UserId, cancellationToken);
+        var account = await CreditAccountLock.AcquireAsync(dbContext, order.UserId, cancellationToken);
 
         if (account is null)
         {
@@ -162,10 +160,21 @@ public sealed class CreditService(FormAutoHubDbContext dbContext) : ICreditServi
             throw new ArgumentOutOfRangeException(nameof(credits), "Credits must be greater than zero.");
         }
 
-        var account = await dbContext.UserCreditAccounts
-            .SingleOrDefaultAsync(item => item.UserId == userId, cancellationToken);
+        var account = await CreditAccountLock.AcquireAsync(dbContext, userId, cancellationToken);
+        var reserved = await dbContext.CreditReservations.Where(x => x.UserId == userId && x.ClosedAt == null)
+            .SumAsync(x => (decimal?)x.OutstandingAmount, cancellationToken) ?? 0m;
+        // Only settlement of this durable paid item may consume its own held unit.
+        if (referenceType == nameof(SubmissionJobItem))
+        {
+            var item = await dbContext.SubmissionJobItems.SingleOrDefaultAsync(x => x.Id == referenceId, cancellationToken);
+            if (credits != 1 || item is null || item.MaximumSendCredits != 1 || item.SettlementState != "Held" ||
+                item.AttemptState is not ("PossibleDispatch" or "Unknown") ||
+                !await dbContext.CreditReservations.AnyAsync(x => x.UserId == userId && x.JobId == item.JobId && x.OutstandingAmount >= 1, cancellationToken))
+                throw new InvalidOperationException("A matching durable paid hold is required.");
+            reserved -= 1;
+        }
 
-        if (account is null || account.Balance < credits)
+        if (account is null || account.Balance - reserved < credits)
         {
             return null;
         }

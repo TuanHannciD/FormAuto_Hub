@@ -16,6 +16,7 @@ public sealed class DashboardService(FormAutoHubDbContext dbContext, ICurrentUse
 {
     public async Task<DashboardSummaryResponse> GetSummaryAsync(CancellationToken cancellationToken)
     {
+        var availability = await new CreditReservationService(dbContext).GetCreditAvailabilityAsync(currentUser.UserId, cancellationToken);
         var account = await dbContext.UserCreditAccounts
             .AsNoTracking()
             .SingleOrDefaultAsync(item => item.UserId == currentUser.UserId, cancellationToken);
@@ -42,11 +43,13 @@ public sealed class DashboardService(FormAutoHubDbContext dbContext, ICurrentUse
             .ToListAsync(cancellationToken);
 
         return new DashboardSummaryResponse(
-            account?.Balance ?? 0,
+            availability.Balance,
             account?.TotalDeposited ?? 0,
             account?.TotalUsed ?? 0,
             pendingTopupOrders,
             recentOrders,
-            recentUsageLogs);
+            recentUsageLogs,
+            availability.Reserved,
+            availability.Available);
     }
 }

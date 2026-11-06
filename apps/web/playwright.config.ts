@@ -2,8 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  // Production metadata checks use their explicit origin/server in playwright.seo.config.ts.
-  testIgnore: "**/seo.spec.ts",
+  // Owned runtime mutations and production metadata checks require their dedicated configs.
+  testIgnore: ["**/seo.spec.ts", "**/history-runtime.spec.ts"],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

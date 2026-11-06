@@ -38,25 +38,19 @@ public sealed class FahErrSubmissionPersistenceTests
             return Task.FromResult(new GoogleFormSubmitResult(true, ""));
         });
 
-        var thrown = await Assert.ThrowsAsync<DbUpdateException>(() => new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(projectId, new SendSubmissionRequest(ids, true), CancellationToken.None));
+        var thrown = await Assert.ThrowsAsync<DbUpdateException>(() => new SubmissionService(db, new UserContext(userId), client, new SubmissionV2Fixture.Compatibility())
+            .SendAsync(projectId, new SendSubmissionRequest(2, Guid.NewGuid(), null, ids, true, false), CancellationToken.None));
 
         Assert.Same(fault, thrown);
         Assert.Equal(failFinalSave ? 1 : 0, calls);
         await using var fresh = new FormAutoHubDbContext(options);
-        var usage = await fresh.UsageLogs.SingleAsync();
-        Assert.Equal(UsageLogStatuses.Failed, usage.Status);
-        var log = await fresh.SubmissionLogs.SingleAsync();
-        if (failFinalSave)
-        {
-            Assert.Equal(SubmissionLogStatuses.Success, log.Status);
-            Assert.Equal(1, (await fresh.SubmissionJobs.SingleAsync()).SuccessCount);
-        }
-        else
-        {
-            Assert.Contains("chưa thực hiện", log.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-            Assert.DoesNotContain("chưa xác định", log.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        }
+        Assert.Empty(await fresh.UsageLogs.ToListAsync());
+        Assert.Empty(await fresh.CreditTransactions.ToListAsync());
+        var job = await fresh.SubmissionJobs.SingleAsync(); Assert.Equal("Failed", job.Status); Assert.NotNull(job.RunnerAcknowledgedAt);
+        var item = await fresh.SubmissionJobItems.SingleAsync();
+        Assert.Equal(failFinalSave ? "PossibleDispatch" : "NotDispatched", item.AttemptState);
+        Assert.Equal(failFinalSave ? "PrepaidHeld" : "PrepaidReleased", item.SettlementState);
+        Assert.Equal(failFinalSave ? 1 : 0, await fresh.SubmissionLogs.CountAsync());
     }
 
     [Fact]
@@ -75,10 +69,8 @@ public sealed class FahErrSubmissionPersistenceTests
             throw fault;
         });
 
-        var thrown = await Assert.ThrowsAsync<HttpRequestException>(() => new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(projectId, new SendSubmissionRequest(ids, true), CancellationToken.None));
-
-        Assert.Same(fault, thrown);
+        await new SubmissionService(db, new UserContext(userId), client, new SubmissionV2Fixture.Compatibility())
+            .SendAsync(projectId, new SendSubmissionRequest(2, Guid.NewGuid(), null, ids, true, false), CancellationToken.None);
         Assert.Equal(2, calls);
         await using var fresh = new FormAutoHubDbContext(options);
         var job = await fresh.SubmissionJobs.SingleAsync();
@@ -89,13 +81,12 @@ public sealed class FahErrSubmissionPersistenceTests
         var logs = await fresh.SubmissionLogs.ToListAsync();
         Assert.Equal(2, logs.Count);
         Assert.Contains(logs, x => x.Status == SubmissionLogStatuses.Success);
-        Assert.Contains(logs, x => x.ErrorMessage!.Contains("chưa xác định", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(logs, x => x.ErrorMessage == "TransportUncertain");
         Assert.DoesNotContain(logs, x => x.ErrorMessage!.Contains("private provider"));
         Assert.Equal(1, await fresh.GeneratedResponses.CountAsync(x => x.Status == GeneratedResponseStatuses.Submitted));
         Assert.Equal(2, await fresh.GeneratedResponses.CountAsync(x => x.Status == GeneratedResponseStatuses.Previewed));
-        var usage = await fresh.UsageLogs.SingleAsync();
-        Assert.Equal(UsageLogStatuses.Failed, usage.Status);
-        Assert.Contains("chưa xác định", usage.Description!, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(1, await fresh.UsageLogs.CountAsync(x => x.SubmissionItemId != null && x.Status == "Success"));
+        Assert.Equal(1, job.UnknownCount); Assert.Equal(1, job.NotDispatchedCount);
     }
 
     [Fact]
@@ -107,22 +98,22 @@ public sealed class FahErrSubmissionPersistenceTests
         await db.SaveChangesAsync();
         var client = new SubmitClient(() => throw new Xunit.Sdk.XunitException("Must not send malformed payload"));
 
-        var thrown = await Assert.ThrowsAsync<InvalidOperationException>(() => new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(projectId, new SendSubmissionRequest(ids, true), CancellationToken.None));
+        var thrown = await Assert.ThrowsAsync<SubmissionContractException>(() => new SubmissionService(db, new UserContext(userId), client, new SubmissionV2Fixture.Compatibility())
+            .SendAsync(projectId, new SendSubmissionRequest(2, Guid.NewGuid(), null, ids, true, false), CancellationToken.None));
 
         Assert.IsAssignableFrom<JsonException>(thrown.InnerException);
         await using var fresh = new FormAutoHubDbContext(options);
-        Assert.Equal(SubmissionJobStatuses.Failed, (await fresh.SubmissionJobs.SingleAsync()).Status);
-        Assert.Equal(UsageLogStatuses.Failed, (await fresh.UsageLogs.SingleAsync()).Status);
+        Assert.Empty(await fresh.SubmissionJobs.ToListAsync());
+        Assert.Empty(await fresh.UsageLogs.ToListAsync());
         Assert.Empty(await fresh.SubmissionLogs.ToListAsync());
     }
 
     [Theory]
-    [InlineData(false, "Failed", "Gửi form thất bại", 0)]
-    [InlineData(true, "Failed", "Gửi form hoàn tất một phần", 1)]
-    [InlineData(true, "Paused", "Đã tạm dừng gửi form", 10)]
-    [InlineData(true, "Cancelled", "Đã hủy gửi form", 10)]
-    public async Task Send_UsageDescribesActualOutcome(bool firstSuccess, string targetStatus, string text, int successes)
+    [InlineData(false, "Failed", 0)]
+    [InlineData(true, "Failed", 1)]
+    [InlineData(true, "Paused", 10)]
+    [InlineData(true, "Cancelled", 10)]
+    public async Task Send_UsageDescribesActualOutcome(bool firstSuccess, string targetStatus, int successes)
     {
         await using var db = new FormAutoHubDbContext(options);
         var boundaryStop = targetStatus is "Paused" or "Cancelled";
@@ -141,18 +132,19 @@ public sealed class FahErrSubmissionPersistenceTests
             return new GoogleFormSubmitResult(boundaryStop || firstSuccess && calls == 1, "Synthetic rejection");
         });
 
-        var result = await new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(projectId, new SendSubmissionRequest(ids, true), CancellationToken.None);
+        var result = await new SubmissionService(db, new UserContext(userId), client, new SubmissionV2Fixture.Compatibility())
+            .SendAsync(projectId, new SendSubmissionRequest(2, Guid.NewGuid(), null, ids, true, false), CancellationToken.None);
 
         Assert.Equal(targetStatus, result!.Status);
         Assert.Equal(successes, result.SuccessCount);
         Assert.Equal(boundaryStop ? 10 : 2, calls);
         await using var fresh = new FormAutoHubDbContext(options);
-        var usage = await fresh.UsageLogs.SingleAsync();
-        Assert.Equal(UsageLogStatuses.Failed, usage.Status);
-        Assert.Contains(text, usage.Description!);
-        Assert.Contains($"{successes}", usage.Description!);
-        Assert.DoesNotContain("Gửi form thành công", usage.Description!);
+        var usage = await fresh.UsageLogs.Where(x => x.SubmissionItemId != null).ToListAsync();
+        Assert.Equal(successes, usage.Count); Assert.All(usage, x => Assert.Equal("Success", x.Status));
+        var job = await fresh.SubmissionJobs.SingleAsync(); Assert.NotNull(job.RunnerAcknowledgedAt);
+        Assert.Equal(targetStatus == "Paused", job.FinishedAt == null);
+        Assert.Equal(boundaryStop ? 1 : 0, job.NotDispatchedCount);
+        Assert.Equal(0, job.HeldCount);
     }
 
     [Fact]
@@ -169,13 +161,14 @@ public sealed class FahErrSubmissionPersistenceTests
             cancellation.Cancel();
             throw fault;
         });
-        await Assert.ThrowsAsync<OperationCanceledException>(() => new SubmissionService(db, new UserContext(userId), client)
-            .SendAsync(projectId, new SendSubmissionRequest(ids, true), cancellation.Token));
+        await new SubmissionService(db, new UserContext(userId), client, new SubmissionV2Fixture.Compatibility())
+            .SendAsync(projectId, new SendSubmissionRequest(2, Guid.NewGuid(), null, ids, true, false), cancellation.Token);
         await using var fresh = new FormAutoHubDbContext(options);
         Assert.Equal(1, calls);
         Assert.Single(await fresh.SubmissionLogs.ToListAsync());
         Assert.Equal(SubmissionJobStatuses.Failed, (await fresh.SubmissionJobs.SingleAsync()).Status);
-        Assert.Single(await fresh.UsageLogs.ToListAsync());
+        Assert.Empty(await fresh.UsageLogs.ToListAsync());
+        Assert.Equal(1, (await fresh.SubmissionJobs.SingleAsync()).UnknownCount);
     }
 
     [Theory]
@@ -248,13 +241,15 @@ public sealed class FahErrSubmissionPersistenceTests
 
     private async Task<(Guid ProjectId, Guid[] ResponseIds)> SeedSubmission(FormAutoHubDbContext db, int count)
     {
-        var project = new FormProject { Id = Guid.NewGuid(), UserId = userId, Name = "Synthetic", FormUrl = "https://example.invalid/form", FormActionUrl = "https://example.invalid/send" };
+        var project = new FormProject { Id = Guid.NewGuid(), UserId = userId, Name = "Synthetic", FormUrl = "https://docs.google.com/forms/d/e/synthetic/viewform", FormActionUrl = "https://docs.google.com/forms/d/e/synthetic/formResponse" };
         db.FormProjects.Add(project);
+        db.UserCreditAccounts.Add(new() { Id = Guid.NewGuid(), UserId = userId, Balance = 100 });
         var ids = Enumerable.Range(0, count).Select(_ => Guid.NewGuid()).ToArray();
         foreach (var id in ids)
             db.GeneratedResponses.Add(new GeneratedResponse
             {
                 Id = id, ProjectId = project.Id, Status = GeneratedResponseStatuses.Previewed,
+                PricingPolicy = "LegacyBundledV1", LegacyEntitlementState = "Available", LegacyEvidenceReference = "test:reviewed-legacy-unattempted",
                 PayloadJson = JsonSerializer.Serialize(new[] { new GeneratedAnswerResponse(Guid.NewGuid(), "entry.1", "Synthetic", "ShortText", new[] { "synthetic answer" }) })
             });
         await db.SaveChangesAsync();
@@ -298,6 +293,11 @@ public sealed class FahErrSubmissionPersistenceTests
     private sealed class SubmitClient(Func<Task<GoogleFormSubmitResult>> submit) : IGoogleFormsClient
     {
         public Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken cancellationToken) => throw new NotSupportedException();
+        public async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
+        {
+            var result = await submit();
+            return GenerationCreditReservationTests.Outcome(result.Success ? SubmissionOutcomeKind.ConfirmedSuccess : SubmissionOutcomeKind.ConfirmedRejected);
+        }
         public Task<GoogleFormSubmitResult> SubmitAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken cancellationToken) => submit();
     }
     private sealed class OAuth : IGoogleOAuthService

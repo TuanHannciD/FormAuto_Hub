@@ -6,7 +6,9 @@ public sealed record DashboardSummaryResponse(
     decimal TotalCreditsUsed,
     int PendingTopupOrders,
     IReadOnlyList<TopupOrderResponse> RecentTopupOrders,
-    IReadOnlyList<UsageLogResponse> RecentUsageLogs);
+    IReadOnlyList<UsageLogResponse> RecentUsageLogs,
+    decimal ReservedCreditBalance = 0,
+    decimal AvailableCreditBalance = 0);
 
 public sealed record CreditPackageResponse(
     Guid Id,

@@ -1,0 +1,112 @@
+{
+  "base": "df5cce54f4a8516ab9dd0bf2b5dff561c1cb8d5c",
+  "status": "FROZEN for independent Task6 and whole-branch review",
+  "at": "2026-11-06T00:04:00.678030+07:00",
+  "writer": "/root/history_task6 gpt-6.1-sol/high",
+  "sourceCount": 5,
+  "docsCount": 14,
+  "files": [
+    {
+      "path": "scripts/history-validation/task6-api-smoke.ps1",
+      "sha256": "bd54cd7d7614a9e027ff15aa36510358fa2a00018a80d203563a34495be396ab",
+      "bytes": 7579
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/HistoryCutoverRehearsalSqlTests.cs",
+      "sha256": "e626d0ca13a1c6bb08e64bed89c62b836dacc2118226f6c8b10e483381380a24",
+      "bytes": 8199
+    },
+    {
+      "path": "tests/FormAutoHub.Tests/DirectRuleSubmissionSqlServerTests.cs",
+      "sha256": "f7f48f2b590872291e324f8e55324973f8e99ce9bec558b7b5eba918cff44408",
+      "bytes": 28050
+    },
+    {
+      "path": "apps/web/playwright.history-runtime.config.ts",
+      "sha256": "8e6922c665ccd61fe4c4c3174d410d305dbed7e4a9236fa190674e9e28972b3a",
+      "bytes": 594
+    },
+    {
+      "path": "apps/web/tests/history-runtime.spec.ts",
+      "sha256": "7e903347fa3384945da25c8b9003f57d6a22ef896dd34025be16d4627513a1c5",
+      "bytes": 9616
+    },
+    {
+      "path": "docs/ai/GENERATION_HISTORY_CONTRACT.md",
+      "sha256": "156e6ca1a5d6dddbc7ebf49a05c9b1977e3f7d35a18fbcbd5f4f1f02724196cd",
+      "bytes": 3722
+    },
+    {
+      "path": "docs/vi/GENERATION_HISTORY_CONTRACT.md",
+      "sha256": "d2c56ba647f79e432fce63787e5fe9cc09cf83a97389424bba6d414433f17008",
+      "bytes": 3565
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/INDEX.md",
+      "sha256": "158ab2c902601665b6fe4bc647e5e81e2630853a0e846462850a3316ffe785b8",
+      "bytes": 14676
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/CUTOVER.md",
+      "sha256": "b317b7c4b3a9aaa9dda7e32806a88cadbef6215866a9a617e2b0b76a743274c5",
+      "bytes": 17234
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/PROGRESS.md",
+      "sha256": "db973ff02ebfa32e046022c1fffd1594a86b1482d82f4989d1fea162a184884b",
+      "bytes": 38294
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/VALIDATION.md",
+      "sha256": "ab61384a5ba3db2fc1a90b95b6b986784d40c4623e746b92e389141b3f261f31",
+      "bytes": 5544
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/HANDOFF.md",
+      "sha256": "a18c40b353ed70c1a9b1928a53154d23775663787f16cafb93054f692299cc09",
+      "bytes": 1304
+    },
+    {
+      "path": "docs/ai/tasks/FAH-HISTORY-001/TASK6_REPORT.md",
+      "sha256": "5fdaec66b909cafd2586e1fceb90cdad4ebd25f2e6b154e5f1d7fbd2cb40e0c1",
+      "bytes": 2754
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/INDEX.md",
+      "sha256": "f2ee8ce0312aacc887f156e32c6c891f0d633a5011f7572227a244c026b20a72",
+      "bytes": 16536
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/CUTOVER.md",
+      "sha256": "5b8c408b04be76b91efd17158d689d0cfe51efbd1c32c44155ff1ada9bcf6edf",
+      "bytes": 16807
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/PROGRESS.md",
+      "sha256": "7629e2709eba623ee528f14569e43de1ae7fffc2aa7dca0d4bbb6d715beed060",
+      "bytes": 38703
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/VALIDATION.md",
+      "sha256": "fc458731f1a165714a86fabe0ebc3ab9c1538d962685fa9c1fecbe358cd79560",
+      "bytes": 5027
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/HANDOFF.md",
+      "sha256": "80f6623d4c61b8862d42b724baba3dba28caee9e07c776f69b8d919152acd53e",
+      "bytes": 1300
+    },
+    {
+      "path": "docs/vi/tasks/FAH-HISTORY-001/TASK6_REPORT.md",
+      "sha256": "103e0f1123c4246322cbd14e46d087b811bc35f015491486ff618e10fd9b143a",
+      "bytes": 2592
+    }
+  ],
+  "preservedBeforeHash": "7086cd49ddf50f3b04a7202fce4d096ae01b94a1089179e8c6496e29a9ae3cec",
+  "validation": {
+    "strictUtf8": true,
+    "under400Lines": true,
+    "linksExist": true,
+    "rawSessionSecretHits": 0
+  }
+}
