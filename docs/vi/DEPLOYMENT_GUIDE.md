@@ -1,12 +1,42 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Cập nhật lần cuối:** 2026-10-06 | **Phase:** Production CI/CD foundation
+**Cập nhật lần cuối:** 2026-11-06 | **Phase:** Production CI/CD foundation
+
+## Mục lục
+
+- [Kết nối server hiện tại](#kết-nối-server-hiện-tại)
+- [Tổng quan kiến trúc](#tổng-quan-kiến-trúc)
+- [Điều kiện cần](#điều-kiện-cần)
+- [Quick start lần đầu](#quick-start-lần-đầu)
+  - [1. Chuẩn bị repo trên VPS](#1-chuẩn-bị-repo-trên-vps)
+  - [2. Tạo runtime secrets trên VPS](#2-tạo-runtime-secrets-trên-vps)
+  - [3. Tạo deploy SSH key trên máy Windows/local](#3-tạo-deploy-ssh-key-trên-máy-windowslocal)
+  - [4. Cài public key lên VPS](#4-cài-public-key-lên-vps)
+  - [5. Login GHCR trên VPS](#5-login-ghcr-trên-vps)
+  - [6. Điền GitHub Actions settings](#6-điền-github-actions-settings)
+  - [7. Deploy](#7-deploy)
+- [Thư mục production](#thư-mục-production)
+- [Deploy bản mới](#deploy-bản-mới)
+- [Lưu bền vững Data Protection key](#lưu-bền-vững-data-protection-key)
+- [Health checks](#health-checks)
+- [Logs](#logs)
+- [Troubleshooting](#troubleshooting)
+  - [GitHub Actions báo `ssh: handshake failed`](#github-actions-báo-ssh-handshake-failed)
+  - [GitHub Actions báo missing production setting](#github-actions-báo-missing-production-setting)
+  - [VPS pull GHCR image fail](#vps-pull-ghcr-image-fail)
+  - [API unhealthy](#api-unhealthy)
+  - [API báo `The key {...} was not found in the key ring`](#api-báo-the-key--was-not-found-in-the-key-ring)
+  - [Web không gọi được API](#web-không-gọi-được-api)
+  - [Port đã bị chiếm](#port-đã-bị-chiếm)
+- [Rollback](#rollback)
 
 ## Kết nối server hiện tại
 
-VPS FormAuto Hub được cấu hình tại `113.23.68.58` (người dùng xác nhận ngày 06/10/2026), với SSH user `deploy` và port `1122`. Chẩn đoán từ local đọc các biến Windows hiện có: `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT` và `CASHBACK_VPS_SSH_KEY`; giữ nguyên các tên cũ này. Dùng `.agents/skills/formauto-server-debugger/SKILL.md` để đọc trạng thái production có giới hạn.
+VPS FormAuto Hub được cấu hình tại `113.184.16.191` (người dùng xác nhận lại ngày 06/11/2026), với SSH user `deploy` và port `1122`. Chẩn đoán từ local đọc các biến Windows hiện có: `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT` và `CASHBACK_VPS_SSH_KEY`; giữ nguyên các tên cũ này. Dùng `.agents/skills/formauto-server-debugger/SKILL.md` để đọc trạng thái production có giới hạn.
 
-Ví dụ setup lần đầu bên dưới dùng địa chỉ minh họa `203.0.113.10`; thay bằng host và SSH port đã cấu hình khi chạy thật. GitHub Environment `production` cần có riêng `DEPLOY_HOST=113.23.68.58` và `DEPLOY_PORT=1122`. Sửa tài liệu hoặc biến Windows không tự cập nhật GitHub settings. Xác minh `DEPLOY_SSH_FINGERPRINT` cho endpoint mới trước khi deploy; không tắt xác minh host.
+Endpoint được người dùng xác nhận mới nhất được ưu tiên hơn biến môi trường local đã cũ. Báo chênh lệch và dùng host trong biến của riêng phiên làm việc theo skill; không tự sửa cấu hình Windows lưu lâu dài. Ngày xác nhận này không phải ngày đổi IP.
+
+Ví dụ setup lần đầu bên dưới dùng địa chỉ minh họa `203.0.113.10`; thay bằng host và SSH port đã cấu hình khi chạy thật. GitHub Environment `production` cần có riêng `DEPLOY_HOST=113.184.16.191` và `DEPLOY_PORT=1122`. Sửa tài liệu hoặc biến Windows không tự cập nhật GitHub settings. Xác minh `DEPLOY_SSH_FINGERPRINT` cho endpoint mới trước khi deploy; không tắt xác minh host.
 
 Chẩn đoán thông thường không đọc secrets. Khi người dùng yêu cầu rõ việc khôi phục cấu hình ứng dụng về local, dùng `.agents/skills/formauto-server-debugger/references/LOCAL_CONFIGURATION_RECOVERY.md`. Tách SQL/JWT/deploy credentials của production khỏi runtime local và không commit secrets đã khôi phục. Xem `ENVIRONMENT_SETUP.md` về vị trí cấu hình local và giới hạn xác minh.
 

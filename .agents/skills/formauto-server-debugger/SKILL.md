@@ -17,16 +17,16 @@ Inspect the FormAuto Hub production VPS without changing production state. Estab
 
 # Preserve the server settings
 
-Keep these existing Windows environment-variable names and values unchanged. They are legacy-named because the connection settings were created before this FormAuto skill, but they point to the real FormAuto Hub VPS.
+Keep these existing Windows environment-variable names. They are legacy-named because the connection settings were created before this FormAuto skill. The table records the approved connection settings; persisted environment values may be stale.
 
 | Variable | Current value |
 |---|---|
-| `CASHBACK_VPS_HOST` | `113.23.68.58` |
+| `CASHBACK_VPS_HOST` | `113.184.16.191` |
 | `CASHBACK_VPS_USER` | `deploy` |
 | `CASHBACK_VPS_SSH_KEY` | `C:\Users\Tuan\.ssh\cashback_skill` |
 | `CASHBACK_VPS_SSH_PORT` | `1122` |
 
-The host was updated by the user on 2026-10-06. Resolve the actual environment values before connecting; report a stale host instead of connecting to it. Do not rename, rewrite, migrate, or persist these settings elsewhere unless the user explicitly asks. Never read or display SSH private-key contents.
+The user reconfirmed the current host on 2026-11-06; this is not the migration date. The latest explicit user-confirmed endpoint takes precedence over stale environment values or older documentation. Resolve the environment before connecting. If the resolved host differs or is missing, report the discrepancy and use the confirmed host only in a local PowerShell variable for this session; never connect to the stale address. If newer instructions conflict with this table, use the newer confirmed endpoint and report the discrepancy. Do not rename, rewrite, migrate, or persist these settings elsewhere unless the user explicitly asks. Never read or display SSH private-key contents.
 
 Resolve each setting in this order:
 
@@ -47,13 +47,19 @@ function Get-FormAutoServerSetting([string]$name) {
     return [Environment]::GetEnvironmentVariable($name, "Machine")
 }
 
-$formautoHost = Get-FormAutoServerSetting "CASHBACK_VPS_HOST"
+# Use a newer explicit user-confirmed endpoint here if one is supplied.
+$formautoConfirmedHost = "113.184.16.191"
+$formautoConfiguredHost = Get-FormAutoServerSetting "CASHBACK_VPS_HOST"
+if ($formautoConfiguredHost -ne $formautoConfirmedHost) {
+    Write-Warning "CASHBACK_VPS_HOST is stale or missing; using the user-confirmed host for this session only."
+}
+$formautoHost = $formautoConfirmedHost
 $formautoUser = Get-FormAutoServerSetting "CASHBACK_VPS_USER"
 $formautoKey = Get-FormAutoServerSetting "CASHBACK_VPS_SSH_KEY"
 $formautoPort = Get-FormAutoServerSetting "CASHBACK_VPS_SSH_PORT"
 ```
 
-Ask only for a specific missing setting. Do not guess a replacement.
+Ask only for a specific missing setting that cannot be resolved from current user instructions. Do not ask again for an endpoint already supplied by the user, guess a replacement, or persist a session override.
 
 # Enforce read-only access
 

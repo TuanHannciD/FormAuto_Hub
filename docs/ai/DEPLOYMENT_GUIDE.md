@@ -1,12 +1,42 @@
 # DEPLOYMENT_GUIDE — FormAuto Hub Production Deployment
 
-**Last updated:** 2026-10-06 | **Phase:** Production CI/CD foundation
+**Last updated:** 2026-11-06 | **Phase:** Production CI/CD foundation
+
+## Contents
+
+- [Current server connection](#current-server-connection)
+- [Architecture overview](#architecture-overview)
+- [Prerequisites](#prerequisites)
+- [Quick start (first-time deploy)](#quick-start-first-time-deploy)
+  - [1. Prepare the repository on the VPS](#1-prepare-the-repository-on-the-vps)
+  - [2. Create runtime secrets on the VPS](#2-create-runtime-secrets-on-the-vps)
+  - [3. Generate the deploy SSH key on Windows/local](#3-generate-the-deploy-ssh-key-on-windowslocal)
+  - [4. Install the public key on the VPS](#4-install-the-public-key-on-the-vps)
+  - [5. Log in to GHCR on the VPS](#5-log-in-to-ghcr-on-the-vps)
+  - [6. Fill GitHub Actions settings](#6-fill-github-actions-settings)
+  - [7. Deploy](#7-deploy)
+- [Production directory layout](#production-directory-layout)
+- [Deploying updates](#deploying-updates)
+- [Data Protection key persistence](#data-protection-key-persistence)
+- [Health checks](#health-checks)
+- [Logs](#logs)
+- [Troubleshooting](#troubleshooting)
+  - [GitHub Actions reports `ssh: handshake failed`](#github-actions-reports-ssh-handshake-failed)
+  - [GitHub Actions reports missing production setting](#github-actions-reports-missing-production-setting)
+  - [VPS cannot pull GHCR image](#vps-cannot-pull-ghcr-image)
+  - [API is unhealthy](#api-is-unhealthy)
+  - [API reports `The key {...} was not found in the key ring`](#api-reports-the-key--was-not-found-in-the-key-ring)
+  - [Web cannot call API](#web-cannot-call-api)
+  - [Port already in use](#port-already-in-use)
+- [Rollback](#rollback)
 
 ## Current server connection
 
-The configured FormAuto Hub VPS host is `113.23.68.58` (user-confirmed on 2026-10-06), with SSH user `deploy` and port `1122`. Local diagnostics resolve the existing Windows variables `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT`, and `CASHBACK_VPS_SSH_KEY`; these legacy names are retained. Use `.agents/skills/formauto-server-debugger/SKILL.md` for bounded production reads.
+The configured FormAuto Hub VPS host is `113.184.16.191` (reconfirmed by the user on 2026-11-06), with SSH user `deploy` and port `1122`. Local diagnostics resolve the existing Windows variables `CASHBACK_VPS_HOST`, `CASHBACK_VPS_USER`, `CASHBACK_VPS_SSH_PORT`, and `CASHBACK_VPS_SSH_KEY`; these legacy names are retained. Use `.agents/skills/formauto-server-debugger/SKILL.md` for bounded production reads.
 
-The first-time setup examples below use the documentation-only address `203.0.113.10`; substitute the configured host and SSH port for real commands. GitHub Environment `production` must separately have `DEPLOY_HOST=113.23.68.58` and `DEPLOY_PORT=1122`. Editing this document or a Windows variable does not update GitHub settings. Verify `DEPLOY_SSH_FINGERPRINT` for the new endpoint before deployment; do not disable host verification.
+The latest explicit user-confirmed endpoint takes precedence over stale local environment values. Report any mismatch and use a session-only host override as shown in the skill; do not silently change persisted Windows settings. This confirmation date does not indicate when the IP changed.
+
+The first-time setup examples below use the documentation-only address `203.0.113.10`; substitute the configured host and SSH port for real commands. GitHub Environment `production` must separately have `DEPLOY_HOST=113.184.16.191` and `DEPLOY_PORT=1122`. Editing this document or a Windows variable does not update GitHub settings. Verify `DEPLOY_SSH_FINGERPRINT` for the new endpoint before deployment; do not disable host verification.
 
 Ordinary diagnostics do not read secrets. Explicit application-configuration recovery to local uses `.agents/skills/formauto-server-debugger/references/LOCAL_CONFIGURATION_RECOVERY.md`. Keep production SQL/JWT/deploy credentials separate from local runtime, and never commit recovered secrets. See `ENVIRONMENT_SETUP.md` for local destinations and validation boundaries.
 

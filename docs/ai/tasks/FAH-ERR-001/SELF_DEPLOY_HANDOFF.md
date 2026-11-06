@@ -26,7 +26,7 @@ Workflow build cả API và Web theo full lowercase 40-character SHA, yêu cầu
 
 | Thành phần | Cấu hình đã có / cần người dùng xác nhận lại |
 | --- | --- |
-| VPS | Deployment guide ghi `113.23.68.58`, user `deploy`, SSH `1122`; chưa kiểm tra hiện tại. Dùng đúng endpoint/fingerprint GitHub environment `production`; không tắt host-key verification. |
+| VPS | Deployment guide ghi `113.184.16.191` (người dùng xác nhận lại ngày 06/11/2026), user `deploy`, SSH `1122`; chưa kiểm tra kết nối hiện tại. Dùng đúng endpoint/fingerprint GitHub environment `production`; không tắt host-key verification. |
 | Cwd VPS | `DEPLOY_PATH`, guide mặc định `/home/deploy/FormAuto_Hub`; dùng giá trị environment thực, không mặc định mù. |
 | Containers | `formauto-sql` (SQL Server 2025 CU7), Compose service `formauto-api`, `formauto-web`. API/Web container names lấy bằng `docker compose ps -q`, không hardcode số suffix. |
 | Runtime | SQL `127.0.0.1:1433`, API `127.0.0.1:5100` → container8080, Web `127.0.0.1:3000`; public qua reverse proxy. |
