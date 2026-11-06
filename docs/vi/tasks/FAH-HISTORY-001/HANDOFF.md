@@ -1,5 +1,7 @@
 # Bàn giao Task6
 
+> Giao nhận mới nhất: đã merge vào main local, gỡ nhánh/đăng ký worktree tính năng. Xem [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); hướng dẫn giữ worktree cũ bên dưới là lịch sử.
+
 > Trạng thái hiện tại: **Done theo xác nhận người dùng**. Được phép dọn tài nguyên/commit local; xem [CLOSEOUT](CLOSEOUT.md). Các ghi chú review/tài nguyên cũ bên dưới là lịch sử.
 
 ## Phạm vi đã đóng băng

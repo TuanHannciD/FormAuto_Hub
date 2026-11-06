@@ -1,5 +1,7 @@
 # FAH-HISTORY-001 — Generation history and separated pricing specification
 
+> Latest delivery: merged to local main and feature branch/worktree registration removed. See [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); earlier retention instructions below are historical.
+
 > Current status: **Done, accepted by user**. Cleanup/local commit authorized; see [CLOSEOUT](CLOSEOUT.md). Older review/resource entries below are historical.
 
 > Current authority (2026-11-05): Task 1 independent reviews R1–R3 and user approval of L1/L2/P1/O1 plus reviewed contracts/schema are recorded in [PROGRESS](PROGRESS.md). Tasks 2–6 are authorized for local implementation and validation in the isolated worktree. Earlier proposal/pending wording below preserves design history; it does not reopen approved decisions. No production activation, live provider, commit or deployment authority is inferred.

@@ -1,5 +1,7 @@
 # FAH-HISTORY-001 — Đặc tả lịch sử tạo và tách phí
 
+> Giao nhận mới nhất: đã merge vào main local, gỡ nhánh/đăng ký worktree tính năng. Xem [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); hướng dẫn giữ worktree cũ bên dưới là lịch sử.
+
 > Trạng thái hiện tại: **Done theo xác nhận người dùng**. Được phép dọn tài nguyên/commit local; xem [CLOSEOUT](CLOSEOUT.md). Các ghi chú review/tài nguyên cũ bên dưới là lịch sử.
 
 > Thẩm quyền hiện tại (2026-11-05): Review độc lập Task 1 qua R1–R3 và việc người dùng duyệt L1/L2/P1/O1 cùng contract/schema đã review được ghi tại [PROGRESS](PROGRESS.md). Tasks 2–6 được phép triển khai và kiểm thử cục bộ trong worktree riêng. Các nhãn đề xuất/chờ duyệt bên dưới lưu lịch sử thiết kế, không mở lại quyết định đã duyệt. Không suy ra quyền kích hoạt production, gọi provider thật, commit hay deploy.

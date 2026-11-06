@@ -1,5 +1,7 @@
 # FAH-HISTORY-001 closeout
 
+> Latest delivery: merged to local main and feature branch/worktree registration removed. See [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); earlier retention instructions below are historical.
+
 Status: **Done — approved local implementation**, explicitly accepted by the user on 2026-11-06. The user authorized task cleanup and a local commit, and will push/deploy themselves. This status supersedes earlier review-pending or keep-processes-running handoff entries.
 
 ## Delivered scope

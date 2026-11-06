@@ -240,3 +240,7 @@
 ## Người dùng chốt Done và commit bàn giao — 2026-11-06
 
 Người dùng chấp nhận Done phạm vi local và cho phép dọn tài nguyên/commit cục bộ; sẽ tự push/deploy. CLOSEOUT.md ghi việc giải phóng process/session/tab và giữ bằng chứng. Receipt/reconciliation Google production còn chưa kiểm chứng, chuyển follow-up; không suy ra quyền kích hoạt/push/deploy. Root kiểm tra/stage/commit cuối; không đổi source sản phẩm sau review đạt.
+
+## Đã merge main local và dọn task — 2026-11-06
+
+Người dùng cho phép merge main local/dọn. Fast-forward0126232 đã thực hiện; kiểm trên main393/0/49skip và Node112/112. Giữ22 bản gốc ở cha và1434 bằng chứng/helper worktree có SHA256; gỡ đăng ký worktree/xóa nhánh đã merge. Chỉ còn thư mục rỗng Windows khóa, không source/change Git bên trong. Xem MERGE_CLOSEOUT. Không push/deploy/dọn ngoài phạm vi.

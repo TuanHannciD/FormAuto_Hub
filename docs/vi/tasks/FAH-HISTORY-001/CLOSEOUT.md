@@ -1,5 +1,7 @@
 # Đóng task FAH-HISTORY-001
 
+> Giao nhận mới nhất: đã merge vào main local, gỡ nhánh/đăng ký worktree tính năng. Xem [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); hướng dẫn giữ worktree cũ bên dưới là lịch sử.
+
 Trạng thái: **Done — triển khai local đã duyệt**, theo xác nhận rõ của người dùng ngày 2026-11-06. Người dùng cho phép dọn tài nguyên task và commit cục bộ, sẽ tự push/deploy. Trạng thái này thay thế các ghi chú cũ còn chờ review hoặc giữ process chạy trong hồ sơ bàn giao.
 
 ## Phạm vi bàn giao

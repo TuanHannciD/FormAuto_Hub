@@ -1,5 +1,7 @@
 # Task6 handoff
 
+> Latest delivery: merged to local main and feature branch/worktree registration removed. See [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); earlier retention instructions below are historical.
+
 > Current status: **Done, accepted by user**. Cleanup/local commit authorized; see [CLOSEOUT](CLOSEOUT.md). Older review/resource entries below are historical.
 
 ## Frozen scope

@@ -77,5 +77,22 @@
     "stagedWhitespaceErrors": 0,
     "reviewedSourceFilesUnchanged": 95,
     "rawEvidencePreservedLocally": true
+  },
+  "localMainIntegration": {
+    "implementationCommit": "0126232a751a31a8a1648df04e33d448e06bc38c",
+    "method": "fast-forward",
+    "mergedMainTests": {
+      "dotnetPassed": 393,
+      "dotnetSkipped": 49,
+      "nodePassed": 112
+    },
+    "parentFilesPreserved": 22,
+    "rawWorktreeFilesPreserved": 1434,
+    "allPreservedFilesSha256Verified": true,
+    "featureBranchDeleted": true,
+    "worktreeUnregistered": true,
+    "emptyDirectoryRemainsLockedByProcess": true,
+    "push": false,
+    "deploy": false
   }
 }
