@@ -36,7 +36,7 @@ internal static class SubmissionV2Fixture
     {
         public int Calls { get; private set; }
         public bool Compatible { get; set; } = true;
-        public string Evidence { get; set; } = "{\"provenance\":\"synthetic-test-only\",\"identity\":\"synthetic\"}";
+        public string Evidence { get; set; } = GoogleFormsSubmissionParser.Parse(GoogleFormsSubmissionParserTests.Form, GoogleFormsSubmissionParserTests.Document())!.SemanticJson;
         public Task<SubmissionCompatibilityResult> CheckAsync(Guid projectId, Guid? batchId, IReadOnlyList<Guid> ids, CancellationToken ct)
         {
             Calls++;

@@ -56,6 +56,13 @@ internal static class SubmissionAdmission
                 var projectRow = await db.FormProjects.SingleAsync(x => x.Id == project && x.UserId == user, ct);
                 var batchId = responses[0].GenerationBatchId;
                 var batch = batchId.HasValue ? await db.GenerationBatches.SingleAsync(x => x.Id == batchId, ct) : null;
+                if (responses.Any(r => !SubmissionCompatibilityService.Accepts(compatibility.CompatibilityEvidenceJson, r.PayloadJson)))
+                    throw new SubmissionContractException("FormIncompatible", 409);
+                // Verify the locked immutable dispatch target still matches the externally refreshed evidence.
+                using (var proof = JsonDocument.Parse(compatibility.CompatibilityEvidenceJson))
+                    if (proof.RootElement.TryGetProperty("ActionUrl", out var expectedAction) &&
+                        (!Integrations.GoogleForms.GoogleFormIdentity.TryNormalize(batch?.FormActionUrl ?? projectRow.FormActionUrl, "formResponse", out var lockedAction) || lockedAction != expectedAction.GetString()))
+                        throw new SubmissionContractException("FormIncompatible", 409);
                 var now = DateTimeOffset.UtcNow;
                 var job = new SubmissionJob { Id = command, CommandId = command, UserId = user, ProjectId = project,
                     ContractVersion = 2, RouteKind = route, RequestFingerprint = fingerprint, GenerationBatchId = batchId,

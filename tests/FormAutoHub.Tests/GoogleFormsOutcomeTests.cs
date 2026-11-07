@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using System.Net;
 using FormAutoHub.Api.Contracts;
 using FormAutoHub.Api.Integrations.GoogleForms;
@@ -58,9 +59,41 @@ public sealed class GoogleFormsOutcomeTests
         Assert.Equal(SubmissionOutcomeKind.Unknown, result.Kind); Assert.Equal("UnsupportedTarget", result.Evidence.Code); Assert.Equal(0, handler.Calls);
     }
 
+    [Fact]
+    public async Task ConfirmedReceiptHasRetrievableHashedArtifactAndOnePost()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "formauto-receipt-test-" + Guid.NewGuid().ToString("N"));
+        var handler = new ReceiptHandler();
+        using var http = new HttpClient(handler);
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder().AddInMemoryCollection(
+            new Dictionary<string, string?> { ["GoogleForms:EvidencePath"] = root }).Build();
+        var result = await new GoogleFormsClient(http, config).SubmitVerifiedAsync(GoogleFormsSubmissionParserTests.Action,
+            new Dictionary<string, IReadOnlyList<string>> { ["entry.1"] = ["test"] }, default);
+        Assert.Equal(SubmissionOutcomeKind.ConfirmedSuccess, result.Kind);
+        Assert.Equal(1, handler.Posts);
+        var artifact = Path.Combine(root, result.Evidence.EvidenceId.ToString("N") + ".json");
+        Assert.True(File.Exists(artifact));
+        Assert.Equal(result.Evidence.ArtifactSha256, Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(await File.ReadAllBytesAsync(artifact))));
+        File.Delete(artifact); Directory.Delete(root);
+    }
+    private sealed class ReceiptHandler : HttpMessageHandler
+    {
+        public int Posts;
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            if (request.Method == HttpMethod.Post) Posts++;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(
+                request.Method == HttpMethod.Get ? GoogleFormsSubmissionParserTests.Document() : GoogleFormsReceiptTests.Receipt(), System.Text.Encoding.UTF8, "text/html") });
+        }
+    }
+
     private sealed class Handler(Func<HttpResponseMessage> response) : HttpMessageHandler
     {
         public int Calls { get; private set; }
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct) { Calls++; return Task.FromResult(response()); }
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            if (request.Method == HttpMethod.Get) return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(GoogleFormsSubmissionParserTests.Document()) });
+            Calls++; return Task.FromResult(response());
+        }
     }
 }

@@ -1,5 +1,7 @@
 # FAH-HISTORY-001 — Generation history and separated pricing specification
 
+> Follow-up: rules submission repair and authorized live validation are tracked in [FAH-HISTORY-SEND-001](../FAH-HISTORY-SEND-001/INDEX.md). Historical local-only completion below is not a production release claim.
+
 > Latest delivery: merged to local main and feature branch/worktree registration removed. See [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); earlier retention instructions below are historical.
 
 > Current status: **Done, accepted by user**. Cleanup/local commit authorized; see [CLOSEOUT](CLOSEOUT.md). Older review/resource entries below are historical.

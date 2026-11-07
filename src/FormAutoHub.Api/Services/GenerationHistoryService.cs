@@ -14,7 +14,7 @@ public interface IGenerationHistoryService
     Task<GenerationHistoryDetailResponse?> GetDetailAsync(Guid batchId, CancellationToken ct);
 }
 
-public sealed class GenerationHistoryService(FormAutoHubDbContext db, ICurrentUserContext currentUser) : IGenerationHistoryService
+public sealed class GenerationHistoryService(FormAutoHubDbContext db, ICurrentUserContext currentUser, ISubmissionCompatibilityService? compatibility = null) : IGenerationHistoryService
 {
     public async Task<GenerationHistoryPageResponse> GetMineAsync(int page = 1, int pageSize = 10, CancellationToken ct = default)
     {
@@ -33,8 +33,13 @@ public sealed class GenerationHistoryService(FormAutoHubDbContext db, ICurrentUs
         }, ct);
     }
 
-    public Task<GenerationHistoryDetailResponse?> GetDetailAsync(Guid batchId, CancellationToken ct) =>
-        ReadAsync<GenerationHistoryDetailResponse?>(async read =>
+    public async Task<GenerationHistoryDetailResponse?> GetDetailAsync(Guid batchId, CancellationToken ct)
+    {
+        // External refresh must never enter the SQL read/retry transaction.
+        var owned = await db.GenerationBatches.AsNoTracking().SingleOrDefaultAsync(x => x.Id == batchId && x.UserId == currentUser.UserId && x.EvictedAt == null, ct);
+        if (owned is null) return null;
+        var fresh = compatibility is null ? null : await compatibility.CheckAsync(owned.ProjectId, batchId, [], ct);
+        return await ReadAsync<GenerationHistoryDetailResponse?>(async read =>
         {
             var batch = await read.GenerationBatches.AsNoTracking().SingleOrDefaultAsync(x => x.Id == batchId && x.UserId == currentUser.UserId && x.EvictedAt == null, ct);
             if (batch is null) return null;
@@ -52,15 +57,17 @@ public sealed class GenerationHistoryService(FormAutoHubDbContext db, ICurrentUs
                 // Observation is never an admission approval; Task4 refreshes complete evidence.
                 var unresolved = facts.Attempts.Any(x => x.ResponseId == response.Id &&
                     (x.AttemptState is "PossibleDispatch" or "Unknown" || x.SettlementState is "Held" or "PrepaidHeld"));
-                var reason = unresolved || response.LegacyEntitlementState == "ReconciliationRequired" ? "OutcomeUnresolved" : "FormEvidenceUnavailable";
+                var reason = unresolved || response.LegacyEntitlementState == "ReconciliationRequired" ? "OutcomeUnresolved" :
+                    fresh?.Compatible == true && SubmissionCompatibilityService.Accepts(fresh.CompatibilityEvidenceJson, response.PayloadJson) ? null : fresh?.RejectionCode ?? "FormEvidenceUnavailable";
                 items.Add(new HistoryResponseItem(response.BatchOrdinal!.Value, response.ToResponse(),
-                    response.PricingPolicy == "LegacyBundledV1" && response.LegacyEntitlementState == "Available", true, reason, outcomes));
+                    response.PricingPolicy == "LegacyBundledV1" && response.LegacyEntitlementState == "Available", reason is not null, reason, outcomes));
             }
             var run = new GenerationHistoryListItem(batch.Id, batch.ProjectId, batch.FormName, batch.Mode, batch.CreatedAt,
                 batch.RequestedCount, batch.GeneratedCount, batch.GenerationCredits, batch.PricingPolicy, Outcomes(ids, facts));
             return new GenerationHistoryDetailResponse(run, batch.FormUrl, observation, items,
                 await new CreditReservationService(read).GetCreditAvailabilityAsync(currentUser.UserId, ct));
         }, ct);
+    }
 
     private static async Task<GenerationHistoryListItem> ListItemAsync(FormAutoHubDbContext read, GenerationBatch batch, CancellationToken ct)
     {

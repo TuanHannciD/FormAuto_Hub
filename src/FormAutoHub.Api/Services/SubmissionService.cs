@@ -19,7 +19,7 @@ public interface ISubmissionService
 public sealed class SubmissionService(FormAutoHubDbContext dbContext, ICurrentUserContext currentUser,
     IGoogleFormsClient googleFormsClient, ISubmissionCompatibilityService? compatibilityService = null) : ISubmissionService
 {
-    private ISubmissionCompatibilityService Compatibility => compatibilityService ?? new SubmissionCompatibilityService(dbContext, currentUser);
+    private ISubmissionCompatibilityService Compatibility => compatibilityService ?? new SubmissionCompatibilityService(dbContext, currentUser, googleFormsClient);
     private Task<bool> OwnedAsync(Guid project, CancellationToken ct) => dbContext.FormProjects.AsNoTracking().AnyAsync(x => x.Id == project && x.UserId == currentUser.UserId, ct);
     private static void Version(int version) { if (version != 2) throw new SubmissionContractException("ClientUpgradeRequired", 409); }
     private static void Require(bool condition, string code, int status = 400) { if (!condition) throw new SubmissionContractException(code, status); }
@@ -152,10 +152,13 @@ public sealed class SubmissionService(FormAutoHubDbContext dbContext, ICurrentUs
                 {
                     ct.ThrowIfCancellationRequested();
                     var payload = Payload(item.PayloadJson);
+                    if (!SubmissionCompatibilityService.Accepts(fresh.CompatibilityEvidenceJson, item.PayloadJson)) { interrupted = true; break; }
+                    var prepared = await googleFormsClient.PrepareSubmissionAsync(item.FormActionUrl, payload, ct, fresh.CompatibilityEvidenceJson);
+                    if (prepared is null) { interrupted = true; break; }
                     // Only an acknowledged FIRST transition grants this runner one outbound invocation.
                     if (!await settlement.MarkPossibleDispatchAsync(item.Id, ct)) { interrupted = true; break; }
                     VerifiedSubmissionOutcome outcome;
-                    try { outcome = await googleFormsClient.SubmitVerifiedAsync(item.FormActionUrl, payload, ct); }
+                    try { outcome = await prepared(ct); }
                     catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException)
                     { outcome = GoogleSubmissionEvidence.Unknown("TransportUncertain", e.GetType().Name); }
                     await settlement.SettleAttemptAsync(item.Id, outcome, CancellationToken.None);

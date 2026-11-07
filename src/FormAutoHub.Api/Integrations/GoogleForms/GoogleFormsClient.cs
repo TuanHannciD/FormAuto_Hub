@@ -10,8 +10,12 @@ namespace FormAutoHub.Api.Integrations.GoogleForms;
 
 public interface IGoogleFormsClient
 {
+    Task<GoogleFormsSubmissionMetadata?> GetSubmissionMetadataAsync(string formUrl, CancellationToken ct) => Task.FromResult<GoogleFormsSubmissionMetadata?>(null);
     Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken cancellationToken);
     Task<GoogleFormSubmitResult> SubmitAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken cancellationToken);
+    Task<Func<CancellationToken, Task<VerifiedSubmissionOutcome>>?> PrepareSubmissionAsync(string actionUrl,
+        IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct, string? expectedSemanticJson = null) =>
+        Task.FromResult<Func<CancellationToken, Task<VerifiedSubmissionOutcome>>?>(token => SubmitVerifiedAsync(actionUrl, answers, token));
     async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl, IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
     {
         // A legacy bool has no receipt provenance, including a true bool.
@@ -20,7 +24,7 @@ public interface IGoogleFormsClient
     }
 }
 
-public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFormsClient
+public sealed partial class GoogleFormsClient(HttpClient httpClient, IConfiguration? configuration = null) : IGoogleFormsClient
 {
     public async Task<GoogleFormAnalysis> AnalyzeAsync(string formUrl, CancellationToken cancellationToken)
     {
@@ -101,45 +105,95 @@ public sealed partial class GoogleFormsClient(HttpClient httpClient) : IGoogleFo
         return new(false, outcome.Evidence.Code);
     }
 
+    public async Task<GoogleFormsSubmissionMetadata?> GetSubmissionMetadataAsync(string formUrl, CancellationToken ct)
+    {
+        if (!GoogleFormIdentity.TryNormalize(formUrl, "viewform", out var form)) return null;
+        try
+        {
+            using var response = await httpClient.GetAsync(form, HttpCompletionOption.ResponseHeadersRead, ct);
+            if (response.StatusCode != HttpStatusCode.OK || response.Headers.Location is not null) return null;
+            var body = await ReadBoundedAsync(response, ct);
+            return body is null ? null : GoogleFormsSubmissionParser.Parse(form, Encoding.UTF8.GetString(body));
+        }
+        catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException) { return null; }
+    }
+
     public async Task<VerifiedSubmissionOutcome> SubmitVerifiedAsync(string actionUrl,
         IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct)
     {
-        if (!GoogleFormIdentity.TryNormalize(actionUrl, "formResponse", out var action))
-            return GoogleSubmissionEvidence.Unknown("UnsupportedTarget", "invalid-target");
+        if (!GoogleFormIdentity.TryNormalize(actionUrl, "formResponse", out _)) return GoogleSubmissionEvidence.Unknown("UnsupportedTarget", "invalid-target");
+        var prepared = await PrepareSubmissionAsync(actionUrl, answers, ct);
+        return prepared is null ? GoogleSubmissionEvidence.Unknown("FormEvidenceUnavailable", actionUrl) : await prepared(ct);
+    }
+
+    public async Task<Func<CancellationToken, Task<VerifiedSubmissionOutcome>>?> PrepareSubmissionAsync(string actionUrl,
+        IReadOnlyDictionary<string, IReadOnlyList<string>> answers, CancellationToken ct, string? expectedSemanticJson = null)
+    {
+        if (!GoogleFormIdentity.TryNormalize(actionUrl, "formResponse", out var action)) return null;
+        var metadata = await GetSubmissionMetadataAsync(action.Replace("/formResponse", "/viewform", StringComparison.Ordinal), ct);
+        if (metadata is null || !metadata.Accepts(answers) || expectedSemanticJson is not null && metadata.SemanticJson != expectedSemanticJson) return null;
+        // Snapshot caller values before granting the runner its single dispatch capability.
+        var snapshot = answers.ToDictionary(x => x.Key, x => (IReadOnlyList<string>)x.Value.ToArray());
+        return token => SubmitPreparedAsync(action, snapshot, metadata, token);
+    }
+
+    private async Task<VerifiedSubmissionOutcome> SubmitPreparedAsync(string action,
+        IReadOnlyDictionary<string, IReadOnlyList<string>> answers, GoogleFormsSubmissionMetadata metadata, CancellationToken ct)
+    {
         var trace = new StringBuilder();
         try
         {
-            var pairs = answers.SelectMany(x => x.Value.Select(value => new KeyValuePair<string, string>(x.Key, value)));
+            var pairs = answers.SelectMany(x => x.Value.Select(value => new KeyValuePair<string, string>(x.Key, value))).ToList();
+            pairs.Add(new("fvv", "1"));
+            pairs.Add(new("pageHistory", string.Join(",", Enumerable.Range(0, metadata.Pages))));
+            if (!string.IsNullOrWhiteSpace(metadata.SessionToken)) pairs.Add(new("fbzx", metadata.SessionToken));
             using var content = new FormUrlEncodedContent(pairs);
+            var payloadHash = Convert.ToHexStringLower(SHA256.HashData(await content.ReadAsByteArrayAsync(ct)));
             using var request = new HttpRequestMessage(HttpMethod.Post, action) { Content = content };
             using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
             trace.Append((int)response.StatusCode).Append('|').Append(action);
-            // No automatic redirect/POST replay. Capture the proposed hop, but no real receipt
-            // classifier has been independently accepted, so no hop authorizes settlement.
             if (response.Headers.Location is { } location)
+                return GoogleSubmissionEvidence.Unknown("UnverifiedRedirect", trace.Append('|').Append(location).ToString());
+            var bytes = await ReadBoundedAsync(response, ct);
+            if (bytes is null) return GoogleSubmissionEvidence.Unknown("ResponseTooLarge", trace.ToString());
+            var html = Encoding.UTF8.GetString(bytes);
+            var confirmed = GoogleFormsReceiptClassifier.IsConfirmation(action, (int)response.StatusCode, html);
+            var id = Guid.NewGuid();
+            var artifact = JsonSerializer.SerializeToUtf8Bytes(new { EvidenceId = id, ActionUrl = action, PayloadSha256 = payloadHash,
+                Status = (int)response.StatusCode, ResponseSha256 = Convert.ToHexStringLower(SHA256.HashData(bytes)),
+                Classifier = GoogleFormsReceiptClassifier.Version, ObservedAt = DateTimeOffset.UtcNow, ResponseBase64 = Convert.ToBase64String(bytes) });
+            var root = configuration?["GoogleForms:EvidencePath"] ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FormAutoHub", "submission-evidence");
+            Directory.CreateDirectory(root);
+            if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(root, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+            var path = Path.Combine(root, id.ToString("N") + ".json");
+            await using (var file = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
             {
-                trace.Append('|').Append(location);
-                var target = new Uri(new Uri(action), location);
-                if (!GoogleFormIdentity.TryNormalize(target.AbsoluteUri, "formResponse", out var normalized) || normalized != action)
-                    return GoogleSubmissionEvidence.Unknown("UnverifiedRedirect", trace.ToString());
-                return GoogleSubmissionEvidence.Unknown("UnverifiedRedirect", trace.ToString());
+                if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+                await file.WriteAsync(artifact, CancellationToken.None);
+                await file.FlushAsync(CancellationToken.None);
+                file.Flush(flushToDisk: true);
             }
-            await using var stream = await response.Content.ReadAsStreamAsync(ct);
-            var bytes = new byte[1024 * 1024 + 1];
-            var read = 0;
-            while (read < bytes.Length)
-            {
-                var next = await stream.ReadAsync(bytes.AsMemory(read), ct);
-                if (next == 0) break;
-                read += next;
-            }
-            trace.Append('|').Append(Convert.ToHexStringLower(SHA256.HashData(bytes.AsSpan(0, read))));
-            return GoogleSubmissionEvidence.Unknown(read == bytes.Length ? "ResponseTooLarge" : "ReceiptEvidenceUnavailable", trace.ToString());
+            return new(confirmed ? SubmissionOutcomeKind.ConfirmedSuccess : SubmissionOutcomeKind.Unknown,
+                new(id, confirmed ? "GoogleConfirmationDocument" : "ReceiptEvidenceUnavailable", GoogleFormsReceiptClassifier.Version,
+                    $"internal:google-evidence:{id:N}", Convert.ToHexStringLower(SHA256.HashData(artifact)), DateTimeOffset.UtcNow, null, null));
         }
-        catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException)
+        catch (Exception e) when (e is HttpRequestException or IOException or OperationCanceledException or UnauthorizedAccessException)
         {
             return GoogleSubmissionEvidence.Unknown("TransportUncertain", trace.Append('|').Append(e.GetType().Name).ToString());
         }
+    }
+
+    private static async Task<byte[]?> ReadBoundedAsync(HttpResponseMessage response, CancellationToken ct)
+    {
+        await using var stream = await response.Content.ReadAsStreamAsync(ct);
+        var bytes = new byte[1024 * 1024 + 1]; var read = 0;
+        while (read < bytes.Length)
+        {
+            var next = await stream.ReadAsync(bytes.AsMemory(read), ct);
+            if (next == 0) break;
+            read += next;
+        }
+        return read == bytes.Length ? null : bytes[..read];
     }
 
     [GeneratedRegex("<title>(?<title>.*?)</title>", RegexOptions.IgnoreCase | RegexOptions.Singleline)]

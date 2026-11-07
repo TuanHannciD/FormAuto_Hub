@@ -601,6 +601,7 @@ export default function FormsPage() {
     directRequestRef.current = true;
     setBusy(true);
     setIsSending(true);
+    setSendNotice("");
     try {
       const raw = await apiFetch<unknown>(`/api/projects/${context.projectId}/submissions/send-rules-direct`, {
         method: "POST",
@@ -614,7 +615,13 @@ export default function FormsPage() {
         const reconciliation = await reconcileDirectRuleCommand(context);
         if (reconciliation === "resolved") return;
         if (reconciliation === "absent") {
-          showError(error, "Yêu cầu direct không được tiếp nhận. Hãy kiểm tra rules trước khi thử lại.");
+          const message = error.code === "FormEvidenceUnavailable"
+            ? "Chưa xác minh được biểu mẫu để gửi. Credit chưa bị trừ. Hãy kiểm tra quyền truy cập công khai và loại câu hỏi được hỗ trợ, rồi phân tích lại biểu mẫu."
+            : error.code === "FormIncompatible"
+              ? "Biểu mẫu hoặc cách trả lời đã thay đổi. Credit chưa bị trừ. Hãy phân tích lại biểu mẫu và kiểm tra quy tắc trước khi gửi."
+              : historyError(error);
+          setSendNotice(message);
+          toast.error(message);
           return;
         }
       }

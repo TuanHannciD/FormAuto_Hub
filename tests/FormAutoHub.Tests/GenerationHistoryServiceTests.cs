@@ -57,6 +57,16 @@ public sealed class GenerationHistoryServiceTests
         Assert.DoesNotContain("RawProvider", System.Text.Json.JsonSerializer.Serialize(detail));
     }
 
+    [Fact]
+    public async Task SupportedHistoryIsSelectableButObservationRemainsPartial()
+    {
+        await using var db = CreateContext(); var f = await SubmissionV2Fixture.SeedAsync(db, 1);
+        var service = new GenerationHistoryService(db, new UserContext(f.User), new SubmissionV2Fixture.Compatibility());
+        var detail = await service.GetDetailAsync(f.Batch, default);
+        Assert.NotNull(detail); Assert.False(Assert.Single(detail.Responses).SendBlocked);
+        Assert.Null(detail.Responses[0].BlockReason); Assert.Equal("Partial", detail.Observation.Completeness);
+    }
+
     [Theory]
     [InlineData(0, 10)] [InlineData(1, 0)] [InlineData(1, 21)]
     public async Task History_RejectsInvalidPagination(int page, int size)

@@ -565,3 +565,24 @@ for (const mode of [
   expect(commonPayload).toEqual({ contractVersion: 2, commandId: expect.stringMatching(/^[0-9a-f-]{36}$/i), batchId: "fixture-batch", responseIds: [preview.id], confirmed: true, duplicateWarningAccepted: false });
   expect(directCalls).toBe(0);
 });
+
+
+test("form evidence rejection explains the failure and never automatically resends", async ({ page }) => {
+  await addSession(page);
+  let posts = 0;
+  await baseRoutes(page, async (route, path) => {
+    if (path.endsWith("/submissions/send-rules-direct")) {
+      posts++;
+      await route.fulfill({ status: 409, json: { code: "FormEvidenceUnavailable", title: "FormEvidenceUnavailable", status: 409 } });
+      return true;
+    }
+    if (path.includes("/submissions/jobs/")) { await route.fulfill({ status: 404, json: {} }); return true; }
+    return false;
+  });
+  await page.goto("/dashboard/forms"); await analyze(page);
+  await page.getByRole("button", { name: "Tạo và gửi ngay", exact: true }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "Chưa xác minh được biểu mẫu để gửi" })).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: "chưa bị trừ" })).toBeVisible();
+  expect(posts).toBe(1);
+  await expect(page.getByRole("button", { name: "Tạo và gửi ngay", exact: true })).toBeEnabled();
+});

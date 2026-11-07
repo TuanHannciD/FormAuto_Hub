@@ -1,5 +1,7 @@
 # FAH-HISTORY-001 — Đặc tả lịch sử tạo và tách phí
 
+> Bổ sung: bản sửa gửi quy tắc và kiểm chứng Google thật được phép theo dõi tại [FAH-HISTORY-SEND-001](../FAH-HISTORY-SEND-001/INDEX.md). Kết luận local cũ bên dưới không có nghĩa đã phát hành production.
+
 > Giao nhận mới nhất: đã merge vào main local, gỡ nhánh/đăng ký worktree tính năng. Xem [MERGE_CLOSEOUT](MERGE_CLOSEOUT.md); hướng dẫn giữ worktree cũ bên dưới là lịch sử.
 
 > Trạng thái hiện tại: **Done theo xác nhận người dùng**. Được phép dọn tài nguyên/commit local; xem [CLOSEOUT](CLOSEOUT.md). Các ghi chú review/tài nguyên cũ bên dưới là lịch sử.
