@@ -21,12 +21,12 @@
 
 ## Steps and checks
 
-- [ ] Add failing strict metadata and real-derived receipt regression cases, including malformed/unsupported/changed metadata, required/unknown entry, false markers and redirects. Run dotnet test with focused filters and observe RED.
-- [ ] Implement parser/refresh and receipt evidence in Integrations/GoogleForms, wire SubmissionCompatibilityService, validate immutable targets and payloads; run focused tests GREEN and affected submission/history suites.
-- [ ] Make direct errors actionable without altering command recovery. Test direct rejection and existing uncertain transport recovery; lint/build web.
-- [ ] Restart owned worktree API/web; verify SQL migrations, authenticated browser direct count1 against the supplied form (second and final real submission), ledger1, retained batch, reservation0, replay with no extra dispatch, history and JS chunks/logs. Mock transport covers additional cases without consuming live budget.
-- [ ] Fresh independent review of immutable diff; fix findings and rerun checks. Sync AI/VI results.
-- [ ] Commit only owned files, merge local main, verify ancestry and clean status, stop owned runtime and remove owned branch/worktree when safe. Preserve DB/evidence and unrelated resources. No remote operation.
+- [x] Add failing strict metadata and real-derived receipt regression cases, including malformed/unsupported/changed metadata, required/unknown entry, false markers and redirects. Run dotnet test with focused filters and observe RED.
+- [x] Implement parser/refresh and receipt evidence in Integrations/GoogleForms, wire SubmissionCompatibilityService, validate immutable targets and payloads; run focused tests GREEN and affected submission/history suites.
+- [x] Make direct errors actionable without altering command recovery. Test direct rejection and existing uncertain transport recovery; lint/build web.
+- [x] Restart owned worktree API/web; verify SQL migrations, authenticated browser direct count1 against the supplied form (second and final real submission), ledger1, retained batch, reservation0, replay with no extra dispatch, history and JS chunks/logs. Mock transport covers additional cases without consuming live budget.
+- [x] Fresh independent review of immutable diff; fix findings and rerun checks. Sync AI/VI results.
+- [x] Commit only owned files, merge local main, verify ancestry and clean status, stop owned runtime and remove owned branch/worktree when safe. Preserve DB/evidence and unrelated resources. No remote operation.
 
 ## Ownership and review focus
 
@@ -39,7 +39,7 @@ Focus: cross-form immutable targets; dynamic token/hash drift; required/choice m
 - Verified baseline: rules UI POST409 FormEvidenceUnavailable; SQL no generation/hold/debit mutation. Root cause is unconditional compatibility rejection and receipt classifier always Unknown.
 - Verified authorized live attempt1: HTTP200, 75,723-byte Google confirmation document, SHA256 b2b12834858fa8cf613c32d24df0131ed641651099f1a09497d38bef9f176843. Saved privately in main .codex-tmp/history-local-debug-20261107. Live remaining budget after attempt1: 1; exhausted after final attempt2.
 - API5307/web3307 restarted from the fix worktree before smoke. Local DB FormAutoHub_History_Safety_20261104, synthetic user; no production writes.
-- Implementation and runtime verified; local merge/cleanup pending. Production release is outside this task.
+- Implementation and runtime verified; local merge and cleanup verified. Production release is outside this task.
 
 Ruling: Initial supported subset is text, multiple-choice, dropdown and checkbox with sequential sections. Linear scale and other types stay blocked pending verified metadata schema; no promise of broad form compatibility. R1 found unrecognized form/question settings being ignored: added RED cases and reject unknown settings/extensions. Stored option lists must match refresh.
 
@@ -52,3 +52,10 @@ Ruling: Initial supported subset is text, multiple-choice, dropdown and checkbox
 - Evidence outside web root: GoogleForms:EvidencePath, default LocalApplicationData/FormAutoHub/submission-evidence; private raw response file contains audit evidence, retain/backup with DB. Unix0700/0600 implemented; Windows app-account inherited ACL. Linux ACL not run.
 - Not run: paid AI, live history resend (budget exhausted; unit/SQL synthetic covers), deployment/production, unsupported form types. No production readiness claim; operator reconciliation remains Deferred.
 - Root model gpt-6.1-sol/medium; all three reviewers Sol/high, no children. Preserve main ignored evidence and both SQL test DBs.
+
+## Local closeout
+
+- Fix84d22eb fast-forward merged to local main. Fresh post-merge dotnet test FormAutoHub.sln -c Release:416 passed49 skipped. First --no-restore run failed because main assets predated new AngleSharp dependency; normal restore+test passed. No code repair needed.
+- Synthetic refresh session revoked, browser local session cleared and owned tab closed. Owned API12240/parent5444 and web23428/parent15532/server26412 stopped after ownership checks; ports5307/3307 verified released.
+- Worktree evidence copied to main ignored history-local-debug-20261107/worktree-evidence before removal; original provider/SQL/browser evidence retained. Exact dependency junction removed without touching target node_modules. Worktree registration and fah-history-001 branch deleted after merged ancestry proof. Other worktrees unchanged; main git status clean before this closeout edit.
+- Status: Done for authorized local repair and integration. No push/deployment. Production still serves its previous revision until separately released. Supported-schema/receipt and operator reconciliation limits above remain.

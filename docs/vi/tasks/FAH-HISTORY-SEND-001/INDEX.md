@@ -21,7 +21,7 @@ Giữ nguyên Unknown hold/fence, không tự retry POST hoặc tự đối soá
 - [x] TDD parser, receipt, compatibility/payload/target; sửa backend và thông báo lỗi rõ ràng, giữ command recovery.
 - [x] Unit, SQL, lint/build và browser mock; restart API/web thuộc worktree và kiểm chứng Google thật, ledger, replay, history.
 - [x] Review độc lập R1/R2; sửa5 Important, R2 không còn Critical/Important. Root16 hardening có RED/GREEN bổ sung.
-- [ ] Commit/merge main local, kiểm chứng hậu merge và dọn tài nguyên.
+- [x] Commit/merge main local, kiểm chứng hậu merge và dọn tài nguyên.
 
 Root gpt-6.1-sol/medium; design reviewer và R1/R2 đều gpt-6.1-sol/high, không agent lồng. Snapshot R2 gồm18 file/hash; root16 bổ sung chỉ thu hẹp schema. Minor closure có thể gọi nhiều lần không xuất hiện qua runner hiện tại (runner chỉ gọi1); giữ Deferred.
 
@@ -37,3 +37,10 @@ Root gpt-6.1-sol/medium; design reviewer và R1/R2 đều gpt-6.1-sol/high, khô
 - Không chạy: deploy/production, ACL Linux, loại form ngoài tập hỗ trợ; không nằm trong acceptance local.
 
 Evidence riêng tư ở main `.codex-tmp/history-local-debug-20261107/`; giữ DB và bằng chứng. Báo cáo này không tuyên bố production đã cập nhật.
+
+## Đóng task local
+
+- Bản sửa84d22eb đã fast-forward vào main local. Kiểm thử hậu merge416 pass49 skip. Lần đầu dùng --no-restore lỗi do assets main chưa có dependency AngleSharp mới; chạy restore+test bình thường đã pass, không sửa thêm code.
+- Đã revoke refresh session synthetic, xóa session trình duyệt và đóng tab sở hữu. Đã xác minh và dừng API12240/parent5444, web23428/parent15532/server26412; port5307/3307 không còn listen.
+- Đã sao lưu bằng chứng worktree vào main ignored history-local-debug-20261107/worktree-evidence; giữ DB, biên nhận và bằng chứng SQL/browser. Tháo junction node_modules mà không đụng target. Đã chứng minh ancestry, xóa registration worktree và nhánh fah-history-001. Worktree khác giữ nguyên; main sạch trước khi ghi closeout này.
+- Trạng thái: Done trong phạm vi sửa và tích hợp local được duyệt. Không push/deploy; production còn revision cũ đến khi phát hành riêng. Các giới hạn loại form/biên nhận và đối soát operator phía trên còn hiệu lực.
