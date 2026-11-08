@@ -138,7 +138,7 @@ export function AiModePreparationPanel({
           : "border-info-border bg-info-surface ring-info-border"
       }`}>
         <div className="w-full sm:w-auto">
-          <label htmlFor="ai-preview-count" className="block text-sm font-semibold text-foreground">Số bản xem trước</label>
+          <label htmlFor="ai-preview-count" className="block text-sm font-semibold text-foreground">Số bản muốn tạo</label>
           <p id="ai-count-help" className="mt-1 text-xs text-secondary-foreground">1–{PREVIEW_COUNT_MAX} bản · Xem lại và xác nhận trước khi gửi.</p>
           <Input
             id="ai-preview-count"
@@ -152,7 +152,7 @@ export function AiModePreparationPanel({
             value={previewCount}
             onChange={(event) => onPreviewCountChange(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
           />
-          <p id="ai-cost" className="mt-2 text-xs font-medium text-info">Phí tạo dự kiến: {previewCount * multiplier} credit · {balance === null ? "Chưa tải được số dư khả dụng" : `${balance} credit khả dụng`}. Chỉ trừ cho bản xem trước hợp lệ đã lưu. Phí gửi riêng tối đa {previewCount} credit, chỉ tính khi gửi thành công.</p>
+          <p id="ai-cost" className="mt-2 text-xs font-medium text-info">Phí tạo dự kiến: {previewCount * multiplier} credit · {balance === null ? "Chưa tải được số dư" : `${balance} credit khả dụng`}. Chỉ trừ bản tạo hợp lệ đã lưu. Phí gửi tối đa {previewCount} credit, chỉ tính khi gửi thành công.</p>
         </div>
         <Button className={`w-full gap-2 sm:w-auto ${isCustom ? "bg-primary text-inverse-foreground hover:bg-primary-hover" : ""}`} disabled={busy || !canGenerate} onClick={onGenerate} type="button">
           <Sparkles className="h-4 w-4" />

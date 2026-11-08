@@ -1181,12 +1181,12 @@ export default function FormsPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Tự động hóa biểu mẫu" description="Dùng quy tắc để tạo và gửi ngay, hoặc dùng AI để xem trước rồi xác nhận gửi." actions={<Link href="/dashboard/forms/history" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline">Lịch sử tạo câu trả lời</Link>} />
+      <PageHeader eyebrow="TẠO CÂU TRẢ LỜI" title="Tự động hóa biểu mẫu" description="Chọn biểu mẫu, cấu hình câu trả lời rồi gửi theo cách phù hợp với bạn." actions={<Link href="/dashboard/forms/history" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline">Xem lịch sử đã tạo</Link>} />
       {upgradeNotice && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{upgradeNotice}</Alert>}
       {sendNotice && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{sendNotice}</Alert>}
       {aiCommand && <Alert role="status" className="space-y-2"><p>Đang giữ mã lệnh để kiểm tra kết quả; không tự động gửi lại.</p><p className="break-all text-xs">Mã lệnh: {aiCommand.commandId}</p><Button disabled={busy} variant="secondary" onClick={recoverSelectedCommand}>Kiểm tra kết quả gửi</Button><Link href="/dashboard/forms/history" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline">Xem tất cả mã lệnh đang chờ</Link></Alert>}
       <nav aria-label="Các bước tự động hóa" className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-        {(generationMode === "rules" ? ["Chọn form", "Cấu hình", "Gửi trực tiếp", "Đang xử lý", "Kết quả"] : ["Chọn form", "Cấu hình", "Preview", "Xác nhận gửi", "Kết quả"]).map((label, index) => {
+        {(generationMode === "rules" ? ["Chọn biểu mẫu", "Cấu hình", "Gửi ngay", "Đang xử lý", "Kết quả"] : ["Chọn biểu mẫu", "Cấu hình", "Xem trước", "Xác nhận gửi", "Kết quả"]).map((label, index) => {
           const enabled = index === 0 || (index === 1 && Boolean(analysis)) || (index === 2 && Boolean(analysis) && (generationMode !== "rules" || Boolean(analysis?.questions.length))) || (index === 3 && generationMode !== "rules" && previews.length > 0) || (index === 4 && Boolean(submission));
           const currentStep = isSending || directCommand ? 3 : submission ? 4 : previews.length > 0 && !previewStale ? (confirmed ? 3 : 2) : analysis ? 1 : 0;
           const content = <><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">{index + 1}</span>{label}</>;
@@ -1198,11 +1198,11 @@ export default function FormsPage() {
       <fieldset disabled={busy || topupBusy || isPasting} className="isolate m-0 min-w-0 space-y-5 border-0 p-0">
       <Card id="workflow-step-1" className="scroll-mt-24">
         <CardHeader>
-          <CardTitle>1. Chọn và phân tích form</CardTitle>
+            <CardTitle>1. Chọn biểu mẫu</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end" onSubmit={analyze}>
-            <label className="grid min-w-0 gap-2 text-sm font-semibold">Link Google Form<Input
+            <label className="grid min-w-0 gap-2 text-sm font-semibold">Đường dẫn Google Form<Input
               maxLength={FORM_URL_MAX_LENGTH}
               type="url"
               disabled={Boolean(pendingPreviewRead)}
@@ -1220,7 +1220,7 @@ export default function FormsPage() {
               value={name}
               onChange={(event) => setName(limitText(event.target.value, PROJECT_NAME_MAX_LENGTH))}
             /></label>
-            <Button className="w-full" disabled={busy || isPasting || !formUrl.trim() || Boolean(pendingPreviewRead)} type="submit">Phân tích biểu mẫu</Button>
+            <Button className="w-full" disabled={busy || isPasting || !formUrl.trim() || Boolean(pendingPreviewRead)} type="submit">Kiểm tra biểu mẫu</Button>
           </form>
         </CardContent>
       </Card>
@@ -1230,7 +1230,7 @@ export default function FormsPage() {
         <Card>
           <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle>2. Câu hỏi và cách trả lời</CardTitle>
+              <CardTitle>2. Cấu hình câu trả lời</CardTitle>
               <p className="mt-1 text-xs text-muted-foreground">
                 {generationMode === "rules"
                   ? `Đang mở ${ruleOpenCount}/${analysis.questions.length} câu hỏi. Có thể mở từng câu để chỉnh nhanh.`
@@ -1261,7 +1261,7 @@ export default function FormsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2 border-b border-border pb-3 text-sm">
               <p className="break-words font-semibold">{analysis.formTitle}</p>
-              <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">{analysis.questions.length} câu hỏi được hỗ trợ</span><StatusBadge status={analysis.status} /></div>
+              <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">{analysis.questions.length} câu hỏi có thể xử lý</span><StatusBadge status={analysis.status} /></div>
               <details className="text-xs text-muted-foreground"><summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">Thông tin biểu mẫu</summary><dl className="space-y-1 pb-2"><div><dt className="inline">Tên nội bộ: </dt><dd className="inline break-words">{analysis.name}</dd></div><div><dt className="inline">Tạo lúc: </dt><dd className="inline">{formatDate(analysis.createdAt)}</dd></div></dl></details>
             </div>
             <fieldset disabled={Boolean(pendingPreviewRead) || Boolean(directCommand)} className="m-0 min-w-0 border-0 p-0">
@@ -1318,8 +1318,8 @@ export default function FormsPage() {
                 ))}
                 <div id="workflow-step-3" role="region" aria-label="Tạo và gửi theo quy tắc" className="scroll-mt-24 sticky bottom-3 z-[200] flex flex-col gap-3 rounded-xl border border-info-border bg-info-surface p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
                   <div className="w-full sm:w-auto">
-                    <label htmlFor="rules-count" className="block text-sm font-semibold text-foreground">Số lượt cần gửi</label>
-                    <p id="rules-count-help" className="mt-1 text-xs text-secondary-foreground">1–{PREVIEW_COUNT_MAX} lượt · Tạo và gửi ngay, không xem trước.</p>
+                    <label htmlFor="rules-count" className="block text-sm font-semibold text-foreground">Số bản muốn gửi</label>
+                    <p id="rules-count-help" className="mt-1 text-xs text-secondary-foreground">1–{PREVIEW_COUNT_MAX} bản · Gửi ngay, không có bước xem trước.</p>
                     <Input
                       id="rules-count"
                       aria-describedby="rules-count-help rules-cost"
@@ -1332,10 +1332,10 @@ export default function FormsPage() {
                       value={previewCount}
                       onChange={(event) => setPreviewCount(clampInteger(event.target.value, PREVIEW_COUNT_MIN, PREVIEW_COUNT_MAX))}
                     />
-                    <p id="rules-cost" className="mt-2 text-xs font-medium text-info">Phí tạo: 0 credit · Phí gửi tối đa: {previewCount} credit · {creditBalance === null ? "Chưa tải được số dư khả dụng" : `${creditBalance} credit khả dụng`}. Chỉ trừ phí gửi thành công.</p>
+                    <p id="rules-cost" className="mt-2 text-xs font-medium text-info">Tạo miễn phí · Gửi tối đa {previewCount} credit · {creditBalance === null ? "Chưa tải được số dư" : `${creditBalance} credit khả dụng`}. Chỉ trừ bản gửi thành công.</p>
                   </div>
                   <Button className="w-full sm:w-auto" disabled={busy || !canGenerate || Boolean(directCommand) || directLockSupported !== true} onClick={createAndSendRulesDirect} type="button">
-                    {isSending ? "Đang tạo và gửi..." : "Tạo và gửi ngay"}
+                    {isSending ? "Đang tạo và gửi…" : "Tạo và gửi ngay"}
                   </Button>
                 </div>
               </div>

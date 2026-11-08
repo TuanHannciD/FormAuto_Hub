@@ -13,7 +13,7 @@ export function GenerationModeSelector({
   onChange: (value: GenerationMode) => void;
 }) {
   return (
-    <div className="relative grid gap-2 md:grid-cols-3">
+    <div className="relative grid gap-3 md:grid-cols-3" aria-label="Chọn cách tạo câu trả lời">
       {generationModeOptions.map((option) => {
         const active = value === option.value;
         const isCustomAi = option.value === "ai-custom";
@@ -22,7 +22,7 @@ export function GenerationModeSelector({
         const Icon = option.value === "rules" ? SlidersHorizontal : option.value === "ai-default" ? Bot : Sparkles;
         return (
           <button
-            className={cn(panelStyles, `relative flex min-h-[68px] flex-col items-start justify-between p-3 text-left transition ${
+            className={cn(panelStyles, `relative flex min-h-[108px] flex-col items-start justify-between p-4 text-left transition ${
               active
                 ? "border-primary bg-primary-soft text-primary ring-1 ring-primary"
                 : "border-border bg-surface text-secondary-foreground hover:border-primary-border hover:bg-primary-soft "
@@ -39,7 +39,7 @@ export function GenerationModeSelector({
                 }`}
               />
             )}
-            <span className="flex w-full flex-wrap items-center justify-between gap-2">
+              <span className="flex w-full flex-wrap items-start justify-between gap-3">
               <span className="flex items-center gap-2 text-sm font-semibold">
                 <Icon className={`h-4 w-4 ${
                   active && !isRules
@@ -50,7 +50,7 @@ export function GenerationModeSelector({
                 }`} />
                 {option.title}
               </span>
-              <Badge tone={
+              <Badge className="shrink-0" tone={
                 option.value === "rules"
                   ? "neutral"
                   : active && isAiDefault
@@ -62,7 +62,7 @@ export function GenerationModeSelector({
                         : "warning"
               }>{option.badge}</Badge>
             </span>
-            <span className="mt-1 text-xs font-medium text-muted-foreground group-hover:text-secondary-foreground">
+            <span className="mt-2 max-w-[22rem] text-xs leading-5 text-muted-foreground group-hover:text-secondary-foreground">
               {option.description}
             </span>
           </button>

@@ -49,18 +49,18 @@ export const generationModeOptions: Array<{
     value: "rules",
     title: "Quy tắc",
     description: "Dùng mẫu và lựa chọn bạn cấu hình",
-    badge: "Tạo 0 · Gửi 1"
+    badge: "Tốn 1 credit/bản"
   },
   {
     value: "ai-default",
     title: "AI mặc định",
     description: "Tạo câu trả lời theo hướng dẫn chung",
-    badge: "Tạo 1 · Gửi 1"
+    badge: "Tốn 2 credit/bản"
   },
   {
     value: "ai-custom",
     title: "AI tùy chỉnh",
     description: "Điều chỉnh hướng trả lời và từng câu hỏi",
-    badge: "Tạo 2 · Gửi 1"
+    badge: "Tốn 3 credit/bản"
   }
 ];

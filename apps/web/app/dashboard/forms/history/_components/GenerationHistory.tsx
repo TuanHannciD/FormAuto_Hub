@@ -68,15 +68,15 @@ export function GenerationHistory() {
   const columns: Array<BaseTableColumn<GenerationHistoryRun>> = [
     { key: "form", header: "Biểu mẫu", render: run => <span className="break-words font-semibold">{run.formName}</span> },
     { key: "mode", header: "Cách tạo / thời gian", render: run => <><p>{modeLabel(run.mode)}</p><p className="text-xs text-muted-foreground">{formatDate(run.createdAt)}</p></> },
-    { key: "count", header: "Đã tạo", render: run => `${run.generatedCount}/${run.requestedCount}` },
-    { key: "fee", header: "Phí tạo đã trả", render: run => `${run.generationCredits} credit` },
-    { key: "outcomes", header: "Lượt gửi", render: run => <span className="text-xs">{run.outcomes.successfulAttempts} thành công · {run.outcomes.rejectedAttempts} từ chối · {run.outcomes.unknownAttempts} chưa xác định</span> },
-    { key: "action", header: "Chi tiết", render: run => <Button variant="secondary" onClick={() => void open(run)}>Xem lượt tạo</Button> }
+    { key: "count", header: "Số bản", render: run => `${run.generatedCount}/${run.requestedCount}` },
+    { key: "fee", header: "Phí tạo", render: run => `${run.generationCredits} credit` },
+    { key: "outcomes", header: "Kết quả gửi", render: run => <span className="text-xs">{run.outcomes.successfulAttempts} thành công · {run.outcomes.rejectedAttempts} từ chối · {run.outcomes.unknownAttempts} chưa xác định</span> },
+    { key: "action", header: "", render: run => <Button variant="secondary" onClick={() => void open(run)}>Xem chi tiết</Button> }
   ];
   return <div className="min-w-0 space-y-5">
     <PageHeader title="Lịch sử tạo câu trả lời" description="20 lượt tạo mới nhất trên toàn tài khoản. Dữ liệu đã tạo được giữ nguyên để xem và tái sử dụng." actions={<Link className={buttonStyles({ variant: "secondary" })} href="/dashboard/forms">Tạo câu trả lời mới</Link>} />
-    <p className="text-sm text-muted-foreground">Khi có lượt thứ 21, lượt cũ nhất tự động rời lịch sử tái sử dụng. Nhật ký gửi và giao dịch credit vẫn được giữ. Số lần gửi có thể lớn hơn số câu trả lời đã tạo.</p>
-    {commands.length > 0 && <Alert className="space-y-3" role="status"><p>Có {commands.length} mã lệnh đang chờ kiểm tra. Tải lại trang chỉ khôi phục trạng thái, không gửi lại.</p>{commands.map(command => <div key={command.commandId} className="space-y-2 border-t border-border pt-3"><p className="break-all text-xs">Mã lệnh: {command.commandId}</p><Button variant="secondary" disabled={loading} onClick={() => void recover(command)}>Kiểm tra kết quả gửi<span className="sr-only"> {command.commandId}</span></Button></div>)}</Alert>}
+    <p className="text-sm text-muted-foreground">Bạn có thể giữ tối đa 20 lượt tạo để xem và gửi lại. Khi tạo lượt thứ 21, lượt cũ nhất rời danh sách này; giao dịch credit và nhật ký gửi vẫn được giữ.</p>
+    {commands.length > 0 && <Alert className="space-y-3" role="status"><p className="font-semibold">Có lượt gửi cần kiểm tra</p><p>Hệ thống chỉ đọc lại trạng thái của {commands.length} lệnh đang chờ, không tự gửi lại.</p>{commands.map(command => <div key={command.commandId} className="space-y-2 border-t border-border pt-3"><p className="break-all text-xs text-muted-foreground">Mã lệnh: {command.commandId}</p><Button variant="secondary" disabled={loading} onClick={() => void recover(command)}>Kiểm tra trạng thái<span className="sr-only"> {command.commandId}</span></Button></div>)}</Alert>}
     {job && !detail && <JobResult job={job} />}
     {error && <Alert role="alert" className="space-y-3 border-warning-border bg-warning-surface text-warning"><p>{error}</p><Button variant="secondary" onClick={() => void load()} disabled={loading}>Tải lại lịch sử</Button></Alert>}
     {loading && <p role="status" className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 aria-hidden size={18} className="animate-spin" />Đang tải lịch sử...</p>}
