@@ -1532,7 +1532,6 @@ export default function FormsPage() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {submission.fees && <JobResult job={submission} />}
-            <p className="break-all text-xs text-muted-foreground">Mã lượt gửi: {submission.id}</p>
             {hasUncertainSubmission && <Alert role="alert" className="border-warning-border bg-warning-surface text-warning">{uncertainSubmissionMessage}</Alert>}
             <div className="flex flex-wrap items-center gap-3">
               <StatusBadge status={submission.status} />
@@ -1571,12 +1570,7 @@ export default function FormsPage() {
                 type="button"
                 onClick={() => setSubmissionLogsOpen((current) => !current)}
               >
-                <span>
-                  <span className="block text-sm font-semibold">Chi tiết các lượt gửi</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">
-                    {buildSubmissionBatches(submission.logs).length} nhóm, thành công {submission.successCount}, lỗi {submission.failedCount}
-                  </span>
-                </span>
+                <span><span className="block text-sm font-semibold">Các lượt đã gửi</span><span className="mt-1 block text-xs text-muted-foreground">Xem trạng thái từng lượt nếu cần</span></span>
                 <span className="inline-flex items-center gap-2 self-start rounded-xl border border-border bg-surface px-2.5 py-1.5 text-xs font-semibold text-primary sm:self-auto">
                   {submissionLogsOpen ? "Thu gọn" : "Mở chi tiết"}
                   {submissionLogsOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
@@ -1590,7 +1584,7 @@ export default function FormsPage() {
                     return (
                       <div className="rounded-xl border border-border bg-surface p-3" key={`submission-pack-${batchIndex}`}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <p className="text-sm font-semibold">Nhóm {batchIndex + 1}</p>
+                          <p className="text-sm font-semibold">Đợt {batchIndex + 1}</p>
                           <div className="flex flex-wrap gap-2 text-xs font-medium">
                             <Badge tone="neutral">Tổng {batch.length}</Badge>
                             <Badge tone="success">Thành công {successCount}</Badge>
@@ -1601,8 +1595,6 @@ export default function FormsPage() {
                           {batch.map((log) => (
                             <li key={log.id} className="space-y-1 text-xs">
                               <StatusBadge status={log.status} />
-                              <p className="break-all">Mã lần gửi: {log.id}</p>
-                              <p className="break-all">Mã bản xem trước: {log.responseId}</p>
                               {log.submittedAt && <p>{formatDate(log.submittedAt)}</p>}
                               {log.status !== "Success" && <p className="leading-5 text-destructive">{submissionFailureMessage(log.errorMessage)}</p>}
                             </li>

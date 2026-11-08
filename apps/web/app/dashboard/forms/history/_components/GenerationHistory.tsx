@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { apiFetch, type GenerationHistoryDetail, type GenerationHistoryPage, type GenerationHistoryRun, type SubmissionJob } from "@/lib/api";
 import { getStoredSession } from "@/lib/auth";
 import { BaseTable, type BaseTableColumn } from "@/components/base-table";
 import { PaginationControls } from "@/components/pagination-controls";
-import { Alert, Button, Card, CardContent, PageHeader } from "@/components/ui";
+import { Alert, Button, Card, CardContent, Dialog, DialogBody, DialogClose, DialogContent, DialogHeader, DialogTitle, PageHeader } from "@/components/ui";
 import { buttonStyles } from "@/components/ui-styles";
 import { formatDate } from "@/lib/utils";
 import { HistoryRunDetail, JobResult } from "./HistoryRunDetail";
@@ -62,7 +62,7 @@ export function GenerationHistory() {
       if (stamp !== scope.epoch) return;
       setJob(value);
       if (terminalJob(value)) removeHistoryCommand(command);
-    } catch { if (stamp === scope.epoch) setError("Chưa xác định được kết quả lệnh đã lưu. Giữ nguyên mã lệnh; không tự gửi lại."); }
+    } catch { if (stamp === scope.epoch) setError("Chưa xác định được kết quả gửi. Hãy thử lại sau; hệ thống không tự gửi lại."); }
     finally { if (stamp === scope.epoch) setLoading(false); }
   }
   const columns: Array<BaseTableColumn<GenerationHistoryRun>> = [
@@ -71,16 +71,21 @@ export function GenerationHistory() {
     { key: "count", header: "Số bản", render: run => `${run.generatedCount}/${run.requestedCount}` },
     { key: "fee", header: "Phí tạo", render: run => `${run.generationCredits} credit` },
     { key: "outcomes", header: "Kết quả gửi", render: run => <span className="text-xs">{run.outcomes.successfulAttempts} thành công · {run.outcomes.rejectedAttempts} từ chối · {run.outcomes.unknownAttempts} chưa xác định</span> },
-    { key: "action", header: "", render: run => <Button variant="secondary" onClick={() => void open(run)}>Xem chi tiết</Button> }
+    { key: "action", header: "", render: run => <Button variant="secondary" onClick={() => void open(run)}>Xem lượt tạo</Button> }
   ];
   return <div className="min-w-0 space-y-5">
     <PageHeader title="Lịch sử tạo câu trả lời" description="20 lượt tạo mới nhất trên toàn tài khoản. Dữ liệu đã tạo được giữ nguyên để xem và tái sử dụng." actions={<Link className={buttonStyles({ variant: "secondary" })} href="/dashboard/forms">Tạo câu trả lời mới</Link>} />
     <p className="text-sm text-muted-foreground">Bạn có thể giữ tối đa 20 lượt tạo để xem và gửi lại. Khi tạo lượt thứ 21, lượt cũ nhất rời danh sách này; giao dịch credit và nhật ký gửi vẫn được giữ.</p>
-    {commands.length > 0 && <Alert className="space-y-3" role="status"><p className="font-semibold">Có lượt gửi cần kiểm tra</p><p>Hệ thống chỉ đọc lại trạng thái của {commands.length} lệnh đang chờ, không tự gửi lại.</p>{commands.map(command => <div key={command.commandId} className="space-y-2 border-t border-border pt-3"><p className="break-all text-xs text-muted-foreground">Mã lệnh: {command.commandId}</p><Button variant="secondary" disabled={loading} onClick={() => void recover(command)}>Kiểm tra trạng thái<span className="sr-only"> {command.commandId}</span></Button></div>)}</Alert>}
+    {commands.length > 0 && <Alert className="space-y-3" role="status"><p className="font-semibold">Có lượt gửi cần kiểm tra</p><p>Hệ thống sẽ kiểm tra lại kết quả, không tự gửi lại.</p>{commands.map(command => <div key={command.commandId} className="border-t border-border pt-3"><Button variant="secondary" disabled={loading} onClick={() => void recover(command)}>Kiểm tra kết quả</Button></div>)}</Alert>}
     {job && !detail && <JobResult job={job} />}
     {error && <Alert role="alert" className="space-y-3 border-warning-border bg-warning-surface text-warning"><p>{error}</p><Button variant="secondary" onClick={() => void load()} disabled={loading}>Tải lại lịch sử</Button></Alert>}
     {loading && <p role="status" className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 aria-hidden size={18} className="animate-spin" />Đang tải lịch sử...</p>}
-    {!loading && detail ? <><Button variant="secondary" onClick={() => { scope.request++; setDetail(null); }}><ArrowLeft aria-hidden size={16} />Quay lại danh sách</Button><HistoryRunDetail key={detail.run.batchId} detail={detail} pending={pending} onPendingChange={setPending} /></>
-      : !loading && data && <Card><CardContent><BaseTable items={data.items} columns={columns} getRowKey={run => run.batchId} emptyTitle="Chưa có lượt tạo nào" emptyDetail="Tạo câu trả lời từ biểu mẫu để lưu lượt đầu tiên vào lịch sử." /><PaginationControls page={data.page} totalItems={data.totalItems} totalPages={data.totalPages} onPrevious={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} /></CardContent></Card>}
+    {!loading && data && <Card><CardContent><BaseTable items={data.items} columns={columns} getRowKey={run => run.batchId} emptyTitle="Chưa có lượt tạo nào" emptyDetail="Tạo câu trả lời từ biểu mẫu để lưu lượt đầu tiên vào lịch sử." /><PaginationControls page={data.page} totalItems={data.totalItems} totalPages={data.totalPages} onPrevious={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} /></CardContent></Card>}
+    <Dialog open={Boolean(detail)} onOpenChange={open => { if (!open) { scope.request++; setDetail(null); } }}>
+      <DialogContent className="max-w-4xl" contentClassName="flex max-h-[calc(100dvh-2rem)] flex-col">
+        <DialogHeader className="flex-row items-start justify-between gap-3 border-b border-border px-4 py-4 sm:px-6"><DialogTitle>Chi tiết lượt tạo</DialogTitle><DialogClose aria-label="Quay lại danh sách" className="shrink-0"><X aria-hidden size={18} /></DialogClose></DialogHeader>
+        <DialogBody className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6">{detail && <HistoryRunDetail key={detail.run.batchId} detail={detail} pending={pending} onPendingChange={setPending} />}</DialogBody>
+      </DialogContent>
+    </Dialog>
   </div>;
 }
