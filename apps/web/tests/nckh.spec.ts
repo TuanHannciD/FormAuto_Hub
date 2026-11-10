@@ -21,25 +21,30 @@ async function captureUserNckh(page: Page, name: string) {
 // 532     Phase 7 workspace tests         Verify workspace tabs, canvas, data, export UI flows
 // ── Helpers ───────────────────────────────────────────────────────
 
-const TEST_USER = {
+const ADMIN_USER = {
   userId: "d23e1bbb-ce23-49c3-8bc8-f70ac7bc9c1b",
   email: "nckh-test@example.com",
   fullName: "NCKH Tester",
-  role: "User"
+  role: "Admin"
 };
 
-const MOCK_SESSION = {
-  userId: TEST_USER.userId,
-  email: TEST_USER.email,
-  fullName: TEST_USER.fullName,
-  role: TEST_USER.role,
+const ADMIN_SESSION = {
+  userId: ADMIN_USER.userId,
+  email: ADMIN_USER.email,
+  fullName: ADMIN_USER.fullName,
+  role: ADMIN_USER.role,
   accessToken: "eyJfake.access.token",
   accessTokenExpiresAt: new Date(Date.now() + 3600_000).toISOString(),
   refreshToken: "fake-refresh-token",
   refreshTokenExpiresAt: new Date(Date.now() + 86400_000).toISOString()
 };
 
-async function loginAsUser(page: Page) {
+const USER_SESSION = {
+  ...ADMIN_SESSION,
+  role: "User"
+};
+
+async function loginWithSession(page: Page, session: typeof ADMIN_SESSION) {
   // Keep this API-fixture suite isolated from the live API, including overview
   // navigation and the impact GETs used by the current delete dialog.
   await page.route("**/api/**", route => {
@@ -54,7 +59,20 @@ async function loginAsUser(page: Page) {
   await page.goto("/login");
   await page.evaluate((session) => {
     window.localStorage.setItem("formauto.auth.session", JSON.stringify(session));
-  }, MOCK_SESSION);
+  }, session);
+}
+
+async function loginAsUser(page: Page) {
+  await loginWithSession(page, USER_SESSION);
+}
+
+async function loginAsAdmin(page: Page) {
+  await loginWithSession(page, ADMIN_SESSION);
+}
+
+async function setMalformedSession(page: Page) {
+  await page.goto("/login");
+  await page.evaluate(() => window.localStorage.setItem("formauto.auth.session", "{malformed-session"));
 }
 
 async function mockApi(page: Page, method: string, path: string, response: unknown, status = 200) {
@@ -76,7 +94,7 @@ async function mockRefreshSuccess(page: Page) {
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        ...MOCK_SESSION,
+        ...ADMIN_SESSION,
         accessToken: "eyJrefreshed.token",
         accessTokenExpiresAt: new Date(Date.now() + 3600_000).toISOString()
       })
@@ -309,11 +327,51 @@ test.describe("NCKH — Auth & Redirect", () => {
   });
 
   test("authenticated user sees NCKH dashboard", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page, MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard/nckh");
     await expect(page.locator("h1")).toContainText("NCKH");
+  });
+
+  test("authenticated non-Admin cannot see NCKH navigation", async ({ page }) => {
+    await loginAsUser(page);
+    await page.goto("/dashboard");
+    await expect(page.getByRole("link", { name: "NCKH", exact: true })).toHaveCount(0);
+  });
+
+  test("authenticated non-Admin is redirected from nested NCKH route", async ({ page }) => {
+    await loginAsUser(page);
+    await page.goto("/dashboard/nckh/forms/11111111-1111-1111-1111-111111111111");
+    await expect(page).toHaveURL(/\/dashboard$/);
+  });
+
+  test("authenticated non-Admin is redirected from NCKH callback", async ({ page }) => {
+    await loginAsUser(page);
+    await page.goto("/dashboard/nckh/callback?code=should-not-be-exchanged");
+    await expect(page).toHaveURL(/\/dashboard$/);
+  });
+
+  test("missing session is redirected from nested NCKH route to login", async ({ page }) => {
+    await page.goto("/dashboard/nckh/forms/11111111-1111-1111-1111-111111111111");
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test("missing session is redirected from NCKH callback to login", async ({ page }) => {
+    await page.goto("/dashboard/nckh/callback?code=missing-session");
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test("malformed session is redirected from nested NCKH route to login", async ({ page }) => {
+    await setMalformedSession(page);
+    await page.goto("/dashboard/nckh/forms/11111111-1111-1111-1111-111111111111");
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test("malformed session is redirected from NCKH callback to login", async ({ page }) => {
+    await setMalformedSession(page);
+    await page.goto("/dashboard/nckh/callback?code=malformed-session");
+    await expect(page).toHaveURL(/\/login/);
   });
 });
 
@@ -321,7 +379,7 @@ test.describe("NCKH — Auth & Redirect", () => {
 
 test.describe("NCKH — Google Not Linked", () => {
   test.beforeEach(async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockNotLinked(page);
   });
 
@@ -351,7 +409,7 @@ test.describe("NCKH — Google Not Linked", () => {
 // ── TESTS: Google Linked — Import & List ──────────────────────────
 
 test("Google authorization failure retains session without attempting JWT refresh", async ({ page }) => {
-  await loginAsUser(page);
+  await loginAsAdmin(page);
   await mockNotLinked(page);
   let refreshes = 0;
   await page.route("**/api/auth/refresh", async route => {
@@ -360,13 +418,13 @@ test("Google authorization failure retains session without attempting JWT refres
   });
   await page.goto("/dashboard/nckh");
   await expect(page.getByRole("button", { name: /Liên kết Google/ })).toBeVisible();
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.auth.session") ?? "null")?.accessToken)).toBe(MOCK_SESSION.accessToken);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("formauto.auth.session") ?? "null")?.accessToken)).toBe(ADMIN_SESSION.accessToken);
   expect(refreshes).toBe(0);
   await expect(page).toHaveURL(/\/dashboard\/nckh$/);
 });
 
 test("forms server failure offers retry without claiming Google is unlinked", async ({ page }) => {
-  await loginAsUser(page);
+  await loginAsAdmin(page);
   await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Service unavailable" }, 503);
   await page.goto("/dashboard/nckh");
   const loadAlert = page.getByRole("alert").filter({ has: page.getByRole("button", { name: "Thử lại", exact: true }) });
@@ -380,7 +438,7 @@ test("forms server failure offers retry without claiming Google is unlinked", as
 });
 
 test("genuine NCKH JWT failure still clears invalid session and redirects to login", async ({ page }) => {
-  await loginAsUser(page);
+  await loginAsAdmin(page);
   await page.route("**/api/v1/nckh/forms?*", route => route.fulfill({ status: 401 }));
   let refreshes = 0;
   await page.route("**/api/auth/refresh", async route => {
@@ -395,7 +453,7 @@ test("genuine NCKH JWT failure still clears invalid session and redirects to log
 
 test.describe("NCKH — Google Linked", () => {
   test.beforeEach(async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page);
   });
 
@@ -444,7 +502,7 @@ test.describe("NCKH — Google Linked", () => {
 
 test.describe("NCKH — Import Form", () => {
   test.beforeEach(async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page);
   });
 
@@ -509,7 +567,7 @@ test.describe("NCKH — Import Form", () => {
 
 test.describe("NCKH — Callback Page", () => {
   test("callback with ?linked=true shows success toast and cleans URL", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page, MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard/nckh?linked=true");
@@ -520,7 +578,7 @@ test.describe("NCKH — Callback Page", () => {
   });
 
   test("callback with ?error=... shows error toast", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockNotLinked(page);
 
     await page.goto("/dashboard/nckh?error=access_denied");
@@ -528,7 +586,7 @@ test.describe("NCKH — Callback Page", () => {
   });
 
   test("direct callback page without code redirects to dashboard", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page, MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard/nckh/callback");
@@ -536,7 +594,7 @@ test.describe("NCKH — Callback Page", () => {
   });
 
   test("callback with valid code calls API and redirects with success", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockRefreshSuccess(page);
     let googleLinkRequestCount = 0;
     await page.route("**/api/v1/nckh/auth/google-link", async (route) => {
@@ -559,7 +617,7 @@ test.describe("NCKH — Callback Page", () => {
   });
 
   test("callback with invalid code shows error then redirects", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockRefreshSuccess(page);
     await mockApi(page, "POST", "/auth/google-link", { title: "Invalid Request", detail: "Failed to exchange authorization code." }, 400);
     await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google account not linked." }, 401);
@@ -573,7 +631,7 @@ test.describe("NCKH — Callback Page", () => {
   });
 
   test("callback with already-linked account shows 409 then redirects", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockRefreshSuccess(page);
     await mockApi(page, "POST", "/auth/google-link", { title: "Conflict", detail: "Already linked." }, 409);
     await mockApi(page, "GET", "/forms?page=1&pageSize=20", { title: "Unauthorized", detail: "Google account not linked." }, 401);
@@ -591,7 +649,7 @@ test.describe("NCKH — Callback Page", () => {
 
 test.describe("NCKH — Navigation", () => {
   test("NCKH nav item exists in sidebar", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page, MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard");
@@ -599,7 +657,7 @@ test.describe("NCKH — Navigation", () => {
   });
 
   test("clicking NCKH nav item navigates to NCKH page", async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockLinked(page, MOCK_EMPTY_LIST);
 
     await page.goto("/dashboard");
@@ -613,7 +671,7 @@ test.describe("NCKH — Navigation", () => {
 
 test.describe("NCKH — Phase 7 Workspace", () => {
   test.beforeEach(async ({ page }) => {
-    await loginAsUser(page);
+    await loginAsAdmin(page);
     await mockWorkspace(page);
   });
 

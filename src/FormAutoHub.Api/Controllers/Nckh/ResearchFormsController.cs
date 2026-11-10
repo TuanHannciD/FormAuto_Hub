@@ -8,7 +8,7 @@ namespace FormAutoHub.Api.Controllers.Nckh;
 
 [ApiController]
 [Route("api/v1/nckh")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public sealed class ResearchFormsController(IResearchFormService researchFormService) : ControllerBase
 {
     [HttpPost("auth/google-link")]

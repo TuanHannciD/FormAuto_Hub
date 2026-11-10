@@ -57,6 +57,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     };
   }, [router]);
 
+  useEffect(() => {
+    if (!isChecking && session && session.role !== "Admin" && pathname.startsWith("/dashboard/nckh")) {
+      router.replace("/dashboard");
+    }
+  }, [isChecking, pathname, router, session]);
+
   async function logout() {
     await logoutCurrentSession();
     router.replace("/login");
@@ -71,7 +77,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   const navigation = (
     <nav aria-label="Điều hướng bảng điều khiển" className="space-y-1">
-      {navItems.map((item) => (
+      {(session?.role === "Admin" ? navItems : navItems.filter((item) => item.href !== "/dashboard/nckh")).map((item) => (
         <Link
           className={cn(
             shellNavItemStyles,
@@ -107,7 +113,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!session) {
+  if (!session || (pathname.startsWith("/dashboard/nckh") && session.role !== "Admin")) {
     return (
       <div className="app-aura-bg flex min-h-screen items-center justify-center text-sm text-muted-foreground">
         Đang chuyển về đăng nhập...

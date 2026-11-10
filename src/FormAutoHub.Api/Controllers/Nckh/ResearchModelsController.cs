@@ -8,7 +8,7 @@ namespace FormAutoHub.Api.Controllers.Nckh;
 
 [ApiController]
 [Route("api/v1/nckh/models")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public sealed class ResearchModelsController : ControllerBase
 {
     private readonly ICurrentUserContext _currentUser;

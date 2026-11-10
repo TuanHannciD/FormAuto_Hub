@@ -9,7 +9,7 @@ namespace FormAutoHub.Api.Controllers.Nckh;
 
 [ApiController]
 [Route("api/v1/nckh/models/{modelId:guid}")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public sealed class ResearchDataController(
     IResearchDataService researchDataService,
     IResearchExportService researchExportService,
