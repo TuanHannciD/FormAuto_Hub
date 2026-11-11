@@ -7,11 +7,10 @@ import {
   Coins,
   FileSpreadsheet,
   Gift,
-  Menu,
   Plus,
-  Sparkles,
-  X
+  Sparkles
 } from "lucide-react";
+import { MobileNavigation } from "@/components/mobile-navigation";
 import { siteUrl } from "@/lib/site";
 import { applicationSchema, serializeJsonLd, siteName, websiteSchema } from "@/lib/seo";
 
@@ -77,21 +76,6 @@ function ProductIllustration() {
   );
 }
 
-function MobileNavigation() {
-  return (
-    <details className="group relative ml-auto md:hidden">
-      <summary className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-lg hover:bg-surface-subtle [&::-webkit-details-marker]:hidden">
-        <Menu className="group-open:hidden" aria-hidden="true" />
-        <X className="hidden group-open:block" aria-hidden="true" />
-        <span className="sr-only">Mở menu</span>
-      </summary>
-      <nav className="absolute right-[-20px] top-[55px] flex w-screen flex-col gap-1 border-b border-border bg-surface px-5 py-4 text-sm font-semibold text-secondary-foreground shadow-raised [&>a]:flex [&>a]:min-h-11 [&>a]:items-center" aria-label="Điều hướng mobile">
-        <Link href="#top">Trang chủ</Link><Link href="#dich-vu">Dịch vụ</Link><Link href="#cach-hoat-dong">Cách hoạt động</Link><Link href="#bang-gia">Bảng giá</Link><Link href="/google-forms/sample-data">Hướng dẫn</Link><Link href="#faq">FAQ</Link>
-      </nav>
-    </details>
-  );
-}
-
 export default function LandingPage() {
   const structuredData = {
     "@context": "https://schema.org",
@@ -102,7 +86,7 @@ export default function LandingPage() {
   return (
     <main className="app-aura-bg landing-page min-h-screen overflow-x-clip text-foreground" id="top">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
-      <header className="sticky top-0 z-20 grid min-h-16 grid-cols-[1fr_auto_1fr] items-center border-b border-border/75 bg-surface/[.88] px-[clamp(1.25rem,5vw,4.75rem)] backdrop-blur-xl max-xl:grid-cols-[1fr_auto]">
+      <header className="sticky top-0 z-20 grid min-h-16 grid-cols-[1fr_auto_1fr] items-center border-b border-border/75 bg-surface/[.88] px-[clamp(1.25rem,5vw,4.75rem)] backdrop-blur-xl max-xl:grid-cols-[1fr_auto] max-md:px-5">
         <Link className="inline-flex min-h-11 items-center justify-self-start" href="#top" aria-label="FormAuto Hub - Trang chủ"><Brand /></Link>
         <nav className="flex items-center gap-5 text-[13px] font-semibold text-secondary-foreground max-xl:hidden [&>a]:inline-flex [&>a]:min-h-11 [&>a]:items-center" aria-label="Điều hướng chính">
           <Link className="hover:text-primary" href="#top">Trang chủ</Link><Link className="hover:text-primary" href="#dich-vu">Dịch vụ</Link><Link className="hover:text-primary" href="#cach-hoat-dong">Cách hoạt động</Link><Link className="hover:text-primary" href="#bang-gia">Bảng giá</Link><Link className="hover:text-primary" href="/google-forms/sample-data">Hướng dẫn</Link><Link className="hover:text-primary" href="#faq">FAQ</Link>

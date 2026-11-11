@@ -50,8 +50,13 @@ for (const viewport of [
     await expect(page.getByText("Bạn có thể chọn từ 1 đến 100 phản hồi trong một lần tạo.", { exact: true })).toBeVisible();
     if (viewport.width < 768) {
       await page.locator("header summary").click();
-      await page.getByRole("navigation", { name: "Điều hướng mobile" }).getByRole("link", { name: "Bảng giá", exact: true }).click();
+      const navigation = page.getByRole("navigation", { name: "Điều hướng mobile" });
+      await expect(navigation.getByRole("link", { name: "Đăng nhập", exact: true })).toHaveAttribute("href", "/login");
+      await expect(navigation.getByRole("link", { name: "Đăng ký", exact: true })).toHaveAttribute("href", "/register");
+      await navigation.getByRole("link", { name: "Bảng giá", exact: true }).click();
+      await expect(navigation).toBeHidden();
       await expect(page).toHaveURL(/#bang-gia$/);
+      await expect.poll(() => page.locator("#bang-gia").evaluate(element => Math.round(element.getBoundingClientRect().top))).toBe(80);
     }
     expect(errors).toEqual([]);
     expect(failedChunks).toEqual([]);
@@ -65,3 +70,45 @@ for (const viewport of [
     expect(await page.evaluate(() => document.getAnimations().filter(animation => animation.playState === "running").length)).toBe(0);
   });
 }
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`mobile navigation closes before scrolling with ${reducedMotion} motion`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    await page.locator("header summary").click();
+    const samples = await page.getByRole("navigation", { name: "Điều hướng mobile" }).getByRole("link", { name: "Bảng giá", exact: true }).evaluate(async link => {
+      const positions: number[] = [];
+      const start = scrollY;
+      (link as HTMLAnchorElement).click();
+      const closed = !document.querySelector("header details")!.hasAttribute("open");
+      for (let frame = 0; frame < 8; frame++) {
+        await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+        positions.push(scrollY);
+      }
+      return { start, closed, positions, target: document.getElementById("bang-gia")!.offsetTop - 80 };
+    });
+    expect(samples.closed).toBe(true);
+    if (reducedMotion === "no-preference") {
+      expect(samples.positions.some(position => position > samples.start && position < samples.target)).toBe(true);
+    } else {
+      expect(samples.positions.every(position => Math.abs(position - samples.target) <= 1)).toBe(true);
+    }
+    await expect.poll(() => page.locator("#bang-gia").evaluate(element => Math.round(element.getBoundingClientRect().top))).toBe(80);
+    await expect(page.locator("header summary")).toBeFocused();
+  });
+}
+
+test("mobile auth actions stay reachable on a short wide viewport and open existing routes", async ({ page }) => {
+  await page.setViewportSize({ width: 767, height: 320 });
+  for (const [label, route] of [["Đăng nhập", "/login"], ["Đăng ký", "/register"]]) {
+    await page.goto("/");
+    await page.locator("header summary").click();
+    const navigation = page.getByRole("navigation", { name: "Điều hướng mobile" });
+    const bounds = await navigation.boundingBox();
+    expect(bounds!.x).toBe(0);
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(320);
+    await navigation.getByRole("link", { name: label, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+  }
+});
