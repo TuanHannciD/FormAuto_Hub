@@ -93,43 +93,6 @@ public sealed record UsageLogResponse(
     Guid? ProjectId,
     DateTimeOffset CreatedAt);
 
-public sealed record UsageLogListResponse(IReadOnlyList<UsageLogResponse> Items);
-
-public sealed record UsageLogQuery(
-    string? Action,
-    string? Search,
-    int Page,
-    int PageSize);
-
-public sealed record UsageLogPageResponse(
-    IReadOnlyList<UsageLogResponse> Items,
-    int Page,
-    int PageSize,
-    int TotalItems,
-    int TotalPages);
-
-public sealed record CreditTransactionResponse(
-    Guid Id,
-    decimal Amount,
-    decimal BalanceAfter,
-    string Type,
-    string Description,
-    string ReferenceType,
-    Guid? ReferenceId,
-    DateTimeOffset CreatedAt);
-
-public sealed record CreditTransactionQuery(
-    string? Type,
-    string? Search,
-    int Page,
-    int PageSize);
-
-public sealed record CreditTransactionPageResponse(
-    IReadOnlyList<CreditTransactionResponse> Items,
-    int Page,
-    int PageSize,
-    int TotalItems,
-    int TotalPages);
 
 public sealed record ProfileResponse(
     Guid Id,

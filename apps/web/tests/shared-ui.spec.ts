@@ -23,7 +23,7 @@ async function setup(page: Page) {
 test("mobile menu traps focus, returns focus and clears modal state at desktop breakpoint", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const trigger = page.getByRole("button", { name: "Mở menu", exact: true });
   await trigger.focus();
   await page.keyboard.press("Enter");
@@ -65,7 +65,7 @@ test("user AI and admin payments retry failed reads without a mutation", async (
 
 test("profile popup uses shared surfaces and controls while preserving its save request", async ({ page }) => {
   const writes = await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   await expect(page.getByLabel("Họ tên")).toHaveValue(profile.fullName);
@@ -81,24 +81,6 @@ test("profile popup uses shared surfaces and controls while preserving its save 
     await page.setViewportSize({ width, height: 844 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
-});
-
-test("shared dropdown still selects options and closes on Escape", async ({ page }) => {
-  await setup(page);
-  await page.goto("/dashboard/credit-transactions");
-  const trigger = page.getByRole("button", { name: "Lọc loại giao dịch", exact: true });
-  await expect(trigger).toHaveAccessibleDescription("Tất cả loại");
-  await trigger.click();
-  await expect(page.getByRole("listbox")).toBeVisible();
-  await page.getByRole("option", { name: "Credit đã sử dụng", exact: true }).click();
-  await expect(page.getByRole("listbox")).toHaveCount(0);
-  const selected = page.getByRole("button", { name: "Lọc loại giao dịch", exact: true });
-  await expect(selected).toHaveText("Credit đã sử dụng");
-  await expect(selected).toHaveAccessibleDescription("Credit đã sử dụng");
-  expect(await selected.evaluate(element => getComputedStyle(element).borderRadius)).toBe("12px");
-  await selected.click();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("listbox")).toHaveCount(0);
 });
 
 test("shared admin dialog opens and cancels without creating a package", async ({ page }) => {

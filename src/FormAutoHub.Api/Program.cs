@@ -84,8 +84,6 @@ builder.Services.AddScoped<TopupEvidenceService>();
 builder.Services.AddScoped<ICreditService, CreditService>();
 builder.Services.AddScoped<ICreditReservationService, CreditReservationService>();
 builder.Services.AddScoped<ISubmissionSettlementService, SubmissionSettlementService>();
-builder.Services.AddScoped<IUsageLogService, UsageLogService>();
-builder.Services.AddScoped<ICreditTransactionService, CreditTransactionService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IPaymentSecretProtector, PaymentSecretProtector>();
 builder.Services.AddScoped<IPaymentProviderSettingsService, PaymentProviderSettingsService>();

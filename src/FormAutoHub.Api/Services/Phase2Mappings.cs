@@ -20,10 +20,6 @@ internal static class Phase2Mappings
         new(log.Id, log.ToolName, log.Action, log.CreditsUsed, log.Status, log.Description, log.ProjectId,
             log.CreatedAt);
 
-    public static CreditTransactionResponse ToResponse(this CreditTransaction transaction) =>
-        new(transaction.Id, transaction.Amount, transaction.BalanceAfter, transaction.Type,
-            transaction.Description, transaction.ReferenceType, transaction.ReferenceId, transaction.CreatedAt);
-
     public static ProfileResponse ToProfileResponse(this User user, UserExternalLogin? googleLogin = null) =>
         new(user.Id, user.Email, user.FullName, user.Role, user.CreatedAt, googleLogin is not null, googleLogin?.Email);
 

@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 // Browser-only fixtures. Never contacts providers or a database.
 const root = resolve(__dirname, "../../../artifacts/reports/ui-cleanup-2026-11-02");
 const data = JSON.parse(readFileSync(resolve(root, "fixture-data.json"), "utf8"));
-const routes = ["/dashboard", "/dashboard/forms", "/dashboard/top-up", "/dashboard/top-up/fixture-order", "/dashboard/usage-logs", "/dashboard/credit-transactions", "/dashboard/ai-usage", "/dashboard/nckh", "/dashboard/nckh/callback", "/dashboard/nckh/forms/fixture-form", "/admin", "/admin/payments", "/admin/manual-credits", "/admin/packages", "/admin/revenue", "/admin/payos-settings", "/admin/ai-provider-settings", "/admin/ai-usage"];
+const routes = ["/dashboard", "/dashboard/forms", "/dashboard/top-up", "/dashboard/top-up/fixture-order", "/dashboard", "/dashboard", "/dashboard/ai-usage", "/dashboard/nckh", "/dashboard/nckh/callback", "/dashboard/nckh/forms/fixture-form", "/admin", "/admin/payments", "/admin/manual-credits", "/admin/packages", "/admin/revenue", "/admin/payos-settings", "/admin/ai-provider-settings", "/admin/ai-usage"];
 
 test("authenticated surface geometry and forms state evidence", async ({ page }) => {
   test.setTimeout(240000);

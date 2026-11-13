@@ -48,20 +48,6 @@ export function displayAction(action: string) {
   return labels[action] ?? action;
 }
 
-export function displayCreditTransactionType(type: string) {
-  const labels: Record<string, string> = {
-    CreditUsed:"Sử dụng credit",
-    Topup: "Nạp credit",
-    TopupApproved: "Nạp credit đã duyệt",
-    Usage: "Sử dụng credit",
-    InitialGrant: "Credit khởi đầu",
-    ManualGrant: "Cộng credit thủ công",
-    Refund: "Hoàn credit"
-  };
-
-  return labels[type] ?? type;
-}
-
 export function displayPaymentMethod(method: string) {
   const labels: Record<string, string> = {
     Manual: "Đối soát thủ công",

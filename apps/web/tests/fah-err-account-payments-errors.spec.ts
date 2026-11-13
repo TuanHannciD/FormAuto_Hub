@@ -27,7 +27,7 @@ async function setup(page: Page, role = "User", intercept?: (route: Route, path:
   return { errors, chunks };
 }
 async function account(page: Page) {
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   return page.getByRole("dialog", { name: "Tài khoản", exact: true });

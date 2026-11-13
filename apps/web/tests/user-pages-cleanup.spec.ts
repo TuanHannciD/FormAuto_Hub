@@ -55,14 +55,13 @@ test("populated user AI records keep errors visible and secondary metadata acces
   expect(errors).toEqual([]);
 });
 
-test("history filter names stay stable and ledger labels describe current page", async ({ page }) => {
+test("dashboard keeps credit summary without standalone history destinations", async ({ page }) => {
   await setup(page);
-  for (const [path, label] of [["/dashboard/usage-logs", "Lọc loại thao tác"], ["/dashboard/credit-transactions", "Lọc loại giao dịch"]]) {
-    await page.goto(path);
-    await expect(page.getByRole("button", { name: label, exact: true })).toBeVisible();
-  }
-  await expect(page.getByText("Credit giao dịch đầu trang", { exact: true })).toBeVisible();
-  await expect(page.getByText("Credit mới nhất", { exact: true })).toHaveCount(0);
+  await page.goto("/dashboard");
+  const navigation = page.getByRole("navigation", { name: "Điều hướng bảng điều khiển" });
+  await expect(navigation.getByRole("link", { name: "Lịch sử sử dụng", exact: true })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Giao dịch credit", exact: true })).toHaveCount(0);
+  await expect(page.getByText("Credit hiện có", { exact: true })).toBeVisible();
 });
 
 test("user AI labels support current and legacy modes without inventing unknown labels", async ({ page }) => {

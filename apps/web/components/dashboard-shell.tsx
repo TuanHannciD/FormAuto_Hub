@@ -11,7 +11,6 @@ import {
   FormInput,
   LayoutDashboard,
   Shield,
-  ReceiptText,
 } from "lucide-react";
 import { getSessionBoundary, getStoredSession, hasUsableSession, logoutCurrentSession, type AuthSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -23,8 +22,6 @@ const navItems = [
   { href: "/dashboard/forms", label: "Tự động hóa biểu mẫu", icon: FormInput },
   { href: "/dashboard/forms/history", label: "Lịch sử tạo câu trả lời", icon: FileClock },
   { href: "/dashboard/top-up", label: "Nạp credit", icon: CreditCard },
-  { href: "/dashboard/usage-logs", label: "Lịch sử sử dụng", icon: FileClock },
-  { href: "/dashboard/credit-transactions", label: "Giao dịch credit", icon: ReceiptText },
   { href: "/dashboard/nckh", label: "NCKH", icon: FlaskConical },
   { href: "/dashboard/ai-usage", label: "Thống kê AI", icon: BarChart3 }
 ];

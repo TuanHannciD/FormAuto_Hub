@@ -300,14 +300,6 @@ export type UsageLog = {
   createdAt: string;
 };
 
-export type UsageLogPageResponse = {
-  items: UsageLog[];
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-};
-
 export type DashboardSummary = {
   currentCreditBalance: number;
   reservedCreditBalance: number;
@@ -408,25 +400,6 @@ export type AdminRevenueSummary = {
   pendingTopupOrders: number;
   failedPayments: number;
   recentPayments: AdminPayment[];
-};
-
-export type CreditTransaction = {
-  id: string;
-  amount: number;
-  balanceAfter: number;
-  type: string;
-  description: string;
-  referenceType: string;
-  referenceId?: string | null;
-  createdAt: string;
-};
-
-export type CreditTransactionPageResponse = {
-  items: CreditTransaction[];
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
 };
 
 export type Profile = {

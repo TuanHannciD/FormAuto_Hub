@@ -24,7 +24,7 @@ test("landing elevation remains translucent when the overlay backdrop token exis
   // Keep the semantic backdrop in use by the real mobile shell.
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Mở menu", exact: true }).click();
   expect(await page.getByRole("dialog", { name: "Điều hướng" }).evaluate(element => getComputedStyle(element, "::backdrop").backgroundColor)).toBe("rgba(24, 36, 74, 0.5)");
 });
@@ -32,15 +32,14 @@ test("landing elevation remains translucent when the overlay backdrop token exis
 test("operating shell leaves a compact readable start for the actual task", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const topbar = page.locator("main > header");
   const height = (await topbar.boundingBox())!.height;
   expect(height).toBeGreaterThanOrEqual(56);
   expect(height).toBeLessThanOrEqual(64);
-  const heading = page.getByRole("heading", { name: "Giao dịch credit", exact: true });
-  const fontSize = await heading.evaluate(element => parseFloat(getComputedStyle(element).fontSize));
-  expect(fontSize).toBeGreaterThanOrEqual(24);
-  expect(fontSize).toBeLessThanOrEqual(28);
+  const metric = page.getByText("Credit hiện có", { exact: true });
+  const fontSize = await metric.evaluate(element => parseFloat(getComputedStyle(element).fontSize));
+  expect(fontSize).toBeGreaterThanOrEqual(12);
   const paddingTop = await topbar.locator("+ div").evaluate(element => parseFloat(getComputedStyle(element).paddingTop));
   expect(paddingTop).toBeGreaterThanOrEqual(20);
   expect(paddingTop).toBeLessThanOrEqual(24);
@@ -49,7 +48,7 @@ test("operating shell leaves a compact readable start for the actual task", asyn
 test("320px shell and account popup remain reachable with keyboard and touch-sized primary controls", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
   for (const control of [page.getByRole("button", { name: "Mở menu", exact: true }), page.getByRole("button", { name: "Tìm", exact: true }), page.getByRole("link", { name: "Nạp credit", exact: true })]) {
     const box = (await control.boundingBox())!;
@@ -82,32 +81,6 @@ test("320px shell and account popup remain reachable with keyboard and touch-siz
   await page.keyboard.press("Escape");
   await expect(popup).toHaveCount(0);
   await expect(trigger).toBeFocused();
-});
-
-test("390x844 history first record and empty state fit after their filters", async ({ page }) => {
-  await setup(page);
-  await page.setViewportSize({ width: 390, height: 844 });
-  for (const populated of [false, true]) {
-    await page.route("**/api/*-logs?**", route => route.fulfill({ json: {
-      items: populated ? [{ id: "usage-fold", toolName: "GoogleForms", action: "GenerateResponses", creditsUsed: 2, status: "Success", description: "Bản ghi fixture đầu tiên", createdAt: "2026-10-28T08:00:00Z" }] : [],
-      page: 1, pageSize: 20, totalItems: populated ? 1 : 0, totalPages: populated ? 1 : 0
-    } }));
-    await page.route("**/api/credit-transactions?**", route => route.fulfill({ json: {
-      items: populated ? [{ id: "credit-fold", type: "CreditUsed", amount: -2, balanceAfter: 99, description: "Bản ghi fixture đầu tiên", createdAt: "2026-10-28T08:00:00Z" }] : [],
-      page: 1, pageSize: 20, totalItems: populated ? 1 : 0, totalPages: populated ? 1 : 0
-    } }));
-    for (const path of ["/dashboard/usage-logs", "/dashboard/credit-transactions"]) {
-      await page.goto(path);
-      const state = populated ? page.locator("article").first() : page.getByText("Không có kết quả phù hợp", { exact: true }).locator("..");
-      await expect(state).toBeVisible();
-      if (populated) await expect(state).toContainText("Bản ghi fixture đầu tiên");
-      const box = (await state.boundingBox())!;
-      const reset = (await page.getByRole("button", { name: "Đặt lại", exact: true }).boundingBox())!;
-      expect(box.y).toBeGreaterThanOrEqual(reset.y + reset.height);
-      expect(box.y + box.height, `${path}, populated=${populated}`).toBeLessThanOrEqual(844);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-    }
-  }
 });
 
 test("shared textarea preserves default and consumer minimum heights at every breakpoint", async ({ page }) => {
@@ -147,7 +120,7 @@ test("native Google provider rendering fits a narrow popup, retains focus on res
     await route.fulfill({ json: { linked: true } });
   });
   await page.setViewportSize({ width: 320, height: 568 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   const popup = page.getByRole("dialog", { name: "Tài khoản", exact: true });

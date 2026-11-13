@@ -22,7 +22,7 @@ async function setup(page: Page) {
 
 test("popup grows before revealing content and hides content before closing", async ({ page }) => {
   await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const trigger = page.getByRole("button", { name: "Menu tài khoản", exact: true });
   await trigger.click();
   const opening = await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).evaluate(async button => {
@@ -62,7 +62,7 @@ test("popup grows before revealing content and hides content before closing", as
 
 test("popup can close during opening, dismiss outside and skip motion when reduced", async ({ page }) => {
   await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const trigger = page.getByRole("button", { name: "Menu tài khoản", exact: true });
   const launch = page.getByRole("button", { name: "Quản lý tài khoản", exact: true });
   await trigger.click();
@@ -99,7 +99,7 @@ test("popup can close during opening, dismiss outside and skip motion when reduc
 
 test("account entry is in topbar, with shared profile and security navigation", async ({ page }) => {
   await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const sidebar = page.getByRole("navigation", { name: "Điều hướng bảng điều khiển" });
   await expect(sidebar.getByRole("link", { name: /Hồ sơ|Bảo mật/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
@@ -108,7 +108,7 @@ test("account entry is in topbar, with shared profile and security navigation", 
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("button", { name: "Hồ sơ", exact: true })).toHaveAttribute("aria-pressed", "true");
   await dialog.getByRole("button", { name: "Bảo mật", exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard\/credit-transactions$/);
+  await expect(page).toHaveURL(/\/dashboard$/);
   await expect(dialog.getByRole("button", { name: "Bảo mật", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(dialog.getByRole("heading", { name: "Đổi mật khẩu", exact: true })).toBeVisible();
   await expect(dialog.getByRole("heading", { name: "Đăng nhập bằng Google", exact: true })).toBeVisible();
@@ -117,7 +117,7 @@ test("account entry is in topbar, with shared profile and security navigation", 
 test("account dropdown supports keyboard dismissal, outside click and narrow screens", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 320, height: 844 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const trigger = page.getByRole("button", { name: "Menu tài khoản", exact: true });
   await trigger.focus();
   await page.keyboard.press("Enter");
@@ -138,7 +138,7 @@ test("account dropdown supports keyboard dismissal, outside click and narrow scr
 
 test("profile save updates topbar name and password keeps the existing request contract", async ({ page }) => {
   const writes = await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   await page.getByLabel("Họ tên", { exact: true }).fill("Tên đã cập nhật");
@@ -171,7 +171,7 @@ test("admin uses the same account menu and logout clears session", async ({ page
 test("compact modal contains focus, fits mobile and restores focus after Escape", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   const trigger = page.getByRole("button", { name: "Menu tài khoản", exact: true });
   await trigger.click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
@@ -201,9 +201,22 @@ test("retired profile and security pages no longer render", async ({ page }) => 
   }
 });
 
+test("dashboard keeps summary while standalone history destinations are retired", async ({ page }) => {
+  await setup(page);
+  await page.goto("/dashboard");
+  const navigation = page.getByRole("navigation", { name: "Điều hướng bảng điều khiển" });
+  await expect(navigation.getByRole("link", { name: "Lịch sử sử dụng", exact: true })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Giao dịch credit", exact: true })).toHaveCount(0);
+  await expect(page.getByText("Credit hiện có", { exact: true })).toBeVisible();
+  for (const path of ["/dashboard/usage-logs", "/dashboard/credit-transactions"]) {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+  }
+});
+
 test("account popup interpolates height, handles interruption and remains bounded on mobile", async ({ page }) => {
   await setup(page);
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Tài khoản", exact: true });
@@ -245,7 +258,7 @@ test("account popup interpolates height, handles interruption and remains bounde
 test("account keeps native scrolling on mobile after resizing before swapping content", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/dashboard/credit-transactions");
+  await page.goto("/dashboard");
   await page.getByRole("button", { name: "Menu tài khoản", exact: true }).click();
   await page.getByRole("button", { name: "Quản lý tài khoản", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Tài khoản", exact: true });

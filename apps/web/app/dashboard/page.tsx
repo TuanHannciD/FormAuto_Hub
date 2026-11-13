@@ -76,7 +76,6 @@ export default function DashboardPage() {
         <Card className="min-w-0 overflow-hidden">
           <CardHeader className="flex items-start justify-between gap-3">
             <div><CardTitle className="text-[17px]">Sử dụng gần đây</CardTitle><p className="mt-1 text-xs leading-5 text-secondary-foreground">Các lượt tạo và gửi phản hồi mới nhất.</p></div>
-            <Link href="/dashboard/usage-logs" className="shrink-0 text-xs font-semibold text-primary hover:underline">Xem tất cả</Link>
           </CardHeader>
           <CardContent className="px-4 py-3">
             {isLoading ? <LoadingPanel /> : errorMessage ? <UnavailablePanel /> : summary?.recentUsageLogs.length ? (
